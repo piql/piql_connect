@@ -6,3 +6,1804 @@
 
 // Bootstrap
 @import '~bootstrap/scss/bootstrap';
+
+//colors
+$color_tuscany_approx: #cb5d31;
+$white: white;
+$color_coral_red_approx: #ef404a;
+$black: black;
+$color_pampas_approx: #f2f1ec;
+$color_cape_cod_approx: #414141;
+$color_mine_shaft_approx: #333333;
+$color_romance_approx: #fdfdfd;
+$color_alto_approx: #dddddd;
+$color_zambezi_approx: #6a4b5b;
+$red:  red;
+$gray: grey;
+$color_thunder_approx: #30242c;
+$color_pewter_approx: #99a1a7;
+$color_quill_gray_approx: lightgrey;
+$color_dove_gray_approx: #6b676b;
+$color_stack_approx: #8e8a8c;
+$color_ship_gray_approx: #42373f;
+$color_pumice_approx: #cacaca;
+$color_orange_roughy_approx: #c54f27;
+$color_plantation_approx: darkslategrey;
+$color_eggplant_approx: #654251;
+$color_mojo_approx: #c94d29;
+$color_bon_jour_approx: #e2dbe1;
+
+//fonts
+$font_0: 'Agenda';
+$font_1: 'Agenda';
+$font_2: 'Arial';
+$font_3: 'Helvetica';
+$font_4: 'sans-serif';
+$font_5: 'Agenda';
+$font_6: 'Arial';
+$font_7: 'Helvetica';
+$font_8: 'sans-serif';
+$font_9: 'Agenda';
+$font_10: 'Arial';
+$font_11: 'Helvetica';
+$font_12: 'sans-serif';
+
+//urls
+$url_0: url('../fonts/Agenda-Regular.otf');
+$url_1: url('../images/bg-image.png');
+$url_2: url('../images/searchicon.png');
+$url_3: url('../images/piql_logo_white.png');
+
+//@extend-elements
+//original selectors
+//html, body
+%extend_1 {
+    width: 100vw;
+    height: 100%;
+    font-family: $font_1, $font_2, $font_3, $font_4;
+    margin: 0;
+    padding: 0;
+    background-color: $color_pampas_approx;
+    position: relative;
+    overflow-x: hidden;
+    color: $color_cape_cod_approx;
+    font-size: 16px;
+}
+
+//original selectors
+//#theForm label, .forgot
+%extend_2 {
+    font-size: 10px;
+    color: $color_dove_gray_approx;
+    width: 100%;
+}
+
+//original selectors
+//.sideMenu ul .fas, #sideMenu ul .far
+%extend_3 {
+    font-size: 20px;
+    position: absolute;
+    left: 24px;
+}
+
+//original selectors
+//#sideMenuCollapsed ul .fas, #.ideMenuCollapsed ul .far
+%extend_4 {
+    font-size: 20px;
+    position: absolute;
+    left: 24px;
+}
+
+//original selectors
+//.listFilter input, .listFilter select, .listFilter option
+%extend_5 {
+    background-color: $white;
+    border: 0;
+    vertical-align: top;
+    padding-left: 10px;
+    color: $color_plantation_approx;
+    font-size: 12px;
+    margin-right: 15px;
+    min-height: 40px !important;
+    line-height: 40px;
+    //Instead of the line below you could use @include box-sizing($bs)
+    box-sizing: content-box;
+    //vendor-prefix found
+    //-moz-box-sizing: content-box
+    //vendor-prefix found
+    //-webkit-box-sizing: content-box
+    min-width: 100px;
+}
+
+//original selectors
+//.list table thead, th
+%extend_6 {
+    text-align: left;
+    border: 0;
+    padding: 20px;
+    background-color: $color_pampas_approx;
+    font-size: 12px;
+}
+
+//original selectors
+//.accountSettings input[type="text"], .accountSettings input[type="password"], .accountSettings textarea, .accountSettings select
+%extend_7 {
+    width: 460px;
+    padding: 5px;
+    margin-bottom: 10px;
+    border: 0;
+    height: 35px;
+    //vendor-prefix found
+    //-ms-box-sizing: content-box
+    //vendor-prefix found
+    //-moz-box-sizing: content-box
+    //vendor-prefix found
+    //-webkit-box-sizing: content-box
+    //Instead of the line below you could use @include box-sizing($bs)
+    box-sizing: content-box;
+}
+
+//original selectors
+//.accountSettings .inputSubmitCancel, .accountSettings .inputSubmitSave
+%extend_8 {
+    float: right;
+    margin-left: 10px;
+    margin-right: 13px;
+}
+
+
+@import "https://fonts.googleapis.com/css?family=Open +Sans";
+@import "https://use.fontawesome.com/releases/v5.7.1/css/all.css";
+@font-face {
+    font-family: $font_0;
+    src: $url_0 format("opentype");
+}
+html {
+    @extend %extend_1;
+}
+body {
+    @extend %extend_1;
+}
+.burgerMenu {
+    display: none;
+}
+.fixed_headers {
+    width: 750px;
+    table-layout: fixed;
+    border-collapse: collapse;
+    th {
+        text-decoration: underline;
+        padding: 5px;
+        text-align: left;
+        &:nth-child(1) {
+            min-width: 200px;
+        }
+        &:nth-child(2) {
+            min-width: 200px;
+        }
+        &:nth-child(3) {
+            width: 350px;
+        }
+    }
+    td {
+        padding: 5px;
+        text-align: left;
+        &:nth-child(1) {
+            min-width: 200px;
+        }
+        &:nth-child(2) {
+            min-width: 200px;
+        }
+        &:nth-child(3) {
+            width: 350px;
+        }
+    }
+    thead {
+        background-color: $color_mine_shaft_approx;
+        color: $color_romance_approx;
+        tr {
+            display: block;
+            position: relative;
+        }
+    }
+    tbody {
+        display: block;
+        overflow: auto;
+        width: 100%;
+        height: 300px;
+        tr:nth-child(even) {
+            background-color: $color_alto_approx;
+        }
+    }
+}
+.old_ie_wrapper {
+    height: 300px;
+    width: 750px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    tbody {
+        height: auto;
+    }
+}
+.chart {
+    position: relative;
+    height: 15vh;
+    width: 35vw;
+    float: left;
+    margin: 25px 25px 50px 25px;
+}
+h1 {
+    margin-bottom: 10px;
+    padding-bottom: 0;
+    font-size: 20px;
+    margin-top: 0;
+    margin-left: 0;
+    text-transform: uppercase;
+    font-size: 30px;
+}
+h2 {
+    margin-bottom: 40px;
+}
+hr {
+    border: 0.5px solid $color_tuscany_approx;
+    margin-top: 50px;
+    margin-bottom: 50px;
+    width: calc(100% - 1px);
+}
+em {
+    display: block;
+    margin: 0;
+    padding: 0;
+    font-style: normal;
+    font-size: 12px;
+    color: $color_zambezi_approx;
+}
+.titleIcon {
+    color: $color_coral_red_approx;
+    font-size: 30px;
+    float: left;
+    margin: 5px 30px 0 0;
+}
+a {
+    text-decoration: none;
+    color: $white;
+    &:visited {
+        text-decoration: none;
+    }
+}
+.clearboth {
+    clear: both;
+}
+.list {
+    position: relative;
+    overflow-y: auto;
+    width: 100%;
+    table {
+        width: 100%;
+        text-align: left;
+        color: $black;
+        border: 0;
+        margin: 0;
+        padding: 0;
+        border-collapse: collapse;
+        thead {
+            @extend %extend_6;
+            tr {
+                position: sticky;
+                top: 0;
+                width: 100%;
+                padding: 0;
+                margin: 0 0 150px 0;
+                border-bottom: 1px solid $red;
+                th {
+                    min-width: auto;
+                }
+            }
+            th .text {
+                z-index: 2;
+                height: 20px;
+                min-width: 50px;
+                padding-bottom: 20px;
+                text-align: left;
+            }
+        }
+        tr {
+            background-color: $white;
+            border-bottom: 1px solid $color_quill_gray_approx;
+        }
+        .greyedOut {
+            color: $gray;
+            a {
+                color: $gray;
+                border-bottom: 1px dashed $gray;
+            }
+        }
+        td:last-child {
+            text-align: right;
+        }
+        th:last-child {
+            text-align: right;
+        }
+        .linked a {
+            border-bottom: 1px dashed $black;
+            color: $black;
+        }
+    }
+    i {
+        color: $color_coral_red_approx;
+        font-size: 20px;
+        &:hover {
+            color: $color_zambezi_approx;
+        }
+    }
+    td {
+        padding: 20px;
+    }
+    td[colspan="4"] {
+        text-align: left !important;
+    }
+    .contentOptionsRow {
+        background-color: transparent;
+        border-bottom: 0;
+        td {
+            text-align: left !important;
+            padding: 10px 40px 0;
+        }
+    }
+    #multipleOptions i {
+        padding-right: 20px;
+        &:last-child {
+            padding-right: 0;
+        }
+    }
+}
+.table-scroll {
+    height: 400px;
+    overflow: auto;
+    margin-top: 20px;
+}
+.formRow {
+    position: relative;
+    height: auto;
+    margin-bottom: 5px;
+    clear: both;
+    min-height: 40px;
+}
+input[type="text"] {
+    min-width: 300px;
+    background-color: $white;
+    border: 0;
+    height: 30px;
+    //Instead of the line below you could use @include border-radius($radius, $vertical-radius)
+    border-radius: 2px;
+    padding: 4px;
+}
+input[type="number"] {
+    min-width: 300px;
+    background-color: $white;
+    border: 0;
+    height: 30px;
+    //Instead of the line below you could use @include border-radius($radius, $vertical-radius)
+    border-radius: 2px;
+    padding: 4px;
+}
+select {
+    width: 300px;
+    background-color: $white;
+    border: 0;
+    height: 30px;
+    //Instead of the line below you could use @include border-radius($radius, $vertical-radius)
+    border-radius: 2px;
+    padding: 4px;
+    //vendor-prefix found
+    //-ms-box-sizing: content-box
+    //vendor-prefix found
+    //-moz-box-sizing: content-box
+    //vendor-prefix found
+    //-webkit-box-sizing: content-box
+    //Instead of the line below you could use @include box-sizing($bs)
+    box-sizing: content-box;
+}
+textarea {
+    min-width: 300px;
+    background-color: $white;
+    border: 0;
+    height: 30px;
+    //Instead of the line below you could use @include border-radius($radius, $vertical-radius)
+    border-radius: 2px;
+    padding: 4px;
+    top: 0;
+}
+input[type="submit"] {
+    width: 80px;
+}
+.inputSubmitSave {
+    background: $color_tuscany_approx;
+    //Instead of the line below you could use @include border-radius($radius, $vertical-radius)
+    border-radius: 5px;
+    border: 4px solid $color_tuscany_approx;
+    display: inline-block;
+    text-transform: uppercase;
+    color: $white;
+    padding: 3px 5px 5px;
+    font-size: 12px;
+    height: 25px;
+    margin-bottom: 4px;
+}
+.inputSubmitCancel {
+    background: $gray;
+    //Instead of the line below you could use @include border-radius($radius, $vertical-radius)
+    border-radius: 5px;
+    border: 4px solid $gray;
+    width: 80px !important;
+    display: inline-block;
+    text-transform: uppercase;
+    color: $white;
+    padding: 3px 5px 5px;
+    font-size: 12px;
+    height: 25px;
+    margin-bottom: 4px;
+    margin-right: 10px;
+}
+label {
+    display: inline-block;
+    width: 200px;
+    top: 0;
+}
+input[type="file"] {
+    width: 0.1px;
+    height: 0.1px;
+    opacity: 0;
+    overflow: hidden;
+    position: absolute;
+    z-index: -1;
+}
+.inputfile {
+    + .filelabel {
+        margin-top: 2px;
+        background: $color_tuscany_approx;
+        //Instead of the line below you could use @include border-radius($radius, $vertical-radius)
+        border-radius: 3px;
+        border: 2px solid $color_tuscany_approx;
+        width: auto;
+        display: inline-block;
+        text-transform: uppercase;
+        color: $white;
+        cursor: pointer;
+        padding: 3px;
+        font-size: 11px;
+        &:hover {
+            background-color: $color_zambezi_approx;
+            border: 2px solid $color_zambezi_approx;
+        }
+    }
+    &:focus + .filelabel {
+        outline: 1px dotted $black;
+        //vendor-prefix found
+        //outline: -webkit-focus-ring-color auto 5px
+        background-color: $color_zambezi_approx;
+        border: 2px solid $color_zambezi_approx;
+    }
+}
+.btn {
+    color: $white;
+    text-align: center;
+    //Instead of the line below you could use @include border-radius($radius, $vertical-radius)
+    border-radius: 10px;
+    min-width: 100px;
+    padding: 10px;
+    background-color: $color_tuscany_approx;
+    border: 0;
+    &:hover {
+        background-color: $color_thunder_approx;
+    }
+}
+.btn-disabled {
+    background-color: $gray !important;
+    cursor: not-allowed;
+}
+.btn-right {
+    float: right;
+}
+.btn-left {
+    float: left;
+}
+.btn-full {
+    width: 100% !important;
+}
+.btn-auto {
+    width: auto !important;
+}
+:focus {
+    outline: none !important;
+}
+.checkbox {
+    appearance: none;
+    background-color: $white;
+    height: 12px;
+    width: 12px;
+    //vendor-prefix found
+    //-webkit-appearance: none
+    background-color: $white;
+    border: 1px solid $color_coral_red_approx;
+    padding: 8px;
+    display: inline-block;
+    position: relative;
+    margin: 0;
+    //vendor-prefix found
+    //-webkit-touch-callout: none
+    //vendor-prefix found
+    //-webkit-user-select: none
+    //vendor-prefix found
+    //-khtml-user-select: none
+    //vendor-prefix found
+    //-moz-user-select: none
+    //vendor-prefix found
+    //-ms-user-select: none
+    //Instead of the line below you could use @include user-select($select)
+    user-select: none;
+    //vendor-prefix found
+    //-webkit-tap-highlight-color: transparent
+    &:checked {
+        background-color: $white;
+        border: 1px solid $color_coral_red_approx;
+        color: $color_pewter_approx;
+        //vendor-prefix found
+        //-webkit-touch-callout: none
+        //vendor-prefix found
+        //-webkit-user-select: none
+        //vendor-prefix found
+        //-khtml-user-select: none
+        //vendor-prefix found
+        //-moz-user-select: none
+        //vendor-prefix found
+        //-ms-user-select: none
+        //Instead of the line below you could use @include user-select($select)
+        user-select: none;
+        //vendor-prefix found
+        //-webkit-tap-highlight-color: transparent
+        &:after {
+            content: '\2714';
+            font-size: 14px;
+            position: absolute;
+            top: 0;
+            left: 3px;
+            color: $color_coral_red_approx;
+        }
+    }
+}
+.checkbox[disabled] {
+    border: 1px solid $gray;
+    background: $color_quill_gray_approx;
+}
+#loginForm {
+    margin-top: 10%;
+    margin-left: auto;
+    margin-right: auto;
+    width: 400px;
+    height: auto;
+    padding-bottom: 30px;
+    background-color: $color_alto_approx;
+    color: $color_dove_gray_approx;
+    text-align: center;
+    label {
+        text-align: left;
+    }
+    img {
+        width: 40%;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        padding-top: 50px;
+    }
+    a {
+        color: $color_dove_gray_approx;
+        text-decoration: underline;
+        &:hover {
+            color: $black;
+        }
+    }
+}
+#loginPage {
+    height: 100vh;
+    background-image: $url_1 !important;
+    background-size: 15%;
+    background-repeat: repeat;
+}
+#theForm {
+    width: 80%;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    input {
+        width: 90%;
+        background-color: $white;
+        height: 20px;
+        font-size: 16px;
+        border: 0;
+        margin-top: 10px;
+        margin-bottom: 10px;
+        padding: 5%;
+    }
+    input[type=submit] {
+        background-color: $color_tuscany_approx;
+        color: $white;
+        height: 50px;
+        width: 100%;
+        text-transform: capitalize;
+    }
+    label {
+        @extend %extend_2;
+    }
+    .forgot {
+        text-align: center;
+        margin: 10px 0;
+        display: block;
+        width: 100%;
+    }
+}
+.forgot {
+    @extend %extend_2;
+}
+#piqlTop {
+    width: 100vw;
+    height: 150px;
+    background-color: $white;
+}
+#piqlLogo {
+    width: 296px;
+    margin-top: 40px;
+    border-right: 2px solid $color_tuscany_approx;
+    float: left;
+    position: relative;
+    .img {
+        text-align: center;
+    }
+    img {
+        padding-top: 7px;
+        width: 246px;
+        left: 100px;
+    }
+}
+#piqlNav {
+    width: calc(100vw - 598px);
+    float: left;
+    ul {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+        text-align: right;
+    }
+    li {
+        display: inline;
+        padding-top: 75px;
+        padding-bottom: 75px;
+        padding-left: 25px;
+        padding-right: 25px;
+        margin-right: 25px;
+        line-height: 150px;
+        text-transform: uppercase;
+        color: $color_stack_approx;
+        &:last-child {
+            margin-right: 0;
+        }
+        &:hover {
+            color: $color_tuscany_approx;
+        }
+    }
+    a .active {
+        color: $color_tuscany_approx;
+    }
+}
+#customerLogo {
+    position: absolute;
+    left: 350px;
+    top: 60px;
+    max-height: 100px;
+    max-width: 100px;
+}
+#piqlOptions {
+    width: 200px;
+    position: absolute;
+    top: 0;
+    right: 0;
+    background-color: $white;
+    font-size: 24px;
+    padding-top: 55px;
+    padding-right: 100px;
+    text-align: right;
+    color: $color_coral_red_approx;
+    i {
+        margin-right: 20px;
+        &:hover {
+            color: $color_stack_approx;
+        }
+    }
+    a {
+        color: $color_coral_red_approx;
+    }
+}
+#noti {
+    position: relative;
+    &:after {
+        content: attr(data-count);
+        position: absolute;
+        top: -10px;
+        left: -8px;
+        background: $color_zambezi_approx;
+        font-weight: bold;
+        font-family: $font_5, $font_6, $font_7, $font_8;
+        color: $white;
+        //Instead of the line below you could use @include border-radius($radius, $vertical-radius)
+        border-radius: 50%;
+        width: 20px;
+        height: 20px;
+        line-height: 22px;
+        text-align: center;
+        font-size: 10px;
+        display: block;
+    }
+}
+#notificationsList {
+    width: 300px;
+    height: auto;
+    background-color: $white;
+    border: 2px solid $color_zambezi_approx;
+    padding: 2px;
+    padding-top: 15px;
+    position: absolute;
+    top: 100px;
+    right: 200px;
+    z-index: 99999;
+    &:after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 88%;
+        width: 0;
+        height: 0;
+        border: 10px solid transparent;
+        border-bottom-color: $color_zambezi_approx;
+        border-top: 0;
+        margin-left: -10px;
+        margin-top: -10px;
+    }
+    strong {
+        text-transform: uppercase;
+        margin: 8px;
+        color: $color_coral_red_approx;
+        font-weight: normal;
+    }
+    .when {
+        background-color: $color_quill_gray_approx;
+        text-transform: uppercase;
+        width: 95%;
+        color: $white;
+        padding-left: 5%;
+    }
+    ul {
+        padding: 15px;
+        li {
+            list-style-type: none;
+        }
+    }
+}
+.closeNotifications {
+    font-size: 34px;
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 10px;
+    color: $color_coral_red_approx;
+}
+.container {
+    position: absolute;
+    left: 0px;
+    height: calc(100vh - 180px);
+}
+.sideMenu {
+    position: relative;
+    width: 300px;
+    float: left;
+    background-color: $color_zambezi_approx;
+    min-height: calc(100vh - 150px);
+    height: auto;
+    color: $white;
+    //Instead of the line below you could use @include transition($transition-1, $transition-2, $transition-3, $transition-4, $transition-5, $transition-6, $transition-7, $transition-8, $transition-9, $transition-10)
+    transition: width 1s;
+    overflow: hidden;
+    ul {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+        color: $white;
+        .fas {
+            @extend %extend_3;
+        }
+        .far {
+            @extend %extend_3;
+        }
+    }
+    li {
+        display: block;
+        width: calc(100% - 30px);
+        background-color: $color_thunder_approx;
+        height: 25px;
+        padding: 15px;
+        margin-bottom: 2px;
+        text-transform: uppercase;
+        &:hover {
+            background-color: $color_tuscany_approx;
+        }
+    }
+    .leftSub {
+        background-color: $color_ship_gray_approx;
+    }
+    .leftMenuItem {
+        font-style: normal;
+        position: absolute;
+        left: 60px;
+        margin-top: 3px;
+        visibility: visible;
+        opacity: 1;
+        //Instead of the line below you could use @include transition($transition-1, $transition-2, $transition-3, $transition-4, $transition-5, $transition-6, $transition-7, $transition-8, $transition-9, $transition-10)
+        transition: visibility 0.5s, opacity 0.5s linear;
+        //Instead of the line below you could use @include transition-delay($delay-1, $delay-2, $delay-3, $delay-4, $delay-5, $delay-6, $delay-7, $delay-8, $delay-9, $delay-10)
+        transition-delay: 0.3s;
+    }
+}
+
+#welcomeText {
+    margin: 25px 25px 60px 25px;
+    text-transform: uppercase;
+    width: 200px;
+    float: left;
+    visibility: visible;
+    opacity: 1;
+    //Instead of the line below you could use @include transition($transition-1, $transition-2, $transition-3, $transition-4, $transition-5, $transition-6, $transition-7, $transition-8, $transition-9, $transition-10)
+    transition: visibility 0.5s, opacity 0.5s ease-in-out;
+    //Instead of the line below you could use @include transition-delay($delay-1, $delay-2, $delay-3, $delay-4, $delay-5, $delay-6, $delay-7, $delay-8, $delay-9, $delay-10)
+    transition-delay: 0.3s;
+}
+#collapseSideMenu {
+    width: 45px;
+    margin-top: 25px;
+    position: absolute;
+    left: 250px;
+    visibility: visible;
+    opacity: 1;
+    //Instead of the line below you could use @include transition($transition-1, $transition-2, $transition-3, $transition-4, $transition-5, $transition-6, $transition-7, $transition-8, $transition-9, $transition-10)
+    transition: visibility 1s, opacity 1s linear;
+    cursor: pointer;
+    //Instead of the line below you could use @include transition($transition-1, $transition-2, $transition-3, $transition-4, $transition-5, $transition-6, $transition-7, $transition-8, $transition-9, $transition-10)
+    transition: left 1s;
+    img {
+        //vendor-prefix found
+        //-webkit-transform: rotate(0)
+        //vendor-prefix found
+        //-moz-transform: rotate(0)
+        //vendor-prefix found
+        //-o-transform: rotate(0)
+        //vendor-prefix found
+        //-ms-transform: rotate(0)
+        //Instead of the line below you could use @include transform($scale, $rotate, $transx, $transy, $skewx, $skewy, $originx, $originy)
+        transform: rotate(0);
+        //Instead of the line below you could use @include transition($transition-1, $transition-2, $transition-3, $transition-4, $transition-5, $transition-6, $transition-7, $transition-8, $transition-9, $transition-10)
+        transition: transform 0.5s;
+        width: 50px;
+    }
+}
+#poweredBy {
+    position: absolute;
+    font-size: 12px;
+    float: left;
+    margin-left: 25px;
+    margin-bottom: 25px;
+    bottom: 0;
+    //Instead of the line below you could use @include transition($transition-1, $transition-2, $transition-3, $transition-4, $transition-5, $transition-6, $transition-7, $transition-8, $transition-9, $transition-10)
+    transition: opacity 1000ms 1s ease;
+    opacity: 1;
+    display: block;
+}
+#poweredByImg {
+    display: inline-block;
+    position: absolute;
+    bottom: 0;
+    //Instead of the line below you could use @include transition($transition-1, $transition-2, $transition-3, $transition-4, $transition-5, $transition-6, $transition-7, $transition-8, $transition-9, $transition-10)
+    transition: left 1000ms ease;
+    left: 90px;
+    margin-top: 3px;
+    margin-bottom: 24px;
+    img {
+        height: 15px;
+        line-height: 110px;
+        float: left;
+        margin-left: 5px;
+    }
+}
+.activePage {
+    background-color: $color_tuscany_approx !important;
+}
+.sideMenuCollapsed {
+    width: 70px;
+    //Instead of the line below you could use @include transition($transition-1, $transition-2, $transition-3, $transition-4, $transition-5, $transition-6, $transition-7, $transition-8, $transition-9, $transition-10)
+    transition: width 1s;
+    position: relative;
+    float: left;
+    background-color: $color_zambezi_approx;
+    height: calc(100vh - 150px);
+    color: $white;
+    overflow: hidden;
+    ul {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+        color: $white;
+        .fas {
+            @extend %extend_4;
+        }
+        .far {
+            @extend %extend_4;
+        }
+    }
+    li {
+        display: block;
+        width: calc(100% - 30px);
+        background-color: $color_thunder_approx;
+        height: 25px;
+        padding: 15px;
+        margin-bottom: 2px;
+        text-transform: uppercase;
+        &:hover {
+            background-color: $color_tuscany_approx;
+        }
+    }
+    .leftMenuItem {
+        position: absolute;
+        left: 60px;
+        visibility: hidden;
+        font-style: normal;
+        opacity: 0;
+        //Instead of the line below you could use @include transition($transition-1, $transition-2, $transition-3, $transition-4, $transition-5, $transition-6, $transition-7, $transition-8, $transition-9, $transition-10)
+        transition: visibility 0.3s, opacity 0.3s linear;
+    }
+    #welcomeText {
+        visibility: hidden;
+        opacity: 0;
+        //Instead of the line below you could use @include transition($transition-1, $transition-2, $transition-3, $transition-4, $transition-5, $transition-6, $transition-7, $transition-8, $transition-9, $transition-10)
+        transition: visibility 0.3s, opacity 0.3s ease-in-out;
+    }
+    #collapseSideMenu {
+        position: absolute;
+        left: 8px;
+        img {
+            //vendor-prefix found
+            //-webkit-transform: rotate(180deg)
+            //vendor-prefix found
+            //-moz-transform: rotate(180deg)
+            //vendor-prefix found
+            //-o-transform: rotate(180deg)
+            //vendor-prefix found
+            //-ms-transform: rotate(180deg)
+            //Instead of the line below you could use @include transform($scale, $rotate, $transx, $transy, $skewx, $skewy, $originx, $originy)
+            transform: rotate(180deg);
+            filter: progid:DXImageTransform.Microsoft.Matrix(M11=-1, M12=0, M21=0, M22=-1, DX=0, DY=0, SizingMethod='auto expand');
+            //Instead of the line below you could use @include transition($transition-1, $transition-2, $transition-3, $transition-4, $transition-5, $transition-6, $transition-7, $transition-8, $transition-9, $transition-10)
+            transition: transform 0.5s;
+        }
+    }
+    #poweredBy {
+        //Instead of the line below you could use @include transition($transition-1, $transition-2, $transition-3, $transition-4, $transition-5, $transition-6, $transition-7, $transition-8, $transition-9, $transition-10)
+        transition: opacity 0ms;
+        opacity: 0;
+    }
+    #poweredByImg {
+        left: 15px;
+        bottom: 24px;
+        margin: 0;
+    }
+}
+.contentContainer {
+    background-color: $color_pampas_approx;
+    width: calc(100% - 360px);
+    float: left;
+    height: calc(100vh - 180px);
+    padding: 30px 30px 0 30px;
+    overflow-y: hidden;
+}
+.content {
+    width: 100%;
+    height: calc(100vh - 180px);
+    overflow-y: hidden;
+    p:first-of-type {
+        padding-top: 20px;
+    }
+}
+.clearBoth {
+    clear: both;
+}
+.uploaderFile {
+    width: 150px;
+    height: 255px;
+    color: $color_pumice_approx;
+    text-align: center;
+    float: left;
+    margin-right: 80px;
+    margin-bottom: 80px;
+    .far {
+        font-size: 200px;
+        margin-left: auto;
+        margin-right: auto;
+        display: block;
+        margin-bottom: 5px;
+    }
+}
+.fileFinished {
+    color: $black;
+}
+.loadingBar {
+    width: 90%;
+    margin-left: auto;
+    margin-right: auto;
+    height: 20px;
+    //Instead of the line below you could use @include border-radius($radius, $vertical-radius)
+    border-radius: 10px;
+    padding: 2px;
+    border: 2px solid $color_pumice_approx;
+    left: 100px;
+    top: 100px;
+}
+.filler {
+    height: 100%;
+    //Instead of the line below you could use @include border-radius($radius, $vertical-radius)
+    border-radius: 5px;
+    width: 25%;
+    background-color: $color_orange_roughy_approx;
+    display: block;
+    //vendor-prefix found
+    //-webkit-transition: width 1s ease-in-out
+    //vendor-prefix found
+    //-moz-transition: width 1s ease-in-out
+    //vendor-prefix found
+    //-o-transition: width 1s ease-in-out
+    //Instead of the line below you could use @include transition($transition-1, $transition-2, $transition-3, $transition-4, $transition-5, $transition-6, $transition-7, $transition-8, $transition-9, $transition-10)
+    transition: width 1s ease-in-out;
+    &:hover {
+        //vendor-prefix found
+        //-webkit-transition: width 1s ease-in-out
+        //vendor-prefix found
+        //-moz-transition: width 1s ease-in-out
+        //vendor-prefix found
+        //-o-transition: width 1s ease-in-out
+        //Instead of the line below you could use @include transition($transition-1, $transition-2, $transition-3, $transition-4, $transition-5, $transition-6, $transition-7, $transition-8, $transition-9, $transition-10)
+        transition: width 1s ease-in-out;
+        width: 100%;
+    }
+}
+.dropFiles {
+    width: 80%;
+    //Instead of the line below you could use @include border-radius($radius, $vertical-radius)
+    border-radius: 20px;
+    background-color: $white;
+    border: 4px dashed $color_pumice_approx;
+    padding: 5%;
+    color: $color_pumice_approx;
+    margin-top: 10px;
+    height: auto;
+}
+.breadcrumbs {
+    margin: 10px 0 10px 60px;
+    display: block;
+    padding: 0;
+    font-size: 12px;
+    font-style: normal;
+    color: $color_tuscany_approx;
+}
+.disabledIcon {
+    color: $gray !important;
+}
+.disabledPiql {
+    color: $gray !important;
+    background-color: $gray !important;
+    border-color: $gray !important;
+}
+.listFilter {
+    margin-bottom: 5px;
+    margin-top: 35px;
+    width: auto;
+    label {
+        width: auto;
+        font-size: 12px;
+        margin-right: 5px;
+        height: 40px;
+        line-height: 40px;
+    }
+    input {
+        @extend %extend_5;
+    }
+    select {
+        @extend %extend_5;
+        height: 42px;
+        width: 150px;
+    }
+    option {
+        @extend %extend_5;
+    }
+    input[type=search] {
+        background-image: $url_2;
+        background-size: 20px;
+        background-repeat: no-repeat;
+        background-position: 115px 10px;
+        //Instead of the line below you could use @include background-origin($origin)
+        background-origin: content-box;
+        padding-right: 30px;
+        width: 150px;
+    }
+}
+input::placeholder {
+    text-transform: uppercase;
+}
+.listError {
+    color: $red;
+}
+input[type=date]::-webkit-inner-spin-button {
+    //vendor-prefix found
+    //-webkit-appearance: none
+    display: none;
+}
+input {
+    font-family: $font_9, $font_10, $font_11, $font_12;
+}
+th {
+    @extend %extend_6;
+}
+.listPagination {
+    ul {
+        margin-left: auto;
+        margin-right: auto;
+        width: 500px;
+    }
+    li {
+        display: inline;
+        padding-bottom: 15px;
+        margin-right: 65px;
+        line-height: 45px;
+        text-transform: uppercase;
+        a {
+            color: $black;
+            &:hover {
+                color: $color_tuscany_approx;
+                font-weight: bold;
+            }
+        }
+        &:last-child {
+            margin-right: 0;
+        }
+    }
+}
+.piqlIt {
+    background: $color_tuscany_approx;
+    background-image: $url_3;
+    background-size: 20px;
+    background-repeat: no-repeat;
+    background-position-x: 24px;
+    background-position-y: 4px;
+    //Instead of the line below you could use @include background-origin($origin)
+    background-origin: content-box;
+    //Instead of the line below you could use @include border-radius($radius, $vertical-radius)
+    border-radius: 10px;
+    padding: 5px;
+    border: 4px solid $color_tuscany_approx;
+    width: 70px;
+    display: inline-block;
+    &:hover {
+        background-color: $color_zambezi_approx;
+        border: 4px solid $color_zambezi_approx;
+    }
+}
+.clickable {
+    cursor: pointer;
+}
+.contentOptionsUploadTag {
+    width: 300px;
+    display: inline-block;
+}
+#browseContainer {
+    border-top: 1px solid $color_tuscany_approx;
+    width: 100%;
+    height: 100%;
+}
+#browseLeftNav {
+    float: left;
+    width: 18%;
+    padding-right: 2%;
+    padding-top: 2%;
+    height: 98%;
+    color: $color_eggplant_approx;
+    a {
+        color: inherit;
+        &:hover {
+            color: $color_tuscany_approx;
+        }
+    }
+}
+#browseCenter {
+    float: left;
+    width: 55%;
+    background-color: $white;
+    margin-top: 1px;
+    height: 98%;
+    overflow-y: scroll;
+    padding: 2% 2% 0 2%;
+    padding-top: 2%;
+    h2 {
+        font-size: inherit;
+        color: $color_mojo_approx;
+        margin-top: 0;
+        padding-top: 0;
+    }
+    .informationTable {
+        width: 100%;
+        margin-bottom: 30px;
+        td {
+            &:nth-child(even) {
+                padding-left: 20px;
+                vertical-align: top;
+            }
+            &:nth-child(odd) {
+                text-align: right;
+                vertical-align: top;
+                font-weight: bold;
+                width: 40%;
+            }
+        }
+    }
+    .fileTable {
+        width: 100%;
+        border-collapse: collapse;
+        tr {
+            border-bottom: 1px solid $color_quill_gray_approx;
+            &:first-child {
+                border-bottom: 1px solid $color_tuscany_approx;
+            }
+        }
+        strong {
+            font-weight: normal;
+            color: $color_eggplant_approx;
+        }
+        .title {
+            font-size: 16px;
+            position: relative;
+            top: -3px;
+            color: $black;
+        }
+        td {
+            padding-bottom: 20px;
+            padding-top: 20px;
+            font-size: 12px;
+            &:first-child {
+                width: 40%;
+            }
+        }
+        i {
+            font-size: 46px;
+            color: $color_coral_red_approx;
+            float: left;
+            padding-right: 15px;
+        }
+    }
+    .grey {
+        color: $gray !important;
+    }
+    table td ul {
+        margin: 0 0 0 10px;
+        padding: 0 0 0 5px;
+    }
+}
+#browseRightNav {
+    float: left;
+    width: 18%;
+    padding-left: 2%;
+    padding-top: 2%;
+    height: 98%;
+}
+.browseNavTitle {
+    padding-left: 10px;
+    padding-bottom: 5px;
+    margin-bottom: 5px;
+    border-bottom: 1px solid $color_cape_cod_approx;
+    .add {
+        float: right;
+        font-size: 32px;
+        color: $color_mojo_approx;
+        line-height: 25px;
+    }
+}
+.holding {
+    padding-top: 5px;
+    margin-bottom: 5px;
+    a {
+        padding-left: 10px;
+        margin-bottom: 5px;
+    }
+    &:nth-child(odd) {
+        background-color: $color_bon_jour_approx;
+    }
+}
+.holdingSubcategory {
+    width: 90%;
+    background-color: $color_pampas_approx;
+    padding-left: 10%;
+    padding-top: 5px;
+    padding-bottom: 2px;
+    a {
+        padding-left: 0;
+    }
+}
+.browseOption {
+    margin: 30px 0 60px;
+    font-size: 18px;
+    i {
+        color: $color_coral_red_approx;
+    }
+    a {
+        color: inherit;
+    }
+}
+.browseFile {
+    text-align: center;
+    width: 50%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 20px;
+    .fas {
+        font-size: 1000%;
+        display: block;
+        margin-bottom: 10px;
+    }
+}
+.browseFileInformation {
+    width: 50%;
+    margin-left: auto;
+    margin-right: auto;
+}
+.browseLeftNavUL {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+.retrieveTabContainer {
+    position: relative;
+    z-index: 1;
+    white-space: nowrap;
+    max-width: 570px;
+    padding-right: 20px;
+    border-bottom: 1px solid $color_pampas_approx;
+    .retrieveTab {
+        position: relative;
+        display: inline-block;
+        padding: 0.5em 1em 0.5em;
+        color: inherit;
+        text-decoration: none;
+        margin: 0;
+        margin-right: 30px;
+    }
+    .retrieveTab::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: .1em;
+        left: 0;
+        z-index: -1;
+        border-bottom: none;
+        //Instead of the line below you could use @include border-radius($radius, $vertical-radius)
+        border-radius: 10px 10px 0 0;
+        background: $color_pampas_approx;
+        //Instead of the line below you could use @include transform($scale, $rotate, $transx, $transy, $skewx, $skewy, $originx, $originy)
+        transform: perspective(5px) rotateX(2deg);
+    }
+    .retrieveTabSelected {
+        position: relative;
+        display: inline-block;
+        padding: 0.5em 1em 0.5em;
+        color: inherit;
+        text-decoration: none;
+        margin: 0;
+        margin-right: 30px;
+    }
+    .retrieveTabSelected::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: .1em;
+        left: 0;
+        z-index: -1;
+        border-bottom: none;
+        //Instead of the line below you could use @include border-radius($radius, $vertical-radius)
+        border-radius: 10px 10px 0 0;
+        background: $white;
+        //Instead of the line below you could use @include transform($scale, $rotate, $transx, $transy, $skewx, $skewy, $originx, $originy)
+        transform: perspective(5px) rotateX(2deg);
+    }
+}
+.accountSettings {
+    width: 700px;
+    input[type="text"] {
+        @extend %extend_7;
+    }
+    input[type="password"] {
+        @extend %extend_7;
+    }
+    textarea {
+        @extend %extend_7;
+        height: 70px;
+    }
+    select {
+        @extend %extend_7;
+    }
+    input[type="radio"] {
+        width: auto;
+        padding: 0;
+        margin-top: 15px;
+        height: auto;
+        line-height: auto;
+    }
+    .inputLabel {
+        width: 200px;
+        height: 30px;
+        line-height: 30px;
+        margin-bottom: 10px;
+        padding: 5px;
+        float: left;
+    }
+    .inputSubmitCancel {
+        @extend %extend_8;
+    }
+    .inputSubmitSave {
+        @extend %extend_8;
+    }
+}
+#mobileMenu {
+    opacity: 0;
+    visibility: hidden;
+    right: -100vw;
+    height: 96.5vh;
+    padding-top: 3.5vh;
+    padding-left: 5vw;
+    width: 95vw;
+    background-color: $color_pampas_approx;
+    z-index: 9999;
+    position: absolute;
+    top: 0;
+    font-size: 30px;
+    text-transform: uppercase;
+    font-weight: bold;
+    color: $color_tuscany_approx;
+    //Instead of the line below you could use @include transition($transition-1, $transition-2, $transition-3, $transition-4, $transition-5, $transition-6, $transition-7, $transition-8, $transition-9, $transition-10)
+    transition: right 0.2s ease-out, opacity 0.2s ease;
+    ul {
+        list-style-type: none;
+        margin: 0;
+        margin-bottom: 30px;
+        margin-top: 15px;
+        padding: 0;
+        font-weight: normal;
+        color: $black;
+        li i {
+            color: $color_tuscany_approx !important;
+            text-align: center;
+            width: 50px;
+        }
+    }
+    a {
+        color: $black;
+    }
+}
+.mobileMenuVisible {
+    opacity: 1 !important;
+    visibility: visible !important;
+    right: 0 !important;
+    //Instead of the line below you could use @include transition($transition-1, $transition-2, $transition-3, $transition-4, $transition-5, $transition-6, $transition-7, $transition-8, $transition-9, $transition-10)
+    transition: right 0.2s ease-in, opacity 0.2s ease;
+}
+@media screen and(min-width: 1405px) {
+    .listFilter input[type=search] {
+        background-image: $url_2;
+        background-size: 20px;
+        background-repeat: no-repeat;
+        background-position: 310px 10px;
+        //Instead of the line below you could use @include background-origin($origin)
+        background-origin: content-box;
+        padding-right: 30px;
+        width: 350px;
+    }
+}
+@media screen and(min-width: 1201px) and(max-width: 1400px) {
+    #piqlLogo {
+        width: 296px;
+        margin-top: 40px;
+        border-right: 2px solid $color_tuscany_approx;
+        float: left;
+        position: relative;
+        .img {
+            text-align: left;
+            padding-left: 30px;
+        }
+        img {
+            width: 246px;
+        }
+    }
+    #customerLogo {
+        position: absolute;
+        left: 350px;
+        top: 60px;
+        max-height: 100px;
+        max-width: 100px;
+    }
+}
+@media screen and(max-width: 1210px) {
+    #piqlTop {
+        height: 130px;
+        width: 100vw;
+        background-color: $white;
+    }
+    hr {
+        width: calc(100vw - 60px);
+    }
+    #piqlLogo {
+        float: none;
+        margin: 0;
+        width: 100%;
+        border-right: 0;
+        .img {
+            padding-top: 33px;
+            text-align: left;
+            padding-left: 30px;
+        }
+    }
+    #piqlNav {
+        display: none;
+        margin: 0;
+        width: 100%;
+        height: 50px;
+        margin-top: 25px;
+        li {
+            padding: 0 15px;
+            line-height: 0;
+        }
+    }
+    #customerLogo {
+        top: 50px;
+        left: 300px;
+        display: block;
+    }
+    #piqlOptions {
+        top: -7px;
+        right: 90px;
+        width: auto;
+        padding-right: 0;
+        background-color: transparent;
+        height: 35px;
+        text-align: center;
+        .fa-info-circle {
+            margin-right: 0;
+        }
+    }
+    .burgerMenu {
+        display: block;
+        position: absolute;
+        right: 15px;
+        top: 40px;
+        padding: 10px;
+        font-size: 30px;
+        color: $color_tuscany_approx;
+        z-index: 999;
+    }
+    .closeNotifications {
+        font-size: 34px;
+        position: absolute;
+        top: 0;
+        right: 0;
+        padding: 10px;
+        color: $color_coral_red_approx;
+    }
+    .accountSettings {
+        width: 90vw;
+        margin-left: 3vw;
+        input {
+            width: calc(100vw - 60px);
+        }
+        textarea {
+            width: calc(100vw - 60px);
+        }
+        select {
+            width: calc(100vw - 60px);
+        }
+        input[type="radio"] {
+            width: auto;
+        }
+    }
+    .sideMenu {
+        display: none;
+        top: 0;
+        width: 100vw;
+        //Instead of the line below you could use @include transition($transition-1, $transition-2, $transition-3, $transition-4, $transition-5, $transition-6, $transition-7, $transition-8, $transition-9, $transition-10)
+        transition: width 1s;
+        padding: 0;
+        margin: 0;
+        ul {
+            margin-top: 100px;
+            li i {
+                font-size: 26px;
+            }
+        }
+        .leftMenuItem {
+            line-height: 20px;
+        }
+        #welcomeText {
+            visibility: hidden;
+            opacity: 0;
+            position: absolute;
+            top: -999px;
+        }
+        #collapseSideMenu {
+            visibility: hidden;
+            img {
+                visibility: hidden;
+            }
+        }
+        #poweredBy {
+            display: none;
+        }
+        #poweredByImg {
+            left: 20px;
+            bottom: 10px;
+            margin: 0;
+        }
+    }
+    .white {
+        color: $white;
+    }
+    .black {
+        color: $black;
+    }
+    #container {
+        height: calc(100vh - 130px);
+        width: calc(100vw - 40px);
+    }
+    #contentContainer {
+        background-color: $color_pampas_approx;
+        width: calc(100vw - 30px);
+        float: left;
+        height: calc(90%);
+        padding: 30px 15px 0;
+    }
+    #content {
+        width: 100%;
+        height: 100%;
+        overflow-y: auto;
+        overflow-x: hidden;
+    }
+    table {
+        font-size: 8px;
+        width: calc(100vw - 60px);
+    }
+    .listFilter {
+        label {
+            display: none;
+        }
+        input {
+            display: none;
+        }
+        select {
+            display: none;
+        }
+        input[type="search"] {
+            display: block;
+            width: calc(100vw);
+            margin-left: 0;
+            background-size: 20px;
+            background-repeat: no-repeat;
+            background-position: calc(100vw - 70px) 10px;
+            //Instead of the line below you could use @include background-origin($origin)
+            background-origin: content-box;
+            padding-right: 70px;
+            margin-right: 0;
+        }
+    }
+    em {
+        font-size: 12px;
+    }
+    .chart {
+        position: relative;
+        height: 20vh;
+        width: 95%;
+        float: left;
+        margin: 0 0 50px 0;
+    }
+    .listPagination ul li {
+        font-size: 10px;
+        margin-right: 40px;
+        text-align: center;
+    }
+}
+@media screen and(max-width: 630px) {
+    #loginForm {
+        margin-top: 0;
+        height: 100vh;
+        width: 100vw;
+        background-color: $color_pampas_approx;
+    }
+    h1 {
+        font-size: 20px;
+    }
+    .titleIcon {
+        font-size: 30px;
+    }
+    #notificationsList {
+        left: 0;
+        top: 0;
+        right: 0;
+        width: calc(100vw - 4px);
+        height: calc(100vh - 17px);
+        border: 0;
+        overflow-y: scroll;
+        strong {
+            text-align: center;
+            display: block;
+        }
+    }
+    #piqlLogo {
+        width: 100%;
+        margin-top: 0;
+        padding: 0;
+        border-right: 2px solid $color_tuscany_approx;
+        float: none;
+        position: relative;
+        .img {
+            text-align: left;
+            padding-left: 10px;
+            padding-top: 10px;
+        }
+        img {
+            width: 246px;
+        }
+    }
+    #customerLogo {
+        position: absolute;
+        right: 10px;
+        left: auto;
+        top: 28px;
+        max-height: 100px;
+        max-width: 100px;
+    }
+    #piqlOptions {
+        float: none;
+        position: relative;
+        top: 0;
+        left: 0;
+        right: 0;
+        padding-top: 15px;
+        width: 200px;
+        margin: 0;
+    }
+    .burgerMenu {
+        top: 72px;
+    }
+    #piqlOptoins i {
+        margin-right: 0;
+    }
+}
+@media screen and(max-width: 360px) {
+    #customerLogo {
+        width: 80px;
+    }
+    #piqlLogo img {
+        width: 200px;
+    }
+}
+.filelabel i {
+    color: $white !important;
+}
