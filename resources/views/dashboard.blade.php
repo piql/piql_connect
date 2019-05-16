@@ -1,7 +1,12 @@
-@extends('layouts.app');
+@extends('layouts.app')
+
+@section('top')
+    @parent
+@endsection
+
 @section('sidebar')
     @parent
-@stop
+@endsection
 
 @section('content')
 <div class="contentContainer">
@@ -25,4 +30,4 @@
         </div>
     </div>
 </div>
-@stop
+@endsection

@@ -1,19 +1,22 @@
 <!doctype html>
 <html>
-    <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+    <head lang="{{ str_replace('_', '-', app()->getLocale()) }}">
         <title>piqlConnect</title>
+        <meta name="csrf-token" content="{{ csrf_token() }}">
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link href="{{ asset('css/app.css') }} " rel="stylesheet" />
+        <link href="{{ asset('css/app.css') }}" rel="stylesheet" />
     </head>
     <body id="{{ Request::path() == 'login' ? 'loginPage' : '' }}">
-        <div class="container">
-        @section('sidebar')
-            @include('includes.sidebar')
-        @show
-        @yield('content')
+        <div id="app">
+            @section('top')
+               @include('includes.top')
+            @show
+            @section('sidebar')
+                @include('includes.sidebar')
+            @show
+            @yield('content')
         </div>
-
-        </div>
+        <script type="text/javascript" src="{{ asset('js/app.js') }}"></script>
     </body>
 </html>

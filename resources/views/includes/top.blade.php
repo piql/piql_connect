@@ -1,16 +1,26 @@
-<div class="flex-center position-ref full-height">
-    @if (Route::has('login'))
-        <div class="top-right links">
-            @auth
-                <a href="{{ url('/home') }}">Home</a>
-            @else
-                <a href="{{ route('login') }}">Login</a>
+<i id="burger" onClick="toggleMobileMenu()" class="fas fa-bars burgerMenu"></i>
 
-                @if (Route::has('register'))
-                    <a href="{{ route('register') }}">Register</a>
-                @endif
-            @endauth
+<div id="piqlTop">
+    <div id="piqlLogo">
+        <div class="img">
+            <a href="dashboard.html"><img src="images/piql-connect.png"></a>
         </div>
-    @endif
+    </div>
+ <img id="customerLogo" src="images/ikaKongsberg.svg">
+ <div id="piqlNav">
+        <ul>
+                <a href="dashboard.html"><li class="active">Home</li></a>
+                <a href="upload.html"><li>Ingest</li></a>
+                <a href="browse.html"><li>Access</li></a>
+        </ul>
+    </div>
+    <div id="piqlOptions">
+    <notifications>
+    </notifications>
+        <a href="settings.html"><i class="fas fa-cogs"></i></a>
+        <i class="fas fa-info-circle"></i>
+    </div>
+    <div class="clearboth"></div>
 </div>
+
 
