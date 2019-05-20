@@ -49,10 +49,10 @@ $font_11: 'Helvetica';
 $font_12: 'sans-serif';
 
 //urls
-$url_0: url('../fonts/Agenda-Regular.otf');
-$url_1: url('../images/bg-image.png');
-$url_2: url('../images/searchicon.png');
-$url_3: url('../images/piql_logo_white.png');
+$font_agenda_url: url('../fonts/Agenda-Regular.otf');
+$image_login-bg_url: url('../images/bg-image.png');
+$image_searchicon_url: url('../images/searchicon.png');
+$image_piql-logo-white_url: url('../images/piql_logo_white.png');
 
 //@extend-elements
 //original selectors
@@ -156,7 +156,7 @@ $url_3: url('../images/piql_logo_white.png');
 @import "https://use.fontawesome.com/releases/v5.7.1/css/all.css";
 @font-face {
     font-family: $font_0;
-    src: $url_0 format("opentype");
+    src: $font_agenda_url format("opentype");
 }
 html {
     @extend %extend_1;
@@ -576,11 +576,11 @@ input[type="file"] {
     border: 1px solid $gray;
     background: $color_quill_gray_approx;
 }
-#loginForm {
+.loginForm {
     margin-top: 10%;
     margin-left: auto;
     margin-right: auto;
-    width: 400px;
+    width: 30em;
     height: auto;
     padding-bottom: 30px;
     background-color: $color_alto_approx;
@@ -594,7 +594,7 @@ input[type="file"] {
         display: block;
         margin-left: auto;
         margin-right: auto;
-        padding-top: 50px;
+        padding-top: 5em;
     }
     a {
         color: $color_dove_gray_approx;
@@ -604,21 +604,20 @@ input[type="file"] {
         }
     }
 }
-#loginPage {
+.loginBody {
     height: 100vh;
-    background-image: $url_1 !important;
+    background-image: $image_login-bg_url !important;
     background-size: 15%;
     background-repeat: repeat;
 }
-#theForm {
-    width: 80%;
-    display: block;
+
+.theLoginForm {
     margin-left: auto;
     margin-right: auto;
     input {
-        width: 90%;
         background-color: $white;
-        height: 20px;
+        height: 2rem;
+        width: 20rem;
         font-size: 16px;
         border: 0;
         margin-top: 10px;
@@ -1135,7 +1134,7 @@ input[type="file"] {
         @extend %extend_5;
     }
     input[type=search] {
-        background-image: $url_2;
+        background-image: $image_searchicon_url;
         background-size: 20px;
         background-repeat: no-repeat;
         background-position: 115px 10px;
@@ -1188,7 +1187,7 @@ th {
 }
 .piqlIt {
     background: $color_tuscany_approx;
-    background-image: $url_3;
+    background-image: $image_piql-logo-white_url;
     background-size: 20px;
     background-repeat: no-repeat;
     background-position-x: 24px;
@@ -1515,7 +1514,7 @@ th {
 }
 @media screen and(min-width: 1405px) {
     .listFilter input[type=search] {
-        background-image: $url_2;
+        background-image: $image_searchicon_url;
         background-size: 20px;
         background-repeat: no-repeat;
         background-position: 310px 10px;

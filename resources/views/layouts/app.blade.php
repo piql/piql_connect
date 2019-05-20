@@ -6,8 +6,16 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link href="{{ asset('css/app.css') }}" rel="stylesheet" />
+        <script type="text/javascript" src="{{ asset('js/app.js') }}" defer></script>
     </head>
-    <body id="{{ Request::path() == 'login' ? 'loginPage' : '' }}">
+
+@if (Route::current()->getName() == 'login')
+    <body class="loginBody">
+        <div id="login">
+            @yield('content')
+        </div>
+@else
+    <body>
         <div id="app">
             @section('top')
                @include('includes.top')
@@ -17,6 +25,6 @@
             @show
             @yield('content')
         </div>
-        <script type="text/javascript" src="{{ asset('js/app.js') }}"></script>
+@endif
     </body>
 </html>
