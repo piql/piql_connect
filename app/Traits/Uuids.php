@@ -11,12 +11,12 @@ trait Uuids
 {
     protected static function generateBin16Uuid()
     {
-        return $this->uuidToBin(Uuid::generate());
+        return hex2bin(str_replace('-','', Uuid::generate()));
     }
 
     protected static function uuid2Bin($uuid)
     {
-        hex2bin(str_replace('-','', (string)$uuid));
+        return hex2bin(str_replace('-','', (string)$uuid));
     }
 
     protected static function bin2Uuid($bin16)

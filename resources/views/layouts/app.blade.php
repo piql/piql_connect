@@ -11,7 +11,7 @@
 
 @if (Route::current()->getName() == 'login')
     <body class="loginBody">
-        <div id="login">
+        <div id="app">
             @yield('content')
         </div>
 @else

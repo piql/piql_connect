@@ -10,11 +10,11 @@ class UsersTableSeeder extends Seeder
     public function run()
     {
         DB::table('users')->insert([
-            'id' => hex2bin(str_replace('-','', (string)Uuid::generate())),
+            'id' => $this->generateBin16Uuid(),
             'username' => "tu-".Str::random(4),
             'password' => bcrypt('123123'),
             'full_name' => 'Kåre Andersen',
-            'email' => 'kare.andersen@piql.com',
+            'email' => 'kare.andersen'.rand(1,100).'@piql.com'
         ]);
     }
 }

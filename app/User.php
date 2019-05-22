@@ -4,10 +4,12 @@ namespace App;
 
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+Use Webpatser\Uuid\Uuid;
 Use App\Traits\Uuids;
 
-class User extends Authenticatable
+class User extends Authenticatable 
 {
     use Notifiable, Uuids;
 
@@ -45,17 +47,17 @@ class User extends Authenticatable
         parent::boot();
         self::creating(function( $model ) /*Create a uuid converted to binary16 */
         {
-            $model->id = $this->generateBin16Uuid();
+            $model->id = Uuid::generate();
         });
     }
 
     public function setIdAttribute($value)
     {
-        $this->attributes['id'] = $this->uuid2Bin($value);
+        return $this->attributes['id'] = $this->uuid2Bin($value);
     }
 
-    public function getIdAttribute($value)
+    public function getIdAttribute()
     {
-        return $this->bin2Uuid($value);
+        return $this->bin2Uuid($this->attributes['id']);
     }
 }
