@@ -60,4 +60,14 @@ class User extends Authenticatable
     {
         return $this->bin2Uuid($this->attributes['id']);
     }
+
+    public static function find($id)
+    {
+       return self::all()->find($id); 
+    }
+
+    public static function findByUsername($username)
+    {
+        return self::where('username', '=', $username)->firstOrFail();
+    }
 }
