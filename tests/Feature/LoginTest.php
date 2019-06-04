@@ -43,18 +43,6 @@ class LoginTest extends TestCase
         $response->assertStatus(200);
     }
 
-    public function test_given_valid_credentials_when_posted_it_logs_the_user_in()
-    {
-        $username = $this->testUser['username'];
-        $password = $this->testUser['password'];
-        $valid_credentials = ['username' => $username, 'password' => "secret"];
-        $response = $this->from('/login')
-                         ->post('/login', $valid_credentials);
-
-        $response->assertRedirect('/');
-
-    }
-
     public function test_given_bad_credentials_when_posted_it_responds_with_404_Not_Found()
     {
         $response = $this->from('/login')
