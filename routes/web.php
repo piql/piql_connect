@@ -1,14 +1,13 @@
 <?php
 
 Route::get('login', array('uses' => 'Auth\LoginController@showLogin'));
+Route::post('/', function () {
+    return view('dashboard');
+});
 
 Route::middleware(['auth'])->group(function () {
 
     Route::get('/', function () {
-        return view('dashboard');
-    });
-
-    Route::post('/', function () {
         return view('dashboard');
     });
 
