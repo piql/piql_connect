@@ -23,7 +23,7 @@
     export default {
         data() {
             return {
-                showNotifications: true
+                showNotifications: false
             }
         },
         methods: {
