@@ -11,7 +11,8 @@ Route::middleware(['auth'])->group(function () {
         return view('dashboard');
     });
 
-    Route::get('upload', 'IngestController@showUpload');
+    Route::resource('/upload', 'IngestUploadController');
+
     Route::get('retrieve', 'AccessController@showRetrieve');
     Route::get('reports', 'ReportsController@showReports');
     Route::get('settings', 'SettingsController@showSettings');
