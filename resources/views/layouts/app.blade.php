@@ -18,11 +18,16 @@
     <body>
         <div id="app">
             @section('top')
-               @include('includes.top')
+                @include('includes.top')
             @show
             @section('sidebar')
                 @include('includes.sidebar')
             @show
+            @hasSection('heading')
+                <div class="contentContainer">
+                    <h1>@yield('heading')</h1>
+                </div>
+            @endif
             @yield('content')
         </div>
 @endif
