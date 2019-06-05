@@ -12524,3 +12524,17 @@ input {
   color: white !important;
 }
 
+.sidebar-active {
+  background-color: rgba(239, 64, 74, 0.8) !important;
+  border: 1px solid rgba(0, 0, 0, 0.125) !important;
+}
+
+.list-group-item {
+  box-sizing: content-box;
+}
+
+.list-group-item:hover {
+  background-color: rgba(239, 64, 74, 0.4) !important;
+  color: white;
+}
+

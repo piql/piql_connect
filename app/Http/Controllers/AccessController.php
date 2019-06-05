@@ -13,7 +13,7 @@ class AccessController extends Controller
 
     }
 
-    public function showRetrieve()
+    public function index()
     {
         Log::info("showRetrieve");
         return view('retrieve');   

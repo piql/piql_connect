@@ -3,15 +3,15 @@
 <div id="piqlTop">
     <div id="piqlLogo">
         <div class="img">
-            <a href="/"><img src="images/piql-connect.png"></a>
+            <a href="/"><img src="{{ asset('/images/piql-connect.png') }} "></a>
         </div>
     </div>
- <img id="customerLogo" src="images/ikaKongsberg.svg">
+ <img id="customerLogo" src="{{ asset('/images/ikaKongsberg.svg') }}">
  <div id="piqlNav">
         <ul>
-                <a href="/"><li class="active">Home</li></a>
-                <a href="upload"><li>Ingest</li></a>
-                <a href="retrieve"><li>Access</li></a>
+            <a href="{{ route('dashboard') }}"><li class="top-active">Home</li></a>
+                <a href="{{ route('upload') }}"><li>Ingest</li></a>
+                <a href="{{ route('retrieve') }}"><li>Access</li></a>
         </ul>
     </div>
     <div id="piqlOptions">
@@ -20,7 +20,6 @@
         <a href="settings"><i class="fas fa-cogs"></i></a>
         <i class="fas fa-info-circle"></i>
     </div>
-    <div class="clearboth"></div>
 </div>
 
 
