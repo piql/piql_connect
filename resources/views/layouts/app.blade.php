@@ -25,12 +25,12 @@
             @section('sidebar')
                 @include('includes.sidebar')
             @show
+            <div class="contentContainer">
             @hasSection('heading')
-                <div class="contentContainer">
                     <h1>@yield('heading')</h1>
-                </div>
             @endif
             @yield('content')
+            </div>
         </div>
 @endif
     </body>

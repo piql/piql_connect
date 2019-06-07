@@ -3,7 +3,7 @@
         <FineUploader :button="button"
                       :uploader="uploader"
                       @submit="addFileToQueue">
-            <div class="browse">browse</div>
+            <div id="browse" class="dropFiles"></div>
         </FineUploader>
     </div>
 </template>
@@ -15,7 +15,6 @@ import FineUploader from 'vue-fineuploader';
 export default {
     data() {
         const uploader = new FineUploaderTraditional({
-
             options: {
                 request: {
                     endpoint: '/api/v1/ingest/upload'

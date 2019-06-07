@@ -4,8 +4,12 @@
     @parent
 @endsection
 
-@section('heading', 'Upload')
+@section('heading')
+    <i class="fas fa-upload titleIcon"></i>Upload
+@endsection
 
 @section('content')
+    <div class="content">
 <Upload></Upload>
+    </div>
 @endsection
