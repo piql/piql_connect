@@ -7,5 +7,5 @@
 @section('heading', 'Upload')
 
 @section('content')
-
+<Upload></Upload>
 @endsection
