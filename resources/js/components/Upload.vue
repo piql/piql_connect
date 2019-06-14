@@ -3,7 +3,7 @@
         <FineUploader :button="button"
                       :uploader="uploader"
                       @submit="addFileToQueue">
-            <div id="browse" class="dropFiles"></div>
+            <div id="browse" class="dropFiles">&nbsp;</div>
         </FineUploader>
     </div>
 </template>
@@ -17,10 +17,26 @@ export default {
         const uploader = new FineUploaderTraditional({
             options: {
                 request: {
-                    endpoint: '/api/v1/ingest/upload'
+                    endpoint: '/api/v1/ingest/upload',
+                    params: {
+                        base_directory: 'completed',
+                        sub_directory: null,
+                        optimus_uploader_allowed_extensions: [],
+                        optimus_uploader_size_limit: 0,
+                        optimus_uploader_thumbnail_height: 100,
+                        optimus_uploader_thumbnail_width: 100,
+                    }
+                },
+                chunking: {
+                    enabled: true,
+                    partSize: 5000,
+                    mandatory: true,
+                    concurrent: {
+                        enabled: false
+                    },
                 },
                 callbacks: {
-                    onComplete: (id, name, response) => { console.log("Completed") }
+                    onComplete: (id, name, response) => { console.log("Upload completed") }
                 }
             },
         });
@@ -30,7 +46,10 @@ export default {
         };
     },
 
-    components: { FineUploader },
+    components: { 
+        "FineUploader" : FineUploader,
+        "file-input" : FileInput,
+    },
 
     methods: {
         addFileToQueue(payload) {

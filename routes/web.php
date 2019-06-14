@@ -5,6 +5,26 @@ Route::post('/', function () {
     return view('dashboard');
 });
 
+Route::get('/wsdl/ac.wsdl', function() {
+    $mimeHeader = ['Content-Type: application/wsdl+xsd'];
+    $filePath = Storage::path('public/wsdl/ac.wsdl');
+    return Response::download($filePath, "ac.wsdl", $mimeHeader);
+});
+
+Route::get('/wsdl/archivator_common.xsd', function() {
+    $mimeHeader = ['Content-Type: application/wsdl+xsd'];
+    $filePath = Storage::path('public/wsdl/archivator_common.xsd');
+    return Response::download($filePath, "archivator_common.xsd", $mimeHeader);
+});
+
+Route::get('/wsdl/dsca_common.xsd', function() {
+    $mimeHeader = ['Content-Type: application/wsdl+xml'];
+    $filePath = Storage::path('public/wsdl/dsca_common.xsd');
+    return Response::download($filePath, "dsca_common.xsd", $mimeHeader);
+});
+
+
+
 Route::middleware(['auth'])->group( function () {
 
     Route::get('/', function () {

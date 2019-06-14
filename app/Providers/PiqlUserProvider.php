@@ -5,6 +5,7 @@ namespace App\Providers;
 use Illuminate\Contracts\Auth\UserProvider;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Auth\EloquentUserProvider;
+use Illuminate\Routing\UrlGenerator;
 use SoapClient;
 use App\User;
 use Log;
@@ -13,7 +14,6 @@ class PiqlUserProvider extends EloquentUserProvider implements UserProvider
 {
     protected $model;
 
-    private $acwsWsdlUrl = "http://testamu1.piql.com/interface/ac.wsdl";
     private $acwsHostname = "http://testamu1.piql.com:8081";
 
 	public function __construct()
@@ -78,10 +78,12 @@ class PiqlUserProvider extends EloquentUserProvider implements UserProvider
 
     private function soapClient(string $userId, string $password)
     {
-        $acwsAcClient = new SoapClient($this->acwsWsdlUrl, array('exceptions' => 0, 'trace' => 1, 'cache_wsdl' => WSDL_CACHE_NONE));
+        $acwsWsdlUrl = url("wsdl/ac.wsdl");
+        $acwsAcClient = new SoapClient($acwsWsdlUrl, array('exceptions' => false, 'trace' => 1, 'cache_wsdl' => WSDL_CACHE_NONE, 'connection_timeout' => 15, 'keep_alive' => false ));
         $acwsAcClient->__setLocation($this->acwsHostname);
 
         $soapReturn = (Array)$acwsAcClient->authenticateUser($userId, $password);
+        dump($soapReturn);
         if(is_soap_fault($soapReturn))
         {
             Log::error('AuthenticateUsers failed: Could not reach SOAP Service');

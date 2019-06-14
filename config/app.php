@@ -165,6 +165,8 @@ return [
         /*
          * Package Service Providers...
          */
+        Optimus\FineuploaderServer\Provider\LaravelServiceProvider::class,
+
 
         /*
          * Application Service Providers...

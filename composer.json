@@ -12,6 +12,8 @@
         "fideloper/proxy": "^4.0",
         "laravel/framework": "5.8.*",
         "laravel/tinker": "^1.0",
+        "optimus/fineuploader-server": "^0.2.0",
+        "optimus/fineuploader-server-thumbnail-creator": "^0.1.1",
         "webpatser/laravel-uuid": "^3.0"
     },
     "require-dev": {
@@ -47,7 +49,7 @@
             "Tests\\": "tests/"
         }
     },
-    "minimum-stability": "dev",
+    "minimum-stability": "alpha",
     "prefer-stable": true,
     "scripts": {
         "post-autoload-dump": [

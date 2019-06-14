@@ -10,6 +10,7 @@
 
 @section('content')
     <div class="content">
-<Upload></Upload>
+        <Upload>
+        </Upload>
     </div>
 @endsection

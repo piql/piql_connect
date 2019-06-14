@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<xsd:schema targetNamespace="http://cinevation.net/archivator/common"  
+            xmlns:xsd_archivator="http://cinevation.net/archivator/common" 
+            xmlns="http://www.w3.org/2001/XMLSchema" 
+            xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <complexType name="FaultReason">
+        <all>
+          <element name="errorCode" type="xsd:int">
+        <annotation>
+          <documentation>Errorcode, must be one declared in enumeration.</documentation>
+        </annotation>
+      </element>
+          <element name="debugMessage" type="xsd:string">
+        <annotation>
+          <documentation>Only to be used for logging or debugging.</documentation>
+        </annotation>
+      </element>
+        </all>
+    </complexType>
+    <complexType name="RequestResult">
+        <all>
+          <element name="status" type="xsd:boolean">
+            <annotation>
+              <documentation>True if a request was successful.</documentation>
+            </annotation>
+          </element>
+          <element name="faultReason" type="xsd_archivator:FaultReason" minOccurs="0">
+            <annotation>
+              <documentation>Only present if status is false. Contains the reason for a fault.</documentation>
+            </annotation>
+          </element>
+        </all>
+    </complexType>
+</xsd:schema>

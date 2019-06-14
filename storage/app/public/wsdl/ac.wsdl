@@ -1,0 +1,1094 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<definitions xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/"
+             xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/"
+             xmlns:tns="http://tedial.com/ac"
+             xmlns:xsd_drec_common="http://cinevation.net/drec"
+             xmlns:xsd_dsca_common="http://cinevation.net/dsca"
+             xmlns:xsd_archivator_common="http://cinevation.net/archivator/common"
+             xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+             xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+             xmlns="http://schemas.xmlsoap.org/wsdl/"
+             targetNamespace="http://tedial.com/ac">
+
+    <types>
+        <xsd:schema targetNamespace="http://tedial.com/ac"
+                    xmlns="http://www.w3.org/2001/XMLSchema"
+                    elementFormDefault="unqualified"
+                    attributeFormDefault="unqualified"
+                    xmlns:auto1="http://tedial.com/ac">
+            <xsd:import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
+            <xsd:import namespace="http://schemas.xmlsoap.org/wsdl/" />
+            <import namespace="http://cinevation.net/dsca" schemaLocation="/wsdl/dsca_common.xsd"/>
+            <import namespace="http://cinevation.net/archivator/common" schemaLocation="/wsdl/archivator_common.xsd"/>
+
+            <complexType name="ArmedNotificationParams">
+                <all>
+                    <element name="result" type="xsd_archivator_common:RequestResult"/>
+                    <element name="reelId" type="xsd:string"/>
+                    <element name="dataReceiver" type="xsd:anyURI"/>
+                </all>
+            </complexType>
+            <complexType name="StoppedNotificationParams">
+                <all>
+                    <element name="result" type="xsd_archivator_common:RequestResult"/>
+                    <element name="reelId" type="xsd:string"/>
+                </all>
+            </complexType>
+            <complexType name="PrintProgressNotificationParams">
+                <all>
+                    <element name="reelId" type="xsd:string"/>
+                    <element name="progress" type="xsd:float">
+                        <annotation>
+                            <documentation>Print progress in percent.</documentation>
+                        </annotation>
+                    </element>
+                </all>
+            </complexType>
+            <complexType name="PrintErrorNotificationParams">
+                <all>
+                    <element name="reelId" type="xsd:string"/>
+                    <element name="error" type="xsd_archivator_common:FaultReason" maxOccurs="1"/>
+                </all>
+            </complexType>
+
+            <complexType name="Job">
+                <all>
+                    <element name="jobId"           type="xsd:unsignedLong"/>
+                    <element name="jobName"         type="xsd:string"/>
+                    <element name="jobType"         type="xsd:string"/>
+                    <element name="creationDate"    type="xsd:string"/>
+                    <element name="userId"          type="xsd:string"/>
+                    <element name="state"           type="xsd:string"/>
+                    <element name="boxingFormat"    type="xsd:string"/>
+                    <element name="colorDepth"      type="xsd:unsignedInt"/>
+                    <element name="blockSize"       type="xsd:unsignedInt"/>
+                    <element name="tocFrames"       type="xsd:unsignedInt"/>
+                    <element name="lastFrameNumber" type="xsd:unsignedInt"/>
+                    <element name="stockCode"       type="xsd:string"/>
+                    <element name="aim"             type="xsd:string"/>
+                    <element name="framesInReel"    type="xsd:unsignedInt"/>
+                </all>
+            </complexType>
+            <complexType name="ListJobs">
+                <sequence>
+                    <element  minOccurs="0" maxOccurs="unbounded" name="Jobs" type="tns:Job"/>
+                </sequence>
+            </complexType>
+            <complexType name="UJob">
+                <all>
+                    <element name="id"              type="xsd:unsignedLong"/>
+                    <element name="jobId"           type="xsd:unsignedLong"/>
+                    <element name="name"            type="xsd:string"/>
+                    <element name="type"            type="xsd:string"/>
+                    <element name="state"           type="xsd:string"/>
+                    <element name="creationDate"    type="xsd:string"/>
+                </all>
+            </complexType>
+            <complexType name="ListUJobs">
+                <sequence>
+                    <element  minOccurs="0" maxOccurs="unbounded" name="UJobs" type="tns:UJob"/>
+                </sequence>
+            </complexType>
+            <complexType name="UTask">
+                <all>
+                    <element name="id"               type="xsd:unsignedLong"/>
+                    <element name="reelId"           type="xsd:unsignedLong"/>
+                    <element name="reelName"         type="xsd:string"/>
+                    <element name="uJobId"           type="xsd:unsignedLong"/>
+                    <element name="state"            type="xsd:string"/>
+                    <element name="name"             type="xsd:string"/>
+                    <element name="frames"           type="xsd:string"/>
+                    <element name="uFramesOK"        type="xsd:unsignedInt"/>
+                    <element name="uFramesError"     type="xsd:unsignedInt"/>
+                </all>
+            </complexType>
+            <complexType name="ListUTasks">
+                <sequence>
+                    <element  minOccurs="0" maxOccurs="unbounded" name="UTasks" type="tns:UTask"/>
+                </sequence>
+            </complexType>
+            <complexType name="UFile">
+                <all>
+                    <element name="id"               type="xsd:unsignedLong"/>
+                    <element name="uJobId"           type="xsd:unsignedLong"/>
+                    <element name="fileId"           type="xsd:unsignedLong"/>
+                    <element name="state"            type="xsd:string"/>
+                    <element name="framesOK"         type="xsd:unsignedInt"/>
+                    <element name="framesError"      type="xsd:unsignedInt"/>
+                    <element name="fileLink"         type="xsd:string"/>
+                </all>
+            </complexType>
+            <complexType name="ListUFiles">
+                <sequence>
+                    <element  minOccurs="0" maxOccurs="unbounded" name="UFiles" type="tns:UFile"/>
+                </sequence>
+            </complexType>
+            <complexType name="UFrame">
+                <all>
+                    <element name="id"               type="xsd:unsignedLong"/>
+                    <element name="uTaskId"          type="xsd:unsignedLong"/>
+                    <element name="state"            type="xsd:string"/>
+                    <element name="status"           type="xsd:string"/>
+                    <element name="nameFile"         type="xsd:string"/>
+                    <element name="frameId"          type="xsd:unsignedLong"/>
+                </all>
+            </complexType>
+            <complexType name="ListUFrames">
+                <sequence>
+                    <element  minOccurs="0" maxOccurs="unbounded" name="UFrames" type="tns:UFrame"/>
+                </sequence>
+            </complexType>
+            <complexType name="Reel">
+                <all>
+                    <element name="reelId"           type="xsd:unsignedLong"/>
+                    <element name="reelName"         type="xsd:string"/>
+                    <element name="jobId"            type="xsd:unsignedLong"/>
+                    <element name="state"            type="xsd:string"/>
+                    <element name="isRecorded"       type="xsd:boolean" />
+                    <element name="errorCode"        type="xsd:int"/>
+                    <element name="debugMessage"     type="xsd:string"/>
+                    <element name="firstFrameNumber" type="xsd:unsignedInt"/>
+                    <element name="lastFrameNumber"  type="xsd:unsignedInt"/>
+                </all>
+            </complexType>
+            <complexType name="ListReels">
+                <sequence>
+                    <element  minOccurs="0" maxOccurs="unbounded" name="Reels" type="tns:Reel"/>
+                </sequence>
+            </complexType>
+            <complexType name="File">
+                <all>
+                    <element name="fileId"           type="xsd:unsignedInt"/>
+                    <element name="fileName"         type="xsd:string"/>
+                    <element name="jobId"            type="xsd:unsignedLong"/>
+                    <element name="state"            type="xsd:string"/>
+                    <element name="firstFrameNumber" type="xsd:unsignedInt"/>
+                    <element name="lastFrameNumber"  type="xsd:unsignedInt"/>
+                    <element name="checkSum"         type="xsd:string"/>
+                    <element name="size"             type="xsd:unsignedInt"/>
+                </all>
+            </complexType>
+            <complexType name="ListFiles">
+                <sequence>
+                    <element  minOccurs="0" maxOccurs="unbounded" name="Files" type="tns:File"/>
+                </sequence>
+            </complexType>
+            <simpleType name="DrecInfoTypes">
+                <restriction base="xsd:string">
+                    <enumeration value="stock"></enumeration>
+                    <enumeration value="imageFormat"></enumeration>
+                    <enumeration value="lookUp"></enumeration>
+                </restriction>
+            </simpleType>
+            <complexType name="DrecInfo">
+                <all>
+                    <element name="id"              type="xsd:int"/>
+                    <element name="textView"        type="xsd:string"/>
+                    <element name="active"          type="xsd:boolean"/>
+                </all>
+            </complexType>
+            <complexType name="ListDrecInfo">
+                <sequence>
+                    <element  minOccurs="0" maxOccurs="unbounded" name="drecInfo" type="tns:DrecInfo"/>
+                </sequence>
+            </complexType>
+            <simpleType name="JobViewTypes">
+                <restriction base="xsd:string">
+                    <enumeration value="Boxable"></enumeration>
+                    <enumeration value="Recordable"></enumeration>
+                    <enumeration value="Error"></enumeration>
+                </restriction>
+            </simpleType>
+
+            <complexType name="Worker">
+                <all>
+                    <element name="id"              type="xsd:string"/>
+                    <element name="type"            type="xsd:string"/>
+                    <element name="description"     type="xsd:string"/>
+                    <element name="state"           type="xsd:string"/>
+                    <element name="stateInfo"       type="xsd:string"/>
+                    <element name="stateProgress"   type="xsd:int"/>
+                </all>
+            </complexType>
+            <complexType name="ListWorker">
+                <sequence>
+                    <element  minOccurs="0" maxOccurs="unbounded" name="Workers" type="tns:Worker"/>
+                </sequence>
+            </complexType>
+
+            <complexType name="ListPermissions">
+                <sequence>
+                    <element minOccurs="0" maxOccurs="unbounded" name="Permissions" type="xsd:string" />
+                </sequence>
+            </complexType>
+
+        </xsd:schema>
+    </types>
+
+    <!-- MESSAGES -->
+    <message name="createTarJobRequest">
+        <part name="clientId"      type="xsd:string"/>
+        <part name="fileUrl"       type="xsd:string"/>
+    </message>
+
+    <message name="createTarJobResponse">
+        <part name="jobId"         type="xsd:unsignedLong" />
+        <part name="result"        type="xsd_archivator_common:RequestResult"/>
+    </message>
+
+    <message name="restoreFilesRequest">
+        <part name="listFilesId"      type="xsd:string"/>
+        <part name="restoreDigital"   type="xsd:boolean"/>
+        <part name="restoreVisual"    type="xsd:boolean"/>
+    </message>
+
+    <message name="restoreFilesResponse">
+        <part name="listRestoreJobs"    type="tns:ListUJobs"/>
+        <part name="result"             type="xsd_archivator_common:RequestResult"/>
+    </message>
+
+    <message name="restoreJobFromReelRequest">
+        <part name="reelId" type="xsd:string">
+            <documentation>If reelId is empty, any reel will be excepted</documentation>
+        </part>
+        <part name="userId" type="xsd:unsignedLong">
+            <documentation>The restored job will belong to this user</documentation>
+        </part>
+    </message>
+
+    <message name="restoreJobFromReelResponse">
+        <part name="uJobId"    type="xsd:unsignedLong"/>
+        <part name="result"    type="xsd_archivator_common:RequestResult"/>
+    </message>
+
+    <message name="createUJobFromReelRequest">
+        <part name="reelId"        type="xsd:unsignedLong" />
+        <part name="ujobName"      type="xsd:string" />
+    </message>
+    <message name="createUJobFromReelResponse">
+        <part name="ujobId"        type="xsd:unsignedLong" />
+        <part name="result"        type="xsd_archivator_common:RequestResult"/>
+    </message>
+    <message name="createUJobFromFilesRequest">
+        <part name="jobId"         type="xsd:unsignedLong" />
+        <part name="listFilesId"   type="xsd:string" />
+        <part name="ujobName"      type="xsd:string" />
+        <part name="readDigital"   type="xsd:boolean" />
+        <part name="readVisual"    type="xsd:boolean" />
+    </message>
+    <message name="createUJobFromFilesResponse">
+        <part name="ujobId"        type="xsd:unsignedLong" />
+        <part name="result"        type="xsd_archivator_common:RequestResult"/>
+    </message>
+    <message name="dropJobRequest">
+        <part name="jobId"         type="xsd:unsignedLong" />
+        <part name="permanentDelete" type="xsd:boolean" />
+    </message>
+    <message name="dropJobResponse">
+        <part name="jobId"         type="xsd:unsignedLong" />
+        <part name="result"        type="xsd_archivator_common:RequestResult" />
+    </message>
+    <message name="dropReelRequest">
+        <part name="reelId"        type="xsd:unsignedLong" />
+        <part name="permanentDelete" type="xsd:boolean" />
+    </message>
+    <message name="dropReelResponse">
+        <part name="reelId"          type="xsd:unsignedLong" />
+        <part name="result"          type="xsd_archivator_common:RequestResult" />
+    </message>
+    <message name="setFileOfflineRequest">
+        <part name="fileId"          type="xsd:unsignedLong" />
+    </message>
+    <message name="setFileOfflineResponse">
+        <part name="result"          type="xsd_archivator_common:RequestResult" />
+    </message>
+    <message name="commitJobRequest">
+        <part name="jobId"          type="xsd:unsignedLong" />
+    </message>
+    <message name="commitJobResponse">
+        <part name="result"          type="xsd_archivator_common:RequestResult" />
+    </message>
+    <message name="sendPasswordResetMailRequest">
+        <part name="userName"        type="xsd:string" />
+        <part name="email"           type="xsd:string" />
+        <part name="code"            type="xsd:string" />
+        <part name="expiry"          type="xsd:string" />
+        <part name="client"          type="xsd:string" />
+        <part name="url"             type="xsd:string" />
+    </message>
+    <message name="sendPasswordResetMailResponse">
+        <part name="result"          type="xsd_archivator_common:RequestResult" />
+    </message>
+    <message name="dropUJobRequest">
+        <part name="ujobId"          type="xsd:unsignedLong" />
+        <part name="permanentDelete" type="xsd:boolean" />
+    </message>
+    <message name="dropUJobResponse">
+        <part name="result"          type="xsd_archivator_common:RequestResult" />
+    </message>
+    <message name="recordRequest">
+        <part name="reelId"          type="xsd:unsignedLong" />
+    </message>
+    <message name="recordResponse">
+        <part name="result"          type="xsd_archivator_common:RequestResult" />
+    </message>
+    <message name="recordStopRequest">
+        <part name="reelId"          type="xsd:unsignedLong" />
+    </message>
+    <message name="recordStopResponse">
+        <part name="result"          type="xsd_archivator_common:RequestResult" />
+    </message>
+    <message name="recordStatusRequest">
+        <part name="reelId"          type="xsd:unsignedLong" />
+    </message>
+    <message name="recordStatusResponse">
+        <part name="status"          type="xsd:string" />
+        <part name="progress"        type="xsd:int" />
+        <part name="result"          type="xsd_archivator_common:RequestResult" />
+    </message>
+    <message name="printLabelRequest">
+        <part name="reelId"          type="xsd:unsignedLong" />
+    </message>
+    <message name="printLabelResponse">
+        <part name="qrCode"          type="xsd:string" />
+        <part name="result"          type="xsd_archivator_common:RequestResult" />
+    </message>
+    <message name="ArmedNotification">
+        <part name="parameters"      type="tns:ArmedNotificationParams" />
+    </message>
+    <message name="StoppedNotification">
+        <part name="parameters"      type="tns:StoppedNotificationParams"/>
+    </message>
+    <message name="PrintProgressNotification">
+        <part name="parameters"      type="tns:PrintProgressNotificationParams"/>
+    </message>
+    <message name="PrintErrorNotification">
+        <part name="parameters"      type="tns:PrintErrorNotificationParams"/>
+    </message>
+    <message name="getJobRequest">
+        <part name="jobId" type="xsd:unsignedLong" />
+    </message>
+    <message name="getJobResponse">
+        <part name="job" type="tns:Job" />
+        <part name="result"   type="xsd_archivator_common:RequestResult" />
+    </message>
+    <message name="getReelRequest">
+        <part name="reelId" type="xsd:unsignedLong" />
+    </message>
+    <message name="getReelResponse">
+        <part name="reel" type="tns:Reel" />
+        <part name="result"   type="xsd_archivator_common:RequestResult" />
+    </message>
+    <message name="getTocFileRequest">
+        <part name="jobId"   type="xsd:unsignedLong" />
+        <part name="reelId"   type="xsd:unsignedLong" />
+    </message>
+    <message name="getTocFileResponse">
+        <part name="tocFile"       type="xsd:string" />
+        <part name="result"       type="xsd_archivator_common:RequestResult" />
+    </message>
+
+    <message name="setReelStateRequest">
+        <part name="reelId"    type="xsd:unsignedLong" />
+        <part name="newState"  type="xsd:string" />
+        <part name="debugMessage" type="xsd:string" />
+    </message>
+    <message name="setReelStateResponse">
+        <part name="result"   type="xsd_archivator_common:RequestResult" />
+    </message>
+
+    <message name="setJobStateRequest">
+        <part name="jobId"    type="xsd:unsignedLong" />
+        <part name="newState"  type="xsd:string" />
+        <part name="debugMessage" type="xsd:string" />
+    </message>
+    <message name="setJobStateResponse">
+        <part name="result"   type="xsd_archivator_common:RequestResult" />
+    </message>
+
+    <message name="rejectJobRequest">
+        <part name="jobId"    type="xsd:unsignedLong" />
+        <part name="debugMessage" type="xsd:string" />
+    </message>
+    <message name="rejectJobResponse">
+        <part name="result"   type="xsd_archivator_common:RequestResult" />
+    </message>
+
+    <message name="resetJobRequest">
+        <part name="jobId"    type="xsd:unsignedLong" />
+        <part name="debugMessage" type="xsd:string" />
+    </message>
+    <message name="resetJobResponse">
+        <part name="result"   type="xsd_archivator_common:RequestResult" />
+    </message>
+    
+    <message name="sendStorageEventRequest">
+        <part name="reelId"    type="xsd:string" />
+        <part name="newState"  type="xsd:string" ><documentation>STORED|RECEIVED|STORE_ERROR|RECEIVE_ERROR</documentation></part>
+        <part name="debugMessage" type="xsd:string" />
+    </message>
+    <message name="sendStorageEventResponse">
+        <part name="result"   type="xsd_archivator_common:RequestResult" />
+    </message>
+
+
+    <message name="setUTaskStateRequest">
+        <part name="uTaskId"    type="xsd:unsignedLong" />
+        <part name="newState"  type="xsd:string" />
+    </message> 
+    <message name="setUTaskStateResponse">
+        <part name="result"   type="xsd_archivator_common:RequestResult" />
+    </message>
+
+    <message name="startRestoreRequest">
+        <part name="uTaskId"    type="xsd:unsignedLong" />
+    </message> 
+    <message name="startRestoreResponse">
+        <part name="result"   type="xsd_archivator_common:RequestResult" />
+    </message>
+
+    <message name="registerEventListenerRequest">
+        <part name="listener"   type="xsd:anyURI" />
+        <part name="name"       type="xsd:string" />
+    </message>
+    <message name="registerEventListenerResponse">
+        <part name="result"       type="xsd_archivator_common:RequestResult" />
+    </message>
+
+    <message name="unregisterEventListenerRequest">
+        <part name="listener"   type="xsd:anyURI" />
+    </message>
+    <message name="unregisterEventListenerResponse">
+        <part name="result"       type="xsd_archivator_common:RequestResult" />
+    </message>
+
+    <message name="createUserRequest">
+        <part name="name"        type="xsd:string" />
+        <part name="password"    type="xsd:string" />
+        <part name="groupId"     type="xsd:string" />
+        <part name="ftpEnabled"  type="xsd:boolean" />
+        <part name="description" type="xsd:string" />
+    </message>
+    <message name="createUserResponse">
+        <part name="userId"     type="xsd:unsignedLong" />
+        <part name="result"     type="xsd_archivator_common:RequestResult" />
+    </message>
+    <message name="deleteUserRequest">
+        <part name="userId"     type="xsd:unsignedLong" />
+        <part name="permanent"  type="xsd:boolean" >       
+          <documentation>Delete permanent from database</documentation>
+        </part>
+    </message>
+    <message name="deleteUserResponse">
+        <part name="result"     type="xsd_archivator_common:RequestResult" />
+    </message>
+    <message name="authenticateUserRequest">
+        <part name="username" type="xsd:string" />
+        <part name="password" type="xsd:string" />
+    </message>
+    <message name="authenticateUserResponse">
+        <part name="isAuthenticated" type="xsd:boolean" />
+        <part name="token" type="xsd:string" />
+        <part name="expires" type="xsd:string" />
+        <part name="reason" type="xsd:string" />
+    </message>
+    <message name="refreshUserAuthenticationRequest">
+        <part name="username" type="xsd:string" />
+        <part name="token" type="xsd:string" />
+    </message>
+    <message name="refreshUserAuthenticationResponse">
+        <part name="token" type="xsd:string" />
+        <part name="expires" type="xsd:string" />
+        <part name="reason" type="xsd:string" />
+    </message>
+    <message name="getUserAuthorizationsRequest">
+        <part name="username" type="xsd:string" />
+        <part name="token" type="xsd:string" />
+    </message>
+    <message name="getUserAuthorizationsResponse">
+        <part name="userId" type="xsd:string" />
+        <part name="permissions" type="tns:ListPermissions" />
+    </message>
+    <message name="setPropertyRequest">
+        <part name="name"       type="xsd:string" />
+        <part name="value"      type="xsd:string" />
+        <part name="ownerName"  type="xsd:string" />
+        <part name="ownerType"  type="xsd:string" />
+    </message>
+    <message name="setPropertyResponse">
+        <part name="result"     type="xsd_archivator_common:RequestResult" />
+    </message>
+    <message name="getPropertyRequest">
+        <part name="name"       type="xsd:string" />
+        <part name="ownerName"  type="xsd:string" />
+        <part name="ownerType"  type="xsd:string" />
+    </message>
+    <message name="getPropertyResponse">
+        <part name="value"      type="xsd:string" />
+        <part name="type"       type="xsd:string" />       
+        <part name="result"     type="xsd_archivator_common:RequestResult" />
+    </message>
+
+    <message name="stopWorkRequest">
+        <part name="id"         type="xsd:string" />
+    </message>
+    <message name="stopWorkResponse">
+        <part name="result"     type="xsd_archivator_common:RequestResult" />
+    </message>
+    
+
+    <message name="getWorkersRequest">
+    </message>
+    <message name="getWorkersResponse">
+        <part name="workerList" type="tns:ListWorker" />
+        <part name="result"     type="xsd_archivator_common:RequestResult" />
+    </message>
+
+    <portType name="ArchivatorCorePortType">
+        <!-- Store operations -->
+        <operation name="createTarJob">
+            <input message="tns:createTarJobRequest"/>
+            <output message="tns:createTarJobResponse"/>
+        </operation>
+        <operation name="setReelState">
+            <input message="tns:setReelStateRequest"/>
+            <output message="tns:setReelStateResponse"/>
+        </operation>
+        <operation name="setJobState">
+            <input message="tns:setJobStateRequest"/>
+            <output message="tns:setJobStateResponse"/>
+        </operation>
+        <operation name="rejectJob">
+            <input message="tns:rejectJobRequest"/>
+            <output message="tns:rejectJobResponse"/>
+        </operation>
+        <operation name="resetJob">
+            <input message="tns:resetJobRequest"/>
+            <output message="tns:resetJobResponse"/>
+        </operation>
+        <operation name="setUTaskState">
+            <input message="tns:setUTaskStateRequest"/>
+            <output message="tns:setUTaskStateResponse"/>
+        </operation>
+        <operation name="startRestore">
+            <input message="tns:startRestoreRequest"/>
+            <output message="tns:startRestoreResponse"/>
+        </operation>
+        <operation name="dropJob">
+            <input message="tns:dropJobRequest"/>
+            <output message="tns:dropJobResponse"/>
+        </operation>
+        <operation name="dropReel">
+            <input message="tns:dropReelRequest"/>
+            <output message="tns:dropReelResponse"/>
+        </operation>
+        <operation name="commitJob">
+            <input message="tns:commitJobRequest"/>
+            <output message="tns:commitJobResponse"/>
+        </operation>
+        <operation name="sendPasswordResetMail">
+            <input message="tns:sendPasswordResetMailRequest"/>
+            <output message="tns:sendPasswordResetMailResponse"/>
+        </operation>
+
+
+        <!-- Restore operations -->
+        <operation name="restoreFiles">
+            <input message="tns:restoreFilesRequest"/>
+            <output message="tns:restoreFilesResponse"/>
+        </operation>
+        <operation name="restoreJobFromReel">
+            <input message="tns:restoreJobFromReelRequest"/>
+            <output message="tns:restoreJobFromReelResponse"/>
+        </operation>
+        <operation name="createUJobFromReel">
+            <input message="tns:createUJobFromReelRequest"/>
+            <output message="tns:createUJobFromReelResponse"/>
+        </operation>
+        <operation name="createUJobFromFiles">
+            <input message="tns:createUJobFromFilesRequest"/>
+            <output message="tns:createUJobFromFilesResponse"/>
+        </operation>
+        <operation name="setFileOffline">
+            <input message="tns:setFileOfflineRequest"/>
+            <output message="tns:setFileOfflineResponse"/>
+        </operation>
+        <operation name="dropUJob">
+            <input message="tns:dropUJobRequest"/>
+            <output message="tns:dropUJobResponse"/>
+        </operation>
+
+        <!-- DRec control -->
+        <operation name="record">
+            <input message="tns:recordRequest"/>
+            <output message="tns:recordResponse"/>
+        </operation>
+        <operation name="recordStop">
+            <input message="tns:recordStopRequest"/>
+            <output message="tns:recordStopResponse"/>
+        </operation>
+        <operation name="recordStatus">
+            <input message="tns:recordStatusRequest"/>
+            <output message="tns:recordStatusResponse"/>
+        </operation>
+        <operation name="printLabel">
+            <input message="tns:printLabelRequest"/>
+            <output message="tns:printLabelResponse"/>
+        </operation>
+        <operation name="armedNotification">
+            <input message="tns:ArmedNotification"/>
+        </operation>
+        <operation name="stoppedNotification">
+            <input message="tns:StoppedNotification"/>
+        </operation>
+        <operation name="printProgressNotification">
+            <input message="tns:PrintProgressNotification"/>
+        </operation>
+        <operation name="printErrorNotification">
+            <input message="tns:PrintErrorNotification"/>
+        </operation>
+
+        <!-- User Management -->
+        <operation name="createUser">
+            <input message="tns:createUserRequest"/>
+            <output message="tns:createUserResponse"/>
+        </operation>
+        <operation name="deleteUser">
+            <input message="tns:deleteUserRequest"/>
+            <output message="tns:deleteUserResponse"/>
+        </operation>
+        <operation name="authenticateUser">
+            <input message="tns:authenticateUserRequest" />
+            <output message="tns:authenticateUserResponse" />
+        </operation>
+         <operation name="getUserAuthorizations">
+            <input message="tns:getUserAuthorizationsRequest" />
+            <output message="tns:getUserAuthorizationsResponse" />
+        </operation>
+          <operation name="refreshUserAuthentication">
+            <input message="tns:refreshUserAuthenticationRequest" />
+            <output message="tns:refreshUserAuthenticationResponse" />
+        </operation>
+        
+        <operation name="setProperty">
+            <input message="tns:setPropertyRequest"/>
+            <output message="tns:getPropertyResponse"/>
+        </operation>
+        <operation name="getProperty">
+            <input message="tns:getPropertyRequest"/>
+            <output message="tns:getPropertyResponse"/>
+        </operation>
+
+
+        <!-- Storage integrations -->
+        <operation name="sendStorageEvent">
+            <input message="tns:sendStorageEventRequest"/>
+            <output message="tns:sendStorageEventResponse"/>
+        </operation>
+
+
+        <!-- Database access -->
+        <!-- Job query interface -->
+        <operation name="getJob">
+            <input message="tns:getJobRequest"/>
+            <output message="tns:getJobResponse"/>
+        </operation>
+
+        <!-- Reel query interface -->
+        <operation name="getReel">
+            <input message="tns:getReelRequest"/>
+            <output message="tns:getReelResponse"/>
+        </operation>
+
+        <!-- Boxing interface -->
+        <operation name="getTocFile">
+            <input message="tns:getTocFileRequest"/>
+            <output message="tns:getTocFileResponse"/>
+        </operation>
+
+        <!-- ACWS event interface -->
+        <operation name="registerEventListener">
+            <input message="tns:registerEventListenerRequest"/>
+            <output message="tns:registerEventListenerResponse"/>
+        </operation>
+        <operation name="unregisterEventListener">
+            <input message="tns:unregisterEventListenerRequest"/>
+            <output message="tns:unregisterEventListenerResponse"/>
+        </operation>
+
+        <!-- Worker Management interface -->
+        <operation name="getWorkers">
+            <input message="tns:getWorkersRequest"/>
+            <output message="tns:getWorkersResponse"/>
+        </operation>
+        <operation name="stopWork">
+            <input message="tns:stopWorkRequest"/>
+            <output message="tns:stopWorkResponse"/>
+        </operation>
+
+    </portType>
+
+    <binding name="ArchivatorCore" type="tns:ArchivatorCorePortType">
+        <soap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http"/>
+        <operation name="sendStorageEvent">
+            <soap:operation soapAction="" style="rpc"/>
+            <input>
+                <soap:body use="literal" namespace="http://tedial.com/ac" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </input>
+            <output>
+                <soap:body use="literal" namespace="http://tedial.com/ac" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </output>
+        </operation>
+
+        <operation name="setReelState">
+            <soap:operation soapAction="" style="rpc"/>
+            <input>
+                <soap:body use="literal" namespace="http://tedial.com/ac" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </input>
+            <output>
+                <soap:body use="literal" namespace="http://tedial.com/ac" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </output>
+        </operation>
+        <operation name="setJobState">
+            <soap:operation soapAction="" style="rpc"/>
+            <input>
+                <soap:body use="literal" namespace="http://tedial.com/ac" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </input>
+            <output>
+                <soap:body use="literal" namespace="http://tedial.com/ac" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </output>
+        </operation>
+        <operation name="rejectJob">
+            <soap:operation soapAction="" style="rpc"/>
+            <input>
+                <soap:body use="literal" namespace="http://tedial.com/ac" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </input>
+            <output>
+                <soap:body use="literal" namespace="http://tedial.com/ac" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </output>
+        </operation>
+        <operation name="resetJob">
+            <soap:operation soapAction="" style="rpc"/>
+            <input>
+                <soap:body use="literal" namespace="http://tedial.com/ac" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </input>
+            <output>
+                <soap:body use="literal" namespace="http://tedial.com/ac" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </output>
+        </operation>
+        <operation name="setUTaskState">
+            <soap:operation soapAction="" style="rpc"/>
+            <input>
+                <soap:body use="literal" namespace="http://tedial.com/ac" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </input>
+            <output>
+                <soap:body use="literal" namespace="http://tedial.com/ac" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </output>
+        </operation>
+        <operation name="startRestore">
+            <soap:operation soapAction="" style="rpc"/>
+            <input>
+                <soap:body use="literal" namespace="http://tedial.com/ac" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </input>
+            <output>
+                <soap:body use="literal" namespace="http://tedial.com/ac" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </output>
+        </operation>
+        <operation name="createTarJob">
+            <soap:operation soapAction="" style="rpc"/>
+            <input>
+                <soap:body use="literal" namespace="http://tedial.com/ac" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </input>
+            <output>
+                <soap:body use="literal" namespace="http://tedial.com/ac" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </output>
+        </operation>
+        <operation name="restoreFiles">
+            <soap:operation soapAction="" style="rpc"/>
+            <input>
+                <soap:body use="literal" namespace="http://tedial.com/ac" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </input>
+            <output>
+                <soap:body use="literal" namespace="http://tedial.com/ac" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </output>
+        </operation>
+        <operation name="restoreJobFromReel">
+            <soap:operation soapAction="" style="rpc"/>
+            <input>
+                <soap:body use="literal" namespace="http://tedial.com/ac" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </input>
+            <output>
+                <soap:body use="literal" namespace="http://tedial.com/ac" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </output>
+        </operation>
+        <operation name="createUJobFromReel">
+            <soap:operation soapAction="" style="rpc"/>
+            <input>
+                <soap:body use="literal" namespace="http://tedial.com/ac" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </input>
+            <output>
+                <soap:body use="literal" namespace="http://tedial.com/ac" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </output>
+        </operation>
+        <operation name="createUJobFromFiles">
+            <soap:operation soapAction="" style="rpc"/>
+            <input>
+                <soap:body use="literal" namespace="http://tedial.com/ac" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </input>
+            <output>
+                <soap:body use="literal" namespace="http://tedial.com/ac" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </output>
+        </operation>
+        <operation name="dropJob">
+            <soap:operation soapAction="" style="rpc"/>
+            <input>
+                <soap:body use="literal" namespace="http://tedial.com/ac" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </input>
+            <output>
+                <soap:body use="literal" namespace="http://tedial.com/ac" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </output>
+        </operation>
+        <operation name="dropReel">
+            <soap:operation soapAction="" style="rpc"/>
+            <input>
+                <soap:body use="literal" namespace="http://tedial.com/ac" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </input>
+            <output>
+                <soap:body use="literal" namespace="http://tedial.com/ac" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </output>
+        </operation>
+        <operation name="setFileOffline">
+            <soap:operation soapAction="" style="rpc"/>
+            <input>
+                <soap:body use="literal" namespace="http://tedial.com/ac" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </input>
+            <output>
+                <soap:body use="literal" namespace="http://tedial.com/ac" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </output>
+        </operation>
+        <operation name="commitJob">
+            <soap:operation soapAction="" style="rpc"/>
+            <input>
+                <soap:body use="literal" namespace="http://tedial.com/ac" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </input>
+            <output>
+                <soap:body use="literal" namespace="http://tedial.com/ac" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </output>
+        </operation>
+        <operation name="sendPasswordResetMail">
+            <soap:operation soapAction="" style="rpc"/>
+            <input>
+                <soap:body use="literal" namespace="http://tedial.com/ac" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </input>
+            <output>
+                <soap:body use="literal" namespace="http://tedial.com/ac" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </output>
+        </operation>
+        <operation name="dropUJob">
+            <soap:operation soapAction="" style="rpc"/>
+            <input>
+                <soap:body use="literal" namespace="http://tedial.com/ac" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </input>
+            <output>
+                <soap:body use="literal" namespace="http://tedial.com/ac" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </output>
+        </operation>
+        <operation name="record">
+            <soap:operation soapAction="" style="rpc"/>
+            <input>
+                <soap:body use="literal" namespace="http://tedial.com/ac" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </input>
+            <output>
+                <soap:body use="literal" namespace="http://tedial.com/ac" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </output>
+        </operation>
+        <operation name="recordStop">
+            <soap:operation soapAction="" style="rpc"/>
+            <input>
+                <soap:body use="literal" namespace="http://tedial.com/ac" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </input>
+            <output>
+                <soap:body use="literal" namespace="http://tedial.com/ac" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </output>
+        </operation>
+        <operation name="recordStatus">
+            <soap:operation soapAction="" style="rpc"/>
+            <input>
+                <soap:body use="literal" namespace="http://tedial.com/ac" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </input>
+            <output>
+                <soap:body use="literal" namespace="http://tedial.com/ac" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </output>
+        </operation>
+        <operation name="printLabel">
+            <soap:operation soapAction="" style="rpc"/>
+            <input>
+                <soap:body use="literal" namespace="http://tedial.com/ac" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </input>
+            <output>
+                <soap:body use="literal" namespace="http://tedial.com/ac" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </output>
+        </operation>
+        <operation name="armedNotification">
+            <soap:operation soapAction="" style="rpc"/>
+            <input>
+                <soap:body use="literal" namespace="http://tedial.com/ac" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </input>
+        </operation>
+        <operation name="stoppedNotification">
+            <soap:operation soapAction="" style="rpc"/>
+            <input>
+                <soap:body use="literal" namespace="http://tedial.com/ac" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </input>
+        </operation>
+        <operation name="printProgressNotification">
+            <soap:operation soapAction="" style="rpc"/>
+            <input>
+                <soap:body use="literal" namespace="http://tedial.com/ac" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </input>
+        </operation>
+        <operation name="printErrorNotification">
+            <soap:operation soapAction="" style="rpc"/>
+            <input>
+                <soap:body use="literal" namespace="http://tedial.com/ac" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </input>
+        </operation>
+        <operation name="getJob">
+            <soap:operation soapAction="" style="rpc"/>
+            <input>
+                <soap:body use="literal" namespace="http://tedial.com/ac" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </input>
+            <output>
+                <soap:body use="literal" namespace="http://tedial.com/ac" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </output>
+        </operation>
+        <operation name="createUser">
+            <soap:operation soapAction="" style="rpc"/>
+            <input>
+                <soap:body use="literal" namespace="http://tedial.com/ac" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </input>
+            <output>
+                <soap:body use="literal" namespace="http://tedial.com/ac" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </output>
+        </operation>
+        <operation name="deleteUser">
+            <soap:operation soapAction="" style="rpc"/>
+            <input>
+                <soap:body use="literal" namespace="http://tedial.com/ac" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </input>
+            <output>
+                <soap:body use="literal" namespace="http://tedial.com/ac" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </output>
+        </operation>
+        <operation name="authenticateUser">
+            <soap:operation soapAction="" style="rpc"/>
+            <input>
+                <soap:body use="literal" namespace="http://tedial.com/ac" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </input>
+            <output>
+                <soap:body use="literal" namespace="http://tedial.com/ac" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </output>
+        </operation>
+        <operation name="getUserAuthorizations">
+            <soap:operation soapAction="" style="rpc"/>
+            <input>
+                <soap:body use="literal" namespace="http://tedial.com/ac" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </input>
+            <output>
+                <soap:body use="literal" namespace="http://tedial.com/ac" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </output>
+        </operation>
+        <operation name="refreshUserAuthentication">
+            <soap:operation soapAction="" style="rpc"/>
+            <input>
+                <soap:body use="literal" namespace="http://tedial.com/ac" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </input>
+            <output>
+                <soap:body use="literal" namespace="http://tedial.com/ac" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </output>
+        </operation>
+        <operation name="setProperty">
+            <soap:operation soapAction="" style="rpc"/>
+            <input>
+                <soap:body use="literal" namespace="http://tedial.com/ac" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </input>
+            <output>
+                <soap:body use="literal" namespace="http://tedial.com/ac" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </output>
+        </operation>
+        <operation name="getProperty">
+            <soap:operation soapAction="" style="rpc"/>
+            <input>
+                <soap:body use="literal" namespace="http://tedial.com/ac" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </input>
+            <output>
+                <soap:body use="literal" namespace="http://tedial.com/ac" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </output>
+        </operation>
+        <operation name="getReel">
+            <soap:operation soapAction="" style="rpc"/>
+            <input>
+                <soap:body use="literal" namespace="http://tedial.com/ac" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </input>
+            <output>
+                <soap:body use="literal" namespace="http://tedial.com/ac" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </output>
+        </operation>
+        <operation name="getTocFile">
+            <soap:operation soapAction="" style="rpc"/>
+            <input>
+                <soap:body use="literal" namespace="http://tedial.com/ac" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </input>
+            <output>
+                <soap:body use="literal" namespace="http://tedial.com/ac" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </output>
+        </operation>
+
+        <operation name="registerEventListener">
+            <soap:operation soapAction="" style="rpc"/>
+            <input>
+                <soap:body use="literal" namespace="http://tedial.com/ac" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </input>
+            <output>
+                <soap:body use="literal" namespace="http://tedial.com/ac" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </output>
+        </operation>
+        <operation name="unregisterEventListener">
+            <soap:operation soapAction="" style="rpc"/>
+            <input>
+                <soap:body use="literal" namespace="http://tedial.com/ac" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </input>
+            <output>
+                <soap:body use="literal" namespace="http://tedial.com/ac" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </output>
+        </operation>
+        <operation name="getWorkers">
+            <soap:operation soapAction="" style="rpc"/>
+            <input>
+                <soap:body use="literal" namespace="http://tedial.com/ac" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </input>
+            <output>
+                <soap:body use="literal" namespace="http://tedial.com/ac" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </output>
+        </operation>
+        <operation name="stopWork">
+            <soap:operation soapAction="" style="rpc"/>
+            <input>
+                <soap:body use="literal" namespace="http://tedial.com/ac" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </input>
+            <output>
+                <soap:body use="literal" namespace="http://tedial.com/ac" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+            </output>
+        </operation>
+    </binding>
+
+    <service name="ArchivatorCoreService">
+        <port name="ArchivatorCoreEndpoint" binding="tns:ArchivatorCore">
+		<soap:address location="http://testamu1.piql.com:8081"/>
+        </port>
+    </service>
+
+</definitions>

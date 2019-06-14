@@ -1,0 +1,203 @@
+<?xml version="1.0"?>
+<xsd:schema 
+   targetNamespace="http://cinevation.net/dsca" 
+   xmlns:tns="http://cinevation.net/dsca"
+   xmlns:xsd_dsca="http://cinevation.net/dsca"
+   xmlns="http://www.w3.org/2001/XMLSchema"
+   xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <xsd:simpleType name="DScaState">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="Init"/>
+      <xsd:enumeration value="Idle"/>
+      <xsd:enumeration value="Arming"/>
+      <xsd:enumeration value="Armed"/>
+      <xsd:enumeration value="ArmError"/>
+      <xsd:enumeration value="Scanning"/>
+      <xsd:enumeration value="Searching"/>
+      <xsd:enumeration value="Stopping"/>
+      <xsd:enumeration value="ScanningComplete"/>
+      <xsd:enumeration value="ScanError"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="ColorSpace">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="RGB"/>
+      <xsd:enumeration value="YUV422"/>
+      <xsd:enumeration value="YUV444"/>
+      <xsd:enumeration value="MONOCHROME"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:complexType name="FaultReason">
+    <xsd:annotation>
+      <xsd:documentation>A generic type for describing fault reasons.</xsd:documentation>
+    </xsd:annotation>
+    <xsd:all>
+      <xsd:element name="errorCode" type="xsd:int">
+        <xsd:annotation>
+          <xsd:documentation>
+        The error code defines the reason for a fault. Legal values must be defined in this document or
+        a separate xsd file.
+      </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="debugMessage" type="xsd:string">
+        <xsd:annotation>
+          <xsd:documentation>
+        A debug message describing the fault reason. This is intended for debugging and/or
+        logging purposes, not for UI.
+      </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+    </xsd:all>
+  </xsd:complexType>
+  <xsd:complexType name="RequestResult">
+    <xsd:all>
+      <xsd:element name="status" type="xsd:boolean">
+        <xsd:annotation>
+          <xsd:documentation>True if a request was successful</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="faultReason" type="tns:FaultReason" minOccurs="0">
+        <xsd:annotation>
+          <xsd:documentation>Only present if status is false. Contains the reason for a fault.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+    </xsd:all>
+  </xsd:complexType>
+  <xsd:complexType name="FrameFormat">
+    <xsd:all>
+      <xsd:element name="pixelWidth" type="xsd:float">
+        <xsd:annotation>
+          <xsd:documentation>Width of a pixel in mm.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="pixelHeight" type="xsd:float">
+        <xsd:annotation>
+          <xsd:documentation>Height of a pixel in mm.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="width" type="xsd:int">
+        <xsd:annotation>
+          <xsd:documentation>Frame width in pixels.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="height" type="xsd:int">
+        <xsd:annotation>
+          <xsd:documentation>Frame height in lines.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="bitDepth" type="xsd:int">
+        <xsd:annotation>
+          <xsd:documentation>Bit depth in bits per color channel.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="colorSpace" type="tns:ColorSpace" default="MONOCHROME">
+        <xsd:annotation>
+          <xsd:documentation>Image colour space.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="separation" type="xsd:int">
+        <xsd:annotation>
+          <xsd:documentation>Separation between frames in lines.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+    </xsd:all>
+  </xsd:complexType>
+  <xsd:complexType name="FrameSequence">
+    <xsd:all>
+      <xsd:element name="startPerforation" type="xsd:int">
+        <xsd:annotation>
+          <xsd:documentation>The first perforation hole of the first frame in the sequence.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="numOfFrames" type="xsd:int">
+        <xsd:annotation>
+          <xsd:documentation>The number of frames in the sequence.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="trackNumber" type="xsd:int" default="0">
+    <xsd:annotation>
+          <xsd:documentation>
+        The track number the frame sequence belongs too. All the frames in the sequence must belong to 
+        the same track. In the first version of the archivator system, only one track will be used,
+        and this parameter will always be set to 0.
+      </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+    </xsd:all>
+  </xsd:complexType>
+  <xsd:complexType name="ScanningParameters">
+    <xsd:sequence>
+      <xsd:element name="storageLocation" type="xsd:anyURI">
+        <xsd:annotation>
+          <xsd:documentation>Tells the scanner where to store scanned frames.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="frameSequences" type="tns:FrameSequence" maxOccurs="unbounded"/>
+      <xsd:element name="frameFormat" type="tns:FrameFormat"/>
+      <xsd:element name="tracks" type="xsd:int" default="1">
+        <xsd:annotation>
+          <xsd:documentation>
+        The number of tracks on the reel of film for this job. In the first version of the archivator system, 
+        only one track will be used.
+      </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="Job">
+    <xsd:all>
+      <xsd:element name="id" type="xsd:string">
+        <xsd:annotation>
+          <xsd:documentation>The id of the job. Same as the reelId on DUnb.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="name" type="xsd:string">
+        <xsd:annotation>
+          <xsd:documentation>The name of the job.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="size" type="xsd:long" minOccurs="0">
+        <xsd:annotation>
+          <xsd:documentation>
+        The total size of the job in perforations if known at the time of the command.
+        As an example, if a job includes scanning back 5 files from the same reel, in the
+        arm command, the size will be the total number of scanned perforations for the the 5 files.
+      </xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+    </xsd:all>
+  </xsd:complexType>
+  <xsd:complexType name="ScannedImageFormat">
+    <xsd:annotation>
+      <xsd:documentation>The image format of the stored image files.</xsd:documentation>
+    </xsd:annotation>
+    <xsd:all>
+      <xsd:element name="imageWidth" type="xsd:unsignedInt">
+        <xsd:annotation>
+          <xsd:documentation>The width of stored images in pixels.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="imageHeight" type="xsd:unsignedInt">
+    <xsd:annotation>
+          <xsd:documentation>The height of stored images in pixels.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="imageBitDepth" type="xsd:unsignedInt">
+    <xsd:annotation>
+          <xsd:documentation>The bit depth of the stored image.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="scannedBitDepth" type="xsd:unsignedInt">
+    <xsd:annotation>
+          <xsd:documentation>The bit depth used when scanning, may be lower than the bit depth of the stored image.</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+      <xsd:element name="numOfChannels" type="xsd:unsignedInt">
+        <xsd:annotation>
+          <xsd:documentation>The number of channels. Typically 1 (grey scale), 3 (RGB) or 4 (RGB+Alpha).</xsd:documentation>
+        </xsd:annotation>
+      </xsd:element>
+    </xsd:all>
+  </xsd:complexType>
+</xsd:schema>
