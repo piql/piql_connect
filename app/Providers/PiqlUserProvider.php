@@ -54,8 +54,9 @@ class PiqlUserProvider extends EloquentUserProvider implements UserProvider
         $username = $credentials['username'];
         $password = $credentials['password'];
         $userId = $this->getUserId($username);
+        Log::info("username: ".$username." / userId: ".$userId."   password: ".$password);
         $soapAuth = $this->soapClient($userId, $password);
-        if( $soapAuth["isAuthenticated"] )
+        if( isset($soapAuth["isAuthenticated"]) && $soapAuth["isAuthenticated"] )
         {
             return true;
         }
@@ -89,14 +90,22 @@ class PiqlUserProvider extends EloquentUserProvider implements UserProvider
             Log::error('AuthenticateUsers failed: Could not reach SOAP Service');
             return ['isAuthenticated' => false, 'reason' => 'SERVICE_UNAVAILABLE'];
         }
-
-        if( $soapReturn['isAuthenticated'] == false )
+        
+        if( isset($soapReturn['isAuthenticated']) )
         {
-            Log::warn('AuthenticateUsers failed: Could not authenticate user : '.$soapReturn['reason']);
+            if( $soapReturn['isAuthenticated'] == false )
+            {
+                Log::warn('AuthenticateUsers failed: Could not authenticate user : '.$soapReturn['reason']);
+            }
+            else
+            {
+                Log::info('User authenticated.');
+            }
         }
         else
         {
-            Log::info('User authenticated.');
+            Log::error("SOAP Communication problem!");
+            dump($soapReturn);
         }
 
         return $soapReturn;

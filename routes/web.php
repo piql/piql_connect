@@ -2,7 +2,7 @@
 
 Route::get('login', array('uses' => 'Auth\LoginController@showLogin'));
 Route::post('/', function () {
-    return view('dashboard');
+    return view('dashboard')->name('dashboard');
 });
 
 Route::get('/wsdl/ac.wsdl', function() {
