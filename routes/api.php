@@ -17,14 +17,10 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::group(['prefix' => 'v1' /*, 'middleware' => 'auth:api'*/], function () {
+Route::group(['prefix' => 'v1' , 'middleware' => 'throttle:500,1',], function () {
     Route::group(['prefix' => 'ingest'], function() {
         Route::post('upload', '\Optimus\FineuploaderServer\Controller\LaravelController@upload');
-        //Route::apiResource('upload', 'FileUploadController');
     });
 });
 
-//Route::group(['prefix' => 'v1' /*, 'middleware' => 'auth:api' */], function() {
-//Route::post('/api/files/upload', 'Api\Files\UploadController@uploadFile');
-//Route::get('/api/files/upload', 'Api\Files\UploadController@getFile');
-//});
+

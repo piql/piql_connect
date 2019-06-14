@@ -29,14 +29,14 @@ export default {
                 },
                 chunking: {
                     enabled: true,
-                    partSize: 5000,
+                    partSize: 1000000,
                     mandatory: true,
                     concurrent: {
                         enabled: false
                     },
                 },
                 callbacks: {
-                    onComplete: (id, name, response) => { console.log("Upload completed") }
+                    onComplete: (id, name, response) => { console.log("Upload of " + name + " completed") }
                 }
             },
         });
@@ -47,8 +47,7 @@ export default {
     },
 
     components: { 
-        "FineUploader" : FineUploader,
-        "file-input" : FileInput,
+        FineUploader,
     },
 
     methods: {
