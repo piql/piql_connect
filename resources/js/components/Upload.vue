@@ -36,7 +36,15 @@ export default {
                     },
                 },
                 callbacks: {
-                    onComplete: (id, name, response) => { console.log("Upload of " + name + " completed") }
+                    onComplete: (id, name, response) => { 
+                        axios.post('/api/v1/ingest/fileUploaded', {
+                            'fileName' : name,
+                            'result' : response,
+                        });
+                        console.log("Upload of " + name + " with id" + id + " completed.");
+                        console.log(response);
+
+                    }
                 }
             },
         });
