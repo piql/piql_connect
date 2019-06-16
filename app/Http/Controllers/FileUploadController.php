@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Log;
 use App\IncomingFile;
+use Response;
 
 class FileUploadController extends Controller
 {
@@ -58,8 +59,14 @@ class FileUploadController extends Controller
      */
     public function show($id)
     {
-        //
         Log::info("FileUpload show");
+        return Response::json(IncomingFile::find($id));
+    }
+
+    public function all()
+    {
+        Log::info("FileUpload all - needs pagination!");
+        return Response::json(Incomingfile::all());
     }
 
     /**

@@ -1,9 +1,6 @@
 <?php
 
 Route::get('login', array('uses' => 'Auth\LoginController@showLogin'));
-Route::post('/', function () {
-    return view('dashboard')->name('dashboard');
-});
 
 Route::get('/wsdl/ac.wsdl', function() {
     $mimeHeader = ['Content-Type: application/wsdl+xsd'];
@@ -36,6 +33,7 @@ Route::middleware(['auth'])->group( function () {
 
     Route::prefix('ingest')->group( function () {
         Route::resource('upload', 'IngestUploadController')->name('index', 'upload');
+        Route::resource('process', 'IngestProcessController')->name('index', 'process');
     });
 
     Route::prefix('access')->group( function () {

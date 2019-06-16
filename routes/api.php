@@ -21,6 +21,8 @@ Route::group(['prefix' => 'v1' , 'middleware' => 'throttle:500,1',], function ()
     Route::group(['prefix' => 'ingest'], function() {
         Route::post('upload', '\Optimus\FineuploaderServer\Controller\LaravelController@upload');
         Route::post('fileUploaded', 'FileUploadController@store');
+        Route::get('uploaded/all', 'FileUploadController@all');
+        Route::get('uploaded/{id}', 'FileUploadController@show');
     });
 });
 
