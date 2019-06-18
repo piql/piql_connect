@@ -276,21 +276,30 @@ a {
 }
 
 .plist {
-    padding: 20px;
+    padding: 15px;
     font-size: 16px;
     border-bottom: 1px solid lightgray;
     background: white;
 }
 
+.linked {
+    border-bottom: 1px dashed $black;
+    color: $black;
+}
+
 .plistHeader {
     background-color: $color_pampas_approx;
-    padding: 20px;
+    padding: 15px;
     font-size: 12px;
     text-align: left;
     color: black;
     font-weight: bold !important;
 }
 
+.listActionItems {
+    color: $color_coral_red_approx;
+    font-size: 20px;
+}
 .list {
     position: relative;
     overflow-y: auto;
@@ -543,7 +552,7 @@ input[type="file"] {
     //-webkit-appearance: none
     background-color: $white;
     border: 1px solid $color_coral_red_approx;
-    padding: 8px;
+    padding: 8px !important;
     display: inline-block;
     position: relative;
     margin: 0;
@@ -1207,15 +1216,18 @@ th {
     background-image: $image_piql-logo-white_url;
     background-size: 20px;
     background-repeat: no-repeat;
-    background-position-x: 24px;
-    background-position-y: 4px;
+    background-position-x: 14px;
+    background-position-y: 0px;
     //Instead of the line below you could use @include background-origin($origin)
     background-origin: content-box;
     //Instead of the line below you could use @include border-radius($radius, $vertical-radius)
     border-radius: 10px;
     padding: 5px;
     border: 4px solid $color_tuscany_approx;
-    width: 70px;
+    max-width: 70px !important;
+    max-width: 70px !important;
+    max-height: 30px !important;
+    min-height: 30px !important;
     display: inline-block;
     &:hover {
         background-color: $color_zambezi_approx;
