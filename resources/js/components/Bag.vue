@@ -2,35 +2,34 @@
     <div>
         <div class="row plist">
             <div class="col">
-                {{bag.name}}
+                {{item.name}}
             </div>
             <div class="col">
-                {{item.fileName}}
+                {{item.uuid}}
             </div>
             <div class="col">
-                {{item.created_at}}
+                {{item.status}}
             </div>
             <div class="col">
-                Ingesting
+                {{shortDate(item.created_at)}}
             </div>
         </div>
     </div>
 </template>
 
 <script>
+import moment from 'moment';
 export default {
     async mounted() {
-        console.log('FileInProcess component mounted.')
-        let bagId = this.item.bag_id;
-        this.bag = (await axios.get("/api/v1/ingest/holdings/"+bagId)).data; 
-    },
-    data() {
-        return {
-            bag: {}
-        };
+        console.log('Bag component mounted.');
     },
     props: {
         item: Object
+    },
+    methods: {
+        shortDate: function(date){
+            return moment(date).format("YYYY-MM-DD");
+        }
     }
 }
 </script>

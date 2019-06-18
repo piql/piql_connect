@@ -4,18 +4,20 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateFilesReceivedTable extends Migration
+class CreateFilesTable extends Migration
 {
     /**
      * Run the migrations.
      *
      * @return void
      */
+     
     public function up()
     {
-        Schema::create('incoming_files', function (Blueprint $table) {
+        Schema::create('files', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('fileName');
+            $table->string('bag_id');
+            $table->string('filename');
             $table->string('uuid');
             $table->timestamps();
         });

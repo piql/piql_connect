@@ -1,11 +1,13 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api\Ingest;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use App\Http\Controllers\Controller;
 use Log;
-use App\IncomingFile;
+use App\File;
+use App\Bag;
 use Response;
 
 class FileUploadController extends Controller
@@ -45,10 +47,11 @@ class FileUploadController extends Controller
         $pathInfo = pathinfo($uploadedFile);
         $uuid = $pathInfo['filename'];
         Log::info("fileUpload@store got file: ".$fileName." with uuid ".$uuid );
-        $incomingFile = new IncomingFile();
-        $incomingFile->fileName = $fileName;
-        $incomingFile->uuid = $uuid;
-        $incomingFile->save();
+        $file = new File();
+        $file->fileName = $fileName;
+        $file->uuid = $uuid;
+        $file->bag_id = Bag::latest()->first()->id;
+        $file->save();
     }
 
     /**
@@ -60,13 +63,13 @@ class FileUploadController extends Controller
     public function show($id)
     {
         Log::info("FileUpload show");
-        return Response::json(IncomingFile::find($id));
+        return Response::json(File::find($id));
     }
 
     public function all()
     {
         Log::info("FileUpload all - needs pagination!");
-        return Response::json(Incomingfile::all());
+        return Response::json(File::all());
     }
 
     /**

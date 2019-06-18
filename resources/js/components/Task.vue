@@ -5,7 +5,7 @@
             <div class="col">
                 <a href="">
                     <span class="linked">
-                {{item.uuid}}
+                {{bag.name}}
                     </span>
                 </a>
             </div>
@@ -26,11 +26,19 @@
 
 <script>
 export default {
-    mounted() {
-        console.log('FileInProcess component mounted.')
+    async mounted() {
+        console.log('Task component mounted.')
+        let bagId = this.item.bag_id;
+        this.bag = (await axios.get("/api/v1/ingest/holdings/"+bagId)).data; 
     },
     props: {
         item: Object
-    }
+    },
+    data() {
+        return {
+            bag: {}
+        };
+    },
+
 }
 </script>

@@ -17,12 +17,20 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::group(['prefix' => 'v1' , 'middleware' => 'throttle:500,1',], function () {
+Route::group(['prefix' => 'v1' , 'middleware' => 'throttle:500,1','auth:web'], function () {
+
+    Route::group(['prefix' => 'system'], function () {
+        Route::get('currentUser', 'Api\System\StatusController@currentUser');
+    });
+
     Route::group(['prefix' => 'ingest'], function() {
         Route::post('upload', '\Optimus\FineuploaderServer\Controller\LaravelController@upload');
-        Route::post('fileUploaded', 'FileUploadController@store');
-        Route::get('uploaded/all', 'FileUploadController@all');
-        Route::get('uploaded/{id}', 'FileUploadController@show');
+        Route::post('fileUploaded', 'Api\Ingest\FileUploadController@store');
+        Route::get('uploaded/', 'Api\Ingest\FileUploadController@all');
+        Route::get('uploaded/{id}', 'Api\Ingest\FileUploadController@show');
+        Route::post('holdings', 'Api\Ingest\BagController@store');
+        Route::get('holdings', 'Api\Ingest\BagController@all');
+        Route::get('holdings/{id}', 'Api\Ingest\BagController@show');
     });
 });
 
