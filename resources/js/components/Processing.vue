@@ -15,7 +15,7 @@
                 </form>
         </div>
         <br/>
-        <div class="row">
+        <div class="row plistHeader">
             <div class="col">Bag</div>
             <div class="col">Content</div>
             <div class="col">Ingest Date</div>

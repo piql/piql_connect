@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="row" style="border-bottom: 1px solid lightgray; background: white;">
+        <div class="row plist">
             <div class="col">
                 {{item.uuid}}
             </div>

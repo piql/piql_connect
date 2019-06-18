@@ -10880,6 +10880,22 @@ a:visited {
   clear: both;
 }
 
+.plist {
+  padding: 20px;
+  font-size: 16px;
+  border-bottom: 1px solid lightgray;
+  background: white;
+}
+
+.plistHeader {
+  background-color: #f2f1ec;
+  padding: 20px;
+  font-size: 12px;
+  text-align: left;
+  color: black;
+  font-weight: bold !important;
+}
+
 .list {
   position: relative;
   overflow-y: auto;
@@ -11629,7 +11645,7 @@ input[type=file] {
 
 .contentContainer {
   background-color: #f2f1ec;
-  width: calc(100% - 360px);
+  width: calc(100% - 300px);
   float: left;
   height: calc(100vh - 180px);
   padding: 30px 30px 0 30px;
