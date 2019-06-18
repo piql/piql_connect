@@ -80,11 +80,10 @@ class PiqlUserProvider extends EloquentUserProvider implements UserProvider
     private function soapClient(string $userId, string $password)
     {
         $acwsWsdlUrl = url("wsdl/ac.wsdl");
-        $acwsAcClient = new SoapClient($acwsWsdlUrl, array('exceptions' => false, 'trace' => 1, 'cache_wsdl' => WSDL_CACHE_NONE, 'connection_timeout' => 15, 'keep_alive' => false ));
+        $acwsAcClient = new SoapClient($acwsWsdlUrl, array('exceptions' => false, 'trace' => 1, 'cache_wsdl' => WSDL_CACHE_NONE, 'connection_timeout' => 65, 'keep_alive' => false ));
         $acwsAcClient->__setLocation($this->acwsHostname);
 
         $soapReturn = (Array)$acwsAcClient->authenticateUser($userId, $password);
-        dump($soapReturn);
         if(is_soap_fault($soapReturn))
         {
             Log::error('AuthenticateUsers failed: Could not reach SOAP Service');
@@ -99,7 +98,7 @@ class PiqlUserProvider extends EloquentUserProvider implements UserProvider
             }
             else
             {
-                Log::info('User authenticated.');
+                Log::info('User with id '.$userId.' authenticated against '.$this->acwsHostname.'.');
             }
         }
         else
