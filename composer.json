@@ -14,6 +14,7 @@
         "laravel/tinker": "^1.0",
         "optimus/fineuploader-server": "^0.2.0",
         "optimus/fineuploader-server-thumbnail-creator": "^0.1.1",
+        "scholarslab/bagit": "^0.3.0",
         "webpatser/laravel-uuid": "^3.0"
     },
     "require-dev": {
