@@ -8,10 +8,10 @@
     <div class="clearboth"></div>
     <ul class="list-group">
     @if  (\Request::is('ingest/*'))
-        <a href="{{ route('upload') }}"><li class="list-group-item {{ \Request::is('ingest/upload') ? 'active sidebar-active' : '' }} "><i class="fas fa-tachometer-alt"></i><i class="leftMenuItem"> Upload</i></li></a>
-        <a href="{{ route('process') }}"><li class="list-group-item" {{ \Request::is('ingest/processing') ? 'active sidebar-active' : '' }} ><i class="fas fa-tachometer-alt"></i><i class="leftMenuItem"> Processing</i></li></a>
-        <a href="{{ route('upload') }}"><li class="list-group-item {{ \Request::is('ingest/tasklist') ? 'active sidebar-active' : '' }} "><i class="fas fa-tachometer-alt"></i><i class="leftMenuItem"> Task list</i></li></a>
-        <a href="{{ route('upload') }}"><li class="list-group-item {{ \Request::is('ingest/status') ? 'active sidebar-active' : '' }} "><i class="fas fa-tachometer-alt"></i><i class="leftMenuItem"> Status</i></li></a>
+        <a href="{{ route('upload') }}"><li class="list-group-item {{ \Request::is('ingest/upload') ? 'active sidebar-active' : '' }} "><i class="fas fa-upload"></i><i class="leftMenuItem"> Upload</i></li></a>
+        <a href="{{ route('process') }}"><li class="list-group-item {{ \Request::is('ingest/process') ? 'active sidebar-active' : '' }} "><i class="fas fa-hourglass-half"></i><i class="leftMenuItem"> Processing</i></li></a>
+        <a href="{{ route('tasks') }}"><li class="list-group-item {{ \Request::is('ingest/tasks') ? 'active sidebar-active' : '' }} "><i class="fas fa-clock"></i><i class="leftMenuItem"> Task list</i></li></a>
+        <a href="{{ route('upload') }}"><li class="list-group-item {{ \Request::is('ingest/status') ? 'active sidebar-active' : '' }} "><i class="fas fa-clipboard-check"></i><i class="leftMenuItem"> Status</i></li></a>
     @elseif (\Request::is('access/*'))
         <a href="{{ route('retrieve') }}"><li class="list-group-item {{ \Request::is('access/browse') ? 'active sidebar-active' : '' }} "><i class="fas fa-tachometer-alt"></i><i class="leftMenuItem"> Browse</i></li></a>
         <a href="{{ route('retrieve') }}"><li class="list-group-item {{ \Request::is('access/retrieve') ? 'active sidebar-active' : '' }} "><i class="fas fa-tachometer-alt"></i><i class="leftMenuItem"> Retrive</i></li></a>

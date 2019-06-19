@@ -10,7 +10,10 @@
 
 @section('content')
     <div class="content">
-        <Upload>
-        </Upload>
+        <Upload><buton class="browse">Add files</button></Upload>
+
+        <div class="row" style="height: 100px;"></div> 
+
+        <Bags></Bags>
     </div>
 @endsection
