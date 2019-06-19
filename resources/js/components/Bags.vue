@@ -19,7 +19,7 @@
             <div class="col">Start date</div>
         </div>
 
-        <div class="plist">
+        <div class="plist" style="height: 500px; overflow-y: scroll !important;">
             <Bag v-for="item in items" :item="item" @selectActiveBag="selectActiveBag"/>
         </div>
     </div>
@@ -29,15 +29,15 @@
 export default {
     data() {
         return {
-            items : {},
             bagName: '',
             userId: '',
         };
     },
-
+    props: {
+        items : {},
+    },
     async mounted() {
         console.log('Bags component mounted.')
-        this.items = (await axios.get("/api/v1/ingest/bags")).data; 
         this.userId = (await axios.get("/api/v1/system/currentUser")).data;
         console.log("current user: " + this.userId);
         console.log(this.items);
@@ -49,12 +49,12 @@ export default {
             e.preventDefault();
             console.log("BagName: "+this.bagName);
             this.errors = {};
-            let response = await axios.post("/api/v1/ingest/bags/", {
+            let createdBag = (await axios.post("/api/v1/ingest/bags/", {
                 bagName: this.bagName,
                 userId: this.userId,
-            });
-            console.log(response.data);
-            this.items = (await axios.get("/api/v1/ingest/bags")).data; 
+            })).data;
+            this.items = (await axios.get("/api/v1/ingest/bags")).data;
+            this.$emit('selectActiveBag', createdBag.id);
         },
         selectActiveBag: function(id) {
             console.log("Bags select active id: "+id);

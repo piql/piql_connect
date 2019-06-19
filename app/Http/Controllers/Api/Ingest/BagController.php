@@ -44,8 +44,10 @@ class BagController extends Controller
     public function store(Request $request)
     {
         Log::debug("Creating new bag with name ".$request->bagName.".");
-        $bag = Bag::create(['name' => $request->bagName, 'owner' => $request->userId ]);
+        Bag::create(['name' => $request->bagName, 'owner' => $request->userId ]);
+        $bag = Bag::latest()->first();
         Log::debug("Bag with id ".$bag->id." created.");
+        return $bag;
     }
 
     /**
@@ -117,6 +119,13 @@ class BagController extends Controller
         //
     }
 
+    public function preCommit($id)
+    {
+        $bag = Bag::find($id);
+        $bag->status = 'processing';
+        $bag->save();
+        return $bag;
+    }
     
     /**
      * Commit the bag to archivematica
@@ -175,5 +184,6 @@ class BagController extends Controller
         // Change bag status
         $bag->status = 'finished';
         $bag->save();
+        return $bag;
     }
 }

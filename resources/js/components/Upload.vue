@@ -15,9 +15,9 @@
             </div>
         </div>
 
-        <div class="row" style="height: 100px;"></div> 
+        <div class="row" style="height: 10px;"></div> 
 
-        <Bags @selectActiveBag="selectActiveBag"></Bags>
+        <Bags :items="bags" @selectActiveBag="selectActiveBag"></Bags>
 
     </div>
 </template>
@@ -70,6 +70,7 @@ export default {
         return {
             uploader: uploader,
             bag: {},
+            bags: {},
             files: {}
         };
     },
@@ -83,15 +84,18 @@ export default {
         },
         commitBagToProcessing() {
             let bagId = this.bag.id;
-            console.log("Committing bag "+bagId);
-            axios.post("/api/v1/ingest/bags/"+bagId+"/commit").then( (response) => {
+            axios.post("/api/v1/ingest/bags/"+bagId+"/preCommit").then( async () => {
+                this.bags = (await axios.get("/api/v1/ingest/bags")).data;
+                this.bag = this.bags[0] || {};
+            });
+
+            axios.post("/api/v1/ingest/bags/"+bagId+"/commit").then( async (response) => {
                 console.log("Bag "+bagId+" committed!");
             });
         },
         selectActiveBag(bagIdToActivate){
             console.log("Activating bag with id "+bagIdToActivate);
             axios.get('/api/v1/ingest/bags/'+bagIdToActivate).then( (response) =>{
-                
                 this.bag = response.data;
             });
         },
@@ -100,6 +104,7 @@ export default {
     async mounted() {
         let self = this;
         console.log('Uploader component mounted.');
+        this.bags = (await axios.get("/api/v1/ingest/bags")).data; 
         await axios.get("/api/v1/system/currentBag")
             .then( (response) => { self.bag = response.data } )
             .then( async () => {
