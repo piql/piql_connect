@@ -36,6 +36,7 @@ Route::middleware(['auth'])->group( function () {
         Route::resource('upload', 'IngestUploadController')->name('index', 'upload');
         Route::resource('process', 'IngestProcessController')->name('index', 'process');
         Route::resource('tasks', 'IngestTaskListController')->name('index', 'tasks');
+        Route::resource('status', 'IngestStatusController')->name('index', 'status');
     });
 
     Route::prefix('access')->group( function () {
