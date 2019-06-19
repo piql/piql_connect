@@ -14,7 +14,7 @@ class IngestBagController extends Controller
      */
     public function index()
     {
-        return view('ingest.holdings.show');
+        return view('ingest.bags.show');
     }
 
     /**

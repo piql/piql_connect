@@ -32,7 +32,7 @@ Route::middleware(['auth'])->group( function () {
     Route::get('settings', 'SettingsController@showSettings');
 
     Route::prefix('ingest')->group( function () {
-        Route::resource('holdings', 'IngestBagController')->name('index', 'holdings');
+        Route::resource('bags', 'IngestBagController')->name('index', 'bags');
         Route::resource('upload', 'IngestUploadController')->name('index', 'upload');
         Route::resource('process', 'IngestProcessController')->name('index', 'process');
         Route::resource('tasks', 'IngestTaskListController')->name('index', 'tasks');

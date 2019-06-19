@@ -1,9 +1,10 @@
 <template>
     <div>
-        <FineUploader :button="button"
-                      :uploader="uploader"
-                      @submit="addFileToQueue">
-            <div id="browse" class="dropFiles">&nbsp;</div>
+        <div>Uploading to bag <span style="font-weight: bold; color: darkorange; font-family: agenda; border-bottom: 1px dotted darkgray;">{{bag.name}}</span>.</div>
+        <FineUploader 
+            :uploader="uploader"
+            @submit="addFileToQueue">
+            <div class="dropFiles">&nbsp;</div>
         </FineUploader>
     </div>
 </template>
@@ -49,21 +50,27 @@ export default {
             },
         });
         return {
-            button: '.browse',
-            uploader
+            uploader: uploader,
+            bag: {},
+            files: {}
         };
     },
 
     components: { 
-        FineUploader,
+        FineUploader
     },
 
     methods: {
         addFileToQueue(payload) {
         },
     },
-    mounted() {
+    async mounted() {
         console.log('Uploader component mounted.');
+        this.bag = (await axios.get("/api/v1/system/currentBag") ).data;
+    },
+    props: {
+        button: Object
     }
+
 };
 </script>

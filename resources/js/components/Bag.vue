@@ -1,6 +1,9 @@
 <template>
     <div>
         <div class="row plist">
+            <div class="col-1">
+                <i class="fas fa-arrow-circle-right"></i>
+            </div>
             <div class="col">
                 {{item.name}}
             </div>

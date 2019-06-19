@@ -21,6 +21,7 @@ Route::group(['prefix' => 'v1' , 'middleware' => 'throttle:500,1','auth:web'], f
 
     Route::group(['prefix' => 'system'], function () {
         Route::get('currentUser', 'Api\System\StatusController@currentUser');
+        Route::get('currentBag', 'Api\System\StatusController@currentBag');
     });
 
     Route::group(['prefix' => 'ingest'], function() {
@@ -28,9 +29,9 @@ Route::group(['prefix' => 'v1' , 'middleware' => 'throttle:500,1','auth:web'], f
         Route::post('fileUploaded', 'Api\Ingest\FileUploadController@store');
         Route::get('uploaded/', 'Api\Ingest\FileUploadController@all');
         Route::get('uploaded/{id}', 'Api\Ingest\FileUploadController@show');
-        Route::post('holdings', 'Api\Ingest\BagController@store');
-        Route::get('holdings', 'Api\Ingest\BagController@all');
-        Route::get('holdings/{id}', 'Api\Ingest\BagController@show');
+        Route::post('bags', 'Api\Ingest\BagController@store');
+        Route::get('bags', 'Api\Ingest\BagController@all');
+        Route::get('bags/{id}', 'Api\Ingest\BagController@show');
     });
 });
 
