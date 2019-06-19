@@ -14,7 +14,6 @@
 }
 
 .vue-fine-uploader-gallery-dropzone {
-    border: 2px dashed #00ABC7;
 }
 .vue-fine-uploader-gallery-dropzone-upload-icon {
     height: 36px;
@@ -44,8 +43,8 @@
 }
 
 .vue-fine-uploader-gallery-file-input-container {
-    background: #00ABC7;
-    border: 1px solid #37B7CC;
+    background: #cb5d31;
+    border: 1px solid #f2f1ec;
     border-radius: 3px;
     color: #FFFFFF;
     display: inline;
@@ -115,8 +114,9 @@
 .vue-fine-uploader-gallery-files {
     clear: both;
     list-style: none;
-    max-height: 450px;
-    overflow-y: auto;
+    max-height: 20em;
+    height: 15em;
+    overflow-y: hidden;
     padding-left: 0;
     padding-top: 15px;
     /* Added for center alignment*/

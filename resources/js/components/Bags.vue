@@ -3,10 +3,10 @@
         <form @submit="createBag">
             <div class="row">
                 <div class="col-2">
-                    <button type="submit" class="btn btn-primary btn-lg">Create new bag</button>
+                    <button type="submit" class="btn btn-primary btn-lg">Start new Ingest Session</button>
                 </div>
                 <div class="col-3">
-                    <input value="" placeholder="New bag name..." v-model="bagName" type="text" class="form-control-lg" style="padding: 24px;"> 
+                    <input value="" placeholder="New Ingest Session name..." v-model="bagName" type="text" class="form-control-lg" style="padding: 24px;"> 
                 </div>
             </div>
         </form>

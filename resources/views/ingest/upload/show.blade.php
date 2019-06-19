@@ -10,7 +10,7 @@
 
 @section('content')
     <div class="content">
-        <Upload><buton class="browse">Add files</button></Upload>
+        <Upload><button class="browse">Add files</button></Upload>
 
         <div class="row" style="height: 100px;"></div> 
 

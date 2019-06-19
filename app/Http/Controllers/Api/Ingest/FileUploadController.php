@@ -44,14 +44,16 @@ class FileUploadController extends Controller
     {
         $fileName = $request->fileName;
         $uploadedFile = $request->result["name"];
+        $bagId = $request->bagId;
         $pathInfo = pathinfo($uploadedFile);
         $uuid = $pathInfo['filename'];
-        Log::info("fileUpload@store got file: ".$fileName." with uuid ".$uuid );
+        Log::info("fileUpload@store received fileName: ".$fileName." with uuid ".$uuid." for bag ".$bagId."." );
         $file = new File();
         $file->fileName = $fileName;
         $file->uuid = $uuid;
-        $file->bag_id = Bag::latest()->first()->id;
+        $file->bag_id = $bagId;
         $file->save();
+        return $file;
     }
 
     /**

@@ -15,10 +15,10 @@
         </ul>
     </div>
     <div id="piqlOptions">
-    <notifications>
-    </notifications>
+        <notifications>
+        </notifications>
         <a href="settings"><i class="fas fa-cogs"></i></a>
-        <i class="fas fa-info-circle"></i>
+        <a href="#"><i class="fas fa-info-circle" style="visibility: collapse;"></i></a>
     </div>
 </div>
 
