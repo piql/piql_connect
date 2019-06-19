@@ -6,8 +6,9 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-Use Webpatser\Uuid\Uuid;
-Use App\Traits\Uuids;
+use Illuminate\Support\Facades\Hash;
+use Webpatser\Uuid\Uuid;
+use App\Traits\Uuids;
 
 class User extends Authenticatable 
 {
@@ -21,7 +22,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'id', 'username', 'password', 'full_name', 'email'
+        'id', 'username', 'password', 'full_name', 'email', 'api_token'
     ];
 
     /**
@@ -48,6 +49,7 @@ class User extends Authenticatable
         self::creating(function( $model ) /*Create a uuid converted to binary16 */
         {
             $model->id = Uuid::generate();
+            $model->api_token = Hash::make(Uuid::generate());
         });
     }
 
