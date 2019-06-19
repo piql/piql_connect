@@ -12,8 +12,5 @@
     <div class="content">
         <Upload><button class="browse">Add files</button></Upload>
 
-        <div class="row" style="height: 100px;"></div> 
-
-        <Bags></Bags>
     </div>
 @endsection

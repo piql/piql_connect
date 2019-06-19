@@ -14,6 +14,11 @@
                 <button class="btn btn-primary btn-lg" v-on:click="commitBagToProcessing">Process</button>
             </div>
         </div>
+
+        <div class="row" style="height: 100px;"></div> 
+
+        <Bags @selectActiveBag="selectActiveBag"></Bags>
+
     </div>
 </template>
 
@@ -82,7 +87,15 @@ export default {
             axios.post("/api/v1/ingest/bags/"+bagId+"/commit").then( (response) => {
                 console.log("Bag "+bagId+" committed!");
             });
-        }
+        },
+        selectActiveBag(bagIdToActivate){
+            console.log("Activating bag with id "+bagIdToActivate);
+            axios.get('/api/v1/ingest/bags/'+bagIdToActivate).then( (response) =>{
+                
+                this.bag = response.data;
+            });
+        },
+    
     },
     async mounted() {
         let self = this;

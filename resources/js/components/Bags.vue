@@ -20,7 +20,7 @@
         </div>
 
         <div class="plist">
-            <Bag v-for="item in items" :item="item"/>
+            <Bag v-for="item in items" :item="item" @selectActiveBag="selectActiveBag"/>
         </div>
     </div>
 </template>
@@ -55,6 +55,10 @@ export default {
             });
             console.log(response.data);
             this.items = (await axios.get("/api/v1/ingest/bags")).data; 
+        },
+        selectActiveBag: function(id) {
+            console.log("Bags select active id: "+id);
+            this.$emit('selectActiveBag', id);
         }
     }
 }

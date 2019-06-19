@@ -2,7 +2,7 @@
     <div>
         <div class="row plist">
             <div class="col-1">
-                <i class="fas fa-arrow-circle-right"></i>
+                <div v-on:click="selectActiveBag(item.id)"><i class="fas fa-arrow-circle-right"></i></div>
             </div>
             <div class="col">
                 {{item.name}}
@@ -27,12 +27,16 @@ export default {
         console.log('Bag component mounted.');
     },
     props: {
-        item: Object
+        item: Object,
     },
     methods: {
         shortDate: function(date){
             return moment(date).format("YYYY-MM-DD");
-        }
+        },
+        selectActiveBag: function(id){
+            console.log("Bag item select active id: "+id);
+            this.$emit('selectActiveBag', id);
+        },
     }
 }
 </script>
