@@ -43,7 +43,10 @@
         "classmap": [
             "database/seeds",
             "database/factories"
-        ]
+        ],
+        "files": [
+	        "bootstrap/bagitutil.php"
+	    ]
     },
     "autoload-dev": {
         "psr-4": {

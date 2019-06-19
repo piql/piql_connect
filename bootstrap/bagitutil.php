@@ -1,7 +1,7 @@
 <?php
 
-require_once '../vendor/scholarslab/bagit/lib/bagit.php'
-require_once '../vendor/scholarslab/bagit/lib/bagit_utils.php'
+require_once './vendor/scholarslab/bagit/lib/bagit.php';
+require_once './vendor/scholarslab/bagit/lib/bagit_utils.php';
 
 class BagitUtil
 {
@@ -26,15 +26,26 @@ class BagitUtil
 
     public function createBag($outputFile)
     {
+        $outputFileExtension = pathinfo($outputFile, PATHINFO_EXTENSION);
+        $outputFileWithoutExtension = substr($outputFile, 0, strlen($outputFile) - strlen($outputFileExtension) - 1);
+    
         // Create temp directory
-        if (!createTempDir($tempDir))
+        if (!$this->createTempDir($tempDir))
         {
             return false;
         }
 
         // Create empty bag
-        $bag = new BagIt($tempDir);
+        $bagPath = $tempDir . '/' . basename($outputFileWithoutExtension);
+        $bag = new BagIt($bagPath);
         if (!$bag->isValid() || !$bag->isExtended())
+        {
+            return false;
+        }
+
+        // Validate bag
+        $bagInfo = $bag->getBagInfo();
+        if ($bagInfo['version'] != '0.96' || $bagInfo['encoding'] != 'UTF-8' || $bagInfo['hash'] != 'sha1')
         {
             return false;
         }
@@ -48,13 +59,18 @@ class BagitUtil
         // Update bag with added files
         $bag->update();
 
+        if ($outputFileExtension != 'zip' && $outputFileExtension != 'tgz')
+        {
+            return false;
+        }
+
         // Output packaged file
-        $bag->package($outputFile);
+        $bag->package($outputFile, $outputFileExtension);
 
         // Validate created bag
         $createdBag = new BagIt($outputFile);
         $expectedContent = "BagIt-Version: 0.96\n" . "Tag-File-Character-Encoding: UTF-8\n";
-        if (file_get_contents($createdBag->bagitFile()) != $expectedContent)
+        if (file_get_contents($createdBag->bagitFile) != $expectedContent)
         {
             return false;
         }
@@ -74,7 +90,8 @@ class BagitUtil
             return false;
         }
 
-        $tempDir = tempnam($this->m_SystemTempDir, 'bagit');
+        $tempDir = $this->m_SystemTempDir . "/" . substr(md5(rand()), 0, 7);
+        
         if (!mkdir($tempDir))
         {
             return false;
