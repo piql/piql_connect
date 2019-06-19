@@ -65,8 +65,15 @@ export default {
         },
     },
     async mounted() {
+        let that = this;
         console.log('Uploader component mounted.');
-        this.bag = (await axios.get("/api/v1/system/currentBag") ).data;
+        await axios.get("/api/v1/system/currentBag")
+            .then( (response) => { that.bag = response.data } )
+            .then( async () => {
+                console.log("getting files from bag "+that.bag.id");
+                let files = (axios.get("/api/v1/ingest/bags/"+that.bag.id+"/files")).data;
+            });
+            
     },
     props: {
         button: Object

@@ -32,6 +32,7 @@ Route::group(['prefix' => 'v1' , 'middleware' => 'throttle:500,1','auth:web'], f
         Route::post('bags', 'Api\Ingest\BagController@store');
         Route::get('bags', 'Api\Ingest\BagController@all');
         Route::get('bags/{id}', 'Api\Ingest\BagController@show');
+        Route::get('bags/{id}/files', 'Api\Ingest\BagController@showFiles');
     });
 });
 

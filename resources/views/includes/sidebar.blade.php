@@ -14,7 +14,7 @@
         <a href="{{ route('upload') }}"><li class="list-group-item {{ \Request::is('ingest/status') ? 'active sidebar-active' : '' }} "><i class="fas fa-clipboard-check"></i><i class="leftMenuItem"> Status</i></li></a>
     @elseif (\Request::is('access/*'))
         <a href="{{ route('retrieve') }}"><li class="list-group-item {{ \Request::is('access/browse') ? 'active sidebar-active' : '' }} "><i class="fas fa-tachometer-alt"></i><i class="leftMenuItem"> Browse</i></li></a>
-        <a href="{{ route('retrieve') }}"><li class="list-group-item {{ \Request::is('access/retrieve') ? 'active sidebar-active' : '' }} "><i class="fas fa-tachometer-alt"></i><i class="leftMenuItem"> Retrive</i></li></a>
+        <a href="{{ route('retrieve') }}"><li class="list-group-item {{ \Request::is('access/retrieve') ? 'active sidebar-active' : '' }} "><i class="fas fa-tachometer-alt"></i><i class="leftMenuItem"> Retrieve</i></li></a>
     @else
         <a href="{{ route('dashboard') }}"><li class="list-group-item  {{ \Request::is('/') ? 'active sidebar-active' : '' }} "><i class="fas fa-tachometer-alt"></i><i class="leftMenuItem"> Dashboard</i></li></a>
         <a href="{{ route('dashboard') }}"><li class="list-group-item {{ \Request::is('reports') ? 'active sidebar-active' : '' }} "><i class="fas fa-chart-bar"></i><i class="leftMenuItem"> Reports</i></li></a>

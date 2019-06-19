@@ -19,7 +19,7 @@ class BagController extends Controller
     public function index()
     {
         //
-        Log::info("Bag index");
+        Log::debug("Bag index");
     }
 
     /**
@@ -30,7 +30,7 @@ class BagController extends Controller
     public function create()
     {
         //
-        Log::info("Bag create");
+        Log::debug("Bag create");
     }
 
     /**
@@ -41,9 +41,9 @@ class BagController extends Controller
      */
     public function store(Request $request)
     {
-        Log::info("Creating new bag with name ".$request->bagName.".");
+        Log::debug("Creating new bag with name ".$request->bagName.".");
         $bag = Bag::create(['name' => $request->bagName, 'owner' => $request->userId ]);
-        Log::info("Bag with id ".$bag->id." created.");
+        Log::debug("Bag with id ".$bag->id." created.");
     }
 
     /**
@@ -54,14 +54,27 @@ class BagController extends Controller
      */
     public function show($id)
     {
-        Log::info("Bag show");
+        Log::debug("Bag show");
         return Response::json(Bag::find($id));
     }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function showFiles($id)
+    {
+        Log::debug("Bag show files");
+        return Response::json(Bag::find($id)->files()->get());
+    }
+
 
   
     public function all()
     {
-        Log::info("Bag all - needs pagination!");
+        Log::debug("Bag all - needs pagination!");
         return Response::json(Bag::all());
     }
 
@@ -74,7 +87,7 @@ class BagController extends Controller
     public function edit($id)
     {
         //
-        Log::info("Bag edit");
+        Log::debug("Bag edit");
     }
 
     /**
@@ -87,7 +100,7 @@ class BagController extends Controller
     public function update(Request $request, $id)
     {
         //
-        Log::info("Bag edit");
+        Log::debug("Bag edit");
     }
 
     /**
@@ -98,7 +111,7 @@ class BagController extends Controller
      */
     public function destroy($id)
     {
-        Log::info("Bag destroy");
+        Log::debug("Bag destroy");
         //
     }
 
