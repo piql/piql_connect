@@ -55,6 +55,7 @@ export default {
             })).data;
             this.items = (await axios.get("/api/v1/ingest/bags")).data;
             this.$emit('selectActiveBag', createdBag.id);
+            this.bagName = "";
         },
         selectActiveBag: function(id) {
             console.log("Bags select active id: "+id);

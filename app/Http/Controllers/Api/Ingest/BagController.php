@@ -74,12 +74,18 @@ class BagController extends Controller
         return Response::json(Bag::find($id)->files()->get());
     }
 
+    public function complete()
+    {
+        Log::debug("Bags complete - needs pagination!");
+        return Response::json(Bag::where('status', '=', 'complete')->get());
+    }
+
 
   
     public function all()
     {
         Log::debug("Bag all - needs pagination!");
-        return Response::json(Bag::where('status', '=', 'created')->get());
+        return Response::json(Bag::latest()->where('status', '=', 'created')->get());
     }
 
     /**
@@ -182,7 +188,15 @@ class BagController extends Controller
         sleep(60);
 
         // Change bag status
-        $bag->status = 'finished';
+        $bag->status = 'complete';
+        $bag->save();
+        return $bag;
+    }
+    
+    public function piqlIt($id)
+    {
+        $bag = Bag::find($id);
+        $bag->status = "piqld";
         $bag->save();
         return $bag;
     }

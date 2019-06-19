@@ -15,15 +15,15 @@
         </div>
         <br/>
         <div class="row plistHeader">
-            <div class="col"><input type="checkbox" class="checkbox" id="allSips"></div>
-            <div class="col">SIP</div>
-            <div class="col">Content</div>
+            <div class="col-1"><input type="checkbox" class="checkbox" id="allSips"></div>
+            <div class="col-2">SIP</div>
+            <div class="col-3">Content</div>
             <div class="col">Ingest Date</div>
             <div class="col listActionItems">&nbsp;</div>
             <div class="col piqlIt">&nbsp;</div>
         </div>
 
-        <Task v-for="item in items" :item="item"/>
+        <Task v-for="item in items" :item="item" @piqlIt="piqlIt"/>
         </form>
     </div>
 </template>
@@ -37,10 +37,16 @@
         },
 
         async mounted() {
-            this.items = (await axios.get("/api/v1/ingest/uploaded/all")).data; 
+            this.items = (await axios.get("/api/v1/ingest/bags/complete")).data; 
             console.log(this.items);
 
             console.log('TaskList component mounted.')
+        },
+        methods: {
+            async piqlIt(id) {
+                await axios.post("/api/v1/ingest/bags/"+id+"/piql");
+                this.items = (await axios.get("/api/v1/ingest/bags/complete")).data; 
+            },
         },
     }
 </script>
