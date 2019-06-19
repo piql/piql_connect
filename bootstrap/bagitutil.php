@@ -1,7 +1,7 @@
 <?php
 
-require_once './vendor/scholarslab/bagit/lib/bagit.php';
-require_once './vendor/scholarslab/bagit/lib/bagit_utils.php';
+require_once __DIR__ . '/../vendor/scholarslab/bagit/lib/bagit.php';
+require_once __DIR__ . '/../vendor/scholarslab/bagit/lib/bagit_utils.php';
 
 class BagitUtil
 {

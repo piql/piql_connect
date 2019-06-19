@@ -6,8 +6,10 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Log;
 use App\Bag;
+use App\File;
 use Response;
 use Illuminate\Support\Facades\Auth;
+use BagitUtil;
 
 class BagController extends Controller
 {
@@ -115,4 +117,54 @@ class BagController extends Controller
         //
     }
 
+    
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function commit($id)
+    {
+        Log::debug("Bag commit");
+
+        $bag = Bag::find($id);
+
+        $bagit = new BagitUtil;
+
+        $files = File::where('bag_id', '=', $bag->id)->get();
+
+        // Create bag output dir
+        $bagOuputDir = '/tmp/bags';
+        if (!is_dir($bagOuputDir))
+        {
+            if (!mkdir($bagOuputDir))
+            {
+                // \todo Return error
+            }
+        }
+    
+        // Create a bag
+        $bagPath = $bagOuputDir . '/' . $bag->name . '-' . $bag->uuid . '.zip';
+        $tmpDir = sys_get_temp_dir() . '/' . substr(md5(rand()), 0, 7);
+        mkdir($tmpDir);
+        foreach ($files as $file)
+        {
+            // Generate fake files
+            $filePath = $tmpDir . '/' . $file->filename;
+            $fp = fopen($filePath, 'w');
+            fseek($fp, 154658-1,SEEK_CUR);
+            fwrite($fp,'a');
+            fclose($fp);
+
+            // \todo Files are fake - use files from upload
+            $bagit->addFile($filePath);
+        }
+        if (!$bagit->createBag($bagPath))
+        {
+            // \todo Return error
+        }
+
+        
+    }
 }
