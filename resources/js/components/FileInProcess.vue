@@ -2,10 +2,10 @@
     <div>
         <div class="row plist">
             <div class="col">
-                {{bag.name}}
+                {{item.name}}
             </div>
             <div class="col">
-                {{item.fileName}}
+                
             </div>
             <div class="col">
                 {{item.created_at}}

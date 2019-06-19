@@ -7,10 +7,10 @@
                     <label for="toDate">To</label>
                     <input type="date" name="toDate" placeholder="DDMMYY">
                     <select name="status">
-                            <option style="display: none;" disabled="" selected="">Status</option>
-                            <option>Uploading</option>
-                            <option>Processing</option>
-                        </select>
+                        <option style="display: none;" disabled="" selected="">Status</option>
+                        <option>Uploading</option>
+                        <option>Processing</option>
+                    </select>
                     <input type="search" placeholder="Search">
                 </form>
         </div>

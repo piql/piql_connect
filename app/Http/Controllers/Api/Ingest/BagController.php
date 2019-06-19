@@ -13,7 +13,7 @@ use BagitUtil;
 
 class BagController extends Controller
 {
-        /**
+    /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
@@ -77,7 +77,7 @@ class BagController extends Controller
     public function all()
     {
         Log::debug("Bag all - needs pagination!");
-        return Response::json(Bag::all());
+        return Response::json(Bag::where('status', '=', 'created')->get());
     }
 
     /**

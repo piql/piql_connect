@@ -69,7 +69,7 @@ class FileUploadController extends Controller
     public function all()
     {
         Log::info("FileUpload all - needs pagination!");
-        return Response::json(File::all());
+        return Response::json(Bag::where('status', '=', 'processing')->get());
     }
 
     /**
