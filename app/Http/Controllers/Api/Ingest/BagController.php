@@ -165,6 +165,15 @@ class BagController extends Controller
             // \todo Return error
         }
 
-        
+        // Change bag status
+        $bag->status = 'processing';
+        $bag->save();
+
+        // \todo We fake AIP creation - it should be done by archivematica
+        sleep(60);
+
+        // Change bag status
+        $bag->status = 'finished';
+        $bag->save();
     }
 }
