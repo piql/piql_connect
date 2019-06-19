@@ -119,7 +119,7 @@ class BagController extends Controller
 
     
     /**
-     * Remove the specified resource from storage.
+     * Commit the bag to archivematica
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response

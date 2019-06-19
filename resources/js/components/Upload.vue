@@ -11,7 +11,7 @@
                 </div>
             </div>
             <div class="col-2">
-                <button class="btn btn-primary btn-lg">Process</button>
+                <button class="btn btn-primary btn-lg" v-on:click="commitBagToProcessing">Process</button>
             </div>
         </div>
     </div>
@@ -76,6 +76,13 @@ export default {
     methods: {
         addFileToQueue(payload) {
         },
+        commitBagToProcessing() {
+            let bagId = this.bag.id;
+            console.log("Committing bag "+bagId);
+            axios.post("/api/v1/ingest/bags/"+bagId+"/commit").then( (response) => {
+                console.log("Bag "+bagId+" committed!");
+            });
+        }
     },
     async mounted() {
         let self = this;
