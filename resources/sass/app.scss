@@ -672,7 +672,7 @@ input[type="file"] {
 }
 #piqlTop {
     width: 100vw;
-    height: 150px;
+    height: 110px;
     background-color: $white;
 }
 #piqlLogo {
@@ -692,6 +692,7 @@ input[type="file"] {
 }
 #piqlNav {
     width: calc(100vw - 598px);
+    max-height: 110px;
     float: left;
     ul {
         list-style-type: none;
@@ -729,6 +730,7 @@ input[type="file"] {
 }
 #piqlOptions {
     width: 200px;
+    max-height: 110px;
     position: absolute;
     top: 0;
     right: 0;
@@ -1110,7 +1112,7 @@ input[type="file"] {
         width: 100%;
     }
 }
-.dropFiles {
+.fine-uploader-dropzone-container {
     width: 80%;
     //Instead of the line below you could use @include border-radius($radius, $vertical-radius)
     border-radius: 20px;
@@ -1578,7 +1580,7 @@ th {
 }
 @media screen and(max-width: 1210px) {
     #piqlTop {
-        height: 130px;
+        height: 110px;
         width: 100vw;
         background-color: $white;
     }
@@ -1600,7 +1602,8 @@ th {
         display: none;
         margin: 0;
         width: 100%;
-        height: 50px;
+        height: 110px;
+        max-height: 110px;
         margin-top: 25px;
         li {
             padding: 0 15px;
@@ -1615,6 +1618,7 @@ th {
     #piqlOptions {
         top: -7px;
         right: 90px;
+        height: 110px;
         width: auto;
         padding-right: 0;
         background-color: transparent;
