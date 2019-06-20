@@ -43,6 +43,16 @@ return [
 
     'disks' => [
 
+        'uploader' => [
+            'driver' => 'local',
+            'root' => storage_path(env('STORAGE_UPLOADER_PATH')),
+        ],
+
+        'bags' => [
+            'driver' => 'local',
+            'root' => storage_path(env('STORAGE_BAGS_PATH')),
+        ],
+    
         'local' => [
             'driver' => 'local',
             'root' => storage_path('app'),

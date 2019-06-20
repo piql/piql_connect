@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\Ingest;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Storage;
 use Log;
 use App\Bag;
 use App\File;
@@ -141,16 +142,16 @@ class BagController extends Controller
      */
     public function commit($id)
     {
-        Log::debug("Bag commit");
+        Log::debug("Bag commit: " . $id);
 
         $bag = Bag::find($id);
 
         $bagit = new BagitUtil;
 
-        $files = File::where('bag_id', '=', $bag->id)->get();
+        $files = $bag->files();
 
         // Create bag output dir
-        $bagOuputDir = '/tmp/bags';
+        $bagOuputDir = dirname($bag->storagePathCreated());
         if (!is_dir($bagOuputDir))
         {
             if (!mkdir($bagOuputDir))
@@ -158,21 +159,12 @@ class BagController extends Controller
                 // \todo Return error
             }
         }
-    
+
         // Create a bag
-        $bagPath = $bagOuputDir . '/' . $bag->name . '-' . $bag->uuid . '.zip';
-        $tmpDir = sys_get_temp_dir() . '/' . substr(md5(rand()), 0, 7);
-        mkdir($tmpDir);
+        $bagPath = $bag->storagePathCreated();
         foreach ($files as $file)
         {
-            // Generate fake files
-            $filePath = $tmpDir . '/' . $file->filename;
-            $fp = fopen($filePath, 'w');
-            fseek($fp, 154658-1,SEEK_CUR);
-            fwrite($fp,'a');
-            fclose($fp);
-
-            // \todo Files are fake - use files from upload
+            $filePath = $file->storagePathCompleted();
             $bagit->addFile($filePath);
         }
         if (!$bagit->createBag($bagPath))

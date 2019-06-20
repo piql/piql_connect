@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 use Webpatser\Uuid\Uuid;
 use App\User;
 
@@ -32,5 +33,9 @@ class Bag extends Model
     {
         return $this->hasMany('App\File');
     }
-    
+
+    public function storagePathCreated()
+    {
+        return Storage::disk('bags')->path('created/' . $this->name . '-' . $this->uuid . '.zip');
+    }
 }
