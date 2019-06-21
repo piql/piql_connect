@@ -19,7 +19,11 @@ class BagitUtil
 
     public function __destruct()
     {
-        // \todo Delete temp files
+        // Delete temp files and directories
+        foreach ($this->m_TempResources as $resource)
+        {
+            rrmdir($resource);
+        }
     }
 
     public function errorMessage()
@@ -143,6 +147,29 @@ class BagitUtil
         array_push($this->m_TempResources, $tempDir);
         $retTempDir = $tempDir;
         return true;
+    }
+
+    private function rrmdir($dir)
+    { 
+        if (is_dir($dir))
+        { 
+            $objects = scandir($dir); 
+            foreach ($objects as $object)
+            { 
+                if ($object != "." && $object != "..")
+                { 
+                    if (is_dir($dir."/".$object))
+                    {
+                        $this->rrmdir($dir."/".$object);
+                    }
+                    else
+                    {
+                        unlink($dir."/".$object);
+                    }
+                } 
+            }
+            rmdir($dir); 
+        } 
     }
 }
 
