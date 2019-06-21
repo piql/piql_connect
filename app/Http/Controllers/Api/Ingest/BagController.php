@@ -148,7 +148,7 @@ class BagController extends Controller
 
         $bagit = new BagitUtil;
 
-        $files = $bag->files();
+        $files = $bag->files;
 
         // Create bag output dir
         $bagOuputDir = dirname($bag->storagePathCreated());
@@ -156,6 +156,7 @@ class BagController extends Controller
         {
             if (!mkdir($bagOuputDir))
             {
+                Log::error("Failed to create bag output dir: " . $bagOuputDir);
                 // \todo Return error
             }
         }
@@ -165,10 +166,11 @@ class BagController extends Controller
         foreach ($files as $file)
         {
             $filePath = $file->storagePathCompleted();
-            $bagit->addFile($filePath);
+            $bagit->addFile($filePath, $file->filename);
         }
         if (!$bagit->createBag($bagPath))
         {
+            Log::error("Failed to create bag: " . $bagit->errorMessage());
             // \todo Return error
         }
 
@@ -176,13 +178,7 @@ class BagController extends Controller
         $bag->status = 'processing';
         $bag->save();
 
-        // \todo We fake AIP creation - it should be done by archivematica
-        sleep(60);
-
-        // Change bag status
-        $bag->status = 'complete';
-        $bag->save();
-        return $bag;
+        Log::debug("Finished");
     }
     
     public function piqlIt($id)
