@@ -51,7 +51,7 @@ class BagitUtilTest extends TestCase
         // Add files
         for ($i = 0; $i < count($this->testFiles); $i++)
         {
-            $bag->addFile($this->testFiles[$i]);
+            $bag->addFile($this->testFiles[$i], basename($this->testFiles[$i]));
         }
 
         // Create bag

@@ -5,13 +5,16 @@ require_once __DIR__ . '/../vendor/scholarslab/bagit/lib/bagit_utils.php';
 
 class BagitUtil
 {
-    var $m_InputFiles = array();
-    var $m_SystemTempDir;
-    var $m_TempResources = array();
+    private $m_InputFilesSource = array();
+    private $m_InputFilesDestination = array();
+    private $m_SystemTempDir;
+    private $m_TempResources = array();
+    private $m_ErrorMessage;
     
     public function __construct()
     {
         $this->m_SystemTempDir = sys_get_temp_dir();
+        $this->m_ErrorMessage = '';
     }
 
     public function __destruct()
@@ -19,9 +22,15 @@ class BagitUtil
         // \todo Delete temp files
     }
 
-    public function addFile($filePath)
+    public function errorMessage()
     {
-        array_push($this->m_InputFiles, $filePath);
+        return $this->m_ErrorMessage;
+    }
+
+    public function addFile($filePathSource, $filePathDestination)
+    {
+        array_push($this->m_InputFilesSource, $filePathSource);
+        array_push($this->m_InputFilesDestination, $filePathDestination);
     }
 
     public function createBag($outputFile)
@@ -32,6 +41,7 @@ class BagitUtil
         // Create temp directory
         if (!$this->createTempDir($tempDir))
         {
+            $this->m_ErrorMessage = 'Failed to create temp dir';
             return false;
         }
 
@@ -46,10 +56,12 @@ class BagitUtil
         $bagitTxtContent = str_replace('0.96', '0.97', $bagitTxtContent, $replaceCount);
         if ($replaceCount != 1)
         {
+            $this->m_ErrorMessage = 'Failed to set bagit version';
             return false;
         }
         if (file_put_contents($bagitTxtPath, $bagitTxtContent, LOCK_EX) === false)
         {
+            $this->m_ErrorMessage = 'Failed to write bagit.txt';
             return false;
         }
 
@@ -61,18 +73,27 @@ class BagitUtil
         // Validate bag
         if (!$bag->isValid() || !$bag->isExtended())
         {
+            $this->m_ErrorMessage = 'Bag is not valid';
             return false;
         }
         $bagInfo = $bag->getBagInfo();
         if ($bagInfo['version'] != '0.97' || $bagInfo['encoding'] != 'UTF-8' || $bagInfo['hash'] != 'sha1')
         {
+            $this->m_ErrorMessage = 'Bag has wrong setup';
             return false;
         }
 
         // Add data
-        foreach ($this->m_InputFiles as $inputFile)
+        for ($i = 0; $i < count($this->m_InputFilesSource); $i++)
         {
-            $bag->addFile($inputFile, 'data/' . basename($inputFile));
+            $inputFileSource = $this->m_InputFilesSource[$i];
+            $inputFileDestination = $this->m_InputFilesDestination[$i];
+            $bag->addFile($inputFileSource, 'data/' . $inputFileDestination);
+            if (!file_exists($bag->getDataDirectory() . '/' . $inputFileDestination))
+            {
+                $this->m_ErrorMessage = 'Failed to add file to bag. Source=' . $inputFileSource . ' destination=' . $bag->getDataDirectory() . '/' . $inputFileDestination;
+                return false;
+            }
         }
 
         // Update bag with added files
@@ -80,6 +101,7 @@ class BagitUtil
 
         if ($outputFileExtension != 'zip' && $outputFileExtension != 'tgz')
         {
+            $this->m_ErrorMessage = 'Bag has wrong extension';
             return false;
         }
 
@@ -91,11 +113,13 @@ class BagitUtil
         $expectedContent = "BagIt-Version: 0.97\n" . "Tag-File-Character-Encoding: UTF-8\n";
         if (file_get_contents($createdBag->bagitFile) != $expectedContent)
         {
+            $this->m_ErrorMessage = 'Created bag is not valid';
             return false;
         }
         $createdBag->validate();
         if (count($createdBag->bagErrors) != 0)
         {
+            $this->m_ErrorMessage = 'Bag has errors';
             return false;
         }
 
