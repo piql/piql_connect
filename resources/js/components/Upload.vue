@@ -84,12 +84,8 @@ export default {
         },
         commitBagToProcessing() {
             let bagId = this.bag.id;
-            axios.post("/api/v1/ingest/bags/"+bagId+"/preCommit").then( async () => {
-                this.bags = (await axios.get("/api/v1/ingest/bags")).data;
-                this.bag = this.bags[0] || {};
-            });
-
             axios.post("/api/v1/ingest/bags/"+bagId+"/commit").then( async (response) => {
+                this.bags = (await axios.get("/api/v1/ingest/bags")).data;
                 console.log("Bag "+bagId+" committed!");
             });
         },

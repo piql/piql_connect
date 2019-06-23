@@ -10,20 +10,20 @@ use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
-class ProcessFilesEvent
+class ReceivedStatusFromArchivematicaEvent
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public $bagId;
+    public $bag;
 
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct($bagId)
+    public function __construct($bag)
     {
-        $this->bagId = $bagId;
+        $this->bag = $bag;
     }
 
     /**

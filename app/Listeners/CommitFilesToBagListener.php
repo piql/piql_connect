@@ -2,7 +2,8 @@
 
 namespace App\Listeners;
 
-use App\Events\ProcessFilesEvent;
+use App\Events\BagFilesEvent;
+use App\Events\BagCompleteEvent;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Facades\Storage;
@@ -11,7 +12,7 @@ use App\Bag;
 use App\File;
 use BagitUtil;
 
-class CommitFilesToBagListener
+class CommitFilesToBagListener implements ShouldQueue
 {
     /**
      * Create the event listener.
@@ -26,15 +27,15 @@ class CommitFilesToBagListener
     /**
      * Handle the event.
      *
-     * @param  ProcessFilesEvent  $event
+     * @param  BagFilesEvent  $event
      * @return void
      */
-    public function handle(ProcessFilesEvent $event)
+    public function handle(BagFilesEvent $event)
     {
         Log::debug("CommitFilesToBagListener handler");
 
         $bag = Bag::find($event->bagId);
-        $bag->status = "bagging";
+        $bag->status = "preparing files";
         $bag->save();
 
         Log::debug("Bag commit: " . $bag->id);
@@ -67,11 +68,8 @@ class CommitFilesToBagListener
             // \todo Error event
         }
 
-        // Change bag status
-        $bag->status = 'processing';
-        $bag->save();
 
         Log::debug("Bag created.");
-
+        event( new BagCompleteEvent($bag) );
     }
 }

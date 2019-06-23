@@ -15,8 +15,17 @@ class EventServiceProvider extends ServiceProvider
      * @var array
      */
     protected $listen = [
-        \App\Events\ProcessFilesEvent::class => [
+        \App\Events\FileUploadedEvent::class=> [
+            \App\Listeners\LogUploadedFilesListener::class,
+        ],
+        \App\Events\BagFilesEvent::class => [
             \App\Listeners\CommitFilesToBagListener::class,
+        ],
+        \App\Events\BagCompleteEvent::class => [
+            \App\Listeners\SendBagToArchivematicaListener::class
+        ],
+        \App\Events\ReceivedStatusFromArchivematicaEvent::class => [
+            \App\Listeners\UpdateIngestStatusListener::class
         ],
 
     ];

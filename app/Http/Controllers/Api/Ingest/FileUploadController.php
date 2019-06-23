@@ -9,6 +9,7 @@ use Log;
 use App\File;
 use App\Bag;
 use Response;
+use App\Events\FileUploadedEvent;
 
 class FileUploadController extends Controller
 {
@@ -42,17 +43,12 @@ class FileUploadController extends Controller
      */
     public function store(Request $request)
     {
-        $fileName = $request->fileName;
-        $uploadedFile = $request->result["name"];
-        $bagId = $request->bagId;
-        $pathInfo = pathinfo($uploadedFile);
-        $uuid = $pathInfo['filename'];
-        Log::info("fileUpload@store received fileName: ".$fileName." with uuid ".$uuid." for bag ".$bagId."." );
         $file = new File();
-        $file->fileName = $fileName;
-        $file->uuid = $uuid;
-        $file->bag_id = $bagId;
+        $file->fileName = $request->fileName;
+        $file->uuid = pathinfo($request->result["name"])['filename'];
+        $file->bag_id = $request->bagId;
         $file->save();
+        event( new FileUploadedEvent($file) );
         return $file;
     }
 

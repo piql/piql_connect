@@ -10,7 +10,7 @@ use App\Bag;
 use App\File;
 use Response;
 use Illuminate\Support\Facades\Auth;
-use App\Events\ProcessFilesEvent;
+use App\Events\BagFilesEvent;
 
 class BagController extends Controller
 {
@@ -125,14 +125,6 @@ class BagController extends Controller
         Log::debug("Bag destroy");
         //
     }
-
-    public function preCommit($id)
-    {
-        $bag = Bag::find($id);
-        $bag->status = 'processing';
-        $bag->save();
-        return $bag;
-    }
     
     /**
      * Commit the bag to archivematica
@@ -143,7 +135,7 @@ class BagController extends Controller
     public function commit($id)
     {
         Log::debug("emitting ProcessFilesEvent");
-        event( new ProcessFilesEvent($id) );
+        event( new BagFilesEvent($id) );
     }
     
     public function piqlIt($id)
