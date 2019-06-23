@@ -10,7 +10,7 @@ use App\Bag;
 use App\File;
 use Response;
 use Illuminate\Support\Facades\Auth;
-use BagitUtil;
+use App\Events\ProcessFilesEvent;
 
 class BagController extends Controller
 {
@@ -142,43 +142,8 @@ class BagController extends Controller
      */
     public function commit($id)
     {
-        Log::debug("Bag commit: " . $id);
-
-        $bag = Bag::find($id);
-
-        $bagit = new BagitUtil;
-
-        $files = $bag->files;
-
-        // Create bag output dir
-        $bagOuputDir = dirname($bag->storagePathCreated());
-        if (!is_dir($bagOuputDir))
-        {
-            if (!mkdir($bagOuputDir))
-            {
-                Log::error("Failed to create bag output dir: " . $bagOuputDir);
-                // \todo Return error
-            }
-        }
-
-        // Create a bag
-        $bagPath = $bag->storagePathCreated();
-        foreach ($files as $file)
-        {
-            $filePath = $file->storagePathCompleted();
-            $bagit->addFile($filePath, $file->filename);
-        }
-        if (!$bagit->createBag($bagPath))
-        {
-            Log::error("Failed to create bag: " . $bagit->errorMessage());
-            // \todo Return error
-        }
-
-        // Change bag status
-        $bag->status = 'processing';
-        $bag->save();
-
-        Log::debug("Finished");
+        Log::debug("emitting ProcessFilesEvent");
+        event( new ProcessFilesEvent($id) );
     }
     
     public function piqlIt($id)

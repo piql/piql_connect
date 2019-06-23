@@ -15,9 +15,10 @@ class EventServiceProvider extends ServiceProvider
      * @var array
      */
     protected $listen = [
-        Registered::class => [
-            SendEmailVerificationNotification::class,
+        \App\Events\ProcessFilesEvent::class => [
+            \App\Listeners\CommitFilesToBagListener::class,
         ],
+
     ];
 
     /**
