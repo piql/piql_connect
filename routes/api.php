@@ -37,6 +37,10 @@ Route::group(['prefix' => 'v1' , 'middleware' => 'throttle:500,1','auth:web'], f
         Route::post('bags/{id}/preCommit', 'Api\Ingest\BagController@preCommit');
         Route::post('bags/{id}/commit', 'Api\Ingest\BagController@commit');
         Route::post('bags/{id}/piql', 'Api\Ingest\BagController@piqlIt');
+
+        Route::group(['prefix' => 'am'], function() {
+            Route::get('instances', 'Api\Ingest\ArchivematicaServiceController@index');
+        });
     });
 });
 
