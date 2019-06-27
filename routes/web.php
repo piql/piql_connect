@@ -37,6 +37,7 @@ Route::middleware(['auth'])->group( function () {
         Route::resource('process', 'IngestProcessController')->name('index', 'process');
         Route::resource('tasks', 'IngestTaskListController')->name('index', 'tasks');
         Route::resource('status', 'IngestStatusController')->name('index', 'status');
+        Route::get('settings', 'IngestSettingsController@show')->name('show', 'show');
     });
 
     Route::prefix('access')->group( function () {
