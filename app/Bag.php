@@ -36,6 +36,16 @@ class Bag extends Model
 
     public function storagePathCreated()
     {
-        return Storage::disk('bags')->path('created/' . $this->name . '-' . $this->uuid . '.zip');
+        return Storage::disk('bags')->path("created/".$this->zipBagFileName());
+    }
+
+    public function zipBagFileName()
+    {
+        return $this->name . '-' . $this->uuid . '.zip';
+    }
+
+    public function createdDirectory()
+    {
+        return Storage::disk('bags')->path('created');
     }
 }

@@ -45,8 +45,9 @@ class CommitFilesToBagListener implements ShouldQueue
         $files = $bag->files;
 
         // Create bag output dir
-        $bagOuputDir = dirname($bag->storagePathCreated());
-        if (!is_dir($bagOuputDir))
+        $bagOutputDir = dirname($bag->storagePathCreated());
+        Log::debug("Bag output dir: ".$bagOutputDir);
+/*        if (!is_dir($bagOuputDir))
         {
             if (!mkdir($bagOuputDir))
             {
@@ -54,9 +55,10 @@ class CommitFilesToBagListener implements ShouldQueue
                 // \todo Error event
             }
         }
-
+ */
         // Create a bag
         $bagPath = $bag->storagePathCreated();
+        Log::debug("Bag path: ".$bagPath);
         foreach ($files as $file)
         {
             $filePath = $file->storagePathCompleted();

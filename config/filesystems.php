@@ -52,10 +52,14 @@ return [
             'driver' => 'local',
             'root' => storage_path(env('STORAGE_BAGS_PATH')),
         ],
-    
+        'archivematica' => [
+            'driver' => 'local', 
+            'root' => storage_path(env('STORAGE_TRANSFER_PATH')),
+        ],        
+
         'local' => [
             'driver' => 'local',
-            'root' => storage_path('app'),
+            'root' => storage_path('/'),
         ],
 
         'public' => [
@@ -72,6 +76,16 @@ return [
             'region' => env('AWS_DEFAULT_REGION'),
             'bucket' => env('AWS_BUCKET'),
             'url' => env('AWS_URL'),
+        ],
+
+        'am' => [
+            'driver' => 'sftp',
+            'host' => '192.168.9.122',
+            'port' => 22,
+            'username' => 'kare',
+            'privateKey' => '/home/vagrant/.ssh/am_id_rsa',
+            'root' => '/home/kare/.am/',
+            'timeout' => 30,
         ],
 
     ],

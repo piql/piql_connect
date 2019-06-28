@@ -27,6 +27,9 @@ class EventServiceProvider extends ServiceProvider
         \App\Events\ReceivedStatusFromArchivematicaEvent::class => [
             \App\Listeners\UpdateIngestStatusListener::class
         ],
+        \App\Events\StartTransferToArchivematicaEvent::class => [
+            \App\Listeners\StartTransferToArchivematicaListener::class
+        ],
 
     ];
 

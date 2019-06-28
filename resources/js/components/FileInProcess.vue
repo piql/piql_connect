@@ -21,8 +21,6 @@
 export default {
     async mounted() {
         console.log('FileInProcess component mounted.')
-        let bagId = this.item.bag_id;
-        this.bag = (await axios.get("/api/v1/ingest/holdings/"+bagId)).data; 
     },
     data() {
         return {
