@@ -35,7 +35,7 @@
         },
 
         async mounted() {
-            this.items = (await axios.get("/api/v1/ingest/uploaded/")).data; 
+            this.items = (await axios.get("/api/v1/ingest/processing/")).data;
             console.log(this.items);
 
             console.log('Processing component mounted.')

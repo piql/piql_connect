@@ -32,7 +32,8 @@ Route::group(['prefix' => 'v1' , 'middleware' => 'throttle:500,1','auth:web'], f
         Route::post('bags', 'Api\Ingest\BagController@store');
         Route::patch('bags/{id}', 'Api\Ingest\BagController@update');
         Route::get('bags', 'Api\Ingest\BagController@all');
-        Route::get('bags/complete', 'Api\Ingest\BagController@complete');
+        Route::get('processing', 'Api\Ingest\BagController@processing');
+        Route::get('complete', 'Api\Ingest\BagController@complete');
         Route::get('bags/{id}', 'Api\Ingest\BagController@show');
         Route::get('bags/{id}/files', 'Api\Ingest\BagController@showFiles');
         Route::post('bags/{id}/commit', 'Api\Ingest\BagController@commit');

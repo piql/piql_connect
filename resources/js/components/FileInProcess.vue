@@ -5,7 +5,7 @@
                 {{item.name}}
             </div>
             <div class="col">
-                
+                {{filename}} 
             </div>
             <div class="col">
                 {{item.created_at}}
@@ -21,10 +21,13 @@
 export default {
     async mounted() {
         console.log('FileInProcess component mounted.')
+        let bagId = this.item.id;
+        this.filename = (await axios.get("/api/v1/ingest/bags/"+bagId+"/files")).data[0].filename;
     },
     data() {
         return {
-            bag: {}
+            bag: {},
+            filename: "",
         };
     },
     props: {

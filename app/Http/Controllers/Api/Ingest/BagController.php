@@ -85,15 +85,19 @@ class BagController extends Controller
     public function complete()
     {
         Log::debug("Bags complete - needs pagination!");
-        return Response::json(Bag::where('status', '=', 'complete')->get());
+        return Response::json(Bag::latest()->where('status', '=', 'complete')->get());
     }
 
-
+    public function processing()
+    {
+        Log::debug("Bags in processing - needs pagination!");
+        return Response::json(Bag::latest()->where('status', '=', 'ingesting')->get());
+    }
   
     public function all()
     {
         Log::debug("Bag all - needs pagination!");
-        return Response::json(Bag::latest()->where('status', '=', 'created')->get());
+        return Response::json(Bag::latest()->all());
     }
 
     /**

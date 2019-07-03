@@ -37,7 +37,7 @@
         },
 
         async mounted() {
-            this.items = (await axios.get("/api/v1/ingest/bags/complete")).data; 
+            this.items = (await axios.get("/api/v1/ingest/complete")).data;
             console.log(this.items);
 
             console.log('TaskList component mounted.')
