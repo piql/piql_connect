@@ -6,7 +6,8 @@
              @change="_onFilesSelected"
              :multiple="multiple"
              :accept="accept"
-             :required="required"/>
+             :required="required"
+             :disabled="disabled"/>
     </label>
   </div>
 </template>
@@ -45,6 +46,10 @@
       uploader: {
         type: Object,
         required: true
+      },
+      disabled: {
+        type: Boolean,
+        default: false
       }
     },
 

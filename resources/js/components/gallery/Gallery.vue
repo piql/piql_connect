@@ -9,6 +9,7 @@ Notes:
     :disabled="dropzoneDisabled"
     :dropActiveClassName="dropzoneDropActiveClassName"
     :multiple="dropzoneMultiple"
+    ref="maybedropzone"
   >
     <!-- TODO: Rendering Default Content when it is null -->
     <!-- Current idea would be to bring MaybeDropzoneContent up to here -->
@@ -17,7 +18,9 @@ Notes:
     <FileInputComponent 
       :multiple="fileInputMultiple"
       :uploader="uploader"
-    />
+      :disabled="fileInputDisabled"
+        ><slot name="inputbuttontext">Add file to upload</slot>
+    </FileInputComponent>
     <ProgressBar 
       class='vue-fine-uploader-gallery-total-progress-bar'
       :uploader="uploader"
@@ -184,8 +187,12 @@ Notes:
         default: true
       },
       thumbnailMaxSize: {
-        default: 130
-      }
+        default: 30
+      },
+      fileInputDisabled: {
+        type: Boolean,
+        default: false
+      },
     },
     mounted () {
       this.uploader.on('statusChange', this._onStatusChange)
@@ -209,6 +216,9 @@ Notes:
       }
     },
     methods: {
+      clearDropzone(e) {
+        this.state.visibleFiles = []
+      },
       _onStatusChange (id, oldStatus, status) {
         const statusEnum = this.uploader.qq.status
         const visibleFiles = this.state.visibleFiles

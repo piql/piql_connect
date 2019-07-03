@@ -235,11 +235,11 @@ body {
 h1 {
     margin-bottom: 10px;
     padding-bottom: 0;
-    font-size: 20px;
     margin-top: 0;
     margin-left: 0;
     text-transform: uppercase;
     font-size: 30px;
+    font-weight: bold;
 }
 h2 {
     margin-bottom: 40px;
@@ -524,9 +524,8 @@ input[type="file"] {
         background-color: $color_thunder_approx;
     }
 }
-.btn-disabled {
+.disabled {
     background-color: $gray !important;
-    cursor: not-allowed;
 }
 .btn-right {
     float: right;
@@ -672,7 +671,7 @@ input[type="file"] {
 }
 #piqlTop {
     width: 100vw;
-    height: 110px;
+    height: 130px;
     background-color: $white;
 }
 #piqlLogo {
@@ -1580,7 +1579,7 @@ th {
 }
 @media screen and(max-width: 1210px) {
     #piqlTop {
-        height: 110px;
+        height: 130px;
         width: 100vw;
         background-color: $white;
     }

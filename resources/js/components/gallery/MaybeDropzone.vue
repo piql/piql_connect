@@ -23,6 +23,7 @@
       :disabled="disabled"
       :dropActiveClassName="dropActiveClassName"
       :multiple="multiple"
+      ref="dropzone"
       v-else
     >
       <span v-if="hasVisibleFiles"/>

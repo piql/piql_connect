@@ -11,6 +11,7 @@ use App\File;
 use Response;
 use Illuminate\Support\Facades\Auth;
 use App\Events\BagFilesEvent;
+use Carbon\Carbon;
 
 class BagController extends Controller
 {
@@ -45,7 +46,13 @@ class BagController extends Controller
     public function store(Request $request)
     {
         Log::debug("Creating new bag with name ".$request->bagName.".");
-        Bag::create(['name' => $request->bagName, 'owner' => $request->userId ]);
+        $bagName = trim($request->bagName);
+        if(empty($bagName))
+        {
+            $bagName = Carbon::now()->format("YmdHis");
+            Log::debug("Creating bag with name ".$bagName);
+        }
+        Bag::create(['name' => $bagName, 'owner' => $request->userId ]);
         $bag = Bag::latest()->first();
         Log::debug("Bag with id ".$bag->id." created.");
         return $bag;
@@ -110,8 +117,15 @@ class BagController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
-        Log::debug("Bag edit");
+        Log::debug("Bag update");
+        if($request->filled("bagName"))
+        {
+            $bag = Bag::find($id);
+            $bag->name = $request->bagName;
+            $bag->save();
+            $bag->fresh();
+            return Response::json($bag);
+        }
     }
 
     /**

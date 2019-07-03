@@ -2,8 +2,10 @@
   <FileInput 
     :uploader="uploader"
     :multiple="multiple"
-  >
-    <span class='btn vue-fine-uploader-gallery-file-input-content'>
+    :disabled="disabled"
+    >
+
+    <span class='btn vue-fine-uploader-gallery-file-input-content' v-bind:class='[{ disabled: disabled }]'>
       <slot>
         <UploadIcon class='vue-fine-uploader-gallery-file-input-upload-icon' />
         Select Files
@@ -29,7 +31,11 @@
       multiple: {
         type: Boolean,
         default: true
-      }
+      },
+      disabled: {
+        type: Boolean,
+        default: false
+      },
     }
   }
 </script>

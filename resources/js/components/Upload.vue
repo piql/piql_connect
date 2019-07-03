@@ -1,24 +1,43 @@
 <template>
     <div>
-        <Gallery
-            :uploader="uploader"
-            @submit="addFileToQueue">
-        </Gallery>
-        <br/>
-        <div class="row">
+        <div class="row mb-5"> 
             <div class="col">
-                <div>Active Ingest Session: <span style="font-weight: bold; color: darkorange; font-family: agenda; border-bottom: 1px dotted darkgray;">{{bag.name}}</span>.
-                </div>
-            </div>
-            <div class="col-2">
-                <button class="btn btn-primary btn-lg" v-on:click="commitBagToProcessing">Process</button>
+                <em class="mb-3">Upload one or more files for pre-ingest here. Either click the <span class="font-weight-bold">Select Files</span> button, or drag and drop files to the area below.</em>
+                <em class="mb-3">Optionally, a name can be added to the upload to ease tracking your archival data.<br/>When your files are uploaded, clicking the <span class="font-weight-bold">Process</span> button will start the ingest process in Archivematica.</em>
             </div>
         </div>
 
-        <div class="row" style="height: 10px;"></div> 
+        <div class="row">
+            <div class="col-11 m-2">
+                <Gallery
+                    :uploader="uploader"
+                    :fileInputDisabled="fileInputDisabled"
+                    @submit="addFileToQueue"
+                    ref="gallery">
+                </Gallery>
+            </div>
+        </div>
 
-        <Bags :items="bags" @selectActiveBag="selectActiveBag"></Bags>
+        <div class="row">
+            <div class="col">
+                <br/>
+            </div>
+        </div>
 
+        <form v-on:submit.prevent="">
+            <div class="row form-group mb-4">
+                <div class="col-9">
+                    <input value="" placeholder="Upload name... (Optional)" v-model="bagName" type="text" class="form-control m-1"> 
+                </div>
+            </div>
+        </form>
+
+
+        <div class="row">
+            <div class="col-md-9 text-center">
+                <button class="btn btn-primary btn-block" v-bind:class="[{ disabled : processDisabled  }]" v-on:click="commitBagToProcessing">Process</button>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -28,7 +47,6 @@ import FineUploader from 'vue-fineuploader';
 
 export default {
     data() {
-        let self = this;
         const uploader = new FineUploaderTraditional({
             options: {
                 request: {
@@ -51,7 +69,11 @@ export default {
                     },
                 },
                 callbacks: {
+                    onValidate: (id, name) => {
+                        this.processDisabled = true;
+                    },
                     onComplete: (id, name, response) => {
+                        this.processDisabled = false;
                         let uploadToBagId = this.bag.id;
                         axios.post('/api/v1/ingest/fileUploaded', {
                             'fileName' : name,
@@ -70,8 +92,11 @@ export default {
         return {
             uploader: uploader,
             bag: {},
-            bags: {},
-            files: {}
+            bagName: "",
+            files: {},
+            userId: '',
+            processDisabled: true,
+            fileInputDisabled: false,
         };
     },
 
@@ -82,32 +107,52 @@ export default {
     methods: {
         addFileToQueue(payload) {
         },
-        commitBagToProcessing() {
-            let bagId = this.bag.id;
-            axios.post("/api/v1/ingest/bags/"+bagId+"/commit").then( async (response) => {
-                this.bags = (await axios.get("/api/v1/ingest/bags")).data;
-                console.log("Bag "+bagId+" committed!");
-            });
+        async commitBagToProcessing(e) {
+            if(this.processDisabled){
+                return;
+            }
+            this.processDisabled = true;
+            this.fileInputDisabled = true;
+
+            let updatedBag = await this.setBagName(this.bagName);
+            if(updatedBag != null){
+                this.bag = updateBag;
+            }
+
+            let committed = (await axios.post("/api/v1/ingest/bags/"+this.bag.id+"/commit")).data;
+            this.$refs.gallery.clearDropzone();
+            this.uploader.methods.reset();
+            this.bagName = "";
+            this.bag = await this.createBag("", this.userId);
+            this.fileInputDisabled = false;
+            //this.$refs.gallery.$refs.maybedropzone.$refs.dropzone.$refs.dropZone.ondrop = null
+            this.$refs.gallery.ondrop = null;
         },
-        selectActiveBag(bagIdToActivate){
-            console.log("Activating bag with id "+bagIdToActivate);
-            axios.get('/api/v1/ingest/bags/'+bagIdToActivate).then( (response) =>{
-                this.bag = response.data;
+        async setBagName(bagName) {
+            let currentBagId = this.bag.id;
+            let bag = null;
+            console.log("updating name of bag with id "+currentBagId+" to "+bagName);
+            axios.patch("/api/v1/ingest/bags/"+currentBagId, {
+                'bagName': bagName
+            }).then( (result) => {
+                console.log("updated bag: ");
+                console.log(result.data);
+                bag = result.data;
             });
+            return bag;
         },
-    
+        async createBag(bagName, userId) {
+            let createdBag = (await axios.post("/api/v1/ingest/bags/", {
+                name: bagName,
+                userId: userId,
+            })).data;
+            return createdBag;
+        },
     },
     async mounted() {
-        let self = this;
         console.log('Uploader component mounted.');
-        this.bags = (await axios.get("/api/v1/ingest/bags")).data; 
-        await axios.get("/api/v1/system/currentBag")
-            .then( (response) => { self.bag = response.data } )
-            .then( async () => {
-                console.log("getting files from bag "+self.bag.id);
-                let files = (axios.get("/api/v1/ingest/bags/"+self.bag.id+"/files")).data;
-            });
-            
+        this.userId = (await axios.get("/api/v1/system/currentUser")).data;
+        this.bag = await this.createBag("", this.userId);
     },
     props: {
         button: Object
