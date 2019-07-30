@@ -31,6 +31,7 @@ Route::middleware(['auth'])->group( function () {
 
     Route::get('reports', 'ReportsController@showReports');
     Route::get('settings', 'SettingsController@showSettings');
+    Route::post('settings', 'SettingsController@updateSettings');
 
     Route::prefix('ingest')->group( function () {
         Route::resource('bags', 'IngestBagController')->name('index', 'bags');

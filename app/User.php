@@ -72,4 +72,9 @@ class User extends Authenticatable
     {
         return self::where('username', '=', $username)->firstOrFail();
     }
+
+    public function settings()
+    {
+        return $this->hasOne('App\UserSetting', 'user');
+    }
 }
