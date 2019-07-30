@@ -1,6 +1,7 @@
 <?php
 
-Route::get('login', array('uses' => 'Auth\LoginController@showLogin'));
+Route::get('/login', array('uses' => 'Auth\LoginController@showLogin'));
+Route::get('/logout', array('uses' => 'Auth\LoginController@logout'));
 
 Route::get('/wsdl/ac.wsdl', function() {
     $mimeHeader = ['Content-Type: application/wsdl+xsd'];

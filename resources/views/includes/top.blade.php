@@ -19,6 +19,7 @@
         </notifications>
         <a href="settings"><i class="fas fa-cogs"></i></a>
         <a href="#"><i class="fas fa-info-circle" style="visibility: collapse;"></i></a>
+        <a href="/logout"><i class="fas fa-sign-out-alt"></i></a>
     </div>
 </div>
 
