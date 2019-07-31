@@ -12,10 +12,6 @@ use Log;
 
 class PiqlUserProvider extends EloquentUserProvider implements UserProvider 
 {
-    protected $model;
-
-    private $acwsHostname = "http://testamu1.piql.com:8081";
-
 	public function __construct()
 	{
 	}
@@ -28,60 +24,32 @@ class PiqlUserProvider extends EloquentUserProvider implements UserProvider
 	public function retrieveByToken($identifier, $token)
     {
         Log::info("retrieveByToken");
-
 	}
 
 	public function updateRememberToken(Authenticatable $user, $token)
 	{
         Log::info("updateRememberToken");
-
 	}
 
 	public function retrieveByCredentials(array $credentials)
-	{
-        Log::info("retrieveByCredentials");
-        $username = $credentials['username'];
-        $password = $credentials['password'];
-        $userId = $this->getUserId($username);
-        $soapAuth = $this->soapClient($userId, $password);
-
-        return $this->model;
-	}
+    {
+        time_nanosleep(0,100000000); //slightly hamper brute force attacks
+        return $user = User::findByUsername($credentials['username']);
+    }
 
 	public function validateCredentials(Authenticatable $user, array $credentials)
     {
-        Log::info("validateCredentials");
-        $username = $credentials['username'];
-        $password = $credentials['password'];
-        $userId = $this->getUserId($username);
-        Log::info("username: ".$username." / userId: ".$userId."   password: ".$password);
-        $soapAuth = $this->soapClient($userId, $password);
-        if( isset($soapAuth["isAuthenticated"]) && $soapAuth["isAuthenticated"] )
-        {
-            return true;
-        }
-        return false;
-	}
-
-    private function getUserId(string $username)
-    {
-        if($this->model == null)
-        {
-            $this->model = User::findByUsername($username);
-        }
-
-        if($this->model == null)
-        {
-            return 0;
-        }
-        return $this->model->id;
+        $soapAuth = $this->soapClient($user->id, $credentials['password']);
+        return (isset($soapAuth["isAuthenticated"]) && $soapAuth["isAuthenticated"] );
     }
 
     private function soapClient(string $userId, string $password)
     {
-        $acwsWsdlUrl = url("wsdl/ac.wsdl");
+        $acwsHostname = env("AMU_ACWS_PROTOCOL")."://".env("AMU_ACWS_HOST").":".env("AMU_ACWS_SOAP_PORT");
+        $acwsWsdlUrl = url(env("AMU_WSDL_PATH"));
+
         $acwsAcClient = new SoapClient($acwsWsdlUrl, array('exceptions' => false, 'trace' => 1, 'cache_wsdl' => WSDL_CACHE_NONE, 'connection_timeout' => 65, 'keep_alive' => false ));
-        $acwsAcClient->__setLocation($this->acwsHostname);
+        $acwsAcClient->__setLocation($acwsHostname);
 
         $soapReturn = (Array)$acwsAcClient->authenticateUser($userId, $password);
         if(is_soap_fault($soapReturn))
@@ -98,13 +66,12 @@ class PiqlUserProvider extends EloquentUserProvider implements UserProvider
             }
             else
             {
-                Log::info('User with id '.$userId.' authenticated against '.$this->acwsHostname.'.');
+                Log::info('User with id '.$userId.' authenticated against '.$acwsHostname.'.');
             }
         }
         else
         {
             Log::error("SOAP Communication problem!");
-            dump($soapReturn);
         }
 
         return $soapReturn;

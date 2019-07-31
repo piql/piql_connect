@@ -70,7 +70,7 @@ class User extends Authenticatable
 
     public static function findByUsername($username)
     {
-        return self::where('username', '=', $username)->firstOrFail();
+        return self::where('username', '=', $username)->first();
     }
 
     public function settings()
