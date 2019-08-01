@@ -5,12 +5,12 @@
 @endsection
 
 @section('heading')
-    <i class="fas fa-upload titleIcon"></i>Upload
+    <i class="fas fa-upload titleIcon"></i>{{__("Upload")}}
 @endsection
 
 @section('content')
     <div class="content">
-        <Upload><button class="browse">Add files</button></Upload>
+        <Upload><button class="browse">{{__("Add files")}}</button></Upload>
 
     </div>
 @endsection

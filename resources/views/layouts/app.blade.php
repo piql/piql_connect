@@ -9,6 +9,7 @@
         <link href="{{ asset('css/fine-uploader.css') }}" rel="stylesheet" />
         <script type="text/javascript" src="{{ asset('js/app.js') }}" defer></script>
         <script type="text/javascript" src="{{ asset('js/fine-uploader.js') }}"></script>
+        <script type="text/javascript" src="/js/lang.js"></script>
     </head>
 
 @if (Route::current()->getName() == 'login')

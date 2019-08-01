@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Log;
 use App\UserSetting;
+use App;
 
 class SettingsController extends Controller
 {
@@ -22,8 +23,12 @@ class SettingsController extends Controller
     public function updateSettings(Request $request)
     {
         $userSettings = $this->fetchUserSettings();
-        $userSettings->interfaceLanguage = $request->interfaceLanguage; //todo: verify fields
-        $userSettings->update();
+        if($userSettings->interfaceLanguage != $request->interfaceLanguage)
+        {
+            $userSettings->interfaceLanguage = $request->interfaceLanguage; //todo: validate form fields
+            $userSettings->update();
+            App::setLocale($userSettings->interfaceLanguage);
+        }
         return view('/settings/settings', $userSettings);
     }
 

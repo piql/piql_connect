@@ -1,0 +1,8 @@
+{
+    "Upload" : "Opplasting",
+    "Welcome": "Velkommen",
+    "Add files" : "Legg til filer",
+    "upload.ingress" : "Last opp en eller flere filer til pre-ingest her. D kan enten klikke på Velg Filer-knappen, eller dra-og-slipp filer til området under.\n\nOm ønskelig kan du gi opplastingen et navn slik at det blir enklere å følge dine arkiverte data.\nNår du er klar med opplastingen, starter du ingest-prosessen i Archivematica ved å klikke på Prosessere",
+    "User Settings" : "Brukerinstillinger",
+    "User interface language": "Brukergrensesnittspråk"
+}

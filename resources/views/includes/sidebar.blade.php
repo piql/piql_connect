@@ -1,6 +1,6 @@
 <div class="wrapper sideMenu">
     <div id="welcomeText">
-        Welcome<br><i class="fas fa-user"></i> {{ Auth::user()->full_name }}
+        {{__("Welcome")}}<br><i class="fas fa-user"></i> {{ Auth::user()->full_name }}
     </div>
     <div id="collapseSideMenu">
         <img onclick="collapseMenu()" src="{{asset('/images/collapsemenu.png')}}">
