@@ -166,6 +166,7 @@ return [
          * Package Service Providers...
          */
         Optimus\FineuploaderServer\Provider\LaravelServiceProvider::class,
+        MartinLindhe\VueInternationalizationGenerator\GeneratorProvider::class,
 
 
         /*

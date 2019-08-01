@@ -2,7 +2,12 @@
     "Upload" : "Opplasting",
     "Welcome": "Velkommen",
     "Add files" : "Legg til filer",
-    "upload.ingress" : "Last opp en eller flere filer til pre-ingest her. D kan enten klikke på Velg Filer-knappen, eller dra-og-slipp filer til området under.\n\nOm ønskelig kan du gi opplastingen et navn slik at det blir enklere å følge dine arkiverte data.\nNår du er klar med opplastingen, starter du ingest-prosessen i Archivematica ved å klikke på Prosessere",
+    "upload.ingress" : "Last opp en eller flere filer til pre-ingest her. Du kan enten klikke på Velg Filer-knappen, eller dra-og-slipp filer til området under.",
+	"upload.ingress2" : "Om ønskelig kan du gi opplastingen et navn slik at det blir enklere å følge dine arkiverte data.",
+	"upload.ingress3" : "Når du er klar med opplastingen, starter du ingest-prosessen i Archivematica ved å klikke på Prosessere-knappen.",
+	"upload.addFileToUpload": "Legg fil til opplasting",
+	"upload.optionalName": "Navn på opplastning (valgfritt)",
+	"upload.processButton": "Prossesere",
     "User Settings" : "Brukerinstillinger",
     "User interface language": "Brukergrensesnittspråk"
 }

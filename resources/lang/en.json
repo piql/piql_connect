@@ -1,3 +1,8 @@
 {
-    "upload.ingress" : "Upload one or more files for pre-ingest here. Either click the Select Files button, or drag and drop files to the area below.\n\nOptionally, a name can be added to the upload to ease tracking your archival data.\nWhen your files are uploaded, clicking the Process button will start the ingest process in Archivematica."
+    "upload.ingress" : "Upload one or more files for pre-ingest here. Either click the Select Files button, or drag and drop files to the area below.",
+	"upload.ingress2" : "Optionally, a name can be added to the upload to ease tracking your archival data.",
+	"upload.ingress3" : "When your files are uploaded, clicking the Process button will start the ingest process in Archivematica.",
+	"upload.addFileToUpload" : "Add file to upload",
+	"upload.optionalName": "Upload name (optional)",
+	"upload.processButton": "Process"
 }

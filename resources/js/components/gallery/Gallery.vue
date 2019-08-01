@@ -19,7 +19,7 @@ Notes:
       :multiple="fileInputMultiple"
       :uploader="uploader"
       :disabled="fileInputDisabled"
-        ><slot name="inputbuttontext">Add file to upload</slot>
+        ><slot name="inputbuttontext">{{$t("upload.addFileToUpload")}}</slot>
     </FileInputComponent>
     <ProgressBar 
       class='vue-fine-uploader-gallery-total-progress-bar'

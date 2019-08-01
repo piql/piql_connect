@@ -2,8 +2,11 @@
     <div>
         <div class="row mb-5"> 
             <div class="col">
-                <em class="mb-3">Upload one or more files for pre-ingest here. Either click the <span class="font-weight-bold">Select Files</span> button, or drag and drop files to the area below.</em>
-                <em class="mb-3">Optionally, a name can be added to the upload to ease tracking your archival data.<br/>When your files are uploaded, clicking the <span class="font-weight-bold">Process</span> button will start the ingest process in Archivematica.</em>
+                <em class="mb-3">
+                    {{ $t('upload.ingress') }}<br/>
+                    {{ $t('upload.ingress2') }}<br/>
+                    {{ $t('upload.ingress3') }}
+                </em>
             </div>
         </div>
 
@@ -27,7 +30,7 @@
         <form v-on:submit.prevent="">
             <div class="row form-group mb-4">
                 <div class="col-9">
-                    <input value="" placeholder="Upload name... (Optional)" v-model="bagName" type="text" class="form-control m-1"> 
+                    <input value="" :placeholder="$t('upload.optionalName')" v-model="bagName" type="text" class="form-control m-1"> 
                 </div>
             </div>
         </form>
@@ -35,7 +38,7 @@
 
         <div class="row">
             <div class="col-md-9 text-center">
-                <button class="btn btn-primary btn-block" v-bind:class="[{ disabled : processDisabled  }]" v-on:click="commitBagToProcessing">Process</button>
+                <button class="btn btn-primary btn-block" v-bind:class="[{ disabled : processDisabled  }]" v-on:click="commitBagToProcessing">{{$t('upload.processButton')}}</button>
             </div>
         </div>
     </div>

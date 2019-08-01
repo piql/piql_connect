@@ -8,6 +8,7 @@ Homestead.json
 Homestead.yaml
 npm-debug.log
 yarn-error.log
+/resources/js/vue-i18n-locales.generated.js
 
 *~
 tags
