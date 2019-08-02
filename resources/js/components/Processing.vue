@@ -2,24 +2,24 @@
     <div>
         <div class="row listFilter">
                 <form>
-                    <label for="fromDate">From</label>
+                    <label for="fromDate">{{$t('ingest.processing.from')}}</label>
                     <input type="date" name="fromDate" placeholder="DDMMYY">
-                    <label for="toDate">To</label>
+                    <label for="toDate">{{$t('ingest.processing.to')}}</label>
                     <input type="date" name="toDate" placeholder="DDMMYY">
                     <select name="status">
-                        <option style="display: none;" disabled="" selected="">Status</option>
-                        <option>Uploading</option>
-                        <option>Processing</option>
+                        <option style="display: none;" disabled="" selected="">{{$t('ingest.processing.statusFilter')}}</option>
+                        <option>{{$t('ingest.processing.uploadingFilter')}}</option>
+                        <option>{{$t('ingest.processing.processingFilter')}}</option>
                     </select>
-                    <input type="search" placeholder="Search">
+                    <input type="search" :placeholder="$t('Search')">
                 </form>
         </div>
         <br/>
         <div class="row plistHeader">
-            <div class="col">Bag</div>
-            <div class="col">Content</div>
-            <div class="col">Ingest Date</div>
-            <div class="col">Status</div>
+            <div class="col">{{$t('ingest.processing.bag')}}</div>
+            <div class="col">{{$t('ingest.processing.content')}}</div>
+            <div class="col">{{$t('ingest.processing.ingestDate')}}</div>
+            <div class="col">{{$t('ingest.processing.status')}}</div>
         </div>
 
         <FileInProcess v-for="item in items" :item="item"/>

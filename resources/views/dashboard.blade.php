@@ -12,9 +12,9 @@
 <div class="contentContainer">
     <div class="content">
         <i class="fas fa-tachometer-alt titleIcon"></i>
-        <h1>Dashboard</h1>
-        <em>Short descriptive text of view.</em>
-        <p>Other type of text or content goes here.</p>
+        <h1>{{__('Dashboard')}}</h1>
+        <em>{{__('dashboard.ingress')}}</em>
+        <p>{{__('dashboard.content')}}</p>
         <br>
         <div class="chart-container chart">
             <canvas id="myChart"></canvas>

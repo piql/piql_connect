@@ -937,14 +937,9 @@ input[type="file"] {
     display: block;
 }
 #poweredByImg {
-    display: inline-block;
-    position: absolute;
-    bottom: 0;
+    display: inline-flex;
     //Instead of the line below you could use @include transition($transition-1, $transition-2, $transition-3, $transition-4, $transition-5, $transition-6, $transition-7, $transition-8, $transition-9, $transition-10)
     transition: left 1000ms ease;
-    left: 90px;
-    margin-top: 3px;
-    margin-bottom: 24px;
     img {
         height: 15px;
         line-height: 110px;

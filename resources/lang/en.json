@@ -1,8 +1,59 @@
 {
+    "Upload" : "Upload",
+    "Welcome": "Welcome",
+    "Add files" : "Add files",
+	"Dashboard" : "Dashboard",
+	"Search": "Search",
+	"Retrieve": "Retrieve",
+	"Home": "Home",
     "upload.ingress" : "Upload one or more files for pre-ingest here. Either click the Select Files button, or drag and drop files to the area below.",
 	"upload.ingress2" : "Optionally, a name can be added to the upload to ease tracking your archival data.",
 	"upload.ingress3" : "When your files are uploaded, clicking the Process button will start the ingest process in Archivematica.",
 	"upload.addFileToUpload" : "Add file to upload",
 	"upload.optionalName": "Upload name (optional)",
-	"upload.processButton": "Process"
+	"upload.processButton": "Process",
+	"sidebar.dashboard": "Dashboard",
+	"sidebar.upload": "Upload",
+	"sidebar.processing": "Processing",
+	"sidebar.taskList": "Task List",
+	"sidebar.status": "Status",
+	"sidebar.browse": "Browse",
+	"sidebar.retrieve": "Retrieve",
+	"sidebar.reports": "Reports",
+
+	"dashboard.ingress": "Short descriptive text of dashboard.",
+	"dashboard.content": "Other type of content goes here.",
+
+	"ingest.processing.from" : "From",
+	"ingest.processing.to" : "To",
+	"ingest.processing.statusFilter": "Status",
+	"ingest.processing.uploadingiFilter": "Uploading",
+	"ingest.processing.processingFilter": "Processing",
+	"ingest.processing.bag": "Bag",
+	"ingest.processing.content": "Content",
+	"ingest.processing.ingestDate": "Ingest Date",
+	"ingest.processing.status": "Status",
+
+	"ingest.taskList.from" : "From",
+	"ingest.taskList.to" : "To",
+	"ingest.taskList.statusFilter": "Status",
+	"ingest.taskList.uploadingFilter": "Uploading",
+	"ingest.taskList.processingFilter": "Processing",
+	"ingest.taskList.sip": "SIP",
+	"ingest.taskList.content": "Content",
+	"ingest.taskList.ingestDate": "Ingest Date",
+
+	"ingest.status.from": "From",
+	"ingest.status.to": "To",
+	"ingest.status.statusFilter": "Status",
+	"ingest.status.encodingFilter": "Encoding",
+	"ingest.status.writingFilter": "Writing",
+	"ingest.status.developingFilter": "Developing",
+	"ingest.status.jobId": "Job Id",
+	"ingest.status.bags": "Bags",
+	"ingest.status.creationDate": "Creation Date",
+	"ingest.status.status": "Status"
+
+
+
 }

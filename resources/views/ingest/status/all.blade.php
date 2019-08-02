@@ -14,25 +14,25 @@
         <div>
             <div class="row listFilter">
                 <form>
-                    <label for="fromDate">From</label>
+                    <label for="fromDate">{{__('ingest.status.from')}}</label>
                     <input type="date" name="fromDate" placeholder="DDMMYY">
-                    <label for="toDate">To</label>
+                    <label for="toDate">{{__('ingest.status.to')}}</label>
                     <input type="date" name="toDate" placeholder="DDMMYY">
                     <select name="status">
-                        <option style="display: none;" disabled="" selected="">Status</option>
-                        <option>Encoding</option>
-                        <option>Writing</option>
-                        <option>Developing</option>
+                        <option style="display: none;" disabled="" selected="">{{__('ingest.status.status')}}</option>
+                        <option>{{__('ingest.status.encodingFilter')}}</option>
+                        <option>{{__('ingest.status.writingFilter')}}</option>
+                        <option>{{__('ingest.status.developingFilter')}}</option>
                     </select>
-                    <input type="search" placeholder="Search">
+                    <input type="search" :placeholder="$t('search')">
                 </form>
             </div>
             <br/>
             <div class="row plistHeader">
-                <div class="col">Job ID</div>
-                <div class="col">Bags</div>
-                <div class="col">Creation Date</div>
-                <div class="col">Status</div>
+                <div class="col">{{__('ingest.status.jobId')}}</div>
+                <div class="col">{{__('ingest.status.bags')}}</div>
+                <div class="col">{{__('ingest.status.creationDate')}}</div>
+                <div class="col">{{__('ingest.status.status')}}</div>
             </div>
 
             <div>
