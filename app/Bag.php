@@ -36,7 +36,7 @@ class Bag extends Model
 
     public function storagePathCreated()
     {
-        return Storage::disk('bags')->path("created/".$this->zipBagFileName());
+        return Storage::disk('bags')->path($this->zipBagFileName());
     }
 
     public function zipBagFileName()
@@ -46,6 +46,6 @@ class Bag extends Model
 
     public function createdDirectory()
     {
-        return Storage::disk('bags')->path('created');
+        return Storage::disk('bags');
     }
 }

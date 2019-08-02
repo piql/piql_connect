@@ -32,8 +32,6 @@ class CommitFilesToBagListener implements ShouldQueue
      */
     public function handle(BagFilesEvent $event)
     {
-        Log::debug("CommitFilesToBagListener handler");
-
         $bag = Bag::find($event->bagId);
         $bag->status = "preparing files";
         $bag->save();
@@ -44,21 +42,8 @@ class CommitFilesToBagListener implements ShouldQueue
 
         $files = $bag->files;
 
-        // Create bag output dir
-        $bagOutputDir = dirname($bag->storagePathCreated());
-        Log::debug("Bag output dir: ".$bagOutputDir);
-/*        if (!is_dir($bagOuputDir))
-        {
-            if (!mkdir($bagOuputDir))
-            {
-                Log::error("Failed to create bag output dir: " . $bagOuputDir);
-                // \todo Error event
-            }
-        }
- */
         // Create a bag
         $bagPath = $bag->storagePathCreated();
-        Log::debug("Bag path: ".$bagPath);
         foreach ($files as $file)
         {
             $filePath = $file->storagePathCompleted();
@@ -70,8 +55,6 @@ class CommitFilesToBagListener implements ShouldQueue
             // \todo Error event
         }
 
-
-        Log::debug("Bag created.");
         event( new BagCompleteEvent($bag) );
     }
 }
