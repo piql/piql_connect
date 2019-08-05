@@ -78,7 +78,7 @@ class BagController extends Controller
      */
     public function showFiles($id)
     {
-        Log::debug("Bag show files");
+        //Log::debug("Bag show files");
         return Response::json(Bag::find($id)->files()->get());
     }
 

@@ -47,7 +47,7 @@ Route::group(['prefix' => 'v1' , 'middleware' => 'throttle:500,1','auth:web'], f
                     Route::post('approve/{id}', 'Api\Ingest\ArchivematicaServiceController@approveTransfer');
                 });
                 Route::group(['prefix' => 'ingest'], function () {
-                    Route::get('status' , 'Api\Ingest\ArchivematicaServiceController@transferStatus');
+                    Route::get('status' , 'Api\Ingest\ArchivematicaServiceController@ingestStatus');
                 });
  
 

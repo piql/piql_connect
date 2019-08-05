@@ -49,15 +49,33 @@ class StartTransferToArchivematicaListener implements ShouldQueue
         while($waitingForTransfer)
         {
             sleep(2);
-            $currentStatuses = $this->getTransferStatus();
-            foreach($currentStatuses->results as $status)
+            $currentTransferStatuses = $this->getTransferStatus();
+            foreach($currentTransferStatuses->results as $status)
             {
-                if($status->name == $bag->zipBagFileName())
-                {
+               if($status->name == $bag->zipBagFileName())
+               {
+                    Log::debug("status should be ingesting");
                     $this->approveTransfer($bag->id);
                     $bag->status = "ingesting";
                     $bag->save();
                     $waitingForTransfer = false;
+                    break;
+               }
+            }
+        }
+
+        while(true)
+        {
+            sleep(2);
+            $currentIngestStatuses = $this->getIngestStatus();
+            foreach($currentIngestStatuses->results as $status)
+            {
+                if($status->name.".zip" == $bag->zipBagFileName() && $status->status == "COMPLETE")
+                {
+                    Log::debug("status complete");
+                    $bag->status = "complete";
+                    $bag->save();
+                    return;
                 }
             }
         }
@@ -73,6 +91,12 @@ class StartTransferToArchivematicaListener implements ShouldQueue
     {
         return json_decode($this->apiClient->get("transfer/status/")->getBody()->getContents());
     }
+
+    public function getIngestStatus()
+    {
+        return json_decode($this->apiClient->get("ingest/status/")->getBody()->getContents());
+    }
+
 
     public function approveTransfer($bagId)
     {
