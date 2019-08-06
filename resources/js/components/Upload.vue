@@ -119,7 +119,7 @@ export default {
 
             let updatedBag = await this.setBagName(this.bagName);
             if(updatedBag != null){
-                this.bag = updateBag;
+                this.bag = updatedBag;
             }
 
             let committed = (await axios.post("/api/v1/ingest/bags/"+this.bag.id+"/commit")).data;

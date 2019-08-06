@@ -15,9 +15,13 @@ class ArchivematicaServiceController extends Controller
 
     public function __construct()
     {
-        $service = ArchivematicaService::latest()->first();
+        $service = ArchivematicaService::first();
+        $base_uri = $service->url;
+        if(!endsWith($base_uri, '/')){
+            $base_uri .='/';
+        }
         $this->apiClient = new Guzzle([
-            'base_uri' => $service->url, 
+            'base_uri' => $base_uri,
             'headers' => [
                 'Authorization' => 'ApiKey '.$service->api_token, 
                 'Content-Type' => 'application/json',
@@ -59,7 +63,7 @@ class ArchivematicaServiceController extends Controller
     public function startTransfer($id)
     {
         $bag = Bag::find($id);
-        $locationId = "428af805-7dc2-4b98-a74f-fdcef94e3a9e"; //todo: db
+        $locationId = env('STORAGE_LOCATION_ID');
         $paths = base64_encode($locationId.":/".$bag->zipBagFileName());
 
         $formData =

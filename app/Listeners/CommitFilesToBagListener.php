@@ -32,29 +32,31 @@ class CommitFilesToBagListener implements ShouldQueue
      */
     public function handle(BagFilesEvent $event)
     {
+        Log::debug("Bag commit: " . $event->bagId);
         $bag = Bag::find($event->bagId);
         $bag->status = "preparing files";
         $bag->save();
 
-        Log::debug("Bag commit: " . $bag->id);
-
-        $bagit = new BagitUtil;
-
         $files = $bag->files;
 
+        $bagIt = new BagitUtil();
         // Create a bag
-        $bagPath = $bag->storagePathCreated();
         foreach ($files as $file)
         {
-            $filePath = $file->storagePathCompleted();
-            $bagit->addFile($filePath, $file->filename);
-        }
-        if (!$bagit->createBag($bagPath))
-        {
-            Log::error("Failed to create bag: " . $bagit->errorMessage());
-            // \todo Error event
+            $bagIt->addFile($file->storagePathCompleted(), $file->filename);
         }
 
-        event( new BagCompleteEvent($bag) );
+        $result = $bagIt->createBag($bag->storagePathCreated());
+
+        if($result)
+        {
+            Log::info("Bag ".$bag->id." built ok!");
+            event( new BagCompleteEvent($bag) );
+        }
+        else
+        {
+            Log::error("Bag ".$bag->id." failed!");
+            //todo: error event
+        }
     }
 }

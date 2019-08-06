@@ -45,17 +45,19 @@ class BagController extends Controller
      */
     public function store(Request $request)
     {
-        Log::debug("Creating new bag with name ".$request->bagName.".");
         $bagName = trim($request->bagName);
         if(empty($bagName))
         {
             $bagName = Carbon::now()->format("YmdHis");
-            Log::debug("Creating bag with name ".$bagName);
         }
-        Bag::create(['name' => $bagName, 'owner' => $request->userId ]);
-        $bag = Bag::latest()->first();
-        Log::debug("Bag with id ".$bag->id." created.");
-        return $bag;
+        $bag = new Bag();
+        $bag->name = $bagName;
+        $bag->owner = $request->userId;
+        if($bag->save()){
+            Log::info("Created bag with name ".$bagName." and id ".$bag->id);
+            return response()->json(['id' => $bag->id, 'name' => $bagName]);
+        }
+        abort(501, "Could not create bag with name ".$bagName." and owner ".$request->userId);
     }
 
     /**
@@ -121,9 +123,9 @@ class BagController extends Controller
      */
     public function update(Request $request, $id)
     {
-        Log::debug("Bag update");
         if($request->filled("bagName"))
         {
+            Log::debug("Bag update");
             $bag = Bag::find($id);
             $bag->name = $request->bagName;
             $bag->save();
@@ -152,7 +154,7 @@ class BagController extends Controller
      */
     public function commit($id)
     {
-        Log::debug("emitting ProcessFilesEvent");
+        Log::debug("emitting ProcessFilesEvent for bag with id ".$id);
         event( new BagFilesEvent($id) );
     }
     

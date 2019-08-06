@@ -21,7 +21,7 @@ class StartTransferToArchivematicaListener implements ShouldQueue
      */
     public function __construct()
     {
-        $am_proxy = url('api/v1/ingest/am');
+        $am_proxy = url('/api/v1/ingest/am')."/";
         $this->apiClient = new Guzzle([
             'base_uri' => $am_proxy,
             'headers' => [
@@ -38,23 +38,20 @@ class StartTransferToArchivematicaListener implements ShouldQueue
      */
     public function handle(StartTransferToArchivematicaEvent $event)
     {
-        Log::debug("event start transfer for bag: ".$event->bag);
         $bagId = $event->bag->id;
         $bag = Bag::find($bagId);
+        Log::info("Handling StartTransferToArchivematicaEvent for bag ".$bag->zipBagFileName()." with id: ".$bag->id);
         $bag->status = "transferring";
         $bag->save();
-        Log::debug("Handling StartTransferToArchivematicaEvent for bag ".$bag->zipBagFileName()." with id: ".$bag->id);
         $this->startTransfer($bag->id);
         $waitingForTransfer = true;
         while($waitingForTransfer)
         {
-            sleep(2);
             $currentTransferStatuses = $this->getTransferStatus();
             foreach($currentTransferStatuses->results as $status)
             {
                if($status->name == $bag->zipBagFileName())
                {
-                    Log::debug("status should be ingesting");
                     $this->approveTransfer($bag->id);
                     $bag->status = "ingesting";
                     $bag->save();
@@ -62,22 +59,23 @@ class StartTransferToArchivematicaListener implements ShouldQueue
                     break;
                }
             }
+            sleep(2);
         }
 
         while(true)
         {
-            sleep(2);
             $currentIngestStatuses = $this->getIngestStatus();
             foreach($currentIngestStatuses->results as $status)
             {
                 if($status->name.".zip" == $bag->zipBagFileName() && $status->status == "COMPLETE")
                 {
-                    Log::debug("status complete");
+                    Log::info("Ingest complete for SIP with bag id ".$bag->id);
                     $bag->status = "complete";
                     $bag->save();
                     return;
                 }
             }
+            sleep(2);
         }
 
     }
