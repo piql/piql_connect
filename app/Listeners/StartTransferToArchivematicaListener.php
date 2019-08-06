@@ -21,9 +21,9 @@ class StartTransferToArchivematicaListener implements ShouldQueue
      */
     public function __construct()
     {
-        $service = ArchivematicaService::latest()->first();
+        $am_proxy = url('api/v1/ingest/am');
         $this->apiClient = new Guzzle([
-            'base_uri' => "http://connect.local/api/v1/ingest/am/",
+            'base_uri' => $am_proxy,
             'headers' => [
                 'Accept' => 'application/json'
             ]
