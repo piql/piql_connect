@@ -411,9 +411,38 @@ input[type="number"] {
     border-radius: 2px;
     padding: 4px;
 }
+.dropdown {
+    &-menu{
+        background-color: $color_secondary_1;
+        color: $white;
+    }
+    &-toggle{
+        background-color: $color_secondary !important;
+        color: $white !important;
+    }
+    &-item{
+        background-color: $color_secondary_1;
+        color: $white;
+        &.selected {
+            background-color: $color_secondary_2;
+            color: $white;
+        }
+        &:hover {
+            background-color: $color_signal;
+            color: $white;
+        }
+    }
+}
+
+.search-icon-inline {
+    position: absolute;
+    left: 90%;
+    top: 20%;
+    z-index: 1000;
+}
 select {
     width: 300px;
-    background-color: $white;
+    background-color: $color_secondary;
     border: 0;
     height: 30px;
     //Instead of the line below you could use @include border-radius($radius, $vertical-radius)

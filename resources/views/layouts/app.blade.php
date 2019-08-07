@@ -5,8 +5,10 @@
         <meta name="csrf-token" content="{{ csrf_token() }}">
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link href="{{ asset('css/app.css') }}" rel="stylesheet" />
+        <link href="{{ asset('css/bootstrap-select.min.css') }}" rel="stylesheet" />
+        <link href="{{ asset('css/bootstrap-datepicker3.min.css') }}" rel="stylesheet" />
         <link href="{{ asset('css/fine-uploader.css') }}" rel="stylesheet" />
+        <link href="{{ asset('css/app.css') }}" rel="stylesheet" />
         <script type="text/javascript" src="{{ asset('js/app.js') }}" defer></script>
         <script type="text/javascript" src="{{ asset('js/fine-uploader.js') }}"></script>
         <script type="text/javascript">Window.locale = '{{\App::getLocale()}}';</script>

@@ -23,6 +23,7 @@ Route::middleware(['auth', 'locale'])->group( function () {
     });
 
     Route::prefix('access')->group( function () {
+        Route::resource('browse', 'BrowseController')->name('index','browse');
         Route::resource('retrieve', 'AccessController')->name('index','retrieve');
     });
 });

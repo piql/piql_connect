@@ -11,7 +11,7 @@
         <ul>
             <a href="{{ route('dashboard') }}"><li class="top-active">{{__('Home')}}</li></a>
             <a href="{{ route('upload') }}"><li>Ingest</li></a>
-            <a href="{{ route('retrieve') }}"><li>Access</li></a>
+            <a href="{{ route('browse') }}"><li>Access</li></a>
         </ul>
     </div>
     <div id="piqlOptions">

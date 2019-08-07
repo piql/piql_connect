@@ -55,8 +55,9 @@
 	"ingest.status.jobId": "Jobb-id",
 	"ingest.status.bags": "Bagger",
 	"ingest.status.creationDate": "Opprettelsesdato",
-	"ingest.status.status": "Status"
+	"ingest.status.status": "Status",
 
+    "access.browse.ingress": "Tilgang til dine arkiver"
 
 
 }

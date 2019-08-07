@@ -22,6 +22,8 @@ mix.js('resources/js/app.js', 'public/js')
     .sass('resources/sass/app.scss', 'public/css')
     .js('node_modules/bootstrap-select/dist/js/bootstrap-select.min.js', 'public/js')
     .styles('node_modules/bootstrap-select/dist/css/bootstrap-select.min.css', 'public/css/bootstrap-select.min.css')
+    .js('node_modules/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js', 'public/js')
+    .styles('node_modules/bootstrap-datepicker/dist/css/bootstrap-datepicker3.min.css', 'public/css/bootstrap-datepicker3.min.css')
     .copyDirectory('resources/images/', 'public/images');
 
 

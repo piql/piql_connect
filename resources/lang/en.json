@@ -4,6 +4,7 @@
     "Add files" : "Add files",
 	"Dashboard" : "Dashboard",
 	"Search": "Search",
+	"Browse": "Browse",
 	"Retrieve": "Retrieve",
 	"Home": "Home",
     "upload.ingress" : "Upload one or more files for pre-ingest here. Either click the Select Files button, or drag and drop files to the area below.",
@@ -52,7 +53,11 @@
 	"ingest.status.jobId": "Job Id",
 	"ingest.status.bags": "Bags",
 	"ingest.status.creationDate": "Creation Date",
-	"ingest.status.status": "Status"
+	"ingest.status.status": "Status",
+
+    "access.browse.ingress": "Access your archives",
+    "access.browse.selectHolding": "Select holding",
+    "access.browse.selectFond": "Select fond"
 
 
 
