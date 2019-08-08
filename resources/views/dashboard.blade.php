@@ -33,9 +33,9 @@
                 {!! $chart3->script() !!}
             </div>
             <div class="col">
-                <h4>57 AIPs stored</h4>
-                <h4>4563 pages stored on piqlFilm</h4>
-                <h4>729 GB Used for online storage</h4>
+                <h4>{{ $infoArray['numberOfAIPsStored'] }} AIPs stored</h4>
+                <h4>#### pages stored on piqlFilm</h4>
+                <h4>{{ $infoArray['sizeOfStoredAIPs'] }} Used for online storage</h4>
             </div>
         </div>
         <div class="row">
