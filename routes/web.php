@@ -24,11 +24,8 @@ Route::get('/wsdl/dsca_common.xsd', function() {
 
 
 Route::middleware(['auth'])->group( function () {
-
-    Route::get('/', function () {
-        return view('dashboard');
-    })->name('dashboard');
-
+    
+    Route::get('/', 'DashboardController@showDashboard')->name('dashboard');
     Route::get('reports', 'ReportsController@showReports');
     Route::get('settings', 'SettingsController@showSettings');
     Route::post('settings', 'SettingsController@updateSettings');

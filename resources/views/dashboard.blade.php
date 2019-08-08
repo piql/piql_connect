@@ -16,17 +16,34 @@
         <em>Short descriptive text of view.</em>
         <p>Other type of text or content goes here.</p>
         <br>
-        <div class="chart-container chart">
-            <canvas id="myChart"></canvas>
+        <div class="row">
+            <div class="col" style="max-height:300px;max-width:300px">
+                {!! $chart1->container() !!}
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js" charset="utf-8"></script>
+                {!! $chart1->script() !!}
+            </div>
+            <div class="col" style="max-height:300px;max-width:300px">
+                {!! $chart2->container() !!}
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js" charset="utf-8"></script>
+                {!! $chart2->script() !!}
+            </div>
+            <div class="col" style="max-height:300px;max-width:300px">
+                {!! $chart3->container() !!}
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js" charset="utf-8"></script>
+                {!! $chart3->script() !!}
+            </div>
+            <div class="col">
+                <h4>57 AIPs stored</h4>
+                <h4>4563 pages stored on piqlFilm</h4>
+                <h4>729 GB Used for online storage</h4>
+            </div>
         </div>
-        <div class="chart-container chart">
-            <canvas id="myChart2"></canvas>
-        </div>
-        <div class="chart-container chart">
-            <canvas id="myChart3"></canvas>
-        </div>
-        <div class="chart-container chart">
-            <canvas id="myChart4"></canvas>
+        <div class="row">
+            <div class="col">
+                {!! $chart4->container() !!}
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js" charset="utf-8"></script>
+                {!! $chart4->script() !!}
+            </div>
         </div>
     </div>
 </div>
