@@ -11,34 +11,32 @@ $factory->define(File::class, function (Faker $faker) {
 
 	if ($chance < 34)
 	{
-		$extension = "PDF";
+		$extension = "pdf";
 	} elseif ($chance < 54)
 	{
-		$extension = "TIFF";
+		$extension = "tif";
 	} elseif ($chance < 69)
 	{
-		$extension = "JPEG";
+		$extension = "jpg";
 	} elseif ($chance < 79)
 	{
-		$extension = "XML";
+		$extension = "xml";
 	} elseif ($chance < 89)
 	{
-		$extension = "PNG";
+		$extension = "png";
 	} elseif ($chance < 92)
 	{
-		$extension = "ZIP";
+		$extension = "zip";
 	} elseif ($chance < 95)
 	{
-		$extension = "DOC";
+		$extension = "docx";
 	} elseif ($chance < 97)
 	{
-		$extension = "AVI";
+		$extension = "avi";
 	} else
 	{
-		$extension = "MP4";
+		$extension = "mp4";
 	}
-
-
 
     return [
         'bag_id' => factory(App\Bag::class)->create(),
