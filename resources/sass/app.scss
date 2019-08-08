@@ -22,7 +22,9 @@ $color_background_3: #d7c5cf;
 $color_secondary: #8f0052;
 $color_secondary_1: #aa405d;
 $color_secondary_2: #c27484;
+$color_secondary_2_transparent: #c2748440;
 $color_secondary_3: #deb3b9;
+$color_secondary_3_transparent: #deb3b940;
 $color_signal: #ff194d;
 $color_fill: #808080;
 $color_fill_1: #ababab;
@@ -411,6 +413,9 @@ input[type="number"] {
     border-radius: 2px;
     padding: 4px;
 }
+*:focus {
+    outline: 0 !important;
+}
 .dropdown {
     &-menu{
         background-color: $color_secondary_1;
@@ -436,7 +441,7 @@ input[type="number"] {
 
 .search-icon-inline {
     position: absolute;
-    left: 90%;
+    right: 0.3rem;
     top: 20%;
     z-index: 1000;
 }
@@ -546,6 +551,7 @@ input[type="file"] {
     min-width: 100px;
     padding: 10px;
     background-color: $color_main_brand;
+    outline-color: $color_secondary_3;
     border: 0;
     &:hover {
         background-color: $color_fill_verydark;
@@ -1881,4 +1887,21 @@ th {
         color: white;
     }
 
+}
+
+.form-control {
+    &:focus {
+        color: #495057;
+        background-color: #fff;
+        background-clip: padding-box;
+        border: 1px solid $color_secondary_2_transparent !important;
+        box-shadow: 0 0 0 0.2rem $color_secondary_3_transparent !important;
+        border-radius: 0.25rem;
+        transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    }
+
+}
+
+.w-90 {
+    width: 90% !important;
 }
