@@ -1,16 +1,16 @@
 <template>
     <div>
         <div class="row plist">
-            <div class="col-1"><input type="checkbox" :id=item.uuid class="checkbox"></div>
+            <div class="col-1"><input type="checkbox" :id="item.uuid" class="checkbox"></div>
             <div class="col-2">
-                <a :href="url">
+                <a href="">
                     <span class="linked">
-                {{item.name}}
+                {{item.id}}
                     </span>
                 </a>
             </div>
             <div class="col-3">
-                {{fileName}}
+                {{item.filename}}
             </div>
             <div class="col">
                 {{item.created_at}}
@@ -28,9 +28,6 @@
 export default {
     async mounted() {
         console.log('Task component mounted.')
-        let bagId = this.item.id;
-        this.fileName = (await axios.get("/api/v1/ingest/bags/"+bagId+"/files")).data[0].filename;
-        this.url = "tasks/"+bagId;
     },
     methods: {
         async piqlIt(e) {
@@ -41,13 +38,12 @@ export default {
         
     },
     props: {
-        item: Object
+        item: Object,
     },
+
     data() {
         return {
-            bag: {},
             fileName: "",
-            url: "",
         };
     },
 

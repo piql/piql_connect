@@ -18,6 +18,7 @@ Route::middleware(['auth', 'locale'])->group( function () {
         Route::resource('upload', 'IngestUploadController')->name('index', 'upload');
         Route::resource('process', 'IngestProcessController')->name('index', 'process');
         Route::resource('tasks', 'IngestTaskListController')->name('index', 'tasks');
+        Route::get('tasks/{id}', 'IngestTaskListController@show')->name('show', 'bag');
         Route::resource('status', 'IngestStatusController')->name('index', 'status');
         Route::get('settings', 'IngestSettingsController@show')->name('show', 'show');
     });
