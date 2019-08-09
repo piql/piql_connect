@@ -43,6 +43,9 @@
 	"ingest.taskList.content": "Content",
 	"ingest.taskList.ingestDate": "Ingest Date",
 
+        "ingest.fileList.fileSize": "File size",
+        "ingest.fileList.fileName": "File name",
+
 	"ingest.status.from": "From",
 	"ingest.status.to": "To",
 	"ingest.status.statusFilter": "Status",
