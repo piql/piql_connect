@@ -10,6 +10,7 @@ npm-debug.log
 yarn-error.log
 /resources/js/vue-i18n-locales.generated.js
 package-lock.json
+/nbproject
 
 *~
 tags
@@ -20,3 +21,4 @@ tags
 [._]sw[a-p]
 
 
+/nbproject/private/

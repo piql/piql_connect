@@ -272,6 +272,9 @@ h1 {
     text-transform: uppercase;
     font-size: 30px;
 }
+.noTextTransform {
+    text-transform: none;
+}
 h2 {
     font-family: 'Agenda';
     margin-bottom: 40px;

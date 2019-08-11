@@ -46,6 +46,9 @@
 	"ingest.taskList.content": "Innhold",
 	"ingest.taskList.ingestDate": "Ingest-dato",
 
+    "ingest.fileList.fileName": "Filnavn",
+    "ingest.fileList.fileSize": "Størrelse",
+
 	"ingest.status.from": "Fra",
 	"ingest.status.to": "Til",
 	"ingest.status.statusFilter": "Status",

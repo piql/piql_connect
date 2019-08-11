@@ -41,12 +41,12 @@ class IngestTaskListController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\TaskList  $taskList
+     * @param  string  $bagId
      * @return \Illuminate\Http\Response
      */
-    public function show(TaskList $taskList)
+    public function show($bagId)
     {
-        //
+        return view('ingest.tasks.show', ['bagId' => $bagId]);
     }
 
     /**

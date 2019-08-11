@@ -1,9 +1,9 @@
 <template>
     <div>
         <div class="row plist">
-            <div class="col-1"><input type="checkbox" id="{item.uuid}" class="checkbox"></div>
+            <div class="col-1"><input type="checkbox" :id=item.uuid class="checkbox"></div>
             <div class="col-2">
-                <a href="">
+                <a :href="url">
                     <span class="linked">
                 {{item.name}}
                     </span>
@@ -31,6 +31,7 @@ export default {
     async mounted() {
         console.log('Task component mounted.')
         let bagId = this.item.id;
+        this.url = "tasks/"+bagId;
         axios.get("/api/v1/ingest/bags/"+bagId+"/files").then( bag => {
             if(bag && bag.data && bag.data[0]){
                 this.fileName = bag.data[0].filename;
@@ -50,8 +51,8 @@ export default {
     },
     data() {
         return {
-            bag: {},
             fileName: "",
+            url: "",
         };
     },
 
