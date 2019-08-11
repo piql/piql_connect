@@ -1,12 +1,5 @@
-// Fonts
-@import url('https://fonts.googleapis.com/css?family=Nunito');
-
 // Variables
 @import 'variables';
-
-// Bootstrap
-@import '~bootstrap/scss/bootstrap';
-@import '~bootstrap-select/sass/bootstrap-select.scss';
 
 //colors
 $white: white;
@@ -34,25 +27,37 @@ $color_fill_dark: #605f5f;
 $color_fill_verydark: #403f3f;
 
 //fonts
-$font_0: 'Agenda';
+$font_agenda: 'Agenda';
+$font_agenda_bold: 'Agenda Bold';
 $font_1: 'Agenda';
-$font_2: 'Arial';
-$font_3: 'Helvetica';
+$font_2: 'Gill';
+$font_open_sans: 'OpenSans';
+$font_open_sans_bold: 'OpenSans Bold';
+$font_open_sans_light: 'OpenSans Light';
 $font_4: 'sans-serif';
 $font_5: 'Agenda';
-$font_6: 'Arial';
-$font_7: 'Helvetica';
+$font_6: 'Gill';
+$font_7: 'OpenSans';
 $font_8: 'sans-serif';
 $font_9: 'Agenda';
 $font_10: 'Arial';
 $font_11: 'Helvetica';
 $font_12: 'sans-serif';
 
-//urls
-$font_agenda_url: url('../fonts/Agenda-Regular.otf');
-$image_login-bg_url: url('../images/bg-image.png');
-$image_searchicon_url: url('../images/searchicon.png');
-$image_piql-logo-white_url: url('../images/piql_logo_white.png');
+//fonts
+$font_agenda_url: url('/fonts/Agenda-Regular.otf');
+$font_agenda_black_url: url('/fonts/Agenda-Black.otf');
+$font_agenda_bold_url: url('/fonts/Agenda-Bold.otf');
+$font_opensans_url: url('/fonts/OpenSans-Regular.ttf');
+$font_opensans_bold_url: url('/fonts/OpenSans-Bold.ttf');
+$font_opensans_light_url: url('/fonts/OpenSans-Light.ttf');
+
+    
+
+//images
+$image_login-bg_url: url('/images/bg-image.png');
+$image_searchicon_url: url('/images/searchicon.png');
+$image_piql-logo-white_url: url('/images/piql_logo_white.png');
 
 //@extend-elements
 //original selectors
@@ -60,7 +65,7 @@ $image_piql-logo-white_url: url('../images/piql_logo_white.png');
 %extend_1 {
     width: 100vw;
     height: 100%;
-    font-family: $font_1, $font_2, $font_3, $font_4;
+    font-family: $font_1, $font_2, $font_open_sans, $font_4;
     margin: 0;
     padding: 0;
     background-color: $color_fill_3;
@@ -152,17 +157,43 @@ $image_piql-logo-white_url: url('../images/piql_logo_white.png');
 }
 
 
-@import "https://fonts.googleapis.com/css?family=Open +Sans";
-@import "https://use.fontawesome.com/releases/v5.7.1/css/all.css";
 @font-face {
-    font-family: $font_0;
+    font-family: $font_agenda;
     src: $font_agenda_url format("opentype");
 }
+
+@font-face {
+    font-family: $font_agenda_bold;
+    src: $font_agenda_bold_url format("opentype");
+}
+
+
+@font-face {
+    font-family: $font_open_sans;
+    src: $font_opensans_url format("truetype");
+}
+
+@font-face {
+    font-family: $font_open_sans;
+    src: $font_opensans_url format("truetype");
+}
+
+@font-face {
+    font-family: $font_open_sans_bold;
+    src: $font_opensans_bold_url format("truetype");
+}
+
+@font-face {
+    font-family: $font_open_sans_light;
+    src: $font_opensans_light_url format("truetype");
+}
+
 html {
     @extend %extend_1;
 }
 body {
     @extend %extend_1;
+    font-family: 'OpenSans';
 }
 .burgerMenu {
     display: none;
@@ -237,11 +268,12 @@ h1 {
     padding-bottom: 0;
     margin-top: 0;
     margin-left: 0;
+    font-family: 'Agenda Bold';
     text-transform: uppercase;
     font-size: 30px;
-    font-weight: bold;
 }
 h2 {
+    font-family: 'Agenda';
     margin-bottom: 40px;
 }
 hr {
@@ -290,10 +322,10 @@ a {
 .plistHeader {
     background-color: $color_fill_3;
     padding: 15px;
+    font-family: $font_open_sans_bold;
     font-size: 12px;
     text-align: left;
     color: black;
-    font-weight: bold !important;
 }
 
 .listActionItems {
@@ -789,8 +821,7 @@ input[type="file"] {
         top: -10px;
         left: -8px;
         background: $color_fill_dark;
-        font-weight: bold;
-        font-family: $font_5, $font_6, $font_7, $font_8;
+        font-family: $font_open_sans_bold;
         color: $white;
         //Instead of the line below you could use @include border-radius($radius, $vertical-radius)
         border-radius: 50%;
@@ -1231,7 +1262,7 @@ th {
             color: $black;
             &:hover {
                 color: $color_main_brand;
-                font-weight: bold;
+                font-family: $font_open_sans_bold;
             }
         }
         &:last-child {
@@ -1314,7 +1345,7 @@ th {
             &:nth-child(odd) {
                 text-align: right;
                 vertical-align: top;
-                font-weight: bold;
+                font-family: $font_open_sans_bold;
                 width: 40%;
             }
         }
@@ -1540,7 +1571,7 @@ th {
     top: 0;
     font-size: 30px;
     text-transform: uppercase;
-    font-weight: bold;
+    font-family: $font_open_sans_bold;
     color: $color_main_brand;
     //Instead of the line below you could use @include transition($transition-1, $transition-2, $transition-3, $transition-4, $transition-5, $transition-6, $transition-7, $transition-8, $transition-9, $transition-10)
     transition: right 0.2s ease-out, opacity 0.2s ease;
@@ -1633,7 +1664,6 @@ th {
         margin-top: 25px;
         li {
             padding: 0 15px;
-            line-height: 0;
         }
     }
     #customerLogo {
@@ -1902,6 +1932,3 @@ th {
 
 }
 
-.w-90 {
-    width: 90% !important;
-}

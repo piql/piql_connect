@@ -25,11 +25,17 @@
 </template>
 
 <script>
+import axios from 'axios';
+
 export default {
     async mounted() {
         console.log('Task component mounted.')
         let bagId = this.item.id;
-        this.fileName = (await axios.get("/api/v1/ingest/bags/"+bagId+"/files")).data[0].filename;
+        axios.get("/api/v1/ingest/bags/"+bagId+"/files").then( bag => {
+            if(bag && bag.data && bag.data[0]){
+                this.fileName = bag.data[0].filename;
+            }
+        });
     },
     methods: {
         async piqlIt(e) {

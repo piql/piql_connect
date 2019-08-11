@@ -57,7 +57,8 @@
 	"ingest.status.creationDate": "Opprettelsesdato",
 	"ingest.status.status": "Status",
 
-    "access.browse.ingress": "Tilgang til dine arkiver"
+    "access.browse.ingress": "Tilgang til dine arkiver",
+    "access.browse.selectHolding": "Velg hovedkategori"
 
 
 }

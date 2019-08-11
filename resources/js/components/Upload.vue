@@ -47,6 +47,7 @@
 <script language="text/babel">
 import FineUploaderTraditional from 'fine-uploader-wrappers'
 import FineUploader from 'vue-fineuploader';
+import axios from 'axios';
 
 export default {
     data() {
