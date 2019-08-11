@@ -61,7 +61,8 @@
 	"ingest.status.status": "Status",
 
     "access.browse.ingress": "Tilgang til dine arkiver",
-    "access.browse.selectHolding": "Velg hovedkategori"
+    "access.browse.selectHolding": "Velg hovedkategori",
+    "access.browse.selectFond": "Velg underkategori"
 
 
 }
