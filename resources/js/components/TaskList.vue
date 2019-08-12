@@ -23,7 +23,7 @@
             <div class="col piqlIt">&nbsp;</div>
         </div>
 
-        <Task v-for="item in items" :item="item" @piqlIt="piqlIt"/>
+        <Task v-for="item in items" v-bind:item="item" v-bind:key="item.id" @piqlIt="piqlIt"/>
         </form>
     </div>
 </template>

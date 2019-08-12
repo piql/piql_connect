@@ -21,7 +21,7 @@
             <div class="col-2 listActionItems"></div>
         </div>
         <br/>
-        <file v-for="listitem in items" :item="listitem"/>
+        <file v-for="listitem in items" v-bind:item="listitem" v-bind:key="listitem.id"/>
         </form>
     </div>
 </template>

@@ -22,7 +22,7 @@
             <div class="col">{{$t('ingest.processing.status')}}</div>
         </div>
 
-        <FileInProcess v-for="item in items" :item="item"/>
+        <FileInProcess v-for="item in items" v-bind:item="item" v-bind:key="item.id"/>
     </div>
 </template>
 

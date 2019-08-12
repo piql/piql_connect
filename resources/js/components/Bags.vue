@@ -20,7 +20,7 @@
         </div>
 
         <div class="plist" style="height: 500px; overflow-y: scroll !important;">
-            <Bag v-for="item in items" :item="item" @selectActiveBag="selectActiveBag"/>
+            <Bag v-for="item in items" v-bind:item="item" v-bind:key="item.id" @selectActiveBag="selectActiveBag"/>
         </div>
     </div>
 </template>
