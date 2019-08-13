@@ -33,7 +33,7 @@
                 {!! $chart3->script() !!}
             </div>
             <div class="col">
-                <h4>{{ $infoArray['numberOfAIPsStored'] }} AIPs stored</h4>
+                <h4>{{ $infoArray['numberOfStoredAIPs'] }} AIPs stored</h4>
                 <h4>#### pages stored on piqlFilm</h4>
                 <h4>{{ $infoArray['sizeOfStoredAIPs'] }} Used for online storage</h4>
             </div>

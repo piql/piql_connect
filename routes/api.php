@@ -53,7 +53,11 @@ Route::group(['prefix' => 'v1' , 'middleware' => 'throttle:500,1','auth:web'], f
 
         });
     });
+
+    Route::group(['prefix' => 'stats'], function () {
+        Route::get('monthly-aips-stored', 'Api\Stats\DashboardChartController@monthlyAipsStored')->name('monthly-aips-stored');
+        Route::get('monthly-data-stored', 'Api\Stats\DashboardChartController@monthlyDataStored')->name('monthly-data-stored');
+        Route::get('file-formats', 'Api\Stats\DashboardChartController@fileFormats')->name('file-formats');
+    });
 });
-
-
 
