@@ -29,10 +29,12 @@ $color_fill_verydark: #403f3f;
 //fonts
 $font_agenda: 'Agenda';
 $font_agenda_bold: 'Agenda Bold';
+$font_agenda_black: 'Agenda Bold';
 $font_1: 'Agenda';
 $font_2: 'Gill';
 $font_open_sans: 'OpenSans';
 $font_open_sans_bold: 'OpenSans Bold';
+$font_open_sans_semibold: 'OpenSans SemiBold';
 $font_open_sans_light: 'OpenSans Light';
 $font_4: 'sans-serif';
 $font_5: 'Agenda';
@@ -50,6 +52,7 @@ $font_agenda_black_url: url('/fonts/Agenda-Black.otf');
 $font_agenda_bold_url: url('/fonts/Agenda-Bold.otf');
 $font_opensans_url: url('/fonts/OpenSans-Regular.ttf');
 $font_opensans_bold_url: url('/fonts/OpenSans-Bold.ttf');
+$font_opensans_semibold_url: url('/fonts/OpenSans-SemiBold.ttf');
 $font_opensans_light_url: url('/fonts/OpenSans-Light.ttf');
 
     
@@ -167,6 +170,12 @@ $image_piql-logo-white_url: url('/images/piql_logo_white.png');
     src: $font_agenda_bold_url format("opentype");
 }
 
+@font-face {
+    font-family: $font_agenda_black;
+    src: $font_agenda_black_url format("opentype");
+}
+
+
 
 @font-face {
     font-family: $font_open_sans;
@@ -182,6 +191,12 @@ $image_piql-logo-white_url: url('/images/piql_logo_white.png');
     font-family: $font_open_sans_bold;
     src: $font_opensans_bold_url format("truetype");
 }
+
+@font-face {
+    font-family: $font_open_sans_semibold;
+    src: $font_opensans_semibold_url format("truetype");
+}
+
 
 @font-face {
     font-family: $font_open_sans_light;
@@ -268,9 +283,10 @@ h1 {
     padding-bottom: 0;
     margin-top: 0;
     margin-left: 0;
-    font-family: 'Agenda Bold';
+    font-family: 'Agenda';
+    font-weight: 800;
     text-transform: uppercase;
-    font-size: 30px;
+    font-size: 40px;
 }
 .noTextTransform {
     text-transform: none;
@@ -1934,4 +1950,48 @@ th {
     }
 
 }
+.subTitle {
+    font-family: $font_open_sans_semibold;
+    color: $color_main_brand;
+    margin-bottom: 20px;
+}
 
+.identifier {
+    font-family: $font_open_sans_semibold;
+    color: $black;
+}
+.bg-white {
+    background-color: $white !important;
+    color: $black !important;
+}
+
+.fill-height {
+    padding-bottom: 100% !important;
+}
+
+input[type=text] {
+    min-width: 100px; 
+    background-color: white;
+    border: 0;
+    height: 36px;
+    border: 1px solid #ced4da;
+    border-radius: 2px;
+    padding: 4px;
+}
+
+.contactItems {
+    color: $black;
+    list-style-type: none;
+    a {
+        color: $color_secondary;
+    }
+}
+
+.addressList {
+    list-style-type: none;
+    padding-left: 0;
+}
+
+.identityList {
+    padding-left: 1em;
+}

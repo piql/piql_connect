@@ -62,7 +62,9 @@
 
     "access.browse.ingress": "Tilgang til dine arkiver",
     "access.browse.selectHolding": "Velg hovedkategori",
-    "access.browse.selectFond": "Velg underkategori"
+    "access.browse.selectFond": "Velg underkategori",
+    "access.browse.itemInfo": "Bag",
+    "access.browse.addToWorkflow" : "Legg til i arbeidsflyt"
 
 
 }

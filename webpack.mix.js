@@ -1,4 +1,5 @@
 const mix = require('laravel-mix');
+/*
 const WebpackShellPlugin = require('webpack-shell-plugin');
 
 mix.webpackConfig({
@@ -16,7 +17,7 @@ mix.webpackConfig({
         ],
     },
 });
-
+*/
 mix.js('resources/js/app.js', 'public/js');
 
 mix.js([
@@ -55,4 +56,9 @@ mix.styles([
             'node_modules/fine-uploader/fine-uploader/fine-uploader.css',
             'node_modules/fine-uploader/fine-uploader/fine-uploader-gallery.css',
 ], 'public/css/vendor.css').sourceMaps();
+
+mix.browserSync({
+	proxy: 'connect.local',
+	files: ['resources/**/*.*']
+});
 
