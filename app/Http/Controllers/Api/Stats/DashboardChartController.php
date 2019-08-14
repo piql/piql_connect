@@ -9,37 +9,37 @@ use App\User;
 
 class DashboardChartController extends Controller
 {
-    public function monthlyAIPsStored()
+    public function monthlyOnlineAIPsIngestedEndpoint()
     {
-        $monthlyStoredAIPsCount = $this->monthlyStoredAIPsCount(User::first());
+        $monthlyOnlineAIPsIngested = $this->monthlyOnlineAIPsIngested(User::first());
         $chart = new TestChartJS;
-        $chart->dataset('monthly-aips-stored', 'bar', array_values($monthlyStoredAIPsCount));
+        $chart->dataset('monthlyOnlineAIPsIngested', 'bar', array_values($monthlyOnlineAIPsIngested));
         return $chart->api();
     }
 
-    public function monthlyDataStored()
+    public function monthlyOnlineDataIngestedEndpoint()
     {
-        $monthlyStoredAIPsSize = $this->monthlyStoredAIPsSize(User::first());
+        $monthlyOnlineDataIngested = $this->monthlyOnlineDataIngested(User::first());
         $chart = new TestChartJS;
-        $chart->labels(array_keys($monthlyStoredAIPsSize));
-        $chart->dataset('monthly-aips-stored', 'bar', array_values($monthlyStoredAIPsSize));
+        $chart->labels(array_keys($monthlyOnlineDataIngested));
+        $chart->dataset('monthlyOnlineDataIngested', 'bar', array_values($monthlyOnlineDataIngested));
 
         return $chart->api();
     }
 
-    public function fileFormats()
+    public function fileFormatsIngestedEndpoint()
     {
-        $fileFormatsStored = $this->fileFormatsStored(User::first());
+        $fileFormatsIngested = $this->fileFormatsIngested(User::first());
         $chart = new TestChartJS;
-        $chart->dataset('monthly-aips-stored', 'pie', array_values($fileFormatsStored));
+        $chart->dataset('fileFormatsIngested', 'pie', array_values($fileFormatsIngested));
         return $chart->api();
     }
 
-    private function monthlyStoredAIPsCount($user)
+    private function monthlyOnlineAIPsIngested($user)
     {
         $bags = $user->bags->where('status', 'complete');
 
-        $storedAIPsCount = array_fill(0, 12, 0);
+        $monthlyOnlineAIPsIngested = array_fill(0, 12, 0);
 
         $oneYearAgo = new \DateTime(date('Y-m-d'));
         $oneYearAgo->modify('-1 year');
@@ -47,21 +47,21 @@ class DashboardChartController extends Controller
 
         foreach ($bags as $bag)
         {
-            $date = new \DateTime($bag->created_at);
+            $creation_date = new \DateTime($bag->created_at);
 
-            if ($date > $oneYearAgo) {
-                $storedAIPsCount[$date->format('n') - 1]++;
+            if ($creation_date > $oneYearAgo) {
+                $monthlyOnlineAIPsIngested[$creation_date->format('n') - 1]++;
             }
         }
 
-        return $this->arrayRearrangeCurrentMonthLast($storedAIPsCount);
+        return $this->arrayRearrangeCurrentMonthLast($monthlyOnlineAIPsIngested);
     }
 
-    private function monthlyStoredAIPsSize($user)
+    private function monthlyOnlineDataIngested($user)
     {
         $bags = $user->bags->where('status', 'complete');
 
-        $storedAIPsSize = array_fill(0, 12, 0);
+        $monthlyOnlineDataIngested = array_fill(0, 12, 0);
 
         $oneYearAgo = new \DateTime(date('Y-m-d'));
         $oneYearAgo->modify('-1 year');
@@ -77,16 +77,16 @@ class DashboardChartController extends Controller
 
                 foreach ($files as $file)
                 {
-                    $storedAIPsSize[$date->format('n') - 1] += $file->filesize / 1000000000; // In GB
+                    $monthlyOnlineDataIngested[$date->format('n') - 1] += $file->filesize / 1000000000; // In GB
                 }
             }
         }
 
-        for ($i = 0; $i < count($storedAIPsSize); $i++)
+        for ($i = 0; $i < count($monthlyOnlineDataIngested); $i++)
         {
-            $storedAIPsSize[$i] = round($storedAIPsSize[$i], 2);
+            $monthlyOnlineDataIngested[$i] = round($monthlyOnlineDataIngested[$i], 2);
         }
-        return $this->arrayRearrangeCurrentMonthLast($storedAIPsSize);
+        return $this->arrayRearrangeCurrentMonthLast($monthlyOnlineDataIngested);
     }
 
     /**
@@ -113,20 +113,20 @@ class DashboardChartController extends Controller
         );
 
         $todaysMonth = date('n') - 1;
-        $arrangedArray = [];
+        $rearrangedArray = [];
 
         for ($i = $todaysMonth + 1; $i < 12; $i++)
         {
-            $arrangedArray[$months[$i]] = $inputArray[$i];
+            $rearrangedArray[$months[$i]] = $inputArray[$i];
         }
         for ($i = 0; $i <= $todaysMonth; $i++)
         {
-            $arrangedArray[$months[$i]] = $inputArray[$i];
+            $rearrangedArray[$months[$i]] = $inputArray[$i];
         }
-        return $arrangedArray;
+        return $rearrangedArray;
     }
 
-    private function fileFormatsStored($user)
+    private function fileFormatsIngested($user)
     {
         $bags = $user->bags->where('status', 'complete');
 

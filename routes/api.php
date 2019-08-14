@@ -49,15 +49,12 @@ Route::group(['prefix' => 'v1' , 'middleware' => 'throttle:500,1','auth:web'], f
                 Route::group(['prefix' => 'ingest'], function () {
                     Route::get('status' , 'Api\Ingest\ArchivematicaServiceController@transferStatus');
                 });
- 
-
         });
     });
 
     Route::group(['prefix' => 'stats'], function () {
-        Route::get('monthly-aips-stored', 'Api\Stats\DashboardChartController@monthlyAipsStored')->name('monthly-aips-stored');
-        Route::get('monthly-data-stored', 'Api\Stats\DashboardChartController@monthlyDataStored')->name('monthly-data-stored');
-        Route::get('file-formats', 'Api\Stats\DashboardChartController@fileFormats')->name('file-formats');
+        Route::get('monthlyOnlineAIPsIngested', 'Api\Stats\DashboardChartController@monthlyOnlineAIPsIngestedEndpoint')->name('monthlyOnlineAIPsIngested');
+        Route::get('monthlyOnlineDataIngested', 'Api\Stats\DashboardChartController@monthlyOnlineDataIngestedEndpoint')->name('monthlyOnlineDataIngested');
+        Route::get('fileFormatsIngested', 'Api\Stats\DashboardChartController@fileFormatsIngestedEndpoint')->name('fileFormatsIngested');
     });
 });
-
