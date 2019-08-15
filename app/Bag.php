@@ -20,7 +20,7 @@ class Bag extends Model
         self::creating( function( $model ) 
         {
             $model->uuid = Uuid::generate();
-            $model->status = "created";
+            // $model->status = "created";
         });
     }
 

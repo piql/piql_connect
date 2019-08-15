@@ -4,11 +4,8 @@ Route::get('/login', array('uses' => 'Auth\LoginController@showLogin'));
 Route::get('/logout', array('uses' => 'Auth\LoginController@logout'));
 
 Route::middleware(['auth', 'locale'])->group( function () {
-
-    Route::get('/', function () {
-        return view('dashboard');
-    })->name('dashboard');
-
+    
+    Route::get('/', 'DashboardController@showDashboard')->name('dashboard');
     Route::get('reports', 'ReportsController@showReports');
     Route::get('settings', 'SettingsController@showSettings');
     Route::post('settings', 'SettingsController@updateSettings');
