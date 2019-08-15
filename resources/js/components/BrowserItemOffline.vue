@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="container-fluid">
         <div class="row plist">
             <div class="col-2">
                 <i class="fas fa-file display-4 thumbnailIcon"></i>

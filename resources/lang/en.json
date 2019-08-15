@@ -60,8 +60,18 @@
 
     "access.browse.ingress": "Access your archives",
     "access.browse.selectHolding": "Select holding",
-    "access.browse.selectFond": "Select fond"
-
-
+    "access.browse.selectFond": "Select fond",
+    "access.browse.selectLocation": "Select object location",
+   
+    "access.browse.itemInfo": "File",
+    "access.browse.identityArea": "Identity area",
+    "access.browse.identityArea.identifier": "Identifier",
+    "access.browse.identityArea.authorizedForm": "Authorized form of name",
+    "access.browse.identityArea.parallelForms": "Parallel form(s) of name",
+    "access.browse.identityArea.otherForms": "Other form(s) of name",
+    "access.browse.identityArea.type": "Type",
+    "access.browse.contactArea": "Contact area",
+    "access.browse.contactArea.address": "Address"
+    
 
 }

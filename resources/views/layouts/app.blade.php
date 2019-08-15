@@ -8,6 +8,8 @@
         <script type="text/javascript">Window.locale = '{{\App::getLocale()}}';</script>
         <link href="{{ asset('css/vendor.css') }}" rel="stylesheet" />
         <link href="{{ asset('css/app.css') }}" rel="stylesheet" />
+        <script type="text/javascript" src="{{ mix('js/vendor.js') }}" defer></script>
+        <script type="text/javascript" src="{{ mix('js/app.js') }}" defer></script>
     </head>
 
 @if (Route::current()->getName() == 'login')
@@ -32,7 +34,5 @@
             </div>
         </div>
 @endif
-        <script type="text/javascript" src="{{ asset('js/vendor.js') }}" ></script>
-        <script type="text/javascript" src="{{ asset('js/app.js') }}" ></script>
     </body>
 </html>

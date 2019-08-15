@@ -1,13 +1,13 @@
 <template>
     <div>
-        <ul class="list-group">
-            <li class="list-group-item d-flex justify-content-between align-items-center active">
+        <ul class="tree-list-group">
+            <li class="tree-list-group-item d-flex justify-content-between align-items-center active">
                 {{ $t('access.browse.selectFond') }}
             </li>
-            <li class="list-group-item d-flex justify-content-between align-items-center">
-            <b-tree-view :data="treeData" :class="list-group-item"></b-tree-view>
+            <li class="tree-list-group-item d-flex justify-content-between align-items-center">
+                <b-tree-view :data="treeData" v-on:nodeSelect="fondSelected" :class="list-group-item" :contextMenuItems="contextMenuItems"></b-tree-view>
             </li>
-            <li class="list-group-item d-flex justify-content-between align-items-center">
+            <li class="tree-list-group-item d-flex justify-content-between align-items-center">
             </li>
         </ul>
     </div>
@@ -17,10 +17,29 @@ import axios from 'axios';
 import { bTreeView } from 'bootstrap-vue-treeview';
 export default {
     components: {
-    bTreeView
+        bTreeView
+    },
+    props: {
+            fondSelectionChanged: {
+                type: Function
+            },
+            contextMenuItems: {
+                type: Array,
+                default: () => {
+                    return [
+                        { code: 'DELETE_NODE', label: '1' }, 
+                        { code: 'RENAME_NODE', label: '2' } 
+                    ]
+                }
+            },
+ 
     },
     data() {
         return {
+           list: [],
+            group: {},
+            item: {},
+
             treeData: [
                 {
                     "id": 1, "name": "Documents" , 
@@ -46,8 +65,8 @@ export default {
     },
 
     methods: {
-        doSomething: () => {
-            console.log("Did something");
+        fondSelected: function (fond, state) {
+            this.$emit('fondSelectionChanged', fond, state);
         }
     }
 }

@@ -1,5 +1,5 @@
 <template>
-    <div class="bg-white fill-height p-3">
+    <div class="content-fluid bg-white fill-height p-3">
         <div class="row">
             <div class="col-sm subTitle pl-5">Identity area</div>
         </div>
@@ -49,7 +49,6 @@
                 </ul>
             </div>
         </div>
- 
     </div>
 </template>
 

@@ -37,12 +37,12 @@
     @elseif (\Request::is('access/*'))
         <a href="{{ route('browse') }}">
             <li class="list-group-item {{ \Request::is('access/browse') ? 'active sidebar-active' : '' }} ">
-                <i class="fas fa-tachometer-alt"></i><i class="leftMenuItem">{{__('sidebar.browse')}}</i>
+                <i class="fas fa-hdd"></i><i class="leftMenuItem">{{__('sidebar.browse')}}</i>
             </li>
         </a>
         <a href="{{ route('retrieve') }}">
             <li class="list-group-item {{ \Request::is('access/retrieve') ? 'active sidebar-active' : '' }} ">
-                <i class="fas fa-tachometer-alt"></i><i class="leftMenuItem">{{__('sidebar.retrieve')}}</i>
+                <i class="fas fa-download"></i><i class="leftMenuItem">{{__('sidebar.retrieve')}}</i>
             </li>
         </a>
 

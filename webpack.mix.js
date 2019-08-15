@@ -1,5 +1,5 @@
 const mix = require('laravel-mix');
-/*
+
 const WebpackShellPlugin = require('webpack-shell-plugin');
 
 mix.webpackConfig({
@@ -17,7 +17,7 @@ mix.webpackConfig({
         ],
     },
 });
-*/
+
 mix.js('resources/js/app.js', 'public/js');
 
 mix.js([

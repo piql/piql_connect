@@ -4,8 +4,8 @@
             <div class="col identfier">Primary Contact</div>
         </div>
         <div class="row">
-            <div class="col">
-                <ul class="contactItems">
+            <div class="col m-0">
+                <ul class="contactItems m-0">
                     <li>iKA Kongsberg</li>
                     <li>John Doe</li>
                     <li>+47 50 40 30 20</li>
