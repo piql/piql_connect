@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\Ingest;
 
+use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Storage;
@@ -45,17 +46,32 @@ class BagController extends Controller
      */
     public function store(Request $request)
     {
+
+        $bag = \App\Bag::query(\App\User::first()->settings->bags)->where('status', '=', 'created')->latest()->first();
+
         $bagName = trim($request->bagName);
-        if(empty($bagName))
-        {
-            $bagName = Carbon::now()->format("YmdHis");
+
+        if($bag == null) {
+            $bag = new Bag();
+            if(empty($bagName))
+            {
+                $bagName = Carbon::now()->format("YmdHis");
+            }
+            $bag->owner = $request->userId;
         }
-        $bag = new Bag();
-        $bag->name = $bagName;
-        $bag->owner = $request->userId;
+
+        if(!empty($bagName))
+        {
+            if($bag->name != $bagName)
+            {
+                $bag->name = $bagName;
+            }
+        }
+
+
         if($bag->save()){
-            Log::info("Created bag with name ".$bagName." and id ".$bag->id);
-            return response()->json(['id' => $bag->id, 'name' => $bagName]);
+            Log::info("Created bag with name ".$bag->name." and id ".$bag->id);
+            return response()->json(['id' => $bag->id, 'name' => $bag->name, 'files' => $bag->files->count()]);
         }
         abort(501, "Could not create bag with name ".$bagName." and owner ".$request->userId);
     }
@@ -95,7 +111,7 @@ class BagController extends Controller
         Log::debug("Bags in processing - needs pagination!");
         return Response::json(Bag::latest()->where('status', '=', 'ingesting')->get());
     }
-  
+
     public function all()
     {
         Log::debug("Bag all - needs pagination!");
@@ -145,7 +161,7 @@ class BagController extends Controller
         Log::debug("Bag destroy");
         //
     }
-    
+
     /**
      * Commit the bag to archivematica
      *
@@ -157,7 +173,7 @@ class BagController extends Controller
         Log::debug("emitting ProcessFilesEvent for bag with id ".$id);
         event( new BagFilesEvent($id) );
     }
-    
+
     public function piqlIt($id)
     {
         $bag = Bag::find($id);
