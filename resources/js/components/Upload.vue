@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="row mb-5"> 
+        <div class="row mb-5">
             <div class="col">
                 <em class="mb-3">
                     {{ $t('upload.ingress') }}<br/>
@@ -27,18 +27,37 @@
             </div>
         </div>
 
-        <form v-on:submit.prevent="">
-            <div class="row form-group mb-4">
-                <div class="col-9">
-                    <input value="" :placeholder="$t('upload.optionalName')" v-model="bagName" type="text" class="form-control m-1"> 
-                </div>
+        <div class="row plistHeader">
+            <div class="col-4">Name</div>
+            <div class="col-3">Fond</div>
+            <div class="col-1">Files</div>
+            <div class="col-1 listActionItems"></div>
+            <div class="col-1"></div>
+        </div>
+        <div class="row plist ">
+            <div class="col-4 pt-1">
+                <form v-on:submit.prevent="">
+                    <span class="noTextTransform"><input value="" :placeholder="bag.name" v-model="bag.name" type="text" class="form-control m-1" @input="bagnameUpdate"></span>
+                </form>
             </div>
-        </form>
-
-
-        <div class="row">
-            <div class="col-md-9 text-center">
-                <button class="btn btn-primary btn-block" v-bind:class="[{ disabled : processDisabled  }]" v-on:click="commitBagToProcessing">{{$t('upload.processButton')}}</button>
+            <div class="col-3 pt-1">
+                <form>
+                    <select name="Fonds" class="select_piql">
+                        <option value="Documents">Documents</option>
+                        <option value="Video">Video</option>
+                        <option value="Sound">Sound</option>
+                    </select>
+                </form>
+            </div>
+            <div class="col-1 pt-2">
+                {{ bag.files }}
+            </div>
+            <div class="col-1 listActionItems pt-2">
+                <i class="fas fa-list-ul" @click="onClick('/ingest/tasks/'+bag.id)"></i>&nbsp;
+                <i class="fas fa-trash-alt"></i>
+            </div>
+            <div class="col-1 text-center">
+                <button class="btn btn-primary btn-block w-75" v-bind:class="[{ disabled : processDisabled  }]" v-on:click="commitBagToProcessing">{{$t('upload.processButton')}}</button>
             </div>
         </div>
     </div>
@@ -96,7 +115,6 @@ export default {
         return {
             uploader: uploader,
             bag: {},
-            bagName: "",
             files: {},
             userId: '',
             processDisabled: true,
@@ -104,11 +122,23 @@ export default {
         };
     },
 
-    components: { 
+    components: {
+//        FondSelect,
         FineUploader
     },
 
     methods: {
+        bagnameUpdate()
+        {
+            console.log(this.bag.name);
+        },
+        onClick(url) {
+            let updatedBag = this.setBagName(this.bag.name);
+            if(updatedBag != null){
+                this.bag = updatedBag;
+            }
+            window.location = url;
+        },
         addFileToQueue(payload) {
         },
         async commitBagToProcessing(e) {
@@ -118,7 +148,7 @@ export default {
             this.processDisabled = true;
             this.fileInputDisabled = true;
 
-            let updatedBag = await this.setBagName(this.bagName);
+            let updatedBag = await this.setBagName(this.bag.name);
             if(updatedBag != null){
                 this.bag = updatedBag;
             }
@@ -126,7 +156,6 @@ export default {
             let committed = (await axios.post("/api/v1/ingest/bags/"+this.bag.id+"/commit")).data;
             this.$refs.gallery.clearDropzone();
             this.uploader.methods.reset();
-            this.bagName = "";
             this.bag = await this.createBag("", this.userId);
             this.fileInputDisabled = false;
             //this.$refs.gallery.$refs.maybedropzone.$refs.dropzone.$refs.dropZone.ondrop = null
@@ -157,6 +186,11 @@ export default {
         console.log('Uploader component mounted.');
         this.userId = (await axios.get("/api/v1/system/currentUser")).data;
         this.bag = await this.createBag("", this.userId);
+        if(this.bag.files)
+        {
+            console.log('Files in bag '+this.bag.files);
+            this.processDisabled = false;
+        }
     },
     props: {
         button: Object
@@ -164,3 +198,14 @@ export default {
 
 };
 </script>
+<style>
+    .select_piql {
+        background-color: white;
+        width: 150px;
+        border: 0;
+        height: 30px;
+        border-radius: 2px;
+        padding: 4px;
+        box-sizing: content-box;
+    }
+</style>
