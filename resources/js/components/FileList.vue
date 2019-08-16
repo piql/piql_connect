@@ -17,7 +17,7 @@
         <div class="row plistHeader">
             <div class="col-1"><input type="checkbox" class="checkbox" id="allSips"></div>
             <div class="col">{{$t('ingest.fileList.fileName')}}</div>
-            <div class="col-3">{{$t('ingest.fileList.fileSize')}}</div>
+            <div class="col-1">{{$t('ingest.fileList.fileSize')}}</div>
             <div class="col-2 listActionItems"></div>
         </div>
         <br/>
@@ -34,7 +34,7 @@
                 items : {},
             }
         },
-        
+
         props: {
             bagId: {
                 type: String,

@@ -6,7 +6,7 @@
 
 @section('heading')
 <div>
-    <i class="fas fa-list-ul titleIcon"></i>Files in <span class="noTextTrasform">{{ App\Bag::find($bagId)->name }}</span>
+    <i class="fas fa-list-ul titleIcon"></i>Files in <span class="noTextTransform">{{ App\Bag::find($bagId)->name }}</span>
 </div>
 @endsection
 

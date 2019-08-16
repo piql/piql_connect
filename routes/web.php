@@ -19,6 +19,7 @@ Route::middleware(['auth', 'locale'])->group( function () {
         Route::resource('process', 'IngestProcessController')->name('index', 'process');
         Route::resource('tasks', 'IngestTaskListController')->name('index', 'tasks');
         Route::get('tasks/{id}', 'IngestTaskListController@show')->name('show', 'bag');
+        Route::get('tasks/{bagId}/metadata/{fileId}/edit', 'IngestMetadataController@edit')->name('edit', 'bag');
         Route::resource('status', 'IngestStatusController')->name('index', 'status');
         Route::get('settings', 'IngestSettingsController@show')->name('show', 'show');
     });
