@@ -1953,7 +1953,7 @@ th {
     border-color: $white;
     color: $black;
     &.active {
-        background-color: $color_signal !important;
+        background-color: $color_main_brand !important;
         border: 1px solid rgba(0, 0, 0, 0.125) !important;
     }
     &:hover{

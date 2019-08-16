@@ -61,8 +61,12 @@
     "access.browse.ingress": "Access your archives",
     "access.browse.selectHolding": "Select holding",
     "access.browse.selectFond": "Select fond",
+    "access.browse.archivedFrom": "Archived from",
+    "access.browse.archivedTo": "Archived to",
+    "access.browse.withContents": "With contents",
     "access.browse.selectLocation": "Select object location",
-   
+  
+    "access.browse": "Browse",
     "access.browse.itemInfo": "File",
     "access.browse.identityArea": "Identity area",
     "access.browse.identityArea.identifier": "Identifier",
@@ -70,6 +74,7 @@
     "access.browse.identityArea.parallelForms": "Parallel form(s) of name",
     "access.browse.identityArea.otherForms": "Other form(s) of name",
     "access.browse.identityArea.type": "Type",
+    "access.browse.primaryContact": "Primary contact",
     "access.browse.contactArea": "Contact area",
     "access.browse.contactArea.address": "Address"
     

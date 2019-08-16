@@ -8,17 +8,17 @@
                     </div>
 
                     <div class="col-sm-2">
-                        <label for="fromDate" class="col-form-label-sm">{{$t('Archived from')}}</label>
+                        <label for="fromDate" class="col-form-label-sm">{{$t('access.browse.archivedFrom')}}</label>
                         <input id="fromDate" type="date" class="form-control w-auto">
                     </div>
 
                     <div class="col-sm-2">
-                        <label for="toDate" class="col-form-label-sm">{{$t('Archived to')}}</label>
+                        <label for="toDate" class="col-form-label-sm">{{$t('access.browse.archivedTo')}}</label>
                         <input id="toDate" type="date" class="form-control w-auto">
                     </div>
 
                     <div class="col-sm-3 form-group">
-                        <label for="searchContents" class="col-form-label-sm">{{$t('With contents')}}</label>
+                        <label for="searchContents" class="col-form-label-sm">{{$t('access.browse.withContents')}}</label>
                         <div class="input-group">
                             <div class="input-group addon">
                                 <input id="searchContents" type="text" class="form-control">

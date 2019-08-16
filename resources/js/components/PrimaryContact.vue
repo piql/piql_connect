@@ -1,7 +1,7 @@
 <template>
     <div> 
         <div class="row">
-            <div class="col identfier">Primary Contact</div>
+            <div class="col identfier">{{$t('access.browse.primaryContact')}}</div>
         </div>
         <div class="row">
             <div class="col m-0">
