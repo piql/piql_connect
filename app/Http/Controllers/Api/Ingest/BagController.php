@@ -147,7 +147,6 @@ class BagController extends Controller
             $bag->save();
             $bag->fresh();
             return response()->json(['id' => $bag->id, 'name' => $bag->name, 'files' => $bag->files->count()]);
-            //return Response::json($bag);
         }
     }
 
