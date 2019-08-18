@@ -21,8 +21,12 @@ Route::middleware(['auth', 'locale'])->group( function () {
     });
 
     Route::prefix('access')->group( function () {
-        Route::resource('browse', 'BrowseController')->name('index','browse');
-        Route::resource('retrieve', 'AccessController')->name('index','retrieve');
+        Route::get('browse', 'BrowseController@index')->name('access.browse');
+        Route::get('retrieve', 'AccessController@retrieve')->name('access.retrieve');
+        Route::get('retrieve/ready', 'AccessController@ready')->name('access.retrieve.ready');
+        Route::get('retrieve/retrieving', 'AccessController@retrieving')->name('access.retrieve.retrieving');
+        Route::get('retrieve/downloadable', 'AccessController@downloadable')->name('access.retrieve.downloadable');
+        Route::get('retrieve/history', 'AccessController@history')->name('access.retrieve.history');
     });
 });
 

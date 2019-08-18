@@ -23,7 +23,11 @@
 	"sidebar.taskList": "Oppgaver",
 	"sidebar.status": "Status",
 	"sidebar.browse": "Utforsk",
-	"sidebar.retrieve": "Gjenfinn",
+	"sidebar.retrieve": "Gjenopprett",
+	"sidebar.retrieve.readyToRetrieve": "Klart til gjenoppretting",
+    "sidebar.retrieve.retrieving": "Under gjenopprettelse",
+    "sidebar.retrieve.downloadable": "Klart til nedlasting",
+    "sidebar.retrieve.history": "Historikk",
 	"sidebar.reports": "Rapporter",
 
 	"dashboard.ingress": "Kort beskrivelse av siden her",
@@ -81,7 +85,12 @@
     "access.browse.identityArea.type": "Type",
     "access.browse.primaryContact": "Primærkontakt",
     "access.browse.contactArea": "Kontaktområde",
-    "access.browse.contactArea.address": "Adresse"
+    "access.browse.contactArea.address": "Adresse",
  
 
+    "access.retrieve": "Gjenopprett",
+    "access.retrieve.readyToRetrieve": "Filer klare for gjenoppretting",
+    "access.retrieve.isRetrieving": "Under gjenopprettelse",
+    "access.retrieve.downloadable": "Filer klare til nedlasting",
+    "access.retrieve.history": "Gjenopprettelseshistorikk"
 }

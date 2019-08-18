@@ -11,7 +11,7 @@
         <ul>
             <a href="{{ route('dashboard') }}"><li class=" {{ \Request::is('/*') ? 'top-active' : ''  }}" >{{__('Home')}}</li></a>
             <a href="{{ route('upload') }}"><li class=" {{ \Request::is('ingest/*') ? 'top-active' : ''  }} ">{{__('Ingest') }}</li></a>
-            <a href="{{ route('browse') }}"><li class=" {{ \Request::is('access/*') ? 'top-active' : '' }} " >{{__('Access') }}</li></a>
+            <a href="{{ route('access.browse') }}"><li class=" {{ \Request::is('access/*') ? 'top-active' : '' }} " >{{__('Access') }}</li></a>
         </ul>
     </div>
     <div id="piqlOptions">
