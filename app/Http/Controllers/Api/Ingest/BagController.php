@@ -146,7 +146,8 @@ class BagController extends Controller
             $bag->name = $request->bagName;
             $bag->save();
             $bag->fresh();
-            return Response::json($bag);
+            return response()->json(['id' => $bag->id, 'name' => $bag->name, 'files' => $bag->files->count()]);
+            //return Response::json($bag);
         }
     }
 
@@ -170,6 +171,9 @@ class BagController extends Controller
      */
     public function commit($id)
     {
+        $bag = Bag::find($id);
+        $bag->status = "ready for file prepare";
+        $bag->save();
         Log::debug("emitting ProcessFilesEvent for bag with id ".$id);
         event( new BagFilesEvent($id) );
     }
