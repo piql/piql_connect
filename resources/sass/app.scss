@@ -939,7 +939,7 @@ input[type="file"] {
     left: 0px;
     height: calc(100vh - 180px);
 }
-.sideMenu {
+#sideMenu {
     position: relative;
     width: 300px;
     float: left;
@@ -1059,13 +1059,13 @@ input[type="file"] {
 .activePage {
     background-color: $color_main_brand !important;
 }
-.sideMenuCollapsed {
+#sideMenuCollapsed {
     width: 70px;
     //Instead of the line below you could use @include transition($transition-1, $transition-2, $transition-3, $transition-4, $transition-5, $transition-6, $transition-7, $transition-8, $transition-9, $transition-10)
     transition: width 1s;
     position: relative;
     float: left;
-    background-color: $color_fill_dark;
+    background-color: $color_background_1;
     height: calc(100vh - 150px);
     color: $white;
     overflow: hidden;
@@ -1084,7 +1084,9 @@ input[type="file"] {
     li {
         display: block;
         width: calc(100% - 30px);
-        background-color: $color_fill_verydark;
+        background-color: $color_background_dark;
+        border-color: $color_background;
+        color: white;
         height: 25px;
         padding: 15px;
         margin-bottom: 2px;

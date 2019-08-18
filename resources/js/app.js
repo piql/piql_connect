@@ -9,6 +9,23 @@ require('bootstrap-select');
 window.Vue = require('vue');
 import VueInternationalization from 'vue-i18n';
 
+/* Function to collapse/expand sidemenu
+Affects the sideMenu and contentContainer. Reduces size of sideMenu
+whilst expanding the size of contentContainer (and vice versa)
+*/
+
+window.collapseMenu = function() {
+    if (document.getElementById("sideMenu")) {          
+        document.getElementById("sideMenu").setAttribute("id", "sideMenuCollapsed");
+        document.getElementById("contentContainer").setAttribute("style", "width: calc(100% - 130px); transition: width 1s");
+    }
+    else {          
+        document.getElementById("sideMenuCollapsed").setAttribute("id", "sideMenu");
+        document.getElementById("contentContainer").setAttribute("style", "width: calc(100% - 360px); transition: width 1s");
+    }
+}
+
+
 /**
  * Now setup localization with vue-i18n using generated locales. 
  * The Window.locale global is set in app.blade.php,

@@ -1,4 +1,4 @@
-<div class="wrapper sideMenu">
+<div class="wrapper sideMenu" id="sideMenu">
 
     <div id="welcomeText">
         {{__("Welcome")}}<br><i class="fas fa-user"></i> {{ Auth::user()->full_name }}
