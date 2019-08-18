@@ -11,9 +11,11 @@ class DashboardChartController extends Controller
 {
     public function monthlyOnlineAIPsIngestedEndpoint()
     {
-        $monthlyOnlineAIPsIngested = $this->monthlyOnlineAIPsIngested(User::first());
+        $monthlyOnlineAIPsIngested = array_values($this->monthlyOnlineAIPsIngested(User::first()));
+        $monthlyOfflineAIPsIngested = array_map(function($val) { return round($val*(rand(1,9)/10)); }, $monthlyOnlineAIPsIngested);
         $chart = new TestChartJS;
-        $chart->dataset('monthlyOnlineAIPsIngested', 'bar', array_values($monthlyOnlineAIPsIngested));
+        $chart->dataset('Online AIPs Ingested', 'line', $monthlyOnlineAIPsIngested);
+        $chart->dataset('Offline AIPs Ingested', 'line', $monthlyOfflineAIPsIngested);
         return $chart->api();
     }
 
@@ -22,8 +24,69 @@ class DashboardChartController extends Controller
         $monthlyOnlineDataIngested = $this->monthlyOnlineDataIngested(User::first());
         $chart = new TestChartJS;
         $chart->labels(array_keys($monthlyOnlineDataIngested));
-        $chart->dataset('monthlyOnlineDataIngested', 'bar', array_values($monthlyOnlineDataIngested));
+        $chart->dataset('Online Data Ingested', 'line', array_values($monthlyOnlineDataIngested));
+        $chart->dataset('Offline Data Ingested', 'line', array_map(function($val) { return round($val*(rand(1, 9)/10), 2); }, array_values($monthlyOnlineDataIngested)));
 
+        return $chart->api();
+    }
+
+    public function monthlyOnlineAIPsAccessedEndpoint()
+    {
+        $monthlyOnlineAIPsAccessed = [42, 65, 31, 45, 12, 78, 56, 36, 15, 14, 48, 66];
+        $monthlyOfflineAIPsAccessed = [7, 4, 0, 0, 2, 5, 0, 8, 1, 11, 5, 7];
+        $chart = new TestChartJS;
+        $chart->dataset('Online AIPs Accessed', 'line', $monthlyOnlineAIPsAccessed);
+        $chart->dataset('Offline AIPs Accessed', 'line', $monthlyOfflineAIPsAccessed);
+        return $chart->api();
+    }
+
+    public function monthlyOnlineDataAccessedEndpoint()
+    {
+        $monthlyOnlineDataAccessed = [140, 89, 45, 15, 78, 143, 120, 110, 90, 20, 50, 74];
+        $monthlyOfflineDataAccessed = [5, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 3];
+        $chart = new TestChartJS;
+        $chart->dataset('Online AIPs Accessed', 'line', $monthlyOnlineDataAccessed);
+        $chart->dataset('Offline AIPs Accessed', 'line', $monthlyOfflineDataAccessed);
+        return $chart->api();
+    }
+
+    public function dailyOnlineAIPsIngestedEndpoint()
+    {
+        $dailyOnlineAIPsIngested = array_values($this->dailyOnlineAIPsIngested(User::first()));;
+        $dailyOfflineAIPsIngested = array_map(function($val) { return round($val*(rand(1,9)/10)); }, $dailyOnlineAIPsIngested);
+        $chart = new TestChartJS;
+        $chart->dataset('Online AIPs Ingested', 'line', $dailyOnlineAIPsIngested);
+        $chart->dataset('Offline AIPs Ingested', 'line', $dailyOfflineAIPsIngested);
+        return $chart->api();
+    }
+
+    public function dailyOnlineDataIngestedEndpoint()
+    {
+        $dailyOnlineDataIngested = array_values($this->dailyOnlineDataIngested(User::first()));;
+        $dailyOfflineDataIngested = array_map(function($val) { return round($val*(rand(1, 9)/10), 2); }, array_values($dailyOnlineDataIngested));
+        $chart = new TestChartJS;
+        $chart->dataset('Online Data Ingested', 'line', $dailyOnlineDataIngested);
+        $chart->dataset('Offline Data Ingested', 'line', $dailyOfflineDataIngested);
+        return $chart->api();
+    }
+
+    public function dailyOnlineAIPsAccessedEndpoint()
+    {
+        $dailyOnlineAIPsAccessed = [10, 2, 12, 1, 15, 9, 5, 7, 10, 4, 7, 6, 1, 11, 14, 9, 15, 2, 11, 8, 7, 3, 4, 9, 3, 10, 13, 2, 8, 3];
+        $dailyOfflineAIPsAccessed = [1, 0, 4, 1, 1, 0, 0, 4, 0, 4, 2, 5, 3, 3, 4, 5, 5, 0, 1, 2, 0, 5, 1, 2, 5, 0, 3, 1, 1, 3];
+        $chart = new TestChartJS;
+        $chart->dataset('Online AIPs Accessed', 'line', $dailyOnlineAIPsAccessed);
+        $chart->dataset('Offline AIPs Accessed', 'line', $dailyOfflineAIPsAccessed);
+        return $chart->api();
+    }
+
+    public function dailyOnlineDataAccessedEndpoint()
+    {
+        $dailyOnlineDataAccessed = [10, 2, 12, 1, 15, 9, 5, 7, 10, 4, 7, 6, 1, 11, 14, 9, 15, 2, 11, 8, 7, 3, 4, 9, 3, 10, 13, 2, 8, 3];
+        $dailyOfflineDataAccessed = [1, 0, 4, 1, 1, 0, 0, 4, 0, 4, 2, 5, 3, 3, 4, 5, 5, 0, 1, 2, 0, 5, 1, 2, 5, 0, 3, 1, 1, 3];
+        $chart = new TestChartJS;
+        $chart->dataset('Online AIPs Accessed', 'line', $dailyOnlineDataAccessed);
+        $chart->dataset('Offline AIPs Accessed', 'line', $dailyOfflineDataAccessed);
         return $chart->api();
     }
 
@@ -87,6 +150,65 @@ class DashboardChartController extends Controller
             $monthlyOnlineDataIngested[$i] = round($monthlyOnlineDataIngested[$i], 2);
         }
         return $this->arrayRearrangeCurrentMonthLast($monthlyOnlineDataIngested);
+    }
+
+    private function dailyOnlineAIPsIngested($user)
+    {
+        $bags = $user->bags->where('status', 'complete');
+
+        $dailyOnlineAIPsIngested = array_fill(0, 30, 0);
+
+        $thirtyDaysAgo = new \DateTime(date('Y-m-d'));
+        $thirtyDaysAgo->modify('-29 days');
+
+        $debugArray = [];
+
+        foreach ($bags as $bag)
+        {
+            $creation_date = new \DateTime($bag->created_at);
+
+            if ($creation_date > $thirtyDaysAgo) {
+
+                $daysAgo = new \DateTime(date('Y-m-d'));
+                $daysAgo = $daysAgo->diff($creation_date);
+                $dailyOnlineAIPsIngested[$daysAgo->days + 1]++;
+            }
+        }
+        return $dailyOnlineAIPsIngested;
+    }
+
+    private function dailyOnlineDataIngested($user)
+    {
+        $bags = $user->bags->where('status', 'complete');
+
+        $dailyOnlineAIPsIngested = array_fill(0, 30, 0);
+
+        $thirtyDaysAgo = new \DateTime(date('Y-m-d'));
+        $thirtyDaysAgo->modify('-29 days');
+
+        foreach ($bags as $bag)
+        {
+            $creation_date = new \DateTime($bag->created_at);
+
+            if ($creation_date > $thirtyDaysAgo) {
+
+                $files = $bag->files;
+
+                foreach ($files as $file)
+                {
+                    $daysAgo = new \DateTime(date('Y-m-d'));
+                    $daysAgo = $daysAgo->diff($creation_date);
+                    $dailyOnlineAIPsIngested[$daysAgo->days + 1]+= $file->filesize / 1000000; // In MB
+                }
+            }
+        }
+
+        for ($i = 0; $i < count($dailyOnlineAIPsIngested); $i++)
+        {
+            $dailyOnlineAIPsIngested[$i] = round($dailyOnlineAIPsIngested[$i], 2);
+        }
+
+        return $dailyOnlineAIPsIngested;
     }
 
     /**

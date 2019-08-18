@@ -17,32 +17,25 @@ class DashboardController extends Controller
         Log::info('showDashboard');
 
         $last12Months = $this->arrayRearrangeCurrentMonthLast(array_fill(0, 12, 0));
+        $last30days = $this->last30days();
         $fileFormatCount = $this->fileFormatsIngested(auth()->user());
         $onlineDataIngested = $this->onlineDataIngested(auth()->user());
         
         $infoArray['onlineDataIngested'] = $this->byteToMetricbyte($onlineDataIngested);
         $infoArray['offlineDataIngested'] = $this->byteToMetricbyte(23 * 110000000000);
         $infoArray['onlineAIPsIngested'] = $this->onlineAIPsIngested(auth()->user());
-        $infoArray['oflineAIPsIngested'] = '' . (23 * 55); 
+        $infoArray['offlineAIPsIngested'] = '' . (23 * 55); 
         $infoArray['offlineReelsCount'] = '23';
-        $infoArray['offlinePagesCount'] = '' . (23 * 3 * 8000) . ' pages';
+        $infoArray['offlinePagesCount'] = (23 * 3 * 8000);
 
         $monthlyOnlineAIPsIngested = new TestChartJS;
-        $monthlyOfflineAIPsIngested = new TestChartJS;
         $monthlyOnlineAIPsAccessed = new TestChartJS;
-        $monthlyOfflineAIPsAccessed = new TestChartJS;
         $monthlyOnlineDataIngested = new TestChartJS;
-        $monthlyOfflineDataIngested = new TestChartJS;
         $monthlyOnlineDataAccessed = new TestChartJS;
-        $monthlyOfflineDataAccessed = new TestChartJS;
-        $dailyOnlineAIPsIngested = new TestChartJS;
-        $dailyOfflineAIPsIngested = new TestChartJS;
-        $dailyOnlineAIPsAccessed = new TestChartJS;
-        $dailyOfflineAIPsAccessed = new TestChartJS;
-        $dailyOnlineDataIngested = new TestChartJS;
-        $dailyOfflineDataIngested = new TestChartJS;
-        $dailyOnlineDataAccessed = new TestChartJS;
-        $dailyOfflineDataAccessed = new TestChartJS;
+        // $dailyOnlineAIPsIngested = new TestChartJS;
+        // $dailyOnlineAIPsAccessed = new TestChartJS;
+        // $dailyOnlineDataIngested = new TestChartJS;
+        // $dailyOnlineDataAccessed = new TestChartJS;
         $fileFormatsIngested = new TestChartJS;
         
 
@@ -56,24 +49,10 @@ class DashboardController extends Controller
                 'mode' => 'x',
                 'intersect' => false
             ]
-        ]); 
-  
-        $monthlyOfflineAIPsIngested->title('Monthly Offline AIPs Ingested');
-        $monthlyOfflineAIPsIngested->labels(['30', '29', '27', '26', '25', '24', '23', '22', '21', '20', '19', '18', '17', '16', '15', '14', '13', '13', '12', '12', '11', '10', '9', '8', '7', '6', '5', '4', '3', '2', '1']);
-        $monthlyOfflineAIPsIngested->dataset('monthly-offline-aips-ingested', 'line', [17, 5, 8, 19, 18, 2, 3, 15, 1, 19,3, 12, 12, 12, 1, 8, 1, 10, 13, 8, 14, 8, 4, 16, 8, 18, 14, 4, 18, 12]);
-        $monthlyOfflineAIPsIngested->options([
-            'legend' => [
-                'display' => false
-            ],
-            'tooltips' => [
-                'mode' => 'x',
-                'intersect' => false
-            ],
         ]);
 
-        $monthlyOnlineAIPsAccessed->title('monthlyOnlineAIPsAccessed');
-        $monthlyOnlineAIPsAccessed->labels(['30', '29', '27', '26', '25', '24', '23', '22', '21', '20', '19', '18', '17', '16', '15', '14', '13', '13', '12', '12', '11', '10', '9', '8', '7', '6', '5', '4', '3', '2', '1']);
-        $monthlyOnlineAIPsAccessed->dataset('monthly-online-aips-accessed', 'line', [17, 5, 8, 19, 18, 2, 3, 15, 1, 19,3, 12, 12, 12, 1, 8, 1, 10, 13, 8, 14, 8, 4, 16, 8, 18, 14, 4, 18, 12]);
+        $monthlyOnlineAIPsAccessed->title('Monthly AIPs Accessed')->load(url('api/v1/stats/monthlyOnlineAIPsAccessed'));
+        $monthlyOnlineAIPsAccessed->labels(array_keys($last12Months));
         $monthlyOnlineAIPsAccessed->options([
             'legend' => [
                 'display' => false
@@ -84,20 +63,7 @@ class DashboardController extends Controller
             ],
         ]);
 
-        $monthlyOfflineAIPsAccessed->title('monthlyOfflineAIPsAccessed');
-        $monthlyOfflineAIPsAccessed->labels(['30', '29', '27', '26', '25', '24', '23', '22', '21', '20', '19', '18', '17', '16', '15', '14', '13', '13', '12', '12', '11', '10', '9', '8', '7', '6', '5', '4', '3', '2', '1']);
-        $monthlyOfflineAIPsAccessed->dataset('monthly-offline-aips-accessed', 'line', [17, 5, 8, 19, 18, 2, 3, 15, 1, 19,3, 12, 12, 12, 1, 8, 1, 10, 13, 8, 14, 8, 4, 16, 8, 18, 14, 4, 18, 12]);
-        $monthlyOfflineAIPsAccessed->options([
-            'legend' => [
-                'display' => false
-            ],
-            'tooltips' => [
-                'mode' => 'x',
-                'intersect' => false
-            ],
-        ]);
-
-        $monthlyOnlineDataIngested->title('Monthly data Ingested');
+        $monthlyOnlineDataIngested->title('Monthly Data Ingested');
         $monthlyOnlineDataIngested->labels(array_keys($last12Months))->load(url('api/v1/stats/monthlyOnlineDataIngested'));
         $monthlyOnlineDataIngested->options([
             'legend' => [
@@ -109,22 +75,8 @@ class DashboardController extends Controller
             ],
         ]);
 
-        $monthlyOfflineDataIngested->title('monthlyOfflineDataIngested');
-        $monthlyOfflineDataIngested->labels(['30', '29', '27', '26', '25', '24', '23', '22', '21', '20', '19', '18', '17', '16', '15', '14', '13', '13', '12', '12', '11', '10', '9', '8', '7', '6', '5', '4', '3', '2', '1']);
-        $monthlyOfflineDataIngested->dataset('monthly-offline-data-ingested', 'line', [17, 5, 8, 19, 18, 2, 3, 15, 1, 19,3, 12, 12, 12, 1, 8, 1, 10, 13, 8, 14, 8, 4, 16, 8, 18, 14, 4, 18, 12]);
-        $monthlyOfflineDataIngested->options([
-            'legend' => [
-                'display' => false
-            ],
-            'tooltips' => [
-                'mode' => 'x',
-                'intersect' => false
-            ],
-        ]);
-
-        $monthlyOnlineDataAccessed->title('monthlyOnlineDataAccessed');
-        $monthlyOnlineDataAccessed->labels(['30', '29', '27', '26', '25', '24', '23', '22', '21', '20', '19', '18', '17', '16', '15', '14', '13', '13', '12', '12', '11', '10', '9', '8', '7', '6', '5', '4', '3', '2', '1']);
-        $monthlyOnlineDataAccessed->dataset('monthly-online-data-accessed', 'line', [17, 5, 8, 19, 18, 2, 3, 15, 1, 19,3, 12, 12, 12, 1, 8, 1, 10, 13, 8, 14, 8, 4, 16, 8, 18, 14, 4, 18, 12]);
+        $monthlyOnlineDataAccessed->title('Monthly Data Accessed')->load(url('api/v1/stats/monthlyOnlineDataAccessed'));;
+        $monthlyOnlineDataAccessed->labels(array_keys($last12Months));
         $monthlyOnlineDataAccessed->options([
             'legend' => [
                 'display' => false
@@ -135,129 +87,64 @@ class DashboardController extends Controller
             ],
         ]);
 
-        $monthlyOfflineDataAccessed->title('monthlyOfflineDataAccessed');
-        $monthlyOfflineDataAccessed->labels(['30', '29', '27', '26', '25', '24', '23', '22', '21', '20', '19', '18', '17', '16', '15', '14', '13', '13', '12', '12', '11', '10', '9', '8', '7', '6', '5', '4', '3', '2', '1']);
-        $monthlyOfflineDataAccessed->dataset('monthly-offline-data-accessed', 'line', [17, 5, 8, 19, 18, 2, 3, 15, 1, 19,3, 12, 12, 12, 1, 8, 1, 10, 13, 8, 14, 8, 4, 16, 8, 18, 14, 4, 18, 12]);
-        $monthlyOfflineDataAccessed->options([
-            'legend' => [
-                'display' => false
-            ],
-            'tooltips' => [
-                'mode' => 'x',
-                'intersect' => false
-            ],
-        ]);
+        // $dailyOnlineAIPsIngested->title('Ingested AIPs Last 30 days')->load(url('api/v1/stats/dailyOnlineAIPsIngested'));
+        // $dailyOnlineAIPsIngested->labels($last30days);
+        // $dailyOnlineAIPsIngested->options([
+        //     'legend' => [
+        //         'display' => false
+        //     ],
+        //     'tooltips' => [
+        //         'mode' => 'x',
+        //         'intersect' => false
+        //     ],
+        // ]);
 
-        $dailyOnlineAIPsIngested->title('dailyOnlineAIPsIngested');
-        $dailyOnlineAIPsIngested->labels(['30', '29', '27', '26', '25', '24', '23', '22', '21', '20', '19', '18', '17', '16', '15', '14', '13', '13', '12', '12', '11', '10', '9', '8', '7', '6', '5', '4', '3', '2', '1']);
-        $dailyOnlineAIPsIngested->dataset('daily-online-aips-ingested', 'line', [17, 5, 8, 19, 18, 2, 3, 15, 1, 19,3, 12, 12, 12, 1, 8, 1, 10, 13, 8, 14, 8, 4, 16, 8, 18, 14, 4, 18, 12]);
-        $dailyOnlineAIPsIngested->options([
-            'legend' => [
-                'display' => false
-            ],
-            'tooltips' => [
-                'mode' => 'x',
-                'intersect' => false
-            ],
-        ]);
+        // $dailyOnlineAIPsAccessed->title('AIPs Accessed Last 30 Days')->load(url('api/v1/stats/dailyOnlineAIPsAccessed'));
+        // $dailyOnlineAIPsAccessed->labels($last30days);
+        // $dailyOnlineAIPsAccessed->options([
+        //     'legend' => [
+        //         'display' => false
+        //     ],
+        //     'tooltips' => [
+        //         'mode' => 'x',
+        //         'intersect' => false
+        //     ],
+        // ]);
 
-        $dailyOfflineAIPsIngested->title('dailyOfflineAIPsIngested');
-        $monthlyOnlineDataAccessed->labels(['30', '29', '27', '26', '25', '24', '23', '22', '21', '20', '19', '18', '17', '16', '15', '14', '13', '13', '12', '12', '11', '10', '9', '8', '7', '6', '5', '4', '3', '2', '1']);
-        $monthlyOnlineDataAccessed->dataset('daily-offline-aips-ingested', 'line', [17, 5, 8, 19, 18, 2, 3, 15, 1, 19,3, 12, 12, 12, 1, 8, 1, 10, 13, 8, 14, 8, 4, 16, 8, 18, 14, 4, 18, 12]);
-        $monthlyOnlineDataAccessed->options([
-            'legend' => [
-                'display' => false
-            ],
-            'tooltips' => [
-                'mode' => 'x',
-                'intersect' => false
-            ],
-        ]);
+        // $dailyOnlineDataIngested->title('Data Ingested Last 30 Days')->load(url('api/v1/stats/dailyOnlineDataIngested'));
+        // $dailyOnlineDataIngested->labels($last30days);
+        // $dailyOnlineDataIngested->options([
+        //     'legend' => [
+        //         'display' => false
+        //     ],
+        //     'tooltips' => [
+        //         'mode' => 'x',
+        //         'intersect' => false
+        //     ],
+        // ]);
 
-        $dailyOnlineAIPsAccessed->title('dailyOnlineAIPsAccessed');
-        $dailyOnlineAIPsAccessed->labels(['30', '29', '27', '26', '25', '24', '23', '22', '21', '20', '19', '18', '17', '16', '15', '14', '13', '13', '12', '12', '11', '10', '9', '8', '7', '6', '5', '4', '3', '2', '1']);
-        $dailyOnlineAIPsAccessed->dataset('daily-online-aips-accessed', 'line', [17, 5, 8, 19, 18, 2, 3, 15, 1, 19,3, 12, 12, 12, 1, 8, 1, 10, 13, 8, 14, 8, 4, 16, 8, 18, 14, 4, 18, 12]);
-        $dailyOnlineAIPsAccessed->options([
-            'legend' => [
-                'display' => false
-            ],
-            'tooltips' => [
-                'mode' => 'x',
-                'intersect' => false
-            ],
-        ]);
-
-        $dailyOfflineAIPsAccessed->title('dailyOfflineAIPsAccessed');
-        $dailyOfflineAIPsAccessed->labels(['30', '29', '27', '26', '25', '24', '23', '22', '21', '20', '19', '18', '17', '16', '15', '14', '13', '13', '12', '12', '11', '10', '9', '8', '7', '6', '5', '4', '3', '2', '1']);
-        $dailyOfflineAIPsAccessed->dataset('daily-offline-aips-accessed', 'line', [17, 5, 8, 19, 18, 2, 3, 15, 1, 19,3, 12, 12, 12, 1, 8, 1, 10, 13, 8, 14, 8, 4, 16, 8, 18, 14, 4, 18, 12]);
-        $dailyOfflineAIPsAccessed->options([
-            'legend' => [
-                'display' => false
-            ],
-            'tooltips' => [
-                'mode' => 'x',
-                'intersect' => false
-            ],
-        ]);
-
-        $dailyOnlineDataIngested->title('dailyOnlineDataIngested');
-        $dailyOnlineDataIngested->labels(['30', '29', '27', '26', '25', '24', '23', '22', '21', '20', '19', '18', '17', '16', '15', '14', '13', '13', '12', '12', '11', '10', '9', '8', '7', '6', '5', '4', '3', '2', '1']);
-        $dailyOnlineDataIngested->dataset('daily-online-data-ingested', 'line', [17, 5, 8, 19, 18, 2, 3, 15, 1, 19,3, 12, 12, 12, 1, 8, 1, 10, 13, 8, 14, 8, 4, 16, 8, 18, 14, 4, 18, 12]);
-        $dailyOnlineDataIngested->options([
-            'legend' => [
-                'display' => false
-            ],
-            'tooltips' => [
-                'mode' => 'x',
-                'intersect' => false
-            ],
-        ]);
-
-        $dailyOfflineDataIngested->title('dailyOfflineDataIngested');
-        $dailyOfflineDataIngested->labels(['30', '29', '27', '26', '25', '24', '23', '22', '21', '20', '19', '18', '17', '16', '15', '14', '13', '13', '12', '12', '11', '10', '9', '8', '7', '6', '5', '4', '3', '2', '1']);
-        $dailyOfflineDataIngested->dataset('daily-offline-data-ingested', 'line', [17, 5, 8, 19, 18, 2, 3, 15, 1, 19,3, 12, 12, 12, 1, 8, 1, 10, 13, 8, 14, 8, 4, 16, 8, 18, 14, 4, 18, 12]);
-        $dailyOfflineDataIngested->options([
-            'legend' => [
-                'display' => false
-            ],
-            'tooltips' => [
-                'mode' => 'x',
-                'intersect' => false
-            ],
-        ]);
-
-        $dailyOnlineDataAccessed->title('dailyOnlineDataAccessed');
-        $dailyOnlineDataAccessed->labels(['30', '29', '27', '26', '25', '24', '23', '22', '21', '20', '19', '18', '17', '16', '15', '14', '13', '13', '12', '12', '11', '10', '9', '8', '7', '6', '5', '4', '3', '2', '1']);
-        $dailyOnlineDataAccessed->dataset('daily-online-data-accessed', 'line', [17, 5, 8, 19, 18, 2, 3, 15, 1, 19,3, 12, 12, 12, 1, 8, 1, 10, 13, 8, 14, 8, 4, 16, 8, 18, 14, 4, 18, 12]);
-        $dailyOnlineDataAccessed->options([
-            'legend' => [
-                'display' => false
-            ],
-            'tooltips' => [
-                'mode' => 'x',
-                'intersect' => false
-            ],
-        ]);
-
-        $dailyOfflineDataAccessed->title('dailyOfflineDataAccessed');
-        $dailyOfflineDataAccessed->labels(['30', '29', '27', '26', '25', '24', '23', '22', '21', '20', '19', '18', '17', '16', '15', '14', '13', '13', '12', '12', '11', '10', '9', '8', '7', '6', '5', '4', '3', '2', '1']);
-        $dailyOfflineDataAccessed->dataset('daily-offline-data-accessed', 'line', [17, 5, 8, 19, 18, 2, 3, 15, 1, 19,3, 12, 12, 12, 1, 8, 1, 10, 13, 8, 14, 8, 4, 16, 8, 18, 14, 4, 18, 12]);
-        $dailyOfflineDataAccessed->options([
-            'legend' => [
-                'display' => false
-            ],
-            'tooltips' => [
-                'mode' => 'x',
-                'intersect' => false
-            ],
-        ]);
+        // $dailyOnlineDataAccessed->title('Date Accessed Last 30 Days')->load(url('api/v1/stats/dailyOnlineDataAccessed'));
+        // $dailyOnlineDataAccessed->labels($last30days);
+        // $dailyOnlineDataAccessed->options([
+        //     'legend' => [
+        //         'display' => false
+        //     ],
+        //     'tooltips' => [
+        //         'mode' => 'x',
+        //         'intersect' => false
+        //     ],
+        // ]);
 
         $fileFormatsIngested->title('File formats Ingested');
         $fileFormatsIngested->labels(array_keys($fileFormatCount))->load(url('api/v1/stats/fileFormatsIngested'));
         $fileFormatsIngested->options([
             'legend' => [
-                'display' => false
+                'display' => true,
+                'position' => 'right'
             ],
+            // 'tooltips' => [
+            //     'enabled' => true
+            // ],
             'animation' => [
                 'animateRotate' => true,
                 'animateScale' => true
@@ -271,21 +158,9 @@ class DashboardController extends Controller
 
         return view('dashboard', compact(
             'monthlyOnlineAIPsIngested',
-            'monthlyOfflineAIPsIngested',
             'monthlyOnlineAIPsAccessed',
-            'monthlyOfflineAIPsAccessed',
             'monthlyOnlineDataIngested',
-            'monthlyOfflineDataIngested',
             'monthlyOnlineDataAccessed',
-            'monthlyOfflineDataAccessed',
-            'dailyOnlineAIPsIngested',
-            'dailyOfflineAIPsIngested',
-            'dailyOnlineAIPsAccessed',
-            'dailyOfflineAIPsAccessed',
-            'dailyOnlineDataIngested',
-            'dailyOfflineDataIngested',
-            'dailyOnlineDataAccessed',
-            'dailyOfflineDataAccessed',
             'fileFormatsIngested',
             'infoArray'
         ));
@@ -388,6 +263,18 @@ class DashboardController extends Controller
             'Oct',
             'Nov',
             'Dec',
+            // 'January',
+            // 'February',
+            // 'March',
+            // 'April',
+            // 'May',
+            // 'June',
+            // 'July',
+            // 'August',
+            // 'September',
+            // 'October',
+            // 'November',
+            // 'December',
         );
 
         $todaysMonth = date('n') - 1;
@@ -455,5 +342,16 @@ class DashboardController extends Controller
         }
 
         return $bytes . ' B';
+    }
+
+    private function last30days()
+    {
+        $last30days = [];
+
+        for ($i=0; $i < 30; $i++) { 
+            array_unshift($last30days, date('j. M', strtotime('-' . $i . ' days')));
+        }
+
+        return $last30days;
     }
 }
