@@ -104,7 +104,7 @@
                                 <h1 style="color: white;text-align: center;padding-top: 50px;font-size: 300%">
                                     <strong>{{ $infoArray['offlinePagesCount'] }}</strong>
                                 </h1>
-                                <em style="text-align: center;position: absolute;left: 0;right: 0;bottom: 0;">Pages stored on film</em>
+                                <em style="color: white;text-align: center;position: absolute;left: 0;right: 0;bottom: 0;">Pages stored on film</em>
                             </div>
                         </div>
                     </div>
