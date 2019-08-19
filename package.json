@@ -12,6 +12,8 @@
     "devDependencies": {
         "axios": "^0.18.1",
         "bootstrap": "^4.1.0",
+        "browser-sync": "^2.26.7",
+        "browser-sync-webpack-plugin": "2.0.1",
         "cross-env": "^5.1",
         "jquery": "^3.2",
         "laravel-mix": "^4.1.2",
@@ -28,6 +30,7 @@
         "bootstrap-datepicker": "^1.9.0",
         "bootstrap-select": "^1.13.10",
         "bootstrap-vue-treeview": "^1.0.8",
+        "chartjs": "^0.3.24",
         "fine-uploader": "^5.16.2",
         "fine-uploader-wrappers": "^1.0.1",
         "imagemagick": "^0.1.3",

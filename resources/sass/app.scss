@@ -9,9 +9,13 @@ $gray: grey;
 
 $color_main_brand: #cc3b0d;
 $color_background: #4d324d;
-$color_background_1: #896577;
+$color_background_dark: #30242c;
+$color_background_1: #6a4b5b;
+$color_background_1_transparent: #6a4b5b40;
 $color_background_2: #b092a2;
+$color_background_2_transparent: #b092a240;
 $color_background_3: #d7c5cf;
+$color_background_3_transparent: #d7c5cf40;
 $color_secondary: #8f0052;
 $color_secondary_1: #aa405d;
 $color_secondary_2: #c27484;
@@ -22,17 +26,21 @@ $color_signal: #ff194d;
 $color_fill: #808080;
 $color_fill_1: #ababab;
 $color_fill_2: #c7c7c7;
+$color_fill_2_transparent: #c7c7c740;
 $color_fill_3: #e3e3e3;
+$color_fill_3_transparent: #e3e3e340;
 $color_fill_dark: #605f5f;
 $color_fill_verydark: #403f3f;
 
 //fonts
 $font_agenda: 'Agenda';
 $font_agenda_bold: 'Agenda Bold';
+$font_agenda_black: 'Agenda Bold';
 $font_1: 'Agenda';
 $font_2: 'Gill';
 $font_open_sans: 'OpenSans';
 $font_open_sans_bold: 'OpenSans Bold';
+$font_open_sans_semibold: 'OpenSans SemiBold';
 $font_open_sans_light: 'OpenSans Light';
 $font_4: 'sans-serif';
 $font_5: 'Agenda';
@@ -50,6 +58,7 @@ $font_agenda_black_url: url('/fonts/Agenda-Black.otf');
 $font_agenda_bold_url: url('/fonts/Agenda-Bold.otf');
 $font_opensans_url: url('/fonts/OpenSans-Regular.ttf');
 $font_opensans_bold_url: url('/fonts/OpenSans-Bold.ttf');
+$font_opensans_semibold_url: url('/fonts/OpenSans-SemiBold.ttf');
 $font_opensans_light_url: url('/fonts/OpenSans-Light.ttf');
 
     
@@ -167,6 +176,12 @@ $image_piql-logo-white_url: url('/images/piql_logo_white.png');
     src: $font_agenda_bold_url format("opentype");
 }
 
+@font-face {
+    font-family: $font_agenda_black;
+    src: $font_agenda_black_url format("opentype");
+}
+
+
 
 @font-face {
     font-family: $font_open_sans;
@@ -182,6 +197,12 @@ $image_piql-logo-white_url: url('/images/piql_logo_white.png');
     font-family: $font_open_sans_bold;
     src: $font_opensans_bold_url format("truetype");
 }
+
+@font-face {
+    font-family: $font_open_sans_semibold;
+    src: $font_opensans_semibold_url format("truetype");
+}
+
 
 @font-face {
     font-family: $font_open_sans_light;
@@ -268,7 +289,8 @@ h1 {
     padding-bottom: 0;
     margin-top: 0;
     margin-left: 0;
-    font-family: 'Agenda Bold';
+    font-family: 'Agenda';
+    font-weight: 800;
     text-transform: uppercase;
     font-size: 30px;
 }
@@ -292,12 +314,6 @@ em {
     font-style: normal;
     font-size: 12px;
     color: $color_fill_dark;
-}
-.titleIcon {
-    color: $color_signal;
-    font-size: 30px;
-    float: left;
-    margin: 5px 30px 0 0;
 }
 a {
     text-decoration: none;
@@ -437,7 +453,7 @@ input[type="text"] {
     height: 30px;
     //Instead of the line below you could use @include border-radius($radius, $vertical-radius)
     border-radius: 2px;
-    padding: 4px;
+    padding: 20px;
 }
 input[type="number"] {
     min-width: 300px;
@@ -453,23 +469,34 @@ input[type="number"] {
 }
 .dropdown {
     &-menu{
-        background-color: $color_secondary_1;
+        background-color: $white;
         color: $white;
+        outline: 0;
+        &:focus{
+            background-color: $color_fill_3;
+            color: $black;
+            outline: 0 !important;
+        }
+
     }
     &-toggle{
-        background-color: $color_secondary !important;
-        color: $white !important;
-    }
+        background-color: $white !important;
+        color: $black !important;
+        outline: 0;
+   }
     &-item{
-        background-color: $color_secondary_1;
-        color: $white;
+        outline: 0;
+        background-color: $white;
+        color: $black;
         &.selected {
-            background-color: $color_secondary_2;
-            color: $white;
+            background-color: $white;
+            outline: 0 !important;
+            color: $black;
         }
         &:hover {
-            background-color: $color_signal;
-            color: $white;
+            background-color: $color_fill_3;
+            color: $black;
+            outline: 0 !important;
         }
     }
 }
@@ -584,13 +611,27 @@ input[type="file"] {
     //Instead of the line below you could use @include border-radius($radius, $vertical-radius)
     border-radius: 10px;
     min-width: 100px;
-    padding: 10px;
+    padding: 0.75rem !important;
     background-color: $color_main_brand;
-    outline-color: $color_secondary_3;
+    outline: 0 !important;
     border: 0;
+    &-light {
+        outline: 0 !important;
+    }
+
     &:hover {
         background-color: $color_fill_verydark;
     }
+ 
+    &:focus {
+        outline-color: $color_background_3 !important;
+        background-clip: padding-box;
+        border: 1px solid $color_background_2_transparent !important;
+        box-shadow: 0 0 0 0.2rem $color_background_3_transparent !important;
+        border-radius: 0.25rem;
+        transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    }
+
 }
 .disabled {
     background-color: $gray !important;
@@ -898,11 +939,11 @@ input[type="file"] {
     left: 0px;
     height: calc(100vh - 180px);
 }
-.sideMenu {
+#sideMenu {
     position: relative;
     width: 300px;
     float: left;
-    background-color: $color_background;
+    background-color: $color_background_1;
     min-height: calc(100vh - 150px);
     height: auto;
     color: $white;
@@ -924,7 +965,9 @@ input[type="file"] {
     li {
         display: block;
         width: calc(100% - 30px);
-        background-color: $color_fill_verydark;
+        background-color: $color_background_dark;
+        border-color: $color_background;
+        color: white;
         height: 25px;
         padding: 15px;
         margin-bottom: 2px;
@@ -1016,13 +1059,13 @@ input[type="file"] {
 .activePage {
     background-color: $color_main_brand !important;
 }
-.sideMenuCollapsed {
+#sideMenuCollapsed {
     width: 70px;
     //Instead of the line below you could use @include transition($transition-1, $transition-2, $transition-3, $transition-4, $transition-5, $transition-6, $transition-7, $transition-8, $transition-9, $transition-10)
     transition: width 1s;
     position: relative;
     float: left;
-    background-color: $color_fill_dark;
+    background-color: $color_background_1;
     height: calc(100vh - 150px);
     color: $white;
     overflow: hidden;
@@ -1041,7 +1084,9 @@ input[type="file"] {
     li {
         display: block;
         width: calc(100% - 30px);
-        background-color: $color_fill_verydark;
+        background-color: $color_background_dark;
+        border-color: $color_background;
+        color: white;
         height: 25px;
         padding: 15px;
         margin-bottom: 2px;
@@ -1906,32 +1951,115 @@ th {
 
 .list-group-item {
     box-sizing: content-box;
-    background-color: rgb(48, 36, 44);
-    border-color: rgba(0, 0, 0, 0.125);
-    color: white;
+    background-color: $color_signal;
+    border-color: $white;
+    color: $black;
     &.active {
-        background-color: $color_secondary_1 !important;
+        background-color: $color_main_brand !important;
         border: 1px solid rgba(0, 0, 0, 0.125) !important;
-        border-color: rgba(0, 0, 0, 0.125);
     }
-    &:hover {
-        background-color: $color_secondary !important;
-        border-color: rgba(0, 0, 0, 0.125);
-        color: white;
+    &:hover{
+        background-color: $color_main_brand !important;
+        border: 1px solid rgba(0, 0, 0, 0.125) !important;
     }
+}
 
+.dashboard-card {
+    background: $color_main_brand;
 }
 
 .form-control {
+    height: 3rem !important;
     &:focus {
-        color: #495057;
-        background-color: #fff;
         background-clip: padding-box;
-        border: 1px solid $color_secondary_2_transparent !important;
-        box-shadow: 0 0 0 0.2rem $color_secondary_3_transparent !important;
+        border: 1px solid $color_fill_2_transparent !important;
+        box-shadow: 0 0 0 0.2rem $color_fill_2_transparent !important;
         border-radius: 0.25rem;
         transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
     }
-
+}
+.subTitle {
+    font-family: $font_open_sans_semibold;
+    color: $color_main_brand;
+    margin-bottom: 20px;
 }
 
+.identifier {
+    font-family: $font_open_sans_semibold;
+    color: $black;
+}
+.bg-white {
+    background-color: $white !important;
+    color: $black !important;
+}
+
+.fill-height {
+    padding-bottom: 100% !important;
+}
+
+input[type=text] {
+    min-width: 100px; 
+    background-color: white;
+    border: 0;
+    height: 36px;
+    border: 1px solid #ced4da;
+    border-radius: 2px;
+    padding: 4px;
+}
+
+.contactItems {
+    color: $black;
+    list-style-type: none;
+    a {
+        color: $color_secondary;
+    }
+}
+
+.addressList {
+    list-style-type: none;
+    padding-left: 0;
+}
+
+.identityList {
+    padding-left: 1em;
+}
+
+.titleIcon {
+    color: $color_signal;
+    font-size: 30px;
+    float: left;
+    margin-right: 24px;
+}
+
+.thumbnailIcon{
+    color: $color_signal;
+    font-size: 46px;
+    float: left;
+    margin-right: 24px;
+}
+
+.browseActionItem {
+    color: $color_signal;
+    font-size: 18px;
+}
+.tree-list-group{
+    color: $color_fill_verydark;
+}
+.tree-branch.selected > .tree-node > .tree-node-label {
+    background-color: $color_fill_3 !important;
+    color: $color_main_brand !important;
+}
+.tree-node-label {
+    &:hover {
+        background-color: $color_fill_2 !important;
+        color: $color_signal !important;
+    }
+}
+
+.p-field {
+    height: 2.8rem;
+}
+
+.top-active {
+    color: $color_main_brand !important;
+}

@@ -77,4 +77,9 @@ class User extends Authenticatable
     {
         return $this->hasOne('App\UserSetting', 'user');
     }
+
+    public function bags()
+    {
+        return $this->hasMany('App\Bag', 'owner');
+    }
 }

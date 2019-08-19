@@ -18,6 +18,7 @@ class CreateFilesTable extends Migration
             $table->bigIncrements('id');
             $table->string('bag_id');
             $table->string('filename');
+            $table->string('filesize');
             $table->string('uuid');
             $table->timestamps();
         });

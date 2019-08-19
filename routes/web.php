@@ -4,11 +4,8 @@ Route::get('/login', array('uses' => 'Auth\LoginController@showLogin'));
 Route::get('/logout', array('uses' => 'Auth\LoginController@logout'));
 
 Route::middleware(['auth', 'locale'])->group( function () {
-
-    Route::get('/', function () {
-        return view('dashboard');
-    })->name('dashboard');
-
+    
+    Route::get('/', 'DashboardController@showDashboard')->name('dashboard');
     Route::get('reports', 'ReportsController@showReports');
     Route::get('settings', 'SettingsController@showSettings');
     Route::post('settings', 'SettingsController@updateSettings');
@@ -25,8 +22,12 @@ Route::middleware(['auth', 'locale'])->group( function () {
     });
 
     Route::prefix('access')->group( function () {
-        Route::resource('browse', 'BrowseController')->name('index','browse');
-        Route::resource('retrieve', 'AccessController')->name('index','retrieve');
+        Route::get('browse', 'BrowseController@index')->name('access.browse');
+        Route::get('retrieve', 'AccessController@retrieve')->name('access.retrieve');
+        Route::get('retrieve/ready', 'AccessController@ready')->name('access.retrieve.ready');
+        Route::get('retrieve/retrieving', 'AccessController@retrieving')->name('access.retrieve.retrieving');
+        Route::get('retrieve/downloadable', 'AccessController@downloadable')->name('access.retrieve.downloadable');
+        Route::get('retrieve/history', 'AccessController@history')->name('access.retrieve.history');
     });
 });
 
