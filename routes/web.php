@@ -18,6 +18,7 @@ Route::middleware(['auth', 'locale'])->group( function () {
         Route::get('tasks/{id}', 'IngestTaskListController@show')->name('show', 'bag');
         Route::resource('status', 'IngestStatusController')->name('index', 'status');
         Route::get('settings', 'IngestSettingsController@show')->name('show', 'show');
+        Route::get('offline_storage', 'IngestOfflineStorageController@index')->name('offline_storage', 'index');
     });
 
     Route::prefix('access')->group( function () {
