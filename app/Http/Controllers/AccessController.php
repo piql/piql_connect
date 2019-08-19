@@ -13,9 +13,29 @@ class AccessController extends Controller
 
     }
 
-    public function index()
+    public function retrieve()
     {
-        Log::info("showRetrieve");
-        return view('retrieve');   
+        return view('access.retrieve.index');
     }
+
+    public function ready()
+    {
+        return view('access.retrieve.ready');
+    }
+
+    public function retrieving()
+    {
+        return view('access.retrieve.retrieving');
+    }
+
+    public function downloadable()
+    {
+        return view('access.retrieve.downloadable');
+    }
+
+    public function history()
+    {
+        return view('access.retrieve.history');
+    }
+
 }

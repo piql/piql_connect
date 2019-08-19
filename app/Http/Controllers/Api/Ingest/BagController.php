@@ -99,7 +99,7 @@ class BagController extends Controller
     public function all()
     {
         Log::debug("Bag all - needs pagination!");
-        return Response::json(Bag::latest()->all());
+        return Response::json(Bag::paginate(5));
     }
 
     /**

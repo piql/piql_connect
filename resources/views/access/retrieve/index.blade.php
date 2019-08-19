@@ -6,7 +6,7 @@
 
 @section('content')
     <div class="contentContainer">
-        <h1>{{__('Retrieve')}}</h1>
+        <h1>{{__('access.retrieve')}}</h1>
     </div>
 
 @endsection
