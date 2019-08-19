@@ -1,4 +1,4 @@
-version: '2'
+version: '3.6'
 services:
     web:
         build:
@@ -12,6 +12,7 @@ services:
             - app
     app:
         build:
+            network: host
             context: ./
             dockerfile: deploy/app.docker
         volumes:
