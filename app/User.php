@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Hash;
 use Webpatser\Uuid\Uuid;
 use App\Traits\Uuids;
 
-class User extends Authenticatable 
+class User extends Authenticatable
 {
     use Notifiable, Uuids;
 
@@ -65,7 +65,7 @@ class User extends Authenticatable
 
     public static function find($id)
     {
-       return self::all()->find($id); 
+       return self::all()->find($id);
     }
 
     public static function findByUsername($username)
@@ -81,5 +81,10 @@ class User extends Authenticatable
     public function bags()
     {
         return $this->hasMany('App\Bag', 'owner');
+    }
+
+    public function jobs()
+    {
+        return $this->hasMany('App\Job', 'owner');
     }
 }

@@ -9,6 +9,7 @@ use Illuminate\Suppoer\Facades\Storage;
 use GuzzleHttp\Client as Guzzle;
 use Log;
 use App\Bag;
+use App\Job;
 use App\ArchivematicaService;
 
 class StartTransferToArchivematicaListener implements ShouldQueue
@@ -72,6 +73,7 @@ class StartTransferToArchivematicaListener implements ShouldQueue
                     Log::info("Ingest complete for SIP with bag id ".$bag->id);
                     $bag->status = "complete";
                     $bag->save();
+                    Job::currentJob($bag->owner)->bags()->toggle($bag);
                     return;
                 }
             }

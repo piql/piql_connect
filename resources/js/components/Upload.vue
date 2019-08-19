@@ -9,7 +9,6 @@
                 </em>
             </div>
         </div>
-
         <div class="row">
             <div class="col-11 m-2">
                 <Gallery
@@ -158,7 +157,6 @@ export default {
             this.uploader.methods.reset();
             this.bag = await this.createBag("", this.userId);
             this.fileInputDisabled = false;
-            //this.$refs.gallery.$refs.maybedropzone.$refs.dropzone.$refs.dropZone.ondrop = null
             this.$refs.gallery.ondrop = null;
         },
         async setBagName(bagName) {

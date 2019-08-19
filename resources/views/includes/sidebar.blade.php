@@ -23,8 +23,8 @@
             <li class="list-group-item {{ \Request::is('ingest/process') ? 'active sidebar-active' : '' }} ">
                 <i class="fas fa-hourglass-half"></i><i class="leftMenuItem">{{__('sidebar.processing')}}</i>
             </li></a>
-        <a href="{{ route('tasks') }}">
-            <li class="list-group-item {{ \Request::is('ingest/tasks') ? 'active sidebar-active' : '' }} ">
+        <a href="{{ route('offline_storage') }}">
+            <li class="list-group-item {{ \Request::is('ingest/offline_storage') ? 'active sidebar-active' : '' }} ">
                 <i class="fas fa-clock"></i><i class="leftMenuItem">{{__("sidebar.taskList")}}</i>
             </li>
         </a>
@@ -88,7 +88,7 @@
     @endif
     </ul>
 
-    <div id="poweredBy">Powered by 
+    <div id="poweredBy">Powered by
 		<span id="poweredByImg"><img src="{{asset('/images/piql_logo_white.png')}}"><span>
 	</div>
 </div>
