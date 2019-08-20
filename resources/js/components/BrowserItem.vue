@@ -12,12 +12,12 @@
                 </div>
                 <div class="row">
                     <div class="col">
-                        <span class="small">More info</span>
+                        <span class="small">Forsvarsmuseet</span>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col">
-                        <span class="small">Even more info</span>
+                        <span class="small">{{selectedFond}}</span>
                     </div>
                 </div>
             </div>
@@ -32,6 +32,7 @@ export default {
     },
     props: {
         item: Object,
+        selectedFond: String
     },
 
     data() {
