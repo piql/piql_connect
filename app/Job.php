@@ -5,6 +5,7 @@ namespace App;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Webpatser\Uuid\Uuid;
+use Illuminate\Support\Facades\Log;
 
 class Job extends Model
 {
@@ -35,15 +36,16 @@ class Job extends Model
 
     public static function currentJob($owner)
     {
+        Log::info("currentJob() owner".$owner);
         // This is a bit nasty because there is no owner validation here
         // Should be safe when used internally e.i when owner is valid
-        $job = \App\Job::where('status', '=', 'preparing')->where('owner', '=', $owner)->latest()->first();
+        $job = \App\Job::where('status', '=', 'created')->where('owner', '=', $owner)->latest()->first();
+        Log::info("currentJob() ".$job);
 
         if($job == null) {
             $job = new Job();
             $job->name = Carbon::now()->format("YmdHis");
             $job->owner = $owner;
-            $job->status = 'preparing';
             $job->save();
         }
 

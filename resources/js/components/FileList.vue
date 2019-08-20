@@ -25,6 +25,7 @@
                 type: String,
                 default: ""
             },
+
         },
 
         async mounted() {
