@@ -16,37 +16,45 @@
         <br/>
         <div class="row plistHeader">
             <div class="col-1"><input type="checkbox" class="checkbox" id="allSips"></div>
-            <div class="col">{{$t('ingest.fileList.fileName')}}</div>
-            <div class="col-1">{{$t('ingest.fileList.fileSize')}}</div>
-            <div class="col-2 listActionItems"></div>
+            <div class="col">Bag</div>
+            <div class="col-3">{{$t('ingest.taskList.ingestDate')}}</div>
+            <div class="col-2 listActionItems">&nbsp;</div>
         </div>
-        <br/>
-        <file v-for="listitem in items" v-bind:item="listitem" v-bind:key="listitem.id"/>
+
+        <bag-list-item v-for="item in items" v-bind:item="item" v-bind:key="item.id" @piqlIt="piqlIt"/>
         </form>
     </div>
 </template>
 
 <script>
-    import axios from 'axios';
+import axios from 'axios';
+
     export default {
         data() {
             return {
-                items : {},
+                items : {}
             }
         },
-
         props: {
-            bagId: {
+            jobId: {
                 type: String,
                 default: ""
             },
-
         },
-
         async mounted() {
-            this.items = (await axios.get("/api/v1/ingest/bags/"+this.bagId+"/files")).data;
+            let url = "/api/v1/ingest/offline_storage/pending/jobs/"+this.jobId+"/bags";
+            console.log(url);
+            console.log(this);
+            this.items = (await axios.get(url)).data;
             console.log(this.items);
+
             console.log('TaskList component mounted.')
+        },
+        methods: {
+            async piqlIt(id) {
+                await axios.post("/api/v1/ingest/bags/"+id+"/piql");
+                this.items = (await axios.get("/api/v1/ingest/bags/complete")).data;
+            },
         },
     }
 </script>

@@ -47,7 +47,7 @@ class BagController extends Controller
     public function store(Request $request)
     {
 
-        $bag = \App\Bag::query(\App\User::first()->settings->bags)->where('status', '=', 'created')->latest()->first();
+        $bag = \App\Bag::query(\App\User::first()->settings->bags)->where('status', '=', 'created')->first();
 
         $bagName = trim($request->bagName);
 
@@ -109,7 +109,13 @@ class BagController extends Controller
     public function processing()
     {
         Log::debug("Bags in processing - needs pagination!");
-        return Response::json(Bag::latest()->where('status', '=', 'ingesting')->get());
+        return Response::json(Bag::latest()
+            ->where('status', '=', 'ingesting')
+            ->orWhere('status', '=', 'preparing files')
+            ->orWhere('status', '=', 'processing')
+            ->orWhere('status', '=', 'ready for file prepare')
+            ->orWhere('status', '=', 'ingesting')
+            ->get());
     }
 
     public function all()
