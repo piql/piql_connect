@@ -1,12 +1,11 @@
 <template>
     <div>
         <div class="row plist">
-            <div class="col-1"><input type="checkbox" :id="item.uuid" class="checkbox"></div>
             <div class="col">
                 {{item.filename}}
             </div>
-            <div class="col-3">
-                &nbsp; <!-- fileSize -->
+            <div class="col-1">
+                60 MiB
             </div>
             <div class="col-2 listActionItems">
                 <i class="fas fa-eye"></i>&nbsp;

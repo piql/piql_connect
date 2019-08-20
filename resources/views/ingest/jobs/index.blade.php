@@ -5,11 +5,11 @@
 @endsection
 
 @section('heading')
-    <i class="fas fa-clipboard-check titleIcon"></i>STATUS
+    <i class="far fa-clock titleIcon"></i>{{ __('ingest.offlineStorage') }}
 @endsection
 
 @section('content')
     <div class="contentContainer">
-        <status-list :job-list-url="'/api/v1/ingest/offline_storage/archive'"/>
+        <job-list :job-list-url="'/api/v1/ingest/offline_storage/pending'"/>
     </div>
 @endsection

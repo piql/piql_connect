@@ -1,8 +1,8 @@
 <template>
-    <div>
-        <div class="row mb-5"> 
+    <div class="container-fluid">
+        <div class="row mb-4">
             <div class="col">
-                <em class="mb-3">
+                <em class="mb-3 mt-2">
                     {{ $t('upload.ingress') }}<br/>
                     {{ $t('upload.ingress2') }}<br/>
                     {{ $t('upload.ingress3') }}
@@ -21,25 +21,39 @@
             </div>
         </div>
 
-        <div class="row">
-            <div class="col">
-                <br/>
+        <div class="card upload-widget-back w-95 p-2 pt-3 pb-4">
+            <div class="row">
+                <div class="col-sm-3 mr-3">{{ $t('upload.sipName') }}</div>
+                <div class="col-sm-2 mr-3">Fonds</div>
+                <div class="col-sm-1 mr-3">{{ $t('upload.files') }}</div>
+                <div class="col-sm-2 listActionItems mr-3"></div>
+                <div class="col-sm-3"></div>
             </div>
-        </div>
 
-        <form v-on:submit.prevent="">
-            <div class="row form-group mb-4">
-                <div class="col-9">
-                    <input value="" :placeholder="$t('upload.optionalName')" v-model="bagName" type="text" class="form-control m-1"> 
+            <form v-on:submit.prevent="">
+                <div class="row w-90">
+                    <div class="col-sm-3 mr-3">
+                        <input value="" :placeholder="bag.name" v-model="bag.name" type="text" class="noTextTransform form-control pl-3" @input="bagnameUpdate" onclick="select()">
+                    </div>
+                    <div class="col-sm-2 mr-3">
+                        <select name="Fonds" class="form-control selectpicker">
+                            <option value="Documents">Documents</option>
+                            <option value="Video">Video</option>
+                            <option value="Sound">Sound</option>
+                        </select>
+                    </div>
+                    <div class="col-sm-1 card p-2 pr-4 mr-3" style="text-align: right; max-height: 3rem;">
+                        {{ this.numberOfFiles}}
+                    </div>
+                    <div class="col-sm-2 listActionItems mr-3" style="text-align: center">
+                        <i class="fas fa-list-ul p-2 mr-4 hover-hand" @click="onClick('/ingest/tasks/'+bag.id)"></i>
+                        <i class="fas fa-trash-alt p-2 hover-hand"></i>
+                    </div>
+                    <div class="col-sm-3 text-center">
+                        <button class="btn btn-primary btn-lg w-75 mr-2" v-bind:class="[{ disabled : processDisabled  }]" v-on:click="commitBagToProcessing">{{$t('upload.processButton')}}</button>
+                    </div>
                 </div>
-            </div>
-        </form>
-
-
-        <div class="row">
-            <div class="col-md-9 text-center">
-                <button class="btn btn-primary btn-block" v-bind:class="[{ disabled : processDisabled  }]" v-on:click="commitBagToProcessing">{{$t('upload.processButton')}}</button>
-            </div>
+            </form>
         </div>
     </div>
 </template>
@@ -84,19 +98,20 @@ export default {
                             'result' : response,
                             'bagId' : uploadToBagId,
                         }).then( () => {
-                            console.log("Upload of " + name + " with id" + id + " completed.");
                             if( this.bag.id == uploadToBagId ){
-                                this.files = axios.get("/api/v1/ingest/bags/"+uploadToBagId+"/files");
+                                axios.get("/api/v1/ingest/bags/"+uploadToBagId+"/files").then( (files) => {
+                                    this.files = files.data;
+                                    this.numberOfFiles = files.data.length;
+                                });
                             }
                         });
                     }
-                }
-            },
-        });
+                }}});
         return {
             uploader: uploader,
             bag: {},
             bagName: "",
+            numberOfFiles: 0,
             files: {},
             userId: '',
             processDisabled: true,
@@ -104,7 +119,7 @@ export default {
         };
     },
 
-    components: { 
+    components: {
         FineUploader
     },
 
@@ -131,6 +146,7 @@ export default {
             this.fileInputDisabled = false;
             //this.$refs.gallery.$refs.maybedropzone.$refs.dropzone.$refs.dropZone.ondrop = null
             this.$refs.gallery.ondrop = null;
+            this.numberOfFiles = 0;
         },
         async setBagName(bagName) {
             let currentBagId = this.bag.id;
@@ -155,8 +171,15 @@ export default {
     },
     async mounted() {
         console.log('Uploader component mounted.');
+        this.numberOfFiles = 0;
         this.userId = (await axios.get("/api/v1/system/currentUser")).data;
         this.bag = await this.createBag("", this.userId);
+        if(this.bag.files)
+        {
+            console.log('Files in bag '+this.bag.files);
+            this.processDisabled = false;
+            this.numberOfFiles = this.bag.files;
+        }
     },
     props: {
         button: Object
