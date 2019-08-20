@@ -43,10 +43,10 @@ class DashboardController extends Controller
         $monthlyOnlineAIPsIngested->labels(array_keys($last12Months));
         $monthlyOnlineAIPsIngested->options([
             'legend' => [
-                'display' => false
+                'display' => false,
             ],
             'tooltips' => [
-                'mode' => 'x',
+                'mode' => 'index',
                 'intersect' => false
             ]
         ]);
@@ -58,7 +58,7 @@ class DashboardController extends Controller
                 'display' => false
             ],
             'tooltips' => [
-                'mode' => 'x',
+                'mode' => 'index',
                 'intersect' => false
             ],
         ]);
@@ -70,7 +70,7 @@ class DashboardController extends Controller
                 'display' => false
             ],
             'tooltips' => [
-                'mode' => 'x',
+                'mode' => 'index',
                 'intersect' => false
             ],
         ]);
@@ -82,7 +82,7 @@ class DashboardController extends Controller
                 'display' => false
             ],
             'tooltips' => [
-                'mode' => 'x',
+                'mode' => 'index',
                 'intersect' => false
             ],
         ]);
@@ -94,7 +94,7 @@ class DashboardController extends Controller
         //         'display' => false
         //     ],
         //     'tooltips' => [
-        //         'mode' => 'x',
+        //         'mode' => 'index',
         //         'intersect' => false
         //     ],
         // ]);
@@ -106,7 +106,7 @@ class DashboardController extends Controller
         //         'display' => false
         //     ],
         //     'tooltips' => [
-        //         'mode' => 'x',
+        //         'mode' => 'index',
         //         'intersect' => false
         //     ],
         // ]);
@@ -118,7 +118,7 @@ class DashboardController extends Controller
         //         'display' => false
         //     ],
         //     'tooltips' => [
-        //         'mode' => 'x',
+        //         'mode' => 'index',
         //         'intersect' => false
         //     ],
         // ]);
@@ -130,7 +130,7 @@ class DashboardController extends Controller
         //         'display' => false
         //     ],
         //     'tooltips' => [
-        //         'mode' => 'x',
+        //         'mode' => 'index',
         //         'intersect' => false
         //     ],
         // ]);
@@ -140,7 +140,8 @@ class DashboardController extends Controller
         $fileFormatsIngested->options([
             'legend' => [
                 'display' => true,
-                'position' => 'right'
+                'position' => 'right',
+                // 'onHover' => 'chartHoverHighlight()'
             ],
             // 'tooltips' => [
             //     'enabled' => true

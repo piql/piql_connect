@@ -22,7 +22,7 @@
         <div class="col-sm-12">
             <div class="row">
                 <div class="col-sm-6">
-                    <h2 style="text-align: center;margin-bottom: 5px;">Ingest</h2>
+                    <!-- <h2 style="text-align: center;margin-bottom: 5px;">Ingest</h2> -->
                     <div>
                         <div class="row">
                             <div class="col-sm-6">
@@ -43,7 +43,7 @@
                     </div>
                 </div>
                 <div class="col-sm-6">
-                    <h2 style="text-align: center;margin-bottom: 5px;">Access</h2>
+                    <!-- <h2 style="text-align: center;margin-bottom: 5px;">Access</h2> -->
                     <div class="row">
                         <div class="col-sm-6">
                             {!! $monthlyOnlineAIPsAccessed->container() !!}
