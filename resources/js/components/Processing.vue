@@ -1,46 +1,49 @@
 <template>
-    <div>
-        <div class="row listFilter">
-                <form>
-                    <label for="fromDate">{{$t('ingest.processing.from')}}</label>
-                    <input type="date" name="fromDate" placeholder="DDMMYY">
-                    <label for="toDate">{{$t('ingest.processing.to')}}</label>
-                    <input type="date" name="toDate" placeholder="DDMMYY">
-                    <select name="status">
-                        <option style="display: none;" disabled="" selected="">{{$t('ingest.processing.statusFilter')}}</option>
-                        <option>{{$t('ingest.processing.uploadingFilter')}}</option>
-                        <option>{{$t('ingest.processing.processingFilter')}}</option>
-                    </select>
-                    <input type="search" :placeholder="$t('Search')">
-                </form>
-        </div>
-        <br/>
-        <div class="row plistHeader">
-            <div class="col">{{$t('ingest.processing.bag')}}</div>
-            <div class="col">{{$t('ingest.processing.content')}}</div>
-            <div class="col">{{$t('ingest.processing.ingestDate')}}</div>
-            <div class="col">{{$t('ingest.processing.status')}}</div>
+    <div class="container-fluid"> 
+        <ingest-filter-search v-bind:filters="['ingest.processing.processingFilter','ingest.processing.uploadingFilter']"></ingest-filter-search>
+        <div class="row plistHeader" v-show="currentlyIdle === false">
+            <div class="col-sm-5">{{$t('ingest.processing.sip')}}</div>
+            <div class="col-sm-3">{{$t('ingest.processing.ingestDate')}}</div>
+            <div class="col-sm-3">{{$t('ingest.processing.status')}}</div>
+            <div class="col-sm-1">&nbsp;</div>
         </div>
 
         <FileInProcess v-for="item in items" v-bind:item="item" v-bind:key="item.id"/>
-    </div>
+        <div v-if="currentlyIdle" class="mt-5"><h3>{{$t('ingest.processing.noItems')}}</h3></div>
+        </div>
 </template>
 
 <script>
 import axios from 'axios';
 
-    export default {
-        data() {
-            return {
-                items : {}
-            }
-        },
+export default {
+    data() {
+        return {
+            items : [],
+            pollProcessingHandle: null
+        }
+    },
 
-        async mounted() {
-            this.items = (await axios.get("/api/v1/ingest/processing/")).data;
-            console.log(this.items);
+    computed: {
+        currentlyIdle: function() {
+            return this.items.length == 0;
+        }
+    },
+    methods: {
+        startPollProcessing () {
+            this.pollProcessingHandle  = setInterval(async () => {
+                this.items = (await axios.get("/api/v1/ingest/processing/")).data;
+            }, 500)
+        }
+    },
+    created() {
+        this.startPollProcessing()
+    },
+    beforeDestroy(){
+        clearInterval(this.pollProcessingHandle);
+    },
 
-            console.log('Processing component mounted.')
-        },
-    }
+    async mounted() {
+    },
+}
 </script>

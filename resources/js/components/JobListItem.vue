@@ -1,22 +1,21 @@
 <template>
     <div v-if="modal">
         <div class="row plist">
-            <div class="col-1"><input type="checkbox" :id=item.uuid class="checkbox"></div>
-            <div class="col">
+            <div class="col-sm-5">
                 {{item.name}}
             </div>
-            <div class="col-1">
+            <div class="col-sm-1">
                 {{bags.length}}
             </div>
-            <div class="col-3">
+            <div class="col-sm-2">
                 {{item.created_at}}
             </div>
-            <div class="col-2 listActionItems">
+            <div class="col-sm-3 listActionItems">
                 <i class="fas fa-list cursor-pointer" @click="onClick('/ingest/offline_storage/'+item.id)"></i>
                 <i class="fas fa-tags"></i>&nbsp;
                 <i class="fas fa-trash-alt"></i>&nbsp;
             </div>
-            <div class="col-2 piqlIt" v-on:click="piqlIt">&nbsp;</div>
+            <div class="col-sm-1 piqlIt" v-on:click="piqlIt">&nbsp;</div>
         </div>
     </div>
 </template>

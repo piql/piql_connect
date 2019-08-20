@@ -4,9 +4,13 @@
             {{$t('access.browse.selectHolding')}}
         </label>
         <select id="holdingPicker" class="form-control selectpicker" v-bind:value="state" v-on:change="holdingChanged">
-            <option>Space Exploration</option>
-            <option>Customer relations</option>
-            <option>Attic</option>
+            <option>Forsvarsmuseet</option>
+            <option>Bergenhus</option>
+            <option>Hjemmefrontmuseet</option>
+            <option>Luftforsvarsmuseet</option>
+            <option>Marinemuseet</option>
+            <option>Oscarsborg</option>
+            <option>Rustkammeret</option>
         </select>
     </div>
 
@@ -18,7 +22,7 @@ export default {
     },
     data() {
         return {
-            state: "Space Exploration"
+            state: "Forsvarsmuseet"
         }
     },
     methods: {

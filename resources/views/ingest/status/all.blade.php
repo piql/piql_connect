@@ -10,6 +10,6 @@
 
 @section('content')
     <div class="contentContainer">
-        <job-list :job-list-url="'/api/v1/ingest/offline_storage/archive'"/>
+        <status-list :job-list-url="'/api/v1/ingest/offline_storage/archive'"/>
     </div>
 @endsection

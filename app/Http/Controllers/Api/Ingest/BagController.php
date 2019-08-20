@@ -47,6 +47,9 @@ class BagController extends Controller
     public function store(Request $request)
     {
 
+        //TODO:  OJ! Her har vi brutt alt av regler for RESTful...
+        //POST/store må alltid opprette ny bag. Denne logikken må nok på klientsiden!
+
         $bag = \App\Bag::query(\App\User::first()->settings->bags)->where('status', '=', 'created')->first();
 
         $bagName = trim($request->bagName);
