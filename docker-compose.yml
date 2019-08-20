@@ -1,14 +1,17 @@
 version: '3.6'
 services:
-    web:
-        build:
-            context: ./
-            dockerfile: deploy/web.docker
-        volumes:
-            - ./:/var/www
-        ports:
-            - "8080:80"
-        links:
+    nginx:
+      image:  nginx
+      restart: unless-stopped
+      tty: true
+      ports:
+        - "80:8040"
+        - "443:8443"
+      volumes:
+            - ./public:/var/www/html
+            - ./nginx/conf.d/:/etc/nginx/conf.d/
+            #TODO: - ./nginx/ssl/:/etc/nginx/ssl/
+       links:
             - app
     app:
         build:
@@ -16,7 +19,7 @@ services:
             context: ./
             dockerfile: deploy/app.docker
         volumes:
-            - ./:/var/www
+            - "./:/var/www"
         links:
             - database
             - cache
@@ -30,8 +33,12 @@ services:
         environment:
             - "MYSQL_ROOT_PASSWORD=secret"
             - "MYSQL_DATABASE=connect"
+            - "MYSQL_USER=connectdbuser"
+            - "MYSQL_PASSWORD=AeJua4le"
         ports:
             - "33061:3306"
+        volumes:
+            - ./storage/db:/var/lib/mysql
     cache:
         image: redis
         ports:
