@@ -103,9 +103,9 @@ export default {
                             'bagId' : uploadToBagId,
                         }).then( () => {
                             console.log("Upload of " + name + " with id" + id + " completed.");
-                            if( this.bag.id == uploadToBagId ){
-                                this.files = axios.get("/api/v1/ingest/bags/"+uploadToBagId+"/files");
-                            }
+                            this.createBag("", this.userId).then( (data)=>{
+                                this.bag = data;
+                            });
                         });
                     }
                 }
@@ -114,7 +114,6 @@ export default {
         return {
             uploader: uploader,
             bag: {},
-            files: {},
             userId: '',
             processDisabled: true,
             fileInputDisabled: false,
@@ -192,7 +191,7 @@ export default {
     },
     props: {
         button: Object
-    }
+    },
 
 };
 </script>

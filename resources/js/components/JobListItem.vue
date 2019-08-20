@@ -2,7 +2,7 @@
     <div v-if="modal">
         <div class="row plist">
             <div class="col-1"><input type="checkbox" :id=item.uuid class="checkbox"></div>
-            <div class="col">
+            <div class="col-3">
                 {{item.name}}
             </div>
             <div class="col-1">
