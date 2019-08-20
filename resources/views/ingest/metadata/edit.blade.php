@@ -13,127 +13,133 @@
 @section('content')
     <!-- for future use -->
     <em>{{__('ingest.metadata.editFile.ingress')}}</em>
-    <div>
+    <!--div>
         <a href="{{ URL::previous() }}">
             <i class="breadcrumbs noTextTransform">&lt;&lt; Back</i>
         </a>
-    </div>
+    </div-->
 
     <div class="container-fluid">
-        <div class="row"><h4 class="col-sm-2 mr-4">{{__('ingest.metadata.editFile.fileName')}}:</h4><h4 class="col"> {{ $file->filename}}</h4></div>
+        <form class="form">
         <div class="row">
-            <div class="col-sm-5">
+            <p class="col-sm-2 mr-4 mt-2">
+                {{__('ingest.metadata.editFile.fileName')}}:</p>
+            <em class="col"> {{ $file->filename}}</em>
+        </div>
+
+        <div class="row">
                 <label for="m_title">Title</label>
-                <input type="text" id="m_title">
+            <div class="col-sm-7">
+                <input type="text" class="form-control" id="m_title">
             </div>
         </div>
 
         <div class="row">
-            <div class="col-sm-5">
                 <label for="m_author">Author</label>
-                <input type="text" id="m_author">
+            <div class="col-sm-7">
+                <input type="text" class="form-control" id="m_author">
             </div>
         </div>
 
         <div class="row">
-            <div class="col-sm-5">
                 <label for="m_subject">Subject</label>
-                <input type="text" id="m_subject">
+            <div class="col-sm-7">
+                <input type="text" class="form-control" id="m_subject">
             </div>
         </div>
 
         <div class="row">
-            <div class="col-sm-5">
                 <label for="m_description">Description</label>
-                <input type="text" id="m_description">
+            <div class="col-sm-7">
+                <input type="text" class="form-control" id="m_description">
             </div>
         </div>
 
 
         <div class="row">
-            <div class="col-sm-5">
                 <label for="m_publisher">Publisher</label>
-                <input type="text" id="m_publisher">
+            <div class="col-sm-7">
+                <input type="text" class="form-control" id="m_publisher">
             </div>
         </div>
 
 
         <div class="row">
-            <div class="col-sm-5">
                 <label for="m_date">Date</label>
-                <input type="text" id="m_date">
+            <div class="col-sm-7">
+                <input type="text" class="form-control" id="m_date">
             </div>
         </div>
 
 
         <div class="row">
-            <div class="col-sm-5">
                 <label for="m_resourcetype">Resource type</label>
-                <input type="text" id="m_resourcetype">
+            <div class="col-sm-7">
+                <input type="text" class="form-control" id="m_resourcetype">
             </div>
         </div>
 
 
         <div class="row">
-            <div class="col-sm-5">
                 <label for="m_resourceidentifier">Resource Identifier</label>
-                <input type="text" id="m_resourceidentifier">
+            <div class="col-sm-7">
+                <input type="text" class="form-control" id="m_resourceidentifier">
             </div>
         </div>
 
 
         <div class="row">
-            <div class="col-sm-5">
                 <label for="m_language">Language</label>
-                <input type="text" id="m_language">
+            <div class="col-sm-7">
+                <input type="text" class="form-control" id="m_language">
             </div>
         </div>
 
 
         <div class="row">
-            <div class="col-sm-5">
                 <label for="m_otherContributor">Other Contributor</label>
-                <input type="text" id="m_othercontributor">
+            <div class="col-sm-7">
+                <input type="text" class="form-control" id="m_othercontributor">
             </div>
         </div>
 
 
         <div class="row">
-            <div class="col-sm-5">
                 <label for="m_format">Format</label>
-                <input type="text" id="m_format">
+            <div class="col-sm-7">
+                <input type="text" class="form-control" id="m_format">
             </div>
         </div>
 
 
         <div class="row">
-            <div class="col-sm-5">
                 <label for="m_source">Source</label>
-                <input type="text" id="m_source">
+            <div class="col-sm-7">
+                <input type="text" class="form-control" id="m_source">
             </div>
         </div>
 
 
         <div class="row">
-            <div class="col-sm-5">
                 <label for="m_relation">Relation</label>
-                <input type="text" id="m_relation">
+            <div class="col-sm-7">
+                <input type="text" class="form-control" id="m_relation">
             </div>
         </div>
 
 
         <div class="row">
-            <div class="col-sm-5">
                 <label for="m_coverage">Coverage</label>
-                <input type="text" id="m_coverage">
+            <div class="col-sm-7">
+                <input type="text" class="form-control" id="m_coverage">
             </div>
         </div>
 
 
         <div class="row">
-            <div class="col-sm-5">
                 <label for="m_Rights Management">Rights Management</label>
-                <input type="text" id="m_rightsmanagement">
+            <div class="col-sm-7">
+                <input type="text" class="form-control" id="m_rightsmanagement">
             </div>
         </div>
 
@@ -141,7 +147,7 @@
 
 
 
-        <div class="row mt-1">
+        <div class="row mt-0">
             <div class="col-sm-2">&nbsp;</div>
             <div class="col p-4">
             <a href="{{ URL::previous() }}">
@@ -150,6 +156,7 @@
             </a>
             </div>
         </div>
+        </form>
     </div>
 
 @endsection

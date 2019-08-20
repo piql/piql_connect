@@ -42,7 +42,7 @@
                 <fond-select @fondSelectionChanged="fondSelectionChanged"></fond-select>
             </div>
             <div class="col-sm-8">
-                <browser-list v-if="fondSelected"></browser-list>
+                <browser-list v-if="fondSelected" :selectedFond="lastSelectedFond"></browser-list>
                 <identity v-else></identity>
             </div>
             <div class="col-sm-2 mt-5">
@@ -58,6 +58,7 @@ export default {
     data() {
         return {
             fondSelectCounter: 0,
+            lastSelectedFond: "",
         }
     },
     computed: {
@@ -71,6 +72,7 @@ export default {
     methods: {
         fondSelectionChanged: function(fond, state) {
             if(state){
+                this.lastelectedFond = fond.data.name;
                 this.fondSelectCounter++;
                 console.log("fond selected name: "+ fond.data.name + " id: "+fond.data.id);
             }

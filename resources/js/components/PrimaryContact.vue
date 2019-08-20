@@ -6,10 +6,9 @@
         <div class="row">
             <div class="col m-0">
                 <ul class="contactItems m-0">
-                    <li>iKA Kongsberg</li>
-                    <li>John Doe</li>
-                    <li>+47 50 40 30 20</li>
-                    <li><a href="mailto:john.doe@ika.no">john@doe.ika.no</a></li>
+                    <li>Forsvarsmuseet</li>
+                    <li><i class="fas fa-phone-alt"></i> +47 23 09 35 82</li>
+                    <li>&nbsp;&nbsp;<a href="mailto:post.fmu@mil.no">post.fmu@mil.no</a></li>
                 </ul>
             </div> 
         </div>

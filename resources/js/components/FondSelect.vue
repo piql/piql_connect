@@ -42,22 +42,22 @@ export default {
 
             treeData: [
                 {
-                    "id": 1, "name": "Documents" , 
+                    "id": 1, "name": "Dokumenter" , 
                     "children": [
-                        {"id": 11, "name": "Neptune"}, 
-                        {"id": 12, "name": "Stratus"} ] 
+                        {"id": 11, "name": "Kjøretøy"}, 
+                        {"id": 12, "name": "Artilleri"} ] 
                 },
                 {
-                    "id": 2, "name": "Audio" , 
+                    "id": 2, "name": "Fotogafi" , 
                     "children": [
-                        {"id": 21, "name": "Moonlanding Recording"}, 
-                        {"id": 22, "name": "Ziggy Stardust by David Bowie"} ] 
+                        {"id": 21, "name": "Samband"}, 
+                        {"id": 22, "name": "Våpen"} ] 
                 },
                 {
-                    "id": 3, "name": "Video" , 
+                    "id": 3, "name": "Lyd" , 
                     "children": [
-                        {"id": 31, "name": "Moonlanding Footage"}, 
-                        {"id": 32, "name": "SpaceX - Of course I still love you"} ] 
+                        {"id": 31, "name": "Samband"}, 
+                        {"id": 32, "name": "Opptak"} ] 
                 }
 
             ]

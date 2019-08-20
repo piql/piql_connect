@@ -6,27 +6,28 @@
         <div class="row mb-1">
             <div class="col-sm-1">&nbsp;</div>
             <div class="col-sm-4 col-sm-push-3 identifier text-right">{{$t('access.browse.identityArea.identifier')}}</div> 
-            <div class="col-sm-4 col-sm-push-3">iKA Kongsberg</div>
+            <div class="col-sm-4 col-sm-push-3">Forsvarsmuseet</div>
         </div>
         <div class="row mb-1">
             <div class="col-sm-1">&nbsp;</div>
             <div class="col-sm-4 identifier text-right">{{$t('access.browse.identityArea.authorizedForm')}}</div>
-            <div class="col-sm-4">iKA Kongsberg</div>
+            <div class="col-sm-4">Forsvarsmuseet</div>
         </div>
         <div class="row mb-1">
             <div class="col-sm-1">&nbsp;</div>
             <div class="col-sm-4 identifier text-right">{{$t('access.browse.identityArea.parallelForms')}}</div>
             <div class="col-sm">
                 <ul class="identityList">
-                    <li>iKA Kongsberg</li>
-                    <li>Inter Kommunalt Arkiv Kongsberg</li>
+                    <li>Forsvarsmuseet</li>
+                    <li>Luftforsvarsmuseet</li>
+                    <li>Marinemuseet</li>
                 </ul>
             </div>
         </div>
         <div class="row">
             <div class="col-sm-1">&nbsp;</div>
             <div class="col-sm-4 identifier text-right">{{$t('access.browse.identityArea.otherForms')}}</div>
-            <div class="col-sm">iKA Kongsberg</div>
+            <div class="col-sm">Forsvarets museer</div>
         </div>
         <div class="row mb-5">
             <div class="col-sm-1">&nbsp;</div>
@@ -43,9 +44,9 @@
             <div class="col-sm-4 identifier text-right">{{$t('access.browse.contactArea.address')}}</div>
             <div class="col-sm">
                 <ul class="addressList">
-                    <li>iKA Kongsberg</li>
-                    <li>Gateadresse 1</li>
-                    <li>303 Kongsberg</li>
+                    <li>Forsvarsmuseet</li>
+                    <li>Myntgata 7-9</li>
+                    <li>0151 Oslo</li>
                 </ul>
             </div>
         </div>

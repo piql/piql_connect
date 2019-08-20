@@ -9,10 +9,10 @@
 
         </div>
         <div class="col" v-if="fileLocation === 'online'">
-            <browser-item  v-for="item in onlineItems" v-bind:item="item" v-bind:key="item.id"></browser-item>
+            <browser-item  v-for="item in onlineItems" :selectedFond="selectedFond" v-bind:item="item" v-bind:key="item.id"></browser-item>
         </div>
         <div class="col" v-if="fileLocation === 'offline'">
-            <browser-item-offline  v-for="item in offlineItems" v-bind:item="item" v-bind:key="item.id"></browser-item-offline>
+            <browser-item-offline  v-for="item in offlineItems" :selectedFond="selectedFond" v-bind:item="item" v-bind:key="item.id"></browser-item-offline>
         </div>
 
     </div>
@@ -34,6 +34,7 @@ export default {
             type: String,
             default: ""
         },
+        selectedFond: String
     },
 
     async mounted() {
