@@ -1,17 +1,16 @@
 version: '3.6'
 services:
     nginx:
-      image:  nginx
-      restart: unless-stopped
-      tty: true
-      ports:
-        - "80:8040"
-        - "443:8443"
-      volumes:
+        image:  nginx
+        restart: unless-stopped
+        tty: true
+        ports:
+            - "80:8040"
+            - "443:8443"
+        volumes:
             - ./public:/var/www/html
             - ./nginx/conf.d/:/etc/nginx/conf.d/
-            #TODO: - ./nginx/ssl/:/etc/nginx/ssl/
-       links:
+        links:
             - app
     app:
         build:
