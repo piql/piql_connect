@@ -8,3 +8,6 @@ RUN docker-php-ext-enable imagick mcrypt
 COPY .env.example .env
 
 WORKDIR /var/www
+
+EXPOSE 9000
+CMD ["php-fpm"]
