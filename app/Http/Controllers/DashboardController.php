@@ -17,7 +17,6 @@ class DashboardController extends Controller
         Log::info('showDashboard');
 
         $last12Months = $this->arrayRearrangeCurrentMonthLast(array_fill(0, 12, 0));
-        $last30days = $this->last30days();
         $fileFormatCount = $this->fileFormatsIngested(auth()->user());
         $onlineDataIngested = $this->onlineDataIngested(auth()->user());
         
@@ -32,120 +31,51 @@ class DashboardController extends Controller
         $monthlyOnlineAIPsAccessed = new TestChartJS;
         $monthlyOnlineDataIngested = new TestChartJS;
         $monthlyOnlineDataAccessed = new TestChartJS;
-        // $dailyOnlineAIPsIngested = new TestChartJS;
-        // $dailyOnlineAIPsAccessed = new TestChartJS;
-        // $dailyOnlineDataIngested = new TestChartJS;
-        // $dailyOnlineDataAccessed = new TestChartJS;
         $fileFormatsIngested = new TestChartJS;
-        
 
-        $monthlyOnlineAIPsIngested->title('Monthly AIPs Ingested')->load(url('api/v1/stats/monthlyOnlineAIPsIngested'));
-        $monthlyOnlineAIPsIngested->labels(array_keys($last12Months));
+
+        $monthlyOnlineAIPsIngested->labels(array_keys($last12Months))->load(url('api/v1/stats/monthlyOnlineAIPsIngested'));
         $monthlyOnlineAIPsIngested->options([
-            'legend' => [
-                'display' => false,
+            'title' => [
+                 'text' => 'Monthly AIPs Ingested'
             ],
-            'tooltips' => [
-                'mode' => 'index',
-                'intersect' => false
-            ]
         ]);
 
-        $monthlyOnlineAIPsAccessed->title('Monthly AIPs Accessed')->load(url('api/v1/stats/monthlyOnlineAIPsAccessed'));
-        $monthlyOnlineAIPsAccessed->labels(array_keys($last12Months));
+        $monthlyOnlineAIPsAccessed->labels(array_keys($last12Months))->load(url('api/v1/stats/monthlyOnlineAIPsAccessed'));
         $monthlyOnlineAIPsAccessed->options([
-            'legend' => [
-                'display' => false
-            ],
-            'tooltips' => [
-                'mode' => 'index',
-                'intersect' => false
+            'title' => [
+                 'text' => 'Monthly AIPs Accessed'
             ],
         ]);
 
-        $monthlyOnlineDataIngested->title('Monthly Data Ingested');
         $monthlyOnlineDataIngested->labels(array_keys($last12Months))->load(url('api/v1/stats/monthlyOnlineDataIngested'));
         $monthlyOnlineDataIngested->options([
-            'legend' => [
-                'display' => false
-            ],
-            'tooltips' => [
-                'mode' => 'index',
-                'intersect' => false
+            'title' => [
+                 'text' => 'Monthly Data Ingested'
             ],
         ]);
 
-        $monthlyOnlineDataAccessed->title('Monthly Data Accessed')->load(url('api/v1/stats/monthlyOnlineDataAccessed'));;
-        $monthlyOnlineDataAccessed->labels(array_keys($last12Months));
+        $monthlyOnlineDataAccessed->labels(array_keys($last12Months))->load(url('api/v1/stats/monthlyOnlineDataAccessed'));
         $monthlyOnlineDataAccessed->options([
-            'legend' => [
-                'display' => false
-            ],
-            'tooltips' => [
-                'mode' => 'index',
-                'intersect' => false
+            'title' => [
+                 'text' => 'Monthly Data Accessed'
             ],
         ]);
 
-        // $dailyOnlineAIPsIngested->title('Ingested AIPs Last 30 days')->load(url('api/v1/stats/dailyOnlineAIPsIngested'));
-        // $dailyOnlineAIPsIngested->labels($last30days);
-        // $dailyOnlineAIPsIngested->options([
-        //     'legend' => [
-        //         'display' => false
-        //     ],
-        //     'tooltips' => [
-        //         'mode' => 'index',
-        //         'intersect' => false
-        //     ],
-        // ]);
 
-        // $dailyOnlineAIPsAccessed->title('AIPs Accessed Last 30 Days')->load(url('api/v1/stats/dailyOnlineAIPsAccessed'));
-        // $dailyOnlineAIPsAccessed->labels($last30days);
-        // $dailyOnlineAIPsAccessed->options([
-        //     'legend' => [
-        //         'display' => false
-        //     ],
-        //     'tooltips' => [
-        //         'mode' => 'index',
-        //         'intersect' => false
-        //     ],
-        // ]);
-
-        // $dailyOnlineDataIngested->title('Data Ingested Last 30 Days')->load(url('api/v1/stats/dailyOnlineDataIngested'));
-        // $dailyOnlineDataIngested->labels($last30days);
-        // $dailyOnlineDataIngested->options([
-        //     'legend' => [
-        //         'display' => false
-        //     ],
-        //     'tooltips' => [
-        //         'mode' => 'index',
-        //         'intersect' => false
-        //     ],
-        // ]);
-
-        // $dailyOnlineDataAccessed->title('Date Accessed Last 30 Days')->load(url('api/v1/stats/dailyOnlineDataAccessed'));
-        // $dailyOnlineDataAccessed->labels($last30days);
-        // $dailyOnlineDataAccessed->options([
-        //     'legend' => [
-        //         'display' => false
-        //     ],
-        //     'tooltips' => [
-        //         'mode' => 'index',
-        //         'intersect' => false
-        //     ],
-        // ]);
-
-        $fileFormatsIngested->title('File formats Ingested');
         $fileFormatsIngested->labels(array_keys($fileFormatCount))->load(url('api/v1/stats/fileFormatsIngested'));
         $fileFormatsIngested->options([
+            'title' => [
+                 'text' => 'File formats Ingested'
+            ],
             'legend' => [
                 'display' => true,
                 'position' => 'right',
-                // 'onHover' => 'chartHoverHighlight()'
+                // 'onHover' => 
             ],
-            // 'tooltips' => [
-            //     'enabled' => true
-            // ],
+            'tooltips' => [
+                'mode' => 'point',
+            ],
             'animation' => [
                 'animateRotate' => true,
                 'animateScale' => true

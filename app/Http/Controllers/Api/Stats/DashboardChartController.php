@@ -15,13 +15,12 @@ class DashboardChartController extends Controller
         $monthlyOfflineAIPsIngested = array_map(function($val) { return round($val*(rand(1,9)/10)); }, $monthlyOnlineAIPsIngested);
         $chart = new TestChartJS;
         $dataset = $chart->dataset('Online AIPs Ingested', 'line', $monthlyOnlineAIPsIngested);
-        $dataset->backgroundColor(collect(['#8f005240']));
-        $dataset->color(collect(['#8f0052']));
-        $dataset = $chart->dataset('Offline AIPs Ingested', 'line', $monthlyOfflineAIPsIngested);
         $dataset->backgroundColor(collect(['#6a4b5b40']));
         $dataset->color(collect(['#6a4b5b']));
+        $dataset = $chart->dataset('Offline AIPs Ingested', 'line', $monthlyOfflineAIPsIngested);
+        $dataset->backgroundColor(collect(['#8f005240']));
+        $dataset->color(collect(['#8f0052']));
         return $chart->api();
-        //8f0052
     }
 
     public function monthlyOnlineDataIngestedEndpoint()
@@ -30,11 +29,11 @@ class DashboardChartController extends Controller
         $chart = new TestChartJS;
         $chart->labels(array_keys($monthlyOnlineDataIngested));
         $dataset = $chart->dataset('Online Data Ingested', 'line', array_values($monthlyOnlineDataIngested));
-        $dataset->backgroundColor(collect(['#d7c5cf40']));
-        $dataset->color(collect(['#b092a2']));
-        $dataset = $chart->dataset('Offline Data Ingested', 'line', array_map(function($val) { return round($val*(rand(1, 9)/10), 2); }, array_values($monthlyOnlineDataIngested)));
-        $dataset->backgroundColor(collect(['#b092a240']));
+        $dataset->backgroundColor(collect(['#6a4b5b40']));
         $dataset->color(collect(['#6a4b5b']));
+        $dataset = $chart->dataset('Offline Data Ingested', 'line', array_map(function($val) { return round($val*(rand(1, 9)/10), 2); }, array_values($monthlyOnlineDataIngested)));
+        $dataset->backgroundColor(collect(['#8f005240']));
+        $dataset->color(collect(['#8f0052']));
 
         return $chart->api();
     }
@@ -45,11 +44,11 @@ class DashboardChartController extends Controller
         $monthlyOfflineAIPsAccessed = [7, 4, 0, 0, 2, 5, 0, 8, 1, 11, 5, 7];
         $chart = new TestChartJS;
         $dataset = $chart->dataset('Online AIPs Accessed', 'line', $monthlyOnlineAIPsAccessed);
-        $dataset->backgroundColor(collect(['#f47c5740']));
-        $dataset->color(collect(['#f47c57']));
+        $dataset->backgroundColor(collect(['#6a4b5b40']));
+        $dataset->color(collect(['#6a4b5b']));
         $dataset = $chart->dataset('Offline AIPs Accessed', 'line', $monthlyOfflineAIPsAccessed);
-        $dataset->backgroundColor(collect(['#cc3b0d40']));
-        $dataset->color(collect(['#cc3b0d']));
+        $dataset->backgroundColor(collect(['#8f005240']));
+        $dataset->color(collect(['#8f0052']));
         return $chart->api();
     }
 
@@ -59,11 +58,11 @@ class DashboardChartController extends Controller
         $monthlyOfflineDataAccessed = [5, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 3];
         $chart = new TestChartJS;
         $dataset = $chart->dataset('Online AIPs Accessed', 'line', $monthlyOnlineDataAccessed);
-        $dataset->backgroundColor(collect(['#f47c5740']));
-        $dataset->color(collect(['#f47c57']));
+        $dataset->backgroundColor(collect(['#6a4b5b40']));
+        $dataset->color(collect(['#6a4b5b']));
         $dataset = $chart->dataset('Offline AIPs Accessed', 'line', $monthlyOfflineDataAccessed);
-        $dataset->backgroundColor(collect(['#cc3b0d40']));
-        $dataset->color(collect(['#cc3b0d']));
+        $dataset->backgroundColor(collect(['#8f005240']));
+        $dataset->color(collect(['#8f0052']));
 
         return $chart->api();
     }
@@ -113,66 +112,42 @@ class DashboardChartController extends Controller
         $fileFormatsIngested = $this->fileFormatsIngested(User::first());
         $chart = new TestChartJS;
         $chart->dataset('fileFormatsIngested', 'pie', array_values($fileFormatsIngested))->backgroundcolor(collect([
-            // '#000000',
-            // '#12070a',
-            // '#250e14',
-            // '#37151e',
-            // '#4a1c28',
-            // '#5c2332',
-            '#6f2a3c',
-            '#813147',
-            '#943851',
-            '#a63f5b',
-            '#aa405d',
-            '#b94665',
-            '#c05974',
-            '#c76b84',
-            '#ce7e93',
-            '#d590a2',
-            '#dca3b2',
-            '#e3b5c1',
-            '#eac8d1',
-            '#f1dae0',
-            '#f8edf0',
-            '#ffffff',
+            // Purple
+            '#4d324d',
+            '#5d3c5d',
+            '#6c476c',
+            '#7b517b',
+            '#8b5b8b',
+            '#9a659a',
+            '#a474a4',
+            '#ae84ae',
+            '#b893b8',
+            '#c3a2c3',
+            '#cdb2cd',
+            '#d7c1d7',
+            '#e1d1e1',
+            '#ebe0eb',
+            '#f5f0f5',
+
+            // Burgundy/pink
+            // '#6f2a3c',
+            // '#813147',
+            // '#943851',
+            // '#a63f5b',
+            // '#aa405d',
+            // '#b94665',
+            // '#c05974',
+            // '#c76b84',
+            // '#ce7e93',
+            // '#d590a2',
+            // '#dca3b2',
+            // '#e3b5c1',
+            // '#eac8d1',
+            // '#f1dae0',
+            // '#f8edf0',
+            // '#ffffff',
         ]));
-
-
-
-        // ->backgroundcolor(collect(['#8f0052', '#aa405d', '#c27484', '#deb3b9', '#d7c5cf', '#b092a2', '#6a4b5b', '#4d324d']));
         return $chart->api();
-
-
-
-// $white: white;
-// $black: black;
-// $red:  red;
-// $gray: grey;
-
-// $color_main_brand: #cc3b0d;
-// $color_background: '#4d324d';
-// $color_background_dark: #30242c;
-// $color_background_1: #6a4b5b;
-// $color_background_1_transparent: #6a4b5b40;
-// $color_background_2: #b092a2;
-// $color_background_2_transparent: #b092a240;
-// $color_background_3: #d7c5cf;
-// $color_background_3_transparent: #d7c5cf40;
-// $color_secondary: #8f0052;
-// $color_secondary_1: #aa405d;
-// $color_secondary_2: #c27484;
-// $color_secondary_2_transparent: #c2748440;
-// $color_secondary_3: #deb3b9;
-// $color_secondary_3_transparent: #deb3b940;
-// $color_signal: #ff194d;
-// $color_fill: #808080;
-// $color_fill_1: #ababab;
-// $color_fill_2: #c7c7c7;
-// $color_fill_2_transparent: #c7c7c740;
-// $color_fill_3: #e3e3e3;
-// $color_fill_3_transparent: #e3e3e340;
-// $color_fill_dark: #605f5f;
-// $color_fill_verydark: #403f3f;
     }
 
     private function monthlyOnlineAIPsIngested($user)
