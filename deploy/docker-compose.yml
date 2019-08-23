@@ -38,7 +38,7 @@ services:
 
   database:
     image: mariadb
-    user: "1000:1000"
+    user: ${HOST_USERID}:${HOST_GROUPID}
     environment:
       - "MYSQL_ROOT_PASSWORD=secret"
       - "MYSQL_DATABASE=connect"
@@ -47,7 +47,7 @@ services:
     ports:
       - "33061:3306"
     volumes:
-      - ./db:/var/lib/mysql
+      - piqlConnect-mariadb:/var/lib/mysql
     networks:
       - piqlConnect-net
 
@@ -57,9 +57,31 @@ services:
       - "63791:6379"
     networks:
       - piqlConnect-net
-       
+
+  composer:
+    image: composer
+    command: bash -c "composer update && composer install"
+    stdin_open: true
+    tty: true
+    user: ${HOST_USERID}:${HOST_GROUPID}
+    volumes:
+      - .././:/app
+ 
+  npm:
+    build:
+      network: host
+      context: ./
+      dockerfile: ./node/Dockerfile
+    stdin_open: true
+    tty: true
+    user: root
+    volumes:
+      - .././:/app
  
 networks:
   piqlConnect-net:
     driver: bridge
 
+volumes:
+  piqlConnect-mariadb:
+    external: true

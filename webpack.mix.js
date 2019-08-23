@@ -1,23 +1,5 @@
 const mix = require('laravel-mix');
 
-const WebpackShellPlugin = require('webpack-shell-plugin');
-
-mix.webpackConfig({
-    plugins: [
-        // Handles conversion of translations to .js on build 
-        new WebpackShellPlugin({ onBuildStart: ['php artisan vue-i18n:generate'], onBuildEnd: [] }),
-    ],
-    module: {
-        rules: [
-            {
-                // Matches all PHP or JSON files in `resources/lang` directory.
-                test: /resources(\|\/)lang.+\.(php|json)$/,
-                loader: 'babel'
-            },
-        ],
-    },
-});
-
 mix.js('resources/js/app.js', 'public/js');
 
 mix.js([
