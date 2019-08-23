@@ -6,6 +6,7 @@ use Illuminate\Contracts\Auth\UserProvider;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Auth\EloquentUserProvider;
 use Illuminate\Routing\UrlGenerator;
+use Illuminate\Support\Facades\Hash;
 use SoapClient;
 use App\User;
 use Log;
@@ -39,8 +40,23 @@ class PiqlUserProvider extends EloquentUserProvider implements UserProvider
 
 	public function validateCredentials(Authenticatable $user, array $credentials)
     {
-        $soapAuth = $this->soapClient($user->id, $credentials['password']);
-        return (isset($soapAuth["isAuthenticated"]) && $soapAuth["isAuthenticated"] );
+        if( env("AMU_SOAP_AUTH_ENABLED") == "true" )
+        {
+            $soapAuth = $this->soapClient($user->id, $credentials['password']);
+            return (isset($soapAuth["isAuthenticated"]) && $soapAuth["isAuthenticated"] );
+        }
+        else
+        { 
+            if(Hash::check( $credentials['password'], $user->password ))
+            {
+                Log::info('User `'.$user->username.'` authenticated against local database');
+                return true;
+            }
+        }
+
+        Log::notice('Authentication failure for user `'.$user->username.'`');
+
+        return false;
     }
 
     private function soapClient(string $userId, string $password)
@@ -62,11 +78,11 @@ class PiqlUserProvider extends EloquentUserProvider implements UserProvider
         {
             if( $soapReturn['isAuthenticated'] == false )
             {
-                Log::warn('AuthenticateUsers failed: Could not authenticate user : '.$soapReturn['reason']);
+                Log::notice('AMU authentication failure for user with id '.$userId.': '.$soapReturn['reason']);
             }
             else
             {
-                Log::info('User with id '.$userId.' authenticated against '.$acwsHostname.'.');
+                Log::info('User with id `'.$userId.'` authenticated against '.$acwsHostname.'.');
             }
         }
         else
