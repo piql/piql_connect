@@ -17,10 +17,10 @@ class Bag extends Model
     public static function boot()
     {
         parent::boot();
-        self::creating( function( $model ) 
+        self::creating( function( $model )
         {
             $model->uuid = Uuid::generate();
-            // $model->status = "created";
+            $model->status = "created";
         });
     }
 
@@ -32,6 +32,11 @@ class Bag extends Model
     public function files()
     {
         return $this->hasMany('App\File');
+    }
+
+    public function job()
+    {
+        return $this->belongsToMany('App\Job')->first();
     }
 
     public function storagePathCreated()

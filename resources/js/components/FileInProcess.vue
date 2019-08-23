@@ -1,17 +1,19 @@
 <template>
     <div>
         <div class="row plist">
-            <div class="col">
+            <div class="col-sm-5">
                 {{item.name}}
             </div>
-            <div class="col">
-                {{filename}} 
-            </div>
-            <div class="col">
+            <div class="col-sm-3">
                 {{item.created_at}}
             </div>
-            <div class="col">
-                Ingesting
+            <div class="col-sm-3">
+                {{ $t('ingest.processing.creatingStatus') }}
+            </div>
+            <div class="col-sm-1">
+                <div class="spinner-border" role="status">
+                  <span class="sr-only"></span>
+                </div>
             </div>
         </div>
     </div>
@@ -22,12 +24,10 @@ export default {
     async mounted() {
         console.log('FileInProcess component mounted.')
         let bagId = this.item.id;
-        this.filename = (await axios.get("/api/v1/ingest/bags/"+bagId+"/files")).data[0].filename;
     },
     data() {
         return {
             bag: {},
-            filename: "",
         };
     },
     props: {

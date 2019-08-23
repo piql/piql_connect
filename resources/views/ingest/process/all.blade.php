@@ -5,7 +5,7 @@
 @endsection
 
 @section('heading')
-    <i class="fas fa-hourglass-half titleIcon"></i>Processing
+    <i class="fas fa-hourglass-half titleIcon"></i>{{ __('Processing') }}
 @endsection
 
 @section('content')

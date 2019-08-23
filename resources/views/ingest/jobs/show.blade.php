@@ -5,11 +5,11 @@
 @endsection
 
 @section('heading')
-    <i class="fas fa-clipboard-check titleIcon"></i>STATUS
+    <i class="fas fa-suitcase titleIcon"></i>Bags
 @endsection
 
 @section('content')
     <div class="contentContainer">
-        <status-list :job-list-url="'/api/v1/ingest/offline_storage/archive'"/>
+        <bag-list :job-id="'{{ $jobId }}' "></bag-list>
     </div>
 @endsection
