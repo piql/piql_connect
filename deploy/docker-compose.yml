@@ -1,0 +1,65 @@
+version: '3.6'
+services:
+  app:
+    build:
+      network: host
+      context: ./
+      dockerfile: ./app/Dockerfile
+    volumes:
+      - ".././:/var/www"
+    links:
+      - database
+      - cache
+    environment:
+      - "DB_PORT=3306"
+      - "DB_HOST=database"
+      - "REDIS_PORT=6379"
+      - "REDIS_HOST=cache"
+    networks:
+      - piqlConnect-net
+           
+  nginx:
+    image:  nginx
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ../public:/var/www/public
+      - ./../storage:/var/www/storage
+      - ./../storage:/var/www/public/storage
+      - ./nginx/conf.d/:/etc/nginx/conf.d/
+      - ./nginx/ssl/:/etc/nginx/ssl/
+    links:
+      - app
+    networks:
+      - piqlConnect-net
+
+  database:
+    image: mariadb
+    user: "1000:1000"
+    environment:
+      - "MYSQL_ROOT_PASSWORD=secret"
+      - "MYSQL_DATABASE=connect"
+      - "MYSQL_USER=connectdbuser"
+      - "MYSQL_PASSWORD=AeJua4le"
+    ports:
+      - "33061:3306"
+    volumes:
+      - ./db:/var/lib/mysql
+    networks:
+      - piqlConnect-net
+
+  cache:
+    image: redis
+    ports:
+      - "63791:6379"
+    networks:
+      - piqlConnect-net
+       
+ 
+networks:
+  piqlConnect-net:
+    driver: bridge
+

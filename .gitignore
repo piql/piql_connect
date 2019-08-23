@@ -11,6 +11,7 @@ yarn-error.log
 /resources/js/vue-i18n-locales.generated.js
 package-lock.json
 /nbproject
+/deploy/db/*
 
 *~
 tags
