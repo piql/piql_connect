@@ -9,13 +9,62 @@ use App\User;
 
 class DashboardChartController extends Controller
 {
+    private $color_cards = '#4d324d';
+    private $color_chart_line_outside = '#6a4b5b';
+    private $color_chart_line_outside_background = '#6a4b5b40';
+    private $color_chart_line_inside = '#8f0052';
+    private $color_chart_line_inside_background = '#8f005240';
+
+    // Purple
+    private $color_chart_pie = [
+        '#4d324d',
+        '#5d3c5d',
+        '#6c476c',
+        '#7b517b',
+        '#8b5b8b',
+        '#9a659a',
+        '#a474a4',
+        '#ae84ae',
+        '#b893b8',
+        '#c3a2c3',
+        '#cdb2cd',
+        '#d7c1d7',
+        '#e1d1e1',
+        '#ebe0eb',
+        '#f5f0f5',
+    ];
+
+    // Burgundy/pink
+    // private $color_chart_pie = [
+    //     '#6f2a3c',
+    //     '#813147',
+    //     '#943851',
+    //     '#a63f5b',
+    //     '#aa405d',
+    //     '#b94665',
+    //     '#c05974',
+    //     '#c76b84',
+    //     '#ce7e93',
+    //     '#d590a2',
+    //     '#dca3b2',
+    //     '#e3b5c1',
+    //     '#eac8d1',
+    //     '#f1dae0',
+    //     '#f8edf0',
+    //     '#ffffff',
+    // ];
+
     public function monthlyOnlineAIPsIngestedEndpoint()
     {
         $monthlyOnlineAIPsIngested = array_values($this->monthlyOnlineAIPsIngested(User::first()));
         $monthlyOfflineAIPsIngested = array_map(function($val) { return round($val*(rand(1,9)/10)); }, $monthlyOnlineAIPsIngested);
         $chart = new TestChartJS;
-        $chart->dataset('Online AIPs Ingested', 'line', $monthlyOnlineAIPsIngested);
-        $chart->dataset('Offline AIPs Ingested', 'line', $monthlyOfflineAIPsIngested);
+        $dataset = $chart->dataset('Online AIPs Ingested', 'line', $monthlyOnlineAIPsIngested);
+        $dataset->backgroundColor($this->color_chart_line_outside_background);
+        $dataset->color($this->color_chart_line_inside);
+        $dataset = $chart->dataset('Offline AIPs Ingested', 'line', $monthlyOfflineAIPsIngested);
+        $dataset->backgroundColor($this->color_chart_line_inside_background);
+        $dataset->color($this->color_chart_line_inside);
         return $chart->api();
     }
 
@@ -24,8 +73,12 @@ class DashboardChartController extends Controller
         $monthlyOnlineDataIngested = $this->monthlyOnlineDataIngested(User::first());
         $chart = new TestChartJS;
         $chart->labels(array_keys($monthlyOnlineDataIngested));
-        $chart->dataset('Online Data Ingested', 'line', array_values($monthlyOnlineDataIngested));
-        $chart->dataset('Offline Data Ingested', 'line', array_map(function($val) { return round($val*(rand(1, 9)/10), 2); }, array_values($monthlyOnlineDataIngested)));
+        $dataset = $chart->dataset('Online Data Ingested', 'line', array_values($monthlyOnlineDataIngested));
+        $dataset->backgroundColor($this->color_chart_line_outside_background);
+        $dataset->color($this->color_chart_line_inside);
+        $dataset = $chart->dataset('Offline Data Ingested', 'line', array_map(function($val) { return round($val*(rand(1, 9)/10), 2); }, array_values($monthlyOnlineDataIngested)));
+        $dataset->backgroundColor($this->color_chart_line_inside_background);
+        $dataset->color($this->color_chart_line_inside);
 
         return $chart->api();
     }
@@ -35,8 +88,12 @@ class DashboardChartController extends Controller
         $monthlyOnlineAIPsAccessed = [42, 65, 31, 45, 12, 78, 56, 36, 15, 14, 48, 66];
         $monthlyOfflineAIPsAccessed = [7, 4, 0, 0, 2, 5, 0, 8, 1, 11, 5, 7];
         $chart = new TestChartJS;
-        $chart->dataset('Online AIPs Accessed', 'line', $monthlyOnlineAIPsAccessed);
-        $chart->dataset('Offline AIPs Accessed', 'line', $monthlyOfflineAIPsAccessed);
+        $dataset = $chart->dataset('Online AIPs Accessed', 'line', $monthlyOnlineAIPsAccessed);
+        $dataset->backgroundColor($this->color_chart_line_outside_background);
+        $dataset->color($this->color_chart_line_inside);
+        $dataset = $chart->dataset('Offline AIPs Accessed', 'line', $monthlyOfflineAIPsAccessed);
+        $dataset->backgroundColor($this->color_chart_line_inside_background);
+        $dataset->color($this->color_chart_line_inside);
         return $chart->api();
     }
 
@@ -45,8 +102,13 @@ class DashboardChartController extends Controller
         $monthlyOnlineDataAccessed = [140, 89, 45, 15, 78, 143, 120, 110, 90, 20, 50, 74];
         $monthlyOfflineDataAccessed = [5, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 3];
         $chart = new TestChartJS;
-        $chart->dataset('Online AIPs Accessed', 'line', $monthlyOnlineDataAccessed);
-        $chart->dataset('Offline AIPs Accessed', 'line', $monthlyOfflineDataAccessed);
+        $dataset = $chart->dataset('Online AIPs Accessed', 'line', $monthlyOnlineDataAccessed);
+        $dataset->backgroundColor($this->color_chart_line_outside_background);
+        $dataset->color($this->color_chart_line_inside);
+        $dataset = $chart->dataset('Offline AIPs Accessed', 'line', $monthlyOfflineDataAccessed);
+        $dataset->backgroundColor($this->color_chart_line_inside_background);
+        $dataset->color($this->color_chart_line_inside);
+
         return $chart->api();
     }
 
@@ -94,7 +156,7 @@ class DashboardChartController extends Controller
     {
         $fileFormatsIngested = $this->fileFormatsIngested(User::first());
         $chart = new TestChartJS;
-        $chart->dataset('fileFormatsIngested', 'pie', array_values($fileFormatsIngested));
+        $chart->dataset('fileFormatsIngested', 'pie', array_values($fileFormatsIngested))->backgroundcolor($this->color_chart_pie);
         return $chart->api();
     }
 
