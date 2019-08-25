@@ -31,11 +31,18 @@ class CommitFilesToBagListener extends BagListener
      */
     public function _handle($event)
     {
-        $bag = $event->bag;
+        $bag = $event->bag->refresh();
         $files = $bag->files;
 
         $bagIt = new BagitUtil();
         // Create a bag
+        if(!$bag->files->count())
+        {
+            Log::error("Empty bag(".$bag->id.")");
+            event( new ErrorEvent ($bag) );
+            return;
+        }
+
         foreach ($files as $file)
         {
             $bagIt->addFile($file->storagePathCompleted(), $file->filename);

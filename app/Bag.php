@@ -89,7 +89,7 @@ class Bag extends Model
         self::creating( function( $model )
         {
             $model->uuid = Uuid::generate();
-            $model->status = "empty";
+            $model->status = "open";
         });
     }
 

@@ -3,7 +3,7 @@
 namespace App\Listeners;
 
 use App\Events\ErrorEvent;
-use App\Events\StartTransferToArchivematicaEvent;
+use App\Events\ArchivematicaIngestingEvent;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Suppoer\Facades\Storage;
