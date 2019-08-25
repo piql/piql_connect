@@ -114,7 +114,6 @@ class BagController extends Controller
             ->orWhere('status', '=', 'preparing files')
             ->orWhere('status', '=', 'processing')
             ->orWhere('status', '=', 'ready for file prepare')
-            ->orWhere('status', '=', 'ingesting')
             ->get());
     }
 
@@ -177,10 +176,15 @@ class BagController extends Controller
     public function commit($id)
     {
         $bag = Bag::find($id);
-        $bag->status = "ready for file prepare";
-        $bag->save();
-        Log::debug("emitting ProcessFilesEvent for bag with id ".$id);
-        event( new BagFilesEvent($id) );
+
+        try {
+            $bag->applyTransition('close');
+            Log::debug("emitting ProcessFilesEvent for bag with id " . $id);
+            event(new BagFilesEvent($bag));
+        } catch (BagTransitionException $e) {
+            abort(501, "Caught an exception closing bag with id " . $id . ". Exception: {$e}");
+            Log::debug("Caught an exception closing bag with id " . $id . ". Exception: {$e}");
+        }
     }
 
     public function piqlIt($id)

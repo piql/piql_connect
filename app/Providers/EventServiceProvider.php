@@ -2,9 +2,11 @@
 
 namespace App\Providers;
 
+use App\Events\ArchivematicaTransferringEvent;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
+use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 
 class EventServiceProvider extends ServiceProvider
@@ -22,13 +24,28 @@ class EventServiceProvider extends ServiceProvider
             \App\Listeners\CommitFilesToBagListener::class,
         ],
         \App\Events\BagCompleteEvent::class => [
-            \App\Listeners\SendBagToArchivematicaListener::class
+            \App\Listeners\SendBagToArchivematicaListener::class,
         ],
-        \App\Events\ReceivedStatusFromArchivematicaEvent::class => [
-            \App\Listeners\UpdateIngestStatusListener::class
+        \App\Events\InitiateTransferToArchivematicaEvent::class => [
+            \App\Listeners\InitiateTransferToArchivematicaListener::class
         ],
-        \App\Events\StartTransferToArchivematicaEvent::class => [
-            \App\Listeners\StartTransferToArchivematicaListener::class
+        \App\Events\ApproveTransferToArchivematicaEvent::class => [
+            \App\Listeners\ApproveTransferToArchivematicaListener::class
+        ],
+        \App\Events\IngestCompleteEvent::class => [
+            \App\Listeners\IngestCompleteListener::class
+        ],
+        \App\Events\ArchivematicaTransferringEvent::class => [
+            \App\Listeners\ArchivematicaTransferringListener::class
+        ],
+        \App\Events\ArchivematicaIngestingEvent::class => [
+            \App\Listeners\ArchivematicaIngestingListener::class
+        ],
+        \App\Events\IngestCompleteEvent::class => [
+            \App\Listeners\IngestCompleteListener::class
+        ],
+        \App\Events\ErrorEvent::class => [
+            \App\Listeners\ErrorListener::class
         ],
 
     ];
