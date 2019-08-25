@@ -3,15 +3,11 @@
         <label for="holdingPicker" class="col-form-label-sm">
             {{$t('access.browse.selectHolding')}}
         </label>
-        <select id="holdingPicker" class="form-control selectpicker" v-bind:value="state" v-on:change="holdingChanged">
-            <option>Forsvarsmuseet</option>
-            <option>Bergenhus</option>
-            <option>Hjemmefrontmuseet</option>
-            <option>Luftforsvarsmuseet</option>
-            <option>Marinemuseet</option>
-            <option>Oscarsborg</option>
-            <option>Rustkammeret</option>
-        </select>
+        <select v-model="selectedHolding" id="holdingPicker" class="form-control selectpicker" v-on:change="holdingChanged">
+          <option v-for="holding in holdings" v-bind:value="holding.value">
+            {{holding.name}}
+          </option>
+       </select>
     </div>
 
 </template>
@@ -22,19 +18,19 @@ export default {
     },
     data() {
         return {
-            state: "Forsvarsmuseet"
+            selectedHolding: this.initialSelectedHolding
         }
     },
     methods: {
         holdingChanged: function (event) {
-            this.$emit('holdingSelected', this.state);
+            this.$emit('holdingSelectionChanged', this.selectedHolding);
         }
     },
     props: {
-        holdingSelected: {
-            type: Function
-        }
+        initialSelectedHolding: String,
+        holdingSelected: Function,
+        holdings: Array
     }
-
 }
+
 </script>

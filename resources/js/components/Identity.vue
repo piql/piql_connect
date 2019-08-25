@@ -70,8 +70,9 @@ export default {
     },
 
     async mounted() {
-        //        let paginatedData = (await axios.get("/api/v1/customer/")).data;
+        /*let paginatedData = {}; //(await axios.get("/api/v1/customer/")).data;
         this.items = paginatedData.data;
+         */
     },
 }
 </script>
