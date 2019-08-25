@@ -12,6 +12,7 @@ use Response;
 use Illuminate\Support\Facades\Auth;
 use App\Events\BagFilesEvent;
 use Carbon\Carbon;
+use App\User;
 
 class BagController extends Controller
 {
@@ -35,6 +36,12 @@ class BagController extends Controller
     {
         //
         Log::debug("Bag create");
+    }
+
+    public function latest(Request $request)
+    {
+        $bag = User::first()->bags()->latest()->first(); //TODO: Authenticated user!
+        return Response::json($bag);
     }
 
     /**
