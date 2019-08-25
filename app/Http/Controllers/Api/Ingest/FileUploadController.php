@@ -45,6 +45,7 @@ class FileUploadController extends Controller
     {
         $file = new File();
         $file->fileName = $request->fileName;
+        $file->filesize = $request->fileSize;
         $file->uuid = pathinfo($request->result["name"])['filename'];
         $file->bag_id = $request->bagId;
         $file->save();

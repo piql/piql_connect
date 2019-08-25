@@ -93,10 +93,12 @@ export default {
                     onComplete: (id, name, response) => {
                         this.processDisabled = false;
                         let uploadToBagId = this.bag.id;
+                        let fileSize = this.getSize(id);
                         axios.post('/api/v1/ingest/fileUploaded', {
                             'fileName' : name,
                             'result' : response,
                             'bagId' : uploadToBagId,
+                            'fileSize': fileSize
                         }).then( () => {
                             if( this.bag.id == uploadToBagId ){
                                 axios.get("/api/v1/ingest/bags/"+uploadToBagId+"/files").then( (files) => {
