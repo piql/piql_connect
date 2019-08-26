@@ -1144,7 +1144,7 @@ input[type="file"] {
     background-color: $color_fill_3;
     width: calc(100% - 300px);
     float: left;
-    height: calc(100vh - 180px);
+    height: calc(100vh - 130px);
     padding: 30px 30px 0 30px;
     overflow-y: hidden;
 }
@@ -1965,8 +1965,9 @@ th {
 }
 
 .dashboard-card {
-    background: $color_main_brand;
+    background: $color_background;
 }
+
 
 .form-control {
     height: 3rem !important;

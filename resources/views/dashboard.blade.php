@@ -22,7 +22,7 @@
         <div class="col-sm-12">
             <div class="row">
                 <div class="col-sm-6">
-                    <h2 style="text-align: center;margin-bottom: 5px;">Ingest</h2>
+                    <!-- <h2 style="text-align: center;margin-bottom: 5px;">Ingest</h2> -->
                     <div>
                         <div class="row">
                             <div class="col-sm-6">
@@ -43,7 +43,7 @@
                     </div>
                 </div>
                 <div class="col-sm-6">
-                    <h2 style="text-align: center;margin-bottom: 5px;">Access</h2>
+                    <!-- <h2 style="text-align: center;margin-bottom: 5px;">Access</h2> -->
                     <div class="row">
                         <div class="col-sm-6">
                             {!! $monthlyOnlineAIPsAccessed->container() !!}
@@ -104,7 +104,7 @@
                                 <h1 style="color: white;text-align: center;padding-top: 50px;font-size: 300%">
                                     <strong>{{ $infoArray['offlinePagesCount'] }}</strong>
                                 </h1>
-                                <em style="text-align: center;position: absolute;left: 0;right: 0;bottom: 0;">Pages stored on film</em>
+                                <em style="color: white;text-align: center;position: absolute;left: 0;right: 0;bottom: 0;">Pages stored on film</em>
                             </div>
                         </div>
                     </div>
