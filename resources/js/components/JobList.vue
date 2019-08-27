@@ -10,7 +10,6 @@
         </div>
 
         <job-list-item v-for="item in items" v-bind:item="item" v-bind:key="item.id" :jobListUrl="jobListUrl" @piqlIt="piqlIt"/>
-        </form>
     </div>
 </template>
 

@@ -8,7 +8,7 @@
                 60 MiB
             </div>
             <div class="col-2 listActionItems">
-                <i class="fas fa-eye"></i>&nbsp;
+                <i class="fas fa-tags" @click="onClick()"></i>&nbsp;
                 <i class="fas fa-trash-alt"></i>
             </div>
         </div>
@@ -18,6 +18,11 @@
 <script>
 import axios from 'axios';
 export default {
+    methods: {
+        onClick() {
+            window.location = window.location+"/metadata/"+this.item.id+"/edit";
+        }
+    },
     async mounted() {
         console.log('Task component mounted.')
     },

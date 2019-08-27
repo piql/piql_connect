@@ -29,8 +29,13 @@ Route::group(['prefix' => 'v1' , 'middleware' => 'throttle:500,1','auth:web'], f
         Route::post('fileUploaded', 'Api\Ingest\FileUploadController@store');
         Route::get('uploaded/', 'Api\Ingest\FileUploadController@all');
         Route::get('uploaded/{id}', 'Api\Ingest\FileUploadController@show');
+
+        // todo: getNewBag
+        // todo: getOpenBags
+
         Route::post('bags', 'Api\Ingest\BagController@store');
         Route::patch('bags/{id}', 'Api\Ingest\BagController@update');
+        Route::get('bags/create', 'Api\Ingest\BagController@create');
         Route::get('bags', 'Api\Ingest\BagController@all');
         Route::get('processing', 'Api\Ingest\BagController@processing');
         Route::get('complete', 'Api\Ingest\BagController@complete');

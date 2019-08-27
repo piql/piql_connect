@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\Ingest;
 
+use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Storage;
@@ -12,7 +13,6 @@ use Response;
 use Illuminate\Support\Facades\Auth;
 use App\Events\BagFilesEvent;
 use Carbon\Carbon;
-use App\User;
 
 class BagController extends Controller
 {
@@ -60,9 +60,11 @@ class BagController extends Controller
         $bag = new Bag();
         $bag->name = $bagName;
         $bag->owner = $request->userId;
+
+
         if($bag->save()){
-            Log::info("Created bag with name ".$bagName." and id ".$bag->id);
-            return response()->json(['id' => $bag->id, 'name' => $bagName]);
+            Log::info("Created bag with name ".$bag->name." and id ".$bag->id);
+            return Response::json($bag->refresh());
         }
         abort(501, "Could not create bag with name ".$bagName." and owner ".$request->userId);
     }
@@ -108,7 +110,7 @@ class BagController extends Controller
             ->orWhere('status', '=', 'ingesting')
             ->get());
     }
-  
+
     public function all()
     {
         Log::debug("Bag all - needs pagination!");
@@ -143,7 +145,7 @@ class BagController extends Controller
             $bag->name = $request->bagName;
             $bag->save();
             $bag->fresh();
-            return Response::json($bag);
+            return response()->json(['id' => $bag->id, 'name' => $bag->name, 'files' => $bag->files->count()]);
         }
     }
 
@@ -158,7 +160,7 @@ class BagController extends Controller
         Log::debug("Bag destroy");
         //
     }
-    
+
     /**
      * Commit the bag to archivematica
      *
@@ -167,10 +169,18 @@ class BagController extends Controller
      */
     public function commit($id)
     {
-        Log::debug("emitting ProcessFilesEvent for bag with id ".$id);
-        event( new BagFilesEvent($id) );
+        $bag = Bag::find($id);
+
+        try {
+            $bag->applyTransition('close');
+            Log::debug("emitting ProcessFilesEvent for bag with id " . $id);
+            event(new BagFilesEvent($bag));
+        } catch (BagTransitionException $e) {
+            abort(501, "Caught an exception closing bag with id " . $id . ". Exception: {$e}");
+            Log::debug("Caught an exception closing bag with id " . $id . ". Exception: {$e}");
+        }
     }
-    
+
     public function piqlIt($id)
     {
         $bag = Bag::find($id);

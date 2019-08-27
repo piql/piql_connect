@@ -3,19 +3,16 @@
 namespace App\Listeners;
 
 use App\Events\BagCompleteEvent;
-use App\Events\ReceivedStatusFromArchivematicaEvent;
+use App\Events\InitiateTransferToArchivematicaEvent;
 use App\Events\StartTransferToArchivematicaEvent;
-use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Support\Facades\Storage;
-use League\Flysystem\Filesystem;
-use League\Flysystem\Sftp\SftpAdapter;
 use Log;
-use App\Bag;
+use Illuminate\Support\Facades\Storage;
 
 
-class SendBagToArchivematicaListener implements ShouldQueue
+class SendBagToArchivematicaListener extends BagListener
 {
+    protected $state = "move_to_outbox";
     private $destination;
     /**
      * Create the event listener.
@@ -33,15 +30,14 @@ class SendBagToArchivematicaListener implements ShouldQueue
      * @param  BagCompleteEvent  $event
      * @return void
      */
-    public function handle(BagCompleteEvent $event)
+    public function _handle($event)
     {
         Log::debug("Handling BagCompleteEvent");
         $bag = $event->bag;
-        $sourceFile = $bag->storagePathCreated();
-        $this->destination->put( 'ss-location-data/'.$bag->zipBagFileName(), fopen($sourceFile, 'r+'));
 
-        $bag->status = "processing";
-        $bag->save();
-        event( new StartTransferToArchivematicaEvent( $bag ) );
+        $sourceFile = $bag->storagePathCreated();
+        $this->destination->put( $bag->zipBagFileName(), fopen($sourceFile, 'r+'));
+
+        event( new InitiateTransferToArchivematicaEvent( $bag ) );
     }
 }

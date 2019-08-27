@@ -169,14 +169,15 @@ export default {
     async mounted() {
         this.userId = (await axios.get("/api/v1/system/currentUser")).data;
         this.bag = (await axios.get("/api/v1/ingest/bags/latest")).data;
-        if(this.bag.status === "created")
+        if(this.bag !== undefined && this.bag.status === "open")
         {
-            this.files = (await axios.get('/api/v1/ingest/bags/'+this.bag.id+'/files')).data;
+            this.files = (await axios.get('/api/v1/ingest/bags/' + this.bag.id + '/files')).data;
         }
         else
         {
-            this.bag = (await this.createBag("", this.userId)).data;
+            this.bag = (await this.createBag("", this.userId));
         }
+
         if(this.files)
         {
             this.processDisabled = false;
