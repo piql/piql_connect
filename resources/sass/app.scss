@@ -24,6 +24,7 @@ $color_secondary_3: #deb3b9;
 $color_secondary_3_transparent: #deb3b940;
 $color_signal: #ff194d;
 $color_fill: #808080;
+$color_fill_0: #f0f0f0;
 $color_fill_1: #ababab;
 $color_fill_2: #c7c7c7;
 $color_fill_2_transparent: #c7c7c740;
@@ -333,13 +334,22 @@ a {
     background: white;
 }
 
+.upload-widget-back {
+    background: $color_fill_0;
+}
+
+.file-widget-back {
+    background: $color_fill_0;
+}
+
+
 .linked {
     border-bottom: 1px dashed $black;
     color: $black;
 }
 
 .plistHeader {
-    background-color: $color_fill_3;
+    background-color: $color_fill_0;
     padding: 15px;
     font-family: $font_open_sans_bold;
     font-size: 12px;
@@ -349,7 +359,7 @@ a {
 
 .listActionItems {
     color: $color_signal;
-    font-size: 20px;
+    font-size: 28px;
 }
 .list {
     position: relative;
@@ -832,9 +842,8 @@ input[type="file"] {
 #customerLogo {
     position: absolute;
     left: 350px;
-    top: 60px;
-    max-height: 100px;
-    max-width: 100px;
+    top: 15px;
+    max-height: 160px;
 }
 #piqlOptions {
     max-height: 110px;
@@ -1144,7 +1153,7 @@ input[type="file"] {
     background-color: $color_fill_3;
     width: calc(100% - 300px);
     float: left;
-    height: calc(100vh - 180px);
+    height: calc(100vh - 130px);
     padding: 30px 30px 0 30px;
     overflow-y: hidden;
 }
@@ -1218,7 +1227,7 @@ input[type="file"] {
     }
 }
 .fine-uploader-dropzone-container {
-    width: 80%;
+    width: 95%;
     //Instead of the line below you could use @include border-radius($radius, $vertical-radius)
     border-radius: 20px;
     background-color: $white;
@@ -1965,8 +1974,9 @@ th {
 }
 
 .dashboard-card {
-    background: $color_main_brand;
+    background: $color_background;
 }
+
 
 .form-control {
     height: 3rem !important;
@@ -2062,4 +2072,14 @@ input[type=text] {
 
 .top-active {
     color: $color_main_brand !important;
+}
+
+.w-95 {
+    width: 95% !important;
+}
+
+.hover-hand {
+    &:hover {
+        cursor: pointer;
+    }
 }

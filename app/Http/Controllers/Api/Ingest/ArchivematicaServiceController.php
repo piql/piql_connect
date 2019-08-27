@@ -23,9 +23,9 @@ class ArchivematicaServiceController extends Controller
         $this->apiClient = new Guzzle([
             'base_uri' => $base_uri,
             'headers' => [
-                'Authorization' => 'ApiKey '.$service->api_token, 
+                'Authorization' => 'ApiKey '.$service->api_token,
                 'Content-Type' => 'application/json',
-            ] 
+            ]
         ]);
     }
     /**
@@ -74,10 +74,9 @@ class ArchivematicaServiceController extends Controller
                 "paths[]" => $paths,
                 "row_ids[]" => ""
             ];
-        $request = $this->apiClient->post('transfer/start_transfer/', 
+        $request = $this->apiClient->post('transfer/start_transfer/',
             ['form_params' => $formData]
         );
-
         return response( $request->getBody(), $request->getStatusCode() );
     }
 
@@ -91,17 +90,17 @@ class ArchivematicaServiceController extends Controller
                 "type" => "zipped bag",
                 "directory" => $bag->zipBagFileName(),
             ];
-        $request = $this->apiClient->post('transfer/approve/', 
+        $request = $this->apiClient->post('transfer/approve/',
             ['form_params' => $formData]
         );
 
         return response( $request->getBody(), $request->getStatusCode() );
     }
 
- 
+
     /**
-     * Get a list of ingests 
-     * 
+     * Get a list of ingests
+     *
      * @return \Illuminate\Http\Response
      */
     public function ingestStatus()

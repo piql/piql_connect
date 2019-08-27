@@ -5,7 +5,7 @@
 @endsection
 
 @section('heading')
-    <i class="far fa-clock titleIcon"></i>Job list
+    <i class="far fa-clock titleIcon"></i>{{ __('ingest.offlineStorage') }}
 @endsection
 
 @section('content')

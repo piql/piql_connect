@@ -1,30 +1,15 @@
 <template>
-    <div>
-        <form>
-        <div class="row listFilter">
-                    <label for="fromDate">{{$t('ingest.taskList.from')}}</label>
-                    <input type="date" name="fromDate" placeholder="DDMMYY">
-                    <label for="toDate">{{$t('ingest.taskList.to')}}</label>
-                    <input type="date" name="toDate" placeholder="DDMMYY">
-                    <select name="status">
-                        <option style="display: none;" disabled="" selected="">{{$t('ingest.taskList.statusFilter')}}</option>
-                        <option>{{$t('ingest.taskList.uploadingFilter')}}</option>
-                        <option>{{$t('ingest.taskList.processingFilter')}}</option>
-                    </select>
-                    <input type="search" :placeholder="$t('Search')">
-        </div>
-        <br/>
+    <div class="container-fluid">
+        <ingest-filter-search></ingest-filter-search>
         <div class="row plistHeader">
-            <div class="col-1"><input type="checkbox" class="checkbox" id="allSips"></div>
-            <div class="col-3">Job</div>
-            <div class="col-1">Bags</div>
-            <div class="col-3">{{$t('ingest.taskList.ingestDate')}}</div>
-            <div class="col-2 listActionItems">&nbsp;</div>
-            <div class="col-2 ">&nbsp;</div>
+            <div class="col-sm-5">{{$t('ingest.offlineStorage.jobName')}}</div>
+            <div class="col-sm-1">{{$t('ingest.offlineStorage.numberOfAips')}}</div>
+            <div class="col-sm-2">{{$t('ingest.offlineStorage.creationDate')}}</div>
+            <div class="col-sm-3 listActionItems">&nbsp;</div>
+            <div class="col-sm-1 ">&nbsp;</div>
         </div>
 
         <job-list-item v-for="item in items" v-bind:item="item" v-bind:key="item.id" :jobListUrl="jobListUrl" @piqlIt="piqlIt"/>
-        </form>
     </div>
 </template>
 

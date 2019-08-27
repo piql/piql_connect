@@ -12,9 +12,12 @@ yarn-error.log
 package-lock.json
 /nbproject
 .idea/
+/deploy/db/*
 
 *~
 tags
+tags.lock
+tags.temp
 [._]*.s[a-v][a-z]
 [._]*.sw[a-p]
 [._]s[a-rt-v][a-z]

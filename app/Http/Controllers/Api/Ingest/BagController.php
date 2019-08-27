@@ -38,6 +38,12 @@ class BagController extends Controller
         Log::debug("Bag create");
     }
 
+    public function latest(Request $request)
+    {
+        $bag = User::first()->bags()->latest()->first(); //TODO: Authenticated user!
+        return Response::json($bag);
+    }
+
     /**
      * Store a newly created resource in storage.
      *
@@ -46,32 +52,19 @@ class BagController extends Controller
      */
     public function store(Request $request)
     {
-
-        $bag = \App\Bag::query(\App\User::first()->settings->bags)->where('status', '=', 'open')->first();
-
         $bagName = trim($request->bagName);
-
-        if($bag == null) {
-            $bag = new Bag();
-            if(empty($bagName))
-            {
-                $bagName = Carbon::now()->format("YmdHis");
-            }
-            $bag->owner = $request->userId;
-        }
-
-        if(!empty($bagName))
+        if(empty($bagName))
         {
-            if($bag->name != $bagName)
-            {
-                $bag->name = $bagName;
-            }
+            $bagName = Carbon::now()->format("YmdHis");
         }
+        $bag = new Bag();
+        $bag->name = $bagName;
+        $bag->owner = $request->userId;
 
 
         if($bag->save()){
             Log::info("Created bag with name ".$bag->name." and id ".$bag->id);
-            return response()->json(['id' => $bag->id, 'name' => $bag->name, 'files' => $bag->files->count()]);
+            return Response::json($bag->refresh());
         }
         abort(501, "Could not create bag with name ".$bagName." and owner ".$request->userId);
     }
@@ -114,6 +107,7 @@ class BagController extends Controller
             ->orWhere('status', '=', 'preparing files')
             ->orWhere('status', '=', 'processing')
             ->orWhere('status', '=', 'ready for file prepare')
+            ->orWhere('status', '=', 'ingesting')
             ->get());
     }
 

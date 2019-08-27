@@ -14,5 +14,21 @@ class TestChartJS extends Chart
     public function __construct()
     {
         parent::__construct();
+
+        return $this->options([
+            'legend' => [
+                'display' => false,
+            ],
+            'tooltips' => [
+                'mode' => 'index',
+                'intersect' => false
+            ],
+            'title' => [
+                 'display'    => true,
+                 'fontFamily' => 'Agenda',
+                 'fontSize'   => 18,
+                 'fontColor'  => '#605f5f',
+            ],
+        ]);
     }
 }
