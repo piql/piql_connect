@@ -103,10 +103,12 @@ class BagController extends Controller
     {
         Log::debug("Bags in processing - needs pagination!");
         return Response::json(Bag::latest()
-            ->where('status', '=', 'ingesting')
-            ->orWhere('status', '=', 'preparing files')
-            ->orWhere('status', '=', 'processing')
-            ->orWhere('status', '=', 'ready for file prepare')
+            ->where(  'status', '=', 'closed')
+            ->orWhere('status', '=', 'bag_files')
+            ->orWhere('status', '=', 'move_to_outbox')
+            ->orWhere('status', '=', 'initiate_transfer')
+            ->orWhere('status', '=', 'approve_transfer')
+            ->orWhere('status', '=', 'transferring')
             ->orWhere('status', '=', 'ingesting')
             ->get());
     }
