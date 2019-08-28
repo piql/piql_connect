@@ -47,7 +47,12 @@ class EventServiceProvider extends ServiceProvider
         \App\Events\ErrorEvent::class => [
             \App\Listeners\ErrorListener::class
         ],
-
+        \App\Events\ClearTransferStatusEvent::class => [
+            \App\Listeners\ClearTransferStatus::class
+        ],
+        \App\Events\ClearIngestStatusEvent::class => [
+            \App\Listeners\ClearIngestStatus::class
+        ],
     ];
 
     /**
