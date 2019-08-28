@@ -109,6 +109,17 @@ class ArchivematicaServiceController extends Controller
         return response( $request->getBody(), $request->getStatusCode() );
     }
 
+    public function transferHideStatus($id)
+    {
+        $request = $this->apiClient->delete("transfer/{$id}/delete/");
+        return response( $request->getBody(), $request->getStatusCode() );
+    }
+
+    public function ingestHideStatus($id)
+    {
+        $request = $this->apiClient->delete("ingest/{$id}/delete/");
+        return response( $request->getBody(), $request->getStatusCode() );
+    }
 
     /**
      * Show the form for creating a new resource.

@@ -44,4 +44,14 @@ class ArchivematicaClient
     {
         return json_decode($this->apiClient->post("transfer/approve/".$bagId)->getBody()->getContents());
     }
+
+    public function hideTransferStatus($uuid)
+    {
+        return json_decode($this->apiClient->delete("transfer/".$uuid)->getBody()->getContents());
+    }
+
+    public function hideIngestStatus($uuid)
+    {
+        return json_decode($this->apiClient->delete("ingest/".$uuid)->getBody()->getContents());
+    }
 }

@@ -37,7 +37,7 @@ class ArchivematicaIngestingListener  extends BagListener
     public function _handle($event)
     {
         $bag = $event->bag;
-        Log::info("Handling StartTransferToArchivematicaEvent for bag ".$bag->zipBagFileName()." with id: ".$bag->id);
+        Log::info("Handling ArchivematicaIngestingEvent for bag ".$bag->zipBagFileName()." with id: ".$bag->id);
 
         while(true)
         {

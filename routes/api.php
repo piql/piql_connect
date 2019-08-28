@@ -51,14 +51,16 @@ Route::group(['prefix' => 'v1' , 'middleware' => 'throttle:500,1','auth:web'], f
 
         Route::group(['prefix' => 'am'], function() {
             Route::get('instances', 'Api\Ingest\ArchivematicaServiceController@serviceInstances');
-                Route::group(['prefix' => 'transfer'], function () {
-                    Route::get('status' , 'Api\Ingest\ArchivematicaServiceController@transferStatus');
-                    Route::post('start/{id}', 'Api\Ingest\ArchivematicaServiceController@startTransfer');
-                    Route::post('approve/{id}', 'Api\Ingest\ArchivematicaServiceController@approveTransfer');
-                });
-                Route::group(['prefix' => 'ingest'], function () {
-                    Route::get('status' , 'Api\Ingest\ArchivematicaServiceController@ingestStatus');
-                });
+            Route::group(['prefix' => 'transfer'], function () {
+                Route::get('status' , 'Api\Ingest\ArchivematicaServiceController@transferStatus');
+                Route::post('start/{id}', 'Api\Ingest\ArchivematicaServiceController@startTransfer');
+                Route::post('approve/{id}', 'Api\Ingest\ArchivematicaServiceController@approveTransfer');
+                Route::delete('{id}' , 'Api\Ingest\ArchivematicaServiceController@transferHideStatus');
+            });
+            Route::group(['prefix' => 'ingest'], function () {
+                Route::get('status' , 'Api\Ingest\ArchivematicaServiceController@ingestStatus');
+                Route::delete('{id}' , 'Api\Ingest\ArchivematicaServiceController@ingestHideStatus');
+            });
         });
     });
 
