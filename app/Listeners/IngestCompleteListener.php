@@ -30,7 +30,7 @@ class IngestCompleteListener extends BagListener
      * @param  IngestCompleteEvent  $event
      * @return void
      */
-    public function handle($event)
+    public function _handle($event)
     {
         $bag = $event->bag;
         Job::currentJob($bag->owner)->bags()->toggle($bag);
