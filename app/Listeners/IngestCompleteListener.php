@@ -2,6 +2,7 @@
 
 namespace App\Listeners;
 
+use App\Events\ClearTmpFilesEvent;
 use App\Events\ClearTransferStatusEvent;
 use App\Events\ClearIngestStatusEvent;
 use App\Events\IngestCompleteEvent;
@@ -38,5 +39,6 @@ class IngestCompleteListener extends BagListener
 
         event( new ClearTransferStatusEvent($bag));
         event( new ClearIngestStatusEvent($bag));
+        event( new ClearTmpFilesEvent($bag));
     }
 }
