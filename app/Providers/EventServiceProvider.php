@@ -53,6 +53,9 @@ class EventServiceProvider extends ServiceProvider
         \App\Events\ClearIngestStatusEvent::class => [
             \App\Listeners\ClearIngestStatus::class
         ],
+        \App\Events\ClearTmpFilesEvent::class => [
+            \App\Listeners\ClearTmpFiles::class
+        ],
     ];
 
     /**

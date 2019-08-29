@@ -2,6 +2,7 @@
 
 namespace App\Listeners;
 
+use App\Events\ArchivematicaIngestingEvent;
 use App\Events\ErrorEvent;
 use App\Events\IngestCompleteEvent;
 use App\Events\StartTransferToArchivematicaEvent;
@@ -39,29 +40,27 @@ class ArchivematicaIngestingListener  extends BagListener
         $bag = $event->bag;
         Log::info("Handling ArchivematicaIngestingEvent for bag ".$bag->zipBagFileName()." with id: ".$bag->id);
 
-        while(true)
+        $currentIngestStatuses = $this->amClient->getIngestStatus();
+        foreach($currentIngestStatuses->results as $status)
         {
-            $currentIngestStatuses = $this->amClient->getIngestStatus();
-            foreach($currentIngestStatuses->results as $status)
+            if($status->name.".zip" == $bag->zipBagFileName() && $status->status == "COMPLETE")
             {
-                if($status->name.".zip" == $bag->zipBagFileName() && $status->status == "COMPLETE")
+                if($status->status == "COMPLETE")
                 {
-                    if($status->status == "COMPLETE")
-                    {
-                        Log::info("Ingest complete for SIP with bag id ".$bag->id);
-                        event(new IngestCompleteEvent($bag));
-                        return;
-                    } elseif ($status->status == "FAILED" || $status->status == "USER_INPUT" )
-                    {
-                        Log::error("Ingest failed for with bag id " . $bag->id);
-                        event(new ErrorEvent($bag));
-                        return;
-                    }
-
+                    Log::info("Ingest complete for SIP with bag id ".$bag->id);
+                    event(new IngestCompleteEvent($bag));
+                    return;
+                } elseif ($status->status == "FAILED" || $status->status == "USER_INPUT" )
+                {
+                    Log::error("Ingest failed for with bag id " . $bag->id);
+                    event(new ErrorEvent($bag));
+                    return;
                 }
+
             }
-            sleep(2);
         }
+
+        $this->delayedEvent(new ArchivematicaIngestingEvent($bag), now()->addSeconds(10) );
 
     }
 
