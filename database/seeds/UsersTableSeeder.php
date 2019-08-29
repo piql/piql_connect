@@ -19,6 +19,7 @@ class UsersTableSeeder extends Seeder
         $user->save();
 
         $found = App\User::where('username', '=', 'kare')->first();
+        $found ?? App\User::where('email', '=', 'kare.andersen@piql.com')->first();
         $user = $found ?? new App\User();
         $user->username = "kare";
         $user->password = Hash::make("kare");
@@ -36,4 +37,3 @@ class UsersTableSeeder extends Seeder
 
     }
 }
-//            'id' => '07da0453-857f-4645-92ac-9a3add6427cf',

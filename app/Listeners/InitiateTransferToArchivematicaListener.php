@@ -30,9 +30,16 @@ class InitiateTransferToArchivematicaListener extends BagListener
     public function _handle($event)
     {
         $bag = $event->bag;
-        Log::info("Handling StartTransferToArchivematicaEvent for bag ".$bag->zipBagFileName()." with id: ".$bag->id);
+        Log::info("Handling InitiateTransferToArchivematicaEvent for bag ".$bag->zipBagFileName()." with id: ".$bag->id);
 
-        $this->amClient->initiateTransfer($bag->id);
+        try{
+            $this->amClient->initiateTransfer($bag->id);
+        } catch(\Exception $e){
+            Log::error(" initiate transfer failed with  ".$e->getMessage());
+            return;
+        }
+
+
         event(new ApproveTransferToArchivematicaEvent($bag));
     }
 }

@@ -11,7 +11,7 @@ class ArchivematicaService extends Model
 {
     Use Uuids;
 
-    public $incrementing = false; /* Do not try to auto increment the id (uuid) */
+    public $incrementing = false;
     protected $table = 'archivematica_services';
     protected $fillable = [
         'id',

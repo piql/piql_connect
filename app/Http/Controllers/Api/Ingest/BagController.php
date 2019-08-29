@@ -95,13 +95,11 @@ class BagController extends Controller
 
     public function complete()
     {
-        Log::debug("Bags complete - needs pagination!");
         return Response::json(Bag::latest()->where('status', '=', 'complete')->get());
     }
 
     public function processing()
     {
-        Log::debug("Bags in processing - needs pagination!");
         return Response::json(Bag::latest()
             ->where(  'status', '=', 'closed')
             ->orWhere('status', '=', 'bag_files')

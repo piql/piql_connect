@@ -27,8 +27,7 @@ class SendBagToArchivematicaListener extends BagListener
     /**
      * Handle the event.
      *
-     * @param  BagCompleteEvent  $event
-     * @return void
+     * @param  BagCompleteEvent  $even     * @return void
      */
     public function _handle($event)
     {
@@ -36,8 +35,10 @@ class SendBagToArchivematicaListener extends BagListener
         $bag = $event->bag;
 
         $sourceFile = $bag->storagePathCreated();
-        $this->destination->put( $bag->zipBagFileName(), fopen($sourceFile, 'r+'));
-
+        $destinationFile = storage_path('am/ss-location-data')."/".$bag->zipBagFileName();
+        Log::debug("Uploading source file ".$sourceFile." to ".$destinationFile);
+        \File::copy($sourceFile, $destinationFile);
+        //$this->destination->put( $bag->zipBagFileName(), fopen($sourceFile, 'r+'));
         event( new InitiateTransferToArchivematicaEvent( $bag ) );
     }
 }

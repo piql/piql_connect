@@ -40,7 +40,7 @@ mix.styles([
 ], 'public/css/vendor.css').sourceMaps();
 
 mix.browserSync({
-	proxy: 'connect.local',
+	proxy: '127.0.0.1',
 	files: ['resources/**/*.*']
 });
 
