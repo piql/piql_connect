@@ -28,4 +28,16 @@ class BagListener implements ShouldQueue
     {
 
     }
+
+    public function delayedEvent($event, $when, $listenerClassName = null)
+    {
+        if(!$listenerClassName)
+        {
+            $listenerClassName = get_called_class();
+        }
+        dispatch(function () use ($listenerClassName, $event) {
+            $listener = new $listenerClassName();
+            $listener->handle($event);
+        })->delay($when);
+    }
 }
