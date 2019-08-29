@@ -7,6 +7,8 @@ services:
       dockerfile: ./app/Dockerfile
     volumes:
       - ".././:/var/www"
+      - "~/.am:/var/www/storage/am"
+    user: ${HOST_USERID}:${HOST_GROUPID}
     links:
       - database
       - cache
@@ -50,6 +52,7 @@ services:
       - piqlConnect-mariadb:/var/lib/mysql
     networks:
       - piqlConnect-net
+    command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci --init-connect='SET NAMES utf8mb4;' --innodb-flush-log-at-trx-commit=0
 
   cache:
     image: redis
