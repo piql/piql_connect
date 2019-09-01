@@ -14,6 +14,7 @@ class FondsApiTest extends TestCase
     private $testTitle1;
     private $owner_holding;
     private $testFondsData;
+    private $createdFondsId;
     /**
      * A basic feature test example.
      *
@@ -33,9 +34,20 @@ class FondsApiTest extends TestCase
 
     }
 
+    private function markFondsForRemoval($response)
+    {
+        $this->createdFondsId = $response->getData()->data->id;
+    }
+
     public function tearDown() : void
     {
         $this->owner_holding->delete();
+        if($this->createdFondsId){
+            $fonds = Fonds::find($this->createdFondsId);
+            if($fonds){
+                $fonds->delete();
+            }
+        }
         parent::tearDown();
     }
     public function test_can_get_list_of_fonds()
@@ -49,6 +61,7 @@ class FondsApiTest extends TestCase
     {
         $response = $this->post(route('preservation.fonds.store'), $this->testFondsData);
         $response->assertStatus(201);
+        $this->markFondsForRemoval($response);
     }
 
     public function test_when_creating_given_a_valids_fonds_was_posted_the_response_contains_a_valid_id()
@@ -57,6 +70,7 @@ class FondsApiTest extends TestCase
         $result = $response->getData();
         $model = Fonds::find($result->data->id);
         $this->assertTrue($model->title == $this->testTitle1);
+        $this->markFondsForRemoval($response);
     }
 
     public function test_when_creating_given_a_bad_title_it_responds_with_422()
@@ -73,7 +87,6 @@ class FondsApiTest extends TestCase
         $response->assertStatus(422);
         $content = $response->getContent();
         $this->assertContains('owner_holding', $content);
-
     }
 
 
