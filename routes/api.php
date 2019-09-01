@@ -49,6 +49,7 @@ Route::group(['prefix' => 'v1' , 'middleware' => 'throttle:500,1','auth:web'], f
         Route::get('offline_storage/pending/jobs', 'Api\Ingest\OfflineStorageController@jobs');
         Route::get('offline_storage/archive/jobs', 'Api\Ingest\OfflineStorageController@archiveJobs');
 
+
         Route::group(['prefix' => 'am'], function() {
             Route::get('instances', 'Api\Ingest\ArchivematicaServiceController@serviceInstances');
             Route::group(['prefix' => 'transfer'], function () {
@@ -62,6 +63,12 @@ Route::group(['prefix' => 'v1' , 'middleware' => 'throttle:500,1','auth:web'], f
                 Route::delete('{id}' , 'Api\Ingest\ArchivematicaServiceController@ingestHideStatus');
             });
         });
+    });
+
+    Route::group(['prefix' => 'preservation'], function() {
+        Route::apiResource('fonds', 'Api\Preservation\FondsController', [ 'as' => 'preservation' ]);
+        //Route::get('fonds', 'Api\Preservation\FondsController@index')->name('preservation.fonds');
+        //Route::post('fonds', 'Api\Preservation\FondsController@create')->name('preservation.fonds.create');
     });
 
     Route::group(['prefix' => 'stats'], function () {
