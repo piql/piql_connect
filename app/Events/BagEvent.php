@@ -1,16 +1,15 @@
 <?php
 
+
 namespace App\Events;
 
-use Illuminate\Broadcasting\Channel;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Broadcasting\PrivateChannel;
-use Illuminate\Broadcasting\PresenceChannel;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
-use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
+use \App\Bag;
 
-class ReceivedStatusFromArchivematicaEvent
+class BagEvent
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -21,7 +20,7 @@ class ReceivedStatusFromArchivematicaEvent
      *
      * @return void
      */
-    public function __construct($bag)
+    public function __construct(Bag $bag)
     {
         $this->bag = $bag;
     }

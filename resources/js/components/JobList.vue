@@ -1,7 +1,7 @@
 <template>
     <div class="container-fluid">
         <ingest-filter-search></ingest-filter-search>
-       <div class="row plistHeader">
+        <div class="row plistHeader">
             <div class="col-sm-5">{{$t('ingest.offlineStorage.jobName')}}</div>
             <div class="col-sm-1">{{$t('ingest.offlineStorage.numberOfAips')}}</div>
             <div class="col-sm-2">{{$t('ingest.offlineStorage.creationDate')}}</div>

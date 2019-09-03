@@ -11,6 +11,7 @@ class ArchivematicaService extends Model
 {
     Use Uuids;
 
+    public $incrementing = false;
     protected $table = 'archivematica_services';
     protected $fillable = [
         'id',
@@ -40,7 +41,7 @@ class ArchivematicaService extends Model
 
     public static function find($id)
     {
-        return self::all()->find($id); 
+        return self::all()->find($id);
     }
 
 }

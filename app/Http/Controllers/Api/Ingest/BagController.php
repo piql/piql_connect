@@ -38,6 +38,12 @@ class BagController extends Controller
         Log::debug("Bag create");
     }
 
+    public function latest(Request $request)
+    {
+        $bag = User::first()->bags()->latest()->first(); //TODO: Authenticated user!
+        return Response::json($bag);
+    }
+
     /**
      * Store a newly created resource in storage.
      *
@@ -46,35 +52,19 @@ class BagController extends Controller
      */
     public function store(Request $request)
     {
-
-        //TODO:  OJ! Her har vi brutt alt av regler for RESTful...
-        //POST/store må alltid opprette ny bag. Denne logikken må nok på klientsiden!
-
-        $bag = \App\Bag::query(\App\User::first()->settings->bags)->where('status', '=', 'created')->first();
-
         $bagName = trim($request->bagName);
-
-        if($bag == null) {
-            $bag = new Bag();
-            if(empty($bagName))
-            {
-                $bagName = Carbon::now()->format("YmdHis");
-            }
-            $bag->owner = $request->userId;
-        }
-
-        if(!empty($bagName))
+        if(empty($bagName))
         {
-            if($bag->name != $bagName)
-            {
-                $bag->name = $bagName;
-            }
+            $bagName = Carbon::now()->format("YmdHis");
         }
+        $bag = new Bag();
+        $bag->name = $bagName;
+        $bag->owner = $request->userId;
 
 
         if($bag->save()){
             Log::info("Created bag with name ".$bag->name." and id ".$bag->id);
-            return response()->json(['id' => $bag->id, 'name' => $bag->name, 'files' => $bag->files->count()]);
+            return Response::json($bag->refresh());
         }
         abort(501, "Could not create bag with name ".$bagName." and owner ".$request->userId);
     }
@@ -105,18 +95,18 @@ class BagController extends Controller
 
     public function complete()
     {
-        Log::debug("Bags complete - needs pagination!");
         return Response::json(Bag::latest()->where('status', '=', 'complete')->get());
     }
 
     public function processing()
     {
-        Log::debug("Bags in processing - needs pagination!");
         return Response::json(Bag::latest()
-            ->where('status', '=', 'ingesting')
-            ->orWhere('status', '=', 'preparing files')
-            ->orWhere('status', '=', 'processing')
-            ->orWhere('status', '=', 'ready for file prepare')
+            ->where(  'status', '=', 'closed')
+            ->orWhere('status', '=', 'bag_files')
+            ->orWhere('status', '=', 'move_to_outbox')
+            ->orWhere('status', '=', 'initiate_transfer')
+            ->orWhere('status', '=', 'approve_transfer')
+            ->orWhere('status', '=', 'transferring')
             ->orWhere('status', '=', 'ingesting')
             ->get());
     }
@@ -180,10 +170,15 @@ class BagController extends Controller
     public function commit($id)
     {
         $bag = Bag::find($id);
-        $bag->status = "ready for file prepare";
-        $bag->save();
-        Log::debug("emitting ProcessFilesEvent for bag with id ".$id);
-        event( new BagFilesEvent($id) );
+
+        try {
+            $bag->applyTransition('close');
+            Log::debug("emitting ProcessFilesEvent for bag with id " . $id);
+            event(new BagFilesEvent($bag));
+        } catch (BagTransitionException $e) {
+            abort(501, "Caught an exception closing bag with id " . $id . ". Exception: {$e}");
+            Log::debug("Caught an exception closing bag with id " . $id . ". Exception: {$e}");
+        }
     }
 
     public function piqlIt($id)

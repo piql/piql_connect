@@ -178,6 +178,7 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         App\Providers\PiqlAuthProvider::class,
+        App\Providers\CustomInflectionServiceProvider::class
 
     ],
 
