@@ -22,17 +22,25 @@ class Holding extends Model
    
     public static function findByParentUuid($parent_uuid)
     {
-        return Holding::where('parent_uuid', '=', $parent_uuid)->firstOrFail();
+        return Holding::where('parent_uuid', '=', $parent_uuid)->first();
+    }
+
+    public static function findByUuid($uuid)
+    {
+        return Holding::where('uuid', '=', $uuid)->first();
     }
 
     public function setParentUuidAttribute($value)
     {
-        if(Holding::findByParentUuid($value) == null)
+        if( !empty($value) )
         {
-            throw new Exception("The parent holding with uuid ".$value." does not exist.");
-        }
+            if( Holding::findByParentUuid($value) == null )
+            {
+                throw new \Exception("The parent holding with uuid ".$value." does not exist.");
+            }
 
-        $this->attributes['parent_uuid'] = $value;
+            $this->attributes['parent_uuid'] = $value;
+        }
     }
 
 }

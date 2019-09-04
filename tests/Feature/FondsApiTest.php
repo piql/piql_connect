@@ -15,15 +15,12 @@ class FondsApiTest extends TestCase
     private $owner_holding;
     private $testFondsData;
     private $createdFondsId;
-    /**
-     * A basic feature test example.
-     *
-     * @return void
-     */
+    private $holdingCount;
 
     public function setUp() : void
     {
         parent::setUp();
+        $this->holdingCount = Holding::count();
         $faker = Faker::create();
         $this->testTitle1 = $faker->slug(1);
         $this->owner_holding = Holding::create(['title' => 'FondsApiTestHolding'])->fresh();
@@ -31,7 +28,6 @@ class FondsApiTest extends TestCase
             'title' => $this->testTitle1,
             'owner_holding_uuid' => $this->owner_holding->uuid
         ];
-
     }
 
     private function markFondsForRemoval($response)
@@ -48,6 +44,7 @@ class FondsApiTest extends TestCase
                 $fonds->delete();
             }
         }
+        $this->assertEquals($this->holdingCount, Holding::count());
         parent::tearDown();
     }
     public function test_can_get_list_of_fonds()

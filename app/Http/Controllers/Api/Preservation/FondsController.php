@@ -42,6 +42,8 @@ class FondsController extends Controller
             'title' => 'required|string|max:100',
             'owner_holding_uuid' => 'required|uuid|exists:holdings,uuid',
             'description' => 'string|max:500',
+            'lhs' => 'int|exists:fonds',
+            'rhs' => 'int|exists:fonds'
         ]);
 
         if( $validator->fails() )
@@ -52,7 +54,7 @@ class FondsController extends Controller
         $data = [
             'title' => $request->title,
             'owner_holding_uuid' => $request->owner_holding_uuid,
-            'description' => $request->description ?? ''
+            'description' => $request->description ?? '',
         ];
 
         $lhs = $request->lhs;
