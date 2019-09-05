@@ -31,6 +31,13 @@ Route::middleware(['auth', 'locale'])->group( function () {
         Route::get('retrieve/downloadable', 'AccessController@downloadable')->name('access.retrieve.downloadable');
         Route::get('retrieve/history', 'AccessController@history')->name('access.retrieve.history');
     });
+
+    Route::prefix('planning')->group( function () {
+        Route::get('holdings', function () {
+            return view('settings.planning.holdings_fonds');
+        })->name('planning.holdings'); 
+    });
+
 });
 
 Auth::routes();

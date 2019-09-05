@@ -30,3 +30,7 @@ tags.temp
 
 
 /nbproject/private/
+.gitconfig
+.wget-hsts
+.zsh
+.zcompdump*

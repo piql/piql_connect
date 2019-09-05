@@ -125,14 +125,13 @@ class Fonds extends Model
 
 
 
-    /* funcction ancestor()
+    /* function ancestor()
     /* recursively finds the top-level fonds for this fonds
      */
 
     public function ancestor()
     {
-        $ancestor = $this->parent();
-        return $ancestor;
+        return $this->parent()->with('ancestor');
     }
 
 }

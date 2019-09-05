@@ -1,7 +1,7 @@
 <template>
     <span>
     <i @click="toggleShowNotifications()" class="fas fa-bell clickable"  id="noti" data-count="4"></i>
-    <div id="notificationsList" v-if="showNotifications">
+    <div class="dropdownList" v-if="showNotifications">
         <i class="fas fa-times closeNotifications" @click="toggleShowNotifications()" ></i>
         <strong>notifications</strong>
         <p class="when">Today</p>
