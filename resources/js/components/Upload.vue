@@ -1,15 +1,14 @@
 <template>
-    <div>
-        <div class="row mb-5"> 
+    <div class="container-fluid">
+        <div class="row mb-4">
             <div class="col">
-                <em class="mb-3">
+                <em class="mb-3 mt-2">
                     {{ $t('upload.ingress') }}<br/>
                     {{ $t('upload.ingress2') }}<br/>
                     {{ $t('upload.ingress3') }}
                 </em>
             </div>
         </div>
-
         <div class="row">
             <div class="col-11 m-2">
                 <Gallery
@@ -21,25 +20,39 @@
             </div>
         </div>
 
-        <div class="row">
-            <div class="col">
-                <br/>
+        <div class="card upload-widget-back w-95 p-2 pt-3 pb-4">
+            <div class="row">
+                <div class="col-sm-3 mr-3">{{ $t('upload.sipName') }}</div>
+                <div class="col-sm-2 mr-3">Fonds</div>
+                <div class="col-sm-1 mr-3">{{ $t('upload.files') }}</div>
+                <div class="col-sm-2 listActionItems mr-3"></div>
+                <div class="col-sm-3"></div>
             </div>
-        </div>
 
-        <form v-on:submit.prevent="">
-            <div class="row form-group mb-4">
-                <div class="col-9">
-                    <input value="" :placeholder="$t('upload.optionalName')" v-model="bagName" type="text" class="form-control m-1"> 
+            <form v-on:submit.prevent="">
+                <div class="row w-90">
+                    <div class="col-sm-3 mr-3">
+                        <input value="" :placeholder="bag.name" v-model="bag.name" type="text" class="noTextTransform form-control pl-3" @input="setBagName" onclick="select()">
+                    </div>
+                    <div class="col-sm-2 mr-3">
+                        <select name="Fonds" class="form-control selectpicker">
+                            <option value="Documents">Documents</option>
+                            <option value="Video">Video</option>
+                            <option value="Sound">Sound</option>
+                        </select>
+                    </div>
+                    <div class="col-sm-1 card p-2 pr-4 mr-3" style="text-align: right; max-height: 3rem;">
+                        {{ this.numberOfFiles || 0}}
+                    </div>
+                    <div class="col-sm-2 listActionItems mr-3" style="text-align: center">
+                        <i class="fas fa-list-ul p-2 mr-4 hover-hand" @click="onClick('/ingest/tasks/'+bag.id)"></i>
+                        <i class="fas fa-trash-alt p-2 hover-hand"></i>
+                    </div>
+                    <div class="col-sm-3 text-center">
+                        <button class="btn btn-primary btn-lg w-75 mr-2" v-bind:class="[{ disabled : processDisabled  }]" v-on:click="commitBagToProcessing">{{$t('upload.processButton')}}</button>
+                    </div>
                 </div>
-            </div>
-        </form>
-
-
-        <div class="row">
-            <div class="col-md-9 text-center">
-                <button class="btn btn-primary btn-block" v-bind:class="[{ disabled : processDisabled  }]" v-on:click="commitBagToProcessing">{{$t('upload.processButton')}}</button>
-            </div>
+            </form>
         </div>
     </div>
 </template>
@@ -76,27 +89,27 @@ export default {
                     onValidate: (id, name) => {
                         this.processDisabled = true;
                     },
-                    onComplete: (id, name, response) => {
+                    onComplete: (id, name, response, xhr, something) => {
                         this.processDisabled = false;
                         let uploadToBagId = this.bag.id;
+                        let fileSize = this.uploader.methods.getSize(id);
                         axios.post('/api/v1/ingest/fileUploaded', {
                             'fileName' : name,
                             'result' : response,
                             'bagId' : uploadToBagId,
+                            'fileSize': fileSize
                         }).then( () => {
-                            console.log("Upload of " + name + " with id" + id + " completed.");
                             if( this.bag.id == uploadToBagId ){
-                                this.files = axios.get("/api/v1/ingest/bags/"+uploadToBagId+"/files");
+                                axios.get("/api/v1/ingest/bags/"+uploadToBagId+"/files").then( (files) => {
+                                    this.files = files.data;
+                                });
                             }
                         });
                     }
-                }
-            },
-        });
+                }}});
         return {
             uploader: uploader,
             bag: {},
-            bagName: "",
             files: {},
             userId: '',
             processDisabled: true,
@@ -104,8 +117,15 @@ export default {
         };
     },
 
-    components: { 
+    components: {
         FineUploader
+    },
+
+  computed: {
+      numberOfFiles: function() {
+          return this.files.length;
+      }
+
     },
 
     methods: {
@@ -118,29 +138,22 @@ export default {
             this.processDisabled = true;
             this.fileInputDisabled = true;
 
-            let updatedBag = await this.setBagName(this.bagName);
-            if(updatedBag != null){
-                this.bag = updatedBag;
-            }
-
             let committed = (await axios.post("/api/v1/ingest/bags/"+this.bag.id+"/commit")).data;
             this.$refs.gallery.clearDropzone();
             this.uploader.methods.reset();
             this.bagName = "";
             this.bag = await this.createBag("", this.userId);
+            this.files = [];
             this.fileInputDisabled = false;
-            //this.$refs.gallery.$refs.maybedropzone.$refs.dropzone.$refs.dropZone.ondrop = null
             this.$refs.gallery.ondrop = null;
         },
-        async setBagName(bagName) {
+        async setBagName() {
             let currentBagId = this.bag.id;
+            let bagName = this.bag.name;
             let bag = null;
-            console.log("updating name of bag with id "+currentBagId+" to "+bagName);
             axios.patch("/api/v1/ingest/bags/"+currentBagId, {
                 'bagName': bagName
             }).then( (result) => {
-                console.log("updated bag: ");
-                console.log(result.data);
                 bag = result.data;
             });
             return bag;
@@ -154,9 +167,21 @@ export default {
         },
     },
     async mounted() {
-        console.log('Uploader component mounted.');
         this.userId = (await axios.get("/api/v1/system/currentUser")).data;
-        this.bag = await this.createBag("", this.userId);
+        this.bag = (await axios.get("/api/v1/ingest/bags/latest")).data;
+        if(this.bag !== undefined && this.bag.status === "open")
+        {
+            this.files = (await axios.get('/api/v1/ingest/bags/' + this.bag.id + '/files')).data;
+        }
+        else
+        {
+            this.bag = (await this.createBag("", this.userId));
+        }
+
+        if(this.files)
+        {
+            this.processDisabled = false;
+        }
     },
     props: {
         button: Object

@@ -78,16 +78,23 @@ return [
             'url' => env('AWS_URL'),
         ],
 
+/*
         'am' => [
             'driver' => 'sftp',
-            'host' => '192.168.9.122',
+            'host' => '172.17.0.1',
             'port' => 22,
             'username' => 'kare',
-            'privateKey' => '/home/vagrant/.ssh/am_id_rsa',
-            'root' => '/home/kare/.am/',
+            'privateKey' => '/home/kare/.ssh/id_rsa',
+            'root' => '/home/kare/.am/ss-location-data',
             'timeout' => 30,
         ],
+*/
+         'am' => [
+            'driver' => 'local',
+            'root' => (storage_path('am/ss-location-data')),
+        ],
 
+ 
     ],
 
 ];

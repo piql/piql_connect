@@ -29,27 +29,46 @@ Route::group(['prefix' => 'v1' , 'middleware' => 'throttle:500,1','auth:web'], f
         Route::post('fileUploaded', 'Api\Ingest\FileUploadController@store');
         Route::get('uploaded/', 'Api\Ingest\FileUploadController@all');
         Route::get('uploaded/{id}', 'Api\Ingest\FileUploadController@show');
+
+        // todo: getNewBag
+        // todo: getOpenBags
+
         Route::post('bags', 'Api\Ingest\BagController@store');
         Route::patch('bags/{id}', 'Api\Ingest\BagController@update');
+        Route::get('bags/create', 'Api\Ingest\BagController@create');
         Route::get('bags', 'Api\Ingest\BagController@all');
         Route::get('processing', 'Api\Ingest\BagController@processing');
         Route::get('complete', 'Api\Ingest\BagController@complete');
+        Route::get('bags/latest', 'Api\Ingest\BagController@latest');
         Route::get('bags/{id}', 'Api\Ingest\BagController@show');
         Route::get('bags/{id}/files', 'Api\Ingest\BagController@showFiles');
         Route::post('bags/{id}/commit', 'Api\Ingest\BagController@commit');
         Route::post('bags/{id}/piql', 'Api\Ingest\BagController@piqlIt');
+        Route::get('offline_storage/pending/jobs/{id}/bags', 'Api\Ingest\OfflineStorageController@bags');
+        Route::patch('offline_storage/pending/jobs/{id}', 'Api\Ingest\OfflineStorageController@archiveJob');
+        Route::get('offline_storage/pending/jobs', 'Api\Ingest\OfflineStorageController@jobs');
+        Route::get('offline_storage/archive/jobs', 'Api\Ingest\OfflineStorageController@archiveJobs');
+
 
         Route::group(['prefix' => 'am'], function() {
             Route::get('instances', 'Api\Ingest\ArchivematicaServiceController@serviceInstances');
-                Route::group(['prefix' => 'transfer'], function () {
-                    Route::get('status' , 'Api\Ingest\ArchivematicaServiceController@transferStatus');
-                    Route::post('start/{id}', 'Api\Ingest\ArchivematicaServiceController@startTransfer');
-                    Route::post('approve/{id}', 'Api\Ingest\ArchivematicaServiceController@approveTransfer');
-                });
-                Route::group(['prefix' => 'ingest'], function () {
-                    Route::get('status' , 'Api\Ingest\ArchivematicaServiceController@ingestStatus');
-                });
+            Route::group(['prefix' => 'transfer'], function () {
+                Route::get('status' , 'Api\Ingest\ArchivematicaServiceController@transferStatus');
+                Route::post('start/{id}', 'Api\Ingest\ArchivematicaServiceController@startTransfer');
+                Route::post('approve/{id}', 'Api\Ingest\ArchivematicaServiceController@approveTransfer');
+                Route::delete('{id}' , 'Api\Ingest\ArchivematicaServiceController@transferHideStatus');
+            });
+            Route::group(['prefix' => 'ingest'], function () {
+                Route::get('status' , 'Api\Ingest\ArchivematicaServiceController@ingestStatus');
+                Route::delete('{id}' , 'Api\Ingest\ArchivematicaServiceController@ingestHideStatus');
+            });
         });
+    });
+
+    Route::group(['prefix' => 'preservation'], function() {
+        Route::apiResource('fonds', 'Api\Preservation\FondsController', [ 'as' => 'preservation' ]);
+        //Route::get('fonds', 'Api\Preservation\FondsController@index')->name('preservation.fonds');
+        //Route::post('fonds', 'Api\Preservation\FondsController@create')->name('preservation.fonds.create');
     });
 
     Route::group(['prefix' => 'stats'], function () {

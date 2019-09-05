@@ -14,4 +14,9 @@ class UserSetting extends Model
     {
         return $this->belongsTo('App\User');
     }
+
+    protected function bags()
+    {
+        return $this->hasMany('App\Bag', 'owner', 'user');
+    }
 }

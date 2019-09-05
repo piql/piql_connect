@@ -4,16 +4,15 @@ namespace App\Listeners;
 
 use App\Events\BagFilesEvent;
 use App\Events\BagCompleteEvent;
-use Illuminate\Queue\InteractsWithQueue;
+use App\Events\ErrorEvent;
+use App\Events\InitiateTransferToArchivematicaEvent;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Support\Facades\Storage;
 use Log;
-use App\Bag;
-use App\File;
 use BagitUtil;
 
-class CommitFilesToBagListener implements ShouldQueue
+class CommitFilesToBagListener extends BagListener
 {
+    protected $state = 'bag_files';
     /**
      * Create the event listener.
      *
@@ -30,17 +29,20 @@ class CommitFilesToBagListener implements ShouldQueue
      * @param  BagFilesEvent  $event
      * @return void
      */
-    public function handle(BagFilesEvent $event)
+    public function _handle($event)
     {
-        Log::debug("Bag commit: " . $event->bagId);
-        $bag = Bag::find($event->bagId);
-        $bag->status = "preparing files";
-        $bag->save();
-
+        $bag = $event->bag->refresh();
         $files = $bag->files;
 
         $bagIt = new BagitUtil();
         // Create a bag
+        if(!$bag->files->count())
+        {
+            Log::error("Empty bag(".$bag->id.")");
+            event( new ErrorEvent ($bag) );
+            return;
+        }
+
         foreach ($files as $file)
         {
             $bagIt->addFile($file->storagePathCompleted(), $file->filename);
@@ -51,12 +53,12 @@ class CommitFilesToBagListener implements ShouldQueue
         if($result)
         {
             Log::info("Bag ".$bag->id." built ok!");
-            event( new BagCompleteEvent($bag) );
+            event( new BagCompleteEvent ($bag) );
         }
         else
         {
             Log::error("Bag ".$bag->id." failed!");
-            //todo: error event
+            event( new ErrorEvent($bag) );
         }
     }
 }

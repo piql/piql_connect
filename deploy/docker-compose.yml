@@ -7,6 +7,8 @@ services:
       dockerfile: ./app/Dockerfile
     volumes:
       - ".././:/var/www"
+      - "~/.am:/var/www/storage/am"
+    user: ${HOST_USERID}:${HOST_GROUPID}
     links:
       - database
       - cache
@@ -41,7 +43,7 @@ services:
 
   database:
     image: mariadb
-    user: "1000:1000"
+    user: root
     environment:
       - "MYSQL_ROOT_PASSWORD=secret"
       - "MYSQL_DATABASE=connect"
@@ -50,9 +52,10 @@ services:
     ports:
       - "33061:3306"
     volumes:
-      - ./db:/var/lib/mysql
+      - piqlConnect-mariadb:/var/lib/mysql
     networks:
       - piqlConnect-net
+    command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci --init-connect='SET NAMES utf8mb4;' --innodb-flush-log-at-trx-commit=0
 
   cache:
     image: redis
@@ -68,9 +71,33 @@ services:
       - ./nginx/certbot/www:/var/www/certbot
     networks:
       - piqlConnect-net
-    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"      
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'" 
+       
+  composer:
+    user: ${HOST_USERID}:${HOST_GROUPID}
+    image: composer
+    command: bash -c "composer install && composer dump-autoload"
+    stdin_open: true
+    tty: true
+    user: ${HOST_USERID}:${HOST_GROUPID}
+    volumes:
+      - .././:/app
+ 
+  npm:
+    build:
+      network: host
+      context: ./
+      dockerfile: ./node/Dockerfile
+    stdin_open: true
+    tty: true
+    user: ${HOST_USERID}:${HOST_GROUPID}
+    volumes:
+      - .././:/app
  
 networks:
   piqlConnect-net:
     driver: bridge
 
+volumes:
+  piqlConnect-mariadb:
+    external: true
