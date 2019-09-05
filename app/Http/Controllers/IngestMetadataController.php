@@ -13,6 +13,7 @@ class IngestMetadataController extends Controller
     {
         $bag = Bag::query()->findOrFail($bagId);
         $file = File::query($bag->files())->findOrFail($fileId);
-        return view('ingest.metadata.edit', compact('bag', 'file'));
+        $readonly = $bag->status != "open";
+        return view('ingest.metadata.edit', compact('bag', 'file', 'readonly'));
     }
 }

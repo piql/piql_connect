@@ -11,12 +11,14 @@
 @endsection
 
 @section('content')
-    <em>{{__("ingest.fileList.ingress")}}</em>
-    <div>
-        <a href="{{ URL::previous() }}">
-            <i class="breadcrumbs noTextTransform">&lt;&lt; Back</i>
-        </a>
+    <div class="contentContainer">
+        <em>{{__("ingest.fileList.ingress")}}</em>
+        <div>
+            <a href="{{ URL::previous() }}">
+                <i class="breadcrumbs noTextTransform">&lt;&lt; Back</i>
+            </a>
+        </div>
+        <file-list :bag-id="'{{ $bagId }}'">
+        </file-list>
     </div>
-    <file-list :bag-id="'{{ $bagId }}'">
-    </file-list>
 @endsection

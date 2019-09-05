@@ -23,7 +23,7 @@
         <div class="card upload-widget-back w-95 p-2 pt-3 pb-4">
             <div class="row">
                 <div class="col-sm-3 mr-3">{{ $t('upload.sipName') }}</div>
-                <div class="col-sm-2 mr-3">Fonds</div>
+                <div class="col-sm-2 mr-3">{{ $t('upload.holding') }}</div>
                 <div class="col-sm-1 mr-3">{{ $t('upload.files') }}</div>
                 <div class="col-sm-2 listActionItems mr-3"></div>
                 <div class="col-sm-3"></div>
@@ -129,6 +129,9 @@ export default {
     },
 
     methods: {
+        onClick(url) {
+          window.location = url;
+        },
         addFileToQueue(payload) {
         },
         async commitBagToProcessing(e) {

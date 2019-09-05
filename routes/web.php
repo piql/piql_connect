@@ -21,6 +21,8 @@ Route::middleware(['auth', 'locale'])->group( function () {
         Route::get('settings', 'IngestSettingsController@show')->name('show', 'show');
         Route::get('offline_storage', 'IngestOfflineStorageController@index')->name('offline_storage', 'index');
         Route::get('offline_storage/{id}', 'IngestOfflineStorageController@show')->name('offline_storage.show', 'show');
+        Route::get('offline_storage/{id}/metadata', 'IngestOfflineStorageController@metadataEdit')->name('offline_storage.metadata.edit');
+        Route::get('offline_storage/{job}/configuration', 'IngestOfflineStorageController@configurationEdit')->name('offline_storage.setup');
     });
 
     Route::prefix('access')->group( function () {

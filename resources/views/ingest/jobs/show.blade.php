@@ -5,7 +5,7 @@
 @endsection
 
 @section('heading')
-    <i class="fas fa-suitcase titleIcon"></i>Bags
+    <i class="fas fa-suitcase titleIcon"></i>AIP List
 @endsection
 
 @section('content')
