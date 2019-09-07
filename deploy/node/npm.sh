@@ -1,3 +1,4 @@
 #!/bin/bash
-cd /app 
+cd /app
+npm install cross-env 
 npm run dev
