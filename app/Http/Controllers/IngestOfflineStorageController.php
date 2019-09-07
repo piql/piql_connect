@@ -12,15 +12,17 @@ class IngestOfflineStorageController extends Controller
     }
 
     public function show($jobId) {
-        return view('ingest.jobs.show', ['jobId' => $jobId]);
+        $job = Job::findOrFail($jobId);
+        return view('ingest.jobs.show', ['job' => $job]);
     }
 
-    public function metadataEdit(Job $job) {
+    public function metadataEdit($jobId) {
+        $job = Job::findOrFail($jobId);
         return view('ingest.metadata.edit', ['job' => $job]);
     }
 
-    public function configurationEdit(Job $job) {
-        //$job  = Job::findOrFail($jobId);
+    public function configurationEdit( $jobId) {
+        $job = Job::findOrFail($jobId);
         return view('ingest.jobs.configuration', ['job' => $job]);
     }
 

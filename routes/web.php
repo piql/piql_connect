@@ -15,8 +15,8 @@ Route::middleware(['auth', 'locale'])->group( function () {
         Route::resource('upload', 'IngestUploadController')->name('index', 'upload');
         Route::resource('process', 'IngestProcessController')->name('index', 'process');
         Route::resource('tasks', 'IngestTaskListController')->name('index', 'tasks');
-        Route::get('tasks/{id}', 'IngestTaskListController@show')->name('show', 'bag');
-        Route::get('tasks/{bagId}/metadata/{fileId}/edit', 'IngestMetadataController@edit')->name('edit', 'bag');
+        Route::get('tasks/{bagId}', 'IngestTaskListController@show')->name('bag.show.files', 'bag.show.files');
+        Route::get('tasks/{bagId}/metadata/{fileId}/edit', 'IngestMetadataController@edit')->name('metadata.edit', 'bag');
         Route::resource('status', 'IngestStatusController')->name('index', 'status');
         Route::get('settings', 'IngestSettingsController@show')->name('show', 'show');
         Route::get('offline_storage', 'IngestOfflineStorageController@index')->name('offline_storage', 'index');

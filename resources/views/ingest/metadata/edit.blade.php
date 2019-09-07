@@ -12,14 +12,16 @@
 
 @section('content')
     <!-- for future use -->
-    {{ $readonly = isset($readonly) ? $readonly : false }}
+    @php
+        $readonly = isset($readonly) ? $readonly : false;
+    @endphp
     <em>{{__('ingest.metadata.editFile.ingress')}}</em>
-    <div>
-        <a href="{{ URL::previous() }}">
-            <i class="breadcrumbs noTextTransform">&lt;&lt; Back</i>
-        </a>
-    </div>
-
+    @isset($file)
+        {{ Breadcrumbs::render('metadata_view', $file) }}
+    @endisset
+    @isset($job)
+        {{ Breadcrumbs::render('offline_storage_metadata_view', $job) }}
+    @endisset
     <div class="container-fluid">
         <div class="row"><h4 class="col-sm-2 mr-4">{{__('ingest.metadata.editFile.fileName')}}:</h4><h4 class="col"> {{ isset($file) ? $file->filename : $job->name }}</h4></div>
         <div class="row">

@@ -9,6 +9,7 @@
 @endsection
 
 @section('content')
+    {{ Breadcrumbs::render('content_options_view', $job) }}
     <div class="contentContainer">
         <div class="container-fluid">
             <div class="row plistHeader">
@@ -18,7 +19,9 @@
                 <div class="col-sm-4 listActionItems">&nbsp;</div>
             </div>
 
-            <job-list-item  :item="{{json_encode($job)}}" :job-list-url="'/api/v1/ingest/offline_storage/pending'" :action-icons="{list: true, metadata: true, config: false, delete: false, defaultAction: true}"/>
+            <job-list-item  :item="{{json_encode($job)}}"
+                            :job-list-url="'/api/v1/ingest/offline_storage/pending'"
+                            :action-icons="{list: false, metadata: false, config: false, delete: false, defaultAction: true}"/>
         </div>
 
         <div class="list">
