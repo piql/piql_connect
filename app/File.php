@@ -14,7 +14,7 @@ class File extends Model
 
     public function bag()
     {
-        return $this->belongsTo('App\Bag', 'uuid', 'bag_uuid');
+        return $this->belongsTo('App\Bag', 'bag_id', 'id');
     }
 
     public function storagePathCompleted()
