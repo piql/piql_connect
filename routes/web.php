@@ -34,8 +34,12 @@ Route::middleware(['auth', 'locale'])->group( function () {
 
     Route::prefix('planning')->group( function () {
         Route::get('holdings', function () {
-            return view('settings.planning.holdings_fonds');
+            return view('settings/planning/holdings/edit');
         })->name('planning.holdings'); 
+        Route::get('fonds', function () {
+            return view('settings.planning.fonds.edit');
+        })->name('planning.fonds'); 
+ 
     });
 
 });

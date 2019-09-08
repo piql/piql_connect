@@ -2148,5 +2148,23 @@ input[type=text] {
     i {
         font-size: x-large;
     }
+}
 
+.list-group-item-light {
+    background-color: $white;
+    border-color: $color_fill_3;
+    &:active {
+        background-color: $color_main_brand;
+    }
+    &:hover {
+        background-color: $color_fill_3 !important;
+    }
+}
+.list-group-item-header {
+    background-color: $color_fill_2;
+}
+
+.description-area {
+    resize: none;
+    height: 15em !important;
 }

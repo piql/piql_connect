@@ -49,21 +49,21 @@ class FondsApiTest extends TestCase
     }
     public function test_can_get_list_of_fonds()
     {
-        $response = $this->get(route('preservation.fonds.index'));
+        $response = $this->get(route('planning.fonds.index'));
 
         $response->assertStatus(200);
     }
 
     public function test_when_creating_given_valid_data_was_posted_it_should_respond_with_201()
     {
-        $response = $this->post(route('preservation.fonds.store'), $this->testFondsData);
+        $response = $this->post(route('planning.fonds.store'), $this->testFondsData);
         $response->assertStatus(201);
         $this->markFondsForRemoval($response);
     }
 
     public function test_when_creating_given_a_valids_fonds_was_posted_the_response_contains_a_valid_id()
     {
-        $response = $this->post(route('preservation.fonds.store'), $this->testFondsData);
+        $response = $this->post(route('planning.fonds.store'), $this->testFondsData);
         $result = $response->getData();
         $model = Fonds::find($result->data->id);
         $this->assertTrue($model->title == $this->testTitle1);
@@ -72,7 +72,7 @@ class FondsApiTest extends TestCase
 
     public function test_when_creating_given_a_bad_title_it_responds_with_422()
     {
-        $response = $this->post(route('preservation.fonds.store'), ['title' => '' ]+$this->testFondsData);
+        $response = $this->post(route('planning.fonds.store'), ['title' => '' ]+$this->testFondsData);
         $response->assertStatus(422);
         $content = $response->getContent();
         $this->assertContains('title', $content);
@@ -80,7 +80,7 @@ class FondsApiTest extends TestCase
 
     public function test_when_creating_given_a_bad_owner_holding_it_responds_with_422()
     {
-        $response = $this->post(route('preservation.fonds.store'), ['owner_holding_uuid' => '123' ]+$this->testFondsData);
+        $response = $this->post(route('planning.fonds.store'), ['owner_holding_uuid' => '123' ]+$this->testFondsData);
         $response->assertStatus(422);
         $content = $response->getContent();
         $this->assertContains('owner_holding', $content);
