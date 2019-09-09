@@ -28,6 +28,7 @@ class Bag extends Model
             'transferring',        // transferring
             'ingesting',           // ingesting
             'complete',            // bag is stored in AM
+            'error',               // bag encountered an error
         ],
         'transitions' => [
             'add_files' => [
