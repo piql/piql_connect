@@ -15,11 +15,11 @@ whilst expanding the size of contentContainer (and vice versa)
 */
 
 window.collapseMenu = function() {
-    if (document.getElementById("sideMenu")) {          
+    if (document.getElementById("sideMenu")) {
         document.getElementById("sideMenu").setAttribute("id", "sideMenuCollapsed");
         document.getElementById("contentContainer").setAttribute("style", "width: calc(100% - 130px); transition: width 1s");
     }
-    else {          
+    else {
         document.getElementById("sideMenuCollapsed").setAttribute("id", "sideMenu");
         document.getElementById("contentContainer").setAttribute("style", "width: calc(100% - 360px); transition: width 1s");
     }
@@ -27,7 +27,7 @@ window.collapseMenu = function() {
 
 
 /**
- * Now setup localization with vue-i18n using generated locales. 
+ * Now setup localization with vue-i18n using generated locales.
  * The Window.locale global is set in app.blade.php,
  * originating from \App:getLocale(). This way, we have one
  * localization concept that works across both php and js.

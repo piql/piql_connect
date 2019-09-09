@@ -15,6 +15,7 @@
 	"upload.optionalName": "Upload name (optional)",
 	"upload.processButton": "Process",
     "upload.sipName": "SIP name",
+    "upload.holding": "Holding",
     "upload.files": "Number of files",
 	"sidebar.dashboard": "Dashboard",
 	"sidebar.upload": "Upload",
@@ -53,11 +54,13 @@
 	"ingest.taskList.sip": "SIP",
 	"ingest.taskList.content": "Content",
 	"ingest.taskList.ingestDate": "Ingest Date",
+    "ingest.taskList.size": "Size",
 
     "ingest.offlineStorage": "Offline storage",
     "ingest.offlineStorage.jobName": "Job name",
     "ingest.offlineStorage.numberOfAips": "AIPs",
     "ingest.offlineStorage.creationDate": "Creation date",
+    "ingest.offlineStorage.size": "Size",
 
 	"ingest.fileList.filesIn": "Viewing files in SIP",
     "ingest.fileList.ingress": "View files in this SIP, and edit metadata per file.",
@@ -89,7 +92,7 @@
     "access.browse.archivedTo": "Archived to",
     "access.browse.withContents": "With contents",
     "access.browse.selectLocation": "Select object location",
-  
+
     "access.browse": "Browse",
     "access.browse.itemInfo": "File",
     "access.browse.identityArea": "Identity area",
@@ -107,6 +110,6 @@
     "access.retrieve.isRetrieving": "Now retrieving",
     "access.retrieve.downloadable": "Ready for download",
     "access.retrieve.history": "Retrieval history"
-    
+
 
 }

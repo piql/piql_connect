@@ -5,11 +5,13 @@
 @endsection
 
 @section('heading')
-    <i class="fas fa-suitcase titleIcon"></i>Bags
+    <i class="fas fa-suitcase titleIcon"></i>AIP List
 @endsection
 
 @section('content')
     <div class="contentContainer">
-        <bag-list :job-id="'{{ $jobId }}' "></bag-list>
+        {{ Breadcrumbs::render('aip_list', $job) }}
+
+        <bag-list :job-id="'{{ $job->id }}' "></bag-list>
     </div>
 @endsection

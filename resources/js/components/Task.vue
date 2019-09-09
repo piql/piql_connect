@@ -16,8 +16,8 @@
                 {{item.created_at}}
             </div>
             <div class="col listActionItems">
-                <i class="fas fa-cog"></i>&nbsp;
-                <i class="fas fa-trash-alt"></i>&nbsp;
+                <i class="fas fa-cog hover-hand"></i>&nbsp;
+                <i class="fas fa-trash-alt hover-hand"></i>&nbsp;
             </div>
             <div class="col piqlIt" v-on:click="piqlIt">&nbsp;</div>
         </div>
@@ -44,7 +44,7 @@ export default {
             let bagId = this.item.id;
             this.$emit('piqlIt', bagId);
         },
-        
+
     },
     props: {
         item: Object

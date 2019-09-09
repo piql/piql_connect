@@ -17,6 +17,7 @@
 	"upload.processButton": "Prosessere",
 	"User Settings" : "Brukerinstillinger",
 	"upload.sipName": "SIP-navn",
+    "upload.holding": "Hovedkategori",
 	"upload.files": "Antall filer",
 	"User interface language": "Brukergrensesnittspråk",
 
@@ -47,7 +48,7 @@
 	"ingest.processing.ingestDate": "Mottaksdato",
 	"ingest.processing.status": "Status",
 	"ingest.processing.creatingStatus": "Oppretter AIP",
-	"ingest.processing.noItems": "Alle SIPer er ferdig prosessert.", 
+	"ingest.processing.noItems": "Alle SIPer er ferdig prosessert.",
 
 	"ingest.taskList.from" : "Fra",
 	"ingest.taskList.to" : "Til",
@@ -57,11 +58,13 @@
 	"ingest.taskList.sip": "SIP",
 	"ingest.taskList.content": "Innhold",
 	"ingest.taskList.ingestDate": "Ingest-dato",
+    "ingest.taskList.size": "Størrelse",
 
 	"ingest.offlineStorage": "Offline-lagring",
 	"ingest.offlineStorage.jobName": "Jobbnavn",
 	"ingest.offlineStorage.numberOfAips": "AIPer",
 	"ingest.offlineStorage.creationDate": "Opprettelsesdato",
+    "ingest.offlineStorage.size": "Størrelse",
 
 
 	"ingest.fileList.fileName": "Filnavn",
@@ -106,7 +109,7 @@
     "access.browse.primaryContact": "Primærkontakt",
     "access.browse.contactArea": "Kontaktområde",
     "access.browse.contactArea.address": "Adresse",
- 
+
 
 
 	"access.retrieve": "Gjenopprett",

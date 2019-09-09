@@ -6,17 +6,15 @@
 
 @section('heading')
 <div>
-    <i class="fas fa-list-ul titleIcon"></i>{{__("ingest.fileList.filesIn")}}&nbsp;<span class="noTextTransform">{{ App\Bag::find($bagId)->name }}</span>
+    <i class="fas fa-list-ul titleIcon"></i>{{__("ingest.fileList.filesIn")}}&nbsp;<span class="noTextTransform">{{ $bag->name }}</span>
 </div>
 @endsection
 
 @section('content')
-    <em>{{__("ingest.fileList.ingress")}}</em>
-    <div>
-        <a href="{{ URL::previous() }}">
-            <i class="breadcrumbs noTextTransform">&lt;&lt; Back</i>
-        </a>
+    <div class="contentContainer">
+        <em>{{__("ingest.fileList.ingress")}}</em>
+        {{ Breadcrumbs::render('file_list', $bag) }}
+        <file-list :bag-id="'{{ $bag->id }}'">
+        </file-list>
     </div>
-    <file-list :bag-id="'{{ $bagId }}'">
-    </file-list>
 @endsection

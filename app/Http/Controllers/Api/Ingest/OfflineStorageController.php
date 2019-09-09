@@ -51,10 +51,21 @@ class OfflineStorageController extends Controller
 
     public function archiveJob($jobId)
     {
+        $job = Job::findOrFail($jobId);
         // This is a bit nasty because there is no owner validation here
         // Should be safe when used internally e.i when owner is valid
-        $job = \App\Job::findOrFail($jobId);
-        $job->status = "ingesting";
+        $data = request()->validate([
+            'name' => 'string',
+            'status' => 'string',
+        ]);
+
+        if(isset($data['name'])) {
+            $job->name = $data['name'];
+        }
+
+        if(isset($data['status']) && ($data['status'] == 'ingesting' )) {
+            $job->status = "ingesting";
+        }
         $job->save();
         return Response::json($job);
     }
