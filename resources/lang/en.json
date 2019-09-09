@@ -6,7 +6,7 @@
 	"Search": "Search",
 	"Browse": "Browse",
 	"Retrieve": "Retrieve",
-    "Processing": "Prosessering",
+    "Processing": "Processing",
 	"Home": "Overview",
     "upload.ingress" : "Upload one or more files for pre-ingest here. Either click the Select Files button, or drag and drop files to the area below.",
 	"upload.ingress2" : "Optionally, a name can be added to the upload to ease tracking your archival data.",
@@ -62,7 +62,7 @@
     "ingest.offlineStorage.creationDate": "Creation date",
     "ingest.offlineStorage.size": "Size",
 
-	"ingest.fileList.filesIn": "Viewing files in SIP",
+	"ingest.fileList.filesIn": "File list",
     "ingest.fileList.ingress": "View files in this SIP, and edit metadata per file.",
     "ingest.fileList.fileSize": "File size",
     "ingest.fileList.fileName": "File name",
@@ -81,7 +81,8 @@
     "ingest.status.preparing": "Preparing writing",
     "ingest.status.writing": "Writing to piqlFilm",
 
-    "ingest.metadata.editFile": "Edit metadata for file",
+    "ingest.metadata.editJob": "Job metadata",
+    "ingest.metadata.editFile": "File metadata",
     "ingest.metadata.editFile.ingress": "This page lets you edit metadata per file",
     "ingest.metadata.editFile.fileName": "File name",
 

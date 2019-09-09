@@ -6,7 +6,7 @@
 
 @section('heading')
 <div>
-    <i class="fas fa-list-ul titleIcon"></i>{{__("ingest.fileList.filesIn")}}&nbsp;<span class="noTextTransform">{{ $bag->name }}</span>
+    <i class="fas fa-list-ul titleIcon"></i>{{__("ingest.fileList.filesIn")}}&nbsp;<span class="noTextTransform"></span>
 </div>
 @endsection
 

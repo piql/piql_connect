@@ -6,7 +6,12 @@
 
 @section('heading')
     <div>
-        <i class="fas fa-tags titleIcon"></i>{{__('ingest.metadata.editFile')}}
+        @isset($file)
+            <i class="fas fa-tags titleIcon"></i>{{__('ingest.metadata.editFile')}}
+        @endisset
+        @isset($job)
+                <i class="fas fa-tags titleIcon"></i>{{__('ingest.metadata.editJob')}}
+        @endisset
     </div>
 @endsection
 
