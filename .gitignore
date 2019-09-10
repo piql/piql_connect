@@ -30,3 +30,4 @@ tags.temp
 
 
 /nbproject/private/
+.env.example
