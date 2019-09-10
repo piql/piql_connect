@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Api\Planning;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Holding;
+use App\Http\Resources\HoldingResource;
+use App\Http\Resources\HoldingCollection;
 
 class HoldingController extends Controller
 {
@@ -15,7 +17,7 @@ class HoldingController extends Controller
      */
     public function index()
     {
-        return Holding::all();
+        return new HoldingCollection(Holding::all());
     }
 
     /**

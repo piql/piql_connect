@@ -6,7 +6,7 @@
 
 @section('content')
     <div class="contentContainer">
-        <h1>{{__("Manage Fonds for Holdings")}}</h1>
+        <h1>{{__("Manage Holdings for Archives")}}</h1>
 
         <holdings-fonds-settings></holdings-fonds-settings>
     </div>

@@ -6,8 +6,8 @@
 
 @section('content')
     <div class="contentContainer">
-        <h1>{{__("Create Holdings")}}</h1>
-        <p class="mb-5 ml-3">Create holdings and assign fonds to them here to plan the preservation structure of your archives.</p>
+        <h1>{{__("Create Archives")}}</h1>
+        <p class="mb-5 ml-3">Create archives and assign holdings to them here to plan the preservation structure of your archives.</p>
 
         <holdings-settings></holdings-settings>
     </div>

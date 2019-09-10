@@ -23,32 +23,27 @@
         <div class="card upload-widget-back w-95 p-2 pt-3 pb-4">
             <div class="row">
                 <div class="col-sm-3 mr-3">{{ $t('upload.sipName') }}</div>
-                <div class="col-sm-2 mr-3">Fonds</div>
-                <div class="col-sm-1 mr-3">{{ $t('upload.files') }}</div>
+                <div class="col-sm-3 mr-3">Archive</div>
+                <div class="col-sm-2 mr-0">{{ $t('upload.files') }}</div>
                 <div class="col-sm-2 listActionItems mr-3"></div>
-                <div class="col-sm-3"></div>
+                <div class="col-sm-2"></div>
             </div>
-
             <form v-on:submit.prevent="">
                 <div class="row w-90">
                     <div class="col-sm-3 mr-3">
                         <input value="" :placeholder="bag.name" v-model="bag.name" type="text" class="noTextTransform form-control pl-3" @input="setBagName" onclick="select()">
                     </div>
-                    <div class="col-sm-2 mr-3">
-                        <select name="Fonds" class="form-control selectpicker">
-                            <option value="Documents">Documents</option>
-                            <option value="Video">Video</option>
-                            <option value="Sound">Sound</option>
-                        </select>
-                    </div>
-                    <div class="col-sm-1 card p-2 pr-4 mr-3" style="text-align: right; max-height: 3rem;">
-                        {{ this.numberOfFiles || 0}}
+                    <div class="col-sm-3 mr-5">
+                      <holding-picker :holdings="archives" :initialSelectedArchive="selectedArchive" :selected="changedArchive"></holding-picker>
+                   </div>
+                    <div class="col-sm-1 card p-2 pr-4 mr-3 w-auto" style="text-align: right; max-height: 3rem;">
+                        {{ numberOfFiles || 0}}
                     </div>
                     <div class="col-sm-2 listActionItems mr-3" style="text-align: center">
                         <i class="fas fa-list-ul p-2 mr-4 hover-hand" @click="onClick('/ingest/tasks/'+bag.id)"></i>
                         <i class="fas fa-trash-alt p-2 hover-hand"></i>
                     </div>
-                    <div class="col-sm-3 text-center">
+                    <div class="col-sm-2 text-center">
                         <button class="btn btn-primary btn-lg w-75 mr-2" v-bind:class="[{ disabled : processDisabled  }]" v-on:click="commitBagToProcessing">{{$t('upload.processButton')}}</button>
                     </div>
                 </div>
@@ -61,6 +56,9 @@
 import FineUploaderTraditional from 'fine-uploader-wrappers'
 import FineUploader from 'vue-fineuploader';
 import axios from 'axios';
+import JQuery from 'jquery';
+let $ = JQuery;
+import selectpicker from 'bootstrap-select';
 
 export default {
     data() {
@@ -110,11 +108,12 @@ export default {
         return {
             uploader: uploader,
             bag: {},
-            numberOfFiles: 0,
             files: {},
             userId: '',
             processDisabled: true,
             fileInputDisabled: false,
+            selectedArchive: 1,
+            archives: [],
         };
     },
 
@@ -122,11 +121,10 @@ export default {
         FineUploader
     },
 
-  computed: {
-      numberOfFiles: function() {
-          return this.files.length;
-      }
-
+    computed: {
+        numberOfFiles: function() {
+            return this.files.length;
+        },
     },
 
     methods: {
@@ -147,7 +145,6 @@ export default {
             this.files = [];
             this.fileInputDisabled = false;
             this.$refs.gallery.ondrop = null;
-            this.numberOfFiles = 0;
         },
         async setBagName() {
             let currentBagId = this.bag.id;
@@ -167,10 +164,23 @@ export default {
             })).data;
             return createdBag;
         },
+        changedArchive(archiveId) {
+            console.log("archive is now: "+archiveId);
+            this.selectedArchive = archiveId;
+        }
     },
     async mounted() {
+        axios.get("/api/v1/planning/holdings").then( (response) => {
+            this.archives = response.data.data;
+            this.selectedArchive = 2;
+            Vue.nextTick( () => {
+                $('#holdingPicker').selectpicker();
+            });
+        });
+
         this.userId = (await axios.get("/api/v1/system/currentUser")).data;
         this.bag = (await axios.get("/api/v1/ingest/bags/latest")).data;
+
         if(this.bag !== undefined && this.bag.status === "open")
         {
             this.files = (await axios.get('/api/v1/ingest/bags/' + this.bag.id + '/files')).data;
@@ -183,8 +193,8 @@ export default {
         if(this.files)
         {
             this.processDisabled = false;
-            this.numberOfFiles = this.bag.files;
         }
+
     },
     props: {
         button: Object

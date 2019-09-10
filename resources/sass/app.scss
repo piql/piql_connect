@@ -518,21 +518,14 @@ input[type="number"] {
     z-index: 1000;
 }
 select {
-    width: 300px;
-    background-color: $color_secondary;
+    width: 100%;
+    height: 50px;
+    background-color: $white;
     border: 0;
-    height: 30px;
-    //Instead of the line below you could use @include border-radius($radius, $vertical-radius)
-    border-radius: 2px;
-    padding: 4px;
-    //vendor-prefix found
-    //-ms-box-sizing: content-box
-    //vendor-prefix found
-    //-moz-box-sizing: content-box
-    //vendor-prefix found
-    //-webkit-box-sizing: content-box
-    //Instead of the line below you could use @include box-sizing($bs)
-    box-sizing: content-box;
+    line-height: 1.5;
+    border-radius: 10px;
+    -moz-appearance: none;
+    -webkit-appearance: none;
 }
 textarea {
     min-width: 300px;

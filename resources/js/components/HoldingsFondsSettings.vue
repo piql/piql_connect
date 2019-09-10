@@ -25,24 +25,8 @@ export default {
             fondSelectCounter: 0,
             lastSelectedFond: "",
             selectedFond: "",
-            fromDateFilter: "",
-            toDateFilter: "",
-            searchField: "",
-            selectedLocation: "online",
-            locations: [
-                { name: 'Online', value: 'online' },
-                { name: 'Offline', value: 'offline'}
-            ],
             selectedHolding: "H-002",
-            holdings: [
-                { name: 'Forsvarsmuseet', value: 'H-001' },
-                { name: 'Bergenhus', value: 'H-002' },
-                { name: 'Hjemmefrontmuseet', value: 'H-003' },
-                { name: 'Luftforsvarsmuseet', value: 'H-004' },
-                { name: 'Marinemuseet', value: 'H-005' },
-                { name: 'Oscarsborg', value: 'H-006' },
-                { name: 'Rustkammeret', value: 'H-007' }
-            ]
+            holdings: [],
         }
     },
     computed: {
@@ -68,7 +52,8 @@ export default {
             return filter;
         },
     },
-    mounted() {
+    async mounted() {
+        this.holdings = (await axios.get("/api/v1/planning/holdings")).data.data;
     },
     methods: {
         fondSelectionChanged: function(fond, state) {
