@@ -34,7 +34,7 @@
                         <input value="" :placeholder="bag.name" v-model="bag.name" type="text" class="noTextTransform form-control pl-3" @input="setBagName" onclick="select()">
                     </div>
                     <div class="col-sm-3 mr-5">
-                      <holding-picker :holdings="archives" :initialSelectedArchive="selectedArchive" :selected="changedArchive"></holding-picker>
+                      <holding-picker :holdings="archives" :initialSelection="selectedArchiveUuid" :selected="changedArchive"></holding-picker>
                    </div>
                     <div class="col-sm-1 card p-2 pr-4 mr-3 w-auto" style="text-align: right; max-height: 3rem;">
                         {{ numberOfFiles || 0}}
@@ -112,7 +112,7 @@ export default {
             userId: '',
             processDisabled: true,
             fileInputDisabled: false,
-            selectedArchive: 1,
+            selectedArchiveUuid: '9aae5540-d3ec-11e9-9a0b-ddd5a3958760',
             archives: [],
         };
     },
@@ -174,8 +174,7 @@ export default {
     },
     async mounted() {
         axios.get("/api/v1/planning/holdings").then( (response) => {
-            this.archives = response.data.data;
-            this.selectedArchive = 2;
+        this.archives = response.data.data;
             Vue.nextTick( () => {
                 $('#holdingPicker').selectpicker();
             });
@@ -197,10 +196,9 @@ export default {
         {
             this.processDisabled = false;
         }
-
     },
     props: {
-        button: Object
+        button: Object,
     }
 
 };

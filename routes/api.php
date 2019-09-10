@@ -68,6 +68,7 @@ Route::group(['prefix' => 'v1' , 'middleware' => 'throttle:500,1','auth:web'], f
     Route::group(['prefix' => 'planning'], function() {
         Route::apiResource('fonds', 'Api\Planning\FondsController', ['as' => 'planning']);
         Route::apiResource('holdings', 'Api\Planning\HoldingController', ['as' => 'planning']);
+        Route::apiResource('holdings.fonds', 'Api\Planning\HoldingFondsController', ['as' => 'planning']);
     });
 
     Route::group(['prefix' => 'stats'], function () {

@@ -3,8 +3,8 @@
         <label v-if="showLabel" for="holdingPicker" class="col-form-label-sm">
             {{label}}
         </label>
-        <select v-model="selection" id="holdingPicker" class="w-100" data-live-search="true" @change="changed($event.target.value)">
-          <option v-for="holding in holdings" v-bind:value="holding.id">
+        <select v-model="selection" id="holdingPicker" class="w-100" data-live-search="true" @change="selectionChanged($event.target.value)">
+          <option v-for="holding in holdings" v-bind:value="holding.uuid">
             {{holding.title}}
           </option>
        </select>
@@ -13,25 +13,25 @@
 </template>
 
 <script>
-import Select from 'bootstrap-select';
 export default {
     mounted() {
-        this.selection = this.initialSelectedArchive;
+        console.log('initialSelection: '+this.initialSelection);
+      
+        this.selection = this.initialSelection;
 
     },
     methods: {
-        changed: function (value) {
-            this.selected(Number.parseInt(value));
+        selectionChanged: function (value) {
+          this.$emit('selectionChanged', value);
         }
     },
     data() {
         return {
-            selection: 0
+            selection: '' 
         };
     },
     props: {
-        initialSelectedArchive: Number,
-        selected: Function,
+        initialSelection: '',
         holdings: Array,
         label: {
             type: String,
@@ -42,10 +42,6 @@ export default {
         showLabel: function() {
             return this.label.length > 0;
         },
-        /*selection: function() {
-            return this.initialSelectedArchive;
-        }*/
-
     }
 }
 

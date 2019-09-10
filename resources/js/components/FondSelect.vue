@@ -2,7 +2,7 @@
     <div>
         <ul class="tree-list-group">
             <li class="tree-list-group-item d-flex justify-content-between align-items-center active">
-                {{ $t('access.browse.selectFond') }}
+                {{ $t('access.browse.selectHolding') }}
             </li>
             <li class="tree-list-group-item d-flex justify-content-between align-items-center">
                 <b-tree-view :data="treeData" v-on:nodeSelect="fondSelected" :class="list-group-item" :contextMenuItems="contextMenuItems"></b-tree-view>
@@ -20,27 +20,25 @@ export default {
         bTreeView
     },
     props: {
-            fondSelectionChanged: {
-                type: Function
-            },
-            contextMenuItems: {
-                type: Array,
-                default: () => {
-                    return [
-                        { code: 'DELETE_NODE', label: '1' }, 
-                        { code: 'RENAME_NODE', label: '2' } 
-                    ]
-                }
-            },
- 
+        fondSelectionChanged: {
+            type: Function
+        },
+        contextMenuItems: {
+            type: Array,
+            default: () => {
+                return [
+                ]
+            }
+        },
+
     },
     data() {
         return {
-           list: [],
+            list: [],
             group: {},
             item: {},
-
-            treeData: [
+            contextMenuItems: [],
+            demoTree: [
                 {
                     "id": 1, "name": "Dokumenter" , 
                     "children": [
@@ -68,6 +66,17 @@ export default {
         fondSelected: function (fond, state) {
             this.$emit('fondSelectionChanged', fond, state);
         }
-    }
+    },
+    mounted() {
+    },
+    computed: {
+        treeData: function() {
+            console.log(this.holdings);
+            return this.holdings.map( (holding) => {
+                return {'id' : holding.id, 'name' : holding.title };
+            });
+        }
+    },
+    props: ['holdings']
 }
 </script>

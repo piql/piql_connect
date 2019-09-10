@@ -9,14 +9,16 @@ class Holding extends Model
 {
     protected $table = 'holdings';
     protected $fillable = [
-        'title','description','parent_uuid'
+        'title','description','parent_uuid', 'uuid'
     ];
 
     protected static function boot()
     {
         parent::boot();
         static::creating(function ($model) {
-            $model->uuid = Uuid::generate()->string;
+            if(empty($model->uuid)){
+                $model->uuid = Uuid::generate()->string;
+            }
         });
     }
    
@@ -42,5 +44,11 @@ class Holding extends Model
             $this->attributes['parent_uuid'] = $value;
         }
     }
+
+    public function fonds()
+    {
+        return $this->hasMany('App\Fonds', 'owner_holding_uuid', 'uuid');
+    }
+
 
 }

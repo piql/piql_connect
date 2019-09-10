@@ -3,21 +3,21 @@
         <form class="form mb-3" v-on:submit.prevent>
             <div class="container-fluid">
                 <div class="row">
-                    <div class="col-sm-3 col-lg-2 col-xs-1">
-                        <holding-picker :holdings='holdings' :initialSelectedHolding='selectedHolding' @holdingSelectionChanged='holdingSelectionChanged'></holding-picker>
+                    <div class="col-sm-3 col-lg-3 col-xs-1">
+                        <holding-picker :holdings='archives' :initialSelection='selectedArchiveUuid' :label='archiveSelectLabel' @selectionChanged='archiveSelectionChanged'></holding-picker>
                     </div>
 
-                    <div class="col-sm-2">
+                    <div class="col-sm-1 ml-5 mr-5">
                         <label for="fromDate" class="col-form-label-sm">{{$t('access.browse.archivedFrom')}}</label>
                         <input v-model="fromDateFilter" id="fromDate" type="date" class="form-control w-auto">
                     </div>
 
-                    <div class="col-sm-2">
+                    <div class="col-sm-1 mr-5">
                         <label for="toDate" class="col-form-label-sm">{{$t('access.browse.archivedTo')}}</label>
                         <input v-model="toDateFilter" id="toDate" type="date" class="form-control w-auto">
                     </div>
 
-                    <div class="col-sm-3 form-group">
+                    <div class="col-sm-3 mr-5 form-group">
                         <label for="searchContents" class="col-form-label-sm">{{$t('access.browse.withContents')}}</label>
                         <div class="input-group">
                             <div class="input-group addon">
@@ -29,8 +29,8 @@
                         </div>
                     </div>
 
-                    <div class="col-sm-2 ml-5">
-                        <location-picker :initialSelectedLocation="selectedLocation" :locations="locations" @locationSelectionChanged="locationSelectionChanged"></location-picker>
+                    <div class="col-sm-1 ml-5">
+                        <location-picker :holding='selectedArchiveUuid' :initialSelectedLocation="selectedLocation" :locations="locations" @locationSelectionChanged="locationSelectionChanged"></location-picker>
                     </div>
                 </div>
             </div>
@@ -44,7 +44,7 @@
         <hr class="row m-0">
         <div class="row">
             <div class="col-sm-3 col-lg-2 col-xs-1 mt-5">
-                <fond-select @fondSelectionChanged="fondSelectionChanged"></fond-select>
+                <fond-select @fondSelectionChanged="fondSelectionChanged" :holdings="selectedArchiveHoldings"></fond-select>
             </div>
             <div class="col-sm-8">
                 <browser-list v-if="fondSelected" :selectedFond="lastSelectedFond"></browser-list>
@@ -59,6 +59,12 @@
 </template>
 
 <script>
+
+import axios from 'axios';
+import JQuery from 'jquery';
+let $ = JQuery;
+import selectpicker from 'bootstrap-select';
+
 export default {
     data() {
         return {
@@ -73,25 +79,19 @@ export default {
                 { name: 'Online', value: 'online' },
                 { name: 'Offline', value: 'offline'}
             ],
-            selectedHolding: "H-002",
-            holdings: [
-                { name: 'Forsvarsmuseet', value: 'H-001' },
-                { name: 'Bergenhus', value: 'H-002' },
-                { name: 'Hjemmefrontmuseet', value: 'H-003' },
-                { name: 'Luftforsvarsmuseet', value: 'H-004' },
-                { name: 'Marinemuseet', value: 'H-005' },
-                { name: 'Oscarsborg', value: 'H-006' },
-                { name: 'Rustkammeret', value: 'H-007' }
-            ]
+            archives: [],
+            selectedArchiveUuid: '9aae5540-d3ec-11e9-9a0b-ddd5a3958760',
+            archiveSelectLabel: "Archive",
+            holdings: [],
+            selectedArchiveHoldings: [],
         }
     },
     computed: {
         fondSelected: function() {
             return this.fondSelectCounter > 0;
         },
-
         completeFilter: function() {
-            let filter = "?holding=" + encodeURI(this.selectedHolding);
+            let filter = "?holding=" + encodeURI(this.selectedArchiveUuid);
             filter += "&loc=" + encodeURI(this.selectedLocation);
             if(this.selectedFond){
                 filter += "&fond=" + encodeURI(this.selectedFond);
@@ -109,6 +109,12 @@ export default {
         },
     },
     mounted() {
+        axios.get("/api/v1/planning/holdings").then( (response) => {
+            this.archives = response.data.data;
+            Vue.nextTick( () => {
+                $('#holdingPicker').selectpicker();
+            });
+        });
     },
     methods: {
         fondSelectionChanged: function(fond, state) {
@@ -126,8 +132,11 @@ export default {
             }
 
         },
-        holdingSelectionChanged: function(holding) {
-            this.selectedHolding = holding;
+        archiveSelectionChanged: function(archiveUuid) {
+            this.selectedArchiveUuid = archiveUuid;
+            axios.get("/api/v1/planning/holdings/"+archiveUuid+"/fonds").then( (response) => {
+                this.selectedArchiveHoldings = response.data.data;
+            });
         },
         locationSelectionChanged: function(location) {
             this.selectedLocation = location;
