@@ -12,15 +12,15 @@
 
                 <div class="col-sm-3 d-flex flex-row justify-content-start" style="justify-content: center">
                     <div class="pr-3 pt-sm-3">
-                        10 GB
+                        {{ fileSize }}
                     </div>
-                    <div class="w-50 pt-sm-3">
+                    <div v-if="fileSize !== '---'" class="w-50 pt-sm-3">
                         <div class="progress-bar">
-                            <div class="bar positive">
-                                <span>54%</span>
+                            <div class="bar positive" :style="'width: ' + usage + '%'">
+                                <span>{{usage}}%</span>
                             </div>
-                            <div class="bar negative">
-                                <span>54%</span>
+                            <div class="bar negative"  :style="'width: ' + (100-usage) + '%'">
+                                <span>{{usage}}%</span>
                             </div>
                         </div>
                     </div>
@@ -108,9 +108,27 @@ export default {
             console.log(job);
             return job;
         },
-
+        getFileSizeIEC(bytes) {
+            let value = 0;
+            let exp = 0;
+            if (bytes) {
+                exp = Math.floor(Math.log(bytes) / Math.log(1024));
+                value = (bytes / Math.pow(1024, exp)).toFixed(2);
+            }
+            return value + " " + (exp ? 'KMGTPEZY'[exp - 1] + 'iB' : 'Bytes')
+        },
     },
-
+    computed: {
+        fileSize: function() {
+            if(this.item.size !== undefined)
+                return this.getFileSizeIEC(this.item.size);
+            else
+                return "---";
+        },
+        usage: function() {
+            return (100*this.item.size/(120*1024*1024*1024)).toFixed(0);
+        },
+    },
     data() {
         return {
             modal: true,

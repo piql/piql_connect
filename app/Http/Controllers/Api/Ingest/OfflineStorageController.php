@@ -27,6 +27,8 @@ class OfflineStorageController extends Controller
         // This is a bit nasty because there is no owner validation here
         // Should be safe when used internally e.i when owner is valid
         $jobs = \App\Job::where('status', '=', 'created')->get();
+        foreach ($jobs as $job)
+            $job->size=$job->getJobSize();
 
         return Response::json($jobs);
     }
@@ -35,9 +37,11 @@ class OfflineStorageController extends Controller
     {
         // This is a bit nasty because there is no owner validation here
         // Should be safe when used internally e.i when owner is valid
-        $job = \App\Job::find($jobId);
-
-        return Response::json($job->bags);
+        $job = \App\Job::findOrFail($jobId);
+        $bags = $job->bags;
+        foreach ($bags as $bag)
+            $bag->size=$bag->getBagSize();
+        return Response::json($bags);
     }
 
     public function archiveJobs()
@@ -45,7 +49,9 @@ class OfflineStorageController extends Controller
         // This is a bit nasty because there is no owner validation here
         // Should be safe when used internally e.i when owner is valid
         $jobs = \App\Job::where('status', '=', 'ingesting')->get();
-
+        foreach ($jobs as $job) {
+            $job->size = $job->getJobSize();
+        }
         return Response::json($jobs);
     }
 
@@ -67,6 +73,7 @@ class OfflineStorageController extends Controller
             $job->status = "ingesting";
         }
         $job->save();
+        $job->size = $job->getJobSize();
         return Response::json($job);
     }
 

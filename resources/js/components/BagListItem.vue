@@ -9,7 +9,7 @@
                 {{item.created_at}}
             </div>
             <div class="col-sm-2 pt-sm-3">
-                10 MB
+                {{fileSize}}
             </div>
             <div class="col-sm-2 listActionItems d-flex flex-row justify-content-end pt-sm-1">
                 <div class="mx-sm-1">
@@ -31,11 +31,6 @@ export default {
         console.log('Task component mounted.')
         let bagId = this.item.id;
         this.url = "tasks/"+bagId;
-        axios.get("/api/v1/ingest/bags/"+bagId+"/files").then( bag => {
-            if(bag && bag.data && bag.data[0]){
-                this.fileName = bag.data[0].filename;
-            }
-        });
     },
     methods: {
         onListClick()
@@ -47,14 +42,30 @@ export default {
             let bagId = this.item.id;
             this.$emit('piqlIt', bagId);
         },
+        getFileSizeIEC(bytes) {
+            let value = 0;
+            let exp = 0;
+            if (bytes) {
+                exp = Math.floor(Math.log(bytes) / Math.log(1024));
+                value = (bytes / Math.pow(1024, exp)).toFixed(2);
+            }
+            return value + " " + (exp ? 'KMGTPEZY'[exp - 1] + 'iB' : 'Bytes')
+        },
 
     },
     props: {
         item: Object
     },
+    computed: {
+        fileSize: function() {
+            if(this.item.size !== undefined)
+                return this.getFileSizeIEC(this.item.size);
+            else
+                return "---";
+        },
+    },
     data() {
         return {
-            fileName: "",
             url: "",
         };
     },

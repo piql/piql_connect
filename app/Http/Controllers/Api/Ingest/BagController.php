@@ -119,7 +119,10 @@ class BagController extends Controller
     public function all()
     {
         Log::debug("Bag all - needs pagination!");
-        return Response::json(Bag::paginate(5));
+        $bags = Bag::paginate(5);
+        foreach ($bags as $bag)
+            $bag->size = $bag->getBagSize();
+        return Response::json($bags);
     }
 
     /**
