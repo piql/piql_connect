@@ -4,7 +4,7 @@
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-sm-3 col-lg-3 col-xs-1">
-                        <holding-picker :holdings='archives' :initialSelection='selectedArchiveUuid' :label='archiveSelectLabel' @selectionChanged='archiveSelectionChanged'></holding-picker>
+                        <archive-picker :holdings='archives' :initialSelection='selectedArchiveUuid' :label='archiveSelectLabel' @selectionChanged='archiveSelectionChanged'></archive-picker>
                     </div>
 
                     <div class="col-sm-1 ml-5 mr-5">
@@ -112,7 +112,7 @@ export default {
         axios.get("/api/v1/planning/holdings").then( (response) => {
             this.archives = response.data.data;
             Vue.nextTick( () => {
-                $('#holdingPicker').selectpicker();
+                $('#archivePicker').selectpicker();
             });
         });
     },

@@ -1,6 +1,6 @@
 <template>
     <div class="container-fluid">
-        <div class="row mb-4">
+        <div class="row mb-4 w-auto">
             <div class="col">
                 <em class="mb-3 mt-2">
                     {{ $t('upload.ingress') }}<br/>
@@ -10,7 +10,7 @@
             </div>
         </div>
         <div class="row mb-5">
-            <div class="col-12">
+            <div class="col-sm-12">
                 <Gallery
                     :uploader="uploader"
                     :fileInputDisabled="fileInputDisabled"
@@ -20,31 +20,36 @@
             </div>
         </div>
 
-        <div class="card upload-widget-back w-95 p-2 pt-3 pb-4">
-            <div class="row">
-                <div class="col-sm-3 mr-3">{{ $t('upload.sipName') }}</div>
-                <div class="col-sm-3 mr-3">{{ $t('Archive') }}</div>
-                <div class="col-sm-2 mr-0">{{ $t('upload.files') }}</div>
-                <div class="col-sm-2 listActionItems mr-3"></div>
+        <div class="card upload-widget-back w-auto p-2 pt-3 pb-4 w-95">
+            <div class="row mb-2">
+                <div class="col-sm-2 mr-1 ml-1">{{ $t('upload.sipName') }}</div>
+                <div class="col-sm-2 mr-1">{{ $t('Archive') }}</div>
+                <div class="col-sm-2 mr-1">{{ $t('Holding') }}</div>
+                <div class="col-sm-2 mr-1">{{ $t('upload.files') }}</div>
+                <div class="col-sm-1 listActionItems mr-3"></div>
                 <div class="col-sm-2"></div>
             </div>
             <form v-on:submit.prevent="">
-                <div class="row w-90">
-                    <div class="col-sm-3 mr-3">
+                <div class="row">
+                    <div class="col-sm-2 mr-2">
                         <input value="" :placeholder="bag.name" v-model="bag.name" type="text" class="noTextTransform form-control pl-3" @input="setBagName" onclick="select()">
                     </div>
-                    <div class="col-sm-3 mr-5">
-                      <holding-picker :holdings="archives" :initialSelection="selectedArchiveUuid" :selected="changedArchive"></holding-picker>
+                    <div class="col-sm-2 mr-2">
+                      <archive-picker :holdings="archives" :initialSelection="selectedArchiveUuid" @selectionChanged="changedArchive"></archive-picker>
                    </div>
-                    <div class="col-sm-1 card p-2 pr-4 mr-3 w-auto" style="text-align: right; max-height: 3rem;">
+                    <div class="col-sm-2 mr-2">
+                      <holding-picker :holdings="holdings" :initialSelection="initialHoldingTitle" @selectionChanged="changedHolding"></holding-picker>
+                   </div>
+
+                    <div class="col-sm-1 card p-2 pr-4 mr-2" style="text-align: right; max-height: 3rem;">
                         {{ numberOfFiles || 0}}
                     </div>
-                    <div class="col-sm-2 listActionItems mr-3" style="text-align: center">
+                    <div class="col-sm-2 listActionItems mr-2" style="text-align: center">
                         <i class="fas fa-list-ul p-2 mr-4 hover-hand" @click="onClick('/ingest/tasks/'+bag.id)"></i>
                         <i class="fas fa-trash-alt p-2 hover-hand"></i>
                     </div>
                     <div class="col-sm-2 text-center">
-                        <button class="btn btn-primary btn-lg w-75 mr-2" v-bind:class="[{ disabled : processDisabled  }]" v-on:click="commitBagToProcessing">{{$t('upload.processButton')}}</button>
+                        <button class="btn btn-primary btn-lg mr-2 w-100" v-bind:class="[{ disabled : processDisabled  }]" v-on:click="commitBagToProcessing">{{$t('upload.processButton')}}</button>
                     </div>
                 </div>
             </form>
@@ -113,7 +118,11 @@ export default {
             processDisabled: true,
             fileInputDisabled: false,
             selectedArchiveUuid: '9aae5540-d3ec-11e9-9a0b-ddd5a3958760',
+            selectedHoldingUuid: '',
+            selectedHolding: 'Documents',
+            initialHoldingTitle: 'Documents',
             archives: [],
+            holdings: [],
         };
     },
 
@@ -168,16 +177,28 @@ export default {
             return createdBag;
         },
         changedArchive(archiveId) {
-            console.log("archive is now: "+archiveId);
             this.selectedArchive = archiveId;
+            axios.get('/api/v1/planning/holdings/'+archiveId+'/fonds').then( (response) => {
+                this.holdings = response.data.data;
+                this.initialHoldingTitle = this.holdings[0].title;
+                Vue.nextTick( () => {
+                    $('#holdingPicker').selectpicker();
+                });
+
+            });
+        },
+        changedHolding(holdingTitle) {
+            this.selectedHolding = holdingTitle;
         }
+
     },
     async mounted() {
         axios.get("/api/v1/planning/holdings").then( (response) => {
-        this.archives = response.data.data;
+            this.archives = response.data.data;
             Vue.nextTick( () => {
-                $('#holdingPicker').selectpicker();
+                $('#archivePicker').selectpicker();
             });
+            this.changedArchive(this.archives[0].uuid);
         });
 
         this.userId = (await axios.get("/api/v1/system/currentUser")).data;
