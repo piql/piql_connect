@@ -8,7 +8,7 @@
                 {{item.created_at}}
             </div>
             <div class="col-sm-3">
-                {{ $t('ingest.processing.creatingStatus') }}
+                {{item.status}}
             </div>
             <div class="col-sm-1">
                 <div class="spinner-border" role="status">

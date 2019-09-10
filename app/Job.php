@@ -52,4 +52,11 @@ class Job extends Model
         return $job;
     }
 
+    public function getJobSize() {
+        $bags = $this->bags;
+        $size = 0;
+        foreach ($bags as $bag)
+            $size += $bag->getBagSize();
+        return $size;
+    }
 }

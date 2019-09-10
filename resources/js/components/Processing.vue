@@ -1,5 +1,5 @@
 <template>
-    <div class="container-fluid"> 
+    <div class="container-fluid">
         <ingest-filter-search v-bind:filters="['ingest.processing.processingFilter','ingest.processing.uploadingFilter']"></ingest-filter-search>
         <div class="row plistHeader" v-show="currentlyIdle === false">
             <div class="col-sm-5">{{$t('ingest.processing.sip')}}</div>
@@ -32,7 +32,7 @@ export default {
     methods: {
         startPollProcessing () {
             this.pollProcessingHandle  = setInterval(async () => {
-                this.items = (await axios.get("/api/v1/ingest/processing/")).data;
+                this.items = (await axios.get("/api/v1/ingest/processing/")).data.data;
             }, 500)
         }
     },

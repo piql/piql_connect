@@ -69,7 +69,7 @@
 
 	"ingest.fileList.fileName": "Filnavn",
 	"ingest.fileList.fileSize": "Størrelse",
-	"ingest.fileList.filesIn": "Viser filer i SIP",
+	"ingest.fileList.filesIn": "Fil-liste",
 	"ingest.fileList.ingress": "Her kan du se hvilke filer du har lagt til i en SIP. Du kan også legge til eller endre metadata per fil.",
 	"ingest.status.from": "Fra",
 	"ingest.status.to": "Til",
@@ -84,8 +84,18 @@
 	"ingest.status.status": "Status",
 	"ingest.status.preparing": "Forbereder skriving",
 	"ingest.status.writing": "Skriver til piqlFilm",
+    "ingest.processing.status.closed":             "Venter på å bli prosessert",
+    "ingest.processing.status.creating_bag":       "Forbereder steg 1/2",
+    "ingest.processing.status.move_to_outbox":     "Forbereder steg 1/2",
+    "ingest.processing.status.initiate_transfer":  "Prosesserer steg 1/4",
+    "ingest.processing.status.approve_transfer":   "Prosesserer steg 2/4",
+    "ingest.processing.status.transferring":       "Prosesserer steg 3/4",
+    "ingest.processing.status.ingesting":          "Prosesserer steg 4/4",
+    "ingest.processing.status.complete":           "Prosessering ferdig",
+    "ingest.processing.status.error":              "Feil",
 
-	"ingest.metadata.editFile": "Rediger metadata per fil",
+    "ingest.metadata.editJob": "Job metadata",
+	"ingest.metadata.editFile": "Fil metadata",
 	"ingest.metadata.editFile.ingress": "Her kan du redigere metadata per fil.",
 	"ingest.metadata.editFile.fileName": "Filnavn",
 

@@ -100,7 +100,7 @@ class BagController extends Controller
 
     public function processing()
     {
-        return Response::json(Bag::latest()
+        $bags = Bag::latest()
             ->where(  'status', '=', 'closed')
             ->orWhere('status', '=', 'bag_files')
             ->orWhere('status', '=', 'move_to_outbox')
@@ -108,13 +108,21 @@ class BagController extends Controller
             ->orWhere('status', '=', 'approve_transfer')
             ->orWhere('status', '=', 'transferring')
             ->orWhere('status', '=', 'ingesting')
-            ->get());
+            ->orWhere('status', '=', 'complete')
+            ->paginate(6);
+        foreach($bags as $bag) {
+            $bag->status = __('ingest.processing.status.'.$bag->status);
+        }
+        return Response::json($bags);
     }
 
     public function all()
     {
         Log::debug("Bag all - needs pagination!");
-        return Response::json(Bag::paginate(5));
+        $bags = Bag::paginate(5);
+        foreach ($bags as $bag)
+            $bag->size = $bag->getBagSize();
+        return Response::json($bags);
     }
 
     /**
