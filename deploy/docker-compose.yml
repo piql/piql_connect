@@ -33,12 +33,10 @@ services:
       - ./../storage:/var/www/public/storage
       - ./nginx/conf.d/:/etc/nginx/conf.d/
       - ./nginx/ssl/:/etc/nginx/ssl/
-
     links:
       - app
     networks:
       - piqlConnect-net
-    command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
 
   database:
     image: mariadb
