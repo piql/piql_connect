@@ -62,7 +62,7 @@ $font_opensans_bold_url: url('/fonts/OpenSans-Bold.ttf');
 $font_opensans_semibold_url: url('/fonts/OpenSans-SemiBold.ttf');
 $font_opensans_light_url: url('/fonts/OpenSans-Light.ttf');
 
-    
+
 
 //images
 $image_login-bg_url: url('/images/bg-image.png');
@@ -632,7 +632,7 @@ input[type="file"] {
     &:hover {
         background-color: $color_fill_verydark;
     }
- 
+
     &:focus {
         outline-color: $color_background_3 !important;
         background-clip: padding-box;
@@ -1237,8 +1237,11 @@ input[type="file"] {
     margin-top: 10px;
     height: auto;
 }
+div.breadcrumbs{
+    padding: 0px 0px 0px 0px
+}
 .breadcrumbs {
-    margin: 10px 0 10px 60px;
+    margin: 10px 10px 10px 0px;
     display: block;
     padding: 0;
     font-size: 12px;
@@ -1332,18 +1335,18 @@ th {
     background-image: $image_piql-logo-white_url;
     background-size: 20px;
     background-repeat: no-repeat;
-    background-position-x: 14px;
+    background-position-x: 18px;
     background-position-y: 0px;
     //Instead of the line below you could use @include background-origin($origin)
     background-origin: content-box;
     //Instead of the line below you could use @include border-radius($radius, $vertical-radius)
     border-radius: 10px;
-    padding: 5px;
+    padding: 3px;
     border: 4px solid $color_main_brand;
     max-width: 70px !important;
     max-width: 70px !important;
-    max-height: 30px !important;
-    min-height: 30px !important;
+    max-height: 28px !important;
+    min-height: 28px !important;
     display: inline-block;
     &:hover {
         background-color: $color_fill_dark;
@@ -2008,7 +2011,7 @@ th {
 }
 
 input[type=text] {
-    min-width: 100px; 
+    min-width: 100px;
     background-color: white;
     border: 0;
     height: 36px;
@@ -2081,5 +2084,58 @@ input[type=text] {
 .hover-hand {
     &:hover {
         cursor: pointer;
+    }
+}
+
+.list-action-icon {
+    font-size: 21px;
+}
+
+$bar-width: 100px;
+$bar-height: 22px;
+
+.progress-bar{
+    margin-top: 1px;
+    border-radius: 8px;
+    position:relative;
+    border:#ccc solid 1px;
+    width:$bar-width;
+    height:$bar-height;
+    line-height:$bar-height;
+    vertical-align:midle;
+    overflow:hidden;
+    font-family:$font_agenda;
+    font-size:20px;
+    .bar{
+        position:absolute;
+        top:0;
+        height:100%;
+        overflow:hidden;
+        span{
+            padding-top: 1px;
+            position:absolute;
+            display:block;
+            width:$bar-width;
+            height:100%;
+            text-align:center;
+        }
+        &.positive{
+            background:$color_signal;
+            left:0;
+            width:54%;
+            span{
+                left:0;
+                color:$color_fill_0;
+            }
+        }
+        &.negative{
+            background:$color_fill_0;
+            right:0;
+            width:46%;
+            span{
+                right:0;
+                color:$color_fill_dark;
+            }
+        }
     }
 }

@@ -53,9 +53,9 @@ return [
             'root' => storage_path(env('STORAGE_BAGS_PATH')),
         ],
         'archivematica' => [
-            'driver' => 'local', 
+            'driver' => 'local',
             'root' => storage_path(env('STORAGE_TRANSFER_PATH')),
-        ],        
+        ],
 
         'local' => [
             'driver' => 'local',
@@ -91,10 +91,8 @@ return [
 */
          'am' => [
             'driver' => 'local',
-            'root' => (storage_path('am/ss-location-data')),
+            'root' => (storage_path(env('STORAGE_TRANSFER_PATH'))),
         ],
-
- 
     ],
 
 ];

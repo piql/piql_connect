@@ -3,7 +3,7 @@
         <ingest-filter-search class="mr-5"></ingest-filter-search>
         <div class="row plistHeader">
             <div class="col">{{$t('ingest.fileList.fileName')}}</div>
-            <div class="col-1">{{$t('ingest.fileList.fileSize')}}</div>
+            <div class="col-sm-2  d-flex flex-row justify-content-end">{{$t('ingest.fileList.fileSize')}}</div>
             <div class="col-2 listActionItems"></div>
         </div>
 
@@ -25,7 +25,6 @@
                 type: String,
                 default: ""
             },
-
         },
 
         async mounted() {

@@ -17,6 +17,7 @@
 	"upload.processButton": "Prosessere",
 	"User Settings" : "Brukerinstillinger",
 	"upload.sipName": "SIP-navn",
+    "upload.holding": "Hovedkategori",
 	"upload.files": "Antall filer",
 	"User interface language": "Brukergrensesnittspråk",
 
@@ -47,7 +48,7 @@
 	"ingest.processing.ingestDate": "Mottaksdato",
 	"ingest.processing.status": "Status",
 	"ingest.processing.creatingStatus": "Oppretter AIP",
-	"ingest.processing.noItems": "Alle SIPer er ferdig prosessert.", 
+	"ingest.processing.noItems": "Alle SIPer er ferdig prosessert.",
 
 	"ingest.taskList.from" : "Fra",
 	"ingest.taskList.to" : "Til",
@@ -57,16 +58,18 @@
 	"ingest.taskList.sip": "SIP",
 	"ingest.taskList.content": "Innhold",
 	"ingest.taskList.ingestDate": "Ingest-dato",
+    "ingest.taskList.size": "Størrelse",
 
 	"ingest.offlineStorage": "Offline-lagring",
 	"ingest.offlineStorage.jobName": "Jobbnavn",
 	"ingest.offlineStorage.numberOfAips": "AIPer",
 	"ingest.offlineStorage.creationDate": "Opprettelsesdato",
+    "ingest.offlineStorage.size": "Størrelse",
 
 
 	"ingest.fileList.fileName": "Filnavn",
 	"ingest.fileList.fileSize": "Størrelse",
-	"ingest.fileList.filesIn": "Viser filer i SIP",
+	"ingest.fileList.filesIn": "Fil-liste",
 	"ingest.fileList.ingress": "Her kan du se hvilke filer du har lagt til i en SIP. Du kan også legge til eller endre metadata per fil.",
 	"ingest.status.from": "Fra",
 	"ingest.status.to": "Til",
@@ -81,8 +84,18 @@
 	"ingest.status.status": "Status",
 	"ingest.status.preparing": "Forbereder skriving",
 	"ingest.status.writing": "Skriver til piqlFilm",
+    "ingest.processing.status.closed":             "Venter på å bli prosessert",
+    "ingest.processing.status.creating_bag":       "Forbereder steg 1/2",
+    "ingest.processing.status.move_to_outbox":     "Forbereder steg 1/2",
+    "ingest.processing.status.initiate_transfer":  "Prosesserer steg 1/4",
+    "ingest.processing.status.approve_transfer":   "Prosesserer steg 2/4",
+    "ingest.processing.status.transferring":       "Prosesserer steg 3/4",
+    "ingest.processing.status.ingesting":          "Prosesserer steg 4/4",
+    "ingest.processing.status.complete":           "Prosessering ferdig",
+    "ingest.processing.status.error":              "Feil",
 
-	"ingest.metadata.editFile": "Rediger metadata per fil",
+    "ingest.metadata.editJob": "Job metadata",
+	"ingest.metadata.editFile": "Fil metadata",
 	"ingest.metadata.editFile.ingress": "Her kan du redigere metadata per fil.",
 	"ingest.metadata.editFile.fileName": "Filnavn",
 
@@ -106,7 +119,7 @@
     "access.browse.primaryContact": "Primærkontakt",
     "access.browse.contactArea": "Kontaktområde",
     "access.browse.contactArea.address": "Adresse",
- 
+
 
 
 	"access.retrieve": "Gjenopprett",
