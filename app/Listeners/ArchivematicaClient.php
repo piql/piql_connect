@@ -3,7 +3,7 @@
 
 namespace App\Listeners;
 
-use Log;
+
 use GuzzleHttp\Client as Guzzle;
 
 class ArchivematicaClient
@@ -16,11 +16,9 @@ class ArchivematicaClient
      */
     public function __construct()
     {
-        $am_proxy = 'https://172.17.0.1/api/v1/ingest/am/';
-        Log::debug("initiate Archivematica proxy with url ".$am_proxy);
+        $am_proxy = url('/api/v1/ingest/am')."/";
         $this->apiClient = new Guzzle([
             'base_uri' => $am_proxy,
-            'verify' => false,
             'headers' => [
                 'Accept' => 'application/json'
             ]

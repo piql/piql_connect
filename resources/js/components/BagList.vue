@@ -16,8 +16,9 @@
         <br/>
         <div class="row plistHeader">
             <div class="col-1"><input type="checkbox" class="checkbox" id="allSips"></div>
-            <div class="col">Bag</div>
+            <div class="col">AIP</div>
             <div class="col-3">{{$t('ingest.taskList.ingestDate')}}</div>
+            <div class="col-2">{{$t('ingest.taskList.size')}}</div>
             <div class="col-2 listActionItems">&nbsp;</div>
         </div>
 

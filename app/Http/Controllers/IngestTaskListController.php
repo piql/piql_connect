@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Bag;
 use App\TaskList;
 use Illuminate\Http\Request;
 
@@ -46,7 +47,8 @@ class IngestTaskListController extends Controller
      */
     public function show($bagId)
     {
-        return view('ingest.tasks.show', ['bagId' => $bagId]);
+        $bag = Bag::findOrFail($bagId);
+        return view('ingest.tasks.show', ['bag' => $bag]);
     }
 
     /**

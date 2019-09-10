@@ -28,6 +28,7 @@ class Bag extends Model
             'transferring',        // transferring
             'ingesting',           // ingesting
             'complete',            // bag is stored in AM
+            'error',               // bag encountered an error
         ],
         'transitions' => [
             'add_files' => [
@@ -146,5 +147,14 @@ class Bag extends Model
 
         $this->status = $this->smConfig['transitions'][$transition]['to'];
         $this->save();
+    }
+
+    public function getBagSize() {
+        $files = $this->files;
+        $size = 0;
+        foreach ($files as $file) {
+            $size += $file->filesize;
+        }
+        return $size;
     }
 }
