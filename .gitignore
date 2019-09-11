@@ -31,3 +31,8 @@ tags.temp
 
 /nbproject/private/
 .env.example
+resources/views/partials/breadcrumbs.blade.php
+.wget-hsts
+package-lock.json
+package.json
+resources/views/ingest/jobs/configuration.blade.php
