@@ -47,7 +47,7 @@ services:
       - "MYSQL_USER=connectdbuser"
       - "MYSQL_PASSWORD=AeJua4le"
     ports:
-      - "33061:3306"
+      - "3306:3306"
     volumes:
       - piqlConnect-mariadb:/var/lib/mysql
     networks:

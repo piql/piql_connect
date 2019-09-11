@@ -9,10 +9,12 @@ use Illuminate\Support\Facades\Storage;
 use Log;
 use App\Bag;
 use App\File;
+use App\StorageProperties;
 use Response;
 use Illuminate\Support\Facades\Auth;
 use App\Events\BagFilesEvent;
 use Carbon\Carbon;
+use App\Http\Resources\BagResource;
 
 class BagController extends Controller
 {
@@ -23,8 +25,6 @@ class BagController extends Controller
      */
     public function index()
     {
-        //
-        Log::debug("Bag index");
     }
 
     /**
@@ -34,14 +34,12 @@ class BagController extends Controller
      */
     public function create()
     {
-        //
-        Log::debug("Bag create");
     }
 
     public function latest(Request $request)
     {
         $bag = User::first()->bags()->latest()->first(); //TODO: Authenticated user!
-        return Response::json($bag);
+        return new BagResource(Bag::with(['storage_properties', 'files'])->find($bag->id));
     }
 
     /**
@@ -60,11 +58,14 @@ class BagController extends Controller
         $bag = new Bag();
         $bag->name = $bagName;
         $bag->owner = $request->userId;
-
-
         if($bag->save()){
+            $bag->fresh();
+            $storage_properties = $bag->storage_properties;
+            $storage_properties->archive_uuid = $request->archive_uuid;
+            $storage_properties->holding_name = $request->holding_name;
+            $storage_properties->save();
             Log::info("Created bag with name ".$bag->name." and id ".$bag->id);
-            return Response::json($bag->refresh());
+            return new BagResource(Bag::with(['storage_properties', 'files'])->find($bag->id));
         }
         abort(501, "Could not create bag with name ".$bagName." and owner ".$request->userId);
     }
@@ -77,8 +78,8 @@ class BagController extends Controller
      */
     public function show($id)
     {
-        Log::debug("Bag show");
-        return Response::json(Bag::find($id));
+        $bag = Bag::with(['storage_properties', 'files'])->find($id);
+        return new BagResource($bag);
     }
 
     /**
@@ -89,7 +90,6 @@ class BagController extends Controller
      */
     public function showFiles($id)
     {
-        //Log::debug("Bag show files");
         return Response::json(Bag::find($id)->files()->get());
     }
 
@@ -118,7 +118,6 @@ class BagController extends Controller
 
     public function all()
     {
-        Log::debug("Bag all - needs pagination!");
         $bags = Bag::paginate(5);
         foreach ($bags as $bag)
             $bag->size = $bag->getBagSize();
@@ -146,15 +145,25 @@ class BagController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $bag = Bag::with(['storage_properties', 'files'])->find($id);
+        $storageProperties = StorageProperties::find($bag->storage_properties()->first()->id);
+
         if($request->filled("bagName"))
         {
-            Log::debug("Bag update");
-            $bag = Bag::find($id);
             $bag->name = $request->bagName;
             $bag->save();
-            $bag->fresh();
-            return response()->json(['id' => $bag->id, 'name' => $bag->name, 'files' => $bag->files->count()]);
         }
+
+        if($request->filled("archive_uuid") && $request->filled("holding_name"))
+        {
+
+            $storageProperties->archive_uuid = $request->archive_uuid;
+            $storageProperties->holding_name = $request->holding_name;
+            $storageProperties->save();
+        }
+
+        $resultBag = Bag::with(['storage_properties', 'files'])->find($bag->id);
+        return new BagResource($resultBag);
     }
 
     /**

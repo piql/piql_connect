@@ -21,6 +21,7 @@ class CreateFondsTable extends Migration
             $table->bigInteger('parent_id')->nullable(); /*Poor mans tree structure - if effiency becomes a problem, use something proper */
             $table->integer('position'); /* Position in tree, 0 leftmost, increasing to the right */
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

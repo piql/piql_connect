@@ -13,7 +13,8 @@ class DatabaseSeeder extends Seeder
     {
         //TODO: env to control which seeders to run
         $this->call(UsersTableSeeder::class);
-        $this->call(HoldingsFondsSeeders::class);
+        $this->call(HoldingSeeder::class);
+        $this->call(FondsSeeder::class);
         //$this->call(FilesTableSeeder::class);
         $this->call(ArchivematicaServiceSeeder::class);
     }
