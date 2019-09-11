@@ -44,15 +44,24 @@
         <hr class="row m-0">
         <div class="row">
             <div class="col-sm-3 col-lg-2 col-xs-1 mt-5">
-                <fond-select @fondSelectionChanged="fondSelectionChanged" :holdings="selectedArchiveHoldings"></fond-select>
+                <fond-select v-if="archiveSelected" @fondSelectionChanged="fondSelectionChanged" :holdings="selectedArchiveHoldings"></fond-select>
             </div>
             <div class="col-sm-8">
-                <browser-list v-if="fondSelected" :selectedFond="lastSelectedFond"></browser-list>
+                <browser-list v-if="fondSelected" @addToRetrieval="addToRetrieval" :selectedArchive="selectedArchiveUuid" :selectedHolding="selectedFond" :filters="completeFilter"/>
                 <identity v-else></identity>
             </div>
             <div class="col-sm-2 mt-5">
-                <online-actions v-if="fondSelected"></online-actions>
-                <primary-contact v-else></primary-contact>
+                <span v-if="fondSelected">
+                    <online-actions v-if="online"/>
+                    <offline-actions v-else/>
+                </span>
+                <span v-else>
+                    <primary-contact></primary-contact>
+                </span>
+                <ul v-if="offline" class="retrievalItems border-none">
+                    <li class="list-group-item fill3" v-for="item in retrievalItems">{{item.name}}</li>
+                </ul>
+
             </div>
         </div>
     </div>
@@ -80,19 +89,31 @@ export default {
                 { name: 'Offline', value: 'offline'}
             ],
             archives: [],
-            selectedArchiveUuid: '9aae5540-d3ec-11e9-9a0b-ddd5a3958760',
+            selectedArchiveUuid: "",
             archiveSelectLabel: "Archive",
             holdings: [],
             selectedArchiveHoldings: [],
+            retrievalItems: [],
         }
     },
     computed: {
+        archiveSelected: function() {
+            return this.selectedArchiveUuid.length > 0;
+        },
         fondSelected: function() {
             return this.fondSelectCounter > 0;
         },
+        online: function() {
+            return this.selectedLocation == "online";
+        },
+        offline: function() {
+            return !this.online;
+        },
         completeFilter: function() {
-            let filter = "?holding=" + encodeURI(this.selectedArchiveUuid);
-            filter += "&loc=" + encodeURI(this.selectedLocation);
+            let filter = "?loc=" + encodeURI(this.selectedLocation);
+            if(this.archiveSelected) {
+                filter += "&holding=" + encodeURI(this.selectedArchiveUuid);
+            }
             if(this.selectedFond){
                 filter += "&fond=" + encodeURI(this.selectedFond);
             }
@@ -140,7 +161,10 @@ export default {
         },
         locationSelectionChanged: function(location) {
             this.selectedLocation = location;
-        }
+        },
+        addToRetrieval: function(item) {
+            this.retrievalItems.push(item);
+        },
     },
 }
 </script>

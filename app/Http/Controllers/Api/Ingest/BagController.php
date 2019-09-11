@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Events\BagFilesEvent;
 use Carbon\Carbon;
 use App\Http\Resources\BagResource;
+use App\Http\Resources\BagCollection;
 
 class BagController extends Controller
 {
@@ -118,10 +119,8 @@ class BagController extends Controller
 
     public function all()
     {
-        $bags = Bag::paginate(5);
-        foreach ($bags as $bag)
-            $bag->size = $bag->getBagSize();
-        return Response::json($bags);
+        $bags = Bag::latest()->paginate(7);
+        return new BagCollection($bags);
     }
 
     /**
