@@ -30,3 +30,7 @@ tags.temp
 
 
 /nbproject/private/
+<<<<<<< HEAD
+=======
+.env.example
+>>>>>>> parent of 45f06fe... added files to ignore
