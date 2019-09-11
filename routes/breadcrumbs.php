@@ -13,7 +13,7 @@ Breadcrumbs::for('offline_storage', function ($trail) {
 // Offline storage > AIP List
 Breadcrumbs::for('aip_list', function ($trail, $job) {
     $trail->parent('offline_storage');
-    $trail->push('AIP List', route('offline_storage.show', $job->id));
+    $trail->push($job->name, route('offline_storage.show', $job->id));
 });
 
 // Offline storage > AIP List > Files
@@ -23,7 +23,7 @@ Breadcrumbs::for('file_list', function ($trail, $bag) {
         $trail->parent('aip_list', $job);
     else
         $trail->parent('upload');
-    $trail->push('File List', route('bag.show.files', $bag->id));
+    $trail->push($bag->name, route('bag.show.files', $bag->id));
 });
 
 // Offline storage > AIP List > Files > Metadata
@@ -41,5 +41,5 @@ Breadcrumbs::for('offline_storage_metadata_view', function ($trail, $job) {
 // Offline storage > Content options
 Breadcrumbs::for('content_options_view', function ($trail, $job) {
     $trail->parent('offline_storage');
-    $trail->push('Content options '.$job->name, route('offline_storage.setup', ['id' => $job->id]));
+    $trail->push($job->name, route('offline_storage.setup', ['id' => $job->id]));
 });
