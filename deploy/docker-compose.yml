@@ -50,9 +50,11 @@ services:
       - "33061:3306"
     volumes:
       - piqlConnect-mariadb:/var/lib/mysql
+      - ./mysql/my.cnf:/etc/my.cnf
     networks:
       - piqlConnect-net
-    command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci --init-connect='SET NAMES utf8mb4;' --innodb-flush-log-at-trx-commit=0
+    #command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci --init-connect='SET NAMES utf8mb4;' --innodb-flush-log-at-trx-commit=0
+    command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci --innodb-flush-log-at-trx-commit=0
 
   cache:
     image: redis
