@@ -10,6 +10,10 @@
 
 @section('content')
     <div class="contentContainer">
+        <em>
+            {{__('ingest.offlineStorage.status.ingress')}}
+        </em>
+        <br/>
         <status-list :job-list-url="'/api/v1/ingest/offline_storage/archive'"/>
     </div>
 @endsection

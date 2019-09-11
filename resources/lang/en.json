@@ -69,6 +69,7 @@
     "ingest.taskList.size": "Size",
 
     "ingest.offlineStorage.status.header": "Status",
+    "ingest.offlineStorage.status.ingress": "Display the status of the archival workflow on piqlFilm",
     "ingest.offlineStorage.aipList.header": "Archival package list",
     "ingest.offlineStorage.aipList.ingress" : "Display the archival packages included in the offline package",
     "ingest.offlineStorage.header": "Offline storage",

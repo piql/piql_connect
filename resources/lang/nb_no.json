@@ -63,6 +63,7 @@
     "ingest.taskList.size": "Størrelse",
 
     "ingest.offlineStorage.status.header": "Status",
+    "ingest.offlineStorage.status.ingress": "Display the status of the archival workflow on piqlFilm",
     "ingest.offlineStorage.aipList.header": "Archival package list",
 	"ingest.offlineStorage.header": "Offline-lagring",
     "ingest.offlineStorage.ingress": "Display the packages sent to offline storage in piqlFilm.\nAdd a name to your offline package (job); this name will identify your piqlFilm and allow to track that data until storage\nOptionally, you can add metadata to provide context and describe the offline package. At the end click the “Piql” button to start the archival process on piqlFilm. \n",
