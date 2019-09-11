@@ -5,10 +5,13 @@
 @endsection
 
 @section('heading')
-    <i class="fas fa-cog titleIcon"></i>Content Options
+    <i class="fas fa-cog titleIcon"></i>{{__('ingest.offlineStorage.contentOptions.header')}}
 @endsection
 
 @section('content')
+    <em>
+        {{__('ingest.offlineStorage.contentOptions.ingress')}}
+    </em>
     {{ Breadcrumbs::render('content_options_view', $job) }}
     <div class="contentContainer">
         <div class="container-fluid">

@@ -5,7 +5,7 @@
 @endsection
 
 @section('heading')
-    <i class="fas fa-clipboard-check titleIcon"></i>STATUS
+    <i class="fas fa-clipboard-check titleIcon"></i>{{__('ingest.offlineStorage.status.header')}}
 @endsection
 
 @section('content')

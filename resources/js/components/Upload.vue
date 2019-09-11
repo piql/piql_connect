@@ -3,9 +3,7 @@
         <div class="row mb-4">
             <div class="col">
                 <em class="mb-3 mt-2">
-                    {{ $t('upload.ingress') }}<br/>
-                    {{ $t('upload.ingress2') }}<br/>
-                    {{ $t('upload.ingress3') }}
+                    {{ $t('upload.ingress') }}
                 </em>
             </div>
         </div>

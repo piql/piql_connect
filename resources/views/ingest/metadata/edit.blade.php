@@ -20,11 +20,19 @@
     @php
         $readonly = isset($readonly) ? $readonly : false;
     @endphp
-    <em>{{__('ingest.metadata.editFile.ingress')}}</em>
+
     @isset($file)
+        @if($readonly)
+            <em>{{__('ingest.metadata.showFile.ingress')}}</em>
+        @else
+            <em>{{__('ingest.metadata.editFile.ingress')}}</em>
+        @endif
+        <br/>
         {{ Breadcrumbs::render('metadata_view', $file) }}
     @endisset
     @isset($job)
+        <em>{{__('ingest.offlineStorage.metadata.ingress')}}</em>
+        <br/>
         {{ Breadcrumbs::render('offline_storage_metadata_view', $job) }}
     @endisset
     <div class="container-fluid">
