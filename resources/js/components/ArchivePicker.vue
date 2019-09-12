@@ -3,8 +3,8 @@
         <label v-if="showLabel" for="holdingPicker" class="col-form-label-sm">
             {{label}}
         </label>
-        <select v-model="selection" id="holdingPicker" class="w-100" data-live-search="true" @change="selectionChanged($event.target.value)">
-          <option v-for="holding in holdings" v-bind:value="holding.title">
+        <select v-model="selection" id="archivePicker" class="w-100" data-live-search="true" @change="selectionChanged($event.target.value)">
+          <option v-for="holding in holdings" v-bind:value="holding.uuid">
             {{holding.title}}
           </option>
        </select>
@@ -16,7 +16,9 @@
 export default {
     mounted() {
         console.log('initialSelection: '+this.initialSelection);
+      
         this.selection = this.initialSelection;
+
     },
     methods: {
         selectionChanged: function (value) {
@@ -25,7 +27,7 @@ export default {
     },
     data() {
         return {
-            selection: 'Documents' 
+            selection: '' 
         };
     },
     props: {
