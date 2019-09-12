@@ -117,16 +117,25 @@ export default {
             }
             return value + " " + (exp ? 'KMGTPEZY'[exp - 1] + 'iB' : 'Bytes')
         },
+        getFileSizeSI(bytes) {
+            let value = 0;
+            let exp = 0;
+            if (bytes) {
+                exp = Math.floor(Math.log(bytes) / Math.log(1000));
+                value = (bytes / Math.pow(1000, exp)).toFixed(2);
+            }
+            return value + " " + (exp ? 'KMGTPEZY'[exp - 1] + 'B' : 'Bytes')
+        },
     },
     computed: {
         fileSize: function() {
             if(this.item.size !== undefined)
-                return this.getFileSizeIEC(this.item.size);
+                return this.getFileSizeSI(this.item.size);
             else
                 return "---";
         },
         usage: function() {
-            return (100*this.item.size/(120*1024*1024*1024)).toFixed(0);
+            return (100*this.item.size/(120*1000*1000*1000)).toFixed(0);
         },
     },
     data() {

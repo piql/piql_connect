@@ -24,11 +24,11 @@ class DummyDataSeeder extends Seeder
                         'files'=> [
                             [
                                 'name' =>'Personal records 2017.03.31',
-                                'size' => 30*1024*1024*1024,
+                                'size' => 30*1000*1000*1000,
                             ],
                             [
                                 'name' =>'Personal records 2017.06.30',
-                                'size' => 30*1024*1024*1024,
+                                'size' => 30*1000*1000*1000,
                             ],
                         ],
                     ],
@@ -37,11 +37,11 @@ class DummyDataSeeder extends Seeder
                         'files'=> [
                             [
                                 'name' => 'Personal records 2017.09.30',
-                                'size' => 30*1024*1024*1024,
+                                'size' => 30*1000*1000*1000,
                             ],
                             [
                                 'name' => 'Personal records 2017.12.31',
-                                'size' => 30*1024*1024*1024,
+                                'size' => 30*1000*1000*1000,
                             ]
                         ],
                     ]
@@ -55,11 +55,11 @@ class DummyDataSeeder extends Seeder
                         'files'=> [
                             [
                                 'name' =>'Personal records 2018.03.31',
-                                'size' => 30*1024*1024*1024,
+                                'size' => 30*1000*1000*1000,
                             ],
                             [
                                 'name' =>'Personal records 2018.06.30',
-                                'size' => 30*1024*1024*1024,
+                                'size' => 30*1000*1000*1000,
                             ],
                         ],
                     ],
@@ -68,11 +68,11 @@ class DummyDataSeeder extends Seeder
                         'files'=> [
                             [
                                 'name' => 'Personal records 2018.09.30',
-                                'size' => 30*1024*1024*1024,
+                                'size' => 30*1000*1000*1000,
                             ],
                             [
                                 'name' => 'Personal records 2018.12.31',
-                                'size' => 30*1024*1024*1024,
+                                'size' => 30*1000*1000*1000,
                             ]
                         ],
                     ]
@@ -86,11 +86,11 @@ class DummyDataSeeder extends Seeder
                         'files'=> [
                             [
                                 'name' =>'Personal records 2019.03.31',
-                                'size' => 30*1024*1024*1024,
+                                'size' => 30*1000*1000*1000,
                             ],
                             [
                                 'name' =>'Personal records 2019.06.30',
-                                'size' => 30*1024*1024*1024,
+                                'size' => 30*1000*1000*1000,
                             ],
                         ],
                     ],

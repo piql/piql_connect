@@ -33,6 +33,15 @@ export default {
             }
             return value + " " + (exp ? 'KMGTPEZY'[exp - 1] + 'iB' : 'Bytes')
         },
+        getFileSizeSI(bytes) {
+            let value = 0;
+            let exp = 0;
+            if (bytes) {
+                exp = Math.floor(Math.log(bytes) / Math.log(1000));
+                value = (bytes / Math.pow(1000, exp)).toFixed(2);
+            }
+            return value + " " + (exp ? 'KMGTPEZY'[exp - 1] + 'B' : 'Bytes')
+        },
     },
     async mounted() {
         console.log('Task component mounted.')
@@ -43,7 +52,7 @@ export default {
     computed: {
         size: function() {
             if(this.item.filesize !== undefined)
-                return this.getFileSizeIEC(this.item.filesize);
+                return this.getFileSizeSI(this.item.filesize);
             else
                 return "---";
         },
