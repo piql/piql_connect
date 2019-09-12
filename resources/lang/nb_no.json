@@ -91,9 +91,12 @@
 	"ingest.status.jobName": "Jobbnavn",
 	"ingest.status.bags": "Bagger",
 	"ingest.status.creationDate": "Opprettelsesdato",
-	"ingest.status.status": "Status",
+    "ingest.status.size" : "Størrelse",
+    "ingest.status.date" : "Dato",
+    "ingest.status.status": "Status",
 	"ingest.status.preparing": "Forbereder skriving",
 	"ingest.status.writing": "Skriver til piqlFilm",
+
     "ingest.processing.status.closed":             "Venter på å bli prosessert",
     "ingest.processing.status.creating_bag":       "Forbereder steg 1/2",
     "ingest.processing.status.move_to_outbox":     "Forbereder steg 1/2",

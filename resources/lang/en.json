@@ -97,6 +97,8 @@
 	"ingest.status.jobName": "Offline package name",
 	"ingest.status.bags": "Bags",
 	"ingest.status.creationDate": "Creation Date",
+    "ingest.status.size" : "Size",
+    "ingest.status.date" : "Date",
 	"ingest.status.status": "Status",
     "ingest.status.preparing": "Preparing writing",
     "ingest.status.writing": "Writing to piqlFilm",

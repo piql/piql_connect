@@ -5,8 +5,9 @@
 
 
         <div class="row plistHeader">
-            <div class="col-4">{{ $t('ingest.status.jobName') }}</div>
-            <div class="col">&nbsp;</div>
+            <div class="col">{{ $t('ingest.status.jobName') }}</div>
+            <div class="col-2">{{ $t('ingest.status.size') }}</div>
+            <div class="col-3">{{ $t('ingest.status.date') }}</div>
             <div class="col-3">{{ $t('ingest.status.status') }}</div>
         </div>
 
