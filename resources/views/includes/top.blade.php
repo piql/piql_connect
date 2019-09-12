@@ -11,7 +11,9 @@
             <li class="navbar mr-3 {{ \Request::is('/*') ? 'top-active' : 'top-inactive'  }}" ><a href="{{ route('dashboard') }}">{{__('Home')}}</a></li>
             <li class="navbar mr-3 {{ \Request::is('ingest/*') ? 'top-active' : 'top-inactive'  }} "><a href="{{ route('upload') }}">{{__('Ingest') }}</a></li>
             <li class="navbar mr-3 {{ \Request::is('access/*') ? 'top-active' : 'top-inactive' }} " ><a href="{{ route('access.browse') }}">{{__('Access') }}</a></li>
+        @if (false) /*TODO: Auth check*/
             <li class="navbar mr-5 {{ \Request::is('planning/*') ? 'top-active' : 'top-inactive' }} " ><a href="{{ route('planning.archives') }}">{{__('Planning') }}</a></li>
+        @endif
             <li class="navbar mr-3"><settings-dropdown></settings-dropdown></li>
             <li class="navbar mr-3"><notifications></notifications></li>
             <li class="navbar mr-4"><a href="/logout"><i class="fas fa-sign-out-alt signal"></i></a></li>

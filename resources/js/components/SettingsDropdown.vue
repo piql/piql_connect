@@ -5,7 +5,7 @@
         <i class="fas fa-times closeNotifications" @click="toggleShowSettings()" ></i>
         <strong>Configuration settings</strong>
         <ul>
-          <li>Language settings</li>
+          <li><a href="/settings" class="dropdown-item" >Language settings</a></li>
         </ul>
     </div>
     </span>

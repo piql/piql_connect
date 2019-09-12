@@ -1,19 +1,16 @@
 <template>
     <span>
-    <i @click="toggleShowNotifications()" class="fas fa-bell clickable"  id="noti" data-count="4"></i>
+    <i @click="toggleShowNotifications()" class="fas fa-bell clickable"  id="noti" data-count="0"></i>
     <div class="dropdownList" v-if="showNotifications">
         <i class="fas fa-times closeNotifications" @click="toggleShowNotifications()" ></i>
         <strong>notifications</strong>
         <p class="when">Today</p>
         <ul>
-            <li>3 files ready for download</li>
+            <li>No new messages</li>
         </ul>
-        <p class="when">Older</p>
+        <p class="when">Message log</p>
         <ul>
-            <li>Something</li>
-            <li>Something</li>
-            <li>Something</li>
-            <li>Something</li>
+            <li></li>
         </ul>
     </div>
     </span>
@@ -32,7 +29,6 @@
             }
         },
         mounted() {
-            console.log('Notifications component mounted.')
         }
     }
 </script>

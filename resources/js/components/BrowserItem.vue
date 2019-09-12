@@ -7,7 +7,7 @@
                 {{item.name}}
             </div>
             <div class="col-sm-3">
-                {{item.archive_name}}
+                {{dateFormat(item.created_at)}}
             </div>
             <div class="col-sm-3">
                 {{item.holding_name}}
@@ -19,6 +19,7 @@
 </template>
 
 <script>
+    import moment from 'moment';
     import axios from 'axios';
     export default {
         async mounted() {
@@ -33,6 +34,11 @@
             return {
                 fileName: "",
             };
+        },
+        methods: {
+            dateFormat: function(item){
+                return moment(item.created_at).format('L');
+            },
         },
 
     }

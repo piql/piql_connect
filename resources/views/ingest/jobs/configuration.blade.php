@@ -17,8 +17,8 @@
         <div class="container-fluid">
             <div class="row plistHeader">
                 <div class="col-sm-4">{{__('ingest.offlineStorage.jobName')}}</div>
-                <div class="col-sm-1">{{__('ingest.offlineStorage.numberOfAips')}}</div>
-                <div class="col-sm-3">{{__('ingest.offlineStorage.size')}}</div>
+                <div class="col-sm-2 pr-3">{{__('ingest.offlineStorage.numberOfAips')}}</div>
+                <div class="col-sm-2 pr-3">{{__('ingest.offlineStorage.size')}}</div>
                 <div class="col-sm-4 listActionItems">&nbsp;</div>
             </div>
 

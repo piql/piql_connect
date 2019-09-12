@@ -457,7 +457,6 @@ a {
     min-height: 40px;
 }
 input[type="text"] {
-    min-width: 300px;
     background-color: $white;
     border: 0;
     height: 30px;
@@ -466,7 +465,6 @@ input[type="text"] {
     padding: 20px;
 }
 input[type="number"] {
-    min-width: 300px;
     background-color: $white;
     border: 0;
     height: 30px;
@@ -536,9 +534,6 @@ textarea {
     border-radius: 2px;
     padding: 4px;
     top: 0;
-}
-input[type="submit"] {
-    width: 80px;
 }
 .inputSubmitSave {
     background: $color_main_brand;
@@ -2046,7 +2041,6 @@ th {
 }
 
 input[type=text] {
-    min-width: 100px;
     background-color: white;
     border: 0;
     height: 36px;
