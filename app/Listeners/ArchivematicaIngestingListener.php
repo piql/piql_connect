@@ -6,6 +6,7 @@ use App\Events\ArchivematicaIngestingEvent;
 use App\Events\ErrorEvent;
 use App\Events\IngestCompleteEvent;
 use App\Events\StartTransferToArchivematicaEvent;
+use App\StorageProperties;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Suppoer\Facades\Storage;
@@ -48,6 +49,11 @@ class ArchivematicaIngestingListener  extends BagListener
                 if($status->status == "COMPLETE")
                 {
                     Log::info("Ingest complete for SIP with bag id ".$bag->id);
+
+                    $storageProperties = StorageProperties::find($bag->storage_properties()->first()->id);
+                    $storageProperties->aip_uuid = $status->uuid;
+                    $storageProperties->save();
+
                     event(new IngestCompleteEvent($bag));
                     return;
                 } elseif ($status->status == "FAILED" || $status->status == "USER_INPUT" )
