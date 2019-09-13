@@ -1,7 +1,7 @@
 <template>
     <div class="container-fluid">
         <div class="row mb-4 w-auto">
-            <div class="col">
+            <div class="col-6">
                 <em class="mb-3 mt-2">
                     {{ $t('upload.ingress') }}
                 </em>
