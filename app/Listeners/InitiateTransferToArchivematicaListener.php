@@ -5,6 +5,7 @@ namespace App\Listeners;
 
 
 use App\Events\ApproveTransferToArchivematicaEvent;
+use App\Events\ErrorEvent;
 use Log;
 
 class InitiateTransferToArchivematicaListener extends BagListener
@@ -36,6 +37,7 @@ class InitiateTransferToArchivematicaListener extends BagListener
             $this->amClient->initiateTransfer($bag->id);
         } catch(\Exception $e){
             Log::error(" initiate transfer failed with  ".$e->getMessage());
+            event(new ErrorEvent($bag));
             return;
         }
 
