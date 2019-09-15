@@ -48,11 +48,9 @@ class ArchivematicaIngestingListener  extends BagListener
             {
                 if($status->status == "COMPLETE")
                 {
-                    Log::info("Ingest complete for SIP with bag id ".$bag->id);
+                    Log::info("Ingest complete for SIP with bag id ".$bag->id." with aip uuid: ".$status->uuid);
 
-                    $storageProperties = StorageProperties::find($bag->storage_properties()->first()->id);
-                    $storageProperties->aip_uuid = $status->uuid;
-                    $storageProperties->save();
+                    $bag->storageProperties->update( ['aip_uuid' =>  $status->uuid] );
 
                     event(new IngestCompleteEvent($bag));
                     return;

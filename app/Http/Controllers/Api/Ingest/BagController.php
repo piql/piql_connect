@@ -335,4 +335,12 @@ class BagController extends Controller
         $bag->save();
         return $bag;
     }
+
+    public function download($id)
+    {
+        $bag = Bag::find($id);
+        $path = storage_path(env('STORAGE_TRANSFER_PATH')."/{$bag->zipBagFileName()}");
+        Log::info("Download path: ".$path);
+        return response()->download($path);
+    }
 }

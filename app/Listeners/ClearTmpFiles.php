@@ -18,7 +18,7 @@ class ClearTmpFiles implements ShouldQueue
     {
         $bag = $event->bag;
         Log::info("Clearing temporary files for bag ".$bag->zipBagFileName()." with id: ".$bag->id);
-
+/*
         $deleteFile = function ($file) use ($bag) {
             if(!is_dir("$file")) {
                 if(!unlink("$file")) {
@@ -30,14 +30,14 @@ class ClearTmpFiles implements ShouldQueue
                 }
             }
         };
-
+ */
         $files = $bag->files;
         foreach ($files as $file)
         {
-            $deleteFile($fileName = $file->storagePathCompleted());
+  //          $deleteFile($fileName = $file->storagePathCompleted());
         }
 
-        $deleteFile($bag->storagePathCreated());
+   //     $deleteFile($bag->storagePathCreated());
     }
 
 }
