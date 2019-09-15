@@ -4,14 +4,15 @@
             <div class="col-sm-1"><input type="checkbox" class="checkbox" id="browserList" v-if="false"></div>
             <div class="col-sm-3">{{$t('access.browse.itemInfo')}}</div>
             <div class="col-sm-3">Archive</div>
-            <div class="col-sm-3">Holding</div>
+            <div class="col-sm-2">Holding</div>
+            <div class="col-sm-1">Files</div>
         </div>
 
         <span v-if="fileLocation === 'online'">
-            <browser-item  v-for="item in dataObjects" :archive="selectedArchive" :holding="selectedHolding" v-bind:item="item" v-bind:key="item.id"/>
+            <browser-item  v-for="item in dataObjects" :archive="selectedArchive" :holding="selectedHolding" v-bind:item="item" v-bind:key="item.id" @openObject="openObject"/>
         </span>
         <span v-if="fileLocation === 'offline'">
-            <browser-item-offline  v-for="item in dataObjects" @addToRetrieval="addToRetrieval" :archive="selectedArchive" :holding="selectedHolding" v-bind:item="item" v-bind:key="item.id"/>
+            <browser-item-offline  v-for="item in dataObjects" @addToRetrieval="addToRetrieval" :archive="selectedArchive" :holding="selectedHolding" v-bind:item="item" v-bind:key="item.id" @openObject="openObject"/>
         </span>
     </div>
 </template>
@@ -49,7 +50,10 @@ export default {
     methods: {
         addToRetrieval: function(item) {
             this.$emit('addToRetrieval', item);
-        }
+        },
+        openObject: function(item) {
+            this.$emit('openObject', item);
+        },
     },
 }
 </script>

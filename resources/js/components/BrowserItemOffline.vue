@@ -14,6 +14,7 @@
             </div>
             <div class="col-sm-2">
                 <a @click="addToRetrieval" class="fas fa-file-export titleIcon signal" href="#"></i></a>
+                <a @click="open" href="#"><i class="fas fa-folder titleIcon"></i></a>
             </div>
         </div>
 </template>
@@ -37,6 +38,9 @@
         methods: {
             addToRetrieval: function() {
                this.$emit('addToRetrieval', this.item); 
+            },
+            open: function() {
+                this.$emit('openObject', this.item.id);
             },
         },
 

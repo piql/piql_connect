@@ -5,11 +5,13 @@ namespace App\Http\Controllers\Api\Ingest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Filesystem\Filesystem;
 use App\Http\Controllers\Controller;
 use App\Bag;
 use App\File;
 use App\User;
 use App\Job;
+use App\Holding;
 use App\StorageProperties;
 use App\Http\Resources\BagResource;
 use App\Http\Resources\BagCollection;
@@ -44,6 +46,8 @@ class BagController extends Controller
         if($bag == null){
             $bagName = Carbon::now()->format("YmdHis");
             $bag = Bag::create(['name' => $bagName, 'owner' => User::first()->id]);
+            $bag->fresh();
+            $bag->storage_properties()->update(['archive_uuid' => Holding::first()->uuid, 'holding_name' => Holding::first()->fonds()->first()->title]);
         }
 
         $resultBag = Bag::with(['files'])
@@ -157,7 +161,12 @@ class BagController extends Controller
      */
     public function showFiles($id)
     {
-        return Response::json(Bag::find($id)->files()->get());
+        $files = Bag::find($id)->files()->get();
+        $result = $files->map( function ($file) {
+            $ext = pathinfo($file->filename, PATHINFO_EXTENSION);
+            return collect(["fupath" => $file->uuid.".".$ext])->merge($file);
+        });
+        return Response::json($result);
     }
 
     public function complete()
@@ -343,4 +352,15 @@ class BagController extends Controller
         Log::info("Download path: ".$path);
         return response()->download($path);
     }
+
+    public function downloadFile($fileId)
+    {
+        $file = \App\File::find($fileId);
+        $ext = pathinfo($file->filename, PATHINFO_EXTENSION);
+        $filename = $file->uuid.".".$ext;
+        $path = storage_path(env('STORAGE_UPLOADER_PATH')."/completed/{$filename}");
+        return response()->download($path);
+    }
+
+
 }

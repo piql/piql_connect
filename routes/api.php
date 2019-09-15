@@ -47,6 +47,7 @@ Route::group(['prefix' => 'v1' , 'middleware' => 'throttle:500,1','auth:web'], f
         Route::post('bags/{id}/commit', 'Api\Ingest\BagController@commit');
         Route::post('bags/{id}/piql', 'Api\Ingest\BagController@piqlIt');
         Route::get('bags/{id}/download', 'Api\Ingest\BagController@download');
+        Route::get('files/{id}/download', 'Api\Ingest\BagController@downloadFile');
         Route::get('offline_storage/pending/jobs/{id}/bags', 'Api\Ingest\OfflineStorageController@bags');
         Route::patch('offline_storage/pending/jobs/{id}', 'Api\Ingest\OfflineStorageController@archiveJob');
         Route::get('offline_storage/pending/jobs', 'Api\Ingest\OfflineStorageController@jobs');

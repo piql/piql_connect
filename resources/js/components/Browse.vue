@@ -42,8 +42,13 @@
                 <fond-select v-if="archiveSelected" @fondSelectionChanged="fondSelectionChanged" :holdings="selectedArchiveHoldings"></fond-select>
             </div>
             <div class="col-sm-8">
-                <browser-list v-if="fondSelected" :location="selectedLocation" :dataObjects="currentObjects"  @addToRetrieval="addToRetrieval" :selectedArchive="selectedArchiveUuid" :selectedHolding="selectedFond"/>
-                <identity v-else></identity>
+                <span v-if="fileMode === false">
+                    <browser-list v-if="fondSelected" @openObject="openObject" :location="selectedLocation" :dataObjects="currentObjects"  @addToRetrieval="addToRetrieval" :selectedArchive="selectedArchiveUuid" :selectedHolding="selectedFond"/>
+                    <identity v-else></identity>
+                </span>
+                <span v-if="fileMode">
+                    <browser-file-list :dataObjects="currentOpenObjectFiles" :location="selectedLocation" @close="closeFileList"/>
+                </span>
             </div>
             <div class="col-sm-2 mt-5">
                 <span v-if="fondSelected">
@@ -90,6 +95,8 @@ export default {
             selectedArchiveHoldings: [],
             retrievalItems: [],
             dataObjects: [],
+            currentOpenObjectFiles: [],
+            fileMode: false
         }
     },
     computed: {
@@ -153,6 +160,7 @@ export default {
             });
         },
         fondSelectionChanged: function(fond, state) {
+            this.fileMode = false;
             if(fond == 0)
             {
                 this.selectedFond = "";
@@ -171,6 +179,7 @@ export default {
             }
         },
         archiveSelectionChanged: function(archiveUuid) {
+            this.fileMode = false;
             this.selectedArchiveUuid = archiveUuid;
             this.selectedFond = "All";
             axios.get("/api/v1/planning/holdings/"+archiveUuid+"/fonds").then( (response) => {
@@ -178,10 +187,18 @@ export default {
             });
         },
         locationSelectionChanged: function(loc) {
+            this.fileMode = false;
             this.selectedLocation = loc;
         },
         addToRetrieval: function(item) {
             this.retrievalItems.push(item);
+        },
+        openObject: async function(bagId) {
+            this.currentOpenObjectFiles = (await( axios.get("/api/v1/ingest/bags/"+bagId+"/files"))).data;
+            this.fileMode = true;
+        },
+        closeFileList: function() {
+            this.fileMode = false;
         },
     },
 }

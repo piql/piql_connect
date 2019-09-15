@@ -8,10 +8,10 @@ services:
     volumes:
       - ".././:/var/www"
       - "~/.am:/var/www/storage/am"
-    user: ${HOST_USERID}:${HOST_GROUPID}
     links:
       - database
       - cache
+    user: www-data:www-data
     environment:
       - "DB_PORT=3306"
       - "DB_HOST=database"
