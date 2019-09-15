@@ -79,7 +79,15 @@ class BagApiTest extends TestCase
 
     private function markForRemoval($response)
     {
-        $this->createdBagIds->push(json_decode($response->getData()->data->id));
+        if($response->getData()){
+            try {
+                $this->createdBagIds->push(json_decode($response->getData()->data->id));
+            }
+            catch(\Exception $ex)
+            {
+//                echo($ex);
+            }
+        }
     }
 
 
@@ -99,6 +107,7 @@ class BagApiTest extends TestCase
     public function test_when_creating_a_bag_the_bag_is_returned_as_json()
     {
         $response = $this->json('POST', '/api/v1/ingest/bags', $this->bagTestData);
+        $response->assertStatus(200);
         $this->markForRemoval($response);
 
         $response->assertJson($this->bagApiResultData);
@@ -107,6 +116,7 @@ class BagApiTest extends TestCase
     public function test_when_creating_a_bag_the_response_includes_storage_properties()
     {
         $response = $this->json('POST', '/api/v1/ingest/bags', $this->bagTestData);
+        $response->assertStatus(200);
         $this->markForRemoval($response);
 
         $response->assertJson(['data' => ['archive_uuid' => '', 'holding_name' => '']]);
@@ -140,6 +150,10 @@ class BagApiTest extends TestCase
     }
 
 
+    public function test_a_query_for_offline_bag_returns_only_bags_with_the_status_complete()
+    {
+            $this->markTestSkipped("need tests for the entire piql-it workflow!");
+    }
 
 
 }

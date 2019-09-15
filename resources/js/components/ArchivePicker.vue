@@ -15,10 +15,7 @@
 <script>
 export default {
     mounted() {
-        console.log('initialSelection: '+this.initialSelection);
-      
         this.selection = this.initialSelection;
-
     },
     methods: {
         selectionChanged: function (value) {

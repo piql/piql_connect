@@ -24,7 +24,7 @@ export default {
     },
     data() {
         return {
-            selection: 'Documents' 
+            selection: '' 
         };
     },
     props: {

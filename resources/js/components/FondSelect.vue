@@ -5,7 +5,7 @@
                 {{ $t('access.browse.selectHolding') }}
             </li>
             <li class="tree-list-group-item d-flex justify-content-between align-items-center">
-                <b-tree-view :data="treeData" v-on:nodeSelect="fondSelected" :class="list-group-item" :contextMenuItems="contextMenuItems" :contextMenu="useContextMenu"></b-tree-view>
+                <b-tree-view :data="treeData" :select="select" v-on:nodeSelect="fondSelected" :class="list-group-item" :contextMenuItems="contextMenuItems" :contextMenu="useContextMenu"></b-tree-view>
             </li>
             <li class="tree-list-group-item d-flex justify-content-between align-items-center">
             </li>
@@ -33,6 +33,12 @@ export default {
             type: Boolean,
             default: () => {
                 return false;
+            }
+        },
+        select: {
+            type: String,
+            default: () => {
+                return "";
             }
         },
         holdings: {
@@ -69,9 +75,9 @@ export default {
             if(this.holdings.length == 0){
                 return this.placeholderTree;
             }
-            return this.holdings.map( (holding) => {
+            return [{'id' : 0, 'name' : 'All' }].concat(this.holdings.map( (holding) => {
                 return {'id' : holding.id, 'name' : holding.title };
-            });
+            }));
         }
     },
 }

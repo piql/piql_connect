@@ -24,7 +24,6 @@
             }
         },
         mounted() {
-            console.log('Notifications component mounted.')
         }
     }
 </script>

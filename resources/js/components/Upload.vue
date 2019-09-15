@@ -33,10 +33,10 @@
                         <input value="" :placeholder="bag.name" v-model="bag.name" type="text" class="noTextTransform form-control pl-3" @input="setBagName" onclick="select()">
                     </div>
                     <div class="col-sm-2 mr-2">
-                      <archive-picker :holdings="archives" :initialSelection="initialArchiveUuid" @selectionChanged="changedArchive"></archive-picker>
+                      <archive-picker :holdings="archives" :initialSelection="selectedArchive" @selectionChanged="changedArchive"></archive-picker>
                    </div>
                     <div class="col-sm-2 mr-2">
-                      <holding-picker :holdings="holdings" :initialSelection="initialHoldingTitle" @selectionChanged="changedHolding"></holding-picker>
+                      <holding-picker :holdings="holdings" :initialSelection="selectedHolding" @selectionChanged="changedHolding"></holding-picker>
                    </div>
 
                     <div class="col-sm-1 card p-2 pr-4 mr-2" style="text-align: right; max-height: 3rem;">
@@ -115,10 +115,6 @@ export default {
             userId: '',
             processDisabled: true,
             fileInputDisabled: false,
-            selectedArchive: '9aae5540-d3ec-11e9-9a0b-ddd5a3958760',
-            initialArchiveUuid: '9aae5540-d3ec-11e9-9a0b-ddd5a3958760',
-            selectedHolding: 'Documents',
-            initialHoldingTitle: 'Documents',
             archives: [],
             holdings: [],
         };
@@ -132,6 +128,12 @@ export default {
         numberOfFiles: function() {
             return this.files.length;
         },
+        selectedArchive: function() {
+            return this.bag.archive_uuid;
+        },
+        selectedHolding: function() {
+            return this.bag.holding_name;
+        }
     },
 
     methods: {
@@ -159,13 +161,12 @@ export default {
         async setBagName() {
             let currentBagId = this.bag.id;
             let bagName = this.bag.name;
-            let bag = null;
             axios.patch("/api/v1/ingest/bags/"+currentBagId, {
                 'bagName': bagName
             }).then( (result) => {
-                bag = result.data.data;
+                this.bag = result.data.data;
             });
-            return bag;
+            return this.bag;
         },
         async createBag(bagName, userId, selectedArchive, selectedHolding) {
             let createdBag = (await axios.post("/api/v1/ingest/bags/", {
@@ -176,40 +177,37 @@ export default {
             })).data.data;
             return createdBag;
         },
-        setupHoldings(archiveId) {
-            axios.get('/api/v1/planning/holdings/'+archiveId+'/fonds').then( (response) => {
+        async setupHoldings(archiveId, initialHolding) {
+            await axios.get('/api/v1/planning/holdings/'+archiveId+'/fonds').then( (response) => {
                 this.holdings = response.data.data;
-                this.initialHoldingTitle = this.holdings[0].title;
-                Vue.nextTick( () => { $('#holdingPicker').selectpicker();});
+                let defaultHolding = this.holdings[0].title;
+                Vue.nextTick( () => { $('#holdingPicker').selectpicker('val', initialHolding || defaultHolding);});
             });
         },
-        changedArchive(archiveId) {
-            this.selectedArchive = archiveId;
-            this.setupHoldings(archiveId);
+        async changedArchive(archiveId) {
+            await this.setupHoldings(archiveId, this.bag.holding_name);
             axios.patch("/api/v1/ingest/bags/"+this.bag.id, {
-                archive_uuid: this.selectedArchive,
+                archive_uuid: archiveId,
                 holding_name: this.selectedHolding
                 }).then( (response) => {
                     this.bag = response.data.data;
             });
         },
         async changedHolding(holdingTitle) {
-            this.selectedHolding = holdingTitle;
-            await axios.patch("/api/v1/ingest/bags/"+this.bag.id, {
-                archive_uuid: this.selectedArchive,
-                holding_name: this.selectedHolding
+            let selectedArchive  = this.selectedArchive;
+            let bag = this.bag;
+            Vue.nextTick( async () => {
+                bag = await axios.patch("/api/v1/ingest/bags/"+bag.id, {
+                    archive_uuid: selectedArchive,
+                    holding_name: holdingTitle
+                }).data;
             });
         },
     },
     async mounted() {
-        axios.get("/api/v1/planning/holdings").then( (response) => {
+        await axios.get("/api/v1/planning/holdings").then( (response) => {
             this.archives = response.data.data;
-            Vue.nextTick( () => {
-                $('#archivePicker').selectpicker();
-            });
-            this.setupHoldings(this.archives[0].uuid);
         });
-
 
         this.userId = (await axios.get("/api/v1/system/currentUser")).data;
         this.bag = (await axios.get("/api/v1/ingest/bags/latest")).data.data;
@@ -217,13 +215,12 @@ export default {
         if(this.bag !== undefined && this.bag.status === "open")
         {
             this.files = (await axios.get('/api/v1/ingest/bags/' + this.bag.id + '/files')).data
+            Vue.nextTick( () => { $('#archivePicker').selectpicker('val', this.selectedArchive);});
         }
         else
         {
             this.bag = (await this.createBag("", this.userId, this.selectedArchive, this.selectedHolding));
-
         }
-
         if(this.files)
         {
             this.processDisabled = false;

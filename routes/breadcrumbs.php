@@ -11,9 +11,10 @@ Breadcrumbs::for('offline_storage', function ($trail) {
 });
 
 // Offline storage > AIP List
-Breadcrumbs::for('aip_list', function ($trail, $job) {
+Breadcrumbs::for('aip_list', function ($trail, $jobs) {
+    $firstJob = $jobs->first(); //TODO: Track the actual job
     $trail->parent('offline_storage');
-    $trail->push($job->name, route('offline_storage.show', $job->id));
+    $trail->push($firstJob->name, route('offline_storage.show', $firstJob->id));
 });
 
 // Offline storage > AIP List > Files

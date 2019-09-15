@@ -113,8 +113,7 @@ class Bag extends Model
 
     public function job()
     {
-        /* REVIEW: Denne forstår jeg ikke - Kåre */
-        return $this->belongsToMany('App\Job')->first();
+        return $this->belongsToMany('App\Job')->using('App\BagJob');
     }
 
     public function storage_properties()

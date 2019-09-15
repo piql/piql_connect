@@ -35,11 +35,6 @@
                 </div>
             </div>
         </form>
-        <div class="row">
-            <div class="col">
-                current filters: {{ completeFilter }}
-            </div>
-        </div>
 
         <hr class="row m-0">
         <div class="row">
@@ -47,7 +42,7 @@
                 <fond-select v-if="archiveSelected" @fondSelectionChanged="fondSelectionChanged" :holdings="selectedArchiveHoldings"></fond-select>
             </div>
             <div class="col-sm-8">
-                <browser-list v-if="fondSelected" @addToRetrieval="addToRetrieval" :selectedArchive="selectedArchiveUuid" :selectedHolding="selectedFond" :filters="completeFilter"/>
+                <browser-list v-if="fondSelected" :location="selectedLocation" :dataObjects="currentObjects"  @addToRetrieval="addToRetrieval" :selectedArchive="selectedArchiveUuid" :selectedHolding="selectedFond"/>
                 <identity v-else></identity>
             </div>
             <div class="col-sm-2 mt-5">
@@ -94,6 +89,7 @@ export default {
             holdings: [],
             selectedArchiveHoldings: [],
             retrievalItems: [],
+            dataObjects: [],
         }
     },
     computed: {
@@ -107,15 +103,17 @@ export default {
             return this.selectedLocation == "online";
         },
         offline: function() {
-            return !this.online;
+            return this.selectedLocation == "offline";
         },
-        completeFilter: function() {
-            let filter = "?loc=" + encodeURI(this.selectedLocation);
+        queryString: function() {
+            let filter = "?location=" + encodeURI(this.selectedLocation);
             if(this.archiveSelected) {
-                filter += "&holding=" + encodeURI(this.selectedArchiveUuid);
+                filter += "&archive=" + encodeURI(this.selectedArchiveUuid);
             }
             if(this.selectedFond){
-                filter += "&fond=" + encodeURI(this.selectedFond);
+                if(this.selectedFond !== "All"){
+                    filter += "&holding=" + encodeURI(this.selectedFond);
+                }
             }
             if(this.fromDateFilter){
                 filter += "&from=" + encodeURI(this.fromDateFilter);
@@ -128,18 +126,38 @@ export default {
             }
             return filter;
         },
+        currentObjects: function() {
+            return this.dataObjects;
+        },
+    },
+    watch: {
+        queryString: function() {
+            this.refreshObjects(this.queryString);
+        },
     },
     mounted() {
         axios.get("/api/v1/planning/holdings").then( (response) => {
             this.archives = response.data.data;
+            let firstArchiveUuid = this.archives[0].uuid;
+            this.fondSelectCounter = 1;
+            this.selectedFond = "All";
             Vue.nextTick( () => {
-                $('#archivePicker').selectpicker();
+                $('#archivePicker').selectpicker('val', firstArchiveUuid);
             });
         });
     },
     methods: {
+        refreshObjects(queryString){
+            axios.get("/api/v1/ingest/bags/"+queryString).then( (bags) => {
+                this.dataObjects = bags.data.data;
+            });
+        },
         fondSelectionChanged: function(fond, state) {
-            if(state){
+            if(fond == 0)
+            {
+                this.selectedFond = "";
+            }
+            else if(state){
                 this.lastelectedFond = fond.data.name;
                 this.fondSelectCounter++;
                 this.selectedFond = fond.data.name;
@@ -151,16 +169,16 @@ export default {
                     this.selectedFond = "";
                 }
             }
-
         },
         archiveSelectionChanged: function(archiveUuid) {
             this.selectedArchiveUuid = archiveUuid;
+            this.selectedFond = "All";
             axios.get("/api/v1/planning/holdings/"+archiveUuid+"/fonds").then( (response) => {
                 this.selectedArchiveHoldings = response.data.data;
             });
         },
-        locationSelectionChanged: function(location) {
-            this.selectedLocation = location;
+        locationSelectionChanged: function(loc) {
+            this.selectedLocation = loc;
         },
         addToRetrieval: function(item) {
             this.retrievalItems.push(item);

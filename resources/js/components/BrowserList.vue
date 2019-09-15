@@ -8,10 +8,10 @@
         </div>
 
         <span v-if="fileLocation === 'online'">
-            <browser-item  v-for="item in onlineItems" :archive="selectedArchive" :holding="selectedHolding" v-bind:item="item" v-bind:key="item.id"/>
+            <browser-item  v-for="item in dataObjects" :archive="selectedArchive" :holding="selectedHolding" v-bind:item="item" v-bind:key="item.id"/>
         </span>
         <span v-if="fileLocation === 'offline'">
-            <browser-item-offline  v-for="item in offlineItems" @addToRetrieval="addToRetrieval" :archive="selectedArchive" :holding="selectedHolding" v-bind:item="item" v-bind:key="item.id"/>
+            <browser-item-offline  v-for="item in dataObjects" @addToRetrieval="addToRetrieval" :archive="selectedArchive" :holding="selectedHolding" v-bind:item="item" v-bind:key="item.id"/>
         </span>
     </div>
 </template>
@@ -19,13 +19,6 @@
 <script>
 import axios from 'axios';
 export default {
-    data() {
-        return {
-            onlineItems : [],
-            offlineItems : [],
-        }
-    },
-
     props: {
         filters: {
             type: String,
@@ -35,24 +28,24 @@ export default {
             type: String,
             default: ""
         },
+        location: {
+            type: String,
+            default: "online"
+        },
         selectedArchive: String,
         selectedHolding: String,
+        dataObjects: Array,
     },
 
     async mounted() {
-        axios.get("/api/v1/ingest/bags/").then( (bags) => { 
-            this.onlineItems = bags.data.data;
-        });
-        axios.get("/api/v1/ingest/bags/").then( (bags) => { 
-            this.offlineItems = bags.data.data;
-        });
     },
 
     computed: {
         fileLocation: function() {
-            return this.filters.includes("loc=offline") ? "offline" : "online";
+            return this.location == "offline" ? "offline" : "online";
         },
     },
+
     methods: {
         addToRetrieval: function(item) {
             this.$emit('addToRetrieval', item);
