@@ -5,6 +5,7 @@ use Webpatser\Uuid\Uuid;
 use App\User;
 use App\Bag;
 use App\File;
+use App\Holding;
 
 class DemoSeeder extends Seeder
 {
@@ -28,11 +29,15 @@ class DemoSeeder extends Seeder
         $found = App\Bag::where('name', '=', 'reader_test_reel')->first();
         $bag = $found ?? new App\Bag();
         $bag->name = "reader_test_reel";
-        $bag->status = "complete";
         $bag->owner = $user->id;
         $bag->created_at = "2019-04-14 09:56:35";
         $bag->save();
-        $bag->applyTransition('complete');
+        $bag->status = "complete";
+        $bag->save();
+
+        $bag->storage_properties->holding_name = "Documents";
+        $bag->storage_properties->archive_uuid = Holding::all()->where('title', 'Forsvarsmuseet')->first()->uuid;
+        $bag->storage_properties->save();
 
         // Create files
 
@@ -86,12 +91,14 @@ class DemoSeeder extends Seeder
 
         // Create job
 
-        $found = App\StorageProperties::where('bag_uuid', '=', $bag->uuid)->first();
-        $storageProperties = $found ?? new App\StorageProperties();
-        $storageProperties->bag_uuid = $bag->uuid;
-        $storageProperties->holding_name = "Forsvarsmuseet";
-        $storageProperties->save();
-
+        $found = App\Job::where('name', '=', 'reader_test_reel')->first();
+        $job = $found ?? new App\Job();
+        $job->name = "reader_test_reel";
+        $job->owner = $user->id;
+        $job->save();
+        $job->bags()->toggle($bag);
+        $job->status = "ingesting";
+        $job->save();
 
         // Create more files (for dashboard)
         // factory(\App\File::class, 100)->create();

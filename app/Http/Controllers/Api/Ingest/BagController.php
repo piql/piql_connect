@@ -184,7 +184,6 @@ class BagController extends Controller
             ->orWhere('status', '=', 'approve_transfer')
             ->orWhere('status', '=', 'transferring')
             ->orWhere('status', '=', 'ingesting')
-            ->orWhere('status', '=', 'complete')
             ->paginate(6);
         foreach($bags as $bag) {
             $bag->status = __('ingest.processing.status.'.$bag->status);
