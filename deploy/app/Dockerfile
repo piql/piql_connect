@@ -9,7 +9,7 @@ RUN docker-php-ext-configure zip --with-libzip && docker-php-ext-install zip
 WORKDIR /var/www
 RUN groupmod -g 333 www-data
 RUN usermod -u 333 -g 333 www-data
-RUN chown -R 333:333 /var/www/storage
+#RUN chown -R 333:333 /var/www/storage
 COPY ./app/bootstrap.sh /usr/local/bin
 EXPOSE 9000
 CMD ["/usr/local/bin/bootstrap.sh"]
