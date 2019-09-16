@@ -7,7 +7,7 @@
                 {{item.filename}}
             </div>
             <div class="col-sm-2">
-                <a href="#" @click="addToRetrieval"><i class="fas fa-file-export titleIcon"></i></a>
+                <a href="#" @click="addFileToRetrieval"><i class="fas fa-file-export titleIcon"></i></a>
             </div>
         </div>
 </template>
@@ -33,6 +33,10 @@
             dateFormat: function(item){
                 return moment(item.created_at).format('L');
             },
+          addFileToRetrieval: function(){
+            console.log("browserfileitemoffline");
+            this.$emit('addFileToRetrieval', this.item);
+          }
         },
         computed: {
             downloadUrl: function(){

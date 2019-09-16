@@ -43,11 +43,11 @@
             </div>
             <div class="col-sm-8">
                 <span v-if="fileMode === false">
-                    <browser-list v-if="fondSelected" @openObject="openObject" :location="selectedLocation" :dataObjects="currentObjects"  @addToRetrieval="addToRetrieval" :selectedArchive="selectedArchiveUuid" :selectedHolding="selectedFond"/>
+                    <browser-list v-if="fondSelected" @openObject="openObject" :location="selectedLocation" :dataObjects="currentObjects"  @addObjectToRetrieval="addObjectToRetrieval" :selectedArchive="selectedArchiveUuid" :selectedHolding="selectedFond"/>
                     <identity v-else></identity>
                 </span>
                 <span v-if="fileMode">
-                    <browser-file-list :dataObjects="currentOpenObjectFiles" :location="selectedLocation" @close="closeFileList"/>
+                    <browser-file-list :dataObjects="currentOpenObjectFiles" :location="selectedLocation" @close="closeFileList" @addFileToRetrieval="addFileToRetrieval" />
                 </span>
             </div>
             <div class="col-sm-2 mt-5">
@@ -58,9 +58,9 @@
                 <span v-else>
                     <primary-contact></primary-contact>
                 </span>
-                <ul v-if="offline" class="retrievalItems border-none">
-                    <li class="list-group-item fill3" v-for="item in retrievalItems">{{item.name}}</li>
-                </ul>
+                <div v-if="offline" class="retrievalItems border-none">
+                    Number of items for retrieval: {{numberOfFilesForRetrieval}}
+                </div>
 
             </div>
         </div>
@@ -136,6 +136,9 @@ export default {
         currentObjects: function() {
             return this.dataObjects;
         },
+        numberOfFilesForRetrieval() {
+            return this.retrievalItems.length;
+        },
     },
     watch: {
         queryString: function() {
@@ -190,8 +193,23 @@ export default {
             this.fileMode = false;
             this.selectedLocation = loc;
         },
-        addToRetrieval: function(item) {
+        addObjectToRetrieval: async function(item) {
+            console.log("browse add object:");
+            console.log(item);
+            let objectFiles = (await( axios.get("/api/v1/ingest/bags/"+item.id+"/files"))).data;
+
+            objectFiles.map( async (file) => {
+                this.retrievalItems.push(file);
+                await (axios.post('/api/v1/storage/retrievals/add', {
+                    'fileId' : item.id,
+                }));
+          });
+        },
+        addFileToRetrieval: async function(item) {
             this.retrievalItems.push(item);
+            await (axios.post('/api/v1/storage/retrievals/add', {
+                'fileId' : item.id,
+           }));
         },
         openObject: async function(bagId) {
             this.currentOpenObjectFiles = (await( axios.get("/api/v1/ingest/bags/"+bagId+"/files"))).data;

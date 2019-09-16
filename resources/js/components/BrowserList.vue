@@ -12,7 +12,7 @@
             <browser-item  v-for="item in dataObjects" :archive="selectedArchive" :holding="selectedHolding" v-bind:item="item" v-bind:key="item.id" @openObject="openObject"/>
         </span>
         <span v-if="fileLocation === 'offline'">
-            <browser-item-offline  v-for="item in dataObjects" @addToRetrieval="addToRetrieval" :archive="selectedArchive" :holding="selectedHolding" v-bind:item="item" v-bind:key="item.id" @openObject="openObject"/>
+            <browser-item-offline  v-for="item in dataObjects" @addFileToRetrieval="addFileToRetrieval" @addObjectToRetrieval="addObjectToRetrieval" :archive="selectedArchive" :holding="selectedHolding" v-bind:item="item" v-bind:key="item.id" @openObject="openObject"/>
         </span>
     </div>
 </template>
@@ -48,9 +48,15 @@ export default {
     },
 
     methods: {
-        addToRetrieval: function(item) {
-            this.$emit('addToRetrieval', item);
+        addObjectToRetrieval: function(item) {
+            this.$emit('addObjectToRetrieval', item);
         },
+
+        addFileToRetrieval: function(item) {
+            console.log('browserlist addfile');
+            this.$emit('addFileToRetrieval', item);
+        },
+
         openObject: function(item) {
             this.$emit('openObject', item);
         },

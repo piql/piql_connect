@@ -44,13 +44,13 @@ class ArchivematicaIngestingListener  extends BagListener
         $currentIngestStatuses = $this->amClient->getIngestStatus();
         foreach($currentIngestStatuses->results as $status)
         {
-            if($status->name.".zip" == $bag->zipBagFileName() && $status->status == "COMPLETE")
+            if($status->name.".zip" == $bag->zipBagFileName())
             {
                 if($status->status == "COMPLETE")
                 {
                     Log::info("Ingest complete for SIP with bag id ".$bag->id); //." with aip uuid: ".$status->uuid);
 
-//                    $bag->storageProperties->update( ['aip_uuid' =>  $status->uuid] );
+                    $bag->storageProperties->update( ['aip_uuid' =>  $status->uuid] );
 
                     event(new IngestCompleteEvent($bag));
                     return;

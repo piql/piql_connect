@@ -10,7 +10,7 @@
             <browser-file-item  v-for="item in dataObjects" :archive="selectedArchive" :holding="selectedHolding" v-bind:item="item" v-bind:key="item.id" @openObject="openObject"/>
         </span>
         <span v-if="offline">
-            <browser-file-item-offline  v-for="item in dataObjects" :archive="selectedArchive" :holding="selectedHolding" v-bind:item="item" v-bind:key="item.id" @openObject="openObject"/>
+            <browser-file-item-offline  v-for="item in dataObjects" :archive="selectedArchive" :holding="selectedHolding" v-bind:item="item" v-bind:key="item.id" @openObject="openObject" @addFileToRetrieval="addFileToRetrieval"/>
         </span>
 
         <div class="row plist">
@@ -60,8 +60,9 @@ export default {
    },
 
     methods: {
-        addToRetrieval: function(item) {
-            this.$emit('addToRetrieval', item);
+        addFileToRetrieval: function(item) {
+            console.log("browserfilelist");
+            this.$emit('addFileToRetrieval', item);
         },
         openObject: function(item) {
             this.$emit('openObject', item);
