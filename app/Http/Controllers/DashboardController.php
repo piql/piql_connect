@@ -23,9 +23,11 @@ class DashboardController extends Controller
         $infoArray['onlineDataIngested'] = $this->byteToMetricbyte($onlineDataIngested);
         $infoArray['offlineDataIngested'] = $this->byteToMetricbyte(23 * 110000000000);
         $infoArray['onlineAIPsIngested'] = $this->onlineAIPsIngested(auth()->user());
-        $infoArray['offlineAIPsIngested'] = '' . (23 * 55); 
+        $infoArray['offlineAIPsIngested'] = '' . (23 * 8);
         $infoArray['offlineReelsCount'] = '23';
-        $infoArray['offlinePagesCount'] = (23 * 3 * 8000);
+        $infoArray['offlinePagesCount'] = (23 * 3 * 4654);
+        $infoArray['AIPsRetrievedCount'] = 8;
+        $infoArray['DataRetrieved'] = $this->byteToMetricbyte(8 * 14000000);
 
         $monthlyOnlineAIPsIngested = new TestChartJS;
         $monthlyOnlineAIPsAccessed = new TestChartJS;
@@ -37,28 +39,28 @@ class DashboardController extends Controller
         $monthlyOnlineAIPsIngested->labels(array_keys($last12Months))->load(url('api/v1/stats/monthlyOnlineAIPsIngested'));
         $monthlyOnlineAIPsIngested->options([
             'title' => [
-                 'text' => 'Monthly AIPs Ingested'
+                 'text' => 'AIPs Ingested (monthly)'
             ],
         ]);
 
         $monthlyOnlineAIPsAccessed->labels(array_keys($last12Months))->load(url('api/v1/stats/monthlyOnlineAIPsAccessed'));
         $monthlyOnlineAIPsAccessed->options([
             'title' => [
-                 'text' => 'Monthly AIPs Accessed'
+                 'text' => 'AIPs Accessed (monthly)'
             ],
         ]);
 
         $monthlyOnlineDataIngested->labels(array_keys($last12Months))->load(url('api/v1/stats/monthlyOnlineDataIngested'));
         $monthlyOnlineDataIngested->options([
             'title' => [
-                 'text' => 'Monthly Data Ingested'
+                 'text' => 'Data Ingested (monthly)'
             ],
         ]);
 
         $monthlyOnlineDataAccessed->labels(array_keys($last12Months))->load(url('api/v1/stats/monthlyOnlineDataAccessed'));
         $monthlyOnlineDataAccessed->options([
             'title' => [
-                 'text' => 'Monthly Data Accessed'
+                 'text' => 'Data Accessed (monthly)'
             ],
         ]);
 
