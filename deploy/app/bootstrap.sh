@@ -7,4 +7,5 @@ php artisan telescope:publish
 php artisan migrate
 php artisan db:seed
 php artisan vue-i18n:generate
+/usr/bin/supervisord
 /usr/local/sbin/php-fpm
