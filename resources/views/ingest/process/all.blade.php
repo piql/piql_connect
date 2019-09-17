@@ -10,9 +10,11 @@
 
 @section('content')
     <div class="contentContainer">
-        <em>
+        <div class="col-8">
+            <em class="mb-3 mt-2">
             {{ __('ingest.processing.ingress') }}
-        </em><br/>
+            </em>
+        </div>
         <Processing>
         </Processing>
     </div>
