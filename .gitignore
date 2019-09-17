@@ -31,14 +31,7 @@ tags.temp
 
 
 /nbproject/private/
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-.env.example
->>>>>>> parent of 45f06fe... added files to ignore
-=======
 .gitconfig
 .wget-hsts
 .zsh
 .zcompdump*
->>>>>>> integration
