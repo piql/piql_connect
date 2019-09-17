@@ -39,11 +39,15 @@ Route::group(['prefix' => 'v1' , 'middleware' => 'throttle:500,1','auth:web'], f
         Route::get('bags', 'Api\Ingest\BagController@all');
         Route::get('processing', 'Api\Ingest\BagController@processing');
         Route::get('complete', 'Api\Ingest\BagController@complete');
+        Route::get('bags/offline', 'Api\Ingest\BagController@offline');
+        Route::get('bags/online', 'Api\Ingest\BagController@online');
         Route::get('bags/latest', 'Api\Ingest\BagController@latest');
         Route::get('bags/{id}', 'Api\Ingest\BagController@show');
         Route::get('bags/{id}/files', 'Api\Ingest\BagController@showFiles');
         Route::post('bags/{id}/commit', 'Api\Ingest\BagController@commit');
         Route::post('bags/{id}/piql', 'Api\Ingest\BagController@piqlIt');
+        Route::get('bags/{id}/download', 'Api\Ingest\BagController@download');
+        Route::get('files/{id}/download', 'Api\Ingest\BagController@downloadFile');
         Route::get('offline_storage/pending/jobs/{id}/bags', 'Api\Ingest\OfflineStorageController@bags');
         Route::patch('offline_storage/pending/jobs/{id}', 'Api\Ingest\OfflineStorageController@archiveJob');
         Route::get('offline_storage/pending/jobs', 'Api\Ingest\OfflineStorageController@jobs');
@@ -65,11 +69,19 @@ Route::group(['prefix' => 'v1' , 'middleware' => 'throttle:500,1','auth:web'], f
         });
     });
 
-    Route::group(['prefix' => 'preservation'], function() {
-        Route::apiResource('fonds', 'Api\Preservation\FondsController', [ 'as' => 'preservation' ]);
-        //Route::get('fonds', 'Api\Preservation\FondsController@index')->name('preservation.fonds');
-        //Route::post('fonds', 'Api\Preservation\FondsController@create')->name('preservation.fonds.create');
+    Route::group(['prefix' => 'planning'], function() {
+        Route::apiResource('fonds', 'Api\Planning\FondsController', ['as' => 'planning']);
+        Route::apiResource('holdings', 'Api\Planning\HoldingController', ['as' => 'planning']);
+        Route::apiResource('holdings.fonds', 'Api\Planning\HoldingFondsController', ['as' => 'planning']);
     });
+
+    Route::group(['prefix' => 'storage'], function() {
+        Route::get('retrievals/latest', 'Api\Storage\RetrievalCollectionController@latest');
+        Route::post('retrievals/add', 'Api\Storage\RetrievalCollectionController@addToLatest');
+        Route::get('retrievals/{id}/files', 'Api\Storage\RetrievalCollectionController@files');
+        Route::apiResource('retrievals', 'Api\Storage\RetrievalCollectionController', ['as' => 'retrievals']);
+    });
+
 
     Route::group(['prefix' => 'stats'], function () {
         Route::get('monthlyOnlineAIPsIngested', 'Api\Stats\DashboardChartController@monthlyOnlineAIPsIngestedEndpoint')->name('monthlyOnlineAIPsIngested');

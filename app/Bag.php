@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Webpatser\Uuid\Uuid;
 use App\User;
+use App\StorageProperties;
 class BagTransitionException extends \Exception {};
 
 class Bag extends Model
@@ -91,6 +92,12 @@ class Bag extends Model
         {
             $model->uuid = Uuid::generate();
             $model->status = "open";
+            StorageProperties::create([ 'bag_uuid' => $model->uuid ]);
+        });
+
+        self::deleting( function( $model )
+        {
+            $model->storage_properties->delete();
         });
     }
 
@@ -106,7 +113,12 @@ class Bag extends Model
 
     public function job()
     {
-        return $this->belongsToMany('App\Job')->first();
+        return $this->belongsToMany('App\Job')->using('App\BagJob');
+    }
+
+    public function storage_properties()
+    {
+        return $this->hasOne('App\StorageProperties', 'bag_uuid', 'uuid');
     }
 
     public function storagePathCreated()

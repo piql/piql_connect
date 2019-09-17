@@ -1,51 +1,65 @@
 <template>
     <div class="container-fluid">
-        <div class="row plistHeader mb-3">
-            <div class="col-1"><input type="checkbox" class="checkbox" id="browserList"></div>
-            <div class="col-7">{{$t('access.browse.itemInfo')}}</div>
-            <div class="col-3">
-           </div>
-
-
-        </div>
-        <div class="col" v-if="fileLocation === 'online'">
-            <browser-item  v-for="item in onlineItems" :selectedFond="selectedFond" v-bind:item="item" v-bind:key="item.id"></browser-item>
-        </div>
-        <div class="col" v-if="fileLocation === 'offline'">
-            <browser-item-offline  v-for="item in offlineItems" :selectedFond="selectedFond" v-bind:item="item" v-bind:key="item.id"></browser-item-offline>
+        <div class="row plistHeader">
+            <div class="col-sm-1"><input type="checkbox" class="checkbox" id="browserList" v-if="false"></div>
+            <div class="col-sm-3">{{$t('access.browse.itemInfo')}}</div>
+            <div class="col-sm-3">Archive</div>
+            <div class="col-sm-2">Holding</div>
+            <div class="col-sm-1">Files</div>
         </div>
 
+        <span v-if="fileLocation === 'online'">
+            <browser-item  v-for="item in dataObjects" :archive="selectedArchive" :holding="selectedHolding" v-bind:item="item" v-bind:key="item.id" @openObject="openObject"/>
+        </span>
+        <span v-if="fileLocation === 'offline'">
+            <browser-item-offline  v-for="item in dataObjects" @addFileToRetrieval="addFileToRetrieval" @addObjectToRetrieval="addObjectToRetrieval" :archive="selectedArchive" :holding="selectedHolding" v-bind:item="item" v-bind:key="item.id" @openObject="openObject"/>
+        </span>
     </div>
 </template>
 
 <script>
 import axios from 'axios';
 export default {
-    data() {
-        return {
-            fileLocation: "online",
-            onlineItems : [],
-            offlineItems : [],
-        }
-    },
-
     props: {
+        filters: {
+            type: String,
+            default: ""
+        },
         bagId: {
             type: String,
             default: ""
         },
-        selectedFond: String
+        location: {
+            type: String,
+            default: "online"
+        },
+        selectedArchive: String,
+        selectedHolding: String,
+        dataObjects: Array,
     },
 
     async mounted() {
-        axios.get("/api/v1/ingest/bags/").then( (bags) => { 
-            this.onlineItems = bags.data.data;
-        });
-        axios.get("/api/v1/ingest/bags/").then( (bags) => { 
-            this.offlineItems = bags.data.data;
-        });
+    },
 
+    computed: {
+        fileLocation: function() {
+            return this.location == "offline" ? "offline" : "online";
+        },
+    },
 
+    methods: {
+        addObjectToRetrieval: function(item) {
+            this.$emit('addObjectToRetrieval', item);
+        },
+
+        addFileToRetrieval: function(item) {
+            console.log('browserlist addfile');
+            this.$emit('addFileToRetrieval', item);
+        },
+
+        openObject: function(item) {
+            this.$emit('openObject', item);
+        },
     },
 }
 </script>

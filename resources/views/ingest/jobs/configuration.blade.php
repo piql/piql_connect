@@ -5,17 +5,20 @@
 @endsection
 
 @section('heading')
-    <i class="fas fa-cog titleIcon"></i>Content Options
+    <i class="fas fa-cog titleIcon"></i>{{__('ingest.offlineStorage.contentOptions.header')}}
 @endsection
 
 @section('content')
+    <em>
+        {{__('ingest.offlineStorage.contentOptions.ingress')}}
+    </em>
     {{ Breadcrumbs::render('content_options_view', $job) }}
     <div class="contentContainer">
         <div class="container-fluid">
             <div class="row plistHeader">
                 <div class="col-sm-4">{{__('ingest.offlineStorage.jobName')}}</div>
-                <div class="col-sm-1">{{__('ingest.offlineStorage.numberOfAips')}}</div>
-                <div class="col-sm-3">{{__('ingest.offlineStorage.size')}}</div>
+                <div class="col-sm-2 pr-3">{{__('ingest.offlineStorage.numberOfAips')}}</div>
+                <div class="col-sm-2 pr-3">{{__('ingest.offlineStorage.size')}}</div>
                 <div class="col-sm-4 listActionItems">&nbsp;</div>
             </div>
 

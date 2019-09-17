@@ -16,47 +16,47 @@ class DashboardChartController extends Controller
     private $color_chart_line_inside_background = '#8f005240';
 
     // Purple
-    private $color_chart_pie = [
-        '#4d324d',
-        '#5d3c5d',
-        '#6c476c',
-        '#7b517b',
-        '#8b5b8b',
-        '#9a659a',
-        '#a474a4',
-        '#ae84ae',
-        '#b893b8',
-        '#c3a2c3',
-        '#cdb2cd',
-        '#d7c1d7',
-        '#e1d1e1',
-        '#ebe0eb',
-        '#f5f0f5',
-    ];
+    // private $color_chart_pie = [
+    //     '#4d324d',
+    //     '#5d3c5d',
+    //     '#6c476c',
+    //     '#7b517b',
+    //     '#8b5b8b',
+    //     '#9a659a',
+    //     '#a474a4',
+    //     '#ae84ae',
+    //     '#b893b8',
+    //     '#c3a2c3',
+    //     '#cdb2cd',
+    //     '#d7c1d7',
+    //     '#e1d1e1',
+    //     '#ebe0eb',
+    //     '#f5f0f5',
+    // ];
 
     // Burgundy/pink
-    // private $color_chart_pie = [
-    //     '#6f2a3c',
-    //     '#813147',
-    //     '#943851',
-    //     '#a63f5b',
-    //     '#aa405d',
-    //     '#b94665',
-    //     '#c05974',
-    //     '#c76b84',
-    //     '#ce7e93',
-    //     '#d590a2',
-    //     '#dca3b2',
-    //     '#e3b5c1',
-    //     '#eac8d1',
-    //     '#f1dae0',
-    //     '#f8edf0',
-    //     '#ffffff',
-    // ];
+    private $color_chart_pie = [
+        '#6f2a3c',
+        '#813147',
+        '#943851',
+        '#a63f5b',
+        '#aa405d',
+        '#b94665',
+        '#c05974',
+        '#c76b84',
+        '#ce7e93',
+        '#d590a2',
+        '#dca3b2',
+        '#e3b5c1',
+        '#eac8d1',
+        '#f1dae0',
+        '#f8edf0',
+        '#ffffff',
+    ];
 
     public function monthlyOnlineAIPsIngestedEndpoint()
     {
-        $monthlyOnlineAIPsIngested = array_values($this->monthlyOnlineAIPsIngested(User::first()));
+        $monthlyOnlineAIPsIngested = array_values($this->monthlyOnlineAIPsIngested(User::all()->where('username', 'Alfredo')->first()));
         $monthlyOfflineAIPsIngested = array_map(function($val) { return round($val*(rand(1,9)/10)); }, $monthlyOnlineAIPsIngested);
         $chart = new TestChartJS;
         $dataset = $chart->dataset('Online AIPs Ingested', 'line', $monthlyOnlineAIPsIngested);
@@ -70,7 +70,7 @@ class DashboardChartController extends Controller
 
     public function monthlyOnlineDataIngestedEndpoint()
     {
-        $monthlyOnlineDataIngested = $this->monthlyOnlineDataIngested(User::first());
+        $monthlyOnlineDataIngested = $this->monthlyOnlineDataIngested(User::all()->where('username', 'Alfredo')->first());
         $chart = new TestChartJS;
         $chart->labels(array_keys($monthlyOnlineDataIngested));
         $dataset = $chart->dataset('Online Data Ingested', 'line', array_values($monthlyOnlineDataIngested));
@@ -114,7 +114,7 @@ class DashboardChartController extends Controller
 
     public function dailyOnlineAIPsIngestedEndpoint()
     {
-        $dailyOnlineAIPsIngested = array_values($this->dailyOnlineAIPsIngested(User::first()));;
+        $dailyOnlineAIPsIngested = array_values($this->dailyOnlineAIPsIngested(User::all()->where('username', 'Alfredo')->first()));;
         $dailyOfflineAIPsIngested = array_map(function($val) { return round($val*(rand(1,9)/10)); }, $dailyOnlineAIPsIngested);
         $chart = new TestChartJS;
         $chart->dataset('Online AIPs Ingested', 'line', $dailyOnlineAIPsIngested);
@@ -124,7 +124,7 @@ class DashboardChartController extends Controller
 
     public function dailyOnlineDataIngestedEndpoint()
     {
-        $dailyOnlineDataIngested = array_values($this->dailyOnlineDataIngested(User::first()));;
+        $dailyOnlineDataIngested = array_values($this->dailyOnlineDataIngested(User::all()->where('username', 'Alfredo')->first()));;
         $dailyOfflineDataIngested = array_map(function($val) { return round($val*(rand(1, 9)/10), 2); }, array_values($dailyOnlineDataIngested));
         $chart = new TestChartJS;
         $chart->dataset('Online Data Ingested', 'line', $dailyOnlineDataIngested);
@@ -154,7 +154,7 @@ class DashboardChartController extends Controller
 
     public function fileFormatsIngestedEndpoint()
     {
-        $fileFormatsIngested = $this->fileFormatsIngested(User::first());
+        $fileFormatsIngested = $this->fileFormatsIngested(User::all()->where('username', 'Alfredo')->first());
         $chart = new TestChartJS;
         $chart->dataset('fileFormatsIngested', 'pie', array_values($fileFormatsIngested))->backgroundcolor($this->color_chart_pie);
         return $chart->api();
@@ -163,7 +163,6 @@ class DashboardChartController extends Controller
     private function monthlyOnlineAIPsIngested($user)
     {
         $bags = $user->bags->where('status', 'complete');
-
         $monthlyOnlineAIPsIngested = array_fill(0, 12, 0);
 
         $oneYearAgo = new \DateTime(date('Y-m-d'));
@@ -206,7 +205,6 @@ class DashboardChartController extends Controller
                 }
             }
         }
-
         for ($i = 0; $i < count($monthlyOnlineDataIngested); $i++)
         {
             $monthlyOnlineDataIngested[$i] = round($monthlyOnlineDataIngested[$i], 2);

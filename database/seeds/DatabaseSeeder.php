@@ -13,8 +13,12 @@ class DatabaseSeeder extends Seeder
     {
         //TODO: env to control which seeders to run
         $this->call(UsersTableSeeder::class);
+        $this->call(HoldingSeeder::class);
+        $this->call(FondsSeeder::class);
         //$this->call(FilesTableSeeder::class);
         $this->call(ArchivematicaServiceSeeder::class);
+
+        // $this->call(DemoSeeder::class);
 
         if(env('APP_DEBUG_DB_SEED_JOB_DATA', false)) {
             $this->call(DummyDataSeeder::class);

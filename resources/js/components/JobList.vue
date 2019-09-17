@@ -3,9 +3,9 @@
         <ingest-filter-search></ingest-filter-search>
         <div class="row plistHeader">
             <div class="col-sm-4">{{$t('ingest.offlineStorage.jobName')}}</div>
-            <div class="col-sm-1">{{$t('ingest.offlineStorage.numberOfAips')}}</div>
+            <div class="col-sm-2">{{$t('ingest.offlineStorage.numberOfAips')}}</div>
             <div class="col-sm-3">{{$t('ingest.offlineStorage.size')}}</div>
-            <div class="col-sm-4 listActionItems">&nbsp;</div>
+            <div class="col-sm-3 listActionItems">&nbsp;</div>
         </div>
 
         <job-list-item v-for="item in items" v-bind:item="item" v-bind:key="item.id"

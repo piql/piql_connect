@@ -7,9 +7,9 @@ RUN pecl install imagick-3.4.4
 RUN docker-php-ext-enable imagick mcrypt
 RUN docker-php-ext-configure zip --with-libzip && docker-php-ext-install zip
 WORKDIR /var/www
-RUN usermod -u 1000 www-data
-RUN chown -R www-data:www-data /var/www
-RUN chmod 775 /var/www
+RUN groupmod -g 333 www-data
+RUN usermod -u 333 -g 333 www-data
+#RUN chown -R 333:333 /var/www/storage
 COPY ./app/bootstrap.sh /usr/local/bin
 EXPOSE 9000
 CMD ["/usr/local/bin/bootstrap.sh"]

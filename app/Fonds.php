@@ -8,9 +8,30 @@ class Fonds extends Model
 {
     protected $table = 'fonds';
     protected $fillable = [
-        'title', 'description', 'owner_holding_uuid', 'parent_id', 'lhs', 'rhs', 
+        'title', 'description', 'owner_holding_uuid', 'parent_id', 'position'
     ];
 
+    protected static function boot()
+    {
+        parent::boot();
+        static::creating(function ($model) {
+            $model->position = $model->siblings()->count()+1;
+        });
+    }
+
+    /* Section: Mutators and accessors */
+    public function setOwnerHoldingUuidAttribute($value)
+    {
+        if(! Holding::findByUuid( $value ) )
+        {
+            throw new \InvalidArgumentException("Cannot assign owner holding to fonds - holding not found: ".$value);
+        }
+
+        $this->attributes['owner_holding_uuid'] = $value;
+    }
+
+
+    /* Section: Relations */
     public function owner_holding()
     {
         return $this->belongsTo('Holding', 'owner_holding_uuid',  'uuid');
@@ -18,24 +39,99 @@ class Fonds extends Model
 
     public function parent()
     {
-        return Fonds::find($this->parent_id);
+        return $this->belongsTo('App\Fonds', 'parent_id');
     }
 
-    /* find all fonds at the same level */
+    /* Section: Utilities */
+
+
+    /* function siblings()
+     * returns all fonds at the same level as the current (self exclusive)
+     */
+
     public function siblings()
     {
-        $parent_id = $this->parent()->id;
-        return Fonds::all()->where('parent_id', '=', $parent_id);
+        return Fonds::orderBy( 'position' )
+            ->where( 'id', '<>', $this->id )
+            ->where( 'parent_id', '=', $this->parent_id);
     }
 
-    /* traverse the tree up to the top-level ancestor */
+    /* function subFonds()
+     * returns all first-level sub-fonds to the current fonds
+     */
+
+    public function subFonds()
+    {
+        return $this->hasMany('App\Fonds', 'parent_id');
+    }
+
+    /* function moveBefore($fonds_id)
+     * moves a fonds before another fonds in the chain
+     * returns the updated fonds
+     */
+
+    public function moveBefore( $fonds_id )
+    {
+        $insertPosition = Fonds::findOrFail( $fonds_id )->position;
+
+        /* Partition the list by before and after new position */
+        $parts = $this->siblings()->get()->partition(
+            function ($sibling) use ($insertPosition) {
+                return $sibling->position < $insertPosition;
+            }
+        );
+
+
+        /* Insert $this between before and after*/
+        $ordered = $parts->first()->concat([$this])->concat($parts->last() );
+
+        /* Re-enumerate entries by map reduce */
+        $ordered->reduce( function ( $pos, $fonds ) {
+            $fonds->update(['position' => $pos]);
+            return $pos+1;
+        }, 0);
+
+        return $this;
+    }
+
+
+    /* function moveAfter($fonds_id)
+     * moves a fonds after another fonds in the chain
+     * returns the updated fonds
+     */
+
+    public function moveAfter( $fonds_id )
+    {
+        $insertPosition = Fonds::findOrFail( $fonds_id )->position;
+
+        /* Partition the list by before and after new position */
+        $parts = $this->siblings()->get()->partition(
+            function ($sibling) use ($insertPosition) {
+                return $sibling->position <= $insertPosition;
+            }
+        );
+
+        /* Insert $this between before and after*/
+        $ordered = $parts->first()->concat( [$this] )->concat( $parts->last() );
+
+        /* Re-enumerate entries by map reduce */
+        $ordered->reduce( function ( $pos, $fonds ) {
+            $fonds->update(['position' => $pos]);
+            return $pos+1;
+        }, 0);
+
+        return $this;
+    }
+
+
+
+    /* function ancestor()
+    /* recursively finds the top-level fonds for this fonds
+     */
+
     public function ancestor()
     {
-        $ancestor = $this->parent();
-        while( $ancestor )
-        {
-            $ancestor = $grandParent->parent();
-        }
-        return $ancestor;
+        return $this->parent()->with('ancestor');
     }
+
 }
