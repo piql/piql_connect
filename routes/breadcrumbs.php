@@ -20,7 +20,7 @@ Breadcrumbs::for('aip_list', function ($trail, $jobs) {
 // Offline storage > AIP List > Files
 Breadcrumbs::for('file_list', function ($trail, $bag) {
     $job = $bag->job();
-    if(isset($job))
+    if($job->count() > 0)
         $trail->parent('aip_list', $job);
     else
         $trail->parent('upload');
