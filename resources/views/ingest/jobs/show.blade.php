@@ -10,10 +10,14 @@
 
 @section('content')
     <div class="contentContainer">
-        <em>
-            {{__('ingest.offlineStorage.aipList.ingress')}}
-        </em>
-        {{ Breadcrumbs::render('aip_list', $job) }}
+        <div class="col-6">
+            <em class="mb-3 mt-2">
+                {{__('ingest.offlineStorage.aipList.ingress')}}
+            </em>
+        </div>
+        <div class="col-8">
+            {{ Breadcrumbs::render('aip_list', $job) }}
+        </div>
 
         <bag-list :job-id="'{{ $job->id }}' "></bag-list>
     </div>

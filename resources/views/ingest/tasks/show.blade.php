@@ -12,8 +12,14 @@
 
 @section('content')
     <div class="contentContainer">
-        <em>{{__("ingest.fileList.ingress")}}</em>
-        {{ Breadcrumbs::render('file_list', $bag) }}
+        <div class="col-6">
+            <em class="mb-3 mt-2">
+                {{__("ingest.fileList.ingress")}}
+            </em>
+        </div>
+        <div class="col-8 pb-4">
+            {{ Breadcrumbs::render('file_list', $bag) }}
+        </div>
         <file-list :bag-id="'{{ $bag->id }}'">
         </file-list>
     </div>
