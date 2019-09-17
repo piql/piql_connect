@@ -164,18 +164,19 @@
                     <input  @if ($readonly) readonly @endif class="form-control input-sm" type="text" id="m_rightsmanagement">
                 </div>
             </div>
+    </div>
 </div>
+@if (!$readonly)
+<div class="row mt-1">
+    <div class="col-sm-3"></div>
+    <div class="col-sm-8 p-4 right">
+        <a href="{{ URL::previous() }}">
+            <button class="btn btn p-3 mr-5 w-300">Cancel</button>
+            <button class="btn btn-ln btn-default w-300 p-3">Save</button>
+        </a>
+    </div>
+</div>
+@endif
 
-            @if (!$readonly)
-            <div class="row mt-1">
-                <div class="col-sm-2">&nbsp;</div>
-                <div class="col p-4">
-                <a href="{{ URL::previous() }}">
-                    <button class="btn p-3">Cancel</button>
-                    <button class="btn p-3">Save</button>
-                </a>
-                </div>
-            </div>
-            @endif
     </form>
 @endsection

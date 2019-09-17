@@ -27,7 +27,7 @@ Route::middleware(['auth', 'locale'])->group( function () {
 
     Route::prefix('access')->group( function () {
         Route::get('browse', 'BrowseController@index')->name('access.browse');
-        Route::get('retrieve', 'AccessController@retrieve')->name('access.retrieve');
+        Route::redirect('retrieve', 'retrieve/ready');
         Route::get('retrieve/ready', 'AccessController@ready')->name('access.retrieve.ready');
         Route::get('retrieve/retrieving', 'AccessController@retrieving')->name('access.retrieve.retrieving');
         Route::get('retrieve/downloadable', 'AccessController@downloadable')->name('access.retrieve.downloadable');

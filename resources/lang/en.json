@@ -133,7 +133,15 @@
     "access.retrieve.readyToRetrieve": "Ready to retrieve",
     "access.retrieve.isRetrieving": "Now retrieving",
     "access.retrieve.downloadable": "Ready for download",
-    "access.retrieve.history": "Retrieval history"
+    "access.retrieve.history": "Retrieval history",
 
+    "access.ready.aipName": "Offline package name",
+    "access.ready.ingestDate": "Ingest date",
+    "access.ready.filesize": "File size",
+    "access.ready.remove": "Remove file",
+    "access.ready.ingress": "Files staged for retrieval from offline storage.",
+    "access.ready.noItems": "No files currently requested for retrieval.",
+    "access.retrieved.noItems": "Your files are now ready for dowload!",
+    "access.retrieved.idle": "No files are currently being retrieved."
 
 }

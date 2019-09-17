@@ -51,17 +51,14 @@
                 </span>
             </div>
             <div class="col-sm-2 mt-5">
-                <span v-if="fondSelected">
+              <primary-contact v-if="fondSelected === false" />
                     <online-actions v-if="online"/>
-                    <offline-actions v-else/>
-                </span>
-                <span v-else>
-                    <primary-contact></primary-contact>
-                </span>
-                <div v-if="offline" class="retrievalItems border-none">
-                    Number of items for retrieval: {{numberOfFilesForRetrieval}}
+                <div v-if="offline" class="retrievalItems border-none w-75">
+                  Items for retrieval: <span class="float-right"> {{numberOfFilesForRetrieval}}</span>
                 </div>
 
+                    <offline-actions v-if="offline"/>
+                </span>
             </div>
         </div>
     </div>

@@ -77,8 +77,11 @@ Route::group(['prefix' => 'v1' , 'middleware' => 'throttle:500,1','auth:web'], f
 
     Route::group(['prefix' => 'storage'], function() {
         Route::get('retrievals/latest', 'Api\Storage\RetrievalCollectionController@latest');
+        Route::get('retrievals/retrieving', 'Api\Storage\RetrievalCollectionController@retrieving');
         Route::post('retrievals/add', 'Api\Storage\RetrievalCollectionController@addToLatest');
         Route::get('retrievals/{id}/files', 'Api\Storage\RetrievalCollectionController@files');
+        Route::post('retrievals/{id}/close', 'Api\Storage\RetrievalCollectionController@close');
+        Route::get('retrievals/toready', 'Api\Storage\RetrievalCollectionController@toReady');
         Route::apiResource('retrievals', 'Api\Storage\RetrievalCollectionController', ['as' => 'retrievals']);
     });
 

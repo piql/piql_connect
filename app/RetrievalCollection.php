@@ -13,4 +13,9 @@ class RetrievalCollection extends Model
     {
         return $this->hasMany('App\RetrievalFile');
     }
+
+    public function sourceFiles()
+    {
+        return $this->hasManyThrough('App\File', 'App\RetrievalFile', 'file_id', 'id');
+    }
 }

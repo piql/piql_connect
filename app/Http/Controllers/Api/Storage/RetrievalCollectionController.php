@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\Storage;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Resources\RetrievalCollectionResource;
+use App\Http\Resources\RetrievalCollectionResourceCollection;
 use App\Http\Resources\RetrievaFileResource;
 use App\Http\Resources\FileCollection;
 use Illuminate\Contracts\Routing\ResponseFactory;
@@ -36,9 +37,16 @@ class RetrievalCollectionController extends Controller
 
     public function latest()
     {
-        $retrievalCollection = RetrievalCollection::latest()->where('status', 'open')->first();
+        $retrievalCollection = RetrievalCollection::with(['sourceFiles'])->where('status', 'open')->latest()->first();
         return new RetrievalCollectionResource($retrievalCollection);
     }
+
+    public function retrieving()
+    {
+        $retrievalCollection = RetrievalCollection::with(['sourceFiles'])->where('status', 'requesting')->get();
+        return new RetrievalCollectionResourceCollection($retrievalCollection);
+    }
+
 
     public function addToLatest(Request $request)
     {
@@ -76,6 +84,27 @@ class RetrievalCollectionController extends Controller
          $retrievalCollection = RetrievalCollection::create(['status' => 'open']);
          return new RetrievalCollectionResource($retrievalCollection);
     }
+
+    public function close(Request $request, $id)
+    {
+        $retrievalCollection = RetrievalCollection::find($id);
+        if($retrievalCollection){
+            $retrievalCollection->update(['status' => 'requesting']);
+        }
+        $new = RetrievalCollection::with(['source_files'])->create(['status' => 'open']);
+        return new RetrievalCollectionResource($new); //TODO: improve response semantics
+    }
+
+    public function toReady(Request $request)
+    {
+        $retrievalCollections = RetrievalCollection::where('status', 'requesting')->get();
+        $retrievalCollections->map(function ($rc) {
+            $rc->update(['status' => 'ready']);
+        });
+        return new RetrievalCollectionResourceCollection($retrievalCollections);
+    }
+
+
 
     /**
      * Display the specified resource.
