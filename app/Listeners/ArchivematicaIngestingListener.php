@@ -15,6 +15,8 @@ use Log;
 use App\Bag;
 use App\Job;
 use App\ArchivematicaService;
+use Symfony\Component\VarDumper\Cloner\VarCloner;
+use Symfony\Component\VarDumper\Dumper\CliDumper;
 
 class ArchivematicaIngestingListener  extends BagListener
 {
@@ -50,7 +52,7 @@ class ArchivematicaIngestingListener  extends BagListener
                 {
                     Log::info("Ingest complete for SIP with bag id ".$bag->id); //." with aip uuid: ".$status->uuid);
 
-                    $bag->storageProperties->update( ['aip_uuid' =>  $status->uuid] );
+                    $bag->storage_properties->update( ['aip_uuid' =>  $status->uuid] );
 
                     event(new IngestCompleteEvent($bag));
                     return;
