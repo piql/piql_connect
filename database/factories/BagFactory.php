@@ -2,6 +2,7 @@
 
 /* @var $factory \Illuminate\Database\Eloquent\Factory */
 
+use App\User;
 use App\Bag;
 use Faker\Generator as Faker;
 
@@ -40,7 +41,7 @@ $factory->define(Bag::class, function (Faker $faker) {
     return [
         'name' => $name,
         'status' => $status,
-        'owner' => "07da0453-857f-4645-92ac-9a3add6427cf",
+        'owner' => User::all()->where('username', 'Alfredo')->first()->id,
         'created_at' => $dateTime
     ];
 });

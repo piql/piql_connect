@@ -29,7 +29,7 @@ class SettingsController extends Controller
             $userSettings->update();
             App::setLocale($userSettings->interfaceLanguage);
         }
-        return view('/settings/settings', $userSettings);
+        return view('/settings/settings', $this->fetchUserSettings());
     }
 
     public function fetchUserSettings()

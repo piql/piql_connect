@@ -1,23 +1,22 @@
 <?php
 
-namespace App\Http\Controllers\Api\Preservation;
+namespace App\Http\Controllers\Api\Planning;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\Controller;
-use App\Fonds;
-use App\Http\Resources\FondsResource;
+use App\Holding;
+use App\Http\Resources\FondsCollection;
 
-class FondsController extends Controller
+class HoldingFondsController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($holding_uuid)
     {
-        return response()->json( Fonds::all() );
+        return new FondsCollection(Holding::findByUuid($holding_uuid)->fonds()->get());
     }
 
     /**
@@ -38,27 +37,7 @@ class FondsController extends Controller
      */
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'title' => 'required|string|max:100',
-            'owner_holding_uuid' => 'required|uuid|exists:holdings,uuid',
-            'description' => 'string|max:500',
-        ]);
-
-        if( $validator->fails() )
-        {
-            $message = $validator->errors();
-            return response($message, 422);
-        }
-        $data = [
-            'title' => $request->title,
-            'owner_holding_uuid' => $request->owner_holding_uuid,
-            'description' => $request->description ?? ''
-        ];
-
-        $lhs = $request->lhs;
-        $rhs = $request->rhs;
-
-        return new FondsResource(Fonds::create($data));
+        //
     }
 
     /**

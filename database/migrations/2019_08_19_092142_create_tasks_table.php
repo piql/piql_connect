@@ -13,6 +13,7 @@ class CreateTasksTable extends Migration
      */
     public function up()
     {
+        Schema::dropIfExists('tasks');
         Schema::create('tasks', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('queue')->index();

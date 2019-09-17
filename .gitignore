@@ -15,6 +15,7 @@ composer.lock
 .idea/
 /deploy/db/*
 .config/
+.bash_history
 .zcompdump
 .zsh_history
 .zshrc
@@ -30,3 +31,7 @@ tags.temp
 
 
 /nbproject/private/
+.gitconfig
+.wget-hsts
+.zsh
+.zcompdump*

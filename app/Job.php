@@ -31,7 +31,7 @@ class Job extends Model
 
     public function bags()
     {
-        return $this->belongsToMany('App\Bag');
+        return $this->belongsToMany('App\Bag')->using('App\BagJob');
     }
 
     public static function currentJob($owner)

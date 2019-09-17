@@ -289,7 +289,7 @@ h1 {
     margin-bottom: 10px;
     padding-bottom: 0;
     margin-top: 0;
-    margin-left: 0;
+    margin-left: 0.75em;
     font-family: 'Agenda';
     font-weight: 800;
     text-transform: uppercase;
@@ -457,7 +457,6 @@ a {
     min-height: 40px;
 }
 input[type="text"] {
-    min-width: 300px;
     background-color: $white;
     border: 0;
     height: 30px;
@@ -466,7 +465,6 @@ input[type="text"] {
     padding: 20px;
 }
 input[type="number"] {
-    min-width: 300px;
     background-color: $white;
     border: 0;
     height: 30px;
@@ -518,21 +516,14 @@ input[type="number"] {
     z-index: 1000;
 }
 select {
-    width: 300px;
-    background-color: $color_secondary;
+    width: 100%;
+    height: 50px;
+    background-color: $white;
     border: 0;
-    height: 30px;
-    //Instead of the line below you could use @include border-radius($radius, $vertical-radius)
-    border-radius: 2px;
-    padding: 4px;
-    //vendor-prefix found
-    //-ms-box-sizing: content-box
-    //vendor-prefix found
-    //-moz-box-sizing: content-box
-    //vendor-prefix found
-    //-webkit-box-sizing: content-box
-    //Instead of the line below you could use @include box-sizing($bs)
-    box-sizing: content-box;
+    line-height: 1.5;
+    border-radius: 10px;
+    -moz-appearance: none;
+    -webkit-appearance: none;
 }
 textarea {
     min-width: 300px;
@@ -543,9 +534,6 @@ textarea {
     border-radius: 2px;
     padding: 4px;
     top: 0;
-}
-input[type="submit"] {
-    width: 80px;
 }
 .inputSubmitSave {
     background: $color_main_brand;
@@ -788,30 +776,35 @@ input[type="file"] {
 .forgot {
     @extend %extend_2;
 }
-#piqlTop {
+.piqlTop {
     width: 100vw;
-    height: 130px;
+    height: 180px;
     background-color: $white;
 }
-#piqlLogo {
-    width: 296px;
+.piqlLogoOuter {
+    box-shadow: 3px 0 0 0 $color_main_brand;
+    width: 246px;
+    padding-right: 275px;
+    margin-right: 100px;
     margin-top: 40px;
-    border-right: 2px solid $color_main_brand;
+    margin-left: 25px;
     float: left;
-    position: relative;
+    position: absolute;
+
+}
+.piqlLogo {
     .img {
         text-align: center;
     }
     img {
         padding-top: 7px;
-        width: 246px;
+        height: 60px;
         left: 100px;
     }
 }
-#piqlNav {
-    width: calc(100vw - 598px);
-    max-height: 110px;
-    float: left;
+.piqlNav {
+    max-height: 100px;
+    float: right;
     ul {
         list-style-type: none;
         margin: 0;
@@ -835,15 +828,18 @@ input[type="file"] {
             color: $color_main_brand;
         }
     }
-    a .active {
-        color: $color_main_brand;
+    a {
+        text-decoration: none;
+        .active {
+            color: $color_main_brand;
+        }
     }
 }
-#customerLogo {
+.customerLogo {
     position: absolute;
-    left: 350px;
-    top: 15px;
-    max-height: 160px;
+    left: 380px;
+    top: 20px;
+    height: 50px;
 }
 #piqlOptions {
     max-height: 110px;
@@ -886,7 +882,7 @@ input[type="file"] {
         display: block;
     }
 }
-#notificationsList {
+.dropdownList{
     width: 15em;
     height: auto;
     background-color: $white;
@@ -895,7 +891,7 @@ input[type="file"] {
     padding-top: 15px;
     position: absolute;
     top: 100px;
-    right: 3.2em;
+    right: -1em;
     margin-right: 1.45em;
     text-align: left;
     font-size: 0.7em;
@@ -1672,34 +1668,54 @@ th {
         width: 350px;
     }
 }
-@media screen and(min-width: 1201px) and(max-width: 1400px) {
-    #piqlLogo {
-        width: 296px;
-        margin-top: 40px;
-        border-right: 2px solid $color_main_brand;
+@media screen and(min-width: 0px) and(max-width: 1400px) {
+    .piqlTop {
+        width: 100vw;
+        height: 180px;
         float: left;
-        position: relative;
+    }
+
+    .piqlLogoOuter {
+        box-shadow: 3px 0 0 0 $color_main_brand;
+        width: 246px;
+        padding-right: 275px;
+        margin-right: 100px;
+        margin-top: 40px;
+        margin-left: 25px;
+        float: left;
+        position: absolute;
+
+    }
+    .piqlLogo {
         .img {
-            text-align: left;
-            padding-left: 30px;
+            text-align: center;
         }
         img {
-            width: 246px;
+            padding-top: 7px;
+            width: 160px;
+            left: 100px;
         }
     }
-    #customerLogo {
+
+    .customerLogo {
+        height: 40px;
         position: absolute;
-        left: 350px;
-        top: 60px;
-        max-height: 100px;
-        max-width: 100px;
+        left: 380px;
+        top: 10px;
     }
+
+   .piqlNav {
+       top: 50px;
+       padding-top: 50px;
+       position: absolute;
+       left: 20px;
+    }
+
 }
 @media screen and(max-width: 1210px) {
     #piqlTop {
         height: 130px;
         width: 100vw;
-        background-color: $white;
     }
     hr {
         width: calc(100vw - 60px);
@@ -1707,7 +1723,7 @@ th {
     #piqlLogo {
         float: none;
         margin: 0;
-        width: 100%;
+        width: 75%;
         border-right: 0;
         .img {
             padding-top: 33px;
@@ -1716,19 +1732,19 @@ th {
         }
     }
     #piqlNav {
-        display: none;
         margin: 0;
-        width: 100%;
-        height: 110px;
         max-height: 110px;
-        margin-top: 25px;
+        top: -75%;
         li {
-            padding: 0 15px;
+        }
+        a {
+            color: black !important;
         }
     }
     #customerLogo {
-        top: 50px;
+        top: 20px;
         left: 300px;
+        height: 80px;
         display: block;
     }
     #piqlOptions {
@@ -1909,7 +1925,7 @@ th {
         }
     }
     #piqlLogo {
-        width: 100%;
+        width: 75%;
         margin-top: 0;
         padding: 0;
         border-right: 2px solid $color_main_brand;
@@ -1928,9 +1944,8 @@ th {
         position: absolute;
         right: 10px;
         left: auto;
-        top: 28px;
-        max-height: 100px;
-        max-width: 100px;
+        top: 20px;
+        height: 80px;
     }
     #piqlOptions {
         float: none;
@@ -1945,16 +1960,19 @@ th {
     .burgerMenu {
         top: 72px;
     }
-    #piqlOptoins i {
+    #piqlOptions i {
         margin-right: 0;
     }
 }
-@media screen and(max-width: 360px) {
+@media screen and(max-width: 60px) {
     #customerLogo {
-        width: 80px;
+        top: 20px;
+        height: 80px;
+        margin-right: 20px;
+        margin-top: 100px;
     }
     #piqlLogo img {
-        width: 200px;
+        width: 50%;
     }
 }
 .filelabel i {
@@ -1977,7 +1995,21 @@ th {
 }
 
 .dashboard-card {
+    border-radius: 25px;
     background: $color_background;
+    background: $color_secondary_1;
+}
+
+.fill1 {
+    background: $color_fill_1 !important;
+}
+
+.fill2 {
+    background: $color_fill_2 !important;
+}
+
+.fill3 {
+    background: $color_fill_3 !important;
 }
 
 
@@ -2011,7 +2043,6 @@ th {
 }
 
 input[type=text] {
-    min-width: 100px;
     background-color: white;
     border: 0;
     height: 36px;
@@ -2074,7 +2105,15 @@ input[type=text] {
 }
 
 .top-active {
-    color: $color_main_brand !important;
+    a {
+        color: $color_main_brand !important;
+    }
+}
+
+.top-inactive {
+    a {
+        color: $color_fill !important;
+    }
 }
 
 .w-95 {
@@ -2085,6 +2124,53 @@ input[type=text] {
     &:hover {
         cursor: pointer;
     }
+}
+
+.signal {
+    color: $color_signal !important;
+}
+
+.w-250 {
+    height: 50px !important;
+}
+.h-80 {
+    height: 80px !important;
+}
+
+.navbar-divide {
+    margin-left: 7px;
+    height: 100px;
+    border-right: 2px solid $color_main_brand;
+}
+
+.mt-2em {
+    margin-top: 2.0em;
+}
+
+.navbar {
+    font-size: large;
+    i {
+        font-size: x-large;
+    }
+}
+
+.list-group-item-light {
+    background-color: $white;
+    border-color: $color_fill_3;
+    &:active {
+        background-color: $color_main_brand;
+    }
+    &:hover {
+        background-color: $color_fill_3 !important;
+    }
+}
+.list-group-item-header {
+    background-color: $color_fill_2;
+}
+
+.description-area {
+    resize: none;
+    height: 15em !important;
 }
 
 .list-action-icon {

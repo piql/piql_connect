@@ -6,6 +6,7 @@ use App\Events\ArchivematicaIngestingEvent;
 use App\Events\ErrorEvent;
 use App\Events\IngestCompleteEvent;
 use App\Events\StartTransferToArchivematicaEvent;
+use App\StorageProperties;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Suppoer\Facades\Storage;
@@ -14,6 +15,8 @@ use Log;
 use App\Bag;
 use App\Job;
 use App\ArchivematicaService;
+use Symfony\Component\VarDumper\Cloner\VarCloner;
+use Symfony\Component\VarDumper\Dumper\CliDumper;
 
 class ArchivematicaIngestingListener  extends BagListener
 {
@@ -43,11 +46,19 @@ class ArchivematicaIngestingListener  extends BagListener
         $currentIngestStatuses = $this->amClient->getIngestStatus();
         foreach($currentIngestStatuses->results as $status)
         {
-            if($status->name.".zip" == $bag->zipBagFileName() && $status->status == "COMPLETE")
+            if($status->name.".zip" == $bag->zipBagFileName())
             {
-                if($status->status == "COMPLETE")
+                if($status->status == "COMPLETE" || env('APP_DEBUG_SKIP_INGEST_STATUS', false))
                 {
-                    Log::info("Ingest complete for SIP with bag id ".$bag->id);
+                    if(env('APP_DEBUG_SKIP_INGEST_STATUS', false))
+                    {
+                        Log::info("Ingest status bypass for SIP with bag id ".$bag->id);
+                    }
+
+                    Log::info("Ingest complete for SIP with bag id ".$bag->id); //." with aip uuid: ".$status->uuid);
+
+                    $bag->storage_properties->update( ['aip_uuid' =>  $status->uuid] );
+
                     event(new IngestCompleteEvent($bag));
                     return;
                 } elseif ($status->status == "FAILED" || $status->status == "USER_INPUT" )

@@ -5,7 +5,7 @@
 @endsection
 
 @section('heading')
-    <i class="fas fa-upload titleIcon"></i>{{__("Upload")}}
+    <i class="fas fa-upload titleIcon"></i>{{__("upload.header")}}
 @endsection
 
 @section('content')

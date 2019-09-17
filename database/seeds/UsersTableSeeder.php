@@ -35,5 +35,12 @@ class UsersTableSeeder extends Seeder
         $user->email = "hakon.larsson@piql.com";
         $user->save();
 
+        $found = App\User::where('username', '=', 'simon')->first();
+        $user = $found ?? new App\User();
+        $user->username = "simon";
+        $user->password = Hash::make("simon");
+        $user->full_name = "Simon Bruce-Cassidy";
+        $user->email = "simon.brucecassidy@piql.com";
+        $user->save();
     }
 }

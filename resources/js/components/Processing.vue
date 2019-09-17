@@ -20,30 +20,33 @@ export default {
     data() {
         return {
             items : [],
-            pollProcessingHandle: null
+            pollProcessingHandle: null,
+            itemsLoaded: false
         }
     },
 
     computed: {
         currentlyIdle: function() {
-            return this.items.length == 0;
+            return this.itemsLoaded && (this.items.length == 0);
         }
     },
     methods: {
         startPollProcessing () {
-            this.pollProcessingHandle  = setInterval(async () => {
+            this.pollProcessingHandle = setInterval(async () => {
                 this.items = (await axios.get("/api/v1/ingest/processing/")).data.data;
-            }, 500)
+            }, 500);
         }
     },
     created() {
-        this.startPollProcessing()
+        this.startPollProcessing();
     },
     beforeDestroy(){
         clearInterval(this.pollProcessingHandle);
     },
 
     async mounted() {
+        this.items = (await axios.get("/api/v1/ingest/processing/")).data.data;
+        this.itemsLoaded = true;
     },
 }
 </script>

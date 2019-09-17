@@ -12,8 +12,20 @@
     </div>
 
     <ul class="list-group">
+    @if(\Request::is('/'))
+        <a href="{{ route('dashboard') }}">
+            <li class="list-group-item  {{ \Request::is('/') ? 'active sidebar-active' : '' }} ">
+                <i class="fas fa-tachometer-alt"></i><i class="leftMenuItem">{{__('sidebar.dashboard')}}</i>
+            </li>
+        </a>
+        <a href="{{ route('dashboard') }}">
+            <li class="list-group-item {{ \Request::is('reports') ? 'active sidebar-active' : '' }} ">
+                <i class="fas fa-chart-bar"></i><i class="leftMenuItem">{{__('sidebar.reports')}}</i>
+            </li>
+        </a>
 
-    @if  (\Request::is('ingest/*'))
+
+    @elseif  (\Request::is('ingest/*'))
         <a href="{{ route('upload') }}">
             <li class="list-group-item {{ \Request::is('ingest/upload') ? 'active sidebar-active' : '' }} ">
                 <i class="fas fa-upload"></i><i class="leftMenuItem">{{__('sidebar.upload')}}</i>
@@ -34,7 +46,7 @@
             </li>
         </a>
 
-    @elseif (\Request::is('access/*'))
+    @elseif (\Request::is('access/browse' || 'access/retrieve'))
         <a href="{{ route('access.browse') }}">
             <li class="list-group-item {{ \Request::is('access/browse') ? 'active sidebar-active' : '' }} ">
                 <i class="fas fa-hdd"></i><i class="leftMenuItem">{{__('sidebar.browse')}}</i>
@@ -45,8 +57,8 @@
                 <i class="fas fa-download"></i><i class="leftMenuItem">{{__('sidebar.retrieve')}}</i>
             </li>
         </a>
-        @if (\Request::is('access/retrieve' || 'access/retrieve/*'))
-
+    @endif
+    @if(\Request::is('access/retrieve'))
             <a href="{{ route('access.retrieve.ready') }}">
                 <li class="list-group-item {{ \Request::is('access/retrieve/ready') ? 'active sidebar-active' : '' }} ">
                     <i class="fas fa-file-export"></i><i class="leftMenuItem">{{__('sidebar.retrieve.readyToRetrieve')}}</i>
@@ -70,21 +82,6 @@
                     <i class="fas fa-history"></i><i class="leftMenuItem">{{__('sidebar.retrieve.history')}}</i>
                 </li>
             </a>
-
-        @endif
-
-    @else
-        <a href="{{ route('dashboard') }}">
-            <li class="list-group-item  {{ \Request::is('/') ? 'active sidebar-active' : '' }} ">
-                <i class="fas fa-tachometer-alt"></i><i class="leftMenuItem">{{__('sidebar.dashboard')}}</i>
-            </li>
-        </a>
-        <a href="{{ route('dashboard') }}">
-            <li class="list-group-item {{ \Request::is('reports') ? 'active sidebar-active' : '' }} ">
-                <i class="fas fa-chart-bar"></i><i class="leftMenuItem">{{__('sidebar.reports')}}</i>
-            </li>
-        </a>
-
     @endif
     </ul>
 

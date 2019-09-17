@@ -1,11 +1,11 @@
 <template>
     <div class="form-group">
-        <label for="holdingPicker" class="col-form-label-sm">
-            {{$t('access.browse.selectHolding')}}
+        <label v-if="showLabel" for="holdingPicker" class="col-form-label-sm">
+            {{label}}
         </label>
-        <select v-model="selectedHolding" id="holdingPicker" class="form-control selectpicker" v-on:change="holdingChanged">
-          <option v-for="holding in holdings" v-bind:value="holding.value">
-            {{holding.name}}
+        <select v-model="selection" id="holdingPicker" class="w-100" data-live-search="true" @change="selectionChanged($event.target.value)">
+          <option v-for="holding in holdings" v-bind:value="holding.title">
+            {{holding.title}}
           </option>
        </select>
     </div>
@@ -15,21 +15,30 @@
 <script>
 export default {
     mounted() {
+        this.selection = this.initialSelection;
+    },
+    methods: {
+        selectionChanged: function (value) {
+          this.$emit('selectionChanged', value);
+        }
     },
     data() {
         return {
-            selectedHolding: this.initialSelectedHolding
-        }
-    },
-    methods: {
-        holdingChanged: function (event) {
-            this.$emit('holdingSelectionChanged', this.selectedHolding);
-        }
+            selection: '' 
+        };
     },
     props: {
-        initialSelectedHolding: String,
-        holdingSelected: Function,
-        holdings: Array
+        initialSelection: '',
+        holdings: Array,
+        label: {
+            type: String,
+            default: ""
+        }
+    },
+    computed: {
+        showLabel: function() {
+            return this.label.length > 0;
+        },
     }
 }
 
