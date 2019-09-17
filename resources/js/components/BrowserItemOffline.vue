@@ -1,7 +1,7 @@
 <template>
         <div class="row plist">
             <div class="col-sm-1">
-                <input type="checkbox" class="checkbox" id="browserList">
+                <!--input type="checkbox" class="checkbox" id="browserList"-->
             </div>
             <div class="col-sm-3">
                 {{item.name}}
@@ -13,7 +13,7 @@
                 {{item.holding_name}}
             </div>
             <div class="col-sm-2">
-                <a @click="addToRetrieval" class="fas fa-file-export titleIcon signal" href="#"></i></a>
+                <a @click="addObjectToRetrieval" class="fas fa-file-export titleIcon signal" href="#"></i></a>
                 <a @click="open" href="#"><i class="fas fa-folder titleIcon"></i></a>
             </div>
         </div>
@@ -36,8 +36,8 @@
             };
         },
         methods: {
-            addToRetrieval: function() {
-               this.$emit('addToRetrieval', this.item); 
+            addObjectToRetrieval: function() {
+               this.$emit('addObjectToRetrieval', this.item); 
             },
             open: function() {
                 this.$emit('openObject', this.item.id);

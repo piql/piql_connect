@@ -75,6 +75,14 @@ Route::group(['prefix' => 'v1' , 'middleware' => 'throttle:500,1','auth:web'], f
         Route::apiResource('holdings.fonds', 'Api\Planning\HoldingFondsController', ['as' => 'planning']);
     });
 
+    Route::group(['prefix' => 'storage'], function() {
+        Route::get('retrievals/latest', 'Api\Storage\RetrievalCollectionController@latest');
+        Route::post('retrievals/add', 'Api\Storage\RetrievalCollectionController@addToLatest');
+        Route::get('retrievals/{id}/files', 'Api\Storage\RetrievalCollectionController@files');
+        Route::apiResource('retrievals', 'Api\Storage\RetrievalCollectionController', ['as' => 'retrievals']);
+    });
+
+
     Route::group(['prefix' => 'stats'], function () {
         Route::get('monthlyOnlineAIPsIngested', 'Api\Stats\DashboardChartController@monthlyOnlineAIPsIngestedEndpoint')->name('monthlyOnlineAIPsIngested');
         Route::get('monthlyOnlineDataIngested', 'Api\Stats\DashboardChartController@monthlyOnlineDataIngestedEndpoint')->name('monthlyOnlineDataIngested');
