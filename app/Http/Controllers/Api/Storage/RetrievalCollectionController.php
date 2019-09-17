@@ -31,7 +31,7 @@ class RetrievalCollectionController extends Controller
      */
     public function create()
     {
-       
+
     }
 
     public function latest()
@@ -43,11 +43,14 @@ class RetrievalCollectionController extends Controller
     public function addToLatest(Request $request)
     {
         $retrievalCollection = RetrievalCollection::latest()->where('status', 'open')->first();
+        if($retrievalCollection == null){
+            $retrievalCollection = RetrievalCollection::create(['status' => 'open']);
+        }
 
         RetrievalFile::create([
             'retrieval_collection_id' => $retrievalCollection->id,
             'file_id' => $request->fileId
-        ]); 
+        ]);
         return new RetrievalCollectionResource($retrievalCollection->refresh());
     }
 
