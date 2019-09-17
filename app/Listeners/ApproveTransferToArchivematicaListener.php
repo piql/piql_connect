@@ -40,10 +40,14 @@ class ApproveTransferToArchivematicaListener extends BagListener
             {
                 if($status->name == $bag->zipBagFileName())
                 {
-                    $this->amClient->approveTransfer($bag->id);
-                    event(new ArchivematicaTransferringEvent($bag));
-                    $waitingForApprove = false;
-                    break;
+                    try {
+                        $this->amClient->approveTransfer($bag->id);
+                        event(new ArchivematicaTransferringEvent($bag));
+                        $waitingForApprove = false;
+                        break;
+                    } catch(\Exception $e) {
+                        Log::error($e->getMessage());
+                    }
                 }
             }
             sleep(2);
