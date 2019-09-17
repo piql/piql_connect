@@ -21,7 +21,8 @@ class ArchivematicaClient
             'base_uri' => $am_proxy,
             'headers' => [
                 'Accept' => 'application/json'
-            ]
+            ],
+            'verify' => env('CURL_VERIFY_SELF_SIGN_CERT', true)
         ]);
     }
 
