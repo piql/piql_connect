@@ -34,7 +34,6 @@
                 return moment(item.created_at).format('L');
             },
           addFileToRetrieval: function(){
-            console.log("browserfileitemoffline");
             this.$emit('addFileToRetrieval', this.item);
           }
         },

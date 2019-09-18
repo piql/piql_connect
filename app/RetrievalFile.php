@@ -19,4 +19,9 @@ class RetrievalFile extends Model
         return $this->hasOne('App\File', 'id', 'file_id');
     }
 
+    public function firstBag()
+    {
+        return $this->sourceFile()->bag();
+    }
+
 }

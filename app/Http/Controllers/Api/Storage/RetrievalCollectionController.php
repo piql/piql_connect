@@ -41,6 +41,27 @@ class RetrievalCollectionController extends Controller
         return new RetrievalCollectionResource($retrievalCollection);
     }
 
+    public function ready()
+    {
+        $rc = RetrievalCollection::with(['sourceFiles'])->where('status','ready')->get();
+        return $rc;
+    }
+
+    public function takeOffline($id)
+    {
+        $rc = RetrievalCollection::find($id);
+        $rc->update(['status' => 'offline']);
+        return [];
+
+    }
+
+    public function download($id)
+    {
+        $path = storage_path("/piql_reader_test_reel.tar");
+        return response()->download($path);
+    }
+
+
     public function retrieving()
     {
         $retrievalCollection = RetrievalCollection::with(['sourceFiles'])->where('status', 'requesting')->get();

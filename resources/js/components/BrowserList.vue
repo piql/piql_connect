@@ -53,7 +53,6 @@ export default {
         },
 
         addFileToRetrieval: function(item) {
-            console.log('browserlist addfile');
             this.$emit('addFileToRetrieval', item);
         },
 

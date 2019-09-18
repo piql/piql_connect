@@ -142,6 +142,8 @@
     "access.ready.ingress": "Files staged for retrieval from offline storage.",
     "access.ready.noItems": "No files currently requested for retrieval.",
     "access.retrieved.noItems": "Your files are now ready for dowload!",
-    "access.retrieved.idle": "No files are currently being retrieved."
+    "access.retrieved.idle": "No files are currently being retrieved.",
+    "access.download.download": "Download",
+    "access.download.takeOffline": "Take offline"
 
 }

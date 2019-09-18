@@ -192,20 +192,21 @@ export default {
         },
         addObjectToRetrieval: async function(item) {
             console.log("browse add object:");
-            console.log(item);
             let objectFiles = (await( axios.get("/api/v1/ingest/bags/"+item.id+"/files"))).data;
 
             objectFiles.map( async (file) => {
+            console.log(file);
                 this.retrievalItems.push(file);
                 await (axios.post('/api/v1/storage/retrievals/add', {
-                    'fileId' : item.id,
+                    'fileId' : file.id,
                 }));
           });
         },
-        addFileToRetrieval: async function(item) {
-            this.retrievalItems.push(item);
+      addFileToRetrieval: async function(file) {
+          console.log(file);
+            this.retrievalItems.push(file);
             await (axios.post('/api/v1/storage/retrievals/add', {
-                'fileId' : item.id,
+                'fileId' : file.id,
            }));
         },
         openObject: async function(bagId) {

@@ -30,7 +30,7 @@ Route::middleware(['auth', 'locale'])->group( function () {
         Route::redirect('retrieve', 'retrieve/ready');
         Route::get('retrieve/ready', 'AccessController@ready')->name('access.retrieve.ready');
         Route::get('retrieve/retrieving', 'AccessController@retrieving')->name('access.retrieve.retrieving');
-        Route::get('retrieve/downloadable', 'AccessController@downloadable')->name('access.retrieve.downloadable');
+        Route::get('retrieve/download', 'AccessController@download')->name('access.retrieve.downloadable');
         Route::get('retrieve/history', 'AccessController@history')->name('access.retrieve.history');
     });
 

@@ -29,7 +29,7 @@ class AccessController extends Controller
         return view('access.retrieve.retrieving');
     }
 
-    public function downloadable()
+    public function download()
     {
         return view('access.retrieve.downloadable');
     }
