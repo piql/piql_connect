@@ -5,45 +5,52 @@
 @endsection
 
 @section('heading')
-    <div>
         @isset($file)
             <i class="fas fa-tags titleIcon"></i>{{__('ingest.metadata.editFile')}}
         @endisset
         @isset($job)
-                <i class="fas fa-tags titleIcon"></i>{{__('ingest.metadata.editJob')}}
+            <i class="fas fa-tags titleIcon"></i>{{__('ingest.metadata.editJob')}}
         @endisset
-    </div>
 @endsection
 
 @section('content')
+    <div class="contentContainer">
     <!-- for future use -->
     @php
         $readonly = isset($readonly) ? $readonly : false;
     @endphp
 
     @isset($file)
-        @if($readonly)
-            <em>{{__('ingest.metadata.showFile.ingress')}}</em>
-        @else
-            <em>{{__('ingest.metadata.editFile.ingress')}}</em>
-        @endif
-        <br/>
+        <div class="col-8">
+            <em class="mb-3 mt-1">
+            @if($readonly)
+                {{__('ingest.metadata.showFile.ingress')}}
+            @else
+                {{__('ingest.metadata.editFile.ingress')}}
+            @endif
+            </em>
+        </div>
         {{ Breadcrumbs::render('metadata_view', $file) }}
     @endisset
     @isset($job)
-        <em>{{__('ingest.offlineStorage.metadata.ingress')}}</em>
-        <br/>
+        <div class="col-8">
+            <em class="mb-3 mt-1">
+                {{__('ingest.offlineStorage.metadata.ingress')}}
+            </em>
+        </div>
+        <div class="col-8">
         {{ Breadcrumbs::render('offline_storage_metadata_view', $job) }}
+        </div>
     @endisset
+        <div class="col-12">
         <form>
-        <div class="container-fluid">
-         <div class="row">
-            <div class="row mb-5">
-                <div class="small col-sm-4" > {{__('ingest.metadata.editFile.fileName')}}</div>
-                <div class="col-sm-8 text-nowrap" id="m_filename"> {{ isset($file) ? $file->filename : $job->name }}</div>
-                </div>
+        <div class="container-fluid pt-4">
+            <div class="row d-flex flex-row align-items-baseline pb-1">
+                    <div class="small pr-2" > {{__('ingest.metadata.editFile.fileName')}}</div>
+                    <div class="text-nowrap" id="m_filename"> {{ isset($file) ? $file->filename : $job->name }}</div>
             </div>
-</div><div class="row">
+        </div>
+        <div class="row">
             <div class="col-sm-4">
                 <div class="row mb-2">
                 <div class="col-sm-7 form-group mb-2">
@@ -79,10 +86,9 @@
                     <input  @if ($readonly) readonly @endif class="form-control input-sm" type="text" id="m_publisher">
                 </div>
             </div>
+        </div>
 
-
-</div>
-<div class="col-sm-4">
+        <div class="col-sm-4">
 
             <div class="row mb-2">
                 <div class="col-sm-7 form-group mb-2">
@@ -98,7 +104,7 @@
                 </div>
             </div>
 
- 
+
 
             <div class="row mb-2">
                 <div class="col-sm-7 form-group mb-2">
@@ -115,16 +121,14 @@
                 </div>
             </div>
 
-           <div class="row mb-2">
+            <div class="row mb-2">
                 <div class="col-sm-7 form-group mb-2">
                     <label class="small"  for="m_otherContributor">Other Contributor</label>
                     <input  @if ($readonly) readonly @endif class="form-control input-sm" type="text" id="m_othercontributor">
                 </div>
             </div>
-
-
-</div>
-<div class="col-sm-4">
+        </div>
+        <div class="col-sm-4">
 
             <div class="row mb-2">
                 <div class="col-sm-7 form-group mb-2">
@@ -164,19 +168,21 @@
                     <input  @if ($readonly) readonly @endif class="form-control input-sm" type="text" id="m_rightsmanagement">
                 </div>
             </div>
+        </div>
     </div>
-</div>
 @if (!$readonly)
-<div class="row mt-1">
-    <div class="col-sm-3"></div>
-    <div class="col-sm-8 p-4 right">
-        <a href="{{ URL::previous() }}">
-            <button class="btn btn p-3 mr-5 w-300">Cancel</button>
-            <button class="btn btn-ln btn-default w-300 p-3">Save</button>
-        </a>
+    <div class="row mt-1">
+        <div class="col-sm-3"></div>
+        <div class="col-sm-8 p-4 right">
+            <a href="{{ URL::previous() }}">
+                <button class="btn btn p-3 mr-5 w-300">Cancel</button>
+            </a>
+            <a href="{{ URL::previous() }}">
+                <button class="btn btn-ln btn-default w-300 p-3">Save</button>
+            </a>
+        </div>
     </div>
-</div>
 @endif
-
     </form>
+</div>
 @endsection

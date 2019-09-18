@@ -9,9 +9,11 @@
 @endsection
 
 @section('content')
-    <em>
-        {{__('ingest.offlineStorage.contentOptions.ingress')}}
-    </em>
+    <div class="col-6">
+        <em class="mb-3 mt-2">
+            {{__('ingest.offlineStorage.contentOptions.ingress')}}
+        </em>
+    </div>
     {{ Breadcrumbs::render('content_options_view', $job) }}
     <div class="contentContainer">
         <div class="container-fluid">

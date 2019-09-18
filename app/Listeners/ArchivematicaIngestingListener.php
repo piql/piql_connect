@@ -48,8 +48,13 @@ class ArchivematicaIngestingListener  extends BagListener
         {
             if($status->name.".zip" == $bag->zipBagFileName())
             {
-                if($status->status == "COMPLETE")
+                if($status->status == "COMPLETE" || env('APP_DEBUG_SKIP_INGEST_STATUS', false))
                 {
+                    if(env('APP_DEBUG_SKIP_INGEST_STATUS', false))
+                    {
+                        Log::info("Ingest status bypass for SIP with bag id ".$bag->id);
+                    }
+
                     Log::info("Ingest complete for SIP with bag id ".$bag->id); //." with aip uuid: ".$status->uuid);
 
                     $bag->storage_properties->update( ['aip_uuid' =>  $status->uuid] );
