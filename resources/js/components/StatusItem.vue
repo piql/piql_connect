@@ -22,7 +22,6 @@ import axios from 'axios';
 
 export default {
     async mounted() {
-        this.bags = (await axios.get(this.jobListUrl+"/jobs/"+this.item.id+"/bags")).data;
     },
     props: {
         item: Object,
@@ -56,7 +55,6 @@ export default {
     data() {
         return {
             modal: true,
-            bags: [],
         };
     },
 

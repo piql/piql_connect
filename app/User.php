@@ -7,12 +7,13 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Facades\Hash;
+use Laravel\Passport\HasApiTokens;
 use Webpatser\Uuid\Uuid;
 use App\Traits\Uuids;
 
 class User extends Authenticatable
 {
-    use Notifiable, Uuids;
+    use HasApiTokens, Notifiable, Uuids;
 
     public $incrementing = false; /* Do not try to auto increment the id (uuid) */
 

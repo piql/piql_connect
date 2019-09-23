@@ -76,6 +76,9 @@ export default {
                         optimus_uploader_size_limit: 0,
                         optimus_uploader_thumbnail_height: 100,
                         optimus_uploader_thumbnail_width: 100,
+                    },
+                    customHeaders: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     }
                 },
                 chunking: {
