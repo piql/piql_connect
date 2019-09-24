@@ -12,11 +12,6 @@
 
 <i class="fas fa-tachometer-alt titleIcon"></i>
 <h1>Dashboard</h1>
-<!-- <em>Short descriptive text of view.</em> -->
-<!-- <p>Other type of text or content goes here.</p> -->
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js" charset="utf-8"></script>
-
 <div class="container-fluid">
     <div class="row">
         <div class="col-sm-12">
@@ -26,18 +21,15 @@
                     <div>
                         <div class="row">
                             <div class="col-sm-6">
-                                {!! $monthlyOnlineAIPsIngested->container() !!}
-                                {!! $monthlyOnlineAIPsIngested->script() !!}
+                                <line-chart title="AIPs Ingested (monthly)" url="/api/v1/stats/monthlyOnlineAIPsIngested"/>
                             </div>
                             <div class="col-sm-6">
-                                {!! $monthlyOnlineDataIngested->container() !!}
-                                {!! $monthlyOnlineDataIngested->script() !!}
+                                <line-chart title="AIPs Accessed (monthly)" url="/api/v1/stats/monthlyOnlineAIPsAccessed"/>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-sm-12">
-                                {!! $fileFormatsIngested->container() !!}
-                                {!! $fileFormatsIngested->script() !!}
+                                <pie-chart title="File formats Ingested" url="/api/v1/stats/fileFormatsIngested"/>
                             </div>
                         </div>
                     </div>
@@ -46,12 +38,10 @@
                     <h2 style="text-align: center;margin-bottom: 5px;">Access</h2>
                     <div class="row">
                         <div class="col-sm-6">
-                            {!! $monthlyOnlineAIPsAccessed->container() !!}
-                            {!! $monthlyOnlineAIPsAccessed->script() !!}
+                            <line-chart title="Data Ingested (monthly)" url="/api/v1/stats/monthlyOnlineDataIngested"/>
                         </div>
                         <div class="col-sm-6">
-                            {!! $monthlyOnlineDataAccessed->container() !!}
-                            {!! $monthlyOnlineDataAccessed->script() !!}
+                            <line-chart title="Data Accessed (monthly)" url="/api/v1/stats/monthlyOnlineDataAccessed"/>
                         </div>
                     </div>
                     <div>
