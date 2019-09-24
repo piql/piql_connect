@@ -17,7 +17,12 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+Route::group(['prefix' => 'v1'], function () {
+    Route::post('login', 'Auth\ApiLoginController@login');
+});
+
 Route::group(['prefix' => 'v1' , 'middleware' => 'auth:api'], function () {
+    Route::post('logout', 'Auth\ApiLoginController@logout');
 
     Route::group(['prefix' => 'system'], function () {
         Route::get('currentUser', 'Api\System\StatusController@currentUser');
