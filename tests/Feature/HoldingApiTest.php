@@ -6,6 +6,7 @@ use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Collection;
+use Laravel\Passport\Passport;
 use Webpatser\Uuid\Uuid;
 use Faker\Factory as Faker;
 use App\Holding;
@@ -18,10 +19,14 @@ class HoldingApiTest extends TestCase
     private $validHoldingData;
     private $createdHoldingIds;
     private $holdingCount;
+    private $testUser;
 
     public function setUp() : void
     {
         parent::setUp();
+        $this->testUser = factory( \App\User::class )->create();
+        Passport::actingAs( $this->testUser );
+
         $this->createdHoldingIds = collect([]);
         $this->holdingCount = Holding::count();
         $faker = Faker::create();
@@ -47,6 +52,8 @@ class HoldingApiTest extends TestCase
 
     public function tearDown() : void
     {
+        $this->testUser->delete();
+
         $this->createdHoldingIds->map( function ($createdId) {
             $holding = Holding::find($createdId);
             if($holding){
