@@ -287,7 +287,7 @@ class BagController extends Controller
         if($request->filled("archive_uuid") && $request->filled("holding_name"))
         {
             $bag->storage_properties->update([
-                'archive_uuid' => $request->archive_uuid, 
+                'archive_uuid' => $request->archive_uuid,
                 'holding_name' => $request->holding_name
             ]);
         }
@@ -328,6 +328,7 @@ class BagController extends Controller
 
         try {
             $bag->applyTransition('close');
+            $bag->save();
             Log::debug("emitting ProcessFilesEvent for bag with id " . $id);
             event(new BagFilesEvent($bag));
         } catch (BagTransitionException $e) {

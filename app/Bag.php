@@ -17,7 +17,7 @@ class Bag extends Model
         'name', 'status', 'owner' // todo: remove 'status'
     ];
 
-    private $smConfig = [
+    protected $smConfig = [
         'states' => [
             'empty',               // empty
             'open',                // files can be added
@@ -91,7 +91,9 @@ class Bag extends Model
         self::creating( function( $model )
         {
             $model->uuid = Uuid::generate();
-            $model->status = "open";
+            if(!isset($model->status) || $model->status == "") {
+                $model->status = "open";
+            }
             StorageProperties::create([ 'bag_uuid' => $model->uuid ]);
         });
 
@@ -138,7 +140,7 @@ class Bag extends Model
 
     public function canTransition($transition)
     {
-        return isset($this->smConfig['transactions'][$transition]['from'][$this->status]);
+        return !(array_search($this->status, $this->smConfig["transitions"][$transition]["from"]) === false);
     }
 
     public function applyTransition($transition)
@@ -148,7 +150,7 @@ class Bag extends Model
             throw new BagTransitionException("transition '{$transition}' doesn't exist");
         }
 
-        if(!isset($this->smConfig['transitions'][$transition]))
+        if(!$this->canTransition($transition))
         {
             throw new BagTransitionException("transition '{$transition}' is not allows from state '{$this->status}'");
         }
@@ -158,7 +160,6 @@ class Bag extends Model
         }
 
         $this->status = $this->smConfig['transitions'][$transition]['to'];
-        $this->save();
     }
 
     public function getBagSize() {

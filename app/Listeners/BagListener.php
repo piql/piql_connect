@@ -16,6 +16,7 @@ class BagListener implements ShouldQueue
         $bag = $event->bag;
         try {
             $bag->applyTransition($this->state);
+            $bag->save();
         } catch (BagTransitionException $e) {
             Log::warning(get_called_class() . " caught an exception changing bag state: {$e}");
             return;
