@@ -38,11 +38,17 @@ class HoldingController extends Controller
      */
     public function store(Request $request)
     {
-        return $holding = Holding::create([
+        $data = [
             'title' => $request->title,
             'description' => $request->description
-        ]);
-        return new HoldingResource($holding);
+        ];
+
+        if( $request->filled( 'uuid' ) ) {
+            $data += ['uuid' => $request->uuid ] ;
+        }
+
+        $holding = Holding::create( $data )->refresh();
+        return new HoldingResource( $holding );
     }
 
     /**
@@ -53,7 +59,11 @@ class HoldingController extends Controller
      */
     public function show($id)
     {
-        //
+        $holding = Holding::find( $id );
+        if( !isset( $holding ) ) {
+            return response()->json(['error' => 'HOLDING WITH ID '.$id.' NOT FOUND'], 404);
+        }
+        return new HoldingResource( $holding );
     }
 
     /**
@@ -87,6 +97,11 @@ class HoldingController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $holding = Holding::find($id);
+        if(!isset($holding) ) {
+            return response()->json(['error' => 'HOLDING WITH ID '.$id.' NOT FOUND'], 404);
+        }
+        $holding->delete();
+        return response()->json([], 204 );
     }
 }

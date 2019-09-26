@@ -3,10 +3,14 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Webpatser\Uuid\Uuid;
+
 
 class Holding extends Model
 {
+    use SoftDeletes;
+
     protected $table = 'holdings';
     protected $fillable = [
         'title','description','parent_uuid', 'uuid'

@@ -16,7 +16,7 @@ class CreateHoldingsTable extends Migration
         Schema::create('holdings', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->uuid('uuid');
-            $table->string('title')->unique();
+            $table->string('title');
             $table->text('description')->nullable();
             $table->uuid('parent_uuid')->nullable();
             $table->softDeletes();
