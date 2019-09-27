@@ -1,7 +1,7 @@
 <?php
 
-Route::get('/login', array('uses' => 'Auth\LoginController@showLogin'));
-Route::get('/logout', array('uses' => 'Auth\LoginController@logout'));
+Route::get('/login', array('uses' => 'Auth\LoginController@showLogin'))->name('login');
+Route::get('/logout', array('uses' => 'Auth\LoginController@logout'))->name('logout');
 
 Route::middleware(['auth', 'locale'])->group( function () {
 

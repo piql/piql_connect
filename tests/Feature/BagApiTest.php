@@ -6,6 +6,7 @@ use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Collection;
+use Laravel\Passport\Passport;
 use App\Bag;
 use App\User;
 use App\Holding;
@@ -15,6 +16,7 @@ class BagApiTest extends TestCase
 {
     private $testUser;
     private $bagTestData;
+    private $testBagName1;
     private $createdBagIds;
     private $testArchive1;
     private $testArchive2;
@@ -25,6 +27,7 @@ class BagApiTest extends TestCase
     {
         parent::setUp();
         $this->createdBagIds = collect([]);
+        $this->testBagName1 = "TestBagName1";
         $this->testUser = User::create([
             'username' => 'BagApiTestUser', 
             'password' => 'notinuse',
@@ -32,9 +35,11 @@ class BagApiTest extends TestCase
             'email' => 'bagapitestuser@localhost'
         ]);
 
+        Passport::actingAs($this->testUser);
+
         $this->bagTestData = [ 
-            'bagName' => 'BagApiTestName',
-            'userId' => $this->testUser->id
+            'name' => $this->testBagName1,
+            'owner' => $this->testUser->id
         ];
 
         $this->testArchive1 = Holding::create(['title' => 'testBagArchive1Title']);
@@ -50,8 +55,8 @@ class BagApiTest extends TestCase
 
 
         $this->bagApiResultData = ['data' => [
-            'name' => $this->bagTestData['bagName'],
-            'owner' => $this->bagTestData['userId']
+            'name' => $this->bagTestData['name'],
+            'owner' => $this->bagTestData['owner']
         ]];
 
         $this->bagTestDataWithArchiveAndHolding = [
@@ -77,15 +82,33 @@ class BagApiTest extends TestCase
         parent::tearDown();
     }
 
+    private function createOneBag( Array $overrides = null )
+    {
+        $data = $this->bagTestDataWithArchiveAndHolding;
+        if( $overrides ) {
+            $data = $overrides + $data;
+        }
+        $bag = Bag::create($data);
+        if( !isset( $bag->id ) ){
+            throw new \Exception("Failed to create test-bag!");
+        }
+
+        $this->createdBagIds->push($bag->id);
+        $bag->storage_properties->update($data);
+        return $bag;
+    }
+
     private function markForRemoval($response)
     {
-        if($response->getData()){
+        if($response->status() == 200)
+        {
             try {
                 $this->createdBagIds->push(json_decode($response->getData()->data->id));
             }
             catch(\Exception $ex)
             {
-//                echo($ex);
+                echo($ex);
+                throw $ex;
             }
         }
     }
@@ -149,11 +172,25 @@ class BagApiTest extends TestCase
         ]]);
     }
 
+    public function test_when_requesting_the_latest_bag_it_responds_with_200()
+    {
+        $response = $this->json('GET', '/api/v1/ingest/bags/latest');
+        $response->assertStatus(200);
+    }
+
+    public function test_when_requesting_the_lastest_bag_it_is_returned()
+    {
+        $createdBag = $this->createOneBag();
+        $response = $this->json('GET', '/api/v1/ingest/bags/latest');
+        $response->assertJson([ 'data' => $this->bagTestDataWithArchiveAndHolding ]);
+    }
 
     public function test_a_query_for_offline_bag_returns_only_bags_with_the_status_complete()
     {
-            $this->markTestSkipped("need tests for the entire piql-it workflow!");
+        $createdBag = $this->createOneBag();
+        $createdBag->update(['status' => 'complete']);
+        $response = $this->json('GET', '/api/v1/ingest/bags/offline');
+        $response->assertJson([ 'data' => [['status'=>'complete']]]);
     }
-
 
 }

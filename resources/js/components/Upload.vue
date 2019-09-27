@@ -165,7 +165,7 @@ export default {
             let currentBagId = this.bag.id;
             let bagName = this.bag.name;
             axios.patch("/api/v1/ingest/bags/"+currentBagId, {
-                'bagName': bagName
+                'name': bagName
             }).then( (result) => {
                 this.bag = result.data.data;
             });
@@ -174,7 +174,7 @@ export default {
         async createBag(bagName, userId, selectedArchive, selectedHolding) {
             let createdBag = (await axios.post("/api/v1/ingest/bags/", {
                 name: bagName,
-                userId: userId,
+                owner: userId,
                 archive_uuid: selectedArchive,
                 holding_name: selectedHolding
             })).data.data;
@@ -182,7 +182,7 @@ export default {
         },
         async setupHoldings(archiveId, initialHolding) {
             await axios.get('/api/v1/planning/holdings/'+archiveId+'/fonds').then( (response) => {
-                this.holdings = response.data.data;
+              this.holdings = response.data.data;
                 let defaultHolding = this.holdings[0].title;
                 Vue.nextTick( () => { $('#holdingPicker').selectpicker('val', initialHolding || defaultHolding);});
             });

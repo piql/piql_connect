@@ -6,6 +6,7 @@ use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Faker\Factory as faker;
+use Laravel\Passport\Passport;
 use App\Fonds;
 use App\Holding;
 
@@ -19,10 +20,14 @@ class FondsApiTest extends TestCase
     private $rndTitle1;
     private $rndTitle2;
     private $rndTitle3;
+    private $testUser;
 
     public function setUp() : void
     {
         parent::setUp();
+        $this->testUser = factory( \App\User::class )->create();
+        Passport::actingAs( $this->testUser );
+
         $this->holdingCount = Holding::count();
         $faker = Faker::create();
         $this->testTitle1 = $faker->slug(1);
@@ -44,6 +49,8 @@ class FondsApiTest extends TestCase
     public function tearDown() : void
     {
         $this->owner_holding->delete();
+        $this->testUser->delete();
+
         if($this->createdFondsId){
             $fonds = Fonds::find($this->createdFondsId);
             if($fonds){

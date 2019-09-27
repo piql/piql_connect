@@ -4,6 +4,7 @@
 /vendor
 .env
 .phpunit.result.cache
+.php_history
 Homestead.json
 Homestead.yaml
 npm-debug.log
@@ -34,4 +35,6 @@ tags.temp
 .gitconfig
 .wget-hsts
 .zsh
+zsh.sh
 .zcompdump*
+install.sh

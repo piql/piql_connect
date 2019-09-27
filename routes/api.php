@@ -60,12 +60,12 @@ Route::group(['prefix' => 'v1' , 'middleware' => 'auth:api'], function () {
 
 
         Route::group(['prefix' => 'am'], function() {
-            Route::get('instances', 'Api\Ingest\ArchivematicaServiceController@serviceInstances');
+            Route::get('instances', 'Api\Ingest\ArchivematicaServiceController@serviceInstances')->name('api.am.instances.index');
             Route::group(['prefix' => 'transfer'], function () {
-                Route::get('status' , 'Api\Ingest\ArchivematicaServiceController@transferStatus');
-                Route::post('start/{id}', 'Api\Ingest\ArchivematicaServiceController@startTransfer');
-                Route::post('approve/{id}', 'Api\Ingest\ArchivematicaServiceController@approveTransfer');
-                Route::delete('{id}' , 'Api\Ingest\ArchivematicaServiceController@transferHideStatus');
+                Route::get('status' , 'Api\Ingest\ArchivematicaServiceController@transferStatus')->name('api.am.transfer.status');
+                Route::post('start/{id}', 'Api\Ingest\ArchivematicaServiceController@startTransfer')->name('api.am.transfer.start');
+                Route::post('approve/{id}', 'Api\Ingest\ArchivematicaServiceController@approveTransfer')->name('api.am.transfer.approve');
+                Route::delete('{id}' , 'Api\Ingest\ArchivematicaServiceController@transferHideStatus')->name('api.am.transfer.hide');
             });
             Route::group(['prefix' => 'ingest'], function () {
                 Route::get('status' , 'Api\Ingest\ArchivematicaServiceController@ingestStatus');
