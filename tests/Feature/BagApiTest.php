@@ -187,8 +187,10 @@ class BagApiTest extends TestCase
 
     public function test_a_query_for_offline_bag_returns_only_bags_with_the_status_complete()
     {
-        $this->markTestSkipped("need tests for the entire piql-it workflow!");
+        $createdBag = $this->createOneBag();
+        $createdBag->update(['status' => 'complete']);
+        $response = $this->json('GET', '/api/v1/ingest/bags/offline');
+        $response->assertJson([ 'data' => [['status'=>'complete']]]);
     }
-
 
 }

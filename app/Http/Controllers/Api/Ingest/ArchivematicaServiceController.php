@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\Api\Ingest;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Validator;
 use App\ArchivematicaService;
 use Illuminate\Http\Request;
-use GuzzleHttp\Client as Guzzle;
 use App\Bag;
 use Log;
 
@@ -13,14 +13,14 @@ class ArchivematicaServiceController extends Controller
 {
     private $apiClient;
 
-    public function __construct()
+    public function __construct( \GuzzleHttp\Client $client = null)
     {
         $service = ArchivematicaService::first();
         $base_uri = $service->url;
         if(!endsWith($base_uri, '/')){
             $base_uri .='/';
         }
-        $this->apiClient = new Guzzle([
+        $this->apiClient = $client ?? new \GuzzleHttp\Client([
             'base_uri' => $base_uri,
             'headers' => [
                 'Authorization' => 'ApiKey '.$service->api_token,
@@ -62,7 +62,17 @@ class ArchivematicaServiceController extends Controller
 
     public function startTransfer($id)
     {
+        $validate = $this->validateId( $id );
+        if( $validate !== true ) {
+            return $validate;
+        }
+
         $bag = Bag::find($id);
+        $expectedState = 'initiate_transfer';
+        if( $bag->status != $expectedState ) {
+            return response()->json(['status' => 409, 'messages' => ['state' => $this->stateError($expectedState, $bag->status)]], 409);
+        }
+
         $locationId = env('STORAGE_LOCATION_ID');
         $paths = base64_encode($locationId.":/".$bag->zipBagFileName());
 
@@ -80,10 +90,20 @@ class ArchivematicaServiceController extends Controller
         return response( $request->getBody(), $request->getStatusCode() );
     }
 
-    public function approveTransfer($id)
+    public function approveTransfer( $id )
     {
+        $validate = $this->validateId( $id );
+        if( $validate !== true ) {
+            return $validate;
+        }
+
         $bag = Bag::find($id);
         Log::info("Approving transfer for bag with id ".$bag->id);
+
+        $expectedState = "approve_transfer";
+        if( $bag->status != $expectedState ) {
+            return response()->json(['status' => 409, 'messages' => ['state' => $this->stateError($expectedState, $bag->status)]], 409);
+        }
 
         $formData =
             [
@@ -111,12 +131,28 @@ class ArchivematicaServiceController extends Controller
 
     public function transferHideStatus($id)
     {
+        $validate = $this->validateId( $id );
+        if( $validate !== true ) {
+            return $validate;
+        }
+
+        $bag = Bag::find( $id );
+        $expectedState = "complete";
+        if( $bag->status != $expectedState ) {
+            return response()->json(['status' => 409, 'messages' => ['state' => $this->stateError($expectedState, $bag->status)]], 409);
+        }
+
         $request = $this->apiClient->delete("transfer/{$id}/delete/");
         return response( $request->getBody(), $request->getStatusCode() );
     }
 
     public function ingestHideStatus($id)
     {
+        $expectedState = "approve_transfer";
+        if( $bag->status != $expectedState ) {
+            return response()->json(['status' => 409, 'messages' => ['state' => $this->stateError($expectedState, $bag->status)]], 409);
+        }
+
         $request = $this->apiClient->delete("ingest/{$id}/delete/");
         return response( $request->getBody(), $request->getStatusCode() );
     }
@@ -186,4 +222,24 @@ class ArchivematicaServiceController extends Controller
     {
         //
     }
+
+    private function stateError( $expected, $actual )
+    {
+        return "The selected bag is in the wrong state. It should be [{$expected}] but was [{$actual}].";
+    }
+
+    private function validateId( $id )
+    {
+        $validator = Validator::make(
+            [ 'bagId' => $id ],
+            [ 'bagId' => 'required|numeric|min:1|exists:bags,id']
+        );
+
+        if( $validator->fails() ){
+            return response()->json(['status' => 422, 'messages' => $validator->errors() ], 422);
+        }
+
+        return true;
+    }
+
 }
