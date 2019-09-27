@@ -53,7 +53,7 @@ class Bag extends Model
                 'to' => 'initiate_transfer',
             ],
             'approve_transfer' => [
-                'from' => ['initiate_transfer'],
+                'from' => ['initiate_transfer', 'approve_transfer'],
                 'to' => 'approve_transfer',
             ],
             'transferring' => [

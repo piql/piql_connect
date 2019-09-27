@@ -4,21 +4,24 @@
 namespace App\Listeners;
 
 
+use App\Events\ApproveTransferToArchivematicaEvent;
 use App\Events\ArchivematicaTransferringEvent;
+use App\Events\ErrorEvent;
 use Log;
 
 class ApproveTransferToArchivematicaListener extends BagListener
 {
     protected $state = "approve_transfer";
     private $amClient;
+
     /**
      * Create the event listener.
      *
-     * @return void
+     * @param ArchivematicaClient|null $client
      */
-    public function __construct()
+    public function __construct(ArchivematicaClient $client = null)
     {
-        $this->amClient = new ArchivematicaClient();
+        $this->amClient = $client ?? new ArchivematicaClient();
     }
 
     /**
@@ -32,27 +35,23 @@ class ApproveTransferToArchivematicaListener extends BagListener
         $bag = $event->bag;
         Log::info("Handling ApproveTransferToArchivematicaEvent for bag ".$bag->zipBagFileName()." with id: ".$bag->id);
 
-        $waitingForApprove = true;
-        while($waitingForApprove)
+        $currentTransferStatuses = $this->amClient->getTransferStatus();
+        foreach($currentTransferStatuses->results as $status)
         {
-            $currentTransferStatuses = $this->amClient->getTransferStatus();
-            foreach($currentTransferStatuses->results as $status)
+            if($status->name == $bag->zipBagFileName())
             {
-                if($status->name == $bag->zipBagFileName())
-                {
-                    try {
-                        $this->amClient->approveTransfer($bag->id);
-                        event(new ArchivematicaTransferringEvent($bag));
-                        $waitingForApprove = false;
-                        break;
-                    } catch(\Exception $e) {
-                        Log::error($e->getMessage());
-                    }
+                try {
+                    $this->amClient->approveTransfer($bag->id);
+                    event(new ArchivematicaTransferringEvent($bag));
+                } catch(\Exception $e) {
+                    Log::error("Approve transfer failed for with bag id " . $bag->id);
+                    Log::error($e->getMessage());
+                    event(new ErrorEvent($bag));
                 }
+                return;
             }
-            sleep(2);
         }
-
+        $this->delayedEvent(new ApproveTransferToArchivematicaEvent($bag), now()->addSeconds(10) );
     }
 
 }
