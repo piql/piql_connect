@@ -19,14 +19,15 @@ class ArchivematicaTransferringListener  extends BagListener
 {
     protected $state = "transferring";
     private $amClient;
+
     /**
      * Create the event listener.
      *
-     * @return void
+     * @param ArchivematicaClient|null $amClient
      */
-    public function __construct()
+    public function __construct(ArchivematicaClient $amClient = null)
     {
-        $this->amClient = new ArchivematicaClient();
+        $this->amClient = $amClient ?? new ArchivematicaClient();
     }
 
     /**
