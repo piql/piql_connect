@@ -57,7 +57,7 @@ class InitiateTransferToArchivematicaListenerTest extends TestCase
         Event::assertDispatched(ApproveTransferToArchivematicaEvent::class);
     }
 
-    public function test_initiate_transfer__failure() {
+    public function test_initiate_transfer_failure() {
         // setup
         Event::fake();
 
