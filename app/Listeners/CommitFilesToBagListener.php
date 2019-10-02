@@ -13,14 +13,15 @@ use BagitUtil;
 class CommitFilesToBagListener extends BagListener
 {
     protected $state = 'bag_files';
+    protected $bagIt;
     /**
      * Create the event listener.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(BagitUtil $bagIt = null)
     {
-        //
+        $this->bagIt = $bagIt ?? new BagitUtil();
     }
 
     /**
@@ -34,7 +35,6 @@ class CommitFilesToBagListener extends BagListener
         $bag = $event->bag->refresh();
         $files = $bag->files;
 
-        $bagIt = new BagitUtil();
         // Create a bag
         if(!$bag->files->count())
         {
@@ -45,10 +45,10 @@ class CommitFilesToBagListener extends BagListener
 
         foreach ($files as $file)
         {
-            $bagIt->addFile($file->storagePathCompleted(), $file->filename);
+            $this->bagIt->addFile($file->storagePathCompleted(), $file->filename);
         }
 
-        $result = $bagIt->createBag($bag->storagePathCreated());
+        $result = $this->bagIt->createBag($bag->storagePathCreated());
 
         if($result)
         {
