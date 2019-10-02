@@ -6,6 +6,7 @@ use App\Events\BagCompleteEvent;
 use App\Events\InitiateTransferToArchivematicaEvent;
 use App\Events\StartTransferToArchivematicaEvent;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Contracts\Filesystem\Filesystem;
 use Log;
 use Illuminate\Support\Facades\Storage;
 
@@ -14,14 +15,15 @@ class SendBagToArchivematicaListener extends BagListener
 {
     protected $state = "move_to_outbox";
     private $destination;
+
     /**
      * Create the event listener.
      *
-     * @return void
+     * @param Storage|null $storage
      */
-    public function __construct()
+    public function __construct(Filesystem $storage = null)
     {
-        $this->destination = Storage::disk('am');
+        $this->destination = $storage ?? Storage::disk('am');
     }
 
     /**
