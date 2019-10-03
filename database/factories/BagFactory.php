@@ -7,7 +7,7 @@ use App\Bag;
 use Faker\Generator as Faker;
 
 $factory->define(Bag::class, function (Faker $faker) {
-    
+
     $chance = rand(0,1);
 
     $year = date("Y");
@@ -37,11 +37,14 @@ $factory->define(Bag::class, function (Faker $faker) {
     {
         $status = "complete";
     }
-
+    $owner = "";
+    $user = User::all()->where('username', 'Alfredo')->first();
+    if(isset($user))
+        $owner = $user->id;
     return [
         'name' => $name,
         'status' => $status,
-        'owner' => User::all()->where('username', 'Alfredo')->first()->id,
+        'owner' => $owner,
         'created_at' => $dateTime
     ];
 });
