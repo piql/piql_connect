@@ -3,6 +3,7 @@
 /storage/
 /vendor
 .env
+.env.testing
 .phpunit.result.cache
 .php_history
 Homestead.json
