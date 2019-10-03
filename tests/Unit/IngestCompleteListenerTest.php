@@ -14,7 +14,6 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Event;
 use Tests\TestCase;
 use Tests\TestEnvironment;
-use database\factories\UserFactory;
 
 class IngestCompleteListenerTest extends TestCase
 {
