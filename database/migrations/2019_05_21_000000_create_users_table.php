@@ -17,7 +17,13 @@ class CreateUsersTable extends Migration
 
     public function up()
     {
-        Schema::create('users', function (Blueprint $table) {
+        $connection = config('database.default');
+        $driver = config("database.connections.{$connection}.driver");
+
+        Schema::create('users', function (Blueprint $table) use ($driver) {
+            if("sqlite" == $driver) {
+                $table->binary('id');
+            }
             $table->string('username');
             $table->string('password');
             $table->string('full_name');
@@ -26,7 +32,10 @@ class CreateUsersTable extends Migration
             $table->rememberToken();
             $table->timestamps();
         });
-        $this->createBinary16Column('users', 'id');
+
+        if("sqlite" != $driver) {
+            $this->createBinary16Column('users', 'id');
+        }
     }
 
     /**

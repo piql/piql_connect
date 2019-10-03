@@ -15,12 +15,21 @@ class CreateArchivematicaServicesTable extends Migration
      */
     public function up()
     {
-        Schema::create('archivematica_services', function (Blueprint $table) {
+        $connection = config('database.default');
+        $driver = config("database.connections.{$connection}.driver");
+
+        Schema::create('archivematica_services', function (Blueprint $table) use ($driver){
+            if("sqlite" == $driver) {
+                $table->binary('id');
+            }
             $table->string('url');
             $table->string('api_token');
             $table->timestamps();
         });
-        $this->createBinary16Column('archivematica_services', 'id');
+
+        if("sqlite" != $driver) {
+            $this->createBinary16Column('archivematica_services', 'id');
+        }
     }
 
     /**
