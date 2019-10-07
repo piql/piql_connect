@@ -4,20 +4,20 @@ namespace Tests;
 
 trait TestEnvironment {
 
-    public function validApplicationEnvironment(array $environment = [
+    public function checkApplicationEnvironment(array $environment = [
         'APP_ENV' => ['testing']]) {
 
-        $this->validEnvironmentSettings($environment);
+        $this->checkEnvironmentSettings($environment);
     }
 
-    public function validDatabaseEnvironment(array $environment = [
+    public function checkDatabaseEnvironment(array $environment = [
         'DB_CONNECTION' => 'sqlite',
         'DB_DATABASE' => ':memory:']) {
 
-        $this->validEnvironmentSettings($environment);
+        $this->checkEnvironmentSettings($environment);
     }
 
-    public function validEnvironmentSettings(array $environmentSettings) {
+    public function checkEnvironmentSettings(array $environmentSettings) {
         foreach ($environmentSettings as $key => $environmentSetting) {
             $envValue = env($key);
             $this->assertTrue(isset($envValue), 'Environment variable '.$key.' is missing');
@@ -31,9 +31,9 @@ trait TestEnvironment {
         }
     }
 
-    public function validDefaultEnvironment() {
-        $this->validApplicationEnvironment();
-        $this->validDatabaseEnvironment();
+    public function checkDefaultEnvironment() {
+        $this->checkApplicationEnvironment();
+        $this->checkDatabaseEnvironment();
     }
 
 }
