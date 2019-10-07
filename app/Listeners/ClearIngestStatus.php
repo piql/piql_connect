@@ -13,9 +13,9 @@ class ClearIngestStatus implements ShouldQueue
 {
     private $amClient;
 
-    public function __construct()
+    public function __construct(ArchivematicaClient $amClient = null)
     {
-        $this->amClient = new ArchivematicaClient();
+        $this->amClient = $amClient ?? new ArchivematicaClient();
     }
 
     public function handle(ClearIngestStatusEvent $event)
