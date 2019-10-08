@@ -32,7 +32,9 @@ class ArchivematicaIngestingListenerTest extends TestCase
         $this->bag->shouldReceive('zipBagFileName')->once()->andReturn($this->zipBagFileName);
         $this->bag->shouldReceive('getAttribute')->once()->with('id')->andReturn($this->zipBagId);
 
-        $this->assertNotTrue(env('APP_DEBUG_SKIP_INGEST_STATUS', false));
+        if(env('APP_DEBUG_SKIP_INGEST_STATUS', false)) {
+            $this->markTestSkipped('Skipping test because APP_DEBUG_SKIP_INGEST_STATUS=true.');
+        }
     }
 
     public function test_ingest_copmplete() {
