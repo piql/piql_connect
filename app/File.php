@@ -9,7 +9,7 @@ class File extends Model
 {
     protected $table = 'files';
     protected $fillable = [
-        'fileName', 'uuid', 'bag_uuid'
+        'fileName', 'uuid', 'bag_id'
     ];
 
     public function bag()
@@ -17,8 +17,13 @@ class File extends Model
         return $this->belongsTo('App\Bag', 'bag_id', 'id');
     }
 
+    public function storagePath()
+    {
+        return 'completed/' . $this->uuid . '.' . pathinfo($this->filename, PATHINFO_EXTENSION);
+    }
+
     public function storagePathCompleted()
     {
-        return Storage::disk('uploader')->path('completed/' . $this->uuid . '.' . pathinfo($this->filename, PATHINFO_EXTENSION));
+        return Storage::disk('uploader')->path($this->storagePath());
     }
 }
