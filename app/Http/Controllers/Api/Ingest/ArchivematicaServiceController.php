@@ -11,16 +11,25 @@ use Log;
 
 class ArchivematicaServiceController extends Controller
 {
-    private $apiClient;
+    private $guzzle;
 
-    public function __construct( \GuzzleHttp\Client $client = null)
+    public function __construct( \GuzzleHttp\Client $guzzleClient = null )
+    {
+        $this->guzzle = $guzzleClient;
+    }
+
+    private function apiClient()
     {
         $service = ArchivematicaService::first();
+        if( $service == null ) {
+            abort( response()->json( ['error' => 428, 'message' => 'No archivematica service configuration could be found on this instance. A valid service configuration must be created first.'], 428 ) );
+        }
         $base_uri = $service->url;
         if(!endsWith($base_uri, '/')){
             $base_uri .='/';
         }
-        $this->apiClient = $client ?? new \GuzzleHttp\Client([
+
+        return $this->guzzle ?? new \GuzzleHttp\Client([
             'base_uri' => $base_uri,
             'headers' => [
                 'Authorization' => 'ApiKey '.$service->api_token,
@@ -28,6 +37,8 @@ class ArchivematicaServiceController extends Controller
             ]
         ]);
     }
+
+
     /**
      * Get a listing of known Archivematica Dashboard Instances
      *  - Which in turn host the Archivematica Ingest REST APIs
@@ -49,7 +60,7 @@ class ArchivematicaServiceController extends Controller
      */
     public function transferStatus()
     {
-        $request = $this->apiClient->get('transfer/status/');
+        $request = $this->apiClient()->get('transfer/status/');
         return response( $request->getBody(), $request->getStatusCode() );
     }
 
@@ -84,7 +95,7 @@ class ArchivematicaServiceController extends Controller
                 "paths[]" => $paths,
                 "row_ids[]" => ""
             ];
-        $request = $this->apiClient->post('transfer/start_transfer/',
+        $request = $this->apiClient()->post('transfer/start_transfer/',
             ['form_params' => $formData]
         );
         return response( $request->getBody(), $request->getStatusCode() );
@@ -110,7 +121,7 @@ class ArchivematicaServiceController extends Controller
                 "type" => "zipped bag",
                 "directory" => $bag->zipBagFileName(),
             ];
-        $request = $this->apiClient->post('transfer/approve/',
+        $request = $this->apiClient()->post('transfer/approve/',
             ['form_params' => $formData]
         );
 
@@ -125,7 +136,7 @@ class ArchivematicaServiceController extends Controller
      */
     public function ingestStatus()
     {
-        $request = $this->apiClient->get('ingest/status');
+        $request = $this->apiClient()->get('ingest/status');
         return response( $request->getBody(), $request->getStatusCode() );
     }
 
@@ -142,7 +153,7 @@ class ArchivematicaServiceController extends Controller
             return response()->json(['status' => 409, 'messages' => ['state' => $this->stateError($expectedState, $bag->status)]], 409);
         }
 
-        $request = $this->apiClient->delete("transfer/{$id}/delete/");
+        $request = $this->apiClient()->delete("transfer/{$id}/delete/");
         return response( $request->getBody(), $request->getStatusCode() );
     }
 
@@ -153,7 +164,7 @@ class ArchivematicaServiceController extends Controller
             return response()->json(['status' => 409, 'messages' => ['state' => $this->stateError($expectedState, $bag->status)]], 409);
         }
 
-        $request = $this->apiClient->delete("ingest/{$id}/delete/");
+        $request = $this->apiClient()->delete("ingest/{$id}/delete/");
         return response( $request->getBody(), $request->getStatusCode() );
     }
 

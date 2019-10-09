@@ -10,12 +10,14 @@ use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Exception\RequestException;
 use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Laravel\Passport\Passport;
 use App\Http\Controllers\Api\Ingest\ArchivematicaServiceController;
+use Illuminate\Support\Facades\Hash;
 
 class ArchivematicaServiceApiTest extends TestCase
 {
+    use DatabaseTransactions;
 
     private $testUser;
     private $controller;
@@ -23,6 +25,7 @@ class ArchivematicaServiceApiTest extends TestCase
     private $testBagName;
     private $testBagData;
     private $testBag;
+    private $testService;
 
     public function setUp() : void
     {
@@ -41,13 +44,9 @@ class ArchivematicaServiceApiTest extends TestCase
             'owner' => $this->testUser->id
         ];
 
-        $this->testBag = \App\Bag::create( $this->testBagData );
-    }
+        $testService = \App\ArchivematicaService::create([ 'url' => 'am.test', 'api_token' => Hash::make('apitoken') ]);
 
-    public function tearDown() : void
-    {
-        $this->testUser->delete();
-        $this->testBag->delete();
+        $this->testBag = \App\Bag::create( $this->testBagData );
     }
 
     public function test_when_requesting_a_list_of_archivematica_instances_it_reponds_with_200()
