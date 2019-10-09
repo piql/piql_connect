@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\Stats;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 use App\Charts\TestChartJS;
 use App\User;
@@ -56,7 +57,12 @@ class DashboardChartController extends Controller
 
     public function monthlyOnlineAIPsIngestedEndpoint()
     {
-        $monthlyOnlineAIPsIngested = array_values($this->monthlyOnlineAIPsIngested(User::all()->where('username', 'Alfredo')->first()));
+        $currentUser = Auth::user();
+        if( $currentUser == null ) {
+            return response()->json([ 'error' => 401, 'message' => 'User must be authenticated to access daily ingested data.' ], 401);
+        }
+
+        $monthlyOnlineAIPsIngested = array_values($this->monthlyOnlineAIPsIngested( $currentUser ) );
         $monthlyOfflineAIPsIngested = array_map(function($val) { return round($val*(rand(1,9)/10)); }, $monthlyOnlineAIPsIngested);
         $chart = new TestChartJS;
         $dataset = $chart->dataset('Online AIPs Ingested', 'line', $monthlyOnlineAIPsIngested);
@@ -70,7 +76,12 @@ class DashboardChartController extends Controller
 
     public function monthlyOnlineDataIngestedEndpoint()
     {
-        $monthlyOnlineDataIngested = $this->monthlyOnlineDataIngested(User::all()->where('username', 'Alfredo')->first());
+        $currentUser = Auth::user();
+        if( $currentUser == null ) {
+            return response()->json([ 'error' => 401, 'message' => 'User must be authenticated to access daily ingested data.' ], 401);
+        }
+
+        $monthlyOnlineDataIngested = $this->monthlyOnlineDataIngested( $currentUser );
         $chart = new TestChartJS;
         $chart->labels(array_keys($monthlyOnlineDataIngested));
         $dataset = $chart->dataset('Online Data Ingested', 'line', array_values($monthlyOnlineDataIngested));
@@ -114,7 +125,12 @@ class DashboardChartController extends Controller
 
     public function dailyOnlineAIPsIngestedEndpoint()
     {
-        $dailyOnlineAIPsIngested = array_values($this->dailyOnlineAIPsIngested(User::all()->where('username', 'Alfredo')->first()));;
+        $currentUser = Auth::user();
+        if( $currentUser == null ) {
+            return response()->json([ 'error' => 401, 'message' => 'User must be authenticated to access daily ingested data.' ], 401);
+        }
+
+        $dailyOnlineAIPsIngested = array_values($this->dailyOnlineAIPsIngested( $currentUser ) );
         $dailyOfflineAIPsIngested = array_map(function($val) { return round($val*(rand(1,9)/10)); }, $dailyOnlineAIPsIngested);
         $chart = new TestChartJS;
         $chart->dataset('Online AIPs Ingested', 'line', $dailyOnlineAIPsIngested);
@@ -124,7 +140,12 @@ class DashboardChartController extends Controller
 
     public function dailyOnlineDataIngestedEndpoint()
     {
-        $dailyOnlineDataIngested = array_values($this->dailyOnlineDataIngested(User::all()->where('username', 'Alfredo')->first()));;
+        $currentUser = Auth::user();
+        if( $currentUser == null ) {
+            return response()->json([ 'error' => 401, 'message' => 'User must be authenticated to access daily ingested data.' ], 401);
+        }
+
+        $dailyOnlineDataIngested = array_values( $this->dailyOnlineDataIngested( $currentUser ) );
         $dailyOfflineDataIngested = array_map(function($val) { return round($val*(rand(1, 9)/10), 2); }, array_values($dailyOnlineDataIngested));
         $chart = new TestChartJS;
         $chart->dataset('Online Data Ingested', 'line', $dailyOnlineDataIngested);
@@ -154,7 +175,12 @@ class DashboardChartController extends Controller
 
     public function fileFormatsIngestedEndpoint()
     {
-        $fileFormatsIngested = $this->fileFormatsIngested(User::all()->where('username', 'Alfredo')->first());
+        $currentUser = Auth::user();
+        if( $currentUser == null ) {
+            return response()->json([ 'error' => 401, 'message' => 'User must be authenticated to access daily ingested data.' ], 401);
+        }
+
+        $fileFormatsIngested = $this->fileFormatsIngested( $currentUser );
         $chart = new TestChartJS;
         $chart->dataset('fileFormatsIngested', 'pie', array_values($fileFormatsIngested))->backgroundcolor($this->color_chart_pie);
         return $chart->api();

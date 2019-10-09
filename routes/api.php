@@ -94,7 +94,7 @@ Route::group(['prefix' => 'v1' , 'middleware' => 'auth:api'], function () {
     });
 
 
-    Route::group(['prefix' => 'stats'], function () {
+    Route::group(['prefix' => 'stats', 'middleware' => 'auth:api'], function () {
         Route::get('monthlyOnlineAIPsIngested', 'Api\Stats\DashboardChartController@monthlyOnlineAIPsIngestedEndpoint')->name('monthlyOnlineAIPsIngested');
         Route::get('monthlyOnlineDataIngested', 'Api\Stats\DashboardChartController@monthlyOnlineDataIngestedEndpoint')->name('monthlyOnlineDataIngested');
         Route::get('monthlyOnlineAIPsAccessed', 'Api\Stats\DashboardChartController@monthlyOnlineAIPsAccessedEndpoint')->name('monthlyOnlineAIPsAccessed');
