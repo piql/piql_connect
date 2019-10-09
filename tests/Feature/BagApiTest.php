@@ -4,7 +4,7 @@ namespace Tests\Feature;
 
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Collection;
 use Laravel\Passport\Passport;
 use App\Bag;
@@ -14,6 +14,8 @@ use App\Fonds;
 
 class BagApiTest extends TestCase
 {
+    use DatabaseTransactions;
+
     private $testUser;
     private $bagTestData;
     private $testBagName1;
@@ -65,23 +67,6 @@ class BagApiTest extends TestCase
         ] + $this->bagTestData;
     }
 
-    public function tearDown() : void
-    {
-        $this->createdBagIds->map( function($bagId) {
-            $b = Bag::find($bagId);
-            if($b){
-                $b->delete();
-            }
-        });
-
-        $this->testUser->delete();
-        $this->testHolding1->delete();
-        $this->testArchive1->delete();
-        $this->testHolding2->delete();
-        $this->testArchive2->delete();
-        parent::tearDown();
-    }
-
     private function createOneBag( Array $overrides = null )
     {
         $data = $this->bagTestDataWithArchiveAndHolding;
@@ -97,22 +82,6 @@ class BagApiTest extends TestCase
         $bag->storage_properties->update($data);
         return $bag;
     }
-
-    private function markForRemoval($response)
-    {
-        if($response->status() == 200)
-        {
-            try {
-                $this->createdBagIds->push(json_decode($response->getData()->data->id));
-            }
-            catch(\Exception $ex)
-            {
-                echo($ex);
-                throw $ex;
-            }
-        }
-    }
-
 
     public function test_it_can_get_a_list_of_bags()
     {
@@ -131,7 +100,6 @@ class BagApiTest extends TestCase
     {
         $response = $this->json('POST', '/api/v1/ingest/bags', $this->bagTestData);
         $response->assertStatus(200);
-        $this->markForRemoval($response);
 
         $response->assertJson($this->bagApiResultData);
     }
@@ -140,7 +108,6 @@ class BagApiTest extends TestCase
     {
         $response = $this->json('POST', '/api/v1/ingest/bags', $this->bagTestData);
         $response->assertStatus(200);
-        $this->markForRemoval($response);
 
         $response->assertJson(['data' => ['archive_uuid' => '', 'holding_name' => '']]);
     }
@@ -148,7 +115,6 @@ class BagApiTest extends TestCase
     public function test_when_creating_a_bag_given_storage_properties_are_set_the_response_includes_those_storage_properties()
     {
         $response = $this->json('POST', '/api/v1/ingest/bags', $this->bagTestDataWithArchiveAndHolding);
-        $this->markForRemoval($response);
         $response->assertStatus(200);
 
         $response->assertJson(['data' => ['archive_uuid' => $this->testArchive1->uuid, 'holding_name' => $this->testHolding1->title]]);
@@ -157,7 +123,6 @@ class BagApiTest extends TestCase
     public function test_when_updating_a_bag_given_storage_properties_are_set_the_response_includes_those_storage_properties()
     {
         $createdBagResponse = $this->json('POST', '/api/v1/ingest/bags', $this->bagTestDataWithArchiveAndHolding);
-        $this->markForRemoval($createdBagResponse);
 
         $bagData = $createdBagResponse->getData()->data;
 
@@ -183,14 +148,6 @@ class BagApiTest extends TestCase
         $createdBag = $this->createOneBag();
         $response = $this->json('GET', '/api/v1/ingest/bags/latest');
         $response->assertJson([ 'data' => $this->bagTestDataWithArchiveAndHolding ]);
-    }
-
-    public function test_a_query_for_offline_bag_returns_only_bags_with_the_status_complete()
-    {
-        $createdBag = $this->createOneBag();
-        $createdBag->update(['status' => 'complete']);
-        $response = $this->json('GET', '/api/v1/ingest/bags/offline');
-        $response->assertJson([ 'data' => [['status'=>'complete']]]);
     }
 
 }

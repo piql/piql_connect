@@ -4,12 +4,14 @@ namespace Tests\Unit;
 
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Webpatser\Uuid\Uuid;
 use App\Holding;
 
 class HoldingModelTest extends TestCase
 {
+    use DatabaseTransactions;
+
     private $valid_holding_data = [
         'title' => 'HoldingModelTest', 
         'description' => "A few words",
@@ -28,25 +30,6 @@ class HoldingModelTest extends TestCase
             'parent_uuid' => null
         ]);
     }
-
-    public function tearDown() : void
-    {
-        $this->validParentHolding->delete();
-
-        try 
-        {
-            if($this->holding){
-                $this->holding->delete();
-            }
-        } 
-        catch(\Exception $ex)
-        {
-            print ("Could not clean up holding: ".$ex);
-        }
-
-        parent::tearDown();
-    }
-
 
     public function test_it_is_assigned_an_uuid_when_created()
     {

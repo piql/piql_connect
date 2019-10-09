@@ -4,7 +4,7 @@ namespace Tests\Feature;
 
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Faker\Factory as faker;
 use Laravel\Passport\Passport;
 use App\Fonds;
@@ -12,6 +12,8 @@ use App\Holding;
 
 class FondsApiTest extends TestCase
 {
+    use DatabaseTransactions;
+
     private $testTitle1;
     private $owner_holding;
     private $testFondsData;
@@ -39,26 +41,6 @@ class FondsApiTest extends TestCase
         $this->rndTitle1 = $faker->slug(1);
         $this->rndTitle2 = $faker->slug(1);
         $this->rndTitle3 = $faker->slug(1);
-    }
-
-    private function markFondsForRemoval($response)
-    {
-        $this->createdFondsId = $response->getData()->data->id;
-    }
-
-    public function tearDown() : void
-    {
-        $this->owner_holding->delete();
-        $this->testUser->delete();
-
-        if($this->createdFondsId){
-            $fonds = Fonds::find($this->createdFondsId);
-            if($fonds){
-                $fonds->delete();
-            }
-        }
-        $this->assertEquals($this->holdingCount, Holding::count());
-        parent::tearDown();
     }
 
     public function test_can_get_list_of_fonds()
@@ -100,7 +82,6 @@ class FondsApiTest extends TestCase
     {
         $response = $this->post(route('planning.fonds.store'), $this->testFondsData);
         $response->assertStatus(201);
-        $this->markFondsForRemoval($response);
     }
 
     public function test_when_creating_given_a_valids_fonds_was_posted_the_response_contains_a_valid_id()
@@ -109,7 +90,6 @@ class FondsApiTest extends TestCase
         $result = $response->getData();
         $model = Fonds::find($result->data->id);
         $this->assertTrue($model->title == $this->testTitle1);
-        $this->markFondsForRemoval($response);
     }
 
     public function test_when_creating_given_a_bad_title_it_responds_with_422()

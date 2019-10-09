@@ -4,7 +4,7 @@ namespace Tests\Feature;
 
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Collection;
 use Laravel\Passport\Passport;
 use Webpatser\Uuid\Uuid;
@@ -13,6 +13,8 @@ use App\Holding;
 
 class HoldingApiTest extends TestCase
 {
+    use DatabaseTransactions;
+
     private $title1;
     private $description1;
     private $uuid1;
@@ -54,31 +56,6 @@ class HoldingApiTest extends TestCase
         $this->createdHoldingIds->push( $this->createdTestHolding->id );
     }
 
-    private function markForRemoval($response)
-    {
-        try {
-            $this->createdHoldingIds->push( $response->getOriginalContent()->id );
-        }
-        catch(\Exception $ex)
-        {
-            print("\nWarning: A holding could not be marked for removal!\n");
-        }
-    }
-
-    public function tearDown() : void
-    {
-        $this->testUser->delete();
-
-        $this->createdHoldingIds->map( function ($createdId) {
-            $holding = Holding::find($createdId);
-            if($holding){
-                $holding->delete();
-            }
-        });
-        $this->assertEquals($this->holdingCount, Holding::count());
-        parent::tearDown();
-    }
-
     public function test_it_can_get_a_list_of_holdings()
     {
         $response = $this->get( route( 'planning.holdings.index' ) );
@@ -97,7 +74,6 @@ class HoldingApiTest extends TestCase
             route('planning.holdings.store'),
             $this->validHoldingData);
         $response->assertStatus(201);
-        $this->markForRemoval($response);
     }
 
     public function test_when_creating_a_holding_given_valid_data_it_returns_a_valid_json_object()
@@ -105,7 +81,6 @@ class HoldingApiTest extends TestCase
         $response = $this->json( 'POST',
             route( 'planning.holdings.store' ),
             $this->validHoldingData );
-        $this->markForRemoval( $response );
 
         $response->assertJson([ 'data' => $this->validHoldingData ]);
     }

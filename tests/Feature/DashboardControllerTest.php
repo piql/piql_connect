@@ -4,11 +4,13 @@ namespace Tests\Feature;
 
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Laravel\Passport\Passport;
 
 class DashboardControllerTest extends TestCase
 {
+    use DatabaseTransactions;
+
     private $testUser;
 
     public function setUp() : void
@@ -22,12 +24,6 @@ class DashboardControllerTest extends TestCase
         ]);
 
         Passport::actingAs($this->testUser);
-    }
-
-    public function tearDown() : void
-    {
-        $this->testUser->delete();
-        parent::tearDown();
     }
 
     public function test_when_requesting_monthly_online_aips_ingested_it_responds_200()

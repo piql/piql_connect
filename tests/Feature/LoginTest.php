@@ -4,11 +4,14 @@ namespace Tests\Feature;
 
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\Hash;
 use App\User;
 
 class LoginTest extends TestCase
 {
+    use DatabaseTransactions;
+
     protected $testUser;
     protected $bad_username;
     protected $bad_password;
@@ -37,13 +40,6 @@ class LoginTest extends TestCase
         ];
     }
 
-    protected function tearDown() : void
-    {
-        $this->testUser->delete();
-
-        parent::tearDown();
-    }
- 
     public function test_when_get_requested_it_responds_with_200_Ok()
     {
         $response = $this->get( '/login' );
