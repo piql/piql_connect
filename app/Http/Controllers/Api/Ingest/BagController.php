@@ -150,6 +150,9 @@ class BagController extends Controller
             ->select( 'bags.*', 'holdings.title AS archive_title',
                 'holdings.uuid AS archive_uuid', 'fonds.title AS holding_name' )
             ->find($id);
+        if( $bag->owner !== Auth::user()->id ) {
+            abort( response()->json([ 'error' => 401, 'message' => 'The current user is not authorized to access bag with id '.$id ], 401 ) );
+        }
         return new BagResource($bag);
     }
 
@@ -171,7 +174,12 @@ class BagController extends Controller
 
     public function complete()
     {
-        return Response::json(Bag::latest()->where('status', '=', 'complete')->get());
+        return Response::json(
+            Bag::latest()
+                ->where('owner', Auth::user()->id)
+                ->where('status', 'complete')
+                ->get()
+        );
     }
 
     public function processing()
@@ -184,6 +192,7 @@ class BagController extends Controller
             ->orWhere('status', '=', 'approve_transfer')
             ->orWhere('status', '=', 'transferring')
             ->orWhere('status', '=', 'ingesting')
+            ->where( 'owner', Auth::user()->id )
             ->paginate(6);
         foreach($bags as $bag) {
             $bag->status = __('ingest.processing.status.'.$bag->status);
@@ -193,13 +202,13 @@ class BagController extends Controller
 
     public function all(Request $request)
     {
-        $q = Bag::query();
+        $q = Bag::query()->where('bags.owner', Auth::user()->id );
         if(empty($request->query())){
-            $q->join('storage_properties', 'storage_properties.bag_uuid', 'bags.uuid')
-              ->join('holdings', 'holdings.uuid', 'storage_properties.archive_uuid')
-              ->join('fonds', 'fonds.title', 'storage_properties.holding_name')
-              ->join('bag_job', 'bags.id', '=', 'bag_job.bag_id')
-              ->join('jobs', 'bag_job.job_id', '=', 'jobs.id')
+            $q->leftJoin('storage_properties', 'storage_properties.bag_uuid', 'bags.uuid')
+              ->leftJoin('holdings', 'holdings.uuid', 'storage_properties.archive_uuid')
+              ->leftJoin('fonds', 'fonds.title', 'storage_properties.holding_name')
+              ->leftJoin('bag_job', 'bags.id', '=', 'bag_job.bag_id')
+              ->leftJoin('jobs', 'bag_job.job_id', '=', 'jobs.id')
               ->select('bags.*', 'holdings.title AS archive_title',
               'holdings.uuid AS archive_uuid', 'fonds.title AS holding_name')
               ->distinct()->latest();
@@ -208,11 +217,11 @@ class BagController extends Controller
         }
 
 
-        $q->join('storage_properties', 'storage_properties.bag_uuid', 'bags.uuid')
-          ->join('holdings', 'holdings.uuid', 'storage_properties.archive_uuid')
-          ->join('fonds', 'fonds.title', 'storage_properties.holding_name')
-          ->join('bag_job', 'bags.id', '=', 'bag_job.bag_id')
-          ->join('jobs', 'bag_job.job_id', '=', 'jobs.id')
+        $q->leftJoin('storage_properties', 'storage_properties.bag_uuid', 'bags.uuid')
+          ->leftJoin('holdings', 'holdings.uuid', 'storage_properties.archive_uuid')
+          ->leftJoin('fonds', 'fonds.title', 'storage_properties.holding_name')
+          ->leftJoin('bag_job', 'bags.id', '=', 'bag_job.bag_id')
+          ->leftJoin('jobs', 'bag_job.job_id', '=', 'jobs.id')
           ->select('bags.*', 'holdings.title AS archive_title',
           'holdings.uuid AS archive_uuid', 'fonds.title AS holding_name')
           ->distinct();
@@ -279,6 +288,10 @@ class BagController extends Controller
     public function update( Request $request, $id )
     {
         $bag = Bag::find( $id );
+        if( $bag->owner !== Auth::user()->id ) {
+            abort( response()->json([ 'error' => 401, 'message' => 'The current user is not authorized to update bag with id '.$id ], 401 ) );
+        }
+
         if( $request->filled( "name" ) )
         {
             $bag->update([ 'name' => $request->name ]);

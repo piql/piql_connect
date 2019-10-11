@@ -38,16 +38,16 @@ Route::group(['prefix' => 'v1' , 'middleware' => 'auth:api'], function () {
         // todo: getNewBag
         // todo: getOpenBags
 
-        Route::post('bags', 'Api\Ingest\BagController@store');
-        Route::patch('bags/{id}', 'Api\Ingest\BagController@update');
-        Route::get('bags/create', 'Api\Ingest\BagController@create');
-        Route::get('bags', 'Api\Ingest\BagController@all');
-        Route::get('processing', 'Api\Ingest\BagController@processing');
-        Route::get('complete', 'Api\Ingest\BagController@complete');
-        Route::get('bags/offline', 'Api\Ingest\BagController@offline');
-        Route::get('bags/online', 'Api\Ingest\BagController@online');
-        Route::get('bags/latest', 'Api\Ingest\BagController@latest');
-        Route::get('bags/{id}', 'Api\Ingest\BagController@show');
+        Route::post('bags', 'Api\Ingest\BagController@store')->name('api.ingest.bags.store');
+        Route::patch('bags/{id}', 'Api\Ingest\BagController@update')->name('api.ingest.bags.update');
+        Route::get('bags/create', 'Api\Ingest\BagController@create')->name('api.ingest.bags.create');
+        Route::get('bags', 'Api\Ingest\BagController@all')->name('api.ingest.bags.all');
+        Route::get('processing', 'Api\Ingest\BagController@processing')->name('api.ingest.bags.processing');
+        Route::get('complete', 'Api\Ingest\BagController@complete')->name('api.ingest.bags.complete');
+        Route::get('bags/offline', 'Api\Ingest\BagController@offline')->name('api.ingest.bags.offline');
+        Route::get('bags/online', 'Api\Ingest\BagController@online')->name('api.ingest.bags.online');
+        Route::get('bags/latest', 'Api\Ingest\BagController@latest')->name('api.ingest.bags.latest');
+        Route::get('bags/{id}', 'Api\Ingest\BagController@show')->name('api.ingest.bags.show');
         Route::get('bags/{id}/files', 'Api\Ingest\BagController@showFiles');
         Route::post('bags/{id}/commit', 'Api\Ingest\BagController@commit');
         Route::post('bags/{id}/piql', 'Api\Ingest\BagController@piqlIt');

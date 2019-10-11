@@ -24,6 +24,8 @@ class BagApiTest extends TestCase
     private $testArchive2;
     private $testHolding1;
     private $testHolding2;
+    private $otherUser;
+    private $otherBag;
 
     public function setUp() : void
     {
@@ -83,22 +85,37 @@ class BagApiTest extends TestCase
         return $bag;
     }
 
+    private function createExtraUserAndBags( Array $overrides = [] )
+    {
+        $this->otherUser = User::create([
+            'username' => 'BagApiOtherTestUser',
+            'password' => 'notinuse',
+            'full_name' => 'BagApi OtherTestUser',
+            'email' => 'bagapiothertestuser@localhost'
+        ]);
+
+        $createdBag = $this->createOneBag( $overrides );
+        $secondBag = $this->createOneBag(['name' => 'secondbag'] + $overrides );
+        $otherBag = $this->createOneBag(['owner' => $this->otherUser->id, 'name' => 'otherbag'] + $overrides );
+        $this->otherBag = $this->createOneBag(['owner' => $this->otherUser->id, 'name' => 'otherbag2'] + $overrides );
+    }
+
     public function test_it_can_get_a_list_of_bags()
     {
-        $response = $this->get('/api/v1/ingest/bags');
+        $response = $this->get( route( 'api.ingest.bags.all' ) );
 
-        $response->assertStatus(200);
+        $response->assertStatus( 200 );
     }
 
     public function test_when_getting_a_list_of_bags_they_are_returned_as_valid_json()
     {
-        $response = $this->get('/api/v1/ingest/bags');
-        $response->assertJson(['data' => []]);
+        $response = $this->get( route( 'api.ingest.bags.all' ) );
+        $response->assertJson([ 'data' => [] ]);
     }
 
     public function test_when_creating_a_bag_the_bag_is_returned_as_json()
     {
-        $response = $this->json('POST', '/api/v1/ingest/bags', $this->bagTestData);
+        $response = $this->json( 'POST', route( 'api.ingest.bags.store' ), $this->bagTestData );
         $response->assertStatus(200);
 
         $response->assertJson($this->bagApiResultData);
@@ -106,7 +123,7 @@ class BagApiTest extends TestCase
 
     public function test_when_creating_a_bag_the_response_includes_storage_properties()
     {
-        $response = $this->json('POST', '/api/v1/ingest/bags', $this->bagTestData);
+        $response = $this->json( 'POST', route( 'api.ingest.bags.store' ), $this->bagTestData );
         $response->assertStatus(200);
 
         $response->assertJson(['data' => ['archive_uuid' => '', 'holding_name' => '']]);
@@ -114,7 +131,7 @@ class BagApiTest extends TestCase
 
     public function test_when_creating_a_bag_given_storage_properties_are_set_the_response_includes_those_storage_properties()
     {
-        $response = $this->json('POST', '/api/v1/ingest/bags', $this->bagTestDataWithArchiveAndHolding);
+        $response = $this->json( 'POST', route( 'api.ingest.bags.store' ), $this->bagTestDataWithArchiveAndHolding );
         $response->assertStatus(200);
 
         $response->assertJson(['data' => ['archive_uuid' => $this->testArchive1->uuid, 'holding_name' => $this->testHolding1->title]]);
@@ -122,11 +139,11 @@ class BagApiTest extends TestCase
 
     public function test_when_updating_a_bag_given_storage_properties_are_set_the_response_includes_those_storage_properties()
     {
-        $createdBagResponse = $this->json('POST', '/api/v1/ingest/bags', $this->bagTestDataWithArchiveAndHolding);
+        $createdBagResponse = $this->json( 'POST', route( 'api.ingest.bags.store' ), $this->bagTestDataWithArchiveAndHolding);
 
         $bagData = $createdBagResponse->getData()->data;
 
-        $response = $this->json('PATCH', '/api/v1/ingest/bags/'.$bagData->id, [
+        $response = $this->json( 'PATCH', route( 'api.ingest.bags.update', $bagData->id ), [
             'archive_uuid' => $this->testArchive2->uuid,
             'holding_name' => $this->testHolding2->title
         ]);
@@ -134,20 +151,85 @@ class BagApiTest extends TestCase
         $response->assertJson(['data' => [
             'archive_uuid' => $this->testArchive2->uuid, 
             'holding_name' => $this->testHolding2->title
-        ]]);
+        ] ]);
     }
 
     public function test_when_requesting_the_latest_bag_it_responds_with_200()
     {
-        $response = $this->json('GET', '/api/v1/ingest/bags/latest');
-        $response->assertStatus(200);
+        $response = $this->json( 'GET', route( 'api.ingest.bags.latest' ) );
+        $response->assertStatus( 200 );
     }
 
     public function test_when_requesting_the_lastest_bag_it_is_returned()
     {
         $createdBag = $this->createOneBag();
-        $response = $this->json('GET', '/api/v1/ingest/bags/latest');
+        $response = $this->json( 'GET', route( 'api.ingest.bags.latest' ) );
         $response->assertJson([ 'data' => $this->bagTestDataWithArchiveAndHolding ]);
+    }
+
+    public function test_when_requesting_the_lastest_bag_it_is_the_latest_bag_for_the_current_user()
+    {
+        $this->createExtraUserAndBags();
+        $response = $this->json( 'GET', route( 'api.ingest.bags.latest' ) );
+        $response->assertJson([ 'data' => $this->bagTestDataWithArchiveAndHolding ]);
+    }
+
+    public function test_when_getting_a_list_of_bags_they_are_the_bags_for_the_current_user()
+    {
+        $this->createExtraUserAndBags();
+        $response = $this->get( route( 'api.ingest.bags.all' ) );
+        $response->assertJsonFragment( ['name' => $this->testBagName1 ] );
+        $response->assertJsonFragment( ['name' => 'secondbag' ] );
+        $response->assertJsonMissing( ['name' => 'otherbag' ] );
+        $response->assertJsonMissing( ['name' => 'otherbag2' ] );
+    }
+
+    public function test_when_getting_a_list_of_bags_in_processing_they_are_the_bags_for_the_current_user()
+    {
+        $this->createExtraUserAndBags([ 'status' => 'ingesting' ]);
+        $response = $this->get( route( 'api.ingest.bags.processing' ) );
+        $response->assertJsonFragment( ['name' => $this->testBagName1 ] );
+        $response->assertJsonFragment( ['name' => 'secondbag' ] );
+        $response->assertJsonMissing( ['name' => 'otherbag' ] );
+        $response->assertJsonMissing( ['name' => 'otherbag2' ] );
+    }
+
+    public function test_when_getting_a_list_of_bags_in_complete_they_are_the_bags_for_the_current_user()
+    {
+        $this->createExtraUserAndBags([ 'status' => 'complete' ]);
+        $response = $this->get( route( 'api.ingest.bags.complete' ) );
+        $response->assertJsonFragment( ['name' => $this->testBagName1 ] );
+        $response->assertJsonFragment( ['name' => 'secondbag' ] );
+        $response->assertJsonMissing( ['name' => 'otherbag' ] );
+        $response->assertJsonMissing( ['name' => 'otherbag2' ] );
+    }
+
+
+    public function test_it_can_get_a_bag_by_id()
+    {
+        $createdBag = $this->createOneBag();
+        $response = $this->get( route( 'api.ingest.bags.show', $createdBag->id ) );
+        $response->assertJson([ 'data' => $this->bagTestDataWithArchiveAndHolding ]);
+    }
+
+    public function test_it_throws_401_when_requesting_a_bag_belonging_to_another_user()
+    {
+        $this->createExtraUserAndBags();
+        $response = $this->get( route( 'api.ingest.bags.show', $this->otherBag->id ) );
+        $response->assertStatus( 401 );
+        $response->assertJson([ 'error' => 401, 'message' => 'The current user is not authorized to access bag with id '.$this->otherBag->id ]);
+    }
+
+    public function test_it_throws_401_when_updating_a_bag_belonging_to_another_user()
+    {
+        $this->createExtraUserAndBags();
+
+        $response = $this->patch( route( 'api.ingest.bags.update', $this->otherBag->id ), [
+            'holding_name' => 'whatever'
+        ]);
+
+        $response->assertStatus( 401 );
+        $response->assertJson([ 'error' => 401, 'message' => 'The current user is not authorized to update bag with id '.$this->otherBag->id ]);
     }
 
 }
