@@ -29,6 +29,6 @@ class CreateHoldingsInArchivesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('fonds_in_holdings');
+        Schema::dropIfExists('holdings_in_archives');
     }
 }

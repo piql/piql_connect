@@ -1,19 +1,19 @@
 <?php
 
 use Illuminate\Database\Seeder;
-use App\Fonds;
 use App\Holding;
+use App\Archive;
 
-class FondsSeeder extends Seeder
+class HoldingSeeder extends Seeder
 {
     public function run()
     {
-        Fonds::truncate();
-        $holdings = Holding::all();
-        $holdings->map( function ($holding) { 
-            Fonds::create( [ 'title' => 'Images', 'position' => 0, 'owner_holding_uuid' => $holding->uuid, 'description' => 'Images for '.$holding->title ] );
-            Fonds::create( [ 'title' => 'Documents', 'position' => 1, 'owner_holding_uuid' => $holding->uuid, 'description' => 'Documents for '.$holding->title ] );
-            Fonds::create( [ 'title' => 'Video', 'position' => 2, 'owner_holding_uuid' => $holding->uuid, 'description' => 'Videos for '.$holding->title ] );
+        Holding::truncate();
+        $archives = Archive::all();
+        $archives->map( function ($archive) { 
+            Holding::create( [ 'title' => 'Images', 'position' => 0, 'owner_archive_uuid' => $archive->uuid, 'description' => 'Images for '.$archive->title ] );
+            Holding::create( [ 'title' => 'Documents', 'position' => 1, 'owner_archive_uuid' => $archive->uuid, 'description' => 'Documents for '.$archive->title ] );
+            Holding::create( [ 'title' => 'Video', 'position' => 2, 'owner_archive_uuid' => $archive->uuid, 'description' => 'Videos for '.$archive->title ] );
         });
     }
 }

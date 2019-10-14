@@ -5,7 +5,7 @@ use Webpatser\Uuid\Uuid;
 use App\User;
 use App\Bag;
 use App\File;
-use App\Holding;
+use App\Archive;
 use Faker\Factory as Faker;
 
 class UserPermissionsTestSeeder extends Seeder
@@ -18,8 +18,8 @@ class UserPermissionsTestSeeder extends Seeder
     public function run()
     {
         // Set up the basic stuff
+        $this->call(ArchiveSeeder::class);
         $this->call(HoldingSeeder::class);
-        $this->call(FondsSeeder::class);
         $this->call(ArchivematicaServiceSeeder::class);
 
         $faker = Faker::create();
@@ -52,7 +52,7 @@ class UserPermissionsTestSeeder extends Seeder
             $bag->save();
 
             $bag->storage_properties->holding_name = "Documents";
-            $bag->storage_properties->archive_uuid = Holding::all()->where('title', 'Forsvarsmuseet')->first()->uuid;
+            $bag->storage_properties->archive_uuid = Archive::all()->where('title', 'Forsvarsmuseet')->first()->uuid;
             $bag->storage_properties->save();
 
             $file = new App\File();
@@ -109,7 +109,7 @@ class UserPermissionsTestSeeder extends Seeder
             $bag->save();
 
             $bag->storage_properties->holding_name = "Documents";
-            $bag->storage_properties->archive_uuid = Holding::all()->where('title', 'Forsvarsmuseet')->first()->uuid;
+            $bag->storage_properties->archive_uuid = Archive::all()->where('title', 'Forsvarsmuseet')->first()->uuid;
             $bag->storage_properties->save();
 
             $file = new App\File();

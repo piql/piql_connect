@@ -7,6 +7,11 @@ use App\Bag;
 use Faker\Generator as Faker;
 
 $factory->define(Bag::class, function (Faker $faker) {
+ 
+    if( User::count() == 0 ) {
+        throw new Exception( 'Bag factory failed: Cannot create Bags without users. Seed one or more users first. ');
+    }
+    $owner = User::pluck('id')->random();
 
     $chance = rand(0,1);
 
@@ -37,10 +42,7 @@ $factory->define(Bag::class, function (Faker $faker) {
     {
         $status = "complete";
     }
-    $owner = "";
-    $user = User::all()->where('username', 'Alfredo')->first();
-    if(isset($user))
-        $owner = $user->id;
+
     return [
         'name' => $name,
         'status' => $status,

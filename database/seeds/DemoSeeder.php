@@ -5,7 +5,7 @@ use Webpatser\Uuid\Uuid;
 use App\User;
 use App\Bag;
 use App\File;
-use App\Holding;
+use App\Archive;
 
 class DemoSeeder extends Seeder
 {
@@ -36,7 +36,7 @@ class DemoSeeder extends Seeder
         $bag->save();
 
         $bag->storage_properties->holding_name = "Documents";
-        $bag->storage_properties->archive_uuid = Holding::all()->where('title', 'Forsvarsmuseet')->first()->uuid;
+        $bag->storage_properties->archive_uuid = Archive::all()->where('title', 'Forsvarsmuseet')->first()->uuid;
         $bag->storage_properties->save();
 
         // Create files

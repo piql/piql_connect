@@ -3,22 +3,25 @@
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
 
 use App\Holding;
+use App\Archive;
 use Faker\Generator as Faker;
-use Webpatser\Uuid\Uuid;
-
 
 $factory->define(Holding::class, function (Faker $faker) {
+    if(Archive::count() == 0){
+        throw new Exception("Holding factory failed: You need to create at least one Archive first");
+    }
     return [
-        'uuid' => $faker->uuid(),
-        'title' => $faker->company(),
+        'title' => $faker->slug(1),
         'description' => $faker->text(80),
-        'parent_uuid' => null
+        'owner_archive_uuid' => Archive::where('parent_uuid', '=', null)->pluck('uuid')->random(),
     ];
 });
 
-/* Sub-holdings belong to a parent, but only one level of nesting should be allowed - it is not a tree */
-$factory->state(Holding::class, 'subholding', function (Faker $faker) {
+$factory->state(Holding::class, 'subholdings', function (Faker $faker) {
+    if(Holding::count() == 0){
+        throw new Exception("Holding factory failed: You need to create at least one holding before creating any subholdings.");
+    }
     return [
-        'parent_uuid' => Holding::count() > 0 ? Holding::where('parent_uuid', '=', null)->pluck('uuid')->random() : null
+        'parent_id' => Holding::pluck('id')->random()
     ];
 });
