@@ -49,9 +49,9 @@ class Archive extends Model
         }
     }
 
-    public function fonds()
+    public function holdings()
     {
-        return $this->hasMany('App\Fonds', 'owner_archive_uuid', 'uuid');
+        return $this->hasMany('App\Holding', 'owner_archive_uuid', 'uuid');
     }
 
 

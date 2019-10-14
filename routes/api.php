@@ -75,9 +75,9 @@ Route::group(['prefix' => 'v1' , 'middleware' => 'auth:api'], function () {
     });
 
     Route::group(['prefix' => 'planning'], function() {
-        Route::apiResource('fonds', 'Api\Planning\FondsController', ['as' => 'planning']);
+        Route::apiResource('holdings', 'Api\Planning\HoldingController', ['as' => 'planning']);
         Route::apiResource('archives', 'Api\Planning\ArchiveController', ['as' => 'planning']);
-        Route::apiResource('archives.fonds', 'Api\Planning\ArchiveFondsController', ['as' => 'planning']);
+        Route::apiResource('archives.holdings', 'Api\Planning\ArchiveHoldingController', ['as' => 'planning']);
     });
 
     Route::group(['prefix' => 'storage'], function() {

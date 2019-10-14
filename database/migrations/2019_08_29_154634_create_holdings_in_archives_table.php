@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateFondsInHoldingsTable extends Migration
+class CreateHoldingsInArchivesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,11 @@ class CreateFondsInHoldingsTable extends Migration
      */
     public function up()
     {
-        Schema::create('fonds_in_holdings', function (Blueprint $table) {
+        Schema::create('holdings_in_archives', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->bigInteger('fonds_id');
-            $table->bigInteger('parent_id')->nullable();
             $table->bigInteger('holding_id');
+            $table->bigInteger('parent_id')->nullable();
+            $table->bigInteger('archive_id');
             $table->timestamps();
         });
     }

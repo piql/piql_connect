@@ -1,20 +1,22 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api\Planning;
 
-use App\Fonds;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use App\Archive;
+use App\Http\Resources\HoldingCollection;
 
-class FondsController extends Controller
+class ArchiveHoldingController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($archive_uuid)
     {
-        //
+        return new HoldingCollection(Archive::findByUuid($archive_uuid)->holdings()->get());
     }
 
     /**
@@ -41,10 +43,10 @@ class FondsController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Fonds  $fonds
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Fonds $fonds)
+    public function show($id)
     {
         //
     }
@@ -52,10 +54,10 @@ class FondsController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Fonds  $fonds
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Fonds $fonds)
+    public function edit($id)
     {
         //
     }
@@ -64,10 +66,10 @@ class FondsController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Fonds  $fonds
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Fonds $fonds)
+    public function update(Request $request, $id)
     {
         //
     }
@@ -75,10 +77,10 @@ class FondsController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Fonds  $fonds
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Fonds $fonds)
+    public function destroy($id)
     {
         //
     }

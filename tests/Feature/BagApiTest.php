@@ -10,7 +10,7 @@ use Laravel\Passport\Passport;
 use App\Bag;
 use App\User;
 use App\Archive;
-use App\Fonds;
+use App\Holding;
 
 class BagApiTest extends TestCase
 {
@@ -48,11 +48,11 @@ class BagApiTest extends TestCase
 
         $this->testArchive1 = Archive::create(['title' => 'testBagArchive1Title']);
         $this->testArchive2 = Archive::create(['title' => 'testBagArchive2Title']);
-        $this->testHolding1 = Fonds::create([
+        $this->testHolding1 = Holding::create([
             'title' => "testBagHoldingTitle1",
             'owner_archive_uuid' => $this->testArchive1->uuid
         ]);
-        $this->testHolding2 = Fonds::create([
+        $this->testHolding2 = Holding::create([
             'title' => "testBagHoldingTitle2",
             'owner_archive_uuid' => $this->testArchive2->uuid
         ]);

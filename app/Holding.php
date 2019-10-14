@@ -4,9 +4,9 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Fonds extends Model
+class Holding extends Model
 {
-    protected $table = 'fonds';
+    protected $table = 'holdings';
     protected $fillable = [
         'title', 'description', 'owner_archive_uuid', 'parent_id', 'position'
     ];
@@ -24,7 +24,7 @@ class Fonds extends Model
     {
         if(! Archive::findByUuid( $value ) )
         {
-            throw new \InvalidArgumentException("Cannot assign owner archive to fonds - archive not found: ".$value);
+            throw new \InvalidArgumentException("Cannot assign owner archive to holdings - archive not found: ".$value);
         }
 
         $this->attributes['owner_archive_uuid'] = $value;
@@ -39,40 +39,40 @@ class Fonds extends Model
 
     public function parent()
     {
-        return $this->belongsTo('App\Fonds', 'parent_id');
+        return $this->belongsTo('App\Holding', 'parent_id');
     }
 
     /* Section: Utilities */
 
 
     /* function siblings()
-     * returns all fonds at the same level as the current (self exclusive)
+     * returns all holdings at the same level as the current (self exclusive)
      */
 
     public function siblings()
     {
-        return Fonds::orderBy( 'position' )
+        return Holding::orderBy( 'position' )
             ->where( 'id', '<>', $this->id )
             ->where( 'parent_id', '=', $this->parent_id);
     }
 
-    /* function subFonds()
-     * returns all first-level sub-fonds to the current fonds
+    /* function subHolding()
+     * returns all first-level sub-holdings for the current holding
      */
 
-    public function subFonds()
+    public function subHolding()
     {
-        return $this->hasMany('App\Fonds', 'parent_id');
+        return $this->hasMany('App\Holding', 'parent_id');
     }
 
-    /* function moveBefore($fonds_id)
-     * moves a fonds before another fonds in the chain
-     * returns the updated fonds
+    /* function moveBefore($holding_id)
+     * moves a holding before another holding in the chain
+     * returns the updated holding
      */
 
-    public function moveBefore( $fonds_id )
+    public function moveBefore( $holding_id )
     {
-        $insertPosition = Fonds::findOrFail( $fonds_id )->position;
+        $insertPosition = Holding::findOrFail( $holding_id )->position;
 
         /* Partition the list by before and after new position */
         $parts = $this->siblings()->get()->partition(
@@ -86,8 +86,8 @@ class Fonds extends Model
         $ordered = $parts->first()->concat([$this])->concat($parts->last() );
 
         /* Re-enumerate entries by map reduce */
-        $ordered->reduce( function ( $pos, $fonds ) {
-            $fonds->update(['position' => $pos]);
+        $ordered->reduce( function ( $pos, $holding ) {
+            $holding->update(['position' => $pos]);
             return $pos+1;
         }, 0);
 
@@ -95,14 +95,13 @@ class Fonds extends Model
     }
 
 
-    /* function moveAfter($fonds_id)
-     * moves a fonds after another fonds in the chain
-     * returns the updated fonds
-     */
+    /* function moveAfter($holding_id)
+     * moves a holding after another holding in the chain
+     * returns the updated holding */
 
-    public function moveAfter( $fonds_id )
+    public function moveAfter( $holding_id )
     {
-        $insertPosition = Fonds::findOrFail( $fonds_id )->position;
+        $insertPosition = Holding::findOrFail( $holding_id )->position;
 
         /* Partition the list by before and after new position */
         $parts = $this->siblings()->get()->partition(
@@ -115,8 +114,8 @@ class Fonds extends Model
         $ordered = $parts->first()->concat( [$this] )->concat( $parts->last() );
 
         /* Re-enumerate entries by map reduce */
-        $ordered->reduce( function ( $pos, $fonds ) {
-            $fonds->update(['position' => $pos]);
+        $ordered->reduce( function ( $pos, $holding ) {
+            $holding->update(['position' => $pos]);
             return $pos+1;
         }, 0);
 
@@ -126,7 +125,7 @@ class Fonds extends Model
 
 
     /* function ancestor()
-    /* recursively finds the top-level fonds for this fonds
+    /* recursively finds the top-level holdings for this holding 
      */
 
     public function ancestor()

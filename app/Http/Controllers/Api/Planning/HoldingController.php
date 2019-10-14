@@ -3,20 +3,22 @@
 namespace App\Http\Controllers\Api\Planning;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\Controller;
-use App\Archive;
-use App\Http\Resources\FondsCollection;
+use App\Holding;
+use App\Http\Resources\HoldingResource;
+use App\Http\Resources\HoldingCollection;
 
-class ArchiveFondsController extends Controller
+class HoldingController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index($archive_uuid)
+    public function index()
     {
-        return new FondsCollection(Archive::findByUuid($archive_uuid)->fonds()->get());
+        return new HoldingCollection( Holding::all() );
     }
 
     /**
@@ -37,7 +39,29 @@ class ArchiveFondsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'title' => 'required|string|max:100',
+            'owner_archive_uuid' => 'required|uuid|exists:archives,uuid',
+            'description' => 'string|max:500',
+            'lhs' => 'int|exists:holding',
+            'rhs' => 'int|exists:holding'
+        ]);
+
+        if( $validator->fails() )
+        {
+            $message = $validator->errors();
+            return response($message, 422);
+        }
+        $data = [
+            'title' => $request->title,
+            'owner_archive_uuid' => $request->owner_archive_uuid,
+            'description' => $request->description ?? '',
+        ];
+
+        $lhs = $request->lhs;
+        $rhs = $request->rhs;
+
+        return new HoldingResource(Holding::create($data));
     }
 
     /**
