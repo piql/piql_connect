@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateHoldingsTable extends Migration
+class CreateArchivesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateHoldingsTable extends Migration
      */
     public function up()
     {
-        Schema::create('holdings', function (Blueprint $table) {
+        Schema::create('archives', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->uuid('uuid');
             $table->string('title');
@@ -31,6 +31,6 @@ class CreateHoldingsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('holdings');
+        Schema::dropIfExists('archives');
     }
 }

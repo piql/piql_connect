@@ -8,7 +8,7 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use App\Fonds;
-use App\Holding;
+use App\Archive;
 use Webpatser\Uuid\Uuid;
 
 
@@ -18,7 +18,7 @@ class FondsModelTest extends TestCase
 
     private $fondsCount;
     private $valid_top_level_fonds_data;
-    private $owner_holding;
+    private $owner_archive;
     private $markedForDeletion;
 
     public function setUp() : void
@@ -27,22 +27,22 @@ class FondsModelTest extends TestCase
 
         $this->fondsCount = Fonds::count();
 
-        $this->owner_holding = Holding::create([
-            'title' => 'FondsModelTestHolding',
+        $this->owner_archive = Archive::create([
+            'title' => 'FondsModelTestArchive',
             'description' => "A few words",
             'parent_uuid' => null
         ]);
 
         $this->valid_top_level_fonds_data = [
             'title' => "test fonds model title",
-            'owner_holding_uuid' => $this->owner_holding->uuid
+            'owner_archive_uuid' => $this->owner_archive->uuid
         ];
 
         $this->topLevelFonds = Fonds::create( $this->valid_top_level_fonds_data );
 
         $this->valid_subfonds_data = [
             'title' => "test subfonds model title",
-            'owner_holding_uuid' => $this->owner_holding->uuid,
+            'owner_archive_uuid' => $this->owner_archive->uuid,
             'parent_id' => $this->topLevelFonds->id
         ];
 
@@ -82,11 +82,11 @@ class FondsModelTest extends TestCase
         $this->assertCount( 0, $fonds->siblings()->get() );
     }
 
-    public function test_it_throws_when_creating_a_fonds_without_a_valid_holding()
+    public function test_it_throws_when_creating_a_fonds_without_a_valid_archive()
     {
         $this->expectException( \InvalidArgumentException::class );
 
-        Fonds::create( ['owner_holding_uuid' => 'b0c7100d-2920-4340-a09c-e5ccee0fa90e'] + $this->valid_top_level_fonds_data );
+        Fonds::create( ['owner_archive_uuid' => 'b0c7100d-2920-4340-a09c-e5ccee0fa90e'] + $this->valid_top_level_fonds_data );
     }
 
     public function test_when_assigning_a_subfonds_to_a_fonds_the_relation_is_set()

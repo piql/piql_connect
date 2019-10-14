@@ -6,59 +6,59 @@ use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Webpatser\Uuid\Uuid;
-use App\Holding;
+use App\Archive;
 
-class HoldingModelTest extends TestCase
+class ArchiveModelTest extends TestCase
 {
     use DatabaseTransactions;
 
-    private $valid_holding_data = [
-        'title' => 'HoldingModelTest', 
+    private $valid_archive_data = [
+        'title' => 'ArchiveModelTest', 
         'description' => "A few words",
         'parent_uuid' => null
     ];
 
-    private $holding;
-    private $validParentHolding;
+    private $archive;
+    private $validParentArchive;
 
     public function setUp() : void
     {
         parent::setUp();
 
-        $this->validParentHolding = Holding::create([
-            'title' => 'TestParentHolding',
+        $this->validParentArchive = Archive::create([
+            'title' => 'TestParentArchive',
             'parent_uuid' => null
         ]);
     }
 
     public function test_it_is_assigned_an_uuid_when_created()
     {
-        $this->holding = Holding::create($this->valid_holding_data);
-        $this->assertRegExp("~".Uuid::VALID_UUID_REGEX."~", $this->holding->uuid);
+        $this->archive = Archive::create($this->valid_archive_data);
+        $this->assertRegExp("~".Uuid::VALID_UUID_REGEX."~", $this->archive->uuid);
     }
 
     public function test_when_creating_given_an_empty_title_it_throws()
     {
         $this->expectException("Exception");
-        $this->holding = Holding::create();
+        $this->archive = Archive::create();
     }
 
     public function test_when_creating_given_an_empty_description_it_is_created()
     {
-        $this->holding = Holding::create(['description' => '']+$this->valid_holding_data);
-        $this->assertNotNull($this->holding);
+        $this->archive = Archive::create(['description' => '']+$this->valid_archive_data);
+        $this->assertNotNull($this->archive);
     }
 
     public function test_when_creating_given_an_emtpy_parent_uuid_it_is_created()
     {
-        $this->holding = Holding::create(['parent_uuid' => ""]+$this->valid_holding_data);
-        $this->assertNotNull($this->holding);
+        $this->archive = Archive::create(['parent_uuid' => ""]+$this->valid_archive_data);
+        $this->assertNotNull($this->archive);
     }
 
     public function test_when_creating_given_a_parent_uuid_that_does_not_exist_it_throws()
     {
         $this->expectException("Exception");
-        $this->holding = Holding::create(['parent_uuid' => Uuid::generate()]+$this->valid_holding_data);
+        $this->archive = Archive::create(['parent_uuid' => Uuid::generate()]+$this->valid_archive_data);
     }
 
 }

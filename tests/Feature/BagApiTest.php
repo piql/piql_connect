@@ -9,7 +9,7 @@ use Illuminate\Support\Collection;
 use Laravel\Passport\Passport;
 use App\Bag;
 use App\User;
-use App\Holding;
+use App\Archive;
 use App\Fonds;
 
 class BagApiTest extends TestCase
@@ -46,15 +46,15 @@ class BagApiTest extends TestCase
             'owner' => $this->testUser->id
         ];
 
-        $this->testArchive1 = Holding::create(['title' => 'testBagArchive1Title']);
-        $this->testArchive2 = Holding::create(['title' => 'testBagArchive2Title']);
+        $this->testArchive1 = Archive::create(['title' => 'testBagArchive1Title']);
+        $this->testArchive2 = Archive::create(['title' => 'testBagArchive2Title']);
         $this->testHolding1 = Fonds::create([
             'title' => "testBagHoldingTitle1",
-            'owner_holding_uuid' => $this->testArchive1->uuid
+            'owner_archive_uuid' => $this->testArchive1->uuid
         ]);
         $this->testHolding2 = Fonds::create([
             'title' => "testBagHoldingTitle2",
-            'owner_holding_uuid' => $this->testArchive2->uuid
+            'owner_archive_uuid' => $this->testArchive2->uuid
         ]);
 
 
@@ -126,7 +126,7 @@ class BagApiTest extends TestCase
         $response = $this->json( 'POST', route( 'api.ingest.bags.store' ), $this->bagTestData );
         $response->assertStatus(200);
 
-        $response->assertJson(['data' => ['archive_uuid' => '', 'holding_name' => '']]);
+        $response->assertJson(['data' => ['archive_uuid' => '', 'archive_name' => '']]);
     }
 
     public function test_when_creating_a_bag_given_storage_properties_are_set_the_response_includes_those_storage_properties()
@@ -225,7 +225,7 @@ class BagApiTest extends TestCase
         $this->createExtraUserAndBags();
 
         $response = $this->patch( route( 'api.ingest.bags.update', $this->otherBag->id ), [
-            'holding_name' => 'whatever'
+            'archive_name' => 'whatever'
         ]);
 
         $response->assertStatus( 401 );

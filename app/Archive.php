@@ -7,11 +7,11 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Webpatser\Uuid\Uuid;
 
 
-class Holding extends Model
+class Archive extends Model
 {
     use SoftDeletes;
 
-    protected $table = 'holdings';
+    protected $table = 'archives';
     protected $fillable = [
         'title','description','parent_uuid', 'uuid'
     ];
@@ -28,21 +28,21 @@ class Holding extends Model
    
     public static function findByParentUuid($parent_uuid)
     {
-        return Holding::where('parent_uuid', '=', $parent_uuid)->first();
+        return Archive::where('parent_uuid', '=', $parent_uuid)->first();
     }
 
     public static function findByUuid($uuid)
     {
-        return Holding::where('uuid', '=', $uuid)->first();
+        return Archive::where('uuid', '=', $uuid)->first();
     }
 
     public function setParentUuidAttribute($value)
     {
         if( !empty($value) )
         {
-            if( Holding::findByParentUuid($value) == null )
+            if( Archive::findByParentUuid($value) == null )
             {
-                throw new \Exception("The parent holding with uuid ".$value." does not exist.");
+                throw new \Exception("The parent archive with uuid ".$value." does not exist.");
             }
 
             $this->attributes['parent_uuid'] = $value;
@@ -51,7 +51,7 @@ class Holding extends Model
 
     public function fonds()
     {
-        return $this->hasMany('App\Fonds', 'owner_holding_uuid', 'uuid');
+        return $this->hasMany('App\Fonds', 'owner_archive_uuid', 'uuid');
     }
 
 

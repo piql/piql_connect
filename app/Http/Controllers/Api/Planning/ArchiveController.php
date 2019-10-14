@@ -4,11 +4,11 @@ namespace App\Http\Controllers\Api\Planning;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Holding;
-use App\Http\Resources\HoldingResource;
-use App\Http\Resources\HoldingCollection;
+use App\Archive;
+use App\Http\Resources\ArchiveResource;
+use App\Http\Resources\ArchiveCollection;
 
-class HoldingController extends Controller
+class ArchiveController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -17,7 +17,7 @@ class HoldingController extends Controller
      */
     public function index()
     {
-        return new HoldingCollection(Holding::all());
+        return new ArchiveCollection(Archive::all());
     }
 
     /**
@@ -47,8 +47,8 @@ class HoldingController extends Controller
             $data += ['uuid' => $request->uuid ] ;
         }
 
-        $holding = Holding::create( $data )->refresh();
-        return new HoldingResource( $holding );
+        $archive = Archive::create( $data )->refresh();
+        return new ArchiveResource( $archive );
     }
 
     /**
@@ -59,11 +59,11 @@ class HoldingController extends Controller
      */
     public function show($id)
     {
-        $holding = Holding::find( $id );
-        if( !isset( $holding ) ) {
-            return response()->json(['error' => 'HOLDING WITH ID '.$id.' NOT FOUND'], 404);
+        $archive = Archive::find( $id );
+        if( !isset( $archive ) ) {
+            abort( response()->json(['error' => 404, 'message' => 'No Archive with id '.$id.' was found.'], 404) );
         }
-        return new HoldingResource( $holding );
+        return new ArchiveResource( $archive );
     }
 
     /**
@@ -97,11 +97,11 @@ class HoldingController extends Controller
      */
     public function destroy($id)
     {
-        $holding = Holding::find($id);
-        if(!isset($holding) ) {
-            return response()->json(['error' => 'HOLDING WITH ID '.$id.' NOT FOUND'], 404);
+        $archive = Archive::find($id);
+        if(!isset($archive) ) {
+            abort( response()->json(['error' => 404, 'message' => 'No Archive with id '.$id.' was found.'], 404) );
         }
-        $holding->delete();
+        $archive->delete();
         return response()->json([], 204 );
     }
 }

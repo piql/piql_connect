@@ -4,19 +4,19 @@ namespace App\Http\Controllers\Api\Planning;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Holding;
+use App\Archive;
 use App\Http\Resources\FondsCollection;
 
-class HoldingFondsController extends Controller
+class ArchiveFondsController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index($holding_uuid)
+    public function index($archive_uuid)
     {
-        return new FondsCollection(Holding::findByUuid($holding_uuid)->fonds()->get());
+        return new FondsCollection(Archive::findByUuid($archive_uuid)->fonds()->get());
     }
 
     /**

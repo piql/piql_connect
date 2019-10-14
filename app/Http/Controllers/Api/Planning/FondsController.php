@@ -40,7 +40,7 @@ class FondsController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'title' => 'required|string|max:100',
-            'owner_holding_uuid' => 'required|uuid|exists:holdings,uuid',
+            'owner_archive_uuid' => 'required|uuid|exists:archives,uuid',
             'description' => 'string|max:500',
             'lhs' => 'int|exists:fonds',
             'rhs' => 'int|exists:fonds'
@@ -53,7 +53,7 @@ class FondsController extends Controller
         }
         $data = [
             'title' => $request->title,
-            'owner_holding_uuid' => $request->owner_holding_uuid,
+            'owner_archive_uuid' => $request->owner_archive_uuid,
             'description' => $request->description ?? '',
         ];
 

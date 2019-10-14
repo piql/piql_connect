@@ -8,7 +8,7 @@ class Fonds extends Model
 {
     protected $table = 'fonds';
     protected $fillable = [
-        'title', 'description', 'owner_holding_uuid', 'parent_id', 'position'
+        'title', 'description', 'owner_archive_uuid', 'parent_id', 'position'
     ];
 
     protected static function boot()
@@ -20,21 +20,21 @@ class Fonds extends Model
     }
 
     /* Section: Mutators and accessors */
-    public function setOwnerHoldingUuidAttribute($value)
+    public function setOwnerArchiveUuidAttribute($value)
     {
-        if(! Holding::findByUuid( $value ) )
+        if(! Archive::findByUuid( $value ) )
         {
-            throw new \InvalidArgumentException("Cannot assign owner holding to fonds - holding not found: ".$value);
+            throw new \InvalidArgumentException("Cannot assign owner archive to fonds - archive not found: ".$value);
         }
 
-        $this->attributes['owner_holding_uuid'] = $value;
+        $this->attributes['owner_archive_uuid'] = $value;
     }
 
 
     /* Section: Relations */
-    public function owner_holding()
+    public function owner_archive()
     {
-        return $this->belongsTo('Holding', 'owner_holding_uuid',  'uuid');
+        return $this->belongsTo('Archive', 'owner_archive_uuid',  'uuid');
     }
 
     public function parent()
