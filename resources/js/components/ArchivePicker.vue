@@ -1,11 +1,11 @@
 <template>
     <div class="form-group">
-        <label v-if="showLabel" for="holdingPicker" class="col-form-label-sm">
+        <label v-if="showLabel" for="archivePicker" class="col-form-label-sm">
             {{label}}
         </label>
         <select v-model="selection" id="archivePicker" class="w-100" data-live-search="true" @change="selectionChanged($event.target.value)">
-          <option v-for="holding in holdings" v-bind:value="holding.uuid">
-            {{holding.title}}
+          <option v-for="archive in archives" v-bind:value="archive.uuid">
+            {{archive.title}}
           </option>
        </select>
     </div>
@@ -29,7 +29,7 @@ export default {
     },
     props: {
         initialSelection: '',
-        holdings: Array,
+        archives: Array,
         label: {
             type: String,
             default: ""

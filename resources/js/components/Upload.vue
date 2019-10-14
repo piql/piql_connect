@@ -33,7 +33,7 @@
                         <input value="" :placeholder="bag.name" v-model="bag.name" type="text" class="noTextTransform form-control pl-3" @input="setBagName" onclick="select()">
                     </div>
                     <div class="col-sm-2 mr-2">
-                      <archive-picker :holdings="archives" :initialSelection="selectedArchive" @selectionChanged="changedArchive"></archive-picker>
+                      <archive-picker :archives="archives" :initialSelection="selectedArchive" @selectionChanged="changedArchive"></archive-picker>
                    </div>
                     <div class="col-sm-2 mr-2">
                       <holding-picker :holdings="holdings" :initialSelection="selectedHolding" @selectionChanged="changedHolding"></holding-picker>
@@ -181,7 +181,7 @@ export default {
             return createdBag;
         },
         async setupHoldings(archiveId, initialHolding) {
-            await axios.get('/api/v1/planning/holdings/'+archiveId+'/fonds').then( (response) => {
+            await axios.get('/api/v1/planning/archives/'+archiveId+'/holdings').then( (response) => {
               this.holdings = response.data.data;
                 let defaultHolding = this.holdings[0].title;
                 Vue.nextTick( () => { $('#holdingPicker').selectpicker('val', initialHolding || defaultHolding);});
@@ -208,7 +208,7 @@ export default {
         },
     },
     async mounted() {
-        await axios.get("/api/v1/planning/holdings").then( (response) => {
+        await axios.get("/api/v1/planning/archives").then( (response) => {
             this.archives = response.data.data;
         });
 

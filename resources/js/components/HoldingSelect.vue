@@ -5,7 +5,7 @@
                 {{ $t('access.browse.selectHolding') }}
             </li>
             <li class="tree-list-group-item d-flex justify-content-between align-items-center">
-                <b-tree-view :data="treeData" :select="select" v-on:nodeSelect="fondSelected" :class="list-group-item" :contextMenuItems="contextMenuItems" :contextMenu="useContextMenu"></b-tree-view>
+                <b-tree-view :data="treeData" :select="select" v-on:nodeSelect="holdingSelected" :class="list-group-item" :contextMenuItems="contextMenuItems" :contextMenu="useContextMenu"></b-tree-view>
             </li>
             <li class="tree-list-group-item d-flex justify-content-between align-items-center">
             </li>
@@ -20,7 +20,7 @@ export default {
         bTreeView
     },
     props: {
-        fondSelectionChanged: {
+        holdingSelectionChanged: {
             type: Function
         },
         contextMenuItems: {
@@ -64,8 +64,8 @@ export default {
     },
 
     methods: {
-        fondSelected: function (fond, state) {
-            this.$emit('fondSelectionChanged', fond, state);
+        holdingSelected: function (holding, state) {
+            this.$emit('holdingSelectionChanged', holding, state);
         },
     },
     mounted() {

@@ -4,7 +4,7 @@
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-sm-3 col-lg-3 col-xs-1">
-                        <archive-picker :holdings='archives' :initialSelection='selectedArchiveUuid' :label='archiveSelectLabel' @selectionChanged='archiveSelectionChanged'></archive-picker>
+                        <archive-picker :archives='archives' :initialSelection='selectedArchiveUuid' :label='archiveSelectLabel' @selectionChanged='archiveSelectionChanged'></archive-picker>
                     </div>
 
                     <div class="col-sm-1 ml-5 mr-5">
@@ -39,11 +39,11 @@
         <hr class="row m-0">
         <div class="row">
             <div class="col-sm-3 col-lg-2 col-xs-1 mt-5">
-                <fond-select v-if="archiveSelected" @fondSelectionChanged="fondSelectionChanged" :holdings="selectedArchiveHoldings"></fond-select>
+                <holding-select v-if="archiveSelected" @holdingSelectionChanged="holdingSelectionChanged" :holdings="selectedArchiveHoldings"></holding-select>
             </div>
             <div class="col-sm-8">
                 <span v-if="fileMode === false">
-                    <browser-list v-if="fondSelected" @openObject="openObject" :location="selectedLocation" :dataObjects="currentObjects"  @addObjectToRetrieval="addObjectToRetrieval" :selectedArchive="selectedArchiveUuid" :selectedHolding="selectedFond"/>
+                    <browser-list v-if="holdingSelected" @openObject="openObject" :location="selectedLocation" :dataObjects="currentObjects"  @addObjectToRetrieval="addObjectToRetrieval" :selectedArchive="selectedArchiveUuid" :selectedHolding="selectedHolding"/>
                     <identity v-else></identity>
                 </span>
                 <span v-if="fileMode">
@@ -51,7 +51,7 @@
                 </span>
             </div>
             <div class="col-sm-2 mt-5">
-              <primary-contact v-if="fondSelected === false" />
+              <primary-contact v-if="holdingSelected === false" />
                     <online-actions v-if="online"/>
                 <div v-if="offline" class="retrievalItems border-none w-75">
                   Items for retrieval: <span class="float-right"> {{numberOfFilesForRetrieval}}</span>
@@ -74,9 +74,9 @@ import selectpicker from 'bootstrap-select';
 export default {
     data() {
         return {
-            fondSelectCounter: 0,
-            lastSelectedFond: "",
-            selectedFond: "",
+            holdingSelectCounter: 0,
+            lastSelectedHolding: "",
+            selectedHolding: "",
             fromDateFilter: "",
             toDateFilter: "",
             searchField: "",
@@ -100,8 +100,8 @@ export default {
         archiveSelected: function() {
             return this.selectedArchiveUuid.length > 0;
         },
-        fondSelected: function() {
-            return this.fondSelectCounter > 0;
+        holdingSelected: function() {
+            return this.holdingSelectCounter > 0;
         },
         online: function() {
             return this.selectedLocation == "online";
@@ -114,9 +114,9 @@ export default {
             if(this.archiveSelected) {
                 filter += "&archive=" + encodeURI(this.selectedArchiveUuid);
             }
-            if(this.selectedFond){
-                if(this.selectedFond !== "All"){
-                    filter += "&holding=" + encodeURI(this.selectedFond);
+            if(this.selectedHolding){
+                if(this.selectedHolding !== "All"){
+                    filter += "&holding=" + encodeURI(this.selectedHolding);
                 }
             }
             if(this.fromDateFilter){
@@ -143,11 +143,11 @@ export default {
         },
     },
     mounted() {
-        axios.get("/api/v1/planning/holdings").then( (response) => {
+        axios.get("/api/v1/planning/archives").then( (response) => {
             this.archives = response.data.data;
             let firstArchiveUuid = this.archives[0].uuid;
-            this.fondSelectCounter = 1;
-            this.selectedFond = "All";
+            this.holdingSelectCounter = 1;
+            this.selectedHolding = "All";
             Vue.nextTick( () => {
                 $('#archivePicker').selectpicker('val', firstArchiveUuid);
             });
@@ -159,30 +159,30 @@ export default {
                 this.dataObjects = bags.data.data;
             });
         },
-        fondSelectionChanged: function(fond, state) {
+        holdingSelectionChanged: function(holding, state) {
             this.fileMode = false;
-            if(fond == 0)
+            if(holding == 0)
             {
-                this.selectedFond = "";
+                this.selectedHolding = "";
             }
             else if(state){
-                this.lastelectedFond = fond.data.name;
-                this.fondSelectCounter++;
-                this.selectedFond = fond.data.name;
+                this.lastSelectedHolding = holding.data.name;
+                this.holdingSelectCounter++;
+                this.selectedHolding = holding.data.name;
             }
             else{
-                this.fondSelectCounter--;
-                if(this.fondSelectCounter === 0)
+                this.holdingSelectCounter--;
+                if(this.holdingSelectCounter === 0)
                 {
-                    this.selectedFond = "";
+                    this.selectedHolding = "";
                 }
             }
         },
         archiveSelectionChanged: function(archiveUuid) {
             this.fileMode = false;
             this.selectedArchiveUuid = archiveUuid;
-            this.selectedFond = "All";
-            axios.get("/api/v1/planning/holdings/"+archiveUuid+"/fonds").then( (response) => {
+            this.selectedHolding = "All";
+            axios.get("/api/v1/planning/archives/"+archiveUuid+"/holdings").then( (response) => {
                 this.selectedArchiveHoldings = response.data.data;
             });
         },
@@ -191,7 +191,6 @@ export default {
             this.selectedLocation = loc;
         },
         addObjectToRetrieval: async function(item) {
-            console.log("browse add object:");
             let objectFiles = (await( axios.get("/api/v1/ingest/bags/"+item.id+"/files"))).data;
 
             objectFiles.map( async (file) => {
@@ -203,7 +202,6 @@ export default {
           });
         },
       addFileToRetrieval: async function(file) {
-          console.log(file);
             this.retrievalItems.push(file);
             await (axios.post('/api/v1/storage/retrievals/add', {
                 'fileId' : file.id,

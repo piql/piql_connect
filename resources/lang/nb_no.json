@@ -115,8 +115,8 @@
 
     "access.browse": "Utforsk",
     "access.browse.ingress": "Tilgang til dine arkiver",
-    "access.browse.selectHolding": "Velg hovedkategori",
-    "access.browse.selectFond": "Velg underkategori",
+    "access.browse.selectArchive": "Velg hovedkategori",
+    "access.browse.selectHolding": "Velg underkategori",
     "access.browse.archivedFrom": "Arkivert fra",
     "access.browse.archivedTo": "Arkivert til",
     "access.browse.withContents": "Med innhold",

@@ -4,7 +4,7 @@
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-sm-4 col-lg-4 col-xs-4">
-                        <holding-picker :holdings='holdings' :initialSelectedHolding='selectedHolding' @holdingSelectionChanged='holdingSelectionChanged'></holding-picker>
+                        <archive-picker :archives='archives' :initialSelectedArchive='selectedArchive' @archiveSelectionChanged='archiveSelectionChanged'></archive-picker>
                     </div>
                 </div>
             </div>
@@ -12,7 +12,7 @@
        <hr class="row m-0">
         <div class="row">
             <div class="col-sm-4 col-lg-4 col-xs-4 mt-5">
-                <fond-select @fondSelectionChanged="fondSelectionChanged"></fond-select>
+                <holding-select @holdingSelectionChanged="holdingSelectionChanged"></holding-select>
             </div>
         </div>
     </div>
@@ -22,23 +22,23 @@
 export default {
     data() {
         return {
-            fondSelectCounter: 0,
-            lastSelectedFond: "",
-            selectedFond: "",
-            selectedHolding: "H-002",
-            holdings: [],
+            holdingSelectCounter: 0,
+            lastSelectedHolding: "",
+            selectedHolding: "",
+            selectedArchive: "H-002",
+            archives: [],
         }
     },
     computed: {
-        fondSelected: function() {
-            return this.fondSelectCounter > 0;
+        holdingSelected: function() {
+            return this.holdingSelectCounter > 0;
         },
 
         completeFilter: function() {
-            let filter = "?holding=" + encodeURI(this.selectedHolding);
+            let filter = "?archive=" + encodeURI(this.selectedArchive);
             filter += "&loc=" + encodeURI(this.selectedLocation);
-            if(this.selectedFond){
-                filter += "&fond=" + encodeURI(this.selectedFond);
+            if(this.selectedHolding){
+                filter += "&holding=" + encodeURI(this.selectedHolding);
             }
             if(this.fromDateFilter){
                 filter += "&from=" + encodeURI(this.fromDateFilter);
@@ -53,26 +53,26 @@ export default {
         },
     },
     async mounted() {
-        this.holdings = (await axios.get("/api/v1/planning/holdings")).data.data;
+        this.archives = (await axios.get("/api/v1/planning/archives")).data.data;
     },
     methods: {
-        fondSelectionChanged: function(fond, state) {
+        holdingSelectionChanged: function(holding, state) {
             if(state){
-                this.lastelectedFond = fond.data.name;
-                this.fondSelectCounter++;
-                this.selectedFond = fond.data.name;
+                this.lastelectedHolding = holding.data.name;
+                this.holdingSelectCounter++;
+                this.selectedHolding = holding.data.name;
             }
             else{
-                this.fondSelectCounter--;
-                if(this.fondSelectCounter === 0)
+                this.holdingSelectCounter--;
+                if(this.holdingSelectCounter === 0)
                 {
-                    this.selectedFond = "";
+                    this.selectedHolding = "";
                 }
             }
 
         },
-        holdingSelectionChanged: function(holding) {
-            this.selectedHolding = holding;
+        archiveSelectionChanged: function(archive) {
+            this.selectedArchive = archive;
         },
         locationSelectionChanged: function(location) {
             this.selectedLocation = location;
