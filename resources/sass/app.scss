@@ -329,6 +329,7 @@ a {
 
 .plist {
     padding: 15px;
+    min-height: 4em;
     font-size: 16px;
     border-bottom: 1px solid lightgray;
     background: white;
@@ -2232,5 +2233,22 @@ $bar-height: 22px;
                 color:$color_fill_dark;
             }
         }
+    }
+}
+
+.page-item {
+    &.active .page-link {
+        color: $white;
+        background-color: $color_main_brand;
+        border-color: $color_main_brand;
+    }
+    .page-link {
+        font-size: 1.33rem;
+        &:hover {
+            cursor: pointer;
+        }
+    }
+    &.disabled .page-link {
+        color: $color_fill_3;
     }
 }

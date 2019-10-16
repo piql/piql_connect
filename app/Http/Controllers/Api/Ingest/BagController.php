@@ -182,7 +182,7 @@ class BagController extends Controller
         );
     }
 
-    public function processing()
+    public function processing( Request $request )
     {
         $bags = Bag::latest()
             ->where(  'status', '=', 'closed')
@@ -193,11 +193,13 @@ class BagController extends Controller
             ->orWhere('status', '=', 'transferring')
             ->orWhere('status', '=', 'ingesting')
             ->where( 'owner', Auth::user()->id )
-            ->paginate(6);
+            ->paginate(env("DEFAULT_ENTRIES_PER_PAGE"));
         foreach($bags as $bag) {
             $bag->status = __('ingest.processing.status.'.$bag->status);
         }
-        return Response::json($bags);
+
+        $bags->setPath("/".$request->path() );
+        return new BagCollection($bags);
     }
 
     public function all(Request $request)
