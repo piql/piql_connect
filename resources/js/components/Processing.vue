@@ -10,72 +10,71 @@
 
         <FileInProcess v-for="item in items" v-bind:item="item" v-bind:key="item.id"/>
         <div v-for="x in padItems"><div class="row plist invisible"><div class="col">&nbsp;</div></div></div>
-        <div class="row">
+        <div v-if="showPager" class="row">
             <div class="col">
-                <pager :meta='pageMeta' @updatePage='updatePage' />
+                <Pager :meta='pageMeta' @updatePage='updatePage' />
             </div>
         </div>
 
         <div v-if="currentlyIdle" class="mt-5"><h3>{{$t('ingest.processing.noItems')}}</h3></div>
-        </div>
+    </div>
 </template>
 
 <script>
-import axios from 'axios';
+    import axios from 'axios';
 
-export default {
-    data() {
-        return {
-            apiResult: null,
-            currentPollUrl: '/api/v1/ingest/processing',
-            pollProcessingHandle: null,
-        }
-    },
-
-    computed: {
-        currentlyIdle: function() {
-            return this.apiResult && !this.items.length;
-        },
-        items: function() {
-            return this.apiResult ? this.apiResult.data : [];
-        },
-        padItems: function() {
-            if(this.apiResult) {
-                let per = this.apiResult.meta.per_page;
-                let p = per - this.items.length;
-                console.log(p);
-                return p;
+    export default {
+        data() {
+            return {
+                result: null,
+                pageQuery: null,
+                pollProcessingHandle: null,
             }
-            return 0;
         },
-        pageMeta: function() {
-            return this.apiResult ? this.apiResult.meta : null;
-        }
-    },
-    methods: {
-        startPollProcessing () {
-            this.pollProcessingHandle = setInterval(async () => {
+        props: {
+            baseUrl: {
+                type: String,
+                default: "/api/v1/ingest/processing"
+            },
+            pollInterval: {
+                type: Number,
+                default: 2000
+            }
+        },
+        computed: {
+            url() { return this.pageQuery ? this.baseUrl + "?" + this.pageQuery : this.baseUrl; },
+            success() { return this.result ? ( this.result.status === 200 ) : false; },
+            items() { return this.success ? this.result.data.data : null; },
+            pageMeta() { return this.success ? this.result.data.meta : null; },
+            showPager() { return this.success && this.pageMeta.total > 1; },
+            padItems() { return this.success ? this.pageMeta.per_page - this.items.length : 0; },
+            currentlyIdle() { return !this.success || !this.items.length; },
+        },
+        methods: {
+            startPollProcessing () {
+                this.pollProcessingHandle = setInterval( async () => {
+                    this.getData();
+                }, this.pollInterval );
+            },
+            updatePage( pageWrapper ) {
+                this.pageQuery = pageWrapper.query;
                 this.getData();
-            }, 2000);
+            },
+            async getData() {
+                this.result = await axios.get( this.url );
+            }
         },
-        updatePage( pageWrapper ) {
-            this.currentPollUrl = pageWrapper.url;
+        created() {
+            this.startPollProcessing();
+        },
+
+        beforeDestroy(){
+            clearInterval(this.pollProcessingHandle);
+        },
+
+        async mounted() {
+            this.currentPollUrl = this.baseUrl;
             this.getData();
         },
-        async getData() {
-            this.apiResult = (await axios.get(this.currentPollUrl)).data;
-        }
-    },
-    created() {
-        this.startPollProcessing();
-    },
-
-    beforeDestroy(){
-        clearInterval(this.pollProcessingHandle);
-    },
-
-    async mounted() {
-        this.getData();
-    },
-}
+    }
 </script>

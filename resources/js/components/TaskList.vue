@@ -1,54 +1,75 @@
 <template>
     <div>
         <form>
-        <div class="row listFilter">
-                    <label for="fromDate">{{$t('ingest.taskList.from')}}</label>
-                    <input type="date" name="fromDate" placeholder="DDMMYY">
-                    <label for="toDate">{{$t('ingest.taskList.to')}}</label>
-                    <input type="date" name="toDate" placeholder="DDMMYY">
-                    <select name="status">
-                        <option style="display: none;" disabled="" selected="">{{$t('ingest.taskList.statusFilter')}}</option>
-                        <option>{{$t('ingest.taskList.uploadingFilter')}}</option>
-                        <option>{{$t('ingest.taskList.processingFilter')}}</option>
-                    </select>
-                    <input type="search" :placeholder="$t('Search')">
-        </div>
-        <br/>
-        <div class="row plistHeader">
-            <div class="col-1"><input type="checkbox" class="checkbox" id="allSips"></div>
-            <div class="col-2">{{$t('ingest.taskList.sip')}}</div>
-            <div class="col-3">{{$t('ingest.taskList.content')}}</div>
-            <div class="col">{{$t('ingest.taskList.ingestDate')}}</div>
-            <div class="col listActionItems">&nbsp;</div>
-            <div class="col piqlIt">&nbsp;</div>
-        </div>
+            <div class="row listFilter">
+                <label for="fromDate">{{$t('ingest.taskList.from')}}</label>
+                <input type="date" name="fromDate" placeholder="DDMMYY">
+                <label for="toDate">{{$t('ingest.taskList.to')}}</label>
+                <input type="date" name="toDate" placeholder="DDMMYY">
+                <select name="status">
+                    <option style="display: none;" disabled="" selected="">{{$t('ingest.taskList.statusFilter')}}</option>
+                    <option>{{$t('ingest.taskList.uploadingFilter')}}</option>
+                    <option>{{$t('ingest.taskList.processingFilter')}}</option>
+                </select>
+                <input type="search" :placeholder="$t('Search')">
+            </div>
+            <div class="row plistHeader mt-5">
+                <div class="col-1"><input type="checkbox" class="checkbox" id="allSips"></div>
+                <div class="col-2">{{$t('ingest.taskList.sip')}}</div>
+                <div class="col-3">{{$t('ingest.taskList.content')}}</div>
+                <div class="col">{{$t('ingest.taskList.ingestDate')}}</div>
+                <div class="col listActionItems">&nbsp;</div>
+                <div class="col piqlIt">&nbsp;</div>
+            </div>
 
-        <Task v-for="item in items" v-bind:item="item" v-bind:key="item.id" @piqlIt="piqlIt"/>
+            <Task v-for="item in items" v-bind:item="item" v-bind:key="item.id" @piqlIt="piqlIt"/>
         </form>
+
+        <div class="row">
+            <div class="col">
+                <Pager :meta="pageMeta" @updatePage="updatePage" />
+            </div>
+        </div>
     </div>
 </template>
 
 <script>
-import axios from 'axios';
+    import axios from 'axios';
 
     export default {
         data() {
             return {
-                items : {}
+                pageQuery: "",
+                result: null
             }
         },
-
+        props: {
+            baseUrl: {
+                type: String,
+                default: "/api/v1/ingest/offline_storage"
+            }
+        },
+        computed: {
+            url() { return this.baseUrl + "&" + this.pageQuery; },
+            success() { return this.result ? ( this.result.status == 200 ) : false; },
+            jobs() { return this.success ? this.result.data.data : null; },
+            meta() { return this.success ? this.result.data.meta : null; }
+        },
         async mounted() {
-            this.items = (await axios.get("/api/v1/ingest/complete")).data;
-            console.log(this.items);
-
-            console.log('TaskList component mounted.')
+            this.update();
         },
         methods: {
-            async piqlIt(id) {
+            async piqlIt( id ) {
                 await axios.post("/api/v1/ingest/bags/"+id+"/piql");
-                this.items = (await axios.get("/api/v1/ingest/bags/complete")).data; 
+                this.update();
             },
+            async update() {
+                this.result = await axios.get( this.url );
+            },
+            updatePage( page ) {
+                this.pageQuery = page.Query;
+                this.update();
+            }
         },
     }
 </script>

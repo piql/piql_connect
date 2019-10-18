@@ -7,7 +7,7 @@
                 </div>
 
                 <div class="col-sm-2 pt-sm-3 text-center">
-                    {{bags.length}}
+                    {{item.bags_count}}
                 </div>
 
                 <div class="col-sm-2 d-flex flex-row justify-content-start" style="justify-content: center">
@@ -56,8 +56,6 @@ import axios from 'axios';
 
 export default {
     async mounted() {
-        console.log('Task component mounted.');
-        this.bags = (await axios.get(this.jobListUrl+"/jobs/"+this.item.id+"/bags")).data;
     },
 
     props: {
@@ -93,8 +91,6 @@ export default {
             })).data;
             if(job.status == 'ingesting')
                 this.modal = false;
-            console.log(job);
-            console.log('Piqled.')
         },
         async setJobName() {
             let currentId = this.item.id;
@@ -105,7 +101,6 @@ export default {
             }).then( (result) => {
                 job = result.data;
             });
-            console.log(job);
             return job;
         },
         getFileSizeIEC(bytes) {
@@ -141,7 +136,6 @@ export default {
     data() {
         return {
             modal: true,
-            bags: [],
         };
     },
 

@@ -2,18 +2,21 @@
 
 namespace App\Http\Controllers\Api\Ingest;
 
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
+use Carbon\Carbon;
+use App\Http\Controllers\Controller;
 use App\Job;
 use App\User;
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Storage;
-use Log;
 use App\Bag;
 use App\File;
-use Response;
-use Illuminate\Support\Facades\Auth;
+use App\Http\Resources\JobResource;
+use App\Http\Resources\JobCollection;
+use App\Http\Resources\BagCollection;
 use App\Events\BagFilesEvent;
-use Carbon\Carbon;
+use Response;
+use Log;
 
 class OfflineStorageController extends Controller
 {
@@ -24,24 +27,12 @@ class OfflineStorageController extends Controller
      */
     public function jobs()
     {
-        // This is a bit nasty because there is no owner validation here
-        // Should be safe when used internally e.i when owner is valid
-        $jobs = \App\Job::where('status', '=', 'created')->get();
-        foreach ($jobs as $job)
-            $job->size=$job->getJobSize();
+        $jobs = Job::where('status', 'created')
+            ->where('owner', Auth::id() )
+            ->withCount('bags')
+            ->paginate( env('DEFAULT_ENTRIES_PER_PAGE') );
 
-        return Response::json($jobs);
-    }
-
-    public function bags($jobId)
-    {
-        // This is a bit nasty because there is no owner validation here
-        // Should be safe when used internally e.i when owner is valid
-        $job = \App\Job::findOrFail($jobId);
-        $bags = $job->bags;
-        foreach ($bags as $bag)
-            $bag->size=$bag->getBagSize();
-        return Response::json($bags);
+        return new JobCollection( $jobs );
     }
 
     public function archiveJobs()
@@ -52,7 +43,8 @@ class OfflineStorageController extends Controller
         foreach ($jobs as $job) {
             $job->size = $job->getJobSize();
         }
-        return Response::json($jobs);
+
+        return new JobCollection( $jobs->paginate( env('DEFAULT_ENTRIES_PER_PAGE') ) );
     }
 
     public function archiveJob($jobId)
@@ -74,7 +66,18 @@ class OfflineStorageController extends Controller
         }
         $job->save();
         $job->size = $job->getJobSize();
-        return Response::json($job);
+        return new JobResource( $job );
     }
+
+    public function bags( $jobId )
+    {
+        $job = Job::with(['bags'])->find($jobId);
+        if( $job->owner !== Auth::id() ){
+            abort( response()->json([ 'error' => 401, 'message' => 'The current user is not authorized to view job with id '.$jobId ], 401 ) );
+        }
+
+        return new BagCollection( $job->bags()->paginate( env('DEFAULT_ENTRIES_PER_PAGE') ) );
+    }
+
 
 }

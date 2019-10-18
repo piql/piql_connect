@@ -43,7 +43,7 @@ Route::group(['prefix' => 'v1' , 'middleware' => 'auth:api'], function () {
         Route::get('bags/create', 'Api\Ingest\BagController@create')->name('api.ingest.bags.create');
         Route::get('bags', 'Api\Ingest\BagController@all')->name('api.ingest.bags.all');
         Route::get('processing', 'Api\Ingest\BagController@processing')->name('api.ingest.bags.processing');
-        Route::get('complete', 'Api\Ingest\BagController@complete')->name('api.ingest.bags.complete');
+        Route::get('bags/complete', 'Api\Ingest\BagController@complete')->name('api.ingest.bags.complete');
         Route::get('bags/offline', 'Api\Ingest\BagController@offline')->name('api.ingest.bags.offline');
         Route::get('bags/online', 'Api\Ingest\BagController@online')->name('api.ingest.bags.online');
         Route::get('bags/latest', 'Api\Ingest\BagController@latest')->name('api.ingest.bags.latest');

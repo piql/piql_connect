@@ -15,6 +15,7 @@ use App\Archive;
 use App\StorageProperties;
 use App\Http\Resources\BagResource;
 use App\Http\Resources\BagCollection;
+use App\Http\Resources\FileCollection;
 use Response;
 use App\Events\BagFilesEvent;
 use Carbon\Carbon;
@@ -149,8 +150,12 @@ class BagController extends Controller
             ->leftJoin( 'holdings', 'holdings.title', 'storage_properties.holding_name' )
             ->select( 'bags.*', 'archives.title AS archive_title',
                 'archives.uuid AS archive_uuid', 'holdings.title AS holding_name' )
-            ->find($id);
-        if( $bag->owner !== Auth::user()->id ) {
+                ->find($id);
+
+        if( $bag == null ) {
+            abort( response()->json([ 'error' => 404, 'message' => 'Could not find any bag with id '.$id ], 404 ) );
+        }
+        if( $bag->owner !== Auth::id() ) {
             abort( response()->json([ 'error' => 401, 'message' => 'The current user is not authorized to access bag with id '.$id ], 401 ) );
         }
         return new BagResource($bag);
@@ -164,22 +169,30 @@ class BagController extends Controller
      */
     public function showFiles($id)
     {
-        $files = Bag::find($id)->files()->get();
-        $result = $files->map( function ($file) {
+        $bag = Bag::find($id);
+        if( $bag == null ) {
+            abort( response()->json([ 'error' => 404, 'message' => 'Could not find any bag with id '.$id ], 404 ) );
+        }
+        if( $bag->owner !== Auth::id() ) {
+            abort( response()->json([ 'error' => 401, 'message' => 'The current user is not authorized to access bag with id '.$id ], 401 ) );
+        }
+
+        $files = $bag->files()->paginate( env( 'DEFAULT_ENTRIES_PER_PAGE') );
+/*TODO: Move to AIP        $result = $files->map( function ($file) {
             $ext = pathinfo($file->filename, PATHINFO_EXTENSION);
             return collect(["fupath" => $file->uuid.".".$ext])->merge($file);
-        });
-        return Response::json($result);
+});
+ */
+        return new FileCollection( $files );
     }
 
     public function complete()
     {
-        return Response::json(
-            Bag::latest()
-                ->where('owner', Auth::user()->id)
+        $bags = Bag::latest()
+                ->where( 'owner', Auth::id() )
                 ->where('status', 'complete')
-                ->get()
-        );
+                ->paginate(env("DEFAULT_ENTRIES_PER_PAGE"));
+        return new BagCollection($bags);
     }
 
     public function processing( Request $request )
@@ -215,7 +228,9 @@ class BagController extends Controller
               'archives.uuid AS archive_uuid', 'holdings.title AS holding_name')
               ->distinct()->latest();
 
-            return new BagCollection($q->paginate(7));
+          return new BagCollection(
+              $q->paginate( env("DEFAULT_ENTRIES_PER_PAGE") )
+          );
         }
 
 
@@ -264,7 +279,7 @@ class BagController extends Controller
         };
 
         $q->latest();
-        $q->paginate(7);
+        $q->paginate(env("DEFAULT_ENTRIES_PER_PAGE"));
         return new BagCollection($q->get());
     }
 
