@@ -105,7 +105,7 @@ export default {
                         }).then( () => {
                             if( this.bag.id == uploadToBagId ){
                                 axios.get("/api/v1/ingest/bags/"+uploadToBagId+"/files").then( (files) => {
-                                    this.files = files.data;
+                                    this.files = files.data.data;
                                 });
                             }
                         });
@@ -217,7 +217,7 @@ export default {
 
         if(this.bag !== undefined && this.bag.status === "open")
         {
-            this.files = (await axios.get('/api/v1/ingest/bags/' + this.bag.id + '/files')).data
+            this.files = (await axios.get('/api/v1/ingest/bags/' + this.bag.id + '/files')).data.data;
             Vue.nextTick( () => { $('#archivePicker').selectpicker('val', this.selectedArchive);});
         }
         else
