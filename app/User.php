@@ -88,4 +88,14 @@ class User extends Authenticatable
     {
         return $this->hasMany('App\Job', 'owner');
     }
+
+    public function aips()
+    {
+        return $this->hasMany('App\Aip', 'owner');
+    }
+
+    public function dips()
+    {
+        return $this->hasMany('App\Dip', 'owner');
+    }
 }

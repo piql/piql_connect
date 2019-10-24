@@ -15,6 +15,7 @@ class CustomInflectionServiceProvider extends ServiceProvider
     public function register()
     {
         Inflector::rules('plural', ['irregular' => ['fonds' => 'fonds']] );
+        Inflector::rules('plural', ['irregular' => ['mets' => 'mets']] );
     }
 
     /**
