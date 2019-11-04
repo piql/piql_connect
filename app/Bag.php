@@ -128,9 +128,14 @@ class Bag extends Model
         return Storage::disk('bags')->path($this->zipBagFileName());
     }
 
+    public function BagFileNameNoExt()
+    {
+        return $this->name . '-' . $this->uuid;
+    }
+
     public function zipBagFileName()
     {
-        return $this->name . '-' . $this->uuid . '.zip';
+        return $this->BagFileNameNoExt() . '.zip';
     }
 
     public function createdDirectory()
