@@ -27,7 +27,7 @@ class ArchivematicaTransferringListener  extends BagListener
      */
     public function __construct(ArchivematicaClient $amClient = null)
     {
-        $this->amClient = $amClient ?? new ArchivematicaClient();
+        $this->amClient = $amClient ?? new ArchivematicaClient(new ArchivematicaServiceConnection( ArchivematicaService::first()));
     }
 
     /**
@@ -42,8 +42,21 @@ class ArchivematicaTransferringListener  extends BagListener
 
         Log::info("Handling ArchivematicaTransferringEvent for bag ".$bag->zipBagFileName()." with id: ".$bag->id);
 
-        $currentIngestStatuses = $this->amClient->getTransferStatus();
-        foreach($currentIngestStatuses->results as $status)
+        // todo: use transfer UUID in get Transfer status
+        $response = $this->amClient->getTransferStatus();
+
+        if($response->statusCode != 200) {
+            $message = " initiate transfer failed with error code " . $response->statusCode;
+            if (isset($response->content->error) && ($response->content->error == true)) {
+                $message += " and error message: " . $response->content->message;
+            }
+
+            Log::error($message);
+            event(new ErrorEvent($bag));
+            return;
+        }
+
+        foreach($response->contents->results as $status)
         {
             if($status->name.".zip" == $bag->zipBagFileName())
             {
