@@ -4,55 +4,80 @@
 namespace App\Listeners;
 
 
+use App\ArchivematicaService;
+use App\Bag;
 use GuzzleHttp\Client as Guzzle;
+use GuzzleHttp\Exception\TransferException;
 
 class ArchivematicaClient
 {
-    private $apiClient;
+    private $connection;
     /**
      * Create the event listener.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(ArchivematicaServiceConnection $connection)
     {
-        $am_proxy = url('/api/v1/ingest/am')."/";
-        $this->apiClient = new Guzzle([
-            'base_uri' => $am_proxy,
-            'headers' => [
-                'Accept' => 'application/json'
-            ],
-            'verify' => env('CURL_VERIFY_SELF_SIGN_CERT', true)
-        ]);
+        $this->connection = $connection;
+        // todo: move this to controller
+        //$service = ArchivematicaService::first();
+        //if( $service == null ) {
+        //    abort( response()->json( ['error' => 428, 'message' => 'No archivematica service configuration could be found on this instance. A valid service configuration must be created first.'], 428 ) );
+        //}
     }
 
-    public function initiateTransfer($bagId)
+    public function initiateTransfer($transferName, $accession, $directory)
     {
-        return json_decode($this->apiClient->post("transfer/start/".$bagId)->getBody()->getContents());
+        $locationId = env('STORAGE_LOCATION_ID');
+        $paths = base64_encode($locationId.":/".$directory);
+        $formData =
+            [
+                "name" => $transferName,
+                "type" => "zipped bag",
+                "accession" => $accession,
+                "paths[]" => $paths,
+                "row_ids[]" => ""
+            ];
+
+        return $this->connection->doRequest('POST', 'transfer/start_transfer/', ['form_params' => $formData]);
     }
 
-    public function getTransferStatus()
+    public function getUnapprovedList()
     {
-        return json_decode($this->apiClient->get("transfer/status/")->getBody()->getContents());
+        return $this->connection->doRequest('GET', 'transfer/unapproved/');
     }
 
-    public function getIngestStatus()
+    public function getTransferStatus($uuid = "")
     {
-        return json_decode($this->apiClient->get("ingest/status/")->getBody()->getContents());
+        return $this->connection->doRequest('GET', 'transfer/status/'.$uuid);
     }
 
-    public function approveTransfer($bagId)
+    public function getIngestStatus($uuid = "")
     {
-        return json_decode($this->apiClient->post("transfer/approve/".$bagId)->getBody()->getContents());
+        return $this->connection->doRequest('GET', 'ingest/status/'.$uuid);
+    }
+
+    public function approveTransfer($directory)
+    {
+        $formData =
+            [
+                "type" => "zipped bag",
+                "directory" => $directory,
+            ];
+
+        return $this->connection->doRequest('POST', 'transfer/approve/',
+            ['form_params' => $formData]
+        );
     }
 
     public function hideTransferStatus($uuid)
     {
-        return json_decode($this->apiClient->delete("transfer/".$uuid)->getBody()->getContents());
+        return $this->connection->doRequest('DELETE', "transfer/{$uuid}/delete/");
     }
 
     public function hideIngestStatus($uuid)
     {
-        return json_decode($this->apiClient->delete("ingest/".$uuid)->getBody()->getContents());
+        return $this->connection->doRequest('DELETE', "ingest/{$uuid}/delete/");
     }
 }
