@@ -4,6 +4,7 @@
 namespace App\Listeners;
 
 
+use App\ArchivematicaService;
 use App\Events\ApproveTransferToArchivematicaEvent;
 use App\Events\ErrorEvent;
 use Log;
@@ -34,14 +35,19 @@ class InitiateTransferToArchivematicaListener extends BagListener
         $bag = $event->bag;
         Log::info("Handling InitiateTransferToArchivematicaEvent for bag ".$bag->zipBagFileName()." with id: ".$bag->id);
 
-        try{
-            $this->amClient->initiateTransfer($bag->id);
-        } catch(\Exception $e){
-            Log::error(" initiate transfer failed with  ".$e->getMessage());
+        $response = $this->amClient->initiateTransfer($bag->name, $bag->uuid, $bag->zipBagFileName());
+
+        if($response->statusCode != 200) {
+            $message = "Initiate transfer failed with error code " . $response->statusCode;
+
+            if (isset($response->contents->error) && ($response->contents->error == true)) {
+                $message .= " and error message: " . $response->contents->message;
+            }
+
+            Log::error($message);
             event(new ErrorEvent($bag));
             return;
         }
-
 
         event(new ApproveTransferToArchivematicaEvent($bag));
     }

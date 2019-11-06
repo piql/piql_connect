@@ -9,7 +9,6 @@ use App\Events\ApproveTransferToArchivematicaEvent;
 class ErrorListener extends BagListener
 {
     protected $state = "error";
-    private $amClient;
     /**
      * Create the event listener.
      *
@@ -17,7 +16,6 @@ class ErrorListener extends BagListener
      */
     public function __construct()
     {
-        $this->amClient = new ArchivematicaClient();
     }
 
     /**
@@ -29,7 +27,7 @@ class ErrorListener extends BagListener
     public function _handle($event)
     {
         $bag = $event->bag;
-        Log::error("Ingesting bag ".$bag->zipBagFileName()." with id: ".$bag->id) . "failed!";
+        Log::error("Ingesting bag ".$bag->zipBagFileName()." with id: ".$bag->id." failed!");
     }
 }
 {

@@ -30,7 +30,7 @@ class ArchivematicaIngestingListener  extends BagListener
      */
     public function __construct(ArchivematicaClient $amClient = null)
     {
-        $this->amClient = $amClient ?? new ArchivematicaClient();
+        $this->amClient = $amClient ?? new ArchivematicaClient(new ArchivematicaServiceConnection( ArchivematicaService::first()));
     }
 
     /**
@@ -44,8 +44,21 @@ class ArchivematicaIngestingListener  extends BagListener
         $bag = $event->bag;
         Log::info("Handling ArchivematicaIngestingEvent for bag ".$bag->zipBagFileName()." with id: ".$bag->id);
 
-        $currentIngestStatuses = $this->amClient->getIngestStatus();
-        foreach($currentIngestStatuses->results as $status)
+        // todo: use ingest UUID to retrieve status
+        $response = $this->amClient->getIngestStatus();
+
+        if($response->statusCode != 200) {
+            $message = "ingest status failed with error code " . $response->statusCode;
+            if (isset($response->content->error) && ($response->content->error == true)) {
+                $message += " and error message: " . $response->content->message;
+            }
+
+            Log::error($message);
+            event(new ErrorEvent($bag));
+            return;
+        }
+
+        foreach($response->contents->results as $status)
         {
             if($status->name.".zip" == $bag->zipBagFileName())
             {
