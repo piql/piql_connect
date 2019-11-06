@@ -21,7 +21,7 @@ class InitiateTransferToArchivematicaListener extends BagListener
      */
     public function __construct(ArchivematicaClient $amClient = null)
     {
-        $this->amClient = $amClient ?? new ArchivematicaClient( new ArchivematicaServiceConnection( ArchivematicaService::first()));
+        $this->amClient = $amClient ?? new ArchivematicaClient();
     }
 
     /**
@@ -38,10 +38,10 @@ class InitiateTransferToArchivematicaListener extends BagListener
         $response = $this->amClient->initiateTransfer($bag->name, $bag->uuid, $bag->zipBagFileName());
 
         if($response->statusCode != 200) {
-            $message = " initiate transfer failed with error code " . $response->statusCode;
+            $message = "Initiate transfer failed with error code " . $response->statusCode;
 
-            if (isset($response->content->error) && ($response->content->error == true)) {
-                $message += " and error message: " . $response->content->message;
+            if (isset($response->contents->error) && ($response->contents->error == true)) {
+                $message .= " and error message: " . $response->contents->message;
             }
 
             Log::error($message);

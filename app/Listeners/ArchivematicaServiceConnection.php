@@ -5,13 +5,19 @@ namespace App\Listeners;
 
 
 use App\ArchivematicaService;
+use GuzzleHttp\Exception\RequestException;
+use Log;
 
 class ArchivematicaServiceConnection
 {
 
-    public function __construct(ArchivematicaService $service)
+    private $apiClient;
+    private $service;
+
+    public function __construct(ArchivematicaService $service = null)
     {
-        $base_uri = $service->url;
+        $this->service = $service ?? ArchivematicaService::first();
+        $base_uri = $this->service->url;
         if(!endsWith($base_uri, '/')){
             $base_uri .='/';
         }
@@ -19,7 +25,7 @@ class ArchivematicaServiceConnection
         $this->apiClient = new \GuzzleHttp\Client([
             'base_uri' => $base_uri,
             'headers' => [
-                'Authorization' => 'ApiKey '.$service->api_token,
+                'Authorization' => 'ApiKey '.$this->service->api_token,
                 'Content-Type' => 'application/json',
             ],
             'http_errors' => false,
@@ -27,10 +33,22 @@ class ArchivematicaServiceConnection
     }
 
     public function doRequest($method, $uri, array $options = []) {
-        $request = $this->apiClient->request($method, $uri, $options);
-        return (object)[
-            'contents' => json_decode($request->getBody()->getContents()) ?? "",
-            'statusCode' => $request->getStatusCode(),
-        ];
+        try {
+            $request = $this->apiClient->request($method, $uri, $options);
+            return (object)[
+                'contents' => json_decode($request->getBody()->getContents()) ?? "",
+                'statusCode' => $request->getStatusCode(),
+            ];
+        } catch (RequestException $exception) {
+            $message = $exception->getMessage() ?? "";
+            $message .= ". ArchivematicaService : " . json_encode($this->service);
+            return (object)[
+                'contents' => (object) [
+                    'message' => $message,
+                    'error' =>  'true'
+                ],
+                'statusCode' => 500,
+            ];
+        }
     }
 }

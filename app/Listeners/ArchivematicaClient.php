@@ -17,9 +17,9 @@ class ArchivematicaClient
      *
      * @return void
      */
-    public function __construct(ArchivematicaServiceConnection $connection)
+    public function __construct(ArchivematicaServiceConnection $connection = null)
     {
-        $this->connection = $connection;
+        $this->connection = $connection ?? new ArchivematicaServiceConnection();
         // todo: move this to controller
         //$service = ArchivematicaService::first();
         //if( $service == null ) {
