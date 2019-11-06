@@ -44,6 +44,8 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    protected $primaryKey = 'id';
+
     public static function boot()
     {
         parent::boot();
@@ -97,5 +99,10 @@ class User extends Authenticatable
     public function dips()
     {
         return $this->hasMany('App\Dip', 'owner');
+    }
+
+    public function storageLocations()
+    {
+        return $this->hasMany('App\StorageLocation', 'owner_id');
     }
 }
