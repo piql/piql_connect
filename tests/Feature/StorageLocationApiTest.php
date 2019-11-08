@@ -45,7 +45,7 @@ class StorageLocationApiTest extends TestCase
     private function makeS3ConfigurationData( string $bucketPrefix ) : array
     {
         return [
-            'url' => $this->faker->url,
+            'url' => $this->faker->url(),
             'key_id' => $this->faker->regexify('[A-Za-z0-9]{20}'),
             'secret' => $this->faker->regexify('[A-Za-z0-9]{40}'),
             'bucket' => $bucketPrefix."-".$this->faker->slug(2)
@@ -111,5 +111,6 @@ class StorageLocationApiTest extends TestCase
                  ]
              ]);
     }
+
 
 }

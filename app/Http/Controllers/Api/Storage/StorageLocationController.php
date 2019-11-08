@@ -107,4 +107,5 @@ class StorageLocationController extends Controller
     {
         //
     }
+
 }

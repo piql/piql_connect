@@ -16,7 +16,7 @@ class CreateS3ConfigurationsTable extends Migration
         Schema::create('s3_configurations', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('url');
-            $table->string('key_id')->unique();
+            $table->string('key_id');
             $table->string('secret');
             $table->string('region')->nullable();
             $table->string('bucket')->nullable();
