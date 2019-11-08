@@ -81,6 +81,10 @@ Route::group(['prefix' => 'v1' , 'middleware' => 'auth:api'], function () {
     });
 
     Route::group(['prefix' => 'storage'], function() {
+        Route::get('transfer/locations/{id}', 'Api\Storage\TransferController@index')->name('storage.transfer.ls');
+        Route::post('transfer/locations/{id}', 'Api\Storage\TransferController@store')->name('storage.transfer.upload');
+        Route::post('transfer/locations/{id}/copy', 'Api\Storage\TransferController@copy')->name('storage.transfer.download');
+        Route::post('transfer/locations/{id}/deletion', 'Api\Storage\TransferController@deletion')->name('storage.transfer.deletion');
         Route::get('config/locations', 'Api\Storage\StorageLocationController@index')->name('storage.config.locations');
         Route::get('config/locations/{id}', 'Api\Storage\StorageLocationController@show')->name('storage.config.location');
         Route::post('config/locations', 'Api\Storage\StorageLocationController@store')->name('storage.config.location.new');
