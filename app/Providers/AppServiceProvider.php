@@ -5,6 +5,7 @@ namespace App\Providers;
 use App\ArchivematicaService;
 use App\Listeners\ArchivematicaServiceConnection;
 use App\Listeners\SendBagToArchivematicaListener;
+use App\Services\ArchivematicaConnectionService;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\ServiceProvider;
 
@@ -28,6 +29,11 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind('App\Listeners\SendBagToArchivematicaListener', function ($app) {
             return new SendBagToArchivematicaListener( Storage::disk('am'));
         });
+
+        $this->app->bind('App\Interfaces\ArchivematicaConnectionServiceInterface', function ($app) {
+            return new ArchivematicaConnectionService();
+        });
+
     }
 
     /**

@@ -2,10 +2,12 @@
 
 namespace App\Jobs;
 
+use App\Bag;
 use App\ArchivematicaService;
 use App\Events\ErrorEvent;
 use App\Listeners\ArchivematicaServiceConnection;
 use App\Listeners\ArchivematicaStorageServerClient;
+use App\Interfaces\ArchivematicaConnectionServiceInterface;
 use App\StorageProperties;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
@@ -36,28 +38,26 @@ class ProcessArchivematicaServiceCallback implements ShouldQueue
      *
      * @return void
      */
-    public function handle()
+    public function handle(ArchivematicaConnectionServiceInterface $connectionService)
     {
         Log::info("Processing uploaded package with uuid: " . $this->packageUuid);
 
-        $service = ArchivematicaService::find($this->serviceUuid);
-        if($service == null) {
+        $serviceConnection = $connectionService->getServiceConnectionByUuid($this->serviceUuid);
+        if($serviceConnection == null) {
             // todo : make proper action
             $message = "No service found with uuid " . $this->serviceUuid;
 
             Log::error($message);
             return;
-
         }
-        $client = new  ArchivematicaStorageServerClient( new ArchivematicaServiceConnection($service));
-
+        $client = new  ArchivematicaStorageServerClient( $serviceConnection);
         $response = $client->getFileDetails($this->packageUuid);
         $contents = $response->contents;
 
         if($response->statusCode != 200) {
 
             // todo : make proper action
-            $message = " initiate transfer failed with error code " . $response->statusCode;
+            $message = "Get file details failed with error code " . $response->statusCode;
             if (isset($contents->error) && ($contents->error == true)) {
                 $message += " and error message: " . $contents->message;
             }
@@ -68,31 +68,28 @@ class ProcessArchivematicaServiceCallback implements ShouldQueue
 
         $parts = explode('/', $response->contents->current_path);
         $subject = array_pop($parts);
-        preg_match('/([\w]){8}-([\w]){4}-([\w]){4}-([\w]){4}-([\w]){12}/', $subject, $matches, PREG_OFFSET_CAPTURE);
-        $bagUuid = $matches[0][0];
-        $storageProperties = StorageProperties::where("bag_uuid",$bagUuid)->first();
-        if($storageProperties == null) {
+        preg_match('/(\w{8})-(\w{4})-(\w{4})-(\w{4})-(\w{12})/', $subject, $matches, PREG_OFFSET_CAPTURE);
+        $bag = Bag::where('uuid', $matches[0][0])->first();
+        if($bag == null) {
             // todo : make proper action
             $message = "Could not find any storage properties linked to this uuid: " . $this->packageUuid . " ";
-            $message .= "response: " . $response;
+            $message .= "response: " . json_encode($response->contents);
             Log::error($message);
             return;
         }
 
         if($contents->package_type == "AIP") {
-            Log::info("AIP uuid '" . $this->packageUuid . "' is linked to bag " .
-                $storageProperties->bag->uid .  " (" . $storageProperties->bag .")");
-            $storageProperties->aip_uuid = $this->packageUuid;
-            $storageProperties->save();
+            Log::info("AIP uuid '" . $this->packageUuid . "' is linked to bag " . $bag->uuid);
+            $bag->storage_properties->aip_uuid = $this->packageUuid;
+            $bag->storage_properties->save();
         } elseif ($contents->package_type == "DIP") {
-            Log::info("DIP uuid '" . $this->packageUuid . "' is linked to bag " .
-                $storageProperties->bag->uid .  " (" . $storageProperties->bag .")");
-            $storageProperties->dip_uuid = $this->packageUuid;
-            $storageProperties->save();
+            Log::info("DIP uuid '" . $this->packageUuid . "' is linked to bag " . $bag->uuid);
+            $bag->storage_properties->dip_uuid = $this->packageUuid;
+            $bag->storage_properties->save();
         } else {
             $message = "Unsupported package type: " . $contents->package_type . " ";
-            $message .= "response: " . $response;
-            Log::warnig($message);
+            $message .= "response: " . json_encode($response->contents);
+            Log::error($message);
         }
 
     }
