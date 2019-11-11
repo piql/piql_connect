@@ -3,6 +3,8 @@
 use Illuminate\Database\Seeder;
 use App\Traits\Uuids;
 use Illuminate\Support\Facades\Hash;
+use Laravel\Passport\ClientRepository;
+use Webpatser\Uuid\Uuid;
 
 class UsersTableSeeder extends Seeder
 {
@@ -42,5 +44,27 @@ class UsersTableSeeder extends Seeder
         $user->full_name = "Simon Bruce-Cassidy";
         $user->email = "simon.brucecassidy@piql.com";
         $user->save();
+
+
+        // Create a Personal Access Client if no one exists
+        $clientRepository = new ClientRepository();
+        try {
+            $clientRepository->personalAccessClient();
+        } catch (RuntimeException $exception) {
+            $clientRepository->createPersonalAccessClient(null, "piqlConnect Personal Access Client", "http://localhost");
+        }
+
+        // Add default Archivematica Client for accessing Piql Connect trigger API
+        $found = App\User::where('username', '=', 'archivematica')->first();
+        $user = $found ?? new App\User();
+        $user->username = "archivematica";
+        $user->password = Hash::make(Uuid::generate());
+        $user->full_name = "Archivematica callback client";
+        $user->email = "";
+        $user->save();
+        $token  = $user->createToken("archivematica_callback_token")->accessToken;
+        dump("Remember to set/update Archivematica storage server callbacks with these headers:");
+        dump("Accept: application/json");
+        dump("Authorization: Bearer ".$token);
     }
 }

@@ -1,0 +1,51 @@
+<?php
+
+use Illuminate\Database\Seeder;
+use App\S3Configuration;
+use App\StorageLocation;
+use App\User;
+
+class SafeSpringS3ConfigurationSeeder extends Seeder
+{
+    /**
+     * Run the database seeds.
+     *
+     * @return void
+     */
+    public function run()
+    {
+        $ss_test_key_id = "A027DQI8VXPIJETYNXZQ";
+        $ss_test_secret = "OOE4owN4uin0ctQQ6VAqsDmsHnGh4AUjgrsbEFtg";
+        $ss_test_url = "https://s3.osl1.safedc.net";
+        $ss_test_bucket = "connect-test";
+
+        if( S3Configuration::where('key_id', $ss_test_key_id)->count() !== 0 ) {
+            echo "Safespring S3 test already seeded";
+            return;
+        }
+
+        $s3Config = S3Configuration::create([
+            'url' => $ss_test_url,
+            'key_id' => $ss_test_key_id,
+            'secret' => $ss_test_secret,
+            'bucket' => $ss_test_bucket
+        ]);
+
+        $owner = User::where('username','kare')->first() ?? User::first() ?? factory(App\User::class, 1)->create()->first();
+
+        StorageLocation::create([
+            'owner_id' => $owner->id,
+            'locatable_id' => $s3Config->id, 
+            'locatable_type' => 'App\S3Configuration',
+            'storable_type' => 'App\Dip'
+        ]);
+
+        StorageLocation::create([
+            'owner_id' => $owner->id,
+            'locatable_id' => $s3Config->id, 
+            'locatable_type' => 'App\S3Configuration',
+            'storable_type' => 'App\Dip'
+        ]);
+
+    }
+}

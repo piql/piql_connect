@@ -92,6 +92,9 @@ Route::group(['prefix' => 'v1' , 'middleware' => 'auth:api'], function () {
     });
 
     Route::group(['prefix' => 'storage'], function() {
+        Route::get('config/locations', 'Api\Storage\StorageLocationController@index')->name('storage.config.locations');
+        Route::get('config/locations/{id}', 'Api\Storage\StorageLocationController@show')->name('storage.config.location');
+        Route::post('config/locations', 'Api\Storage\StorageLocationController@store')->name('storage.config.location.new');
         Route::get('retrievals/latest', 'Api\Storage\RetrievalCollectionController@latest');
         Route::get('retrievals/retrieving', 'Api\Storage\RetrievalCollectionController@retrieving');
         Route::get('retrievals/toready', 'Api\Storage\RetrievalCollectionController@toReady');
