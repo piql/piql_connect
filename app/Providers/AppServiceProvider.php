@@ -31,7 +31,7 @@ class AppServiceProvider extends ServiceProvider
         });
 
         $this->app->bind('App\Interfaces\ArchivematicaConnectionServiceInterface', function ($app) {
-            return new ArchivematicaConnectionService();
+            return new ArchivematicaConnectionService($this->app);
         });
 
     }

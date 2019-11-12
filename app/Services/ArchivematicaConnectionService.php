@@ -5,8 +5,9 @@ namespace App\Services;
 
 
 use App\ArchivematicaService;
+use App\Listeners\ArchivematicaServiceConnection;
 
-    class ArchivematicaConnectionService implements \App\Interfaces\ArchivematicaConnectionServiceInterface
+class ArchivematicaConnectionService implements \App\Interfaces\ArchivematicaConnectionServiceInterface
 {
     private $app;
 
@@ -16,6 +17,7 @@ use App\ArchivematicaService;
     }
 
     public function getServiceConnectionByUuid($uuid) {
-        $service = ArchivematicaService::find($this->serviceUuid);
+        $service = ArchivematicaService::find($uuid);
+        return $service ? new ArchivematicaServiceConnection($service) : null;
     }
 }
