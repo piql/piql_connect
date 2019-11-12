@@ -17,7 +17,8 @@ class CreateStorageLocationsTable extends Migration
             $table->bigIncrements('id');
             $table->morphs('locatable'); /* Storage config for s3: local, etc */
             $table->uuid('owner_id'); /* Owner model type name, App\User, App\Group etc */
-            $table->string('storable_type'); /* Model type name to store: App\Aip, App\Dip, etc */ 
+            $table->string('storable_type'); /* Model type name to store: App\Aip, App\Dip, etc */
+            $table->string('human_readable_name'); /*Presented in the user interface to ease configuration */
             $table->timestamps();
             $table->softDeletes();
         });
