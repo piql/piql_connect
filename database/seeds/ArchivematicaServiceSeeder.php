@@ -27,6 +27,7 @@ class ArchivematicaServiceSeeder extends Seeder
         $service->save();
         $service->api_token = "test:test";
         $service->save();
-
+        dump("Remember to set/update Archivematica storage server callbacks with this url: ");
+        dump(route( 'api.ingest.triggers.am.callback', [$service->id, '']).'/<package_uuid>');
     }
 }

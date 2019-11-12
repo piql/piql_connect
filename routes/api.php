@@ -65,7 +65,7 @@ Route::group(['prefix' => 'v1' , 'middleware' => 'auth:api'], function () {
         Route::group(['prefix' => 'triggers'], function() {
             // todo: add middleware
             Route::group(['prefix' => 'am'], function() {
-                Route::post('{serviceUuid}/uploaded/{packageUuid}', 'Api\Ingest\ArchivematicaServiceCallback@packageUploaded');
+                Route::post('{serviceUuid}/uploaded/{packageUuid}', 'Api\Ingest\ArchivematicaServiceCallback@packageUploaded')->name('api.ingest.triggers.am.callback');
             });
         });
 
