@@ -21,6 +21,10 @@ Route::group(['prefix' => 'v1'], function () {
     Route::post('login', 'Auth\ApiLoginController@login');
 });
 
+// todo: mode to whitelist middleware or add token to headers in callback
+Route::group(['prefix' => 'v1'], function () {
+});
+
 Route::group(['prefix' => 'v1' , 'middleware' => 'auth:api'], function () {
     Route::post('logout', 'Auth\ApiLoginController@logout');
 
@@ -58,7 +62,14 @@ Route::group(['prefix' => 'v1' , 'middleware' => 'auth:api'], function () {
         Route::get('offline_storage/pending/jobs', 'Api\Ingest\OfflineStorageController@jobs');
         Route::get('offline_storage/archive/jobs', 'Api\Ingest\OfflineStorageController@archiveJobs');
 
+        Route::group(['prefix' => 'triggers'], function() {
+            // todo: add middleware
+            Route::group(['prefix' => 'am'], function() {
+                Route::post('{serviceUuid}/uploaded/{packageUuid}', 'Api\Ingest\ArchivematicaServiceCallback@packageUploaded');
+            });
+        });
 
+        // todo: these calls are obsolete
         Route::group(['prefix' => 'am'], function() {
             Route::get('instances', 'Api\Ingest\ArchivematicaServiceController@serviceInstances')->name('api.am.instances.index');
             Route::group(['prefix' => 'transfer'], function () {

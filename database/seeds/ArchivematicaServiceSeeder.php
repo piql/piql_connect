@@ -17,5 +17,16 @@ class ArchivematicaServiceSeeder extends Seeder
         $service->url = "http://172.17.0.1:62080/api";
         $service->api_token = "test:test";
         $service->save();
+
+        $found = null;
+        if(App\ArchivematicaService::count() == 2) {
+            $found = App\ArchivematicaService::all()[1];
+        }
+        $service = $found ?? new ArchivematicaService();
+        $service->url = "http://172.17.0.1:62081/api";
+        $service->save();
+        $service->api_token = "test:test";
+        $service->save();
+
     }
 }
