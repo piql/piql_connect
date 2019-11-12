@@ -57,7 +57,9 @@ class StorageLocationController extends Controller
             'owner_id' => Auth::id(),
             'locatable_id' => $request->locatable_id,
             'locatable_type' => $request->locatable_type,
-            'storable_type' => $request->storable_type
+            'storable_type' => $request->storable_type,
+            'human_readable_name' => $request->human_readable_name
+
         ]);
         return new StorageLocationResource( $created );
     }

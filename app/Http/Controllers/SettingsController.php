@@ -10,40 +10,68 @@ use App;
 
 class SettingsController extends Controller
 {
-    public function __construct()
-    {
-
-    }
 
     public function showSettings()
     {
-        return view('/settings/settings', $this->fetchUserSettings());
+        return view('/settings/settings', [
+            'settings' => $this->fetchUserSettings(),
+            'aipStorageLocations' => $this->fetchAipStorageLocations(),
+            'dipStorageLocations' => $this->fetchDipStorageLocations()
+        ] );
     }
 
     public function updateSettings(Request $request)
     {
         $userSettings = $this->fetchUserSettings();
-        if($userSettings->interfaceLanguage != $request->interfaceLanguage)
+        if( $userSettings->interfaceLanguage != $request->interfaceLanguage )
         {
-            $userSettings->interfaceLanguage = $request->interfaceLanguage; //todo: validate form fields
-            $userSettings->update();
-            App::setLocale($userSettings->interfaceLanguage);
+            $userSettings->update([ 'interfaceLanguage' => $request->interfaceLanguage ]); //todo: validate form fields
+            App::setLocale( $userSettings->interfaceLanguage );
         }
-        return view('/settings/settings', $this->fetchUserSettings());
+
+        if( $userSettings->defaultAipStorageLocationId != $request->defaultAipStorageLocation )
+        {
+            $userSettings->update([ 'defaultAipStorageLocationId' => $request->defaultAipStorageLocation ]); //todo: validate form fields
+        }
+
+        if( $userSettings->defaultDipStorageLocationId != $request->defaultDipStorageLocation )
+        {
+            $userSettings->update([ 'defaultDipStorageLocationId' => $request->defaultDipStorageLocation ]); //todo: validate form fields
+        }
+
+
+        return view('/settings/settings', [
+            'settings' => $this->fetchUserSettings(),
+            'aipStorageLocations' => $this->fetchAipStorageLocations(),
+            'dipStorageLocations' => $this->fetchDipStorageLocations()
+        ] );
     }
 
     public function fetchUserSettings()
     {
-        $userSettings = \Auth::user()->settings()->first();
+        $userSettings = \Auth::user()->settings;
         if($userSettings == null)
         {
             /* Sane defaults for user settings go here! */
             $userSettings = \Auth::user()->settings()->create([
                 'user' => \Auth::user()->id,
-                'interfaceLanguage' => 'en'
+                'interface' => array(),
+                'workflow' => array(),
+                'storage' => array(),
+                'data' => array()
             ]);
         }
         return $userSettings;
+    }
+
+    private function fetchAipStorageLocations()
+    {
+        return \App\StorageLocation::whereStorableType('App\Aip')->pluck('human_readable_name','id')->toArray();
+    }
+
+    private function fetchDipStorageLocations()
+    {
+        return \App\StorageLocation::whereStorableType('App\Dip')->pluck('human_readable_name','id')->toArray();
     }
 
 }

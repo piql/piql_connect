@@ -15,7 +15,7 @@ class FileObject extends Model
         'object_type', 'mime_type', 'storable_type', 'storable_id'
     ];
 
-    public static function storable()
+    public function storable()
     {
         return $this->morphTo();
     }

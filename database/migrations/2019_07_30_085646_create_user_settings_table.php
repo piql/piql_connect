@@ -4,14 +4,18 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-/* These are common user settings that should be set for all users
- * and be cheap to fetch from the database. Another list of
- * settings as key-value pairs will be added, and is useful for per client
- * type of settings (metadata etc).
+/*
+ * The user_settings table contain json array fields for interface, workflow
+ * and data configuration settings.
+ * This allows for completely dynamic options, casted by the model
+ * to respective php arrays for easy access.
+ *
+ * Often used fields can be cached by the model to avoid deserializing on read.
+ *
  */
 
 class CreateUserSettingsTable extends Migration
-{ 
+{
 
     /**
      * Run the migrations.
@@ -23,7 +27,10 @@ class CreateUserSettingsTable extends Migration
         Schema::create('user_settings', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('user');
-            $table->string('interfaceLanguage');
+            $table->json('interface');
+            $table->json('workflow');
+            $table->json('storage');
+            $table->json('data');
             $table->timestamps();
         });
     }

@@ -54,7 +54,8 @@ class TransferApiTest extends TestCase
             'owner_id' => $ownerId,
             'locatable_id' => $locationId,
             'locatable_type' => 'App\S3Configuration',
-            'storable_type' => $storableType
+            'storable_type' => $storableType,
+            'human_readable_name' => "Storage config name"
         ];
     }
 

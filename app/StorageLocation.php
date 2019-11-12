@@ -16,7 +16,8 @@ class StorageLocation extends Model
     protected $fillable = [
         'owner_id',
         'locatable_id', 'locatable_type',
-        'storable_type'
+        'storable_type',
+        'human_readable_name'
     ];
 
     public function locatable()

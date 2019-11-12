@@ -35,17 +35,36 @@ class SafeSpringS3ConfigurationSeeder extends Seeder
 
         StorageLocation::create([
             'owner_id' => $owner->id,
-            'locatable_id' => $s3Config->id, 
+            'locatable_id' => $s3Config->id,
             'locatable_type' => 'App\S3Configuration',
-            'storable_type' => 'App\Dip'
+            'storable_type' => 'App\Aip',
+            'human_readable_name' => "Safespring S3 Aip Store"
         ]);
 
         StorageLocation::create([
             'owner_id' => $owner->id,
-            'locatable_id' => $s3Config->id, 
+            'locatable_id' => $s3Config->id,
             'locatable_type' => 'App\S3Configuration',
-            'storable_type' => 'App\Dip'
+            'storable_type' => 'App\Dip',
+            'human_readable_name' => "Safespring S3 Dip Store"
         ]);
+
+        StorageLocation::create([
+            'owner_id' => $owner->id,
+            'locatable_id' => $s3Config->id,
+            'locatable_type' => 'App\S3Configuration',
+            'storable_type' => 'App\Aip',
+            'human_readable_name' => "Other Aip Store"
+        ]);
+
+        StorageLocation::create([
+            'owner_id' => $owner->id,
+            'locatable_id' => $s3Config->id,
+            'locatable_type' => 'App\S3Configuration',
+            'storable_type' => 'App\Dip',
+            'human_readable_name' => "Other Dip Store"
+        ]);
+
 
     }
 }
