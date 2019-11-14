@@ -5,23 +5,38 @@
 @endsection
 
 @section('content')
-    <div class="contentContainer">
-        <h1>{{__("User Settings")}}</h1>
 
         <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-12 mb-5">
+                <h1><i class="fas fa-cog titleIcon"></i>{{__("User Settings")}}</h1>
+            </div>
+        </div>
         <form method="POST" action="settings">
             @csrf
             <div class="form-group row">
-                <label class="col-sm-5" for="interfaceLanguage">{{__("User interface language")}}</label>
-                <select class="selectpicker col-sm-5" name="interfaceLanguage" id="interfaceLanguage" >
+                <label class="col-sm-3" for="interfaceLanguage">{{__("User interface language")}}</label>
+                <select class="selectpicker col-sm-4" name="interfaceLanguage" id="interfaceLanguage" >
                     <option value="en" {{ $settings->interfaceLanguage == 'en' ? 'selected = "true"' : ''}}>English</option>
                     <option value="nb_no" {{ $settings->interfaceLanguage == 'nb_no' ? 'selected = "true"' : ''}}>Norsk Bokmål</option>
                 </select>
             </div>
 
+            <div class="row mt-5">
+                <label class="form-check-label col-sm-3" for="ingestCompoundModeEnabled">{{__("Ingest mode")}}</label>
+                <div class="col-sm-4 btn-group btn-group-toggle" data-toggle="buttons">
+                    <label class="btn btn-light btn-secondary {{ $settings->ingestCompoundModeEnabled ? 'active' : '' }} ">
+                        <input type="radio" name="ingestCompoundMode" id="ingestCompoundMode" value="compound">{{__("Compound")}}</input>
+                    </label>
+                    <label class="btn btn-light btn-secondary {{ $settings->ingestCompoundModeEnabled ? '' : 'active' }} ">
+                        <input type="radio" name="ingestCompoundMode" id="ingestCompoundMode" value="single">{{__("Single file")}}</input>
+                    </label>
+                </div>
+            </div>
+
             <div class="form-group row mt-5">
-                <label class="col-sm-5" for="defaultAipStorageLocation">{{__("Default AIP storage location")}}</label>
-                <select class="selectpicker col-sm-5" name="defaultAipStorageLocation" id="defaultAipStorageLocation" >
+                <label class="col-sm-3" for="defaultAipStorageLocation">{{__("Default AIP storage location")}}</label>
+                <select class="selectpicker col-sm-4" name="defaultAipStorageLocation" id="defaultAipStorageLocation" >
                     @foreach ( $aipStorageLocations as $id => $name )
                         <option value="{{$id}}"  {{$id == $settings->defaultAipStorageLocationId ? 'selected = "true"' : ''}}>{{ $name }}</option>
                     @endforeach
@@ -29,8 +44,8 @@
             </div>
 
             <div class="form-group row mt-3">
-                <label class="col-sm-5" for="defaultDipStorageLocation">{{__("Default AIP storage location")}}</label>
-                <select class="selectpicker col-sm-5" name="defaultDipStorageLocation" id="defaultAipStorageLocation" >
+                <label class="col-sm-3" for="defaultDipStorageLocation">{{__("Default DIP storage location")}}</label>
+                <select class="selectpicker col-sm-4" name="defaultDipStorageLocation" id="defaultAipStorageLocation" >
                     @foreach ( $dipStorageLocations as $id => $name )
                         <option value="{{$id}}"  {{$id == $settings->defaultDipStorageLocationId ? 'selected = "true"' : ''}}>{{ $name }}</option>
                     @endforeach

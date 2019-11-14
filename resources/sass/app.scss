@@ -616,6 +616,17 @@ input[type="file"] {
     border: 0;
     &-light {
         outline: 0 !important;
+        background-color: $white !important;
+        color: $black;
+    }
+
+    &-radio {
+        width: 5rem;
+    }
+
+    &.active {
+        background-color: $color_main_brand !important;
+        color: $white !important;
     }
 
     &:hover {

@@ -18,7 +18,13 @@
 	"upload.sipName": "SIP-navn",
     "upload.holding": "Hovedkategori",
 	"upload.files": "Antall filer",
+
 	"User interface language": "Brukergrensesnittspråk",
+    "Ingest mode": "Mottaksmodus",
+    "Compound": "Sammensatt",
+    "Single file": "Enkeltfiler",
+    "Default AIP storage location": "Standardplassering for AIPer",
+    "Default DIP storage location": "Standardplassering for DIPer",
 
 	"sidebar.dashboard": "Oversikt",
 	"sidebar.upload": "Opplasting",
