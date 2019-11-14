@@ -22,8 +22,6 @@ class UserSetting extends Model
 {
     protected $table = "user_settings";
 
-    protected $appends = [ 'interfaceLanguage', 'defaultAipStorageLocationId', 'defaultDipStorageLocationId' ];
-
     protected $fillable = [
         'owner',
         'interface',
@@ -31,10 +29,11 @@ class UserSetting extends Model
         'storage',
         'data',
         'interfaceLanguage',
-        'defaultAipStorageLocationId',
-        'defaultDipStorageLocationId'
     ];
 
+    /* When adding new configuration groups, they must always
+     * be added to $casts and $attributes to work!
+     */
     protected $casts = [
         'interface' => 'array',
         'workflow' => 'array',
@@ -42,48 +41,115 @@ class UserSetting extends Model
         'data' => 'array'
     ];
 
+    protected $attributes = [
+        'interface' => '[]',
+        'workflow' =>  '[]',
+        'storage' => '[]',
+        'data' => '[]'
+    ];
+
     public function User()
     {
         return $this->belongsTo('App\User');
     }
 
+    /* Create or update a property in a group array
+     *
+     * @param string $property The group and property to set in the form 'group.property'
+     * @param $value The value that will be associated with the property
+     */
+    public function set( string $property, $value ) : void
+    {
+        list( $group, $prop ) = $this->parsePropertyPath( $property );
+        $this{$group} = [ $prop => $value ] + $this{$group};
+    }
+
+    /* Get property from a group
+     *
+     * @param string $property The group and property to get in the form 'group.property'
+     * @param $default A default value [Optional]. Usually not required, will automatically resolve to env DEFAULT variables
+     */
+
+    public function get( string $property, $default = null )
+    {
+        list( $group, $prop ) = $this->parsePropertyPath( $property );
+        return array_key_exists( $prop, $this{$group} )
+            ? $this{$group}[$prop]
+            : $default ?? $this->propertyNameToDefaultEnv( $property );
+    }
+
+    /*
+     * Get default value for a property from env by name
+     *
+     * Takes the name of a property in the form 'group.property' and turns it
+     * into the form DEFAULT_GROUP_ATTRIBUTE, then fetches that value from env.
+     * If no value was provided it returns null.
+     *
+     * @param string @property The name of a property in the form 'group.property'
+     * @returns The default environment value for this property
+     */
+
+    private function propertyNameToDefaultEnv( string $property )
+    {
+        $variableName = ( "DEFAULT_".strtoupper(
+            \Str::snake( str_replace( "."," ", $property ) ) ) );
+
+        $envVariable = env( $variableName );
+        if ( !isset( $envVariable ) ){
+            throw new \Exception("No {$variableName} found in environment. Please update the relevant '.env' file accordingly.");
+        }
+        return $envVariable;
+    }
+
+    private function parsePropertyPath( $propertyPath )
+    {
+        $parsed = list( $group, $prop ) = explode( '.', $propertyPath );
+        if( ! array_key_exists( $group, $this->casts ) ) {
+            throw new \Exception("The configuration group '{$group}' does not exist.");
+        }
+        return $parsed;
+    }
+
     public function getInterfaceLanguageAttribute()
     {
-        return array_key_exists( 'language', $this->interface )
-            ? $this->interface['language']
-            : env("DEFAULT_INTERFACE_LANGUAGE");
+        return $this->get( 'interface.language' );
     }
 
     public function setInterfaceLanguageAttribute( $value )
     {
-        $interface = ['language' => $value] + $this->interface;
-        $this->interface = $interface;
+        $this->set( 'interface.language', $value );
     }
 
     public function getDefaultAipStorageLocationIdAttribute()
     {
-        return array_key_exists( 'defaultAipStorageLocationId', $this->storage )
-            ? $this->storage['defaultAipStorageLocationId']
-            : \App\StorageLocation::where('storable_type', 'App\Aip')->firstOrFail()->id;
+        return $this->get( "storage.defaultAipStorageLocationId",
+            \App\StorageLocation::where('storable_type', 'App\Aip')->firstOrFail()->id );
     }
 
     public function setDefaultAipStorageLocationIdAttribute( $value )
     {
-        $storage = [ 'defaultAipStorageLocationId' => $value ] + $this->storage;
-        $this->storage = $storage;
+        $this->set( 'storage.defaultAipStorageLocationId', $value );
     }
 
     public function getDefaultDipStorageLocationIdAttribute()
     {
-        return array_key_exists( 'defaultDipStorageLocationId', $this->storage )
-            ? $this->storage['defaultDipStorageLocationId']
-            : \App\StorageLocation::where('storable_type', 'App\Dip')->firstOrFail()->id;
+        return $this->get( "storage.defaultDipStorageLocationId",
+            \App\StorageLocation::where('storable_type', 'App\Dip')->firstOrFail()->id );
     }
 
     public function setDefaultDipStorageLocationIdAttribute( $value )
     {
-        $storage = [ 'defaultDipStorageLocationId' => $value ] + $this->storage;
-        $this->storage = $storage;
+        $this->set( 'storage.defaultDipStorageLocationId', $value );
+    }
+
+    public function getIngestCompoundModeEnabledAttribute() : bool
+    {
+        return $this->get( 'workflow.ingestCompoundModeEnabled' );
+    }
+
+    public function setIngestCompoundModeEnabledAttribute( $value ) : void
+    {
+        $this->set( 'workflow.ingestCompoundModeEnabled', $value );
     }
 
 }
