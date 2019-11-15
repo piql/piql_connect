@@ -11,19 +11,17 @@ use App;
 class SettingsController extends Controller
 {
 
-    public function showSettings( \App\Interfaces\SettingsInterface $settingsService )
-    {
-        $settings = $settingsService->all();
+    public function showSettings( \App\Interfaces\SettingsInterface $settingsProvider ){
         return view('/settings/settings', [
-            'settings' => $settings,
+            'settings' => $settingsProvider->forAuthUser(),
             'aipStorageLocations' => $this->fetchAipStorageLocations(),
             'dipStorageLocations' => $this->fetchDipStorageLocations()
         ] );
     }
 
-    public function updateSettings(Request $request, \App\Interfaces\SettingsInterface $settingsService )
+    public function updateSettings(Request $request, \App\Interfaces\SettingsInterface $settingsProvider )
     {
-        $settings = $settingsService->all();
+        $settings = $settingsProvider->forAuthUser();
         $settings->interfaceLanguage = $request->interfaceLanguage; //todo: validate form fields
         App::setLocale( $settings->interfaceLanguage );
 
