@@ -179,7 +179,8 @@ return [
         App\Providers\RouteServiceProvider::class,
         App\Providers\PiqlAuthProvider::class,
         App\Providers\CustomInflectionServiceProvider::class,
-        App\Providers\ArchivalStorageServiceProvider::class
+        App\Providers\ArchivalStorageServiceProvider::class,
+        App\Providers\SettingsProvider::class
 
     ],
 

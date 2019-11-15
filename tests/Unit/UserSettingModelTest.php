@@ -3,8 +3,6 @@
 namespace Tests\Unit;
 
 use Tests\TestCase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\UserSetting;
 
 class UserSettingModelTest extends TestCase
@@ -157,7 +155,7 @@ class UserSettingModelTest extends TestCase
         $this->assertFalse( $this->userSetting->ingestCompoundModeEnabled );
     }
 
-    public function test_given_a_user_setting_and_it_has_the_ingest_compound_model_enabled_set_to_false_when_setting_it_to_true_then_it_is_false()
+    public function test_given_a_user_setting_and_it_has_the_ingest_compound_model_enabled_set_to_false_when_setting_it_to_true_then_it_is_true()
     {
         $this->userSetting->workflow = [ "ingestCompoundModeEnabled" => false ];
 

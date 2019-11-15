@@ -11,57 +11,36 @@ use App;
 class SettingsController extends Controller
 {
 
-    public function showSettings()
+    public function showSettings( \App\Interfaces\SettingsInterface $settingsService )
     {
+        $settings = $settingsService->all();
         return view('/settings/settings', [
-            'settings' => $this->fetchUserSettings(),
+            'settings' => $settings,
             'aipStorageLocations' => $this->fetchAipStorageLocations(),
             'dipStorageLocations' => $this->fetchDipStorageLocations()
         ] );
     }
 
-    public function updateSettings(Request $request)
+    public function updateSettings(Request $request, \App\Interfaces\SettingsInterface $settingsService )
     {
-        $userSettings = $this->fetchUserSettings();
-        if( $userSettings->interfaceLanguage != $request->interfaceLanguage )
-        {
-            $userSettings->update([ 'interfaceLanguage' => $request->interfaceLanguage ]); //todo: validate form fields
-            App::setLocale( $userSettings->interfaceLanguage );
-        }
+        $settings = $settingsService->all();
+        $settings->interfaceLanguage = $request->interfaceLanguage; //todo: validate form fields
+        App::setLocale( $settings->interfaceLanguage );
 
-        if( $userSettings->defaultAipStorageLocationId != $request->defaultAipStorageLocation )
-        {
-            $userSettings->update([ 'defaultAipStorageLocationId' => $request->defaultAipStorageLocation ]); //todo: validate form fields
-        }
+        $settings->defaultAipStorageLocationId = $request->defaultAipStorageLocation; //todo: validate form fields
 
-        if( $userSettings->defaultDipStorageLocationId != $request->defaultDipStorageLocation )
-        {
-            $userSettings->update([ 'defaultDipStorageLocationId' => $request->defaultDipStorageLocation ]); //todo: validate form fields
-        }
+        $settings->defaultDipStorageLocationId = $request->defaultDipStorageLocation; //todo: validate form fields
+
+        $settings->ingestCompoundModeEnabled = ( $request->ingestCompoundMode == "compound" );
+
+        $settings->save();
 
 
         return view('/settings/settings', [
-            'settings' => $this->fetchUserSettings(),
+            'settings' => $settings,
             'aipStorageLocations' => $this->fetchAipStorageLocations(),
             'dipStorageLocations' => $this->fetchDipStorageLocations()
         ] );
-    }
-
-    public function fetchUserSettings()
-    {
-        $userSettings = \Auth::user()->settings;
-        if($userSettings == null)
-        {
-            /* Sane defaults for user settings go here! */
-            $userSettings = \Auth::user()->settings()->create([
-                'user' => \Auth::user()->id,
-                'interface' => array(),
-                'workflow' => array(),
-                'storage' => array(),
-                'data' => array()
-            ]);
-        }
-        return $userSettings;
     }
 
     private function fetchAipStorageLocations()
