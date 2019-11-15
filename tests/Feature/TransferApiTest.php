@@ -22,7 +22,7 @@ class TransferApiTest extends TestCase
     private $faker;
     private $storageService;
 
-    public function setUp() : void
+    public function setUp( ) : void
     {
         parent::setUp();
         $this->testUser = factory( \App\User::class )->create();
@@ -34,7 +34,7 @@ class TransferApiTest extends TestCase
             $this->testUser->id, $this->s3Configuration->id, "App\Aip" );
         $this->storageLocation = StorageLocation::create( $this->storageLocationData );
 
-        $this->storageService = new \App\Services\ArchivalStorageService( $this->app );
+        $this->storageService = resolve( 'App\Interfaces\ArchivalStorageInterface' );
     }
 
     private function makeS3ConfigurationFromEnv( string $bucketPrefix ) : array

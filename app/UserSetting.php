@@ -23,12 +23,11 @@ class UserSetting extends Model
     protected $table = "user_settings";
 
     protected $fillable = [
-        'owner',
+        'user_id',
         'interface',
         'workflow',
         'storage',
         'data',
-        'interfaceLanguage',
     ];
 
     /* When adding new configuration groups, they must always
@@ -50,7 +49,7 @@ class UserSetting extends Model
 
     public function User()
     {
-        return $this->belongsTo('App\User');
+        return $this->belongsTo('App\User', 'user_id');
     }
 
     /* Create or update a property in a group array

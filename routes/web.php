@@ -7,8 +7,8 @@ Route::middleware(['auth', 'locale'])->group( function () {
 
     Route::get('/', 'DashboardController@showDashboard')->name('dashboard');
     Route::get('reports', 'ReportsController@showReports');
-    Route::get('settings', 'SettingsController@showSettings');
-    Route::post('settings', 'SettingsController@updateSettings');
+    Route::get('settings', 'SettingsController@showSettings')->name('web.showSettings');
+    Route::post('settings', 'SettingsController@updateSettings')->name('web.updateSettings');
 
     Route::prefix('ingest')->group( function () {
         Route::resource('bags', 'IngestBagController')->name('index', 'bags');

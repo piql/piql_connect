@@ -26,7 +26,7 @@ class CreateUserSettingsTable extends Migration
     {
         Schema::create('user_settings', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('user');
+            $table->string('user_id');
             $table->json('interface');
             $table->json('workflow');
             $table->json('storage');

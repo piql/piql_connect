@@ -35,4 +35,9 @@ class StorageLocation extends Model
         return Str::lower( Str::after( $this->storable_type, "\\" ) );
     }
 
+    public function locatableType()
+    {
+        return Str::lower( Str::after( $this->locatable_type, "\\" ) );
+    }
+
 }

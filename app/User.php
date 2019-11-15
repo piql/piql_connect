@@ -52,7 +52,8 @@ class User extends Authenticatable
         self::creating(function( $model ) /*Create a uuid converted to binary16 */
         {
             $model->id = Uuid::generate();
-            $model->api_token = Hash::make(Uuid::generate());
+            $model->api_token = Hash::make( Uuid::generate() );
+            \App\UserSetting::create([ 'user_id' => $model->id ]);
         });
     }
 
@@ -78,7 +79,7 @@ class User extends Authenticatable
 
     public function settings()
     {
-        return $this->hasOne('App\UserSetting', 'user');
+        return $this->hasOne('App\UserSetting', 'user_id');
     }
 
     public function bags()

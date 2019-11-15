@@ -14,7 +14,8 @@ class ArchivalStorageServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->bind('App\Interfaces\ArchivalStorageInterface', function( $app ) {
-            return new \App\Services\ArchivalStorageService($app);
+            $filesystemDriver = $this->app->make('App\Interfaces\FilesystemDriverInterface');
+            return new \App\Services\ArchivalStorageService( $app, $filesystemDriver );
         });
 
     }
