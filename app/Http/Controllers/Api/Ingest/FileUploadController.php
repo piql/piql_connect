@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\Ingest;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 use Log;
 use App\File;
@@ -49,7 +50,7 @@ class FileUploadController extends Controller
         $file->uuid = pathinfo($request->result["name"])['filename'];
         $file->bag_id = $request->bagId;
         $file->save();
-        event( new FileUploadedEvent($file) );
+        event( new FileUploadedEvent( $file, Auth::user() ) );
         return $file;
     }
 

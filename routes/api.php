@@ -26,6 +26,7 @@ Route::group(['prefix' => 'v1' , 'middleware' => 'auth:api'], function () {
 
     Route::group(['prefix' => 'system'], function () {
         Route::get('currentUser', 'Api\System\StatusController@currentUser');
+        Route::get('currentUserSettings', 'Api\System\StatusController@currentUserSettings');
         Route::get('currentBag', 'Api\System\StatusController@currentBag');
     });
 
@@ -50,6 +51,7 @@ Route::group(['prefix' => 'v1' , 'middleware' => 'auth:api'], function () {
         Route::get('bags/{id}', 'Api\Ingest\BagController@show')->name('api.ingest.bags.show');
         Route::get('bags/{id}/files', 'Api\Ingest\BagController@showFiles');
         Route::post('bags/{id}/commit', 'Api\Ingest\BagController@commit');
+        Route::post('files/bag', 'Api\Ingest\BagController@bagSingleFile');
         Route::post('bags/{id}/piql', 'Api\Ingest\BagController@piqlIt');
         Route::get('bags/{id}/download', 'Api\Ingest\BagController@download');
         Route::get('files/{id}/download', 'Api\Ingest\BagController@downloadFile');

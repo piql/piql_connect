@@ -15,15 +15,17 @@ class FileUploadedEvent
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     public $file;
+    public $owner;
 
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct($file)
+    public function __construct( \App\File $file, \App\User $owner )
     {
         $this->file = $file;
+        $this->owner = $owner;
     }
 
     /**
