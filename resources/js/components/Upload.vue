@@ -20,33 +20,33 @@
 
         <div class="card upload-widget-back w-auto p-2 pt-3 pb-4 w-95">
             <div class="row mb-2">
-                <div class="col-sm-2 mr-1 ml-1">{{ $t('upload.sipName') }}</div>
+                <div v-if="compoundModeEnabled" class="col-sm-2 mr-1 ml-1">{{ $t('upload.sipName') }}</div>
                 <div class="col-sm-2 mr-1">{{ $t('Archive') }}</div>
                 <div class="col-sm-2 mr-1">{{ $t('Holding') }}</div>
-                <div class="col-sm-2 mr-1">{{ $t('upload.files') }}</div>
-                <div class="col-sm-1 listActionItems mr-3"></div>
-                <div class="col-sm-2"></div>
+                <div v-if="compoundModeEnabled" class="col-sm-2 mr-1">{{ $t('upload.files') }}</div>
+                <div v-if="compoundModeEnabled" class="col-sm-1 listActionItems mr-3"></div>
+                <div v-if="compoundModeEnabled" class="col-sm-2"></div>
             </div>
             <form v-on:submit.prevent="">
                 <div class="row">
-                    <div class="col-sm-2 mr-2">
+                    <div v-if="compoundModeEnabled" class="col-sm-2 mr-2">
                         <input value="" :placeholder="bag.name" v-model="bag.name" type="text" class="noTextTransform form-control pl-3" @input="setBagName" onclick="select()">
                     </div>
                     <div class="col-sm-2 mr-2">
                       <archive-picker :archives="archives" :initialSelection="selectedArchive" @selectionChanged="changedArchive"></archive-picker>
                    </div>
                     <div class="col-sm-2 mr-2">
-                      <holding-picker :holdings="holdings" :initialSelection="selectedHolding" @selectionChanged="changedHolding"></holding-picker>
+                      <holding-picker :holdings="holdings" :initialSelection="selectedHoldingTitle" @selectionChanged="changedHolding"></holding-picker>
                    </div>
 
-                    <div class="col-sm-1 card p-2 pr-4 mr-2" style="text-align: right; max-height: 3rem;">
+                    <div v-if="compoundModeEnabled" class="col-sm-1 card p-2 pr-4 mr-2" style="text-align: right; max-height: 3rem;">
                         {{ numberOfFiles || 0}}
                     </div>
-                    <div class="col-sm-2 listActionItems mr-2" style="text-align: center">
+                    <div v-if="compoundModeEnabled" class="col-sm-2 listActionItems mr-2" style="text-align: center">
                         <i class="fas fa-list-ul p-2 mr-4 hover-hand" @click="onClick('/ingest/tasks/'+bag.id)"></i>
                         <i class="fas fa-trash-alt p-2 hover-hand"></i>
                     </div>
-                    <div class="col-sm-2 text-center">
+                    <div v-if="compoundModeEnabled" class="col-sm-2 text-center">
                         <button class="btn btn-primary btn-lg mr-2 w-100" v-bind:class="[{ disabled : processDisabled  }]" v-on:click="commitBagToProcessing">{{$t('upload.processButton')}}</button>
                     </div>
                 </div>
@@ -93,22 +93,30 @@ export default {
                     onValidate: (id, name) => {
                         this.processDisabled = true;
                     },
-                    onComplete: (id, name, response, xhr, something) => {
-                        this.processDisabled = false;
-                        let uploadToBagId = this.bag.id;
+                    onComplete: async (id, name, response, xhr, something) => {
                         let fileSize = this.uploader.methods.getSize(id);
-                        axios.post('/api/v1/ingest/fileUploaded', {
-                            'fileName' : name,
-                            'result' : response,
-                            'bagId' : uploadToBagId,
-                            'fileSize': fileSize
-                        }).then( () => {
-                            if( this.bag.id == uploadToBagId ){
-                                axios.get("/api/v1/ingest/bags/"+uploadToBagId+"/files").then( (files) => {
-                                    this.files = files.data.data;
-                                });
-                            }
-                        });
+                        if( this.compoundModeEnabled ) {
+                            this.processDisabled = false;
+                            let uploadToBagId = this.bag.id;
+                            axios.post('/api/v1/ingest/fileUploaded', {
+                                'fileName' : name,
+                                'result' : response,
+                                'bagId' : uploadToBagId,
+                                'fileSize': fileSize
+                            }).then( async () => {
+                                if( this.bag.id == uploadToBagId ){ //???
+                                    await axios.get("/api/v1/ingest/bags/"+uploadToBagId+"/files").then( (files) => {
+                                        this.files = files.data.data;
+                                    });
+                                }
+                            })
+                        } else {
+                            axios.post("/api/v1/ingest/files/bag", {
+                                'fileName' : name,
+                                'result' : response,
+                                'fileSize': fileSize
+                            });
+                        }
                     }
                 }}});
         return {
@@ -116,10 +124,16 @@ export default {
             bag: {},
             files: {},
             userId: '',
+            userSettings: {
+            workflow: {
+                }
+            },
             processDisabled: true,
             fileInputDisabled: false,
             archives: [],
+            selectedArchive: {},
             holdings: [],
+            selectedHoldingTitle: {}
         };
     },
 
@@ -131,12 +145,9 @@ export default {
         numberOfFiles: function() {
             return this.files.length;
         },
-        selectedArchive: function() {
-            return this.bag.archive_uuid;
+        compoundModeEnabled: function() {
+            return this.userSettings.workflow.ingestCompoundModeEnabled;
         },
-        selectedHolding: function() {
-            return this.bag.holding_name;
-        }
     },
 
     methods: {
@@ -152,14 +163,17 @@ export default {
             this.processDisabled = true;
             this.fileInputDisabled = true;
 
-            let committed = (await axios.post("/api/v1/ingest/bags/"+this.bag.id+"/commit")).data.data;
+            await this.doProcessing( this.bag.id );
+            this.bag = await this.createBag("", this.userId, this.selectedArchive, this.selectedHoldingTitle );
+            this.fileInputDisabled = false;
+            this.$refs.gallery.ondrop = null;
+        },
+        async doProcessing( bagId ) {
+            let committed = (await axios.post("/api/v1/ingest/bags/"+bagId+"/commit")).data.data;
             this.$refs.gallery.clearDropzone();
             this.uploader.methods.reset();
             this.bagName = "";
-            this.bag = await this.createBag("", this.userId, this.selectedArchive, this.selectedHolding);
             this.files = [];
-            this.fileInputDisabled = false;
-            this.$refs.gallery.ondrop = null;
         },
         async setBagName() {
             let currentBagId = this.bag.id;
@@ -171,12 +185,12 @@ export default {
             });
             return this.bag;
         },
-        async createBag(bagName, userId, selectedArchive, selectedHolding) {
+        async createBag( bagName, userId, selectedArchive, selectedHoldingTitle ) {
             let createdBag = (await axios.post("/api/v1/ingest/bags/", {
                 name: bagName,
                 owner: userId,
                 archive_uuid: selectedArchive,
-                holding_name: selectedHolding
+                holding_name: selectedHoldingTitle
             })).data.data;
             return createdBag;
         },
@@ -188,45 +202,62 @@ export default {
             });
         },
         async changedArchive(archiveId) {
-            await this.setupHoldings(archiveId, this.bag.holding_name);
-            axios.patch("/api/v1/ingest/bags/"+this.bag.id, {
-                archive_uuid: archiveId,
-                holding_name: this.selectedHolding
-                }).then( (response) => {
-                    this.bag = response.data.data;
-            });
+            this.selectedArchive = archiveId;
+            if( this.compoundModeEnabled) {
+                await this.setupHoldings(archiveId, this.bag.holding_name);
+                axios.patch("/api/v1/ingest/bags/"+this.bag.id, {
+                    archive_uuid: archiveId,
+                    holding_name: this.selectedHoldingTitle
+                    }).then( (response) => {
+                        this.bag = response.data.data;
+                });
+            }
         },
         async changedHolding(holdingTitle) {
             let selectedArchive  = this.selectedArchive;
-            let bag = this.bag;
-            Vue.nextTick( async () => {
-                bag = await axios.patch("/api/v1/ingest/bags/"+bag.id, {
-                    archive_uuid: selectedArchive,
-                    holding_name: holdingTitle
-                }).data;
-            });
+            this.selectedHoldingTitle = holdingTitle;
+            if( this.compoundModeEnabled ) {
+                let bag = this.bag;
+                Vue.nextTick( async () => {
+                    bag = await axios.patch("/api/v1/ingest/bags/"+bag.id, {
+                        archive_uuid: selectedArchive,
+                        holding_name: holdingTitle
+                    }).data;
+                });
+            }
         },
     },
     async mounted() {
         await axios.get("/api/v1/planning/archives").then( (response) => {
             this.archives = response.data.data;
+            this.selectedArchive = this.archives[0].uuid;
         });
 
         this.userId = (await axios.get("/api/v1/system/currentUser")).data;
-        this.bag = (await axios.get("/api/v1/ingest/bags/latest")).data.data;
+        this.userSettings  = (await axios.get("/api/v1/system/currentUserSettings")).data;
 
-        if(this.bag !== undefined && this.bag.status === "open")
-        {
-            this.files = (await axios.get('/api/v1/ingest/bags/' + this.bag.id + '/files')).data.data;
+        if( this.compoundModeEnabled ) {
+
+            this.bag = (await axios.get("/api/v1/ingest/bags/latest")).data.data;
             Vue.nextTick( () => { $('#archivePicker').selectpicker('val', this.selectedArchive);});
-        }
-        else
-        {
-            this.bag = (await this.createBag("", this.userId, this.selectedArchive, this.selectedHolding));
-        }
-        if(this.files)
-        {
-            this.processDisabled = false;
+
+            if(this.bag !== undefined && this.bag.status === "open")
+            {
+                this.files = (await axios.get('/api/v1/ingest/bags/' + this.bag.id + '/files')).data.data;
+            }
+            else
+            {
+                this.bag = (await this.createBag( "", this.userId, this.selectedArchive, this.selectedHoldingTitle ));
+            }
+            if(this.files)
+            {
+                this.processDisabled = false;
+            }
+        } else {
+            Vue.nextTick( () => {
+                $('#archivePicker').selectpicker('val', this.selectedArchive);
+                this.setupHoldings( this.selectedArchive );
+            });
         }
     },
     props: {

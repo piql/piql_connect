@@ -10,13 +10,20 @@ use App\Bag;
 
 class StatusController extends Controller
 {
-    public function currentUser(Request $request)
+    public function currentUser( Request $request )
     {
-        return User::first()->id;
+        return Auth::id();
     }
 
-    public function currentBag(Request $request)
+    public function currentBag( Request $request )
     {
-        return Bag::latest()->first();
+        $userId = Auth::id();
+        return Bag::whereOwner( $userId )->latest()->first();
+    }
+
+    public function currentUserSettings( Request $request )
+    {
+        $user = Auth::user();
+        return $user->settings;
     }
 }

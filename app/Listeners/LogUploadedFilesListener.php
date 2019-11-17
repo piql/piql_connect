@@ -29,6 +29,7 @@ class LogUploadedFilesListener
     public function handle(FileUploadedEvent $event)
     {
         $file = $event->file;
-        Log::info("The file ".$file->fileName." with uuid ".$file->uuid." was uploaded to bag ".$file->bag_id."." );
+        $owner = $event->owner;
+        Log::info("The file ".$file->fileName." with uuid ".$file->uuid." was uploaded to bag ".$file->bag_id." by user ".$owner->username."." );
     }
 }

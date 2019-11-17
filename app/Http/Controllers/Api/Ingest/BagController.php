@@ -18,6 +18,7 @@ use App\Http\Resources\BagCollection;
 use App\Http\Resources\FileCollection;
 use Response;
 use App\Events\BagFilesEvent;
+use App\Events\FileUploadedEvent;
 use Carbon\Carbon;
 use Log;
 
@@ -45,7 +46,7 @@ class BagController extends Controller
     {
         $user = Auth::user();
         $bag = $user->bags()->latest()->first();
-        if( $bag == null ){
+        if( $bag == null || $bag->status !== 'open' ){
             $bagName = Carbon::now()->format("YmdHis");
             $bag = Bag::create(['name' => $bagName, 'owner' => $user->id]);
             $bag->storage_properties()->update(['archive_uuid' => Archive::first()->uuid, 'holding_name' => Archive::first()->holdings()->first()->title]);
@@ -305,6 +306,10 @@ class BagController extends Controller
     public function update( Request $request, $id )
     {
         $bag = Bag::find( $id );
+        if( $bag == null )
+        {
+            abort( response()->json([ 'error' => 404, 'message' => 'Bag not found for id '.$id ], 404 ) );
+        }
         if( $bag->owner !== Auth::user()->id ) {
             abort( response()->json([ 'error' => 401, 'message' => 'The current user is not authorized to update bag with id '.$id ], 401 ) );
         }
@@ -366,6 +371,34 @@ class BagController extends Controller
             Log::debug("Caught an exception closing bag with id " . $id . ". Exception: {$e}");
         }
     }
+
+    public function bagSingleFile( Request $request )
+    {
+        $bag = Bag::create([
+            'name' => $request->fileName,
+            'owner' => Auth::id()
+        ]);
+
+        $file = new File();
+        $file->fileName = $request->fileName;
+        $file->filesize = $request->fileSize;
+        $file->uuid = pathinfo($request->result["name"])['filename'];
+        $file->bag_id = $bag->id;
+        $file->save();
+
+        event( new FileUploadedEvent( $file, Auth::user() ) );
+
+        try {
+            $bag->applyTransition('close');
+            $bag->save();
+            Log::debug("emitting ProcessFilesEvent for bag with id " . $bag->id);
+            event(new BagFilesEvent($bag));
+        } catch (BagTransitionException $e) {
+            abort(501, "Caught an exception closing bag with id " . $bag->id . ". Exception: {$e}");
+            Log::debug("Caught an exception closing bag with id " . $bag->id . ". Exception: {$e}");
+        }
+    }
+
 
     public function piqlIt($id)
     {
