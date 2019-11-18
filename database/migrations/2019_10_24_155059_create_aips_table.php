@@ -17,8 +17,10 @@ class CreateAipsTable extends Migration
             $table->bigIncrements('id');
             $table->uuid('external_uuid');
             $table->uuid('owner');
-            $table->string('online_url')->nullable();
-            $table->string('offline_url')->nullable();
+            $table->bigInteger('online_storage_location_id')->nullable(); //location of online aip file (tarball etc)
+            $table->bigInteger('offline_storage_location_id')->nullable(); //same for offline files (amu config etc.)
+            $table->string('online_storage_path')->nullable(); //file path relative to storage location entry point for online AIP file ('/1234/5678/some_aip.tar')
+            $table->string('offline_storage_path')->nullable(); //same for offline files (path inside afs etc.)
             $table->timestamps();
             $table->softDeletes();
         });

@@ -18,8 +18,8 @@ class CreateDipsTable extends Migration
             $table->uuid('external_uuid');
             $table->uuid('owner');
             $table->uuid('aip_external_uuid')->nullable();
-            $table->string('online_url')->nullable();
-            $table->string('offline_url')->nullable();
+            $table->bigInteger('storage_location_id')->nullable();
+            $table->string('storage_path')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });
