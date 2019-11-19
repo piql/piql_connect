@@ -97,11 +97,11 @@ return [
         ],
         'am_aip' => [
             'driver' => 'local',
-            'root' => (storage_path('STORAGE_AIP_PATH')),
+            'root' => (storage_path(env('STORAGE_AIP_PATH'))),
         ],
         'am_dip' => [
             'driver' => 'local',
-            'root' => (storage_path('STORAGE_DIP_PATH')),
+            'root' => (storage_path(env('STORAGE_DIP_PATH'))),
         ],
     ],
 
