@@ -15,7 +15,6 @@ use Log;
 class TransferPackageToStorage implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
-    use InteractsWithQueue;
 
     private $storageLocation;
     private $uploadFileAtPath;
