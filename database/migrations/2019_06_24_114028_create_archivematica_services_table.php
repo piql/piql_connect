@@ -24,6 +24,7 @@ class CreateArchivematicaServicesTable extends Migration
             }
             $table->string('url');
             $table->string('api_token');
+            $table->string('service_type');
             $table->timestamps();
         });
 

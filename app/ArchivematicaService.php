@@ -16,7 +16,8 @@ class ArchivematicaService extends Model
     protected $fillable = [
         'id',
         'url',
-        'api_token'
+        'api_token',
+        'service_type'
     ];
 
     public static function boot()
@@ -25,7 +26,6 @@ class ArchivematicaService extends Model
         self::creating(function( $model ) /*Create a uuid converted to binary16 */
         {
             $model->id = Uuid::generate();
-            $model->api_token = Hash::make(Uuid::generate());
         });
     }
 

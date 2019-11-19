@@ -2,9 +2,21 @@
 
 use App\ArchivematicaService;
 use Illuminate\Database\Seeder;
+use Laravel\Passport\ClientRepository;
+use Illuminate\Support\Facades\Log;
 
 class ArchivematicaServiceSeeder extends Seeder
 {
+    /*
+     * Print a message to the screen and also write it to the info log
+     */
+
+    private function printAndLog(string $message)
+    {
+        print($message."\n");
+        Log::info($message);
+    }
+
     /**
      * Run the database seeds.
      *
@@ -12,22 +24,40 @@ class ArchivematicaServiceSeeder extends Seeder
      */
     public function run()
     {
-        $found = App\ArchivematicaService::first();
-        $service = $found ?? new ArchivematicaService();
-        $service->url = "http://172.17.0.1:62080/api";
-        $service->api_token = "test:test";
-        $service->save();
+        ArchivematicaService::truncate();
+        $dashboard = ArchivematicaService::create([
+            'url' => "http://172.17.0.1:62080/api",
+            'api_token' => "test:test",
+            'service_type' => 'dashboard'
+        ]);
 
-        $found = null;
-        if(App\ArchivematicaService::count() == 2) {
-            $found = App\ArchivematicaService::all()[1];
+        $storage = ArchivematicaService::create([
+            'url' => "http://172.17.0.1:62080/api",
+            'api_token' => "test:test",
+            'service_type' => 'storage'
+        ]);
+
+        // Create a Personal Access Client if no one exists
+        $clientRepository = new ClientRepository();
+        try {
+            $clientRepository->personalAccessClient();
+        } catch (RuntimeException $exception) {
+            $clientRepository->createPersonalAccessClient(null, "piqlConnect Personal Access Client", "http://localhost");
         }
-        $service = $found ?? new ArchivematicaService();
-        $service->url = "http://172.17.0.1:62081/api";
-        $service->save();
-        $service->api_token = "test:test";
-        $service->save();
-        dump("Remember to set/update Archivematica storage server callbacks with this url: ");
-        dump(route( 'api.ingest.triggers.am.callback', [$service->id, '']).'/<package_uuid>');
+
+        // Add default Archivematica Client for accessing Piql Connect trigger API
+        $amUser = App\User::firstOrNew(['username' => 'archivematica']);
+        $amUser->username = "archivematica";
+        $amUser->password = Hash::make(Uuid::generate());
+        $amUser->full_name = "Archivematica callback client";
+        $amUser->email = "";
+        $amUser->save();
+        $token  = $amUser->createToken("archivematica_callback_token")->accessToken;
+
+        $this->printAndLog("Important! Archivematica storage server POST-store AIP and DIP callbacks (GET) must be updated with url:\n"
+            . route( 'api.ingest.triggers.am.callback', [$storage->id, '']).'/<package_uuid>'."\n"
+            . "And headers:\n"
+            . "Accept: application/json \n"
+            . "Authorization: Bearer ".$token);
     }
 }
