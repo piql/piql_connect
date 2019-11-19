@@ -44,7 +44,7 @@ class ArchivematicaServiceApiTest extends TestCase
             'owner' => $this->testUser->id
         ];
 
-        $testService = \App\ArchivematicaService::create([ 'url' => 'am.test', 'api_token' => Hash::make('apitoken') ]);
+        $testService = \App\ArchivematicaService::create([ 'url' => 'am.test', 'api_token' => Hash::make('apitoken'), 'service_type' => 'dashboard' ]);
 
         $this->testBag = \App\Bag::create( $this->testBagData );
     }
