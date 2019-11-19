@@ -105,7 +105,7 @@ class Bag extends Model
 
     public function owner()
     {
-        return $this->belongsTo('App\User');
+        return User::find($this->owner);
     }
 
     public function files()

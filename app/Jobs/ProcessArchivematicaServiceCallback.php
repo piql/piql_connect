@@ -2,18 +2,22 @@
 
 namespace App\Jobs;
 
+use App\Aip;
 use App\Bag;
 use App\ArchivematicaService;
+use App\Dip;
 use App\Events\ErrorEvent;
 use App\Listeners\ArchivematicaServiceConnection;
 use App\Listeners\ArchivematicaStorageServerClient;
 use App\Interfaces\ArchivematicaConnectionServiceInterface;
+use App\StorageLocation;
 use App\StorageProperties;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
+use Illuminate\Support\Facades\Storage;
 use Log;
 
 class ProcessArchivematicaServiceCallback implements ShouldQueue
@@ -82,10 +86,38 @@ class ProcessArchivematicaServiceCallback implements ShouldQueue
             Log::info("AIP uuid '" . $this->packageUuid . "' is linked to bag " . $bag->uuid);
             $bag->storage_properties->aip_uuid = $this->packageUuid;
             $bag->storage_properties->save();
+
+            $aip = new Aip([
+                'external_uuid' => $this->packageUuid,
+                'owner' => $bag->owner,
+                'online_storage_location_id' => $bag->owner()->settings->defaultAipStorageLocationId,
+                'online_storage_path' => $contents->current_path
+            ]);
+            $aip->save();
+
+            dispatch( new TransferPackageToStorage(
+                StorageLocation::find($bag->owner()->settings->defaultAipStorageLocationId),
+                Storage::disk('am_aip'),
+                $contents->current_path
+            ));
         } elseif ($contents->package_type == "DIP") {
             Log::info("DIP uuid '" . $this->packageUuid . "' is linked to bag " . $bag->uuid);
             $bag->storage_properties->dip_uuid = $this->packageUuid;
             $bag->storage_properties->save();
+
+            $dip = new Dip([
+                'external_uuid' => $this->packageUuid,
+                'owner' => $bag->owner,
+                'online_storage_location_id' => $bag->owner()->settings->defaultDipStorageLocationId,
+                'online_storage_path' => $contents->current_path
+            ]);
+            $dip->save();
+
+            dispatch( new TransferPackageToStorage(
+                StorageLocation::find($bag->owner()->settings->defaultDipStorageLocationId),
+                Storage::disk('am_dip'),
+                $contents->current_path
+            ));
         } else {
             $message = "Unsupported package type: " . $contents->package_type . " ";
             $message .= "response: " . json_encode($response->contents);

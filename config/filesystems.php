@@ -91,9 +91,17 @@ return [
             'timeout' => 30,
         ],
 */
-         'am' => [
+        'am' => [
+           'driver' => 'local',
+           'root' => (storage_path(env('STORAGE_TRANSFER_PATH'))),
+        ],
+        'am_aip' => [
             'driver' => 'local',
-            'root' => (storage_path(env('STORAGE_TRANSFER_PATH'))),
+            'root' => (storage_path('STORAGE_AIP_PATH')),
+        ],
+        'am_dip' => [
+            'driver' => 'local',
+            'root' => (storage_path('STORAGE_DIP_PATH')),
         ],
     ],
 
