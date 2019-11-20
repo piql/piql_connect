@@ -7,7 +7,12 @@ services:
       dockerfile: ./app/Dockerfile
     volumes:
       - ".././:/var/www"
-      - "~/.am:/var/www/storage/am"
+      - type: bind
+        source: $HOME/.am/ss-location-data
+        target: /var/www/storage/ss-location-data
+      - type: bind
+        source: $HOME/.am/am-pipeline-data
+        target: /var/www/storage/am-pipeline-data
       - ./supervisor/:/etc/supervisor/        
     links:
       - database
@@ -89,4 +94,8 @@ networks:
 
 volumes:
   piqlConnect-mariadb:
+    external: true
+  ss-location-data:
+    external: true
+  am-pipeline-data:
     external: true

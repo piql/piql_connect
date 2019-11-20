@@ -10,9 +10,8 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Log;
 use BagitUtil;
 
-class CommitFilesToBagListener extends BagListener
+class CommitFilesToBagListener implements ShouldQueue
 {
-    protected $state = 'bag_files';
     protected $bagIt;
     /**
      * Create the event listener.
@@ -30,12 +29,15 @@ class CommitFilesToBagListener extends BagListener
      * @param  BagFilesEvent  $event
      * @return void
      */
-    public function _handle($event)
+    public function handle($event)
     {
         $bag = $event->bag->refresh();
+        $bag->applyTransition( "bag_files" );
+        $bag->save();
+
         $files = $bag->files;
 
-        // Create a bag
+        // Use bagIt to create a zipped bag on disk
         if(!$bag->files->count())
         {
             Log::error("Empty bag(".$bag->id.")");

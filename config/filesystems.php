@@ -43,23 +43,9 @@ return [
 
     'disks' => [
 
-        'uploader' => [
-            'driver' => 'local',
-            'root' => storage_path(env('STORAGE_UPLOADER_PATH')),
-        ],
-
-        'bags' => [
-            'driver' => 'local',
-            'root' => storage_path(env('STORAGE_BAGS_PATH')),
-        ],
-        'archivematica' => [
-            'driver' => 'local',
-            'root' => storage_path(env('STORAGE_TRANSFER_PATH')),
-        ],
-
         'local' => [
             'driver' => 'local',
-            'root' => storage_path('/'),
+            'root' => storage_path('app'),
         ],
 
         'public' => [
@@ -80,28 +66,31 @@ return [
             'use_path_style_endpoint' => true
         ],
 
-/*
-        'am' => [
-            'driver' => 'sftp',
-            'host' => '172.17.0.1',
-            'port' => 22,
-            'username' => 'kare',
-            'privateKey' => '/home/kare/.ssh/id_rsa',
-            'root' => '/home/kare/.am/ss-location-data',
-            'timeout' => 30,
+        'uploader' => [
+            'driver' => 'local',
+            'root' => env('STORAGE_UPLOADER_PATH'),
         ],
-*/
+
+        'bags' => [
+            'driver' => 'local',
+            'root' => env('STORAGE_BAGS_PATH'),
+        ],
+        'archivematica' => [
+            'driver' => 'local',
+            'root' => env('STORAGE_TRANSFER_PATH'),
+        ],
+
         'am' => [
            'driver' => 'local',
-           'root' => (storage_path(env('STORAGE_TRANSFER_PATH'))),
+           'root' => env('STORAGE_TRANSFER_PATH'),
         ],
         'am_aip' => [
             'driver' => 'local',
-            'root' => (storage_path(env('STORAGE_AIP_PATH'))),
+            'root' => env('STORAGE_AIP_PATH'),
         ],
         'am_dip' => [
             'driver' => 'local',
-            'root' => (storage_path(env('STORAGE_DIP_PATH'))),
+            'root' => env('STORAGE_DIP_PATH'),
         ],
     ],
 

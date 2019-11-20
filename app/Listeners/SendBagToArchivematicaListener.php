@@ -6,24 +6,20 @@ use App\Events\BagCompleteEvent;
 use App\Events\InitiateTransferToArchivematicaEvent;
 use App\Events\StartTransferToArchivematicaEvent;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Contracts\Filesystem\Filesystem;
-use Log;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Contracts\Filesystem\Filesystem;
+use Illuminate\Support\Facades\File;
+use Log;
 
-
-class SendBagToArchivematicaListener extends BagListener
+class SendBagToArchivematicaListener implements ShouldQueue
 {
-    protected $state = "move_to_outbox";
-    private $destination;
-
     /**
      * Create the event listener.
      *
      * @param Storage|null $storage
      */
-    public function __construct(Filesystem $storage = null)
+    public function __construct()
     {
-        $this->destination = $storage ?? Storage::disk('am');
     }
 
     /**
@@ -32,13 +28,22 @@ class SendBagToArchivematicaListener extends BagListener
      * @param  BagCompleteEvent  $event
      * @return void
      */
-    public function _handle($event)
+    public function handle($event)
     {
-        Log::debug("Handling BagCompleteEvent");
-        $bag = $event->bag;
+        $bag = $event->bag->refresh();
+        $bag->applyTransition( "move_to_outbox" );
+        $bag->save();
+
+        Log::debug("Handling BagCompleteEvent for bag {$bag->id} in state {$bag}");
 
         $sourceFile = $bag->storagePathCreated();
-        $this->destination->put( $bag->zipBagFileName(), fopen($sourceFile, 'r+'));
+//        Log::debug("SendBagToArchivematicaListener will write to path: {$destination}");
+//        $destination->put( $bag->zipBagFileName(), fopen($sourceFile, 'r+'));
+        $destination = Storage::disk( 'am' )->path( $bag->zipBagFileName() );
+        Log::debug("Copying bag {$sourceFile} to {$destination}");
+        //Storage::disk('local')->copy( $sourceFile, $destination );
+        //        File::copy( storage_path()."/storage/bags/".$bag->zipBagFileName(), storage_path()."/storage/ss-location-data/".$bag->zipBagFileName() );
+        Log::debug("Copying complete");
 
         event( new InitiateTransferToArchivematicaEvent( $bag ) );
     }

@@ -9,9 +9,8 @@ use App\Events\ApproveTransferToArchivematicaEvent;
 use App\Events\ErrorEvent;
 use Log;
 
-class InitiateTransferToArchivematicaListener extends BagListener
+class InitiateTransferToArchivematicaListener implements ShouldQueue
 {
-    protected $state = "initiate_transfer";
     private $amClient;
 
     /**
@@ -30,10 +29,12 @@ class InitiateTransferToArchivematicaListener extends BagListener
      * @param  object  $event
      * @return void
      */
-    public function _handle($event)
+    public function handle($event)
     {
-        $bag = $event->bag;
+        $bag = $event->bag->refresh();
         Log::info("Handling InitiateTransferToArchivematicaEvent for bag ".$bag->zipBagFileName()." with id: ".$bag->id);
+        $bag->applyTransition( "initiate_transfer" );
+        $bag->save();
 
         $response = $this->amClient->initiateTransfer($bag->name, $bag->uuid, $bag->zipBagFileName());
 
@@ -49,6 +50,6 @@ class InitiateTransferToArchivematicaListener extends BagListener
             return;
         }
 
-        event(new ApproveTransferToArchivematicaEvent($bag));
+        event(new ApproveTransferToArchivematicaEvent( $bag ));
     }
 }
