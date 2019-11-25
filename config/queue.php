@@ -41,6 +41,13 @@ return [
             'retry_after' => 90,
         ],
 
+        's3_upload' => [
+            'driver' => 'database',
+            'table' => 'tasks',
+            'queue' => 's3_upload',
+            'retry_after' => 90,
+        ],
+
         'beanstalkd' => [
             'driver' => 'beanstalkd',
             'host' => 'localhost',
