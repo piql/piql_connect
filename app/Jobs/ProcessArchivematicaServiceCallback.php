@@ -106,7 +106,7 @@ class ProcessArchivematicaServiceCallback implements ShouldQueue
                 StorageLocation::find($bag->owner()->settings->defaultAipStorageLocationId),
                 Storage::disk('am_aip'),
                 $contents->current_path
-            ));
+            ))->onQueue("s3_upload");
         } elseif ($contents->package_type == "DIP") {
             Log::info("DIP uuid '" . $this->packageUuid . "' is linked to bag " . $bag->uuid);
             $bag->storage_properties->dip_uuid = $this->packageUuid;
@@ -124,7 +124,7 @@ class ProcessArchivematicaServiceCallback implements ShouldQueue
                 StorageLocation::find($bag->owner()->settings->defaultDipStorageLocationId),
                 Storage::disk('am_dip'),
                 $contents->current_path
-            ));
+            ))->onQueue("s3_upload");
         } else {
             $message = "Unsupported package type: " . $contents->package_type . " ";
             $message .= "response: " . json_encode($response->contents);
