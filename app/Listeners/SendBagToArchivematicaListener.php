@@ -2,18 +2,19 @@
 
 namespace App\Listeners;
 
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Contracts\Filesystem\Filesystem;
+use Illuminate\Support\Facades\Storage;
 use App\Events\BagCompleteEvent;
 use App\Events\InitiateTransferToArchivematicaEvent;
 use App\Events\StartTransferToArchivematicaEvent;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Contracts\Filesystem\Filesystem;
+use App\Traits\BagOperations;
 use Log;
-use Illuminate\Support\Facades\Storage;
 
-
-class SendBagToArchivematicaListener extends BagListener
+class SendBagToArchivematicaListener implements ShouldQueue
 {
-    protected $state = "move_to_outbox";
+    use BagOperations;
+
     private $destination;
 
     /**
@@ -32,10 +33,13 @@ class SendBagToArchivematicaListener extends BagListener
      * @param  BagCompleteEvent  $event
      * @return void
      */
-    public function _handle($event)
+    public function handle( $event )
     {
-        Log::debug("Handling BagCompleteEvent");
         $bag = $event->bag;
+        if( !$this->tryBagTransition( $bag, "move_to_outbox" ) ){
+            Log::error(" SendBagToArchivematicaListener: Failed transition for bag with id {$bag->id} from state '{$bag->status}' to state '{move_to_outbox}'" );
+            return;
+        }
 
         $sourceFile = $bag->storagePathCreated();
         $this->destination->put( $bag->zipBagFileName(), fopen($sourceFile, 'r+'));

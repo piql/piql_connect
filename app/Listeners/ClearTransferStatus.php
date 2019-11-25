@@ -3,20 +3,25 @@
 
 namespace App\Listeners;
 
+use Illuminate\Contracts\Queue\ShouldQueue;
 use App\ArchivematicaService;
 use App\Events\ClearTransferStatusEvent;
 use App\Events\BagEvent;
 use App\Events\ErrorEvent;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Log;
 
 class ClearTransferStatus implements ShouldQueue
 {
     private $amClient;
 
-    public function __construct(ArchivematicaClient $amClient = null)
+    /**
+     * Create the event listener.
+     *
+     * @param ArchivematicaDashboardClientInterface
+     */
+    public function __construct( \App\Interfaces\ArchivematicaDashboardClientInterface $dashboardClient )
     {
-        $this->amClient = $amClient ?? new ArchivematicaClient(new ArchivematicaServiceConnection( ArchivematicaService::first()));
+        $this->amClient = $dashboardClient;
     }
 
     public function handle(ClearTransferStatusEvent $event)

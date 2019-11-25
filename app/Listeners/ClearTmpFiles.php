@@ -17,7 +17,6 @@ class ClearTmpFiles implements ShouldQueue
     public function handle(ClearTmpFilesEvent $event)
     {
         $bag = $event->bag;
-        Log::info("Clearing temporary files for bag ".$bag->zipBagFileName()." with id: ".$bag->id);
 
         $deleteFile = function ($file) use ($bag) {
             if(!is_dir("$file")) {

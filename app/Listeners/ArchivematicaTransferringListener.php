@@ -2,33 +2,35 @@
 
 namespace App\Listeners;
 
+use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use App\Events\BagCompleteEvent;
 use App\Events\ErrorEvent;
 use App\Events\ArchivematicaTransferringEvent;
 use App\Events\ArchivematicaIngestingEvent;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Suppoer\Facades\Storage;
-use GuzzleHttp\Client as Guzzle;
-use Log;
 use App\Bag;
 use App\Job;
 use App\ArchivematicaService;
+use App\Traits\BagOperations;
+use Carbon\Carbon;
+use Log;
 
-class ArchivematicaTransferringListener  extends BagListener
+class ArchivematicaTransferringListener implements ShouldQueue
 {
-    protected $state = "transferring";
+    use BagOperations;
+
     private $amClient;
 
     /**
      * Create the event listener.
      *
-     * @param ArchivematicaClient|null $amClient
+     * @param ArchivematicaDashboardClientInterface
      */
-    public function __construct(ArchivematicaClient $amClient = null)
+    public function __construct( \App\Interfaces\ArchivematicaDashboardClientInterface $dashboardClient )
     {
-        $this->amClient = $amClient ?? new ArchivematicaClient(new ArchivematicaServiceConnection( ArchivematicaService::first()));
+        $this->amClient = $dashboardClient;
     }
+
 
     /**
      * Handle the event.
@@ -36,11 +38,13 @@ class ArchivematicaTransferringListener  extends BagListener
      * @param  object  $event
      * @return void
      */
-    public function _handle($event)
+    public function handle( $event )
     {
         $bag = $event->bag;
-
-        Log::info("Handling ArchivematicaTransferringEvent for bag ".$bag->zipBagFileName()." with id: ".$bag->id);
+        if( !$this->tryBagTransition( $bag, "transferring" ) ){
+            Log::error(" ArchivematicaTransferringListener: Failed transition for bag with id {$bag->id} from state '{$bag->status}' to state '{transferring}'" );
+            return;
+        }
 
         // todo: use transfer UUID in get Transfer status
         $response = $this->amClient->getTransferStatus();
@@ -74,8 +78,6 @@ class ArchivematicaTransferringListener  extends BagListener
             }
         }
 
-        $this->delayedEvent(new ArchivematicaTransferringEvent($bag), now()->addSeconds(10) );
-
+        dispatch( function () use ( $bag ) { event( new ArchivematicaTransferringEvent( $bag ) );  } )->delay( Carbon::now()->addSeconds( 10 ) );
     }
-
 }

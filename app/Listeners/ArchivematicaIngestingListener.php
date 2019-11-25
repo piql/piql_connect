@@ -2,50 +2,48 @@
 
 namespace App\Listeners;
 
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Queue\InteractsWithQueue;
+use Carbon\Carbon;
 use App\Events\ArchivematicaIngestingEvent;
 use App\Events\ErrorEvent;
 use App\Events\IngestCompleteEvent;
-use App\Events\StartTransferToArchivematicaEvent;
-use App\StorageProperties;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Suppoer\Facades\Storage;
-use GuzzleHttp\Client as Guzzle;
-use Log;
 use App\Bag;
-use App\Job;
-use App\ArchivematicaService;
-use Symfony\Component\VarDumper\Cloner\VarCloner;
-use Symfony\Component\VarDumper\Dumper\CliDumper;
+use App\Traits\BagOperations;
+use Log;
 
-class ArchivematicaIngestingListener  extends BagListener
+class ArchivematicaIngestingListener implements ShouldQueue
 {
-    protected $state = "ingesting";
-    private $amClient;
+    use BagOperations;
+
+    private $dashboardClient;
 
     /**
      * Create the event listener.
      *
-     * @param ArchivematicaClient|null $amClient
+     * @param ArchivematicaDashboardClientInterface
      */
-    public function __construct(ArchivematicaClient $amClient = null)
+    public function __construct( \App\Interfaces\ArchivematicaDashboardClientInterface $dashboardClient )
     {
-        $this->amClient = $amClient ?? new ArchivematicaClient(new ArchivematicaServiceConnection( ArchivematicaService::first()));
+        $this->dashboardClient = $dashboardClient;
     }
 
     /**
-     * Handle the event.
+     * Handle event for reading back status from Archivematica from started ingests.
      *
      * @param  object  $event
      * @return void
      */
-    public function _handle($event)
+    public function handle( $event )
     {
         $bag = $event->bag;
-        Log::info("Handling ArchivematicaIngestingEvent for bag ".$bag->zipBagFileName()." with id: ".$bag->id);
+        if( !$this->tryBagTransition( $bag, "ingesting" ) ){
+            Log::error(" ArchivematicaIngestingListener: Failed transition for bag with id {$bag->id} from state '{$bag->status}' to state '{$transitionTo}'" );
+            return;
+        }
 
         // todo: use ingest UUID to retrieve status
-        $response = $this->amClient->getIngestStatus();
+        $response = $this->dashboardClient->getIngestStatus();
 
         if($response->statusCode != 200) {
             $message = "ingest status failed with error code " . $response->statusCode;
@@ -53,8 +51,8 @@ class ArchivematicaIngestingListener  extends BagListener
                 $message += " and error message: " . $response->content->message;
             }
 
-            Log::error($message);
-            event(new ErrorEvent($bag));
+            Log::error( $message );
+            event( new ErrorEvent( $bag ) );
             return;
         }
 
@@ -71,22 +69,18 @@ class ArchivematicaIngestingListener  extends BagListener
 
                     Log::info("Ingest complete for SIP with bag id ".$bag->id); //." with aip uuid: ".$status->uuid);
 
-                    $bag->storage_properties->update( ['aip_uuid' =>  $status->uuid] );
 
                     event(new IngestCompleteEvent($bag));
                     return;
                 } elseif ($status->status == "FAILED" || $status->status == "USER_INPUT" )
                 {
-                    Log::error("Ingest failed for with bag id " . $bag->id);
-                    event(new ErrorEvent($bag));
+                    event( new ErrorEvent( $bag ) );
                     return;
                 }
 
             }
         }
 
-        $this->delayedEvent(new ArchivematicaIngestingEvent($bag), now()->addSeconds(10) );
-
+        dispatch( function () use ( $bag ) { event( new ArchivematicaIngestingEvent( $bag ) );  } )->delay( Carbon::now()->addSeconds( 10 ) );
     }
-
 }

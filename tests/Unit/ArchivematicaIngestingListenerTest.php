@@ -7,8 +7,8 @@ use App\Events\ArchivematicaIngestingEvent;
 use App\Events\ErrorEvent;
 use App\Events\IngestCompleteEvent;
 use App\File;
-use App\Listeners\ArchivematicaClient;
 use App\Listeners\ArchivematicaIngestingListener;
+use App\Interfaces\ArchivematicaDashboardClientInterface;
 use App\StorageProperties;
 use App\User;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
@@ -55,7 +55,7 @@ class ArchivematicaIngestingListenerTest extends TestCase
         Event::fake();
         Bus::fake();
 
-        $amClient = \Mockery::mock(ArchivematicaClient::class);
+        $amClient = \Mockery::mock(ArchivematicaDashboardClientInterface::class);
         $amClient->shouldReceive('getIngestStatus')->once()->andReturns(
             (object)[
                 'contents' => (object) [
@@ -93,7 +93,7 @@ class ArchivematicaIngestingListenerTest extends TestCase
         Event::fake();
         Bus::fake();
 
-        $amClient = \Mockery::mock(ArchivematicaClient::class);
+        $amClient = \Mockery::mock(ArchivematicaDashboardClientInterface::class);
         $amClient->shouldReceive('getIngestStatus')->once()->andReturns(
             (object)[
                 'contents' => (object) [
@@ -124,7 +124,7 @@ class ArchivematicaIngestingListenerTest extends TestCase
         Event::fake();
         Bus::fake();
 
-        $amClient = \Mockery::mock(ArchivematicaClient::class);
+        $amClient = \Mockery::mock(ArchivematicaDashboardClientInterface::class);
         $amClient->shouldReceive('getIngestStatus')->once()->andReturns(
             (object)[
                 'contents' => (object) [
@@ -156,7 +156,7 @@ class ArchivematicaIngestingListenerTest extends TestCase
         Event::fake();
         Bus::fake();
 
-        $amClient = \Mockery::mock(ArchivematicaClient::class);
+        $amClient = \Mockery::mock(ArchivematicaDashboardClientInterface::class);
         $amClient->shouldReceive('getIngestStatus')->once()->andReturns(
             (object)[
                 'contents' => (object) [
@@ -196,7 +196,7 @@ class ArchivematicaIngestingListenerTest extends TestCase
         Event::fake();
         Bus::fake();
 
-        $amClient = \Mockery::mock(ArchivematicaClient::class);
+        $amClient = \Mockery::mock(ArchivematicaDashboardClientInterface::class);
         $amClient->shouldReceive('getIngestStatus')->once()->andReturns(
             (object)[
                 'contents' => (object) [

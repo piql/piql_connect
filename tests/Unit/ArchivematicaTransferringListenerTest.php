@@ -9,7 +9,7 @@ use App\Events\ArchivematicaTransferringEvent;
 use App\Events\ErrorEvent;
 use App\File;
 use App\Listeners\ApproveTransferToArchivematicaListener;
-use App\Listeners\ArchivematicaClient;
+use App\Interfaces\ArchivematicaDashboardClientInterface;
 use App\Listeners\ArchivematicaTransferringListener;
 use App\User;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
@@ -51,7 +51,7 @@ class ArchivematicaTransferringListenerTest extends TestCase
         Event::fake();
         Bus::fake();
 
-        $amClient = \Mockery::mock(ArchivematicaClient::class);
+        $amClient = \Mockery::mock(ArchivematicaDashboardClientInterface::class);
         $amClient->shouldReceive('getTransferStatus')->once()->andReturns(
             (object)[
                 'contents' => (object) [
@@ -89,7 +89,7 @@ class ArchivematicaTransferringListenerTest extends TestCase
         Event::fake();
         Bus::fake();
 
-        $amClient = \Mockery::mock(ArchivematicaClient::class);
+        $amClient = \Mockery::mock(ArchivematicaDashboardClientInterface::class);
         $amClient->shouldReceive('getTransferStatus')->once()->andReturns(
             (object)[
                 'contents' => (object) [
@@ -120,7 +120,7 @@ class ArchivematicaTransferringListenerTest extends TestCase
         Event::fake();
         Bus::fake();
 
-        $amClient = \Mockery::mock(ArchivematicaClient::class);
+        $amClient = \Mockery::mock(ArchivematicaDashboardClientInterface::class);
         $amClient->shouldReceive('getTransferStatus')->once()->andReturns(
             (object)[
                 'contents' => (object) [
@@ -152,7 +152,7 @@ class ArchivematicaTransferringListenerTest extends TestCase
         Event::fake();
         Bus::fake();
 
-        $amClient = \Mockery::mock(ArchivematicaClient::class);
+        $amClient = \Mockery::mock(ArchivematicaDashboardClientInterface::class);
         $amClient->shouldReceive('getTransferStatus')->once()->andReturns(
             (object)[
                 'contents' => (object) [
@@ -190,7 +190,7 @@ class ArchivematicaTransferringListenerTest extends TestCase
         Event::fake();
         Bus::fake();
 
-        $amClient = \Mockery::mock(ArchivematicaClient::class);
+        $amClient = \Mockery::mock(ArchivematicaDashboardClientInterface::class);
         $amClient->shouldReceive('getTransferStatus')->once()->andReturns(
             (object)[
                 'contents' => (object) [

@@ -8,7 +8,7 @@ use App\Events\ArchivematicaTransferringEvent;
 use App\Events\ErrorEvent;
 use App\File;
 use App\Listeners\ApproveTransferToArchivematicaListener;
-use App\Listeners\ArchivematicaClient;
+use App\Interfaces\ArchivematicaDashboardClientInterface;
 use App\User;
 use Illuminate\Foundation\Bus\PendingDispatch;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
@@ -54,7 +54,7 @@ class ApproveTransferToArchivematicaListenerTest extends TestCase
         Event::fake();
         Bus::fake();
 
-        $amClient = \Mockery::mock(ArchivematicaClient::class);
+        $amClient = \Mockery::mock(ArchivematicaDashboardClientInterface::class);
 
         $amClient->shouldReceive('getUnapprovedList')->once()->andReturns(
             (object)[
@@ -100,7 +100,7 @@ class ApproveTransferToArchivematicaListenerTest extends TestCase
         Event::fake();
         Bus::fake();
 
-        $amClient = \Mockery::mock(ArchivematicaClient::class);
+        $amClient = \Mockery::mock(ArchivematicaDashboardClientInterface::class);
 
         $amClient->shouldReceive('getUnapprovedList')->once()->andReturns(
             (object)[
@@ -132,7 +132,7 @@ class ApproveTransferToArchivematicaListenerTest extends TestCase
         Event::fake();
         Bus::fake();
 
-        $amClient = \Mockery::mock(ArchivematicaClient::class);
+        $amClient = \Mockery::mock(ArchivematicaDashboardClientInterface::class);
 
         $amClient->shouldReceive('getUnapprovedList')->once()->andReturns(
             (object)[
@@ -164,7 +164,7 @@ class ApproveTransferToArchivematicaListenerTest extends TestCase
         Event::fake();
         Bus::fake();
 
-        $amClient = \Mockery::mock(ArchivematicaClient::class);
+        $amClient = \Mockery::mock(ArchivematicaDashboardClientInterface::class);
 
         $amClient->shouldReceive('getUnapprovedList')->once()->andReturns(
             (object)[
@@ -195,7 +195,7 @@ class ApproveTransferToArchivematicaListenerTest extends TestCase
         );
 
         $event = new ApproveTransferToArchivematicaEvent($this->bag);
-        $listener =new ApproveTransferToArchivematicaListener($amClient);
+        $listener = new ApproveTransferToArchivematicaListener($amClient );
         $listener->handle($event);
 
         Bus::assertNotDispatched(CallQueuedClosure::class, function ($job) {

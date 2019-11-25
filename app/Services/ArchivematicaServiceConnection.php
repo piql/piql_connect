@@ -1,22 +1,23 @@
 <?php
 
 
-namespace App\Listeners;
+namespace App\Services;
 
 
 use App\ArchivematicaService;
+use App\Interfaces\ArchivematicaServiceConnectionInterface;
 use GuzzleHttp\Exception\RequestException;
 use Log;
 
-class ArchivematicaServiceConnection
+class ArchivematicaServiceConnection implements ArchivematicaServiceConnectionInterface
 {
 
     private $apiClient;
     private $service;
 
-    public function __construct(ArchivematicaService $service = null)
+    public function __construct( ArchivematicaService $service )
     {
-        $this->service = $service ?? ArchivematicaService::first();
+        $this->service = $service;
         $base_uri = $this->service->url;
         if(!endsWith($base_uri, '/')){
             $base_uri .='/';

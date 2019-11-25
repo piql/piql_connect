@@ -71,20 +71,17 @@ class ArchivematicaServiceCallbackTest extends TestCase
 
     public function test_with_valid_package_uuid_and_service_uuid_and_archivematica_returns_valid_AIP_description()
     {
-        $serviceConnection = Mockery::mock(ArchivematicaServiceConnection::class);
-        $serviceConnection->shouldReceive('doRequest')->once()->andReturns(
+        $storageClient = Mockery::mock( \App\Interfaces\ArchivematicaStorageClientInterface::class );
+        $storageClient->shouldReceive('getFileDetails')->once()->andReturn(
             $this->getFileDetailsResponse($this->packageUuid, $this->bag->uuid, 200)
         );
 
-        $connectionService = Mockery::mock(ArchivematicaConnectionService::class);
-        $connectionService->shouldReceive('getServiceConnectionByUuid')->once()->andReturn($serviceConnection);
-
-        Log::shouldReceive('info')->times(1)->with(\Mockery::pattern('/^Processing uploaded package with uuid:/'));
+        Log::shouldReceive('info')->times(1)->with(\Mockery::pattern('/^Processing callback for stored package with uuid:/'));
         Log::shouldReceive('info')->times(1)->with(\Mockery::pattern('/^AIP uuid /'));
         Log::shouldReceive('error')->times(0);
 
-        $job = new ProcessArchivematicaServiceCallback($this->serviceUuid, $this->packageUuid);
-        $job->handle($connectionService);
+        $job = new ProcessArchivematicaServiceCallback( $this->packageUuid );
+        $job->handle( $storageClient );
 
         self::assertEquals($this->packageUuid, $this->bag->storage_properties->aip_uuid);
 
@@ -95,20 +92,17 @@ class ArchivematicaServiceCallbackTest extends TestCase
 
     public function test_with_valid_package_uuid_and_service_uuid_and_archivematica_returns_valid_DIP_description()
     {
-        $serviceConnection = Mockery::mock(ArchivematicaServiceConnection::class);
-        $serviceConnection->shouldReceive('doRequest')->once()->andReturns(
+        $storageClient = Mockery::mock( \App\Interfaces\ArchivematicaStorageClientInterface::class );
+        $storageClient->shouldReceive('getFileDetails')->once()->andReturn(
             $this->getFileDetailsResponse($this->packageUuid, $this->bag->uuid, 200, 'DIP')
         );
 
-        $connectionService = Mockery::mock(ArchivematicaConnectionService::class);
-        $connectionService->shouldReceive('getServiceConnectionByUuid')->once()->andReturn($serviceConnection);
-
-        Log::shouldReceive('info')->times(1)->with(\Mockery::pattern('/^Processing uploaded package with uuid:/'));
+        Log::shouldReceive('info')->times(1)->with(\Mockery::pattern('/^Processing callback for stored package with uuid:/'));
         Log::shouldReceive('info')->times(1)->with(\Mockery::pattern('/^DIP uuid /'));
         Log::shouldReceive('error')->times(0);
 
-        $job = new ProcessArchivematicaServiceCallback($this->serviceUuid, $this->packageUuid);
-        $job->handle($connectionService);
+        $job = new ProcessArchivematicaServiceCallback( $this->packageUuid );
+        $job->handle( $storageClient );
 
         self::assertEquals($this->packageUuid, $this->bag->storage_properties->dip_uuid);
         Bus::assertDispatched(TransferPackageToStorage::class, function ($job) {
@@ -118,19 +112,16 @@ class ArchivematicaServiceCallbackTest extends TestCase
 
     public function test_with_valid_package_uuid_and_service_uuid_and_archivematica_returns_invalid_package_type()
     {
-        $serviceConnection = Mockery::mock(ArchivematicaServiceConnection::class);
-        $serviceConnection->shouldReceive('doRequest')->once()->andReturns(
+        $storageClient = Mockery::mock( \App\Interfaces\ArchivematicaStorageClientInterface::class );
+        $storageClient->shouldReceive('getFileDetails')->once()->andReturn(
             $this->getFileDetailsResponse($this->packageUuid, $this->bag->uuid, 200, 'x')
         );
 
-        $connectionService = Mockery::mock(ArchivematicaConnectionService::class);
-        $connectionService->shouldReceive('getServiceConnectionByUuid')->once()->andReturn($serviceConnection);
-
-        Log::shouldReceive('info')->times(1)->with(\Mockery::pattern('/^Processing uploaded package with uuid:/'));
+        Log::shouldReceive('info')->times(1)->with(\Mockery::pattern('/^Processing callback for stored package with uuid:/'));
         Log::shouldReceive('error')->times(1)->with(\Mockery::pattern('/^Unsupported package type/'));
 
         $job = new ProcessArchivematicaServiceCallback($this->serviceUuid, $this->packageUuid);
-        $job->handle($connectionService);
+        $job->handle( $storageClient );
 
         self::assertEquals(null, $this->bag->storage_properties->aip_uuid);
         self::assertEquals(null, $this->bag->storage_properties->dip_uuid);
@@ -139,38 +130,18 @@ class ArchivematicaServiceCallbackTest extends TestCase
         });
     }
 
-    public function test_with_invalid_package_uuid_and_service_uuid_and_archivematica_returns_404()
+    public function test_with_invalid_package_uuid_archivematica_returns_404()
     {
-        $serviceConnection = Mockery::mock(ArchivematicaServiceConnection::class);
-        $serviceConnection->shouldReceive('doRequest')->once()->andReturns(
-            $this->getFileDetailsResponse($this->packageUuid, $this->bag->uuid, 404)
+        $storageClient = Mockery::mock( \App\Interfaces\ArchivematicaStorageClientInterface::class );
+        $storageClient->shouldReceive('getFileDetails')->once()->andReturn(
+            $this->getFileDetailsResponse($this->packageUuid, $this->bag->uuid, 404 )
         );
 
-        $connectionService = Mockery::mock(ArchivematicaConnectionService::class);
-        $connectionService->shouldReceive('getServiceConnectionByUuid')->once()->andReturn($serviceConnection);
-
-        Log::shouldReceive('info')->times(1)->with(\Mockery::pattern('/^Processing uploaded package with uuid:/'));
+        Log::shouldReceive('info')->times(1)->with(\Mockery::pattern('/^Processing callback for stored package with uuid:/'));
         Log::shouldReceive('error')->times(1)->with(\Mockery::pattern('/^Get file details failed with error code/'));
 
-        $job = new ProcessArchivematicaServiceCallback($this->serviceUuid, $this->packageUuid);
-        $job->handle($connectionService);
-
-        self::assertEquals("", $this->bag->storage_properties->aip_uuid);
-        Bus::assertNotDispatched(TransferPackageToStorage::class, function ($job) {
-            return true;
-        });
-    }
-
-    public function test_with_valid_package_uuid_and_invalid_service_uuid()
-    {
-        $connectionService = Mockery::mock(ArchivematicaConnectionService::class);
-        $connectionService->shouldReceive('getServiceConnectionByUuid')->once()->andReturn(null);
-
-        Log::shouldReceive('info')->times(1)->with(\Mockery::pattern('/^Processing uploaded package with uuid:/'));
-        Log::shouldReceive('error')->times(1)->with(\Mockery::pattern('/^No service found with uuid/'));
-
-        $job = new ProcessArchivematicaServiceCallback($this->serviceUuid, $this->packageUuid);
-        $job->handle($connectionService);
+        $job = new ProcessArchivematicaServiceCallback( $this->packageUuid );
+        $job->handle( $storageClient );
 
         self::assertEquals("", $this->bag->storage_properties->aip_uuid);
         Bus::assertNotDispatched(TransferPackageToStorage::class, function ($job) {
@@ -180,19 +151,17 @@ class ArchivematicaServiceCallbackTest extends TestCase
 
     public function test_archivematica_returns_with_no_reference_bag_uuid()
     {
-        $serviceConnection = Mockery::mock(ArchivematicaServiceConnection::class);
-        $serviceConnection->shouldReceive('doRequest')->once()->andReturns(
+
+        $storageClient = Mockery::mock( \App\Interfaces\ArchivematicaStorageClientInterface::class );
+        $storageClient->shouldReceive('getFileDetails')->once()->andReturn(
             $this->getFileDetailsResponse($this->packageUuid, '57e2f036-dcf1-464f-a244-159eb6faa2c1', 200)
         );
 
-        $connectionService = Mockery::mock(ArchivematicaConnectionService::class);
-        $connectionService->shouldReceive('getServiceConnectionByUuid')->once()->andReturn($serviceConnection);
-
-        Log::shouldReceive('info')->times(1)->with(\Mockery::pattern('/^Processing uploaded package with uuid:/'));
+        Log::shouldReceive('info')->times(1)->with(\Mockery::pattern('/^Processing callback for stored package with uuid:/'));
         Log::shouldReceive('error')->times(1)->with(\Mockery::pattern('/^Could not find any storage properties linked to this uuid/'));
 
-        $job = new ProcessArchivematicaServiceCallback($this->serviceUuid, $this->packageUuid);
-        $job->handle($connectionService);
+        $job = new ProcessArchivematicaServiceCallback( $this->packageUuid );
+        $job->handle( $storageClient );
 
         self::assertEquals(null, $this->bag->storage_properties->aip_uuid);
         Bus::assertNotDispatched(TransferPackageToStorage::class, function ($job) {

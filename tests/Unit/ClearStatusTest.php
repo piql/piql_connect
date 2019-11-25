@@ -6,7 +6,7 @@ use App\Bag;
 use App\Events\ClearIngestStatusEvent;
 use App\Events\ClearTransferStatusEvent;
 use App\File;
-use App\Listeners\ArchivematicaClient;
+use App\Interfaces\ArchivematicaDashboardClientInterface;
 use App\Listeners\ClearIngestStatus;
 use App\Listeners\ClearTransferStatus;
 use App\User;
@@ -47,7 +47,7 @@ class ClearStatusTest extends TestCase
      */
     public function test_clear_tansfer_status() {
         // setup
-        $amClient = \Mockery::mock(ArchivematicaClient::class);
+        $amClient = \Mockery::mock(ArchivematicaDashboardClientInterface::class);
         $amClient->shouldReceive('getTransferStatus')->once()->andReturns(
             (object)[
                 'contents' => (object) [
@@ -84,7 +84,7 @@ class ClearStatusTest extends TestCase
     public function test_clear_ingest_status() {
         // setup
 
-        $amClient = \Mockery::mock(ArchivematicaClient::class);
+        $amClient = \Mockery::mock(ArchivematicaDashboardClientInterface::class);
         $amClient->shouldReceive('getIngestStatus')->once()->andReturns(
             (object)[
                 'contents' => (object) [

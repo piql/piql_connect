@@ -9,10 +9,12 @@ use App\Events\InitiateTransferToArchivematicaEvent;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Log;
 use BagitUtil;
+use App\Traits\BagOperations;
 
-class CommitFilesToBagListener extends BagListener
+class CommitFilesToBagListener implements ShouldQueue
 {
-    protected $state = 'bag_files';
+    use BagOperations;
+
     protected $bagIt;
     /**
      * Create the event listener.
@@ -30,9 +32,14 @@ class CommitFilesToBagListener extends BagListener
      * @param  BagFilesEvent  $event
      * @return void
      */
-    public function _handle($event)
+    public function handle( $event )
     {
-        $bag = $event->bag->refresh();
+        $bag = $event->bag;
+        if( !$this->tryBagTransition( $bag, "bag_files" ) ){
+            Log::error(" ArchivematicaIngestingListener: Failed transition for bag with id {$bag->id} from state '{$bag->status}' to state 'bag_files'" );
+            return;
+        }
+
         $files = $bag->files;
 
         // Create a bag
@@ -52,7 +59,6 @@ class CommitFilesToBagListener extends BagListener
 
         if($result)
         {
-            Log::info("Bag ".$bag->id." built ok!");
             event( new BagCompleteEvent ($bag) );
         }
         else

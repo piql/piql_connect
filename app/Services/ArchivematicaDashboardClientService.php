@@ -1,30 +1,26 @@
 <?php
 
-
-namespace App\Listeners;
-
+namespace App\Services;
 
 use App\ArchivematicaService;
+use App\Interfaces\ArchivematicaDashboardClientInterface;
+use App\Interfaces\ArchivematicaConnectionServiceInterface;
+use App\Services\ArchivematicaServiceConnection;
 use App\Bag;
 use GuzzleHttp\Client as Guzzle;
 use GuzzleHttp\Exception\TransferException;
 
-class ArchivematicaClient
+class ArchivematicaDashboardClientService implements ArchivematicaDashboardClientInterface
 {
-    private $connection;
+    private $dashboard;
     /**
      * Create the event listener.
      *
      * @return void
      */
-    public function __construct(ArchivematicaServiceConnection $connection = null)
+    public function __construct( ArchivematicaConnectionServiceInterface $connectionService )
     {
-        $this->connection = $connection ?? new ArchivematicaServiceConnection();
-        // todo: move this to controller
-        //$service = ArchivematicaService::first();
-        //if( $service == null ) {
-        //    abort( response()->json( ['error' => 428, 'message' => 'No archivematica service configuration could be found on this instance. A valid service configuration must be created first.'], 428 ) );
-        //}
+        $this->dashboard = $connectionService->getFirstAvailableDashboard();
     }
 
     public function initiateTransfer($transferName, $accession, $directory)
@@ -40,22 +36,22 @@ class ArchivematicaClient
                 "row_ids[]" => ""
             ];
 
-        return $this->connection->doRequest('POST', 'transfer/start_transfer/', ['form_params' => $formData]);
+        return $this->dashboard->doRequest('POST', 'transfer/start_transfer/', ['form_params' => $formData]);
     }
 
     public function getUnapprovedList()
     {
-        return $this->connection->doRequest('GET', 'transfer/unapproved/');
+        return $this->dashboard->doRequest('GET', 'transfer/unapproved/');
     }
 
     public function getTransferStatus($uuid = "")
     {
-        return $this->connection->doRequest('GET', 'transfer/status/'.$uuid);
+        return $this->dashboard->doRequest('GET', 'transfer/status/'.$uuid);
     }
 
     public function getIngestStatus($uuid = "")
     {
-        return $this->connection->doRequest('GET', 'ingest/status/'.$uuid);
+        return $this->dashboard->doRequest('GET', 'ingest/status/'.$uuid);
     }
 
     public function approveTransfer($directory)
@@ -66,18 +62,18 @@ class ArchivematicaClient
                 "directory" => $directory,
             ];
 
-        return $this->connection->doRequest('POST', 'transfer/approve/',
+        return $this->dashboard->doRequest('POST', 'transfer/approve/',
             ['form_params' => $formData]
         );
     }
 
     public function hideTransferStatus($uuid)
     {
-        return $this->connection->doRequest('DELETE', "transfer/{$uuid}/delete/");
+        return $this->dashboard->doRequest('DELETE', "transfer/{$uuid}/delete/");
     }
 
     public function hideIngestStatus($uuid)
     {
-        return $this->connection->doRequest('DELETE', "ingest/{$uuid}/delete/");
+        return $this->dashboard->doRequest('DELETE', "ingest/{$uuid}/delete/");
     }
 }

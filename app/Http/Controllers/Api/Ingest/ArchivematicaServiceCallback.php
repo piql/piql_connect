@@ -13,6 +13,8 @@ class ArchivematicaServiceCallback extends Controller
 {
     public function packageUploaded($serviceUuid, $packageUuid) {
 
+        //TODO: Store the service uuid in StorageProperties
+        //Passing it around still only allows for one static service...
         $validator = Validator::make( [
             'serviceUuid' => $serviceUuid,
             'packageUuid' => $packageUuid
@@ -27,7 +29,7 @@ class ArchivematicaServiceCallback extends Controller
             return response($validator->errors()->getMessages(), 400);
         }
 
-        $this->dispatch(new ProcessArchivematicaServiceCallback($serviceUuid, $packageUuid));
+        $this->dispatch( new ProcessArchivematicaServiceCallback( $packageUuid ) );
         return response("OK", 200);
     }
 }

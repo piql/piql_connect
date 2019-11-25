@@ -12,20 +12,24 @@ use Log;
 
 class ClearIngestStatus implements ShouldQueue
 {
-    private $amClient;
+    private $dashboardClient;
 
-    public function __construct(ArchivematicaClient $amClient = null)
+    /**
+     * Create the event listener.
+     *
+     * @param ArchivematicaDashboardClientInterface
+     */
+    public function __construct( \App\Interfaces\ArchivematicaDashboardClientInterface $dashboardClient )
     {
-        $this->amClient = $amClient ?? new ArchivematicaClient( new ArchivematicaServiceConnection( ArchivematicaService::first()) );
+        $this->dashboardClient = $dashboardClient;
     }
 
-    public function handle(ClearIngestStatusEvent $event)
+
+    public function handle( ClearIngestStatusEvent $event )
     {
         $bag = $event->bag;
 
-        Log::info("Clearing ingest status for bag ".$bag->zipBagFileName()." with id: ".$bag->id);
-
-        $response = $this->amClient->getIngestStatus();
+        $response = $this->dashboardClient->getIngestStatus();
         if($response->statusCode != 200) {
                 $message = "get ingest status failed with error code " . $response->statusCode;
             if (isset($response->content->error) && ($response->content->error == true)) {
@@ -41,7 +45,7 @@ class ClearIngestStatus implements ShouldQueue
         {
             if($status->name.".zip" == $bag->zipBagFileName())
             {
-                $hideResponse = $this->amClient->hideIngestStatus($status->uuid);
+                $hideResponse = $this->dashboardClient->hideIngestStatus($status->uuid);
                 if($hideResponse->statusCode != 200) {
                     $message = "hide transfer status failed with error code " . $hideResponse->statusCode;
                     if (isset($hideResponse->content->error) && ($hideResponse->content->error == true)) {

@@ -4,4 +4,19 @@
 namespace App\Events;
 
 
-class ArchivematicaIngestingEvent extends BagEvent {}
+use Illuminate\Queue\SerializesModels;
+use Illuminate\Foundation\Events\Dispatchable;
+use Illuminate\Broadcasting\InteractsWithSockets;
+use \App\Bag;
+
+class ArchivematicaIngestingEvent
+{
+    use Dispatchable, InteractsWithSockets, SerializesModels;
+
+    public $bag;
+
+    public function __construct(Bag $bag)
+    {
+        $this->bag = $bag;
+    }
+}

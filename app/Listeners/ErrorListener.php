@@ -5,10 +5,10 @@ namespace App\Listeners;
 
 use Log;
 use App\Events\ApproveTransferToArchivematicaEvent;
+use Illuminate\Contracts\Queue\ShouldQueue;
 
-class ErrorListener extends BagListener
+class ErrorListener implements ShouldQueue
 {
-    protected $state = "error";
     /**
      * Create the event listener.
      *
@@ -19,17 +19,19 @@ class ErrorListener extends BagListener
     }
 
     /**
-     * Handle the event.
+     * Handle Bag Error events.
      *
      * @param  object  $event
      * @return void
      */
-    public function _handle($event)
+    public function handle( $event )
     {
         $bag = $event->bag;
-        Log::error("Ingesting bag ".$bag->zipBagFileName()." with id: ".$bag->id." failed!");
+        if( Bag::find( $bag->id ) {
+            Log::error( "Ingest failed for with bag with id {$bag->id} and filename {$bag->zipBagFileName()}." );
+            $bag->update([ 'status' => 'error' ]);
+        } else {
+            Log::error( "Unknown error for ErrorListener for event {$event}" );
+        }
     }
-}
-{
 
-}

@@ -157,7 +157,7 @@ class Bag extends Model
 
         if(!$this->canTransition($transition))
         {
-            throw new BagTransitionException("transition '{$transition}' is not allows from state '{$this->status}'");
+            throw new BagTransitionException("transition '{$transition}' is not allowed from state '{$this->status}'");
         }
 
         if(!isset($this->smConfig['transitions'][$transition]['to'])) {
@@ -165,6 +165,7 @@ class Bag extends Model
         }
 
         $this->status = $this->smConfig['transitions'][$transition]['to'];
+        return $this;
     }
 
     public function getBagSize() {

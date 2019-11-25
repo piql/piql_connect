@@ -11,10 +11,12 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Log;
 use App\Bag;
+use App\Traits\BagOperations;
 
-class IngestCompleteListener extends BagListener
+class IngestCompleteListener implements ShouldQueue
 {
-    protected $state = "complete";
+    use BagOperations;
+
     /**
      * Create the event listener.
      *
@@ -31,9 +33,14 @@ class IngestCompleteListener extends BagListener
      * @param  IngestCompleteEvent  $event
      * @return void
      */
-    public function _handle($event)
+    public function handle($event)
     {
-        $bag = $event->bag;
+        $bag = $event->bag->refresh();
+        if( !$this->tryBagTransition( $bag, "complete" ) ){
+            Log::error(" ArchivematicaIngestingListener: Failed transition for bag with id {$bag->id} from state '{$bag->status}' to state '{$transitionTo}'" );
+            return;
+        }
+
         Job::currentJob($bag->owner)->bags()->toggle($bag);
         Log::info("Ingest complete: ".$bag->id." status: ".$bag->status);
 

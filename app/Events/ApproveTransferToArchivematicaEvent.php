@@ -2,5 +2,19 @@
 
 namespace App\Events;
 
+use Illuminate\Queue\SerializesModels;
+use Illuminate\Foundation\Events\Dispatchable;
+use Illuminate\Broadcasting\InteractsWithSockets;
+use \App\Bag;
 
-class ApproveTransferToArchivematicaEvent extends BagEvent {}
+class ApproveTransferToArchivematicaEvent
+{
+    use Dispatchable, InteractsWithSockets, SerializesModels;
+
+    public $bag;
+
+    public function __construct(Bag $bag)
+    {
+        $this->bag = $bag;
+    }
+}

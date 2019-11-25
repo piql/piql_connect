@@ -3,25 +3,27 @@
 
 namespace App\Listeners;
 
-
+use Illuminate\Contracts\Queue\ShouldQueue;
 use App\ArchivematicaService;
 use App\Events\ApproveTransferToArchivematicaEvent;
 use App\Events\ErrorEvent;
 use Log;
+use App\Traits\BagOperations;
 
-class InitiateTransferToArchivematicaListener extends BagListener
+class InitiateTransferToArchivematicaListener implements ShouldQueue
 {
-    protected $state = "initiate_transfer";
-    private $amClient;
+    use BagOperations;
+
+    private $dashboardClient;
 
     /**
      * Create the event listener.
      *
-     * @param ArchivematicaClient|null $amClient
+     * @param ArchivematicaDashboardClientInterface
      */
-    public function __construct(ArchivematicaClient $amClient = null)
+    public function __construct( \App\Interfaces\ArchivematicaDashboardClientInterface $dashboardClient )
     {
-        $this->amClient = $amClient ?? new ArchivematicaClient();
+        $this->dashboardClient = $dashboardClient;
     }
 
     /**
@@ -30,12 +32,15 @@ class InitiateTransferToArchivematicaListener extends BagListener
      * @param  object  $event
      * @return void
      */
-    public function _handle($event)
+    public function handle($event)
     {
-        $bag = $event->bag;
-        Log::info("Handling InitiateTransferToArchivematicaEvent for bag ".$bag->zipBagFileName()." with id: ".$bag->id);
+        $bag = $event->bag->refresh();
+        if( !$this->tryBagTransition( $bag, "initiate_transfer" ) ){
+            Log::error(" ArchivematicaIngestingListener: Failed transition for bag with id {$bag->id} from state '{$bag->status}' to state '{$transitionTo}'" );
+            return;
+        }
 
-        $response = $this->amClient->initiateTransfer($bag->name, $bag->uuid, $bag->zipBagFileName());
+        $response = $this->dashboardClient->initiateTransfer($bag->name, $bag->uuid, $bag->zipBagFileName());
 
         if($response->statusCode != 200) {
             $message = "Initiate transfer failed with error code " . $response->statusCode;

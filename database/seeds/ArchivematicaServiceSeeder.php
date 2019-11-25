@@ -32,7 +32,7 @@ class ArchivematicaServiceSeeder extends Seeder
         ]);
 
         $storage = ArchivematicaService::create([
-            'url' => "http://172.17.0.1:62080/api",
+            'url' => "http://172.17.0.1:62081/api",
             'api_token' => "test:test",
             'service_type' => 'storage'
         ]);

@@ -7,9 +7,7 @@ use App\Bag;
 use App\ArchivematicaService;
 use App\Dip;
 use App\Events\ErrorEvent;
-use App\Listeners\ArchivematicaServiceConnection;
-use App\Listeners\ArchivematicaStorageServerClient;
-use App\Interfaces\ArchivematicaConnectionServiceInterface;
+use App\Interfaces\ArchivematicaStorageClientInterface;
 use App\StorageLocation;
 use App\StorageProperties;
 use Illuminate\Bus\Queueable;
@@ -25,15 +23,14 @@ class ProcessArchivematicaServiceCallback implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     private $packageUuid;
-    private $serviceUuid;
+
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct($serviceUuid, $packageUuid)
+    public function __construct( $packageUuid )
     {
-        $this->serviceUuid = $serviceUuid;
         $this->packageUuid = $packageUuid;
     }
 
@@ -42,20 +39,11 @@ class ProcessArchivematicaServiceCallback implements ShouldQueue
      *
      * @return void
      */
-    public function handle(ArchivematicaConnectionServiceInterface $connectionService)
+    public function handle( ArchivematicaStorageClientInterface $storageClient )
     {
-        Log::info("Processing uploaded package with uuid: " . $this->packageUuid);
+        Log::info("Processing callback for stored package with uuid: " . $this->packageUuid);
 
-        $serviceConnection = $connectionService->getServiceConnectionByUuid($this->serviceUuid);
-        if($serviceConnection == null) {
-            // todo : make proper action
-            $message = "No service found with uuid " . $this->serviceUuid;
-
-            Log::error($message);
-            return;
-        }
-        $client = new  ArchivematicaStorageServerClient( $serviceConnection);
-        $response = $client->getFileDetails($this->packageUuid);
+        $response = $storageClient->getFileDetails( $this->packageUuid );
         $contents = $response->contents;
 
         if($response->statusCode != 200) {

@@ -3,41 +3,47 @@
 
 namespace App\Listeners;
 
-
+use Illuminate\Contracts\Queue\ShouldQueue;
 use App\ArchivematicaService;
 use App\Events\ApproveTransferToArchivematicaEvent;
 use App\Events\ArchivematicaTransferringEvent;
 use App\Events\ErrorEvent;
+use App\Interfaces\ArchivematicaDashboardClientInterface;
+use App\Traits\BagOperations;
 use Log;
 
-class ApproveTransferToArchivematicaListener extends BagListener
+class ApproveTransferToArchivematicaListener implements ShouldQueue
 {
-    protected $state = "approve_transfer";
-    private $amClient;
+    use BagOperations;
+
+    private $dashboardClient;
 
     /**
      * Create the event listener.
      *
-     * @param ArchivematicaClient|null $client
+     * @param ArchivematicaDashboardClientInterface
      */
-    public function __construct(ArchivematicaClient $client = null)
+    public function __construct( ArchivematicaDashboardClientInterface $dashboardClient )
     {
-        $this->amClient = $client ?? new ArchivematicaClient( new ArchivematicaServiceConnection( ArchivematicaService::first()));
+        $this->dashboardClient = $dashboardClient;
     }
 
     /**
-     * Handle the event.
+     * Handle Approve Transfer To Archivematica event.
      *
      * @param  object  $event
      * @return void
      */
-    public function _handle($event)
+    public function handle( $event )
     {
         $bag = $event->bag;
-        Log::info("Handling ApproveTransferToArchivematicaEvent for bag ".$bag->zipBagFileName()." with id: ".$bag->id);
+        if( !$this->tryBagTransition( $bag, "approve_transfer" ) ){
+            Log::error(" ArchivematicaIngestingListener: Failed transition for bag with id {$bag->id} from state '{$bag->status}' to state '{$transitionTo}'" );
+            return;
+        }
 
         // todo: use UUID instead of parsing all requests.
-        $response = $this->amClient->getUnapprovedList();
+        $response = $this->dashboardClient->getUnapprovedList();
 
         if( $response->statusCode != 200) {
             Log::error("Service replied with error message : " . ($response->content->message ?? ""));
@@ -50,7 +56,7 @@ class ApproveTransferToArchivematicaListener extends BagListener
         {
             if($status->directory == $bag->zipBagFileName()) {
 
-                $approveResponse = $this->amClient->approveTransfer($bag->zipBagFileName());
+                $approveResponse = $this->dashboardClient->approveTransfer($bag->zipBagFileName());
                 // todo: we need to take case of transfer UUID
                 if ($approveResponse->statusCode == 200) {
                     event(new ArchivematicaTransferringEvent($bag));
@@ -62,7 +68,6 @@ class ApproveTransferToArchivematicaListener extends BagListener
                 return;
             }
         }
-        $this->delayedEvent(new ApproveTransferToArchivematicaEvent($bag), now()->addSeconds(10) );
+        dispatch( function () use ( $bag ) { event( new ApproveTransferToArchivematicaEvent( $bag ) );  }, now()->addSeconds( 10 ) );
     }
-
 }

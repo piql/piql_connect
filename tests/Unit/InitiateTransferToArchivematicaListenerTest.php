@@ -8,8 +8,8 @@ use App\Events\ArchivematicaIngestingEvent;
 use App\Events\ErrorEvent;
 use App\Events\InitiateTransferToArchivematicaEvent;
 use App\File;
-use App\Listeners\ArchivematicaClient;
 use App\Listeners\InitiateTransferToArchivematicaListener;
+use App\Interfaces\ArchivematicaDashboardClientInterface;
 use App\User;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\Event;
@@ -46,7 +46,7 @@ class InitiateTransferToArchivematicaListenerTest extends TestCase
         // setup
         Event::fake();
 
-        $amClient = Mockery::mock(ArchivematicaClient::class);
+        $amClient = Mockery::mock(ArchivematicaDashboardClientInterface::class);
         $amClient->shouldReceive('initiateTransfer')->once()->andReturns(
             (object)[
                 'contents' => json_decode('{}'),
@@ -69,7 +69,7 @@ class InitiateTransferToArchivematicaListenerTest extends TestCase
         // setup
         Event::fake();
 
-        $amClient = Mockery::mock(ArchivematicaClient::class);
+        $amClient = Mockery::mock(ArchivematicaDashboardClientInterface::class);
         $amClient->shouldReceive('initiateTransfer')->once()->andReturns(
             (object)[
                 'contents' => json_decode('{"message" : "Error", "error" : "true" }'),

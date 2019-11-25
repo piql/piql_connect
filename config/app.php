@@ -181,7 +181,10 @@ return [
         App\Providers\CustomInflectionServiceProvider::class,
         App\Providers\ArchivalStorageServiceProvider::class,
         App\Providers\FilesystemDriverProvider::class,
-        App\Providers\SettingsProvider::class
+        App\Providers\SettingsProvider::class,
+        App\Providers\ArchivematicaConnectionServiceProvider::class,
+        App\Providers\ArchivematicaDashboardClientProvider::class,
+        App\Providers\ArchivematicaStorageClientProvider::class
 
     ],
 
