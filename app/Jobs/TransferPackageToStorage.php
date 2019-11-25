@@ -42,7 +42,9 @@ class TransferPackageToStorage implements ShouldQueue
         Log::info("Uploading files to " . $this->storageLocation->human_readable_name);
 
         if($this->localStorage->exists($this->uploadFileAtPath) !== true) {
-            Log::error("Upload failed: file does not exist '".$this->uploadFileAtPath."'");
+            $message = "Upload failed: file does not exist '".$this->uploadFileAtPath."'";
+            Log::error($message);
+            $this->fail(new \Exception($message));
             return;
         }
         $baseDir = $this->localStorage->path('');
@@ -54,14 +56,18 @@ class TransferPackageToStorage implements ShouldQueue
         foreach ($files as $filePath) {
             $file = new \Illuminate\Http\File($this->localStorage->path($filePath), false);
             if($file->isDir()) {
-                Log::error("Upload don't support directory uploads");
+                $message = "Upload don't support directory uploads";
+                Log::error($message);
+                $this->fail(new \Exception($message));
                 return;
             }
             $uploadPath = substr($file->getPath(), $baseDirLen);
             Log::debug("Uploading file '" . $file->getRealPath() . "' to '" . $uploadPath . "'");
             $result = $storage->upload( $this->storageLocation, $uploadPath, $file );
             if($result === false) {
-                Log::error("Upload failed : " . $result);
+                $message = "Upload failed : " . $result;
+                Log::error($message);
+                $this->fail(new \Exception($message));
                 return;
             }
         }

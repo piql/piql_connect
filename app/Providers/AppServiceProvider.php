@@ -6,6 +6,9 @@ use App\ArchivematicaService;
 use App\Listeners\ArchivematicaServiceConnection;
 use App\Listeners\SendBagToArchivematicaListener;
 use App\Services\ArchivematicaConnectionService;
+use Illuminate\Queue\Events\JobFailed;
+use Log;
+use Illuminate\Support\Facades\Queue;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\ServiceProvider;
 
@@ -44,5 +47,8 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         //
+        Queue::failing(function (JobFailed $event) {
+            Log::error("Job failed: id = " . $event->job->getJobId() . ", name " . $event->job->getName() .  " on connection " . $event->connectionName);
+        });
     }
 }

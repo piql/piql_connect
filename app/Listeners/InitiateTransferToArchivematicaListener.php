@@ -7,6 +7,7 @@ namespace App\Listeners;
 use App\ArchivematicaService;
 use App\Events\ApproveTransferToArchivematicaEvent;
 use App\Events\ErrorEvent;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Log;
 
 class InitiateTransferToArchivematicaListener extends BagListener

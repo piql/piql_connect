@@ -13,11 +13,13 @@ use App\Interfaces\ArchivematicaConnectionServiceInterface;
 use App\StorageLocation;
 use App\StorageProperties;
 use Illuminate\Bus\Queueable;
+use Illuminate\Queue\MaxAttemptsExceededException;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Support\Facades\Storage;
+
 use Log;
 
 class ProcessArchivematicaServiceCallback implements ShouldQueue
@@ -50,8 +52,8 @@ class ProcessArchivematicaServiceCallback implements ShouldQueue
         if($serviceConnection == null) {
             // todo : make proper action
             $message = "No service found with uuid " . $this->serviceUuid;
-
             Log::error($message);
+            $this->fail(new \Exception($message));
             return;
         }
         $client = new  ArchivematicaStorageServerClient( $serviceConnection);
@@ -64,9 +66,13 @@ class ProcessArchivematicaServiceCallback implements ShouldQueue
             $message = "Get file details failed with error code " . $response->statusCode;
             if (isset($contents->error) && ($contents->error == true)) {
                 $message += " and error message: " . $contents->message;
+                Log::error($message);
+                $this->fail(new \Exception($message));
+                return;
             }
 
             Log::error($message);
+            $this->release(10);
             return;
         }
 
@@ -79,6 +85,7 @@ class ProcessArchivematicaServiceCallback implements ShouldQueue
             $message = "Could not find any storage properties linked to this uuid: " . $this->packageUuid . " ";
             $message .= "response: " . json_encode($response->contents);
             Log::error($message);
+            $this->fail(new \Exception($message));
             return;
         }
 
@@ -122,7 +129,17 @@ class ProcessArchivematicaServiceCallback implements ShouldQueue
             $message = "Unsupported package type: " . $contents->package_type . " ";
             $message .= "response: " . json_encode($response->contents);
             Log::error($message);
+            $this->fail(new \Exception($message));
         }
 
+    }
+
+
+    public function failed(\Exception $exception)
+    {
+        if( $exception instanceof MaxAttemptsExceededException )
+        {
+            Log::error("Too many attempts. Giving up");
+        }
     }
 }
