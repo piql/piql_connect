@@ -49,13 +49,14 @@ class ArchivematicaClientTest extends TestCase
             );
         };
 
-        $connnectionService = Mockery::mock( ArchivematicaServiceConnectionInterface::class )
-            ->shouldReceive('doRequest')
-            ->withArgs( $closure );
+        $connnectionService = Mockery::mock( ArchivematicaServiceConnectionInterface::class, function( $mock ) use ($closure) {
+            $mock->shouldReceive('doRequest')->once()
+                ->withArgs( $closure );
+        });
 
-        $this->mock(ArchivematicaConnectionServiceInterface::class, function( $mock ) {
+        $this->mock(ArchivematicaConnectionServiceInterface::class, function( $mock ) use ($connnectionService) {
             $mock->shouldReceive('getFirstAvailableDashboard')->once()
-                 ->andReturn( new ArchivematicaServiceConnection( new ArchivematicaService() ) );
+                 ->andReturns( $connnectionService );
         });
         $amClient = resolve('App\Interfaces\ArchivematicaDashboardClientInterface');
         $amClient->initiateTransfer($this->bag->name, $this->bag->uuid, $this->bag->zipBagFileName());
@@ -71,13 +72,14 @@ class ArchivematicaClientTest extends TestCase
             );
         };
 
-        $connnectionService = Mockery::mock( ArchivematicaServiceConnectionInterface::class )
-            ->shouldReceive('doRequest')
-            ->withArgs( $closure );
+        $connnectionService = Mockery::mock( ArchivematicaServiceConnectionInterface::class, function( $mock ) use ($closure) {
+            $mock->shouldReceive('doRequest')
+                 ->withArgs( $closure );
+        });
 
-        $this->mock(ArchivematicaConnectionServiceInterface::class, function( $mock ) {
+        $this->mock(ArchivematicaConnectionServiceInterface::class, function( $mock ) use ($connnectionService){
             $mock->shouldReceive('getFirstAvailableDashboard')->once()
-                 ->andReturn( new ArchivematicaServiceConnection( new ArchivematicaService() ) );
+                 ->andReturn( $connnectionService );
         });
         $amClient = resolve('App\Interfaces\ArchivematicaDashboardClientInterface');
         $amClient->getUnapprovedList();
@@ -93,14 +95,16 @@ class ArchivematicaClientTest extends TestCase
             );
         };
 
-        $connnectionService = Mockery::mock( ArchivematicaServiceConnectionInterface::class )
-            ->shouldReceive('doRequest')
-            ->withArgs( $closure );
-
-        $this->mock(ArchivematicaConnectionServiceInterface::class, function( $mock ) {
-            $mock->shouldReceive('getFirstAvailableDashboard')->once()
-                 ->andReturn( new ArchivematicaServiceConnection( new ArchivematicaService() ) );
+        $connnectionService = Mockery::mock( ArchivematicaServiceConnectionInterface::class, function( $mock ) use ($closure) {
+            $mock->shouldReceive('doRequest')
+                ->withArgs( $closure );
         });
+
+        $this->mock(ArchivematicaConnectionServiceInterface::class, function( $mock ) use($connnectionService) {
+            $mock->shouldReceive('getFirstAvailableDashboard')->once()
+                 ->andReturn( $connnectionService );
+        });
+
         $amClient = resolve('App\Interfaces\ArchivematicaDashboardClientInterface');
         $amClient->getTransferStatus();
     }
@@ -115,13 +119,14 @@ class ArchivematicaClientTest extends TestCase
             );
         };
 
-        $connectionService = Mockery::mock( ArchivematicaServiceConnectionInterface::class )
-            ->shouldReceive('doRequest')
-            ->withArgs( $closure );
+        $connnectionService = Mockery::mock( ArchivematicaServiceConnectionInterface::class, function( $mock ) use ($closure) {
+            $mock->shouldReceive('doRequest')
+                ->withArgs( $closure );
+        });
 
-        $this->mock(ArchivematicaConnectionServiceInterface::class, function( $mock ) {
+        $this->mock(ArchivematicaConnectionServiceInterface::class, function( $mock ) use($connnectionService) {
             $mock->shouldReceive('getFirstAvailableDashboard')->once()
-                 ->andReturn( new ArchivematicaServiceConnection( new ArchivematicaService() ) );
+                ->andReturn( $connnectionService );
         });
 
         $amClient = resolve('App\Interfaces\ArchivematicaDashboardClientInterface');
@@ -138,13 +143,14 @@ class ArchivematicaClientTest extends TestCase
             );
         };
 
-        $connectionService = Mockery::mock( ArchivematicaServiceConnectionInterface::class )
-            ->shouldReceive('doRequest')
-            ->withArgs( $closure );
+        $connnectionService = Mockery::mock( ArchivematicaServiceConnectionInterface::class, function( $mock ) use ($closure) {
+            $mock->shouldReceive('doRequest')
+                ->withArgs( $closure );
+        });
 
-        $this->mock(ArchivematicaConnectionServiceInterface::class, function( $mock ) {
+        $this->mock(ArchivematicaConnectionServiceInterface::class, function( $mock ) use($connnectionService) {
             $mock->shouldReceive('getFirstAvailableDashboard')->once()
-                 ->andReturn( new ArchivematicaServiceConnection( new ArchivematicaService() ) );
+                ->andReturn( $connnectionService );
         });
 
         $amClient = resolve('App\Interfaces\ArchivematicaDashboardClientInterface');
@@ -161,13 +167,14 @@ class ArchivematicaClientTest extends TestCase
             );
         };
 
-        $connectionService = Mockery::mock( ArchivematicaServiceConnectionInterface::class )
-            ->shouldReceive('doRequest')
-            ->withArgs( $closure );
+        $connnectionService = Mockery::mock( ArchivematicaServiceConnectionInterface::class, function( $mock ) use ($closure) {
+            $mock->shouldReceive('doRequest')
+                ->withArgs( $closure );
+        });
 
-        $this->mock(ArchivematicaConnectionServiceInterface::class, function( $mock ) {
+        $this->mock(ArchivematicaConnectionServiceInterface::class, function( $mock ) use($connnectionService) {
             $mock->shouldReceive('getFirstAvailableDashboard')->once()
-                 ->andReturn( new ArchivematicaServiceConnection( new ArchivematicaService() ) );
+                ->andReturn( $connnectionService );
         });
 
 
@@ -186,13 +193,14 @@ class ArchivematicaClientTest extends TestCase
             );
         };
 
-        $connectionService = Mockery::mock( ArchivematicaServiceConnectionInterface::class )
-            ->shouldReceive('doRequest')
-            ->withArgs( $closure );
+        $connnectionService = Mockery::mock( ArchivematicaServiceConnectionInterface::class, function( $mock ) use ($closure) {
+            $mock->shouldReceive('doRequest')
+                ->withArgs( $closure );
+        });
 
-        $this->mock(ArchivematicaConnectionServiceInterface::class, function( $mock ) {
+        $this->mock(ArchivematicaConnectionServiceInterface::class, function( $mock ) use($connnectionService) {
             $mock->shouldReceive('getFirstAvailableDashboard')->once()
-                 ->andReturn( new ArchivematicaServiceConnection( new ArchivematicaService() ) );
+                ->andReturn( $connnectionService );
         });
 
         $amClient = resolve('App\Interfaces\ArchivematicaDashboardClientInterface');
@@ -209,13 +217,14 @@ class ArchivematicaClientTest extends TestCase
             );
         };
 
-        $connectionService = Mockery::mock( ArchivematicaServiceConnectionInterface::class )
-            ->shouldReceive('doRequest')
-            ->withArgs( $closure );
+        $connnectionService = Mockery::mock( ArchivematicaServiceConnectionInterface::class, function( $mock ) use ($closure) {
+            $mock->shouldReceive('doRequest')
+                ->withArgs( $closure );
+        });
 
-        $this->mock(ArchivematicaConnectionServiceInterface::class, function( $mock ) {
+        $this->mock(ArchivematicaConnectionServiceInterface::class, function( $mock ) use($connnectionService) {
             $mock->shouldReceive('getFirstAvailableDashboard')->once()
-                 ->andReturn( new ArchivematicaServiceConnection( new ArchivematicaService() ) );
+                ->andReturn( $connnectionService );
         });
 
         $amClient = resolve('App\Interfaces\ArchivematicaDashboardClientInterface');
@@ -232,13 +241,14 @@ class ArchivematicaClientTest extends TestCase
             );
         };
 
-        $connnectionService = Mockery::mock( ArchivematicaServiceConnectionInterface::class )
-            ->shouldReceive('doRequest')
-            ->withArgs( $closure );
+        $connnectionService = Mockery::mock( ArchivematicaServiceConnectionInterface::class, function( $mock ) use ($closure) {
+            $mock->shouldReceive('doRequest')
+                ->withArgs( $closure );
+        });
 
-        $this->mock(ArchivematicaConnectionServiceInterface::class, function( $mock ) {
+        $this->mock(ArchivematicaConnectionServiceInterface::class, function( $mock ) use($connnectionService) {
             $mock->shouldReceive('getFirstAvailableDashboard')->once()
-                 ->andReturn( new ArchivematicaServiceConnection( new ArchivematicaService() ) );
+                ->andReturn( $connnectionService );
         });
 
         $amClient = resolve('App\Interfaces\ArchivematicaDashboardClientInterface');
