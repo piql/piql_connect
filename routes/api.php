@@ -17,6 +17,10 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+
+Route::get('test/getThumbnail', 'Api\Access\ThumbnailController@testThumbnail');
+Route::get('test/getPreview', 'Api\Access\ThumbnailController@testPreview');
+
 Route::group(['prefix' => 'v1'], function () {
     Route::post('login', 'Auth\ApiLoginController@login');
 });

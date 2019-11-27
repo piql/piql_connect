@@ -65,6 +65,13 @@ class ArchivalStorageService implements \App\Interfaces\ArchivalStorageInterface
         return $localFilenameWithDir;
     }
 
+    public function stream( \App\StorageLocation $storage, string $storagePath )
+    {
+        $driver = $this->getDriverFromConfig( $storage );
+        return $driver->get( $storagePath );
+    }
+
+
     public function delete( \App\StorageLocation $storage, string $remotePathToDelete)
     {
         $driver = $this->getDriverFromConfig( $storage );
