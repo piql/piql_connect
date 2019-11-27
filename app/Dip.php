@@ -18,7 +18,7 @@ class Dip extends Model
      */
     public function fileObjects()
     {
-        return $this->morphMany( 'App\FileObject', 'storable', null, 'storable_id', 'external_uuid' );
+        return $this->morphMany( 'App\FileObject', 'storable', null, 'storable_id' );
     }
 
     /* 
@@ -26,7 +26,7 @@ class Dip extends Model
      */
     public function mets()
     {
-        return $this->morphOne( 'App\Mets', 'metsable', null, 'metsable_id', 'external_uuid' );
+        return $this->morphOne( 'App\Mets', 'metsable', null, 'metsable_id');
     }
 
     /*

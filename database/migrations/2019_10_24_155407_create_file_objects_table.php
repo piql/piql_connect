@@ -15,6 +15,7 @@ class CreateFileObjectsTable extends Migration
     {
         Schema::create('file_objects', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->string('path');
             $table->string('object_type');
             $table->string('mime_type');
             $table->uuidMorphs('storable');

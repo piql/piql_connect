@@ -20,7 +20,7 @@ class Aip extends Model
      */
     public function fileObjects()
     {
-        return $this->morphMany('App\FileObject', 'storable', null, 'storable_id', 'external_uuid');
+        return $this->morphMany('App\FileObject', 'storable', null, 'storable_id' );
     }
 
     /*

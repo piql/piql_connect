@@ -88,7 +88,9 @@ class ProcessArchivematicaServiceCallback implements ShouldQueue
             dispatch( new TransferPackageToStorage(
                 $online_storage_location,
                 Storage::disk('am_aip'),
-                $contents->current_path
+                $contents->current_path,
+                'App\Aip',
+                $aip->id
             ));
         } elseif ($contents->package_type == "DIP") {
             Log::info("DIP uuid '" . $this->packageUuid . "' is linked to bag " . $bag->uuid);
@@ -108,7 +110,9 @@ class ProcessArchivematicaServiceCallback implements ShouldQueue
             dispatch( new TransferPackageToStorage(
                 $storage_location,
                 Storage::disk('am_dip'),
-                $contents->current_path
+                $contents->current_path,
+                "App\Dip",
+                $dip->id
             ));
         } else {
             $message = "Unsupported package type: " . $contents->package_type . " ";
