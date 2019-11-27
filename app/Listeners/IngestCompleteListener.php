@@ -35,8 +35,9 @@ class IngestCompleteListener implements ShouldQueue
      */
     public function handle($event)
     {
+        $transitionTo = 'complete';
         $bag = $event->bag->refresh();
-        if( !$this->tryBagTransition( $bag, "complete" ) ){
+        if( !$this->tryBagTransition( $bag, $transitionTo ) ){
             Log::error(" ArchivematicaIngestingListener: Failed transition for bag with id {$bag->id} from state '{$bag->status}' to state '{$transitionTo}'" );
             return;
         }

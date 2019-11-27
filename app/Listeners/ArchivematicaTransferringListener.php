@@ -40,9 +40,10 @@ class ArchivematicaTransferringListener implements ShouldQueue
      */
     public function handle( $event )
     {
+        $transitionTo = 'transferring';
         $bag = $event->bag;
-        if( !$this->tryBagTransition( $bag, "transferring" ) ){
-            Log::error(" ArchivematicaTransferringListener: Failed transition for bag with id {$bag->id} from state '{$bag->status}' to state '{transferring}'" );
+        if( !$this->tryBagTransition( $bag, $transitionTo ) ){
+            Log::error(" ArchivematicaTransferringListener: Failed transition for bag with id {$bag->id} from state '{$bag->status}' to state '{$transitionTo}'" );
             return;
         }
 
