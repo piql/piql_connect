@@ -12,8 +12,8 @@ use Log;
 
 class ArchivematicaServiceCallback extends Controller
 {
-    public function packageUploaded($serviceUuid, $packageUuid, Request $request) {
-        Log::debug("Receiving callback from {$serviceUuid} with {$packageUuid}");
+    public function packageUploaded($serviceUuid, $packageUuid )
+    {
 
         //TODO: Store the service uuid in StorageProperties
         //Passing it around still only allows for one static service...

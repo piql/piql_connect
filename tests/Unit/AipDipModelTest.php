@@ -5,6 +5,7 @@ namespace Tests\Unit;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Laravel\Passport\Passport;
 use Faker\Factory as faker;
 use Webpatser\Uuid\Uuid;
 use App\Aip;
@@ -27,6 +28,8 @@ class AipDipModelTest extends TestCase
         parent::setUp();
 
         $this->testUser = factory( \App\User::class )->create();
+        Passport::actingAs( $this->testUser );
+
         $this->external_aip_uuid = Uuid::generate();
         $this->external_dip_uuid = Uuid::generate();
     }
@@ -109,7 +112,7 @@ class AipDipModelTest extends TestCase
             'dip_uuid' => $dip->external_uuid
         ]);
 
-        $this->assertEquals( $this->external_dip_uuid, $aip->getDipFromStorageProperties()->external_uuid );
+        $this->assertEquals( $this->external_dip_uuid, $aip->storagePropertiesDip()->external_uuid );
     }
 
 
@@ -132,7 +135,7 @@ class AipDipModelTest extends TestCase
             'dip_uuid' => $dip->external_uuid
         ]);
 
-        $this->assertEquals( $this->external_aip_uuid, $dip->getAipFromStorageProperties()->external_uuid );
+        $this->assertEquals( $this->external_aip_uuid, $dip->storagePropertiesAip()->external_uuid );
     }
 
 

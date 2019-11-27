@@ -87,6 +87,9 @@ class BagApiTest extends TestCase
 
     private function createExtraUserAndBags( Array $overrides = [] )
     {
+        $createdBag = $this->createOneBag( $overrides );
+        $secondBag = $this->createOneBag(['name' => 'secondbag'] + $overrides );
+
         $this->otherUser = User::create([
             'username' => 'BagApiOtherTestUser',
             'password' => 'notinuse',
@@ -94,10 +97,10 @@ class BagApiTest extends TestCase
             'email' => 'bagapiothertestuser@localhost'
         ]);
 
-        $createdBag = $this->createOneBag( $overrides );
-        $secondBag = $this->createOneBag(['name' => 'secondbag'] + $overrides );
+        Passport::actingAs($this->otherUser);
         $otherBag = $this->createOneBag(['owner' => $this->otherUser->id, 'name' => 'otherbag'] + $overrides );
         $this->otherBag = $this->createOneBag(['owner' => $this->otherUser->id, 'name' => 'otherbag2'] + $overrides );
+        Passport::actingAs($this->testUser);
     }
 
     public function test_it_can_get_a_list_of_bags()

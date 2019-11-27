@@ -40,9 +40,9 @@ class Dip extends Model
     /*
      * Scan for an AIP through storage properties
      */
-    public function getAipFromStorageProperties()
+    public function storagePropertiesAip()
     {
-        return \App\Aip::whereExternalUuid($this->storageProperties->aip_uuid)->first();
+        return $this->storage_properties->aip;
     }
 
 
@@ -54,8 +54,14 @@ class Dip extends Model
         return User::find( $this->owner );
     }
 
-    public function storageProperties()
+    public function storage_properties()
     {
         return $this->belongsTo( 'App\StorageProperties', 'external_uuid', 'dip_uuid');
     }
+
+    public function storage_location()
+    {
+        return $this->belongsTo( 'App\StorageLocation', 'storage_location_id' );
+    }
+
 }

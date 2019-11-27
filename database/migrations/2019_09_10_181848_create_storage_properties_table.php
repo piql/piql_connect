@@ -21,6 +21,10 @@ class CreateStoragePropertiesTable extends Migration
             $table->uuid('sip_uuid')->nullable();
             $table->uuid('dip_uuid')->nullable();
             $table->uuid('aip_uuid')->nullable();
+            $table->bigInteger('aip_initial_online_storage_location');
+            $table->bigInteger('dip_initial_storage_location');
+            $table->uuid('archivematica_service_dashboard_uuid')->nullable();
+            $table->uuid('archivematica_service_storage_server_uuid')->nullable();
             $table->timestamps();
         });
     }
