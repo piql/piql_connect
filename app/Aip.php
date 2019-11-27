@@ -32,9 +32,9 @@ class Aip extends Model
     }
 
     /*
-     * The related DIP
+     * Scan for a DIP through storage properties
      */
-    public function dip()
+    public function getDipFromStorageProperties()
     {
         return \App\Dip::whereExternalUuid($this->storageProperties->dip_uuid)->first();
     }

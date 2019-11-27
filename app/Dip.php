@@ -34,8 +34,17 @@ class Dip extends Model
      */
     public function aip()
     {
+        return $this->hasOne( 'App\Aip', 'external_uuid', 'aip_external_uuid' );
+    }
+
+    /*
+     * Scan for an AIP through storage properties
+     */
+    public function getAipFromStorageProperties()
+    {
         return \App\Aip::whereExternalUuid($this->storageProperties->aip_uuid)->first();
     }
+
 
     /*
      * The owner of the object

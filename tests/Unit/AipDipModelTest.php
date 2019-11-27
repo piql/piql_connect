@@ -8,8 +8,10 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Faker\Factory as faker;
 use Webpatser\Uuid\Uuid;
 use App\Aip;
+use App\Bag;
 use App\Dip;
 use App\StorageLocation;
+use App\StorageProperties;
 use App\S3Configuration;
 
 class AipDipModelTest extends TestCase
@@ -87,6 +89,52 @@ class AipDipModelTest extends TestCase
 
         $this->assertEquals( $this->external_aip_uuid, $dip->aip->external_uuid );
     }
+
+    public function test_given_a_storage_properties_when_it_has_an_aip_and_a_dip_the_aip_can_get_the_dip()
+    {
+        $aip = Aip::create([ 
+            'external_uuid' => $this->external_aip_uuid,
+            'owner' => $this->testUser->id
+        ]);
+
+        $dip = Dip::create([ 
+            'external_uuid' => $this->external_dip_uuid,
+            'owner' => $this->testUser->id,
+            'aip_external_uuid' => $aip->external_uuid
+        ]);
+
+        $bag = Bag::create(['owner' => $this->testUser->id, 'name' => "testAipDipRelationBag"]);
+        $bag->storage_properties->update([
+            'aip_uuid' => $aip->external_uuid,
+            'dip_uuid' => $dip->external_uuid
+        ]);
+
+        $this->assertEquals( $this->external_dip_uuid, $aip->getDipFromStorageProperties()->external_uuid );
+    }
+
+
+    public function test_given_a_storage_properties_when_it_has_an_aip_and_a_dip_the_dip_can_get_the_aip()
+    {
+        $aip = Aip::create([ 
+            'external_uuid' => $this->external_aip_uuid,
+            'owner' => $this->testUser->id
+        ]);
+
+        $dip = Dip::create([ 
+            'external_uuid' => $this->external_dip_uuid,
+            'owner' => $this->testUser->id,
+            'aip_external_uuid' => $aip->external_uuid
+        ]);
+
+        $bag = Bag::create(['owner' => $this->testUser->id, 'name' => "testAipDipRelationBag"]);
+        $bag->storage_properties->update([
+            'aip_uuid' => $aip->external_uuid,
+            'dip_uuid' => $dip->external_uuid
+        ]);
+
+        $this->assertEquals( $this->external_aip_uuid, $dip->getAipFromStorageProperties()->external_uuid );
+    }
+
 
     public function test_given_a_storage_location_id_and_path_when_creating_an_aip_it_is_has_online_storage()
     {
