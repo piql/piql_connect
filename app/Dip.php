@@ -10,7 +10,7 @@ class Dip extends Model
     use SoftDeletes;
     protected $table = 'dips';
     protected $fillable = [
-        'external_uuid', 'owner', 'aip_external_uuid', 'storage_location_id', 'storage_location_path'
+        'external_uuid', 'owner', 'aip_external_uuid', 'storage_location_id', 'storage_path'
     ];
 
     /*
@@ -34,7 +34,7 @@ class Dip extends Model
      */
     public function aip()
     {
-        return $this->hasOne( 'App\Aip', 'external_uuid', 'aip_external_uuid' );
+        return \App\Aip::whereExternalUuid($this->storageProperties->aip_uuid)->first();
     }
 
     /*
@@ -45,4 +45,8 @@ class Dip extends Model
         return User::find( $this->owner );
     }
 
+    public function storageProperties()
+    {
+        return $this->belongsTo( 'App\StorageProperties', 'external_uuid', 'dip_uuid');
+    }
 }

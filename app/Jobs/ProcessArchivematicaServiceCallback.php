@@ -96,8 +96,8 @@ class ProcessArchivematicaServiceCallback implements ShouldQueue
             $dip = new Dip([
                 'external_uuid' => $this->packageUuid,
                 'owner' => $bag->owner,
-                'online_storage_location_id' => $bag->owner()->settings->defaultDipStorageLocationId,
-                'online_storage_path' => $contents->current_path
+                'storage_location_id' => $bag->owner()->settings->defaultDipStorageLocationId,
+                'storage_path' => $contents->current_path
             ]);
             $dip->save();
 

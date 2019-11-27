@@ -14,4 +14,15 @@ class StorageProperties extends Model
     {
         return $this->belongsTo('App\Bag', 'bag_uuid', 'uuid');
     }
+
+    public function aip()
+    {
+        return $this->hasOne('App\Aip', 'external_uuid', 'aip_uuid');
+    }
+
+    public function dip()
+    {
+        return $this->hasOne('App\Dip', 'external_uuid', 'dip_uuid');
+    }
+
 }
