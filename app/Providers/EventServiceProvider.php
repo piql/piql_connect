@@ -41,9 +41,6 @@ class EventServiceProvider extends ServiceProvider
         \App\Events\ArchivematicaIngestingEvent::class => [
             \App\Listeners\ArchivematicaIngestingListener::class
         ],
-        \App\Events\IngestCompleteEvent::class => [
-            \App\Listeners\IngestCompleteListener::class
-        ],
         \App\Events\ErrorEvent::class => [
             \App\Listeners\ErrorListener::class
         ],
@@ -56,6 +53,15 @@ class EventServiceProvider extends ServiceProvider
         \App\Events\ClearTmpFilesEvent::class => [
             \App\Listeners\ClearTmpFiles::class
         ],
+    ];
+
+    /**
+     * The subscriber classes to register.
+     *
+     * @var array
+     */
+    protected $subscribe = [
+        'App\Listeners\EventLogger',
     ];
 
     /**

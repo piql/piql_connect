@@ -17,7 +17,7 @@ trait BagOperations
     {
         if( ! $bag->canTransition( $transitionTo ) ) {
             //Todo: Separate event handling for transition errors
-            event( new \App\Events\ErrorEvent( $bag ) );
+            event( new \App\Events\BagStateTransitionError( $bag ) );
             return false;
         }
 
