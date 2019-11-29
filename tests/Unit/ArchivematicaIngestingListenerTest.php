@@ -62,14 +62,10 @@ class ArchivematicaIngestingListenerTest extends TestCase
             (object)[
                 'contents' => (object) [
                     'message' => 'Fetched ingest status successfully.',
-                    'results' =>  [
-                        (object) [
-                            'name' => $this->bag->BagFileNameNoExt(),
-                            'type' => 'zipped bag',
-                            'uuid' => 'b3a0a321-d857-4429-91ac-f28c6b9cb28d',
-                            'status' => 'COMPLETE'
-                        ]
-                    ]
+                    'name' => $this->bag->BagFileNameNoExt(),
+                    'type' => 'zipped bag',
+                    'uuid' => 'b3a0a321-d857-4429-91ac-f28c6b9cb28d',
+                    'status' => 'COMPLETE'
                 ],
                 'statusCode' => 200,
             ]
@@ -100,7 +96,7 @@ class ArchivematicaIngestingListenerTest extends TestCase
             (object)[
                 'contents' => (object) [
                     'message' => 'Bad Request',
-                    'error' =>  'true',
+                    'error' =>  true,
                 ],
                 'statusCode' => 400,
             ]
@@ -121,38 +117,6 @@ class ArchivematicaIngestingListenerTest extends TestCase
         Event::assertNotDispatched(IngestCompleteEvent::class);
     }
 
-    public function test_get_ingest_status_with_empty_set() {
-        // setup
-        Event::fake();
-        Bus::fake();
-
-        $amClient = \Mockery::mock(ArchivematicaDashboardClientInterface::class);
-        $amClient->shouldReceive('getIngestStatus')->once()->andReturns(
-            (object)[
-                'contents' => (object) [
-                    'message' => 'Fetched ingest status successfully.',
-                    'results' =>  [
-                    ]
-                ],
-                'statusCode' => 200,
-            ]
-        );
-
-        $event = new ArchivematicaIngestingEvent($this->bag);
-        $listener = new ArchivematicaIngestingListener($amClient);
-
-        //test
-        $listener->handle($event);
-
-        // assets
-        Bus::assertDispatched(CallQueuedClosure::class, function ($job) {
-            return true;
-        });
-
-        Event::assertNotDispatched(ErrorEvent::class);
-        Event::assertNotDispatched(IngestCompleteEvent::class);
-    }
-
     public function test_get_ingest_status_with_ERROR_status() {
         // setup
         Event::fake();
@@ -163,14 +127,10 @@ class ArchivematicaIngestingListenerTest extends TestCase
             (object)[
                 'contents' => (object) [
                     'message' => 'Fetched ingest status successfully.',
-                    'results' =>  [
-                        (object) [
-                            'name' => $this->bag->BagFileNameNoExt(),
-                            'type' => 'zipped bag',
-                            'uuid' => 'b3a0a321-d857-4429-91ac-f28c6b9cb28d',
-                            'status' => 'FAILED'
-                        ]
-                    ]
+                    'name' => $this->bag->BagFileNameNoExt(),
+                    'type' => 'zipped bag',
+                    'uuid' => 'b3a0a321-d857-4429-91ac-f28c6b9cb28d',
+                    'status' => 'FAILED'
                 ],
                 'statusCode' => 200,
             ]
@@ -203,14 +163,10 @@ class ArchivematicaIngestingListenerTest extends TestCase
             (object)[
                 'contents' => (object) [
                     'message' => 'Fetched ingest status successfully.',
-                    'results' =>  [
-                        (object) [
-                            'name' => $this->bag->BagFileNameNoExt(),
-                            'type' => 'zipped bag',
-                            'uuid' => 'b3a0a321-d857-4429-91ac-f28c6b9cb28d',
-                            'status' => 'USER_INPUT'
-                        ]
-                    ]
+                    'name' => $this->bag->BagFileNameNoExt(),
+                    'type' => 'zipped bag',
+                    'uuid' => 'b3a0a321-d857-4429-91ac-f28c6b9cb28d',
+                    'status' => 'USER_INPUT'
                 ],
                 'statusCode' => 200,
             ]

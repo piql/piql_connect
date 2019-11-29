@@ -18,6 +18,7 @@ class CreateStoragePropertiesTable extends Migration
             $table->uuid('bag_uuid');
             $table->uuid('archive_uuid')->nullable();
             $table->string('holding_name')->nullable();
+            $table->uuid('transfer_uuid')->nullable();
             $table->uuid('sip_uuid')->nullable();
             $table->uuid('dip_uuid')->nullable();
             $table->uuid('aip_uuid')->nullable();

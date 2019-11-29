@@ -187,4 +187,9 @@ class Bag extends Model
         }
         return $size;
     }
+
+    public function events()
+    {
+        return $this->morphMany('App\EventLogEntry', 'context');
+    }
 }

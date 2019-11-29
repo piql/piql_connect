@@ -4,7 +4,11 @@ namespace Tests\Unit;
 
 use App\Bag;
 use App\BagTransitionException;
+use App\EventLogEntry;
+use App\User;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\Log;
+use Laravel\Passport\Passport;
 use Tests\TestCase;
 use function Psy\debug;
 class TestBag extends Bag {
@@ -15,6 +19,8 @@ class TestBag extends Bag {
 
 class BagTest extends TestCase
 {
+    use DatabaseTransactions;
+
     private $bag;
 
     protected function setUp(): void
@@ -87,6 +93,35 @@ class BagTest extends TestCase
             }
         }
         return $testSet;
+    }
+
+    public function test_get_event_log_entries()
+    {
+        $user = factory(User::class)->create();
+        Passport::actingAs( $user );
+        $bag = factory(Bag::class)->create([
+            "status" => "initiate_transfer"
+        ]);
+        $eventEntry[] = new EventLogEntry([
+            'severity' => "DEBUG",
+            'type' => 'DUMMY_EVENT',
+            'message' => 'This is a dummy test',
+        ]);
+        $eventEntry[0]->context()->associate($bag);
+        $eventEntry[0]->save();
+
+        $eventEntry[] = new EventLogEntry([
+            'severity' => "ERROR",
+            'type' => 'DUMMY_ERROR_EVENT',
+            'message' => 'Holy crap something bad happened!',
+        ]);
+        $eventEntry[1]->context()->associate($bag);
+        $eventEntry[1]->save();
+
+        $bag->refresh();
+
+        $this->assertEquals($eventEntry[0]->id, $bag->events[0]->id);
+        $this->assertEquals($eventEntry[1]->id, $bag->events[1]->id);
     }
 
 

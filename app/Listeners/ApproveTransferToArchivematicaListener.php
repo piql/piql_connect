@@ -60,6 +60,8 @@ class ApproveTransferToArchivematicaListener implements ShouldQueue
                 $approveResponse = $this->dashboardClient->approveTransfer($bag->zipBagFileName());
                 // todo: we need to take case of transfer UUID
                 if ($approveResponse->statusCode == 200) {
+                    $bag->storage_properties->transfer_uuid = $approveResponse->contents->uuid;
+                    $bag->storage_properties->save();
                     event(new ArchivematicaTransferringEvent($bag));
                 } else {
                     Log::error("Approve transfer failed for with bag id " . $bag->id);
@@ -69,6 +71,6 @@ class ApproveTransferToArchivematicaListener implements ShouldQueue
                 return;
             }
         }
-        dispatch( function () use ( $bag ) { event( new ApproveTransferToArchivematicaEvent( $bag ) );  }, now()->addSeconds( 10 ) );
+        dispatch( function () use ( $bag ) { event( new ApproveTransferToArchivematicaEvent( $bag ) );  } )->delay( Carbon::now()->addSeconds( 10 ) );
     }
 }

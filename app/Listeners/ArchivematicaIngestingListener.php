@@ -44,12 +44,12 @@ class ArchivematicaIngestingListener implements ShouldQueue
         }
 
         // todo: use ingest UUID to retrieve status
-        $response = $this->dashboardClient->getIngestStatus();
+        $response = $this->dashboardClient->getIngestStatus($bag->storage_properties->sip_uuid);
 
         if($response->statusCode != 200) {
             $message = "ingest status failed with error code " . $response->statusCode;
-            if (isset($response->content->error) && ($response->content->error == true)) {
-                $message += " and error message: " . $response->content->message;
+            if (isset($response->contents->error) && ($response->contents->error == true)) {
+                $message .= " and error message: " . $response->contents->message;
             }
 
             Log::error( $message );
@@ -57,29 +57,24 @@ class ArchivematicaIngestingListener implements ShouldQueue
             return;
         }
 
-        foreach($response->contents->results as $status)
+        $ingestStatus = $response->contents->status;
+
+        if($ingestStatus == "COMPLETE" || env('APP_DEBUG_SKIP_INGEST_STATUS', false))
         {
-            if($status->name.".zip" == $bag->zipBagFileName())
+            if(env('APP_DEBUG_SKIP_INGEST_STATUS', false))
             {
-                if($status->status == "COMPLETE" || env('APP_DEBUG_SKIP_INGEST_STATUS', false))
-                {
-                    if(env('APP_DEBUG_SKIP_INGEST_STATUS', false))
-                    {
-                        Log::info("Ingest status bypass for SIP with bag id ".$bag->id);
-                    }
-
-                    Log::info("Ingest complete for SIP with bag id ".$bag->id); //." with aip uuid: ".$status->uuid);
-
-
-                    event(new IngestCompleteEvent($bag));
-                    return;
-                } elseif ($status->status == "FAILED" || $status->status == "USER_INPUT" )
-                {
-                    event( new ErrorEvent( $bag ) );
-                    return;
-                }
-
+                Log::info("Ingest status bypass for SIP with bag id ".$bag->id);
             }
+
+            Log::info("Ingest complete for SIP with bag id ".$bag->id); //." with aip uuid: ".$status->uuid);
+
+
+            event(new IngestCompleteEvent($bag));
+            return;
+        } elseif ($ingestStatus == "FAILED" || $ingestStatus == "USER_INPUT" )
+        {
+            event( new ErrorEvent( $bag ) );
+            return;
         }
 
         dispatch( function () use ( $bag ) { event( new ArchivematicaIngestingEvent( $bag ) );  } )->delay( Carbon::now()->addSeconds( 10 ) );

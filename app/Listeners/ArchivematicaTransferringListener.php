@@ -48,12 +48,12 @@ class ArchivematicaTransferringListener implements ShouldQueue
         }
 
         // todo: use transfer UUID in get Transfer status
-        $response = $this->amClient->getTransferStatus();
+        $response = $this->amClient->getTransferStatus($bag->storage_properties->transfer_uuid);
 
         if($response->statusCode != 200) {
             $message = " initiate transfer failed with error code " . $response->statusCode;
-            if (isset($response->content->error) && ($response->content->error == true)) {
-                $message += " and error message: " . $response->content->message;
+            if (isset($response->contents->error) && ($response->contents->error == true)) {
+                $message .= " and error message: " . $response->contents->message;
             }
 
             Log::error($message);
@@ -61,22 +61,20 @@ class ArchivematicaTransferringListener implements ShouldQueue
             return;
         }
 
-        foreach($response->contents->results as $status)
+        $transferStatus = $response->contents->status;
+
+        if($transferStatus == "COMPLETE")
         {
-            if($status->name.".zip" == $bag->zipBagFileName())
-            {
-                if($status->status == "COMPLETE")
-                {
-                    Log::info("Transfer complete for with bag id " . $bag->id);
-                    event(new ArchivematicaIngestingEvent($bag));
-                    return;
-                } elseif ($status->status == "FAILED" || $status->status == "USER_INPUT" )
-                {
-                    Log::error("Transfer failed for with bag id " . $bag->id);
-                    event(new ErrorEvent($bag));
-                    return;
-                }
-            }
+            Log::info("Transfer complete for with bag id " . $bag->id);
+            $bag->storage_properties->sip_uuid = $response->contents->sip_uuid;
+            $bag->storage_properties->save();
+            event(new ArchivematicaIngestingEvent($bag));
+            return;
+        } elseif ($transferStatus == "FAILED" || $transferStatus == "USER_INPUT" )
+        {
+            Log::error("Transfer failed for with bag id " . $bag->id);
+            event(new ErrorEvent($bag));
+            return;
         }
 
         dispatch( function () use ( $bag ) { event( new ArchivematicaTransferringEvent( $bag ) );  } )->delay( Carbon::now()->addSeconds( 10 ) );

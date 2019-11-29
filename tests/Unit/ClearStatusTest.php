@@ -49,23 +49,6 @@ class ClearStatusTest extends TestCase
     public function test_clear_tansfer_status() {
         // setup
         $amClient = \Mockery::mock(ArchivematicaDashboardClientInterface::class);
-        $amClient->shouldReceive('getTransferStatus')->once()->andReturns(
-            (object)[
-                'contents' => (object) [
-                    'message' => 'Fetched transfer status successfully.',
-                    'results' =>  [
-                        (object) [
-                            'name' => $this->bag->BagFileNameNoExt(),
-                            'type' => 'zipped bag',
-                            'uuid' => 'b3a0a321-d857-4429-91ac-f28c6b9cb28d',
-                            'status' => 'COMPLETE'
-                        ]
-                    ]
-                ],
-                'statusCode' => 200,
-            ]
-        );
-
         $amClient->shouldReceive('hideTransferStatus')->once()->andReturns(
             (object)[
                 'contents' => (object) [
@@ -86,23 +69,6 @@ class ClearStatusTest extends TestCase
         // setup
 
         $amClient = \Mockery::mock(ArchivematicaDashboardClientInterface::class);
-        $amClient->shouldReceive('getIngestStatus')->once()->andReturns(
-            (object)[
-                'contents' => (object) [
-                    'message' => 'Fetched ingest status successfully.',
-                    'results' =>  [
-                        (object) [
-                            'name' => $this->bag->BagFileNameNoExt(),
-                            'type' => 'zipped bag',
-                            'uuid' => 'b3a0a321-d857-4429-91ac-f28c6b9cb28d',
-                            'status' => 'COMPLETE'
-                        ]
-                    ]
-                ],
-                'statusCode' => 200,
-            ]
-        );
-
         $amClient->shouldReceive('hideIngestStatus')->once()->andReturns(
             (object)[
                 'contents' => (object) [
