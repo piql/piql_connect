@@ -1,9 +1,9 @@
 <template>
     <div class="container-fluid">
         <div class="row plistHeader">
-            <div class="col-sm-1"><input type="checkbox" class="checkbox" id="browserList" v-if="false"></div>
-            <div class="col-sm-9">{{$t('Filename')}}</div>
-            <div class="col-sm-2"></div>
+          <div class="col-sm-3">&nbsp;</div>
+            <div class="col-sm-5">{{$t('Filename')}}</div>
+            <div class="col-sm-2 text-center">Actions</div>
         </div>
 
         <span v-if="online">
@@ -17,7 +17,7 @@
             <div class="col-sm-1">
             </div>
             <div class="col-sm-8 mr-5 ">
-                Close bag
+                Close archive
             </div>
             <div class="col-sm-1">
                 <a href="#" @click="close"><i class="fas fa-backspace titleIcon"></i></a>

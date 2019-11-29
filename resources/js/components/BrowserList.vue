@@ -20,7 +20,7 @@
         </span>
         <VueEasyLightbox
             :visible="lbVisible"
-            :imgs="imgs"
+            :imgs="previewImages"
             :index="index"
             @hide="hideLightBox"
         />
@@ -53,10 +53,9 @@ import VueEasyLightbox from 'vue-easy-lightbox';
     },
     data() {
         return {
-            imgs: '',
             lbVisible: false,
             index: 0,
-            thumbnailImage: ''
+            previewImages: []
         }
     },
 
@@ -82,13 +81,24 @@ import VueEasyLightbox from 'vue-easy-lightbox';
             this.$emit('openObject', item);
         },
         async showPreview ( dip ) {
-						let response = await axios.get('/api/v1/access/dips/'+dip.id+'/previews', { responseType: 'arraybuffer' });
-						this.thumbnailImage = `data:${response.headers['content-type']};base64,${btoa(String.fromCharCode(...new Uint8Array(response.data)))}`;
-            this.imgs = this.thumbnailImage;
+            /* Grab all previews from a dip and convert to b64, then push to the lightbox.
+             * Code could be tidier.
+             */
+
             this.lbVisible = true;
+            let allFiles = ( await axios.get('/api/v1/access/dips/'+dip.id+'/files') ).data;
+            let fileIds = [];
+            for ( var i in allFiles ) {
+                fileIds.push( allFiles[i].id );
+            }
+            Promise.all( fileIds.map( async (fileId) => {
+                return axios.get('/api/v1/access/dips/'+dip.id+'/previews/files/'+fileId, { responseType: 'arraybuffer' }).then( (image) => {
+                    this.previewImages.push(`data:${image.headers['content-type']};base64,${btoa(String.fromCharCode(...new Uint8Array(image.data)))}`);
+                })}));
         },
         hideLightBox: function( e ) {
             this.lbVisible = false;
+            this.imgs = [];
         }
     },
 }

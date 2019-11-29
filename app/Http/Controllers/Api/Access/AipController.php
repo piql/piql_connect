@@ -63,7 +63,6 @@ class AipController extends Controller
 
     public function download(ArchivalStorageInterface $storage, Request $request)
     {
-        Log::debug("Preparing download for aip {$request->aipId}");
         $aip = Aip::find($request->aipId);
         $file = $aip->fileObjects->first();
 

@@ -96,9 +96,13 @@ Route::group(['prefix' => 'v1' , 'middleware' => 'auth:api'], function () {
         Route::get('aips/{aipId}/download', 'Api\Access\AipController@download');
         Route::get('dips/', 'Api\Access\DipController@index');
         Route::get('dips/{dipId}', 'Api\Access\DipController@show');
-        Route::get('dips/{dipId}/thumbnails/{fileObjectId}', 'Api\Access\DipController@file_thumbnail');
+        Route::get('dips/{dipId}/files', 'Api\Access\DipController@files');
         Route::get('dips/{dipId}/thumbnails', 'Api\Access\DipController@package_thumbnail');
+        Route::get('dips/{dipId}/thumbnails/files/{fileId}', 'Api\Access\DipController@file_thumbnail');
         Route::get('dips/{dipId}/previews', 'Api\Access\DipController@package_preview');
+        Route::get('dips/{dipId}/previews/files/{fileId}', 'Api\Access\DipController@file_preview');
+        Route::get('dips/{dipId}/downloads/files/{fileId}', 'Api\Access\DipController@file_download');
+        Route::get('aips/{dipId}/downloads/files/{fileId}', 'Api\Access\AipController@download');
     });
 
 

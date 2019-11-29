@@ -47,7 +47,7 @@
                     <identity v-else></identity>
                 </span>
                 <span v-if="fileMode">
-                    <browser-file-list :dataObjects="currentOpenObjectFiles" :location="selectedLocation" @close="closeFileList" @addFileToRetrieval="addFileToRetrieval" />
+                    <browser-file-list :dip="dip" :dataObjects="currentOpenObjectFiles" :location="selectedLocation" @close="closeFileList" @addFileToRetrieval="addFileToRetrieval" />
                 </span>
             </div>
             <div class="col-sm-2 mt-5">
@@ -207,8 +207,8 @@ export default {
                 'fileId' : file.id,
            }));
         },
-        openObject: async function(bagId) {
-            this.currentOpenObjectFiles = (await( axios.get("/api/v1/access/dips/"+bagId+"/files"))).data;
+        openObject: async function( dipId ) {
+            this.currentOpenObjectFiles = (await( axios.get("/api/v1/access/dips/"+dipId+"/files"))).data;
             this.fileMode = true;
         },
         closeFileList: function() {
