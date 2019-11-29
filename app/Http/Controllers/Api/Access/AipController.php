@@ -7,6 +7,7 @@ use App\Aip;
 use Illuminate\Http\Request;
 use App\Interfaces\ArchivalStorageInterface;
 use App\FileObject;
+use Log;
 
 class AipController extends Controller
 {
@@ -47,17 +48,30 @@ class AipController extends Controller
      * @param  \App\Aip  $aip
      * @return \Illuminate\Http\Response
      */
-    public function show(ArchivalStorageInterface $storage, Request $request)
+
+    public function show( Request $request )
     {
+        $aip = Aip::find( $request->aipId );
+        return response( $aip );
+    }
+
+    public function filename( Request $request )
+    {
+        $aip = Aip::find( $request->aipId );
+        return response ( $aip->fileObjects->first()->filename );
+    }
+
+    public function download(ArchivalStorageInterface $storage, Request $request)
+    {
+        Log::debug("Preparing download for aip {$request->aipId}");
         $aip = Aip::find($request->aipId);
         $file = $aip->fileObjects->first();
 
         return response()->streamDownload(function () use( $storage, $aip, $file ) {
-            echo $storage->stream( $aip->online_storage_location, $file->path );
+            echo $storage->stream( $aip->online_storage_location, $file->fullpath );
         }, basename( $file->path ), [
             "Content-Type" => "application/x-tar",
-            "Content-Disposition" => "attachment; { basename( $file->path ) }"
-
+            "Content-Disposition" => "attachment; { $file->filename }"
         ]);
     }
 

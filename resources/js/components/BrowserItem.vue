@@ -19,7 +19,7 @@
                 {{item.storage_properties.bag.fileCount}}
             </div>
             <div class="col-sm-1 align-self-center text-center">
-                <a v-bind:href="downloadUrl" data-toggle="tooltip" title="Download file"><i class="fas fa-file-download titleIcon text-center"></i></a>
+                <a @click="download" href="#" data-toggle="tooltip" title="Download file"><i class="fas fa-file-download titleIcon text-center"></i></a>
             </div>
             <div class="col-sm-1 align-self-center text-center">
                 <a @click="open" href="#" data-toggle="tooltip" title="Access contents" ><i class="fas fa-folder-open titleIcon"></i></a>
@@ -60,25 +60,23 @@
             preview: function(){
                 this.$emit('openObject', this.item.id);
             },
-            download: function(){
-                this.$emit('openObject', this.item.id);
+            async download(){
+                let filename = (await axios.get('/api/v1/access/aips/'+this.item.id+'/filename')).data;
+                let response = await axios.get('/api/v1/access/aips/'+this.item.id+'/download', { responseType: 'blob' });
+                let fileUrl = window.URL.createObjectURL(new Blob([response.data]));
+                let fileLink = document.createElement('a');
+                fileLink.href = fileUrl;
+                fileLink.setAttribute('download', filename);
+                document.body.appendChild(fileLink);
+                await fileLink.click();
+                document.body.removeChild(fileLink);
             },
-
-
 
         },
         computed: {
             downloadUrl: function(){
-                return "/api/v1/ingest/aips/"+this.item.id+"/download";
-
+                return "/api/v1/access/aips/"+this.item.id+"/download";
             },
-/*
-               return axios.get('/api/v1/access/dips/'+this.item.id+"/thumbnails")
-                   .then( (response ) => {
-                       let img = btoa(
-                           new UInt8Array( response.data ).recude( data, byte) => data
-                   }
-*/
         }
 
     }
