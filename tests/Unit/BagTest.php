@@ -8,6 +8,7 @@ use App\EventLogEntry;
 use App\User;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\Log;
+use Laravel\Passport\Passport;
 use Tests\TestCase;
 use function Psy\debug;
 class TestBag extends Bag {
@@ -97,8 +98,8 @@ class BagTest extends TestCase
     public function test_get_event_log_entries()
     {
         $user = factory(User::class)->create();
+        Passport::actingAs( $user );
         $bag = factory(Bag::class)->create([
-            "owner" => $user->id,
             "status" => "initiate_transfer"
         ]);
         $eventEntry[] = new EventLogEntry([
