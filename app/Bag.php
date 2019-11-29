@@ -5,6 +5,7 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Auth;
 use Webpatser\Uuid\Uuid;
 use App\User;
 use App\StorageProperties;
@@ -14,7 +15,7 @@ class Bag extends Model
 {
     protected $table = 'bags';
     protected $fillable = [
-        'name', 'status', 'owner' // todo: remove 'status'
+        'name', 'status' // todo: remove 'status'
     ];
 
     protected $smConfig = [
@@ -91,10 +92,20 @@ class Bag extends Model
         self::creating( function( $model )
         {
             $model->uuid = Uuid::generate();
+            $model->owner = Auth::id();
+
             if(!isset($model->status) || $model->status == "") {
                 $model->status = "open";
             }
-            StorageProperties::create([ 'bag_uuid' => $model->uuid ]);
+            $settings = UserSetting::where('user_id', $model->owner )->first();
+
+            StorageProperties::create([
+                'bag_uuid' => $model->uuid,
+                'aip_initial_online_storage_location' => $settings->defaultAipStorageLocationId,
+                'dip_initial_storage_location' =>  $settings->defaultDipStorageLocationId,
+                'archivematica_service_dashboard_uuid' => $settings->defaultArchivematicaServiceDashboardUuid,
+                'archivematica_service_storage_server_uuid' => $settings->defaultArchivematicaServiceStorageServerUuid
+            ]);
         });
 
         self::deleting( function( $model )

@@ -14,6 +14,7 @@ use App\User;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Mockery;
 use Tests\TestCase;
+use Laravel\Passport\Passport;
 
 class ArchivematicaClientTest extends TestCase
 {
@@ -24,6 +25,7 @@ class ArchivematicaClientTest extends TestCase
     {
         parent::setUp();
         $user = factory(User::class)->create();
+        Passport::actingAs( $user );
         $bag = factory(Bag::class)->create([
             "owner" => $user->id,
             "status" => "move_to_outbox"

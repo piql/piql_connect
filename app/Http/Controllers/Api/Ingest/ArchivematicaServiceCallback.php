@@ -3,15 +3,17 @@
 
 namespace App\Http\Controllers\Api\Ingest;
 
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\Controller;
 use App\Jobs\ProcessArchivematicaServiceCallback;
-use http\Client\Response;
-use Illuminate\Support\Facades\Validator;
 use Log;
 
 class ArchivematicaServiceCallback extends Controller
 {
-    public function packageUploaded($serviceUuid, $packageUuid) {
+    public function packageUploaded($serviceUuid, $packageUuid )
+    {
 
         //TODO: Store the service uuid in StorageProperties
         //Passing it around still only allows for one static service...

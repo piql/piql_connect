@@ -20,7 +20,7 @@ class Aip extends Model
      */
     public function fileObjects()
     {
-        return $this->morphMany('App\FileObject', 'storable', null, 'storable_id', 'external_uuid');
+        return $this->morphMany('App\FileObject', 'storable', null, 'storable_id' );
     }
 
     /*
@@ -32,12 +32,13 @@ class Aip extends Model
     }
 
     /*
-     * The related DIP
+     * Scan for a DIP through storage properties
      */
-    public function dip()
+    public function storagePropertiesDip()
     {
-        return Dip::where( 'aip_external_uuid', $this->external_uuid )->first();
+        return $this->storage_properties->dip;
     }
+
 
     /*
      * The owner of the object
@@ -45,6 +46,16 @@ class Aip extends Model
     public function owner()
     {
         return User::find( $this->owner );
+    }
+
+    public function storage_properties()
+    {
+        return $this->belongsTo( 'App\StorageProperties', 'external_uuid', 'aip_uuid' );
+    }
+
+    public function online_storage_location()
+    {
+        return $this->belongsTo( 'App\StorageLocation', 'online_storage_location_id' );
     }
 
 }

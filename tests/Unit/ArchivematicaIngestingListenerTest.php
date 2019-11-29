@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Event;
 use Mockery;
 use Tests\TestCase;
+use Laravel\Passport\Passport;
 
 class ArchivematicaIngestingListenerTest extends TestCase
 {
@@ -35,8 +36,9 @@ class ArchivematicaIngestingListenerTest extends TestCase
         }
 
         $user = factory(User::class)->create();
+        Passport::actingAs( $user );
+
         $bag = factory(Bag::class)->create([
-            "owner" => $user->id,
             "status" => "ingesting"
         ]);
 

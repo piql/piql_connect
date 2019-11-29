@@ -45,11 +45,17 @@ class BagController extends Controller
     public function latest(Request $request)
     {
         $user = Auth::user();
-        $bag = $user->bags()->latest()->first();
+        $bag = null;
+        if( $user->bags->count() > 0){
+            $bag = $user->bags()->latest()->first();
+        }
         if( $bag == null || $bag->status !== 'open' ){
             $bagName = Carbon::now()->format("YmdHis");
-            $bag = Bag::create(['name' => $bagName, 'owner' => $user->id]);
-            $bag->storage_properties()->update(['archive_uuid' => Archive::first()->uuid, 'holding_name' => Archive::first()->holdings()->first()->title]);
+            $bag = Bag::create(['name' => $bagName]);
+            $bag->storage_properties()->update([
+                'archive_uuid' => Archive::first()->uuid,
+                'holding_name' => Archive::first()->holdings()->first()->title
+            ]);
         }
 
         $resultBag = Bag::with([ 'files' ])
@@ -102,7 +108,6 @@ class BagController extends Controller
         }
         $bag = new Bag();
         $bag->name = $bagName;
-        $bag->owner = Auth::user()->id;
         if( $bag->save() )
         {
             if( $request->filled( 'archive_uuid' ) && $request->filled( 'holding_name' ) )
@@ -134,7 +139,7 @@ class BagController extends Controller
             }
         }
 
-        abort( 501, "Could not create bag with name ".$bagName." and owner ".$request->userId );
+        abort( 501, "Could not create bag with name ".$bagName." and owner ".Auth::id() );
     }
 
     /**
@@ -206,7 +211,7 @@ class BagController extends Controller
             ->orWhere('status', '=', 'approve_transfer')
             ->orWhere('status', '=', 'transferring')
             ->orWhere('status', '=', 'ingesting')
-            ->where( 'owner', Auth::user()->id )
+            ->where( 'owner', Auth::id() )
             ->paginate(env("DEFAULT_ENTRIES_PER_PAGE"));
         foreach($bags as $bag) {
             $bag->status = __('ingest.processing.status.'.$bag->status);
@@ -218,7 +223,7 @@ class BagController extends Controller
 
     public function all(Request $request)
     {
-        $q = Bag::query()->where('bags.owner', Auth::user()->id );
+        $q = Bag::query()->where('bags.owner', Auth::id() );
         if(empty($request->query())){
             $q->leftJoin('storage_properties', 'storage_properties.bag_uuid', 'bags.uuid')
               ->leftJoin('archives', 'archives.uuid', 'storage_properties.archive_uuid')
@@ -310,7 +315,7 @@ class BagController extends Controller
         {
             abort( response()->json([ 'error' => 404, 'message' => 'Bag not found for id '.$id ], 404 ) );
         }
-        if( $bag->owner !== Auth::user()->id ) {
+        if( $bag->owner !== Auth::id() ) {
             abort( response()->json([ 'error' => 401, 'message' => 'The current user is not authorized to update bag with id '.$id ], 401 ) );
         }
 
@@ -376,7 +381,6 @@ class BagController extends Controller
     {
         $bag = Bag::create([
             'name' => $request->fileName,
-            'owner' => Auth::id()
         ]);
 
         $file = new File();

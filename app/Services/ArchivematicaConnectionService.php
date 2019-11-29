@@ -14,7 +14,6 @@ class ArchivematicaConnectionService implements \App\Interfaces\ArchivematicaCon
 
     public function __construct( $app )
     {
-        Log::debug("Making ArchivematicaConnectionService");
         $this->app = $app;
     }
 

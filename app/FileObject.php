@@ -12,7 +12,7 @@ class FileObject extends Model
 
     protected $table = 'file_objects';
     protected $fillable = [
-        'object_type', 'mime_type', 'storable_type', 'storable_id'
+        'path', 'object_type', 'mime_type', 'storable_type', 'storable_id'
     ];
 
     public function storable()
@@ -20,7 +20,7 @@ class FileObject extends Model
         return $this->morphTo();
     }
 
-    public function storageType()
+    public function storedObjectType()
     {
         return Str::lower( Str::after( $this->storable_type, "\\" ) );
     }

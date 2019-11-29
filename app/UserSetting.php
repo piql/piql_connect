@@ -136,6 +136,31 @@ class UserSetting extends Model
             \App\StorageLocation::where('storable_type', 'App\Dip')->firstOrFail()->id );
     }
 
+    public function getDefaultArchivematicaServiceDashboardUuidAttribute()
+    {
+        return $this->get( "storage.defaultArchivematicaServiceDashboardUuid",
+            \App\ArchivematicaService::whereServiceType('dashboard')->firstOrFail()->id );
+    }
+
+
+    public function setDefaultArchivematicaServiceStorageServerUuidAttribute( $value )
+    {
+        $this->set( 'storage.defaultArchivematicaServiceStorageServerUuid', $value );
+    }
+
+    public function getDefaultArchivematicaServiceStorageServerUuidAttribute()
+    {
+        return $this->get( "storage.defaultArchivematicaServiceStorageServerUuid",
+            \App\ArchivematicaService::whereServiceType('storage')->firstOrFail()->id );
+    }
+
+
+    public function setDefaultArchivematicaServiceDashboardUuidAttribute( $value )
+    {
+        $this->set( 'storage.defaultArchivematicaServiceDashboardUuid', $value );
+    }
+
+
     public function setDefaultDipStorageLocationIdAttribute( $value )
     {
         $this->set( 'storage.defaultDipStorageLocationId', $value );

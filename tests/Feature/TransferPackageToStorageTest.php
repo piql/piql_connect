@@ -9,6 +9,9 @@ use App\S3Configuration;
 use App\Services\ArchivalStorageService;
 use App\Services\ArchivematicaConnectionService;
 use App\StorageLocation;
+use App\Aip;
+use App\Dip;
+use App\Bag;
 use Faker\Factory as faker;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\Storage;
@@ -18,6 +21,7 @@ use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Log;
+use Webpatser\Uuid\Uuid;
 
 class TransferPackageToStorageTest extends TestCase
 {
@@ -29,6 +33,9 @@ class TransferPackageToStorageTest extends TestCase
     private $storageService;
     private $testUser;
     private $faker;
+    private $aip;
+    private $dip;
+    private $bag;
 
     private $destinationStorage;
     private $sourceStorage;
@@ -49,6 +56,19 @@ class TransferPackageToStorageTest extends TestCase
         $this->storageLocationData = $this->makeStorageLocationData(
             $this->testUser->id, $this->s3Configuration->id, "App\Aip" );
         $this->storageLocation = StorageLocation::create( $this->storageLocationData );
+
+        $this->bag = Bag::create(['name' => 'testBag']);
+        $this->dip = Dip::create([
+            'bag_uuid' => $this->bag->uuid,
+            'external_uuid' => Uuid::generate(),
+            'owner' => $this->testUser->id
+        ]);
+
+        $this->aip = Aip::create([
+            'bag_uuid' => $this->bag->uuid,
+            'external_uuid' => Uuid::generate(),
+            'owner' => $this->testUser->id
+        ]);
 
     }
 
@@ -93,7 +113,9 @@ class TransferPackageToStorageTest extends TestCase
             $files[] = $path;
         }
 
-        $job = new TransferPackageToStorage($this->storageLocation, $this->sourceStorage, $basePath);
+
+
+        $job = new TransferPackageToStorage($this->storageLocation, $this->sourceStorage, $basePath, 'App\Dip', $this->dip->id );
         $job->handle( $storageService);
         foreach ($files as $file) {
             $this->assertFileExists($this->destinationStorage->path($file));
@@ -111,12 +133,13 @@ class TransferPackageToStorageTest extends TestCase
 
         $storageService = $this->app->make('App\Interfaces\ArchivalStorageInterface');
         Log::shouldReceive('info')->times(1)->with(\Mockery::pattern('/^Uploading files to /'));
-        Log::shouldReceive('error')->times(1)->with(\Mockery::pattern('/^Upload don\'t support directory uploads/'));
 
         $basePath = '0753/029c/165e/4ec4/9117/2844/9ff6/8cf9/';
         $this->sourceStorage->makeDirectory($basePath);
 
-        $job = new TransferPackageToStorage($this->storageLocation, $this->sourceStorage, $basePath);
+        $job = new TransferPackageToStorage($this->storageLocation, $this->sourceStorage, $basePath, 'App\Dip', $this->dip->id );
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage("ArchivalStorage cannot upload directories yet");
         $job->handle( $storageService);
         self::assertEquals(0, count($this->destinationStorage->allFiles($basePath)), "");
     }
@@ -136,7 +159,7 @@ class TransferPackageToStorageTest extends TestCase
         $files = array();
         $this->sourceStorage->put($path, $path);
 
-        $job = new TransferPackageToStorage($this->storageLocation, $this->sourceStorage, $path);
+        $job = new TransferPackageToStorage($this->storageLocation, $this->sourceStorage, $path, 'App\Aip', $this->aip->id );
         $job->handle( $storageService);
         foreach ($files as $file) {
             $this->assertFileExists($this->destinationStorage->path($file));
@@ -157,7 +180,7 @@ class TransferPackageToStorageTest extends TestCase
         Log::shouldReceive('error')->times(1)->with(\Mockery::pattern('/^Upload failed: file does not exist/'));
 
         $basePath = '0753/029c/165e/4ec4/9117/2844/9ff6/8cf9/';
-        $job = new TransferPackageToStorage($this->storageLocation, $this->sourceStorage, $basePath);
+        $job = new TransferPackageToStorage($this->storageLocation, $this->sourceStorage, $basePath, 'App\Aip', $this->aip->id );
         $job->handle( $storageService);
         self::assertEquals(0, count($this->destinationStorage->allFiles($basePath)), "");
 
