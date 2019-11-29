@@ -58,14 +58,11 @@ class ArchivematicaTransferringListenerTest extends TestCase
             (object)[
                 'contents' => (object) [
                     'message' => 'Fetched transfer status successfully.',
-                    'results' =>  [
-                        (object) [
-                            'name' => $this->bag->BagFileNameNoExt(),
-                            'type' => 'zipped bag',
-                            'uuid' => 'b3a0a321-d857-4429-91ac-f28c6b9cb28d',
-                            'status' => 'COMPLETE'
-                        ]
-                    ]
+                    'name' => $this->bag->BagFileNameNoExt(),
+                    'sip_uuid' => 'ff29e8b0-0bba-11ea-9a8c-1500a571ff88',
+                    'type' => 'zipped bag',
+                    'uuid' => 'b3a0a321-d857-4429-91ac-f28c6b9cb28d',
+                    'status' => 'COMPLETE'
                 ],
                 'statusCode' => 200,
             ]
@@ -117,38 +114,6 @@ class ArchivematicaTransferringListenerTest extends TestCase
         Event::assertNotDispatched(ArchivematicaIngestingEvent::class);
     }
 
-    public function test_get_transfer_status_with_empty_set() {
-        // setup
-        Event::fake();
-        Bus::fake();
-
-        $amClient = \Mockery::mock(ArchivematicaDashboardClientInterface::class);
-        $amClient->shouldReceive('getTransferStatus')->once()->andReturns(
-            (object)[
-                'contents' => (object) [
-                    'message' => 'Fetched transfer status successfully.',
-                    'results' =>  [
-                    ]
-                ],
-                'statusCode' => 200,
-            ]
-        );
-
-        $event = new ArchivematicaTransferringEvent($this->bag);
-        $listener = new ArchivematicaTransferringListener($amClient);
-
-        //test
-        $listener->handle($event);
-
-        // assets
-        Bus::assertDispatched(CallQueuedClosure::class, function ($job) {
-            return true;
-        });
-
-        Event::assertNotDispatched(ErrorEvent::class);
-        Event::assertNotDispatched(ArchivematicaIngestingEvent::class);
-    }
-
     public function test_get_transfer_status_with_ERROR_status() {
         // setup
         Event::fake();
@@ -159,14 +124,10 @@ class ArchivematicaTransferringListenerTest extends TestCase
             (object)[
                 'contents' => (object) [
                     'message' => 'Fetched transfer status successfully.',
-                    'results' =>  [
-                        (object) [
-                            'name' => $this->bag->BagFileNameNoExt(),
-                            'type' => 'zipped bag',
-                            'uuid' => 'b3a0a321-d857-4429-91ac-f28c6b9cb28d',
-                            'status' => 'FAILED'
-                        ]
-                    ]
+                    'name' => $this->bag->BagFileNameNoExt(),
+                    'type' => 'zipped bag',
+                    'uuid' => 'b3a0a321-d857-4429-91ac-f28c6b9cb28d',
+                    'status' => 'FAILED'
                 ],
                 'statusCode' => 200,
             ]
@@ -197,14 +158,10 @@ class ArchivematicaTransferringListenerTest extends TestCase
             (object)[
                 'contents' => (object) [
                     'message' => 'Fetched transfer status successfully.',
-                    'results' =>  [
-                        (object) [
-                            'name' => $this->bag->BagFileNameNoExt(),
-                            'type' => 'zipped bag',
-                            'uuid' => 'b3a0a321-d857-4429-91ac-f28c6b9cb28d',
-                            'status' => 'USER_INPUT'
-                        ]
-                    ]
+                    'name' => $this->bag->BagFileNameNoExt(),
+                    'type' => 'zipped bag',
+                    'uuid' => 'b3a0a321-d857-4429-91ac-f28c6b9cb28d',
+                    'status' => 'USER_INPUT'
                 ],
                 'statusCode' => 200,
             ]

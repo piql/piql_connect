@@ -8,7 +8,7 @@ class StorageProperties extends Model
 {
     protected $table ='storage_properties';
     protected $fillable = [ 'bag_uuid', 'archive_uuid', 'holding_name',
-        'sip_uuid', 'dip_uuid', 'aip_uuid',
+        'transfer_uuid', 'sip_uuid', 'dip_uuid', 'aip_uuid',
         'aip_initial_online_storage_location', 'dip_initial_storage_location',
         'archivematica_service_dashboard_uuid', 'archivematica_service_storage_server_uuid' ];
 

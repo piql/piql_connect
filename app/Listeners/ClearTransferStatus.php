@@ -30,34 +30,16 @@ class ClearTransferStatus implements ShouldQueue
 
         Log::info("Clearing transfer status for bag ".$bag->zipBagFileName()." with id: ".$bag->id);
 
-        $response = $this->amClient->getTransferStatus();
-        if($response->statusCode != 200) {
-            $message = "get transfer status failed with error code " . $response->statusCode;
-            if (isset($response->content->error) && ($response->content->error == true)) {
-                $message += " and error message: " . $response->content->message;
+        $hideResponse = $this->amClient->hideTransferStatus($bag->storage_properties->transfer_uuid);
+        if($hideResponse->statusCode != 200) {
+            $message = "hide transfer status failed with error code " . $hideResponse->statusCode;
+            if (isset($hideResponse->contents->error) && ($hideResponse->contents->error == true)) {
+                $message .= " and error message: " . $hideResponse->contents->message;
             }
 
             Log::error($message);
             event(new ErrorEvent($bag));
             return;
-        }
-
-        foreach($response->contents->results as $status)
-        {
-            if($status->name.".zip" == $bag->zipBagFileName())
-            {
-                $hideResponse = $this->amClient->hideTransferStatus($status->uuid);
-                if($hideResponse->statusCode != 200) {
-                    $message = "hide transfer status failed with error code " . $hideResponse->statusCode;
-                    if (isset($hideResponse->content->error) && ($hideResponse->content->error == true)) {
-                        $message += " and error message: " . $hideResponse->content->message;
-                    }
-
-                    Log::error($message);
-                    event(new ErrorEvent($bag));
-                    return;
-                }
-            }
         }
     }
 
