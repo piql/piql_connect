@@ -155,8 +155,8 @@ export default {
     },
     methods: {
         refreshObjects(queryString){
-            axios.get("/api/v1/ingest/bags/"+queryString).then( (bags) => {
-                this.dataObjects = bags.data.data;
+            axios.get("/api/v1/access/dips/"+queryString).then( (dips ) => {
+                this.dataObjects = dips.data.data;
             });
         },
         holdingSelectionChanged: function(holding, state) {
@@ -191,7 +191,7 @@ export default {
             this.selectedLocation = loc;
         },
         addObjectToRetrieval: async function(item) {
-            let objectFiles = (await( axios.get("/api/v1/ingest/bags/"+item.id+"/files"))).data;
+            let objectFiles = (await( axios.get("/api/v1/access/aips/"+item.id+"/files"))).data;
 
             objectFiles.map( async (file) => {
             console.log(file);
@@ -208,7 +208,7 @@ export default {
            }));
         },
         openObject: async function(bagId) {
-            this.currentOpenObjectFiles = (await( axios.get("/api/v1/ingest/bags/"+bagId+"/files"))).data;
+            this.currentOpenObjectFiles = (await( axios.get("/api/v1/access/dips/"+bagId+"/files"))).data;
             this.fileMode = true;
         },
         closeFileList: function() {

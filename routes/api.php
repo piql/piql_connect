@@ -18,9 +18,8 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 
-Route::get('test/getThumbnail', 'Api\Access\ThumbnailController@testThumbnail');
+Route::get('test/getThumbnail', 'Api\Access\ThumbnailController@testThumbnail')->name('testThumbnail');;
 Route::get('test/getPreview', 'Api\Access\ThumbnailController@testPreview');
-
 Route::group(['prefix' => 'v1'], function () {
     Route::post('login', 'Auth\ApiLoginController@login');
 });
@@ -90,6 +89,15 @@ Route::group(['prefix' => 'v1' , 'middleware' => 'auth:api'], function () {
             });
         });
     });
+
+    Route::group(['prefix' => 'access'], function() {
+        Route::get('aips/{aipId}', 'Api\Access\AipController@show');
+        Route::get('dips/', 'Api\Access\DipController@index');
+        Route::get('dips/{dipId}', 'Api\Access\DipController@show');
+        Route::get('dips/{dipId}/thumbnails/{fileObjectId}', 'Api\Access\DipController@file_thumbnail');
+        Route::get('dips/{dipId}/thumbnails', 'Api\Access\DipController@package_thumbnail');
+    });
+
 
     Route::group(['prefix' => 'planning'], function() {
         Route::apiResource('holdings', 'Api\Planning\HoldingController', ['as' => 'planning']);

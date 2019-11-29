@@ -12,7 +12,9 @@ class FileObject extends Model
 
     protected $table = 'file_objects';
     protected $fillable = [
-        'path', 'object_type', 'mime_type', 'storable_type', 'storable_id'
+        'fullpath', 'filename', 'path', 'size',
+        'object_type', 'info_source', 'mime_type',
+        'storable_type', 'storable_id'
     ];
 
     public function storable()

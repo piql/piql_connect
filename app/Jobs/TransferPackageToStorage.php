@@ -68,26 +68,29 @@ class TransferPackageToStorage implements ShouldQueue
                 return;
             }
             $uploadPath = substr($file->getPath(), $baseDirLen);
-            Log::debug("Uploading file to '".$this->storageLocation->human_readable_name .":". $uploadPath."/".$file->getFileName());
+            $uploadRealPath = "{$uploadPath}/{$file->getFileName()}";
+            Log::debug("Uploading file to '{$this->storageLocation->human_readable_name}:{$uploadRealPath}'" );
             $result = $storage->upload( $this->storageLocation, $uploadPath, $file );
             if($result === false) {
                 Log::error("Upload failed : " . $result);
                 return;
             }
 
-            $uploadRealPath = "{$uploadPath}/{$file->getFileName()}";
             try {
             FileObject::create([
-                'path' => $uploadRealPath,
+                'fullpath' => $uploadRealPath,
+                'filename' => $file->getFilename(),
+                'path' => $file->getPath(),
+                'size' => $file->getSize(),
                 'object_type' => 'file',
-                'mime_type' => 'application/octet-stream',
+                'info_source' => "connect",
+                'mime_type' => $file->getMimeType(),
                 'storable_type' => $this->storable_type,
                 'storable_id' => $this->storable_id
             ]);
             } catch( \Exception $ex )
             {
                 Log::error("Failed to create file object for file at {$this->storageLocation}:{$uploadPath}");
-                throw $ex;
             }
         }
     }

@@ -1,11 +1,15 @@
 <template>
     <div class="container-fluid">
         <div class="row plistHeader">
-            <div class="col-sm-1"><input type="checkbox" class="checkbox" id="browserList" v-if="false"></div>
-            <div class="col-sm-3">{{$t('access.browse.itemInfo')}}</div>
-            <div class="col-sm-3">Archive</div>
-            <div class="col-sm-2">Holding</div>
-            <div class="col-sm-1">Files</div>
+            <div class="col-sm-1 pl-5 collapse">
+                <input type="checkbox" class="checkbox" id="browserList">
+            </div>
+            <div class="col-sm-3">&nbsp;</div>
+            <div class="col-sm-2 text-center">Name</div>
+            <div class="col-sm-2 text-center">Date</div>
+            <div class="col-sm-1 text-center">Holding</div>
+            <div class="col-sm-1 text-center">Files</div>
+            <div class="col-sm-3 text-center">Actions</div>
         </div>
 
         <span v-if="fileLocation === 'online'">
