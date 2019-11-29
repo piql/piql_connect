@@ -71,6 +71,6 @@ class ApproveTransferToArchivematicaListener implements ShouldQueue
                 return;
             }
         }
-        dispatch( function () use ( $bag ) { event( new ApproveTransferToArchivematicaEvent( $bag ) );  } )->delay( Carbon::now()->addSeconds( 10 ) );
+        dispatch( function () use ( $bag ) { event( new ApproveTransferToArchivematicaEvent( $bag ) );  } )->delay( now()->addSeconds( 10 ) );
     }
 }
