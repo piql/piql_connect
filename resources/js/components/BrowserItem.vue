@@ -58,7 +58,7 @@
                 this.$emit('openObject', this.item.id);
             },
             preview: function(){
-                this.$emit('openObject', this.item.id);
+                this.$emit('showPreview', this.item);
             },
             async download(){
                 let filename = (await axios.get('/api/v1/access/aips/'+this.item.id+'/filename')).data;

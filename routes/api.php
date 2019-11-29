@@ -98,6 +98,7 @@ Route::group(['prefix' => 'v1' , 'middleware' => 'auth:api'], function () {
         Route::get('dips/{dipId}', 'Api\Access\DipController@show');
         Route::get('dips/{dipId}/thumbnails/{fileObjectId}', 'Api\Access\DipController@file_thumbnail');
         Route::get('dips/{dipId}/thumbnails', 'Api\Access\DipController@package_thumbnail');
+        Route::get('dips/{dipId}/previews', 'Api\Access\DipController@package_preview');
     });
 
 

@@ -32,6 +32,18 @@ class DipController extends Controller
         return response($storage->stream( $dip->storage_location, $file->fullpath ))
             ->header("Content-Type" , "image/jpeg");
     }
+
+    public function package_preview( Request $request, ArchivalStorageInterface $storage )
+    {
+        $dip = Dip::find( $request->dipId );
+        $file = $dip->fileObjects->filter( function ($file, $key) {
+            return Str::contains( $file->fullpath, '/objects' );
+        })->first();
+
+        return response($storage->stream( $dip->storage_location, $file->fullpath ))
+            ->header("Content-Type" , "image/jpeg");
+    }
+
     /**
      * Show the form for creating a new resource.
      *
