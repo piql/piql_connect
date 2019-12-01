@@ -3,6 +3,8 @@
 namespace App\Listeners;
 
 use App\EventLogEntry;
+use App\Events\ArchivematicaGetUnapprovedListError;
+use App\Events\ArchivematicaTransferringEvent;
 use Illuminate\Events\Dispatcher;
 
 class EventLogger
@@ -83,6 +85,8 @@ class EventLogger
         $events->listen([
             'App\Events\ConnectionError',
             'App\Events\ArchivematicaInitiateTransferError',
+            'App\Events\ArchivematicaGetUnapprovedListError',
+            'App\Events\ArchivematicaTransferringEvent',
             'App\Events\BagStateTransitionError',
             'App\Events\ErrorEvent',
         ],

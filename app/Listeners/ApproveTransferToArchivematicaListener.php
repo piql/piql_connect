@@ -3,6 +3,10 @@
 
 namespace App\Listeners;
 
+use App\Events\ArchivematicaApproveTransferError;
+use App\Events\ArchivematicaGetUnapprovedListError;
+use App\Events\ArchivematicaInitiateTransferError;
+use App\Events\ConnectionError;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use App\ArchivematicaService;
 use App\Events\ApproveTransferToArchivematicaEvent;
@@ -47,7 +51,14 @@ class ApproveTransferToArchivematicaListener implements ShouldQueue
         $response = $this->dashboardClient->getUnapprovedList();
 
         if( $response->statusCode != 200) {
-            Log::error("Service replied with error message : " . ($response->content->message ?? ""));
+            $message = "Get unapproved list failed with error code " . $response->statusCode;
+            if (isset($response->contents->error) && ($response->contents->error == true)) {
+                $message .= " and error message: " . $response->contents->message;
+                event(new ArchivematicaGetUnapprovedListError($bag, $message));
+            } else {
+                event(new ConnectionError($bag, $message));
+            }
+            Log::error($message);
             event(new ErrorEvent($bag));
             return;
         }
@@ -64,8 +75,15 @@ class ApproveTransferToArchivematicaListener implements ShouldQueue
                     $bag->storage_properties->save();
                     event(new ArchivematicaTransferringEvent($bag));
                 } else {
+                    $message = "Approve transfer failed with error code " . $approveResponse->statusCode;
+                    if (isset($approveResponse->contents->error) && ($approveResponse->contents->error == true)) {
+                        $message .= " and error message: " . $approveResponse->contents->message;
+                        event(new ArchivematicaApproveTransferError($bag, $message));
+                    } else {
+                        event(new ConnectionError($bag, $message));
+                    }
                     Log::error("Approve transfer failed for with bag id " . $bag->id);
-                    Log::error("Service replied with error message : " . ($response->content->message ?? ""));
+                    Log::error("Service replied with error message : " . ($approveResponse->content->message ?? ""));
                     event(new ErrorEvent($bag));
                 }
                 return;
