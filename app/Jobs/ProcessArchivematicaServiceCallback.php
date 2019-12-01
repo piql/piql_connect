@@ -6,6 +6,8 @@ use App\Aip;
 use App\Bag;
 use App\ArchivematicaService;
 use App\Dip;
+use App\Events\ArchivematicaGetFileDetailsError;
+use App\Events\ConnectionError;
 use App\Events\ErrorEvent;
 use App\Interfaces\ArchivematicaStorageClientInterface;
 use App\StorageLocation;
@@ -48,10 +50,12 @@ class ProcessArchivematicaServiceCallback implements ShouldQueue
 
         if($response->statusCode != 200) {
 
-            // todo : make proper action
             $message = "Get file details failed with error code " . $response->statusCode;
-            if (isset($contents->error) && ($contents->error == true)) {
-                $message += " and error message: " . $contents->message;
+            if (isset($response->contents->error) && ($response->contents->error == true)) {
+                $message .= " and error message: " . $response->contents->message;
+                event(new ArchivematicaGetFileDetailsError(null, $message));
+            } else {
+                event(new ConnectionError(null, $message));
             }
 
             Log::error($message);
@@ -66,6 +70,7 @@ class ProcessArchivematicaServiceCallback implements ShouldQueue
             // todo : make proper action
             $message = "Could not find any storage properties linked to this uuid: " . $this->packageUuid . " ";
             $message .= "response: " . json_encode($response->contents);
+            event(new ArchivematicaGetFileDetailsError(null, $message));
             Log::error($message);
             return;
         }
@@ -117,6 +122,7 @@ class ProcessArchivematicaServiceCallback implements ShouldQueue
         } else {
             $message = "Unsupported package type: " . $contents->package_type . " ";
             $message .= "response: " . json_encode($response->contents);
+            event(new ArchivematicaGetFileDetailsError($bag, $message));
             Log::error($message);
         }
 
