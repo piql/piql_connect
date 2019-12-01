@@ -3,7 +3,9 @@
 namespace App\Listeners;
 
 use App\EventLogEntry;
+use App\Events\ArchivematicaGetTransferStatusError;
 use App\Events\ArchivematicaGetUnapprovedListError;
+use App\Events\ArchivematicaTransferError;
 use App\Events\ArchivematicaTransferringEvent;
 use Illuminate\Events\Dispatcher;
 
@@ -87,6 +89,8 @@ class EventLogger
             'App\Events\ArchivematicaInitiateTransferError',
             'App\Events\ArchivematicaGetUnapprovedListError',
             'App\Events\ArchivematicaTransferringEvent',
+            'App\Events\ArchivematicaGetTransferStatusError',
+            'App\Events\ArchivematicaTransferError',
             'App\Events\BagStateTransitionError',
             'App\Events\ErrorEvent',
         ],

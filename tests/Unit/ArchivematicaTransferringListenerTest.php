@@ -4,8 +4,11 @@ namespace Tests\Unit;
 
 use App\Bag;
 use App\Events\ApproveTransferToArchivematicaEvent;
+use App\Events\ArchivematicaGetTransferStatusError;
 use App\Events\ArchivematicaIngestingEvent;
+use App\Events\ArchivematicaTransferError;
 use App\Events\ArchivematicaTransferringEvent;
+use App\Events\ConnectionError;
 use App\Events\ErrorEvent;
 use App\File;
 use App\Listeners\ApproveTransferToArchivematicaListener;
@@ -79,6 +82,9 @@ class ArchivematicaTransferringListenerTest extends TestCase
             return true;
         });
 
+        Event::assertNotDispatched(ArchivematicaGetTransferStatusError::class);
+        Event::assertNotDispatched(ArchivematicaTransferError::class);
+        Event::assertNotDispatched(ConnectionError::class);
         Event::assertNotDispatched(ErrorEvent::class);
         Event::assertDispatched(ArchivematicaIngestingEvent::class);
     }
@@ -92,8 +98,6 @@ class ArchivematicaTransferringListenerTest extends TestCase
         $amClient->shouldReceive('getTransferStatus')->once()->andReturns(
             (object)[
                 'contents' => (object) [
-                    'message' => 'Bad Request',
-                    'error' =>  'true',
                 ],
                 'statusCode' => 400,
             ]
@@ -110,6 +114,9 @@ class ArchivematicaTransferringListenerTest extends TestCase
             return true;
         });
 
+        Event::assertNotDispatched(ArchivematicaGetTransferStatusError::class);
+        Event::assertNotDispatched(ArchivematicaTransferError::class);
+        Event::assertDispatched(ConnectionError::class);
         Event::assertDispatched(ErrorEvent::class);
         Event::assertNotDispatched(ArchivematicaIngestingEvent::class);
     }
@@ -144,6 +151,9 @@ class ArchivematicaTransferringListenerTest extends TestCase
             return true;
         });
 
+        Event::assertNotDispatched(ArchivematicaGetTransferStatusError::class);
+        Event::assertDispatched(ArchivematicaTransferError::class);
+        Event::assertNotDispatched(ConnectionError::class);
         Event::assertDispatched(ErrorEvent::class);
         Event::assertNotDispatched(ArchivematicaIngestingEvent::class);
     }
@@ -178,6 +188,9 @@ class ArchivematicaTransferringListenerTest extends TestCase
             return true;
         });
 
+        Event::assertNotDispatched(ArchivematicaGetTransferStatusError::class);
+        Event::assertDispatched(ArchivematicaTransferError::class);
+        Event::assertNotDispatched(ConnectionError::class);
         Event::assertDispatched(ErrorEvent::class);
         Event::assertNotDispatched(ArchivematicaIngestingEvent::class);
     }
