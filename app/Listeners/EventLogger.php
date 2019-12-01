@@ -81,6 +81,8 @@ class EventLogger
         );
 
         $events->listen([
+            'App\Events\ConnectionError',
+            'App\Events\ArchivematicaInitiateTransferError',
             'App\Events\BagStateTransitionError',
             'App\Events\ErrorEvent',
         ],
