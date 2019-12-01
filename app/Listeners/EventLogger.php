@@ -91,6 +91,8 @@ class EventLogger
             'App\Events\ArchivematicaTransferringEvent',
             'App\Events\ArchivematicaGetTransferStatusError',
             'App\Events\ArchivematicaTransferError',
+            'App\Events\ArchivematicaGetIngestStatusError',
+            'App\Events\ArchivematicaIngestError',
             'App\Events\BagStateTransitionError',
             'App\Events\ErrorEvent',
         ],

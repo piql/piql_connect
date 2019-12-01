@@ -2,6 +2,11 @@
 
 namespace App\Listeners;
 
+use App\Events\ArchivematicaGetIngestStatusError;
+use App\Events\ArchivematicaGetTransferStatusError;
+use App\Events\ArchivematicaIngestError;
+use App\Events\ArchivematicaTransferError;
+use App\Events\ConnectionError;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use Carbon\Carbon;
@@ -47,9 +52,12 @@ class ArchivematicaIngestingListener implements ShouldQueue
         $response = $this->dashboardClient->getIngestStatus($bag->storage_properties->sip_uuid);
 
         if($response->statusCode != 200) {
-            $message = "ingest status failed with error code " . $response->statusCode;
+            $message = "Ingest failed with error code " . $response->statusCode;
             if (isset($response->contents->error) && ($response->contents->error == true)) {
                 $message .= " and error message: " . $response->contents->message;
+                event(new ArchivematicaGetIngestStatusError($bag, $message));
+            } else {
+                event(new ConnectionError($bag, $message));
             }
 
             Log::error( $message );
@@ -73,6 +81,7 @@ class ArchivematicaIngestingListener implements ShouldQueue
             return;
         } elseif ($ingestStatus == "FAILED" || $ingestStatus == "USER_INPUT" )
         {
+            event(new ArchivematicaIngestError($bag, "Transfer failed with status: " . $ingestStatus));
             event( new ErrorEvent( $bag ) );
             return;
         }

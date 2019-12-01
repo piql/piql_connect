@@ -54,7 +54,7 @@ class ArchivematicaTransferringListener implements ShouldQueue
         $response = $this->amClient->getTransferStatus($bag->storage_properties->transfer_uuid);
 
         if($response->statusCode != 200) {
-            $message = " initiate transfer failed with error code " . $response->statusCode;
+            $message = "Transfer failed with error code " . $response->statusCode;
             if (isset($response->contents->error) && ($response->contents->error == true)) {
                 $message .= " and error message: " . $response->contents->message;
                 event(new ArchivematicaGetTransferStatusError($bag, $message));
