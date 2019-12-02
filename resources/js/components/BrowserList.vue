@@ -6,7 +6,7 @@
             </div>
             <div class="col-sm-3">&nbsp;</div>
             <div class="col-sm-2 text-center">Name</div>
-            <div class="col-sm-2 text-center">Date</div>
+            <div class="col-sm-2 text-center">Ingest Date</div>
             <div class="col-sm-1 text-center">Holding</div>
             <div class="col-sm-1 text-center">Files</div>
             <div class="col-sm-3 text-center">Actions</div>

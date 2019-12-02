@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\Access;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\DipResource;
 use App\Dip;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -20,8 +21,12 @@ class DipController extends Controller
 
     public function index()
     {
-        return Dip::with(['storage_properties','storage_properties.bag'])->latest()->paginate(5);
+        return \App\Http\Resources\DipResource::collection(
+            Dip::with(['storage_properties', 'storage_properties.bag'])
+                ->latest()->paginate( 5 )
+        );
     }
+
     public function package_thumbnail( Request $request, ArchivalStorageInterface $storage )
     {
         $dip = Dip::find( $request->dipId );
@@ -80,7 +85,7 @@ class DipController extends Controller
         $dip = Dip::find( $request->dipId );
         $file = $dip->fileObjects->find( $request->fileId );
         $thumbnail = $dip->fileObjects->filter( function ($thumb, $key) use( $file ) {
-                return Str::contains( $thumb->path, '/thumbnails' ); 
+                return Str::contains( $thumb->path, '/thumbnails' );
         })->filter( function ($thumb, $key) use ( $file ) {
             return Str::contains( $file->filename, pathinfo( $thumb->filename, PATHINFO_FILENAME ) );
         })->first();

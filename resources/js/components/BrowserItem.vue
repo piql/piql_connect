@@ -10,13 +10,13 @@
                 {{item.storage_properties.bag.name}}
             </div>
             <div class="col-sm-2 align-self-center text-center">
-                {{dateFormat(item.created_at)}}
+                {{dateFormat(item.storage_properties.bag.created_at)}}
             </div>
             <div class="col-sm-1 align-self-center text-center">
                 {{item.storage_properties.holding_name}}
             </div>
             <div class="col-sm-1 align-self-center text-center">
-                {{item.storage_properties.bag.fileCount}}
+                {{fileCount}}
             </div>
             <div class="col-sm-1 align-self-center text-center">
                 <a @click="download" href="#" data-toggle="tooltip" title="Download file"><i class="fas fa-file-download titleIcon text-center"></i></a>
@@ -77,6 +77,9 @@
             downloadUrl: function(){
                 return "/api/v1/access/aips/"+this.item.id+"/download";
             },
+            fileCount: function(){
+                return this.item.storage_properties.bag.fileCount;
+            }
         }
 
     }
