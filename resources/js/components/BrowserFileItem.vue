@@ -19,8 +19,10 @@
     import axios from 'axios';
     export default {
         async mounted() {
-            let response = await axios.get('/api/v1/access/dips/'+this.dipId+'/thumbnails/files/'+this.item.id, { responseType: 'arraybuffer' });
-						this.thumbnailImage = `data:${response.headers['content-type']};base64,${btoa(String.fromCharCode(...new Uint8Array(response.data)))}`;
+            let thumbnail = await axios.get('/api/v1/access/dips/'+this.dipId+'/thumbnails/files/'+this.item.id, { responseType: 'blob' });
+            let reader = new FileReader();
+            reader.onload = e => this.thumbnailImage = reader.result;
+            reader.readAsDataURL( thumbnail.data );
         },
         props: {
             item: Object,

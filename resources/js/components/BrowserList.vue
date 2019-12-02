@@ -91,14 +91,16 @@ import VueEasyLightbox from 'vue-easy-lightbox';
             for ( var i in allFiles ) {
                 fileIds.push( allFiles[i].id );
             }
-            Promise.all( fileIds.map( async (fileId) => {
-                return axios.get('/api/v1/access/dips/'+dip.id+'/previews/files/'+fileId, { responseType: 'arraybuffer' }).then( (image) => {
-                    this.previewImages.push(`data:${image.headers['content-type']};base64,${btoa(String.fromCharCode(...new Uint8Array(image.data)))}`);
-                })}));
+            fileIds.map( async (fileId) => {
+              let image = (await axios.get('/api/v1/access/dips/'+dip.id+'/previews/files/'+fileId, { responseType: 'blob' }));
+              let reader = new FileReader();
+              reader.onload = e => this.previewImages.push( reader.result );
+              reader.readAsDataURL( image.data );
+            });
         },
         hideLightBox: function( e ) {
             this.lbVisible = false;
-            this.imgs = [];
+            this.previewImages = [];
         }
     },
 }

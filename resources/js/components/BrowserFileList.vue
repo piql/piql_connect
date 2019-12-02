@@ -44,7 +44,7 @@ export default {
         },
         selectedArchive: String,
         selectedHolding: String,
-        dataObjects: Array,
+        dataObjects: Object,
     },
 
     async mounted() {
