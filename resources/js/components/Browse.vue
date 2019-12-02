@@ -47,7 +47,7 @@
                     <identity v-else></identity>
                 </span>
                 <span v-if="fileMode">
-                    <browser-file-list :dip="dip" :dataObjects="currentOpenObjectFiles" :location="selectedLocation" @close="closeFileList" @addFileToRetrieval="addFileToRetrieval" />
+                    <browser-file-list :dataObjects="currentOpenObjectFiles" :location="selectedLocation" @close="closeFileList" @addFileToRetrieval="addFileToRetrieval" />
                 </span>
             </div>
             <div class="col-sm-2 mt-5">
