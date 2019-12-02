@@ -4,6 +4,9 @@ namespace Tests\Unit;
 
 use App\Bag;
 use App\Events\ApproveTransferToArchivematicaEvent;
+use App\Events\ArchivematicaApproveTransferError;
+use App\Events\ArchivematicaGetUnapprovedListError;
+use App\Events\ConnectionError;
 use Laravel\Passport\Passport;
 use App\Events\ArchivematicaTransferringEvent;
 use App\Events\ErrorEvent;
@@ -94,6 +97,9 @@ class ApproveTransferToArchivematicaListenerTest extends TestCase
             return true;
         });
 
+        Event::assertNotDispatched(ArchivematicaGetUnapprovedListError::class);
+        Event::assertNotDispatched(ArchivematicaApproveTransferError::class);
+        Event::assertNotDispatched(ConnectionError::class);
         Event::assertDispatched(ArchivematicaTransferringEvent::class);
         Event::assertNotDispatched(ApproveTransferToArchivematicaEvent::class);
     }
@@ -126,11 +132,14 @@ class ApproveTransferToArchivematicaListenerTest extends TestCase
             return true;
         });
 
+        Event::assertNotDispatched(ArchivematicaGetUnapprovedListError::class);
+        Event::assertNotDispatched(ArchivematicaApproveTransferError::class);
+        Event::assertNotDispatched(ConnectionError::class);
         Event::assertNotDispatched(ArchivematicaTransferringEvent::class);
         Event::assertNotDispatched(ErrorEvent::class);
     }
 
-    public function test_get_unapproved_list_fails() {
+    public function test_where_archivematica_get_unapproved_list_returns_with_error_message() {
         Event::fake();
         Bus::fake();
 
@@ -140,6 +149,7 @@ class ApproveTransferToArchivematicaListenerTest extends TestCase
             (object)[
                 'contents' => (object) [
                     'message' => 'Fetched unapproved transfers successfully.',
+                    'error' => 'true',
                     'results' =>  [
                     ]
                 ],
@@ -158,11 +168,46 @@ class ApproveTransferToArchivematicaListenerTest extends TestCase
             return true;
         });
 
+        Event::assertDispatched(ArchivematicaGetUnapprovedListError::class);
+        Event::assertNotDispatched(ArchivematicaApproveTransferError::class);
+        Event::assertNotDispatched(ConnectionError::class);
         Event::assertNotDispatched(ArchivematicaTransferringEvent::class);
         Event::assertDispatched(ErrorEvent::class);
     }
 
-    public function test_approve_transfer_fails() {
+    public function test_where_archivematica_get_unapproved_list_returns_without_error_message() {
+        Event::fake();
+        Bus::fake();
+
+        $amClient = \Mockery::mock(ArchivematicaDashboardClientInterface::class);
+
+        $amClient->shouldReceive('getUnapprovedList')->once()->andReturns(
+            (object)[
+                'contents' => (object) [
+                ],
+                'statusCode' => 400,
+            ]
+        );
+
+        $amClient->shouldReceive('approveTransfer')->never();
+
+        $event = new ApproveTransferToArchivematicaEvent($this->bag);
+        $listener = new ApproveTransferToArchivematicaListener($amClient);
+        $listener->handle($event);
+
+
+        Bus::assertNotDispatched(CallQueuedClosure::class, function ($job) {
+            return true;
+        });
+
+        Event::assertNotDispatched(ArchivematicaGetUnapprovedListError::class);
+        Event::assertNotDispatched(ArchivematicaApproveTransferError::class);
+        Event::assertDispatched(ConnectionError::class);
+        Event::assertNotDispatched(ArchivematicaTransferringEvent::class);
+        Event::assertDispatched(ErrorEvent::class);
+    }
+
+    public function test_where_archivematica_returns_approve_transfer_with_error_message() {
         Event::fake();
         Bus::fake();
 
@@ -204,6 +249,56 @@ class ApproveTransferToArchivematicaListenerTest extends TestCase
             return true;
         });
 
+        Event::assertNotDispatched(ArchivematicaGetUnapprovedListError::class);
+        Event::assertDispatched(ArchivematicaApproveTransferError::class);
+        Event::assertNotDispatched(ConnectionError::class);
+        Event::assertNotDispatched(ArchivematicaTransferringEvent::class);
+        Event::assertDispatched(ErrorEvent::class);
+    }
+
+    public function test_where_archivematica_returns_approve_transfer_without_error_message() {
+        Event::fake();
+        Bus::fake();
+
+        $amClient = \Mockery::mock(ArchivematicaDashboardClientInterface::class);
+
+        $amClient->shouldReceive('getUnapprovedList')->once()->andReturns(
+            (object)[
+                'contents' => (object) [
+                    'message' => 'Fetched unapproved transfers successfully.',
+                    'results' =>  [
+                        (object) [
+                            'directory' => $this->bag->zipBagFileName(),
+                            'type' => 'zipped bag',
+                            'uuid' => 'b3a0a321-d857-4429-91ac-f28c6b9cb28d'
+                        ]
+                    ]
+                ],
+                'statusCode' => 200,
+            ]
+        );
+
+        $amClient->shouldReceive('approveTransfer')->once()->with(
+            $this->bag->zipBagFileName()
+        )->andReturns(
+            (object)[
+                'contents' => (object) [
+                ],
+                'statusCode' => 400,
+            ]
+        );
+
+        $event = new ApproveTransferToArchivematicaEvent($this->bag);
+        $listener = new ApproveTransferToArchivematicaListener($amClient );
+        $listener->handle($event);
+
+        Bus::assertNotDispatched(CallQueuedClosure::class, function ($job) {
+            return true;
+        });
+
+        Event::assertNotDispatched(ArchivematicaGetUnapprovedListError::class);
+        Event::assertNotDispatched(ArchivematicaApproveTransferError::class);
+        Event::assertDispatched(ConnectionError::class);
         Event::assertNotDispatched(ArchivematicaTransferringEvent::class);
         Event::assertDispatched(ErrorEvent::class);
     }

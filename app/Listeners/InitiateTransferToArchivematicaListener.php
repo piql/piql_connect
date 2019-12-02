@@ -3,6 +3,8 @@
 
 namespace App\Listeners;
 
+use App\Events\ArchivematicaInitiateTransferError;
+use App\Events\ConnectionError;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use App\ArchivematicaService;
 use App\Events\ApproveTransferToArchivematicaEvent;
@@ -36,7 +38,7 @@ class InitiateTransferToArchivematicaListener implements ShouldQueue
     {
         $transitionTo = 'initiate_transfer';
         $bag = $event->bag->refresh();
-        if( !$this->tryBagTransition( $bag, $transitionTo ) ){
+        if( !$this->tryBagTransition( $bag, $transitionTo ) ) {
             Log::error(" ArchivematicaIngestingListener: Failed transition for bag with id {$bag->id} from state '{$bag->status}' to state '{$transitionTo}'" );
             return;
         }
@@ -48,6 +50,9 @@ class InitiateTransferToArchivematicaListener implements ShouldQueue
 
             if (isset($response->contents->error) && ($response->contents->error == true)) {
                 $message .= " and error message: " . $response->contents->message;
+                event(new ArchivematicaInitiateTransferError($bag, $message));
+            } else {
+                event(new ConnectionError($bag, $message));
             }
 
             Log::error($message);

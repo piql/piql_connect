@@ -3,7 +3,10 @@
 namespace Tests\Unit;
 
 use App\Bag;
+use App\Events\ArchivematicaGetIngestStatusError;
+use App\Events\ArchivematicaIngestError;
 use App\Events\ArchivematicaIngestingEvent;
+use App\Events\ConnectionError;
 use App\Events\ErrorEvent;
 use App\Events\IngestCompleteEvent;
 use App\File;
@@ -81,7 +84,9 @@ class ArchivematicaIngestingListenerTest extends TestCase
         Bus::assertNotDispatched(CallQueuedClosure::class, function ($job) {
             return true;
         });
-
+        Event::assertNotDispatched(ArchivematicaGetIngestStatusError::class);
+        Event::assertNotDispatched(ArchivematicaIngestError::class);
+        Event::assertNotDispatched(ConnectionError::class);
         Event::assertNotDispatched(ErrorEvent::class);
         Event::assertDispatched(IngestCompleteEvent::class);
     }
@@ -95,8 +100,8 @@ class ArchivematicaIngestingListenerTest extends TestCase
         $amClient->shouldReceive('getIngestStatus')->once()->andReturns(
             (object)[
                 'contents' => (object) [
-                    'message' => 'Bad Request',
-                    'error' =>  true,
+                    'message' => 'Approval failed.',
+                    'error' => 'true'
                 ],
                 'statusCode' => 400,
             ]
@@ -113,6 +118,41 @@ class ArchivematicaIngestingListenerTest extends TestCase
             return true;
         });
 
+        Event::assertDispatched(ArchivematicaGetIngestStatusError::class);
+        Event::assertNotDispatched(ArchivematicaIngestError::class);
+        Event::assertNotDispatched(ConnectionError::class);
+        Event::assertDispatched(ErrorEvent::class);
+        Event::assertNotDispatched(IngestCompleteEvent::class);
+    }
+
+    public function test_get_ingest_status_with_http_error_400_without_error_message() {
+        // setup
+        Event::fake();
+        Bus::fake();
+
+        $amClient = \Mockery::mock(ArchivematicaDashboardClientInterface::class);
+        $amClient->shouldReceive('getIngestStatus')->once()->andReturns(
+            (object)[
+                'contents' => (object) [
+                ],
+                'statusCode' => 400,
+            ]
+        );
+
+        $event = new ArchivematicaIngestingEvent($this->bag);
+        $listener = new ArchivematicaIngestingListener($amClient);
+
+        //test
+        $listener->handle($event);
+
+        // assets
+        Bus::assertNotDispatched(CallQueuedClosure::class, function ($job) {
+            return true;
+        });
+
+        Event::assertNotDispatched(ArchivematicaGetIngestStatusError::class);
+        Event::assertNotDispatched(ArchivematicaIngestError::class);
+        Event::assertDispatched(ConnectionError::class);
         Event::assertDispatched(ErrorEvent::class);
         Event::assertNotDispatched(IngestCompleteEvent::class);
     }
@@ -147,6 +187,9 @@ class ArchivematicaIngestingListenerTest extends TestCase
             return true;
         });
 
+        Event::assertNotDispatched(ArchivematicaGetIngestStatusError::class);
+        Event::assertDispatched(ArchivematicaIngestError::class);
+        Event::assertNotDispatched(ConnectionError::class);
         Event::assertDispatched(ErrorEvent::class);
         Event::assertNotDispatched(IngestCompleteEvent::class);
     }
@@ -183,6 +226,9 @@ class ArchivematicaIngestingListenerTest extends TestCase
             return true;
         });
 
+        Event::assertNotDispatched(ArchivematicaGetIngestStatusError::class);
+        Event::assertDispatched(ArchivematicaIngestError::class);
+        Event::assertNotDispatched(ConnectionError::class);
         Event::assertDispatched(ErrorEvent::class);
         Event::assertNotDispatched(IngestCompleteEvent::class);
     }

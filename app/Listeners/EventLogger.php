@@ -3,6 +3,12 @@
 namespace App\Listeners;
 
 use App\EventLogEntry;
+use App\Events\ArchivematicaApproveTransferError;
+use App\Events\ArchivematicaGetFileDetailsError;
+use App\Events\ArchivematicaGetTransferStatusError;
+use App\Events\ArchivematicaGetUnapprovedListError;
+use App\Events\ArchivematicaTransferError;
+use App\Events\ArchivematicaTransferringEvent;
 use Illuminate\Events\Dispatcher;
 
 class EventLogger
@@ -63,24 +69,35 @@ class EventLogger
      */
     public function subscribe($events)
     {
-        $events->listen([
-            'App\Events\ApproveTransferToArchivematicaEvent',
-            'App\Events\ArchivematicaIngestingEvent',
-            'App\Events\ArchivematicaTransferringEvent',
-            'App\Events\BagCompleteEvent',
-            'App\Events\BagFilesEvent',
-            'App\Events\ClearIngestStatusEvent',
-            'App\Events\ClearTmpFilesEvent',
-            'App\Events\ClearTransferStatusEvent',
-            'App\Events\FileUploadedEvent',
-            'App\Events\IngestCompleteEvent',
-            'App\Events\InitiateTransferToArchivematicaEvent',
-            'App\Events\StartTransferToArchivematicaEvent',
-        ],
-            'App\Listeners\EventLogger@logInfoEvents'
-        );
+        if(false) {
+            $events->listen([
+                'App\Events\ApproveTransferToArchivematicaEvent',
+                'App\Events\ArchivematicaIngestingEvent',
+                'App\Events\ArchivematicaTransferringEvent',
+                'App\Events\BagCompleteEvent',
+                'App\Events\BagFilesEvent',
+                'App\Events\ClearIngestStatusEvent',
+                'App\Events\ClearTmpFilesEvent',
+                'App\Events\ClearTransferStatusEvent',
+                'App\Events\FileUploadedEvent',
+                'App\Events\IngestCompleteEvent',
+                'App\Events\InitiateTransferToArchivematicaEvent',
+                'App\Events\StartTransferToArchivematicaEvent',
+            ],
+                'App\Listeners\EventLogger@logInfoEvents'
+            );
+        }
 
         $events->listen([
+            'App\Events\ConnectionError',
+            'App\Events\ArchivematicaInitiateTransferError',
+            'App\Events\ArchivematicaGetUnapprovedListError',
+            'App\Events\ArchivematicaApproveTransferError',
+            'App\Events\ArchivematicaGetTransferStatusError',
+            'App\Events\ArchivematicaTransferError',
+            'App\Events\ArchivematicaGetIngestStatusError',
+            'App\Events\ArchivematicaIngestError',
+            'App\Events\ArchivematicaGetFileDetailsError',
             'App\Events\BagStateTransitionError',
             'App\Events\ErrorEvent',
         ],

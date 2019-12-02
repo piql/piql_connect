@@ -5,6 +5,8 @@ namespace Tests\Unit;
 use App\Bag;
 use App\Events\ApproveTransferToArchivematicaEvent;
 use App\Events\ArchivematicaIngestingEvent;
+use App\Events\ArchivematicaInitiateTransferError;
+use App\Events\ConnectionError;
 use App\Events\ErrorEvent;
 use App\Events\InitiateTransferToArchivematicaEvent;
 use App\File;
@@ -62,11 +64,13 @@ class InitiateTransferToArchivematicaListenerTest extends TestCase
         $listener->handle($event);
 
         // assets
+        Event::assertNotDispatched(ArchivematicaInitiateTransferError::class);
+        Event::assertNotDispatched(ConnectionError::class);
         Event::assertNotDispatched(ErrorEvent::class);
         Event::assertDispatched(ApproveTransferToArchivematicaEvent::class);
     }
 
-    public function test_where_initiate_transfer_returns_error() {
+    public function test_where_initiate_transfer_where_archivematica_returns_with_error_message() {
         // setup
         Event::fake();
 
@@ -85,8 +89,35 @@ class InitiateTransferToArchivematicaListenerTest extends TestCase
         $listener->handle($event);
 
         // assets
+        Event::assertDispatched(ArchivematicaInitiateTransferError::class);
+        Event::assertNotDispatched(ConnectionError::class);
         Event::assertDispatched(ErrorEvent::class);
         Event::assertNotDispatched(ApproveTransferToArchivematicaEvent::class);
     }
 
+
+    public function test_where_initiate_transfer_where_archivematica_returns_without_error_message() {
+        // setup
+        Event::fake();
+
+        $amClient = Mockery::mock(ArchivematicaDashboardClientInterface::class);
+        $amClient->shouldReceive('initiateTransfer')->once()->andReturns(
+            (object)[
+                'contents' => json_decode(''),
+                'statusCode' => 404,
+            ]
+        );
+
+        $event = new ArchivematicaIngestingEvent($this->bag);
+        $listener = new InitiateTransferToArchivematicaListener($amClient);
+
+        //test
+        $listener->handle($event);
+
+        // assets
+        Event::assertNotDispatched(ArchivematicaInitiateTransferError::class);
+        Event::assertDispatched(ConnectionError::class);
+        Event::assertDispatched(ErrorEvent::class);
+        Event::assertNotDispatched(ApproveTransferToArchivematicaEvent::class);
+    }
 }

@@ -2,6 +2,9 @@
 
 namespace App\Listeners;
 
+use App\Events\ArchivematicaGetTransferStatusError;
+use App\Events\ArchivematicaTransferError;
+use App\Events\ConnectionError;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use App\Events\BagCompleteEvent;
@@ -51,9 +54,12 @@ class ArchivematicaTransferringListener implements ShouldQueue
         $response = $this->amClient->getTransferStatus($bag->storage_properties->transfer_uuid);
 
         if($response->statusCode != 200) {
-            $message = " initiate transfer failed with error code " . $response->statusCode;
+            $message = "Transfer failed with error code " . $response->statusCode;
             if (isset($response->contents->error) && ($response->contents->error == true)) {
                 $message .= " and error message: " . $response->contents->message;
+                event(new ArchivematicaGetTransferStatusError($bag, $message));
+            } else {
+                event(new ConnectionError($bag, $message));
             }
 
             Log::error($message);
@@ -70,9 +76,11 @@ class ArchivematicaTransferringListener implements ShouldQueue
             $bag->storage_properties->save();
             event(new ArchivematicaIngestingEvent($bag));
             return;
+
         } elseif ($transferStatus == "FAILED" || $transferStatus == "USER_INPUT" )
         {
             Log::error("Transfer failed for with bag id " . $bag->id);
+            event(new ArchivematicaTransferError($bag, "Transfer failed with status: " . $transferStatus));
             event(new ErrorEvent($bag));
             return;
         }
