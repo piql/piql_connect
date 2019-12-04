@@ -2050,6 +2050,21 @@ th {
     color: $black !important;
 }
 
+.bg-brand {
+    color: $black !important;
+    background-color: $color_main_brand !important;
+}
+
+.bg-signal{
+    color: $black !important;
+    background-color: $color_signal !important;
+}
+
+
+.fg-black {
+    color: $black !important;
+}
+
 .fill-height {
     padding-bottom: 100% !important;
 }
@@ -2089,6 +2104,7 @@ input[type=text] {
 
 .actionIcon {
     color: $color_signal;
+    margin: 0.2rem 0.8rem 0.2rem 0.8rem;
     font-size: 30px;
 }
 
@@ -2198,18 +2214,22 @@ input[type=text] {
     font-size: 21px;
 }
 
-$bar-width: 100px;
-$bar-height: 22px;
+.progress {
+    height: 3rem;
+}
+
+.uploadFileList {
+    min-height: 5rem;
+}
 
 .progress-bar{
     margin-top: 1px;
     border-radius: 8px;
     position:relative;
     border:#ccc solid 1px;
-    width:$bar-width;
-    height:$bar-height;
-    line-height:$bar-height;
-    vertical-align:midle;
+    width: auto;
+    height: 3rem;
+    vertical-align: middle;
     overflow:hidden;
     font-family:$font_agenda;
     font-size:20px;
@@ -2222,7 +2242,7 @@ $bar-height: 22px;
             padding-top: 1px;
             position:absolute;
             display:block;
-            width:$bar-width;
+            width: auto;
             height:100%;
             text-align:center;
         }

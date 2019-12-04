@@ -32,6 +32,7 @@
         "bootstrap-vue-treeview": "^1.0.8",
         "chart.js": "^2.8.0",
         "chartjs": "^0.3.24",
+        "filesize": "^6.0.1",
         "fine-uploader": "^5.16.2",
         "fine-uploader-wrappers": "^1.0.1",
         "imagemagick": "^0.1.3",
