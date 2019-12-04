@@ -52,8 +52,7 @@
             class='vue-fine-uploader-gallery-total-progress-bar'
             :uploader="uploader" />
 
-        <div class="row plistHeader">
-            <div class="col-sm-1 text-center">
+        <div class="row plistHeader"> <div class="col-sm-1 text-center">
             </div>
             <div class="col-sm-6 text-left align-self-center">
                 Filename
@@ -66,7 +65,10 @@
             </div>
         </div>
 
-        <UploadFileItem v-for="file in filesUploading" v-bind:file="file" :key="file.id" />
+        <UploadFileItem v-for="(file,index) in filesUploading" v-bind:file="file" :key="file.id"
+            v-if="index >= pageFrom-1 && index <= pageTo-1 " />
+        <div class="row plist uploadFileList invisible" v-for="pad in pagerPad"></div>
+        <Pager :meta="filesUploadingMeta" @updatePage="updatePage" />
 
     </div>
 </template>
@@ -111,14 +113,14 @@ data() {
                         this.processDisabled = true;
                     },
                     onSubmit: (id, name) => {
-                        this.filesUploading.push({ 
+                        this.filesUploading.unshift({
                             'id': id,
                             'filename': name,
                             'progressBarStyle': "width: 0%",
-                            uploadedFileId: '',
-                            fileSize: 0,
-                            uploadedFileSize: 0,
-                            isUploading: false
+                            'uploadedFileId': '',
+                            'fileSize': 0,
+                            'uploadedFileSize': 0,
+                            'isUploading': false
                         });
                     },
                     onProgress: (id, name, uploadedBytes, totalBytes) => {
@@ -148,7 +150,6 @@ data() {
                                 if( this.bag.id == uploadToBagId ){ //???
                                     await axios.get("/api/v1/ingest/bags/"+uploadToBagId+"/files").then( (files) => {
                                         this.files = files.data.data;
-                                        console.log("File list updated");
                                     });
                                 }
                             })
@@ -168,8 +169,8 @@ data() {
             filesUploading: [],
             userId: '',
             userSettings: {
-            workflow: {
-                }
+                workflow: {
+                    }
             },
             processDisabled: true,
             fileInputDisabled: false,
@@ -177,6 +178,10 @@ data() {
             selectedArchive: {},
             holdings: [],
             selectedHoldingTitle: {},
+            currentPage: 1,
+            pageSize: 5,
+            pageFrom: 1,
+            pageTo: 5
         };
     },
 
@@ -189,17 +194,44 @@ data() {
             return this.files.length;
         },
         compoundModeEnabled: function() {
-          return this.userSettings.workflow.ingestCompoundModeEnabled;
+            return this.userSettings.workflow.ingestCompoundModeEnabled;
         },
         uploadInProgress: function() {
-            return this.filesUploading.length > 0;
+            return this.totalFilesUploading.length > 0;
+        },
+        totalFilesUploading: function() {
+            return this.filesUploading.length;
+        },
+        pageLast: function() {
+            return Math.ceil( this.totalFilesUploading / this.pageSize );
+        },
+        pagePrev: function() {
+            return this.currentPage < 2 ? null : this.currentPage - 1;
+        },
+        pageNext: function() {
+            return this.currentPage == this.pageLast ? null : this.currentPage + 1;
+        },
+        pagerPad: function() {
+            return this.currentPage != this.pageLast ? 0 : this.pageSize - (this.totalFilesUploading % this.pageSize);
+        },
+        filesUploadingMeta: function() {
+            return {
+                'current_page': this.currentPage,
+                'prev': this.pagePrev,
+                'next': this.pageNext,
+                'last_page': this.pageLast,
+                'from': this.pageFrom,
+                'to': this.pageTo,
+                'total': this.totalFilesUploading
+            }
         }
+
     },
 
     methods: {
         onClick(url) {
             window.location = url;
-            },
+        },
         metadataClicked( e ) {
         },
         removeClicked( e ) {
@@ -208,6 +240,12 @@ data() {
         },
         humanReadableFileSize( fileSizeInBytes ){
             return isNaN( fileSizeInBytes )  ? "" : filesize( fileSizeInBytes );
+        },
+        updatePage( page ) {
+            let prevCurrentPage = this.currentPage;
+            this.currentPage = page.page;
+            this.pageFrom = 1 + (this.currentPage-1) * this.pageSize;
+            this.pageTo = this.pageFrom+this.pageSize-1;
         },
         async commitBagToProcessing(e) {
             if(this.processDisabled){
@@ -282,6 +320,9 @@ data() {
         },
     },
     async mounted() {
+        this.currentPage = 1;
+        this.pageFrom = 1;
+        this.pageTo = this.pageSize;
         await axios.get("/api/v1/planning/archives").then( (response) => {
             this.archives = response.data.data;
             this.selectedArchive = this.archives[0].uuid;
@@ -298,16 +339,15 @@ data() {
             if(this.bag !== undefined && this.bag.status === "open")
             {
                 this.files = (await axios.get('/api/v1/ingest/bags/' + this.bag.id + '/files')).data.data;
-                this.filesUploading = this.files.map( (file, index) => { return { 
-                            'id': index+10000,
-                            'filename': file.filename,
-                            'progressBarStyle': "width: 0%",
+                this.filesUploading = this.files.map( (file, index) => ({
+                            id: index+10000,
+                            filename: file.filename,
+                            progressBarStyle: "width: 0%",
                             uploadedFileId: '',
                             fileSize: file.filesize,
                             uploadedFileSize: file.filesize,
                             isUploading: false
-                }} );
-
+                }) );
             }
             else
             {
