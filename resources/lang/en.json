@@ -10,7 +10,7 @@
 	"Home": "Overview",
     "upload.header": "Upload",
     "upload.ingress" : "Upload one or more files for pre-ingest here. Either click the “Add file to upload” button, or drag and drop files to the area below. Add a name to your submission package to ease tracking your archival data. When your files are uploaded, clicking the Process button will start the archival workflow.",
-	"upload.addFileToUpload" : "Add file to upload",
+	"upload.addFileToUpload" : "Add file",
 	"upload.optionalName": "Upload name (optional)",
 	"upload.processButton": "Process",
     "upload.sipName": "Submission package name",

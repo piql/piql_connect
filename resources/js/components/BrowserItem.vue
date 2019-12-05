@@ -10,13 +10,13 @@
                 {{item.storage_properties.bag.name}}
             </div>
             <div class="col-sm-2 align-self-center text-center">
-                {{dateFormat(item.created_at)}}
+                {{dateFormat(item.storage_properties.bag.created_at)}}
             </div>
             <div class="col-sm-1 align-self-center text-center">
                 {{item.storage_properties.holding_name}}
             </div>
             <div class="col-sm-1 align-self-center text-center">
-                {{item.storage_properties.bag.fileCount}}
+                {{fileCount}}
             </div>
             <div class="col-sm-1 align-self-center text-center">
                 <a @click="download" href="#" data-toggle="tooltip" title="Download file"><i class="fas fa-file-download titleIcon text-center"></i></a>
@@ -35,8 +35,10 @@
     import axios from 'axios';
     export default {
         async mounted() {
-						let response = await axios.get('/api/v1/access/dips/'+this.item.id+'/thumbnails', { responseType: 'arraybuffer' });
-						this.thumbnailImage = `data:${response.headers['content-type']};base64,${btoa(String.fromCharCode(...new Uint8Array(response.data)))}`;
+						let thumbnail = await axios.get('/api/v1/access/dips/'+this.item.id+'/thumbnails', { responseType: 'blob' });
+            let reader = new FileReader();
+            reader.onload = e => this.thumbnailImage = reader.result;
+            reader.readAsDataURL( thumbnail.data );
         },
         props: {
             item: Object,
@@ -58,11 +60,11 @@
                 this.$emit('openObject', this.item.id);
             },
             preview: function(){
-                this.$emit('openObject', this.item.id);
+                this.$emit('showPreview', this.item);
             },
             async download(){
-                let filename = (await axios.get('/api/v1/access/aips/'+this.item.id+'/filename')).data;
-                let response = await axios.get('/api/v1/access/aips/'+this.item.id+'/download', { responseType: 'blob' });
+                let filename = (await axios.get('/api/v1/access/aips/dips/'+this.item.id+'/filename')).data;
+                let response = await axios.get('/api/v1/access/aips/dips/'+this.item.id+'/download', { responseType: 'blob' });
                 let fileUrl = window.URL.createObjectURL(new Blob([response.data]));
                 let fileLink = document.createElement('a');
                 fileLink.href = fileUrl;
@@ -77,6 +79,9 @@
             downloadUrl: function(){
                 return "/api/v1/access/aips/"+this.item.id+"/download";
             },
+            fileCount: function(){
+                return this.item.storage_properties.bag.fileCount;
+            }
         }
 
     }

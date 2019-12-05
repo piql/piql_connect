@@ -183,7 +183,7 @@ class BagController extends Controller
             abort( response()->json([ 'error' => 401, 'message' => 'The current user is not authorized to access bag with id '.$id ], 401 ) );
         }
 
-        $files = $bag->files()->paginate( env( 'DEFAULT_ENTRIES_PER_PAGE') );
+        $files = $bag->files()->latest()->get();
 /*TODO: Move to AIP        $result = $files->map( function ($file) {
             $ext = pathinfo($file->filename, PATHINFO_EXTENSION);
             return collect(["fupath" => $file->uuid.".".$ext])->merge($file);
@@ -194,7 +194,7 @@ class BagController extends Controller
 
     public function complete()
     {
-        $bags = Bag::latest()
+        $bags = Bag::with('files')->latest()
                 ->where( 'owner', Auth::id() )
                 ->where('status', 'complete')
                 ->paginate(env("DEFAULT_ENTRIES_PER_PAGE"));

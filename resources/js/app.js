@@ -73,14 +73,18 @@ const i18n = new VueInternationalization({
 const files = require.context('./', true, /\.vue$/i);
 files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default));
 
-Vue.component('gallery', './components/gallery/index.vue');
-Vue.component('thumbnail', './components/thumbnail/index.vue');
-
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
+
+/**
+ * The filesize es6 module - giving us human readable file sizes -
+ * must be required by full path according to the documentation at 
+ * https://www.npmjs.com/package/filesize
+ */
+require('../../node_modules/filesize/lib/filesize.es6.js');
 
 const app = new Vue({
     el: '#app',

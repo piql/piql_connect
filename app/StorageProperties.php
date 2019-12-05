@@ -27,4 +27,9 @@ class StorageProperties extends Model
         return $this->hasOne('App\Dip', 'external_uuid', 'dip_uuid');
     }
 
+    public function archive()
+    {
+        return $this->belongsTo('App\Archive', 'archive_uuid', 'uuid' );
+    }
+
 }

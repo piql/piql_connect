@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\FileResource;
 use Log;
 use App\File;
 use App\Bag;
@@ -51,7 +52,7 @@ class FileUploadController extends Controller
         $file->bag_id = $request->bagId;
         $file->save();
         event( new FileUploadedEvent( $file, Auth::user() ) );
-        return $file;
+        return new FileResource($file);
     }
 
     /**

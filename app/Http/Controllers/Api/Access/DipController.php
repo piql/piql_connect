@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\Access;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\DipResource;
 use App\Dip;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -20,8 +21,12 @@ class DipController extends Controller
 
     public function index()
     {
-        return Dip::with(['storage_properties','storage_properties.bag'])->latest()->paginate(5);
+        return \App\Http\Resources\DipResource::collection(
+            Dip::with(['storage_properties', 'storage_properties.bag'])
+                ->latest()->paginate( 5 )
+        );
     }
+
     public function package_thumbnail( Request $request, ArchivalStorageInterface $storage )
     {
         $dip = Dip::find( $request->dipId );
@@ -32,6 +37,66 @@ class DipController extends Controller
         return response($storage->stream( $dip->storage_location, $file->fullpath ))
             ->header("Content-Type" , "image/jpeg");
     }
+
+    public function package_preview( Request $request, ArchivalStorageInterface $storage )
+    {
+        $dip = Dip::find( $request->dipId );
+        $file = $dip->fileObjects->filter( function ($file, $key) {
+            return Str::contains( $file->fullpath, '/objects' );
+        })->first();
+
+        return response($storage->stream( $dip->storage_location, $file->fullpath ))
+            ->header("Content-Type" , "image/jpeg");
+    }
+
+    public function files( Request $request )
+    {
+        $dip = Dip::find( $request->dipId );
+        $files = $dip->fileObjects->filter( function ($file, $key) {
+            return Str::contains( $file->fullpath, '/objects' );
+        })->all();
+        return response( $files );
+    }
+
+    public function file_preview( Request $request, ArchivalStorageInterface $storage )
+    {
+        $dip = Dip::find( $request->dipId );
+        $file = $dip->fileObjects->find( $request->fileId );
+
+        return response($storage->stream( $dip->storage_location, $file->fullpath ))
+            ->header("Content-Type" , "image/jpeg");
+    }
+
+    public function file_download( ArchivalStorageInterface $storage, Request $request )
+    {
+        $dip = Dip::find( $request->dipId );
+        $file = $dip->fileObjects->find( $request->fileId );
+
+        return response()->streamDownload( function () use( $storage, $dip, $file ) {
+            echo $storage->stream( $dip->storage_location, $file->fullpath );
+        }, basename( $file->path ), [
+            "Content-Type" => "application/octet-stream",
+            "Content-Disposition" => "attachment; { $file->filename }"
+        ]);
+    }
+
+    public function file_thumbnail( ArchivalStorageInterface $storage, Request $request )
+    {
+        $dip = Dip::find( $request->dipId );
+        $file = $dip->fileObjects->find( $request->fileId );
+        $thumbnail = $dip->fileObjects->filter( function ($thumb, $key) use( $file ) {
+                return Str::contains( $thumb->path, '/thumbnails' );
+        })->filter( function ($thumb, $key) use ( $file ) {
+            return Str::contains( $file->filename, pathinfo( $thumb->filename, PATHINFO_FILENAME ) );
+        })->first();
+
+
+        return response($storage->stream( $dip->storage_location, $thumbnail->fullpath ))
+            ->header("Content-Type" , "image/jpeg");
+    }
+
+
+
     /**
      * Show the form for creating a new resource.
      *

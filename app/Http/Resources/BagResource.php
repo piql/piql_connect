@@ -25,9 +25,9 @@ class BagResource extends JsonResource
             'bagSize' => $this->getBagSize(),
             'created_at' => $this->created_at,
             'update_at' => $this->updated_at,
-            'archive_uuid' => $this->archive_uuid,
+            'archive_uuid' => $this->storage_properties->archive_uuid,
             'archive_name' => $this->archive_title,
-            'holding_name' => $this->holding_name,
+            'holding_name' => $this->storage_properties->holding_name,
             'retrieval_id' => $this->retrieval_id
         ];
     }

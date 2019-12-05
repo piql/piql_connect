@@ -61,9 +61,16 @@ class AipController extends Controller
         return response ( $aip->fileObjects->first()->filename );
     }
 
+    public function filenameFromDipId( Request $request )
+    {
+        $dip = \App\Dip::find ($request->dipId );
+        $aip = $dip->storage_properties->aip;
+        return response ( $aip->fileObjects->first()->filename );
+    }
+
+
     public function download(ArchivalStorageInterface $storage, Request $request)
     {
-        Log::debug("Preparing download for aip {$request->aipId}");
         $aip = Aip::find($request->aipId);
         $file = $aip->fileObjects->first();
 
@@ -74,6 +81,21 @@ class AipController extends Controller
             "Content-Disposition" => "attachment; { $file->filename }"
         ]);
     }
+
+    public function downloadFromDipId(ArchivalStorageInterface $storage, Request $request)
+    {
+        $dip = \App\Dip::find( $request->dipId );
+        $aip = $dip->storage_properties->aip;
+        $file = $aip->fileObjects->first();
+
+        return response()->streamDownload(function () use( $storage, $aip, $file ) {
+            echo $storage->stream( $aip->online_storage_location, $file->fullpath );
+        }, basename( $file->path ), [
+            "Content-Type" => "application/x-tar",
+            "Content-Disposition" => "attachment; { $file->filename }"
+        ]);
+    }
+
 
     /**
      * Show the form for editing the specified resource.

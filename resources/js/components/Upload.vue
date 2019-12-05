@@ -1,70 +1,89 @@
 <template>
     <div class="container-fluid">
+
         <div class="row mb-4 w-auto">
             <div class="col-6">
-                <em class="mb-3 mt-2">
-                    {{ $t('upload.ingress') }}
-                </em>
-            </div>
-        </div>
-        <div class="row mb-5">
-            <div class="col-sm-12">
-                <Gallery
-                    :uploader="uploader"
-                    :fileInputDisabled="fileInputDisabled"
-                    @submit="addFileToQueue"
-                    ref="gallery">
-                </Gallery>
+                <em class="mb-3 mt-2">{{ $t('upload.ingress') }}</em>
             </div>
         </div>
 
-        <div class="card upload-widget-back w-auto p-2 pt-3 pb-4 w-95">
-            <div class="row mb-2">
-                <div v-if="compoundModeEnabled" class="col-sm-2 mr-1 ml-1">{{ $t('upload.sipName') }}</div>
-                <div class="col-sm-2 mr-1">{{ $t('Archive') }}</div>
-                <div class="col-sm-2 mr-1">{{ $t('Holding') }}</div>
-                <div v-if="compoundModeEnabled" class="col-sm-2 mr-1">{{ $t('upload.files') }}</div>
-                <div v-if="compoundModeEnabled" class="col-sm-1 listActionItems mr-3"></div>
-                <div v-if="compoundModeEnabled" class="col-sm-2"></div>
-            </div>
-            <form v-on:submit.prevent="">
-                <div class="row">
-                    <div v-if="compoundModeEnabled" class="col-sm-2 mr-2">
-                        <input value="" :placeholder="bag.name" v-model="bag.name" type="text" class="noTextTransform form-control pl-3" @input="setBagName" onclick="select()">
-                    </div>
-                    <div class="col-sm-2 mr-2">
-                      <archive-picker :archives="archives" :initialSelection="selectedArchive" @selectionChanged="changedArchive"></archive-picker>
-                   </div>
-                    <div class="col-sm-2 mr-2">
-                      <holding-picker :holdings="holdings" :initialSelection="selectedHoldingTitle" @selectionChanged="changedHolding"></holding-picker>
-                   </div>
-
-                    <div v-if="compoundModeEnabled" class="col-sm-1 card p-2 pr-4 mr-2" style="text-align: right; max-height: 3rem;">
-                        {{ numberOfFiles || 0}}
-                    </div>
-                    <div v-if="compoundModeEnabled" class="col-sm-2 listActionItems mr-2" style="text-align: center">
-                        <i class="fas fa-list-ul p-2 mr-4 hover-hand" @click="onClick('/ingest/tasks/'+bag.id)"></i>
-                        <i class="fas fa-trash-alt p-2 hover-hand"></i>
-                    </div>
-                    <div v-if="compoundModeEnabled" class="col-sm-2 text-center">
-                        <button class="btn btn-primary btn-lg mr-2 w-100" v-bind:class="[{ disabled : processDisabled  }]" v-on:click="commitBagToProcessing">{{$t('upload.processButton')}}</button>
-                    </div>
-                </div>
-            </form>
+        <div class="row mb-2">
+            <div v-if="compoundModeEnabled" class="col-sm-2 mr-1 ml-1">{{ $t('upload.sipName') }}</div>
+            <div class="col-sm-2 mr-1">{{ $t('Archive') }}</div>
+            <div class="col-sm-2 mr-1">{{ $t('Holding') }}</div>
+            <div v-if="compoundModeEnabled" class="col-sm-2 mr-1">{{ $t('upload.files') }}</div>
+            <div v-if="compoundModeEnabled" class="col-sm-1 listActionItems mr-3"></div>
+            <div v-if="compoundModeEnabled" class="col-sm-2"></div>
         </div>
+
+        <div class="row">
+            <div v-if="compoundModeEnabled" class="col-sm-2 mr-2">
+                <input value="" :placeholder="bag.name" v-model="bag.name" type="text" class="noTextTransform form-control pl-3" @input="setBagName" onclick="select()">
+            </div>
+            <div class="col-sm-2 mr-2">
+                <archive-picker :archives="archives" :initialSelection="selectedArchive" @selectionChanged="changedArchive"></archive-picker>
+            </div>
+
+            <div class="col-sm-2 mr-2">
+                <holding-picker :holdings="holdings" :initialSelection="selectedHoldingTitle" @selectionChanged="changedHolding"></holding-picker>
+            </div>
+
+            <div v-if="compoundModeEnabled" class="col-sm-1 card p-2 pr-4 mr-2" style="text-align: right; max-height: 3rem;">
+                {{ numberOfFiles || 0}}
+            </div>
+
+            <div v-if="compoundModeEnabled" class="col-sm-2 listActionItems mr-2" style="text-align: center">
+                <i class="fas fa-list-ul p-2 mr-4 hover-hand" @click="onClick('/ingest/tasks/'+bag.id)"></i>
+                <i class="fas fa-trash-alt p-2 hover-hand"></i>
+            </div>
+            <div v-if="compoundModeEnabled" class="col-sm-2 text-center">
+                <button class="btn btn-primary btn-lg mr-2 w-100" v-bind:class="[{ disabled : processDisabled  }]" v-on:click="commitBagToProcessing">{{$t('upload.processButton')}}</button>
+            </div>
+        </div>
+
+        <FileInputComponent
+            :multiple="compoundModeEnabled"
+            :uploader="uploader"
+            :disabled="fileInputDisabled">
+            <slot name="inputbuttontext">{{$t("upload.addFileToUpload")}}</slot>
+        </FileInputComponent>
+
+        <ProgressBar
+            class='vue-fine-uploader-gallery-total-progress-bar'
+            :uploader="uploader" />
+
+        <div class="row plistHeader"> <div class="col-sm-1 text-center">
+            </div>
+            <div class="col-sm-6 text-left align-self-center">
+                Filename
+            </div>
+            <div class="col-sm-3 text-center align-self-center">
+                File size
+            </div>
+            <div class="col-sm-2 text-center align-self-center">
+                Actions
+            </div>
+        </div>
+
+        <UploadFileItem v-for="(file,index) in filesUploading" v-bind:file="file" :key="file.id"
+            v-if="index >= pageFrom-1 && index <= pageTo-1 " />
+        <div class="row plist uploadFileList invisible" v-for="pad in pagerPad"></div>
+        <Pager :meta="filesUploadingMeta" @updatePage="updatePage" />
+
     </div>
 </template>
 
 <script language="text/babel">
-import FineUploaderTraditional from 'fine-uploader-wrappers'
 import FineUploader from 'vue-fineuploader';
+import FineUploaderTraditional from 'fine-uploader-wrappers'
 import axios from 'axios';
 import JQuery from 'jquery';
 let $ = JQuery;
 import selectpicker from 'bootstrap-select';
+import filesize from 'filesize';
 
 export default {
-    data() {
+data() {
         const uploader = new FineUploaderTraditional({
             options: {
                 request: {
@@ -83,7 +102,7 @@ export default {
                 },
                 chunking: {
                     enabled: true,
-                    partSize: 1000000,
+                    partSize: 1024*256,
                     mandatory: true,
                     concurrent: {
                         enabled: false
@@ -93,8 +112,31 @@ export default {
                     onValidate: (id, name) => {
                         this.processDisabled = true;
                     },
+                    onSubmit: (id, name) => {
+                        this.filesUploading.unshift({
+                            'id': id,
+                            'filename': name,
+                            'progressBarStyle': "width: 0%",
+                            'uploadedFileId': '',
+                            'fileSize': 0,
+                            'uploadedFileSize': 0,
+                            'isUploading': false
+                        });
+                    },
+                    onProgress: (id, name, uploadedBytes, totalBytes) => {
+                        let progress = Math.round( uploadedBytes * ( 100.0 / totalBytes ) );
+                        let filesIndex = this.filesUploading.findIndex( (file) => file.id == id );
+                        this.filesUploading[filesIndex].isUploading = true;
+                        this.filesUploading[filesIndex].fileSize = totalBytes;
+                        this.filesUploading[filesIndex].uploadedFileSize = uploadedBytes;
+                        this.filesUploading[filesIndex].progressBarStyle = {'width': `${progress}%` };
+                    },
                     onComplete: async (id, name, response, xhr, something) => {
+                        let filesIndex = this.filesUploading.findIndex( (file) => file.id == id );
+                        this.filesUploading[filesIndex].isUploading = false;
                         let fileSize = this.uploader.methods.getSize(id);
+                        this.filesUploading[filesIndex].fileSize = fileSize;
+
                         if( this.compoundModeEnabled ) {
                             this.processDisabled = false;
                             let uploadToBagId = this.bag.id;
@@ -103,7 +145,8 @@ export default {
                                 'result' : response,
                                 'bagId' : uploadToBagId,
                                 'fileSize': fileSize
-                            }).then( async () => {
+                            }).then( async ( file ) => {
+                                this.filesUploading[filesIndex].uploadedFileId = file.data.data.id;
                                 if( this.bag.id == uploadToBagId ){ //???
                                     await axios.get("/api/v1/ingest/bags/"+uploadToBagId+"/files").then( (files) => {
                                         this.files = files.data.data;
@@ -123,17 +166,22 @@ export default {
             uploader: uploader,
             bag: {},
             files: {},
+            filesUploading: [],
             userId: '',
             userSettings: {
-            workflow: {
-                }
+                workflow: {
+                    }
             },
             processDisabled: true,
             fileInputDisabled: false,
             archives: [],
             selectedArchive: {},
             holdings: [],
-            selectedHoldingTitle: {}
+            selectedHoldingTitle: {},
+            currentPage: 1,
+            pageSize: 5,
+            pageFrom: 1,
+            pageTo: 5
         };
     },
 
@@ -148,13 +196,56 @@ export default {
         compoundModeEnabled: function() {
             return this.userSettings.workflow.ingestCompoundModeEnabled;
         },
+        uploadInProgress: function() {
+            return this.totalFilesUploading.length > 0;
+        },
+        totalFilesUploading: function() {
+            return this.filesUploading.length;
+        },
+        pageLast: function() {
+            return Math.ceil( this.totalFilesUploading / this.pageSize );
+        },
+        pagePrev: function() {
+            return this.currentPage < 2 ? null : this.currentPage - 1;
+        },
+        pageNext: function() {
+            return this.currentPage == this.pageLast ? null : this.currentPage + 1;
+        },
+        pagerPad: function() {
+            return this.currentPage != this.pageLast ? 0 : this.pageSize - (this.totalFilesUploading % this.pageSize);
+        },
+        filesUploadingMeta: function() {
+            return {
+                'current_page': this.currentPage,
+                'prev': this.pagePrev,
+                'next': this.pageNext,
+                'last_page': this.pageLast,
+                'from': this.pageFrom,
+                'to': this.pageTo,
+                'total': this.totalFilesUploading
+            }
+        }
+
     },
 
     methods: {
         onClick(url) {
-          window.location = url;
+            window.location = url;
+        },
+        metadataClicked( e ) {
+        },
+        removeClicked( e ) {
         },
         addFileToQueue(payload) {
+        },
+        humanReadableFileSize( fileSizeInBytes ){
+            return isNaN( fileSizeInBytes )  ? "" : filesize( fileSizeInBytes );
+        },
+        updatePage( page ) {
+            let prevCurrentPage = this.currentPage;
+            this.currentPage = page.page;
+            this.pageFrom = 1 + (this.currentPage-1) * this.pageSize;
+            this.pageTo = this.pageFrom+this.pageSize-1;
         },
         async commitBagToProcessing(e) {
             if(this.processDisabled){
@@ -166,14 +257,13 @@ export default {
             await this.doProcessing( this.bag.id );
             this.bag = await this.createBag("", this.userId, this.selectedArchive, this.selectedHoldingTitle );
             this.fileInputDisabled = false;
-            this.$refs.gallery.ondrop = null;
         },
         async doProcessing( bagId ) {
             let committed = (await axios.post("/api/v1/ingest/bags/"+bagId+"/commit")).data.data;
-            this.$refs.gallery.clearDropzone();
             this.uploader.methods.reset();
             this.bagName = "";
             this.files = [];
+            this.fileUploading = [];
         },
         async setBagName() {
             let currentBagId = this.bag.id;
@@ -192,6 +282,8 @@ export default {
                 archive_uuid: selectedArchive,
                 holding_name: selectedHoldingTitle
             })).data.data;
+            this.files = [];
+            this.filesUploading = [];
             return createdBag;
         },
         async setupHoldings(archiveId, initialHolding) {
@@ -228,6 +320,9 @@ export default {
         },
     },
     async mounted() {
+        this.currentPage = 1;
+        this.pageFrom = 1;
+        this.pageTo = this.pageSize;
         await axios.get("/api/v1/planning/archives").then( (response) => {
             this.archives = response.data.data;
             this.selectedArchive = this.archives[0].uuid;
@@ -244,12 +339,21 @@ export default {
             if(this.bag !== undefined && this.bag.status === "open")
             {
                 this.files = (await axios.get('/api/v1/ingest/bags/' + this.bag.id + '/files')).data.data;
+                this.filesUploading = this.files.map( (file, index) => ({
+                            id: index+10000,
+                            filename: file.filename,
+                            progressBarStyle: "width: 0%",
+                            uploadedFileId: '',
+                            fileSize: file.filesize,
+                            uploadedFileSize: file.filesize,
+                            isUploading: false
+                }) );
             }
             else
             {
                 this.bag = (await this.createBag( "", this.userId, this.selectedArchive, this.selectedHoldingTitle ));
             }
-            if(this.files)
+            if(this.filesUploading)
             {
                 this.processDisabled = false;
             }
@@ -261,7 +365,6 @@ export default {
         }
     },
     props: {
-        button: Object,
     }
 
 };
