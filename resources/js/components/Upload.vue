@@ -68,7 +68,7 @@
         <UploadFileItem v-for="(file,index) in filesUploading" v-bind:file="file" :key="file.id"
             v-if="index >= pageFrom-1 && index <= pageTo-1 " />
         <div class="row plist uploadFileList invisible" v-for="pad in pagerPad"></div>
-        <Pager :meta="filesUploadingMeta" @updatePage="updatePage" />
+        <Pager :meta="filesUploadingMeta" @updatePage="updatePage" v-if="totalFilesUploading > 0" />
 
     </div>
 </template>
@@ -197,7 +197,7 @@ data() {
             return this.userSettings.workflow.ingestCompoundModeEnabled;
         },
         uploadInProgress: function() {
-            return this.totalFilesUploading.length > 0;
+            return this.filesUploading.length > 0;
         },
         totalFilesUploading: function() {
             return this.filesUploading.length;
@@ -212,7 +212,10 @@ data() {
             return this.currentPage == this.pageLast ? null : this.currentPage + 1;
         },
         pagerPad: function() {
-            return this.currentPage != this.pageLast ? 0 : this.pageSize - (this.totalFilesUploading % this.pageSize);
+            let entriesOnLastPage = this.totalFilesUploading % this.pageSize;
+            let padEntries = entriesOnLastPage > 0 ? ( this.pageSize - entriesOnLastPage ) : 0;
+
+            return this.currentPage != this.pageLast ? 0 : padEntries;
         },
         filesUploadingMeta: function() {
             return {
