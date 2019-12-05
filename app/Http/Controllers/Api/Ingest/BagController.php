@@ -301,6 +301,28 @@ class BagController extends Controller
         Log::debug("Bag edit");
     }
 
+
+    public function deleteFile( Request $request, $bagId, $fileId ){
+        $file = \App\File::find($fileId);
+        if(! $file ){
+            abort( response()->json([ 'error' => 410, 'message' => 'File not found or already deleted for file with id {$fileId}'], 410 ) );
+        }
+        $filePath = $file->storagePath();
+        Log::debug("Trying to delete file {$fileId} from bag {$bagId} at path {$filePath} ");
+        try {
+            if(! Storage::disk('uploader')->delete( $filePath ) ) {
+                throw new \Exception("Reason unknown. Possibly a permissions problem.");
+            }
+        } catch( \Exception $ex ) {
+            $exMessage = $ex->getMessage();
+            $trace = $ex->getTrace();
+            $jtrace = json_encode( $trace );
+            abort( response()->json([ 'error' => 500, 'message' => "Unable to delete file with id {$fileId}: {$exMessage}", 'Stack trace' => $trace ], 410 ) );
+        }
+        $file->delete();
+        return response()->json(["message" => "File {$fileId} from bag {$bagId} deleted."]);
+    }
+
     /**
      * Update the specified resource in storage.
      *
