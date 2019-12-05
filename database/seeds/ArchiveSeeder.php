@@ -2,9 +2,12 @@
 
 use Illuminate\Database\Seeder;
 use App\Archive;
+use \App\Traits\SeederOperations;
 
 class ArchiveSeeder extends Seeder
 {
+    use SeederOperations;
+
     /**
      * Run the database seeds.
      *
@@ -13,8 +16,16 @@ class ArchiveSeeder extends Seeder
     public function run()
     {
         Archive::truncate();
+
+        if($this->seedFromFile(function($param) {
+                Archive::create($param);
+            })){
+
+            return;
+        }
+
         Archive::create([
-            'title' => 'Forsvarsmuseet', 
+            'title' => 'Forsvarsmuseet',
             'description' => 'Forsvarsmuseet er hovedmuseum i Forsvaret og har holdt til i en gammel arsenalbygning på Akershus festning siden 1860. Utstillingene viser historien til det norske Forsvaret, med vekt på tiden fra 1400-tallet til våre dager. Forsvarsmuseet skal formidle informasjon slik at man på historisk grunnlag skal kunne ta standpunkt i forsvarshistoriske spørsmål, og til Forsvarets rolle i dagens situasjon.',
             'uuid' => '9aae5540-d3ec-11e9-9a0b-ddd5a3958760'
 
