@@ -18,8 +18,8 @@
         </div>
         <div class="col-sm-2 text-center align-self-center">
             <span v-if="! file.isUploading">
-                <a @click="metadataClicked" href="#" data-toggle="tooltip" title="Edit metadata"><i class="fas fa-tags actionIcon text-center"></i></a>
-                <a @click="removeClicked" href="#" data-toggle="tooltip" title="Remove file"><i class="fas fa-trash-alt actionIcon text-center"></i></a>
+                <a @click="metadataClicked (file)" href="#" data-toggle="tooltip" title="Edit metadata"><i class="fas fa-tags actionIcon text-center"></i></a>
+                <a @click="removeClicked (file)" href="#" data-toggle="tooltip" title="Remove file"><i class="fas fa-trash-alt actionIcon text-center"></i></a>
             </span>
         </div>
     </div>
@@ -45,9 +45,10 @@
                 return moment(item.created_at).format('L');
             },
             removeClicked: function( file ) {
-              console.log("remove me: "+file);
+              this.$emit("removeClicked", file );
             },
-            metadataClicked: function (file ) {
+          metadataClicked: function (file ) {
+              this.$emit("metadataClicked", file );
             },
         },
         computed: {

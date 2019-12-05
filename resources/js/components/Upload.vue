@@ -2,21 +2,30 @@
     <div class="container-fluid">
 
         <div class="row mb-4 w-auto">
-            <div class="col-6">
+            <div class="col-8">
                 <em class="mb-3 mt-2">{{ $t('upload.ingress') }}</em>
             </div>
         </div>
 
         <div class="row mb-2">
-            <div v-if="compoundModeEnabled" class="col-sm-2 mr-1 ml-1">{{ $t('upload.sipName') }}</div>
-            <div class="col-sm-2 mr-1">{{ $t('Archive') }}</div>
-            <div class="col-sm-2 mr-1">{{ $t('Holding') }}</div>
+          <div class="col-sm-2">&nbsp;</div>
+            <div v-if="compoundModeEnabled" class="col-sm-2 text-left">{{ $t('upload.sipName') }}</div>
+            <div class="col-sm-2 ">{{ $t('Archive') }}</div>
+            <div class="col-sm-2 ">{{ $t('Holding') }}</div>
             <div v-if="compoundModeEnabled" class="col-sm-2 mr-1">{{ $t('upload.files') }}</div>
-            <div v-if="compoundModeEnabled" class="col-sm-1 listActionItems mr-3"></div>
             <div v-if="compoundModeEnabled" class="col-sm-2"></div>
         </div>
 
         <div class="row">
+          <div class="col-sm-2">
+            <FileInputComponent
+                :multiple="compoundModeEnabled"
+                :uploader="uploader"
+                :disabled="fileInputDisabled">
+                <slot name="inputbuttontext" class="w-auto">{{$t("upload.addFileToUpload")}}</slot>
+            </FileInputComponent>
+          </div>
+
             <div v-if="compoundModeEnabled" class="col-sm-2 mr-2">
                 <input value="" :placeholder="bag.name" v-model="bag.name" type="text" class="noTextTransform form-control pl-3" @input="setBagName" onclick="select()">
             </div>
@@ -28,34 +37,20 @@
                 <holding-picker :holdings="holdings" :initialSelection="selectedHoldingTitle" @selectionChanged="changedHolding"></holding-picker>
             </div>
 
-            <div v-if="compoundModeEnabled" class="col-sm-1 card p-2 pr-4 mr-2" style="text-align: right; max-height: 3rem;">
+              <div v-if="compoundModeEnabled" class="col-sm-1 " >
                 {{ numberOfFiles || 0}}
-            </div>
+              </div>
 
-            <div v-if="compoundModeEnabled" class="col-sm-2 listActionItems mr-2" style="text-align: center">
-                <i class="fas fa-list-ul p-2 mr-4 hover-hand" @click="onClick('/ingest/tasks/'+bag.id)"></i>
-                <i class="fas fa-trash-alt p-2 hover-hand"></i>
-            </div>
-            <div v-if="compoundModeEnabled" class="col-sm-2 text-center">
-                <button class="btn btn-primary btn-lg mr-2 w-100" v-bind:class="[{ disabled : processDisabled  }]" v-on:click="commitBagToProcessing">{{$t('upload.processButton')}}</button>
-            </div>
-        </div>
+              <div v-if="compoundModeEnabled" class="col-sm-2 text-right">
+                <button class="btn btn-primary btn-lg btn-full" v-bind:class="[{ disabled : processDisabled  }]" v-on:click="commitBagToProcessing">{{$t('upload.processButton')}}</button>
+              </div>
 
-        <FileInputComponent
-            :multiple="compoundModeEnabled"
-            :uploader="uploader"
-            :disabled="fileInputDisabled">
-            <slot name="inputbuttontext">{{$t("upload.addFileToUpload")}}</slot>
-        </FileInputComponent>
 
-        <ProgressBar
-            class='vue-fine-uploader-gallery-total-progress-bar'
-            :uploader="uploader" />
-
-        <div class="row plistHeader"> <div class="col-sm-1 text-center">
+          </div>
+          <div class="row plistHeader"> <div class="col-sm-1 text-center">
             </div>
             <div class="col-sm-6 text-left align-self-center">
-                Filename
+              Filename
             </div>
             <div class="col-sm-3 text-center align-self-center">
                 File size
@@ -66,7 +61,8 @@
         </div>
 
         <UploadFileItem v-for="(file,index) in filesUploading" v-bind:file="file" :key="file.id"
-            v-if="index >= pageFrom-1 && index <= pageTo-1 " />
+          @metadataClicked="metadataClicked" @removeClicked="removeClicked"
+          v-if="index >= pageFrom-1 && index <= pageTo-1 " />
         <div class="row plist uploadFileList invisible" v-for="pad in pagerPad"></div>
         <Pager :meta="filesUploadingMeta" @updatePage="updatePage" v-if="totalFilesUploading > 0" />
 
@@ -145,8 +141,10 @@ data() {
                                 'result' : response,
                                 'bagId' : uploadToBagId,
                                 'fileSize': fileSize
-                            }).then( async ( file ) => {
+                                }).then( async ( file ) => {
                                 this.filesUploading[filesIndex].uploadedFileId = file.data.data.id;
+                                this.filesUploading[filesIndex].uploadedToBagId = file.data.data.bag_id;
+
                                 if( this.bag.id == uploadToBagId ){ //???
                                     await axios.get("/api/v1/ingest/bags/"+uploadToBagId+"/files").then( (files) => {
                                         this.files = files.data.data;
@@ -179,9 +177,9 @@ data() {
             holdings: [],
             selectedHoldingTitle: {},
             currentPage: 1,
-            pageSize: 5,
+            pageSize: 4,
             pageFrom: 1,
-            pageTo: 5
+            pageTo: 4
         };
     },
 
@@ -236,8 +234,20 @@ data() {
             window.location = url;
         },
         metadataClicked( e ) {
+          let fileId = e.uploadedFileId;
+          let bagId = e.uploadedToBagId;
+          if( fileId && bagId ){
+            window.location = '/ingest/tasks/'+bagId+'/metadata/'+fileId+'/edit_ingest';
+          }
         },
-        removeClicked( e ) {
+        async removeClicked( e ) {
+          let fileId = e.uploadedFileId;
+          let bagId = e.uploadedToBagId;
+          axios.delete("/api/v1/ingest/bags/"+bagId+"/files/"+fileId).then ( async (response) => {
+            this.files = (await axios.get('/api/v1/ingest/bags/' + this.bag.id + '/files')).data.data;
+            this.filesUploading = this.filesUploading.filter( (file) => file.uploadedFileId !== fileId );
+          });
+
         },
         addFileToQueue(payload) {
         },
@@ -266,7 +276,7 @@ data() {
             this.uploader.methods.reset();
             this.bagName = "";
             this.files = [];
-            this.fileUploading = [];
+            this.filesUploading = [];
         },
         async setBagName() {
             let currentBagId = this.bag.id;
@@ -343,10 +353,11 @@ data() {
             {
                 this.files = (await axios.get('/api/v1/ingest/bags/' + this.bag.id + '/files')).data.data;
                 this.filesUploading = this.files.map( (file, index) => ({
-                            id: index+10000,
+                            id: index+100000,  /*A large enough number to avoid collisions with id's provided by FineUploader */
                             filename: file.filename,
                             progressBarStyle: "width: 0%",
-                            uploadedFileId: '',
+                            uploadedFileId: file.id,
+                            uploadedToBagId: file.bag_id,
                             fileSize: file.filesize,
                             uploadedFileSize: file.filesize,
                             isUploading: false
