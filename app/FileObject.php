@@ -26,4 +26,5 @@ class FileObject extends Model
     {
         return Str::lower( Str::after( $this->storable_type, "\\" ) );
     }
+
 }

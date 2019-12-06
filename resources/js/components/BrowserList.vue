@@ -1,7 +1,7 @@
 <template>
     <div class="container-fluid">
         <div class="row plistHeader">
-            <div class="col-sm-1 pl-5 collapse">
+            <div class="col-sm-1 collapse">
                 <input type="checkbox" class="checkbox" id="browserList">
             </div>
             <div class="col-sm-3">&nbsp;</div>
@@ -86,7 +86,7 @@ import VueEasyLightbox from 'vue-easy-lightbox';
              */
 
             this.lbVisible = true;
-            let allFiles = ( await axios.get('/api/v1/access/dips/'+dip.id+'/files') ).data;
+            let allFiles = ( await axios.get('/api/v1/access/dips/'+dip.id+'/files') ).data.data;
             let fileIds = [];
             for ( var i in allFiles ) {
                 fileIds.push( allFiles[i].id );

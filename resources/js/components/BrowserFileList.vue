@@ -7,7 +7,8 @@
         </div>
 
         <span v-if="online">
-            <browser-file-item  v-for="item in dataObjects" :archive="selectedArchive" :holding="selectedHolding" v-bind:item="item" v-bind:key="item.id" @openObject="openObject"/>
+          <browser-file-item  v-for="item in dataObjects" :archive="selectedArchive" :holding="selectedHolding" 
+            v-bind:item="item" v-bind:key="item.id" @openObject="openObject"/>
         </span>
         <span v-if="offline">
             <browser-file-item-offline  v-for="item in dataObjects" :archive="selectedArchive" :holding="selectedHolding" v-bind:item="item" v-bind:key="item.id" @openObject="openObject" @addFileToRetrieval="addFileToRetrieval"/>
@@ -34,9 +35,9 @@ export default {
             type: String,
             default: ""
         },
-        bagId: {
-            type: String,
-            default: ""
+        dipId: {
+            type: Number,
+            default: 0 
         },
         location: {
             type: String,
@@ -44,7 +45,7 @@ export default {
         },
         selectedArchive: String,
         selectedHolding: String,
-        dataObjects: Object,
+        dataObjects: Array,
     },
 
     async mounted() {

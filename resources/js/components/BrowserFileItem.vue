@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="row plist">
+        <div class="row plist thumbnailList">
             <div class="col-sm-3 text-center">
                 <img v-bind:src="thumbnailImage">
             </div>

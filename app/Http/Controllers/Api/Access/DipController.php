@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\Access;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\DipResource;
+use App\Http\Resources\FileObjectResource;
 use App\Dip;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -19,11 +20,11 @@ class DipController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    public function index()
+    public function index( Request $request )
     {
         return \App\Http\Resources\DipResource::collection(
             Dip::with(['storage_properties', 'storage_properties.bag'])
-                ->latest()->paginate( 5 )
+                ->latest()->paginate( env('DEFAULT_ENTRIES_PER_PAGE') )
         );
     }
 
@@ -52,10 +53,11 @@ class DipController extends Controller
     public function files( Request $request )
     {
         $dip = Dip::find( $request->dipId );
-        $files = $dip->fileObjects->filter( function ($file, $key) {
-            return Str::contains( $file->fullpath, '/objects' );
-        })->all();
-        return response( $files );
+        $files = $dip->fileObjects()
+                     ->where( 'path', 'LIKE', "%/objects" )
+                     ->paginate( env('DEFAULT_ENTRIES_PER_PAGE') );
+
+        return FileObjectResource::collection( $files );
     }
 
     public function file_preview( Request $request, ArchivalStorageInterface $storage )
