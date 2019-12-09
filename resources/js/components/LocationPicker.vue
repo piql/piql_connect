@@ -3,7 +3,7 @@
         <label for="locationPicker" class="col-form-label-sm">
             {{$t('access.browse.selectLocation')}}
         </label>
-        <select v-model="selectedLocation"id="locationPicker" class="form-control selectpicker w-auto" v-on:change="locationChanged">
+        <select v-model="selectedLocation"id="locationPicker" class="form-control selectpicker" v-on:change="locationChanged">
             <option v-for="location in locations" v-bind:value="location.value">
                 {{location.name}}
             </option>

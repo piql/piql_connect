@@ -2,7 +2,7 @@
     <div>
         <div class="row plist thumbnailList">
             <div class="col-sm-3 text-center">
-                <img v-bind:src="thumbnailImage">
+                <img class="thumbnailImage" v-bind:src="thumbnailImage">
             </div>
             <div class="col-sm-5 text-center align-self-center">
                 {{item.filename}}

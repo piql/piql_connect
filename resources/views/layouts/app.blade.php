@@ -4,7 +4,7 @@
         <title>piqlConnect</title>
         <meta name="csrf-token" content="{{ csrf_token() }}">
         <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <script type="text/javascript">Window.locale = '{{\App::getLocale()}}';</script>
         <link href="{{ asset('css/vendor.css') }}" rel="stylesheet" />
         <link href="{{ asset('css/app.css') }}" rel="stylesheet" />
@@ -14,25 +14,31 @@
 
 @if (Route::current()->getName() == 'login')
     <body class="loginBody">
-        <div id="app">
+        <div id="app" class="container-fluid">
             @yield('content')
         </div>
 @else
     <body>
-        <div id="app">
-            @section('top')
-                @include('includes.top')
-            @show
-            @section('sidebar')
-                @include('includes.sidebar')
-            @show
-            <div class="contentContainer">
-            @hasSection('heading')
-                    <h1>@yield('heading')</h1>
-            @endif
-            @yield('content')
+        <div id="app" class="container-fluid pl-0">
+            <div class="row">
+                @section('top')
+                    @include('includes.top')
+                @show
             </div>
-        </div>
+            <div class="row">
+                <div id="sidebarWrapper" class="col-3 pl-0 sidebarWrapper">
+                    @section('sidebar')
+                        @include('includes.sidebar')
+                    @show
+                </div>
+                <div id="mainContent" class="col-8 ml-2 mr-1">
+                    @hasSection('heading')
+                            <h1>@yield('heading')</h1>
+                    @endif
+                    @yield('content')
+                </div>
+            </div>
+    </div>
 @endif
     </body>
 </html>

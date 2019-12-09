@@ -1,5 +1,5 @@
 <template>
-    <div class="container-fluid">
+    <div>
         <div class="row plistHeader">
             <div class="col-sm-1 collapse">
                 <input type="checkbox" class="checkbox" id="browserList">

@@ -9,11 +9,14 @@
 @endsection
 
 @section('content')
-    <div class="content">
-        <i class="fas fa-hdd titleIcon"></i>
-        <h1>{{__('access.browse')}}</h1>
-        <em>{{__('access.browse.ingress')}}</em>
-        <br/>
+@if (false)
+        <div class="row">
+            <i class="fas fa-hdd titleIcon"></i>
+            <div class="col-sm-2 pageHeaderText">{{__('access.browse')}}</div>
+            <div class="col-sm-6 text-center ingressText"> 
+                {{__('access.browse.ingress')}}
+            </div>
+        </div>
+@endif
         <browse></browse>
-    </div>
 @endsection

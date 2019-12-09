@@ -28,7 +28,8 @@ class StoragePropertiesResource extends JsonResource
             'archivematica_service_storage_server_uuid' => $this->archivematica_service_storag_service_uuid,
             'bag' => new BagResource( $this->bag ),
             'archive_title' => $this->archive ? $this->archive->title : null,
-            'holding_name' => $this->holding_name
+            'holding_name' => $this->holding_name,
+            'ingest_time' => $this->created_at
         ];
     }
 }

@@ -3,14 +3,14 @@
             <div class="col-sm-1 text-center align-self-center collapse">
               <input type="checkbox" class="checkbox collapse" id="browserList" >
             </div>
-            <div class="col-sm-3 text-center align-self-center">
-                <img v-bind:src="thumbnailImage">
+            <div class="col-sm-2 text-center align-self-center">
+                <img class="thumbnailImage" v-bind:src="thumbnailImage">
             </div>
-            <div class="col-sm-2 align-self-center text-center">
+            <div class="col-sm-3 align-self-center text-center">
                 {{item.storage_properties.bag.name}}
             </div>
             <div class="col-sm-2 align-self-center text-center">
-                {{dateFormat(item.storage_properties.bag.created_at)}}
+                {{dateFormat(item.storage_properties.ingest_time)}}
             </div>
             <div class="col-sm-1 align-self-center text-center">
                 {{item.storage_properties.holding_name}}
@@ -54,8 +54,8 @@
 						}
         },
         methods: {
-            dateFormat: function(item){
-                return moment(item.created_at).format('L');
+            dateFormat: function(timestamp) {
+                return moment(timestamp).format('L');
             },
             open: function(){
                 this.$emit('openObject', this.item.id);

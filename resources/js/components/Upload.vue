@@ -1,6 +1,5 @@
 <template>
-    <div class="container-fluid">
-
+  <div>
         <div class="row mb-4 w-auto">
             <div class="col-8">
                 <em class="mb-3 mt-2">{{ $t('upload.ingress') }}</em>
@@ -65,7 +64,6 @@
           v-if="index >= pageFrom-1 && index <= pageTo-1 " />
         <div class="row plist uploadFileList invisible" v-for="pad in pagerPad"></div>
         <Pager :meta="filesUploadingMeta" @updatePage="updatePage" v-if="totalFilesUploading > 0" />
-
     </div>
 </template>
 

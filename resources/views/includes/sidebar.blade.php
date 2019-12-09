@@ -1,12 +1,12 @@
-<div class="wrapper sideMenu" id="sideMenu">
+<div class="sideMenu" id="sideMenu">
 
     <div id="welcomeText">
         {{__("Welcome")}}<br><i class="fas fa-user"></i> {{ Auth::user()->full_name }}
     </div>
 
-    <div id="collapseSideMenu">
+    <!--div id="collapseSideMenu">
         <img onclick="collapseMenu()" src="{{asset('/images/collapsemenu.png')}}">
-    </div>
+    </div-->
 
     <div class="clearboth">
     </div>
@@ -78,7 +78,8 @@
 @endif
     </ul>
 
-    <div id="poweredBy">Powered by
-		<span id="poweredByImg"><img src="{{asset('/images/piql_logo_white.png')}}"><span>
+    <div class="poweredBy">
+         <div class="poweredByText">Powered by </div>
+        <span class="poweredByImg"><img src="{{asset('/images/piql_logo_white.png')}}"><span>
 	</div>
 </div>

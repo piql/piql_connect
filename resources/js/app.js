@@ -17,11 +17,39 @@ whilst expanding the size of contentContainer (and vice versa)
 window.collapseMenu = function() {
     if (document.getElementById("sideMenu")) {
         document.getElementById("sideMenu").setAttribute("id", "sideMenuCollapsed");
-        document.getElementById("contentContainer").setAttribute("style", "width: calc(100% - 130px); transition: width 1s");
+        document.getElementById("sidebarWrapper").setAttribute("class", "col-1 pl-0 sidebarWrapper");
+        document.getElementById("mainContent").setAttribute("class", "col-10 ml-2 mr-1");
     }
     else {
         document.getElementById("sideMenuCollapsed").setAttribute("id", "sideMenu");
-        document.getElementById("contentContainer").setAttribute("style", "width: calc(100% - 360px); transition: width 1s");
+        document.getElementById("sidebarWrapper").setAttribute("class", "col-3 pl-0 sidebarWrapper");
+        document.getElementById("mainContent").setAttribute("class", "col-8 ml-3 mr-0");
+    }
+}
+
+window.isAutoCollapsed = false;
+window.autoCollapseMenu = function() {
+    if(!window.isAutoCollapsed){
+        window.collapseMenu();
+        window.isAutoCollapsed = true;
+    }
+}
+
+window.onload = function() {
+    window.onresize();
+}
+
+window.onresize = function() {
+    let wide = document.getElementById("sideMenu");
+    let bodyWidth = document.body.getClientRects()[0].width;
+    if( wide ) {
+        if( bodyWidth < 1000 ) {
+            window.collapseMenu();
+        }
+    } else {
+        if( bodyWidth > 1000 ) {
+            window.collapseMenu();
+        }
     }
 }
 
