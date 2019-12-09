@@ -26,12 +26,12 @@
                 @show
             </div>
             <div class="row">
-                <div id="sidebarWrapper" class="col-3 pl-0 sidebarWrapper">
+                <div id="sidebarWrapper" class="col-2 p-0 sidebarWrapper">
                     @section('sidebar')
                         @include('includes.sidebar')
                     @show
                 </div>
-                <div id="mainContent" class="col-8 ml-2 mr-1">
+                <div id="mainContent" class="col-9 pr-2 pl-5">
                     @hasSection('heading')
                             <h1>@yield('heading')</h1>
                     @endif
