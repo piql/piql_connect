@@ -1,9 +1,10 @@
 <template>
-    <div class="container-fluid">
-        <div class="row plistHeader">
+    <div> 
+        <div class="row plistHeader text-center">
           <div class="col-sm-3">&nbsp;</div>
-            <div class="col-sm-5">{{$t('Filename')}}</div>
-            <div class="col-sm-2 text-center">Actions</div>
+            <div class="col-sm-7">{{$t('Filename')}}</div>
+            <div class="col-sm-1 text-left">Actions</div>
+            <div class="col-sm-1"><a href="#" @click.once="close"><i class="fas fa-backspace titleIcon"></i></a></div>
         </div>
 
         <span v-if="online">
@@ -14,16 +15,6 @@
             <browser-file-item-offline  v-for="item in dataObjects" :archive="selectedArchive" :holding="selectedHolding" v-bind:item="item" v-bind:key="item.id" @openObject="openObject" @addFileToRetrieval="addFileToRetrieval"/>
         </span>
 
-        <div class="row plist">
-            <div class="col-sm-1">
-            </div>
-            <div class="col-sm-8 mr-5 ">
-                Close archive
-            </div>
-            <div class="col-sm-1">
-                <a href="#" @click="close"><i class="fas fa-backspace titleIcon"></i></a>
-            </div>
-        </div>
     </div>
 </template>
 
@@ -62,7 +53,6 @@ export default {
 
     methods: {
         addFileToRetrieval: function(item) {
-            console.log("browserfilelist");
             this.$emit('addFileToRetrieval', item);
         },
         openObject: function(item) {

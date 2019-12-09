@@ -299,7 +299,7 @@ h1 {
     font-family: 'Agenda' !important;
     font-weight: 800;
     text-transform: uppercase;
-    font-size: 20px;
+    font-size: 28px;
 }
 .pageHeaderText {
     margin-bottom: 10px;
@@ -390,8 +390,7 @@ a {
 .plistHeader {
     background-color: $color_fill_0;
     padding: 18px 0px;
-    border-top: 1px solid $color_main_brand;
-    border-bottom: 1px solid $color_main_brand;
+    border-bottom: 1px solid $color_background_dark;
     font-family: $font_open_sans_bold;
     font-size: 12px;
     text-align: left;
@@ -2288,4 +2287,8 @@ input[type=text] {
     &.disabled .page-link {
         color: $color_fill_3;
     }
+}
+
+.color-main-brand {
+    color: $color_main_brand !important;
 }

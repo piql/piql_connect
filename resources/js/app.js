@@ -43,11 +43,11 @@ window.onresize = function() {
     let wide = document.getElementById("sideMenu");
     let bodyWidth = document.body.getClientRects()[0].width;
     if( wide ) {
-        if( bodyWidth < 1000 ) {
+        if( bodyWidth < 1200 ) {
             window.collapseMenu();
         }
     } else {
-        if( bodyWidth > 1000 ) {
+        if( bodyWidth > 1200 ) {
             window.collapseMenu();
         }
     }

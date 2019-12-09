@@ -1,15 +1,12 @@
 <template>
     <div>
-        <div class="row plistHeader">
-            <div class="col-sm-1 collapse">
-                <input type="checkbox" class="checkbox" id="browserList">
-            </div>
-            <div class="col-sm-3">&nbsp;</div>
-            <div class="col-sm-2 text-center">Name</div>
-            <div class="col-sm-2 text-center">Ingest Date</div>
-            <div class="col-sm-1 text-center">Holding</div>
-            <div class="col-sm-1 text-center">Files</div>
-            <div class="col-sm-3 text-center">Actions</div>
+        <div class="row plistHeader text-truncate">
+            <div class="col-sm-2 text-center p-0">Preview</div>
+            <div class="col-sm-3 text-center p-0">Name</div>
+            <div class="col-sm-1 text-center p-0">Ingest Date</div>
+            <div class="col-sm-2 text-center p-0">Holding</div>
+            <div class="col-sm-1 text-center p-0">Files</div>
+            <div class="col-sm-3 text-center p-0">Actions</div>
         </div>
 
         <span v-if="fileLocation === 'online'">

@@ -1,5 +1,11 @@
 <template>
-    <div>
+  <div>
+      <div class="row mt-5">
+          <div class="col-4 text-left ">
+              <h1> <i class="fas fa-hdd color-main-brand mr-3"/> Browse</h1>
+          </div>
+          <div class="col-5 ml-5 font-weight-bold text-center">Access your archives</div>
+      </div>
         <form class="form mb-2" v-on:submit.prevent>
             <div class="row mt-5 mb-0">
                 <div class="col-sm-2">
@@ -43,14 +49,22 @@
             <browser-list v-if="holdingSelected" @openObject="openObject" :location="selectedLocation" :dataObjects="currentObjects"
                 @addObjectToRetrieval="addObjectToRetrieval" :selectedArchive="selectedArchiveUuid" :selectedHolding="selectedHolding"/>
             <div class="row plist thumbnailList invisible" v-for="pad in padPackageItems"></div>
-            <Pager :meta='packagePageMeta' @updatePage='packageUpdatePage' />
+            <div class="row page-footer text-center">
+                <div class="col">
+                    <Pager :meta='packagePageMeta' @updatePage='packageUpdatePage' />
+                </div>
+            </div>
             <!--identity v-else></identity-->
     </span>
     <span v-if="fileMode">
         <browser-file-list :dataObjects="currentOpenObjectFiles" :location="selectedLocation" :dipId="currentOpenDipId"
             @close="closeFileList" @addFileToRetrieval="addFileToRetrieval" />
         <div class="row plist thumbnailList invisible" v-for="pad in padFileItems"></div>
-        <Pager :meta='filesPageMeta' @updatePage='filesUpdatePage' />
+        <div class="row page-footer text-center">
+            <div class="col">
+                <Pager :meta='filesPageMeta' @updatePage='filesUpdatePage' />
+            </div>
+        </div>
     </span>
     <!--primary-contact v-if="holdingSelected === false" /-->
     <online-actions v-if="online"/>
@@ -134,13 +148,8 @@
             },
             padFileItems() {
                 let entriesOnLastPage = this.currentOpenObjectFiles.length % this.fileItemsPerPage;
-                console.log("File entries on last page:",entriesOnLastPage);
                 let padEntries = entriesOnLastPage > 0 ? ( this.fileItemsPerPage - entriesOnLastPage ) : 0;
-                console.log("File pad entries: ",entriesOnLastPage);
-                console.log("CurrentFilesPAge: ", this.currentFilesPage);
-                console.log("File entries per page: ", this.fileItemsPerPage);
                 let pad = this.currentFilesPage != this.filesLastPage ? 0 : padEntries;
-                console.log("Files pad:" ,pad);
                 return pad;
             },
             pageNumber() {
