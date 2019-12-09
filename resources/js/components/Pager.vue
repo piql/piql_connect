@@ -1,5 +1,5 @@
 <template>
-    <nav aria-label="pages" class="pt-5 pb-3">
+    <nav aria-label="pages" class="mt-4 mb-1 d-inline-flex ">
         <ul class="pagination pagination-sm justify-content-center">
             <li class="page-item" v-bind:class="{ disabled: onFirstPage }">
                 <a @click="firstPage" class="page-link">

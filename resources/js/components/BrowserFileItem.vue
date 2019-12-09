@@ -1,15 +1,16 @@
 <template>
     <div>
-        <div class="row plist">
+        <div class="row plist thumbnailList">
             <div class="col-sm-3 text-center">
-                <img v-bind:src="thumbnailImage">
+                <img class="thumbnailImage" v-bind:src="thumbnailImage">
             </div>
-            <div class="col-sm-5 text-center align-self-center">
+            <div class="col text-center align-self-center">
                 {{item.filename}}
             </div>
-            <div class="col-sm-2 text-center align-self-center">
-                <a @click="download" href="#" data-toggle="tooltip" title="Download file"><i class="fas fa-file-download titleIcon text-center"></i></a>
-            </div>
+            <div class="col-sm-1 ml-3 text-right align-self-center">
+                <a @click.once="download" href="#" data-toggle="tooltip" title="Download file"><i class="fas fa-file-download actionIcon text-center"></i></a>
+              </div>
+            <div class="col-sm-1"></div> 
         </div>
     </div>
 </template>
@@ -40,9 +41,10 @@
             dateFormat: function(item){
                 return moment(item.created_at).format('L');
             },
-            async download() {
+            async download(e) {
+                e.stopImmediatePropagation();
                 let item = this.item;
-                let allFiles = ( await axios.get('/api/v1/access/dips/'+this.dipId+'/files') ).data;
+                let allFiles = ( await axios.get('/api/v1/access/dips/'+this.dipId+'/files') ).data.data;
                 let fileId = 0;
                 for ( var i in allFiles ) {
                     if ( allFiles[i].filename === this.item.filename ){
@@ -50,13 +52,10 @@
                     }
                 }
                 let response = await axios.get('/api/v1/access/dips/'+this.dipId+'/downloads/files/'+fileId, { responseType: 'blob' });
-                let fileUrl = window.URL.createObjectURL(new Blob([response.data]));
                 let fileLink = document.createElement('a');
-                fileLink.href = fileUrl;
-                fileLink.setAttribute('download', this.item.filename);
-                document.body.appendChild(fileLink);
-                await fileLink.click();
-                document.body.removeChild(fileLink);
+                fileLink.href = window.URL.createObjectURL(new Blob([response.data], {type: 'application/octet-stream'}));
+                fileLink.download = this.item.filename;
+                fileLink.click();
             },
 
 

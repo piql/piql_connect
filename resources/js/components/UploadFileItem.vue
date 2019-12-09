@@ -1,25 +1,24 @@
 <template> 
     <div class="row plist uploadFileList fg-black">
-        <div class="col-sm-1 text-center">
-            <!--img v-bind:src="thumbnailImage"-->
-        </div>
-        <div class="col-sm-6 text-left align-self-center">
+        <div class="col-md-7 col-sm-5 col-xs-3 text-left text-truncate align-self-center">
             <div v-if="isUploading" class="progress">
                 <div class="progress-bar bg-signal text-left" role="progressbar" v-bind:style="progressBarStyle" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
                     {{file.filename}}
                 </div>
             </div>
             <div v-else>
+              <div class="text-left">
                 {{file.filename}}
+              </div>
             </div>
         </div>
-        <div class="col-sm-3 text-center align-self-center">
+        <div class="col-xs-2 col-sm-2 text-center text-truncate align-self-center">
             {{humanReadableFileSize}}
         </div>
-        <div class="col-sm-2 text-center align-self-center">
+        <div class="col-xs-2 col-sm-3 text-center">
             <span v-if="! file.isUploading">
-                <a @click="metadataClicked" href="#" data-toggle="tooltip" title="Edit metadata"><i class="fas fa-tags actionIcon text-center"></i></a>
-                <a @click="removeClicked" href="#" data-toggle="tooltip" title="Remove file"><i class="fas fa-trash-alt actionIcon text-center"></i></a>
+                <a @click="metadataClicked (file)" href="#" data-toggle="tooltip" title="Edit metadata"><i class="fas fa-tags actionIcon text-center"></i></a>
+                <a @click="removeClicked (file)" href="#" data-toggle="tooltip" title="Remove file"><i class="fas fa-trash-alt actionIcon text-center"></i></a>
             </span>
         </div>
     </div>
@@ -45,9 +44,10 @@
                 return moment(item.created_at).format('L');
             },
             removeClicked: function( file ) {
-              console.log("remove me: "+file);
+              this.$emit("removeClicked", file );
             },
-            metadataClicked: function (file ) {
+          metadataClicked: function (file ) {
+              this.$emit("metadataClicked", file );
             },
         },
         computed: {
