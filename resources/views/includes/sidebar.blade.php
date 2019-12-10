@@ -12,18 +12,25 @@
     </div>
 
     <ul class="list-group">
-    @if(\Request::is('/'))
+    @if(\Request::is('/') || \Request::is("settings") ) 
         <a href="{{ route('dashboard') }}">
             <li class="list-group-item  {{ \Request::is('/') ? 'active sidebar-active' : '' }} ">
                 <i class="fas fa-tachometer-alt"></i><i class="leftMenuItem">{{__('sidebar.dashboard')}}</i>
             </li>
         </a>
-        <a href="{{ route('dashboard') }}">
+    @unless( true ) <!-- Reports not implemented yet -->
+        <a href="{{ route('reports') }}">
             <li class="list-group-item {{ \Request::is('reports') ? 'active sidebar-active' : '' }} ">
                 <i class="fas fa-chart-bar"></i><i class="leftMenuItem">{{__('sidebar.reports')}}</i>
             </li>
         </a>
+    @endif
 
+        <a href="{{ route('web.showSettings') }}">
+            <li class="list-group-item {{ \Request::is('settings') ? 'active sidebar-active' : '' }} ">
+                <i class="fas fa-cogs"></i><i class="leftMenuItem">{{__('sidebar.settings')}}</i>
+            </li>
+        </a>
 
     @elseif  (\Request::is('ingest/*'))
         <a href="{{ route('upload') }}">
@@ -46,7 +53,7 @@
             </li>
         </a>
 
-    @elseif (\Request::is('access/*' || 'access/'))
+    @elseif (\Request::is('access/*') || \Request::is('access/'))
         <a href="{{ route('access.browse') }}">
             <li class="list-group-item {{ \Request::is('access/browse') ? 'active sidebar-active' : '' }} ">
                 <i class="fas fa-hdd"></i><i class="leftMenuItem">{{__('sidebar.browse')}}</i>

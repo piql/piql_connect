@@ -5,14 +5,13 @@
 @endsection
 
 @section('content')
-
-        <div class="container-fluid">
+<div>
         <div class="row">
             <div class="col-sm-12 mb-5">
                 <h1><i class="fas fa-cog titleIcon"></i>{{__("User Settings")}}</h1>
             </div>
         </div>
-        <form method="POST" action="settings">
+        <form method="POST" action="settings" onchange="submit()">
             @csrf
             <div class="form-group row">
                 <label class="col-sm-3" for="interfaceLanguage">{{__("User interface language")}}</label>
@@ -52,14 +51,9 @@
                 </select>
             </div>
 
-
-            <div class="form-group row mt-5">
-                <input type="submit" class="btn btn-lg" value="{{__("Save")}}">
-            </div>
         </form>
     </div>
 </div>
-
 @endsection
 
 

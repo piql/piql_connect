@@ -27,6 +27,7 @@
     "Default DIP storage location": "Standardplassering for DIPer",
 
 	"sidebar.dashboard": "Oversikt",
+    "sidebar.settings": "Innstillinger",
 	"sidebar.upload": "Opplasting",
 	"sidebar.processing": "Prosessering",
 	"sidebar.taskList": "Offline-lagring",

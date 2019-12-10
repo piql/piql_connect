@@ -18,6 +18,7 @@
     "upload.holding": "Holding",
     "upload.files": "Number of files",
 	"sidebar.dashboard": "Dashboard",
+    "sidebar.settings": "Settings",
 	"sidebar.upload": "Upload",
 	"sidebar.processing": "Processing",
 	"sidebar.taskList": "Offline Storage",
