@@ -3,7 +3,7 @@
         <label v-if="showLabel" for="holdingPicker" class="col-form-label-sm">
             {{label}}
         </label>
-        <select v-model="selection" id="holdingPicker" class="w-100" data-live-search="true" @change="selectionChanged($event.target.value)">
+        <select v-model="selection" id="holdingPicker" class="form-input" data-live-search="true" @change="selectionChanged($event.target.value)">
           <option v-for="holding in holdings" v-bind:value="holding.title">
             {{holding.title}}
           </option>

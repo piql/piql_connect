@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="row plistHeader text-truncate">
+        <div class="row plistHeader text-truncate mt-2">
             <div class="col-sm-2 text-center p-0">Preview</div>
             <div class="col-sm-3 text-center p-0">Name</div>
             <div class="col-sm-1 text-center p-0">Ingest Date</div>

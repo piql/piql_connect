@@ -74,7 +74,8 @@ $image_piql-logo-white_url: url('/images/piql_logo_white.png');
 //html, body
 %extend_1 {
     width: 100vw;
-    height: 100%;
+    height: 100vh;
+    min-height: 100%;
     font-family: $font_1, $font_2, $font_open_sans, $font_4;
     margin: 0;
     padding: 0;
@@ -82,13 +83,13 @@ $image_piql-logo-white_url: url('/images/piql_logo_white.png');
     position: relative;
     overflow-x: hidden;
     color: $color_fill;
-    font-size: 16px;
+    //font-size: 16px;
 }
 
 //original selectors
 //#theForm label, .forgot
 %extend_2 {
-    font-size: 10px;
+    //font-size: 10px;
     color: $color_fill_dark;
     width: 100%;
 }
@@ -96,7 +97,7 @@ $image_piql-logo-white_url: url('/images/piql_logo_white.png');
 //original selectors
 //.sideMenu ul .fas, #sideMenu ul .far
 %extend_3 {
-    font-size: 20px;
+    font-size: 2rem;
     position: absolute;
     left: 24px;
 }
@@ -104,7 +105,7 @@ $image_piql-logo-white_url: url('/images/piql_logo_white.png');
 //original selectors
 //#sideMenuCollapsed ul .fas, #.ideMenuCollapsed ul .far
 %extend_4 {
-    font-size: 20px;
+    font-size: 1.8rem;
     position: absolute;
     left: 24px;
 }
@@ -117,7 +118,7 @@ $image_piql-logo-white_url: url('/images/piql_logo_white.png');
     vertical-align: top;
     padding-left: 3px;
     color: $color_fill_verydark;
-    font-size: 12px;
+    //font-size: 12px;
     margin-right: 15px;
     min-height: 40px !important;
     line-height: 40px;
@@ -137,7 +138,7 @@ $image_piql-logo-white_url: url('/images/piql_logo_white.png');
     border: 0;
     padding: 20px;
     background-color: $color_fill_3;
-    font-size: 12px;
+    //font-size: 12px;
 }
 
 //original selectors
@@ -216,6 +217,7 @@ html {
 body {
     @extend %extend_1;
     font-family: 'OpenSans';
+    -webkit-text-size-adjust: none;
 }
 
 @media (min-height: 900px) {
@@ -292,14 +294,10 @@ body {
     margin: 25px 25px 50px 25px;
 }
 h1 {
-    margin-bottom: 10px;
-    padding-bottom: 0;
-    margin-top: 0;
-    margin-left: 0.75em;
     font-family: 'Agenda' !important;
     font-weight: 800;
     text-transform: uppercase;
-    font-size: 28px;
+    font-size: 1.5rem;
 }
 .pageHeaderText {
     margin-bottom: 10px;
@@ -309,7 +307,7 @@ h1 {
     font-family: $font_agenda_bold !important;
     font-weight: 300;
     text-transform: uppercase;
-    font-size: 28px;
+    font-size: 2rem;
 
 }
 
@@ -321,7 +319,7 @@ h1 {
     font-family: $font_agenda !important;
     font-weight: 800;
     text-transform: uppercase;
-    font-size: 20px;
+    font-size: 0.8rem;
 }
 
 
@@ -330,19 +328,24 @@ h1 {
 }
 h2 {
     font-family: 'Agenda';
-    margin-bottom: 40px;
 }
 hr {
     border: 0.5px solid $color_main_brand;
     margin-top: 50px;
     margin-bottom: 50px;
 }
+
+h5 {
+    font-family: 'Agenda';
+    font-size: 0.8rem;
+}
+
 em {
     display: block;
     margin: 0;
     padding: 0;
     font-style: normal;
-    font-size: 12px;
+    //font-size: 12px;
     color: $color_fill_dark;
 }
 a {
@@ -359,18 +362,18 @@ a {
 .plist {
     padding: 15px;
     min-height: 4em;
-    font-size: 16px;
+    font-size: 1.2rem;
     border-bottom: 1px solid lightgray;
     background: white;
 }
 
 .thumbnailList {
-    height: 7rem;
+    height: 6.8rem;
 }
 
 .thumbnailImage {
-    height: 7vh;
-    max-width: 4rem;
+    height: 4.5rem;
+    max-width: 8rem;
 }
 
 .upload-widget-back {
@@ -389,17 +392,17 @@ a {
 
 .plistHeader {
     background-color: $color_fill_0;
-    padding: 18px 0px;
+    padding: 0.7rem 0px;
     border-bottom: 1px solid $color_background_dark;
     font-family: $font_open_sans_bold;
-    font-size: 12px;
+    font-size: 0.8rem;
     text-align: left;
     color: black;
 }
 
 .listActionItems {
     color: $color_signal;
-    font-size: 28px;
+    //font-size: 28px;
 }
 .list {
     position: relative;
@@ -458,7 +461,7 @@ a {
     }
     i {
         color: $color_signal;
-        font-size: 20px;
+        //font-size: 20px;
         &:hover {
             color: $color_fill_dark;
         }
@@ -584,7 +587,7 @@ textarea {
     text-transform: uppercase;
     color: $white;
     padding: 3px 5px 5px;
-    font-size: 12px;
+    //font-size: 12px;
     height: 25px;
     margin-bottom: 4px;
 }
@@ -598,7 +601,7 @@ textarea {
     text-transform: uppercase;
     color: $white;
     padding: 3px 5px 5px;
-    font-size: 12px;
+    //font-size: 12px;
     height: 25px;
     margin-bottom: 4px;
     margin-right: 10px;
@@ -629,7 +632,7 @@ input[type="file"] {
         color: $white;
         cursor: pointer;
         padding: 3px;
-        font-size: 11px;
+        //font-size: 11px;
         &:hover {
             background-color: $color_fill_dark;
             border: 2px solid $color_fill_dark;
@@ -747,7 +750,7 @@ input[type="file"] {
         //-webkit-tap-highlight-color: transparent
         &:after {
             content: '\2714';
-            font-size: 14px;
+            //font-size: 14px;
             position: absolute;
             top: 0;
             left: 3px;
@@ -801,7 +804,7 @@ input[type="file"] {
         background-color: $white;
         height: 2rem;
         width: 20rem;
-        font-size: 16px;
+        //font-size: 16px;
         border: 0;
         margin-top: 10px;
         margin-bottom: 10px;
@@ -830,6 +833,7 @@ input[type="file"] {
 .piqlTop {
     width: 100%;
     background-color: $white;
+    padding-bottom: 0.7rem;
 }
 .piqlLogoOuter {
     box-shadow: 3px 0 0 0 $color_main_brand;
@@ -897,7 +901,7 @@ input[type="file"] {
     top: 0;
     right: 0;
     background-color: $white;
-    font-size: 24px;
+    //font-size: 24px;
     padding-top: 55px;
     padding-right: 50px;
     text-align: right;
@@ -928,7 +932,7 @@ input[type="file"] {
         height: 20px;
         line-height: 22px;
         text-align: center;
-        font-size: 10px;
+        //font-size: 10px;
         display: block;
     }
 }
@@ -944,7 +948,7 @@ input[type="file"] {
     right: -1em;
     margin-right: 1.45em;
     text-align: left;
-    font-size: 0.7em;
+    //font-size: 0.7em;
     min-width: 18em;
     z-index: 99999;
     &:after {
@@ -982,7 +986,7 @@ input[type="file"] {
     }
 }
 .closeNotifications {
-    font-size: 34px;
+    //font-size: 34px;
     position: absolute;
     top: 0;
     right: 0;
@@ -997,6 +1001,7 @@ input[type="file"] {
 
 .sideMenu {
     background-color: $color_background_1;
+    font-size: 1rem;
     height: 100vh;
     width: 320px;
     padding: 0;
@@ -1036,7 +1041,7 @@ input[type="file"] {
     .leftMenuItem {
         font-style: normal;
         position: absolute;
-        left: 60px;
+        left: 5rem;
         margin-top: 3px;
         visibility: visible;
         opacity: 1;
@@ -1086,7 +1091,7 @@ input[type="file"] {
     display: inline-block;
     position: absolute;
     bottom: 0.3rem;
-    font-size: 12px;
+    //font-size: 12px;
     margin-left: 25px;
     //Instead of the line below you could use @include transition($transition-1, $transition-2, $transition-3, $transition-4, $transition-5, $transition-6, $transition-7, $transition-8, $transition-9, $transition-10)
     opacity: 1;
@@ -1219,7 +1224,7 @@ input[type="file"] {
     margin-right: 80px;
     margin-bottom: 80px;
     .far {
-        font-size: 200px;
+        //font-size: 200px;
         margin-left: auto;
         margin-right: auto;
         display: block;
@@ -1269,7 +1274,7 @@ div.breadcrumbs{
     margin: 10px 10px 10px 0px;
     display: block;
     padding: 0;
-    font-size: 12px;
+    //font-size: 12px;
     font-style: normal;
     color: $color_main_brand;
 }
@@ -1287,7 +1292,7 @@ div.breadcrumbs{
     width: auto;
     label {
         width: auto;
-        font-size: 12px;
+        //font-size: 12px;
         margin-right: 5px;
         height: 40px;
         line-height: 40px;
@@ -1414,7 +1419,7 @@ th {
     padding: 2% 2% 0 2%;
     padding-top: 2%;
     h2 {
-        font-size: inherit;
+        //font-size: inherit;
         color: $color_main_brand;
         margin-top: 0;
         padding-top: 0;
@@ -1449,7 +1454,7 @@ th {
             color: $color_signal;
         }
         .title {
-            font-size: 16px;
+            //font-size: 16px;
             position: relative;
             top: -3px;
             color: $black;
@@ -1457,13 +1462,13 @@ th {
         td {
             padding-bottom: 20px;
             padding-top: 20px;
-            font-size: 12px;
+            //font-size: 12px;
             &:first-child {
                 width: 40%;
             }
         }
         i {
-            font-size: 46px;
+            //font-size: 46px;
             color: $color_signal;
             float: left;
             padding-right: 15px;
@@ -1491,7 +1496,7 @@ th {
     border-bottom: 1px solid $color_fill;
     .add {
         float: right;
-        font-size: 32px;
+        //font-size: 32px;
         color: $color_main_brand;
         line-height: 25px;
     }
@@ -1519,7 +1524,7 @@ th {
 }
 .browseOption {
     margin: 30px 0 60px;
-    font-size: 18px;
+    //font-size: 18px;
     i {
         color: $color_signal;
     }
@@ -1534,7 +1539,7 @@ th {
     margin-right: auto;
     margin-bottom: 20px;
     .fas {
-        font-size: 1000%;
+        //font-size: 1000%;
         display: block;
         margin-bottom: 10px;
     }
@@ -1654,7 +1659,7 @@ th {
     z-index: 9999;
     position: absolute;
     top: 0;
-    font-size: 30px;
+    //font-size: 30px;
     text-transform: uppercase;
     font-family: $font_open_sans_bold;
     color: $color_main_brand;
@@ -1783,12 +1788,12 @@ th {
         right: 15px;
         top: 40px;
         padding: 10px;
-        font-size: 30px;
+        //font-size: 30px;
         color: $color_main_brand;
         z-index: 999;
     }
     .closeNotifications {
-        font-size: 34px;
+        //font-size: 34px;
         position: absolute;
         top: 0;
         right: 0;
@@ -1821,7 +1826,7 @@ th {
         ul {
             margin-top: 100px;
             li i {
-                font-size: 26px;
+                font-size: 2rem;
             }
         }
         .leftMenuItem {
@@ -1872,7 +1877,7 @@ th {
         overflow-x: hidden;
     }
     table {
-        font-size: 8px;
+        font-size: 1rem;
         width: calc(100vw - 60px);
     }
     .listFilter {
@@ -1899,7 +1904,7 @@ th {
         }
     }
     em {
-        font-size: 12px;
+        //font-size: 12px;
     }
     .chart {
         position: relative;
@@ -1909,7 +1914,7 @@ th {
         margin: 0 0 50px 0;
     }
     .listPagination ul li {
-        font-size: 10px;
+        //font-size: 10px;
         margin-right: 40px;
         text-align: center;
     }
@@ -1923,10 +1928,10 @@ th {
         background-color: $color_fill_3;
     }
     h1 {
-        font-size: 20px;
+        font-size: 2.5px;
     }
     .titleIcon {
-        font-size: 30px;
+        font-size: 2rem;
     }
     #notificationsList {
         left: 0;
@@ -2102,29 +2107,19 @@ input[type=text] {
 
 .titleIcon {
     color: $color_signal;
-    font-size: 30px;
-    float: left;
-    margin-right: 24px;
+    font-size: 2.5rem;
 }
 
 .actionIcon {
     color: $color_signal;
-    margin: 0.2rem 0.8rem 0.2rem 0.8rem;
-    font-size: 28px;
+    font-size: 2.0rem;
 }
 
 
 .thumbnailIcon{
     color: $color_signal;
-    font-size: 46px;
-    float: left;
-    margin-right: 24px;
 }
 
-.browseActionItem {
-    color: $color_signal;
-    font-size: 18px;
-}
 .tree-list-group{
     color: $color_fill_verydark;
 }
@@ -2181,19 +2176,11 @@ input[type=text] {
 
 .navbar-divide {
     margin-left: 7px;
-    height: 100px;
     border-right: 2px solid $color_main_brand;
 }
 
 .mt-2em {
-    margin-top: 2.0em;
-}
-
-.navbar {
-    font-size: large;
-    i {
-        font-size: x-large;
-    }
+    margin-top: 1.0rem;
 }
 
 .list-group-item-light {
@@ -2216,7 +2203,7 @@ input[type=text] {
 }
 
 .list-action-icon {
-    font-size: 21px;
+    //font-size: 21px;
 }
 
 .progress {
@@ -2237,7 +2224,7 @@ input[type=text] {
     vertical-align: middle;
     overflow:hidden;
     font-family:$font_agenda;
-    font-size:20px;
+    //font-size:20px;
     .bar{
         position:absolute;
         top:0;
@@ -2273,22 +2260,85 @@ input[type=text] {
 }
 
 .page-item {
+        margin-bottom: 0.7rem;
     &.active .page-link {
         color: $white;
         background-color: $color_main_brand;
         border-color: $color_main_brand;
     }
     .page-link {
-        font-size: 1.33rem;
+        font-size: 1rem;
         &:hover {
             cursor: pointer;
         }
     }
     &.disabled .page-link {
         color: $color_fill_3;
+        fotn-size: rem;
     }
 }
 
 .color-main-brand {
     color: $color_main_brand !important;
+}
+
+.pagerRow {
+    position: absolute;
+    bottom: 0;
+    margin-bottom: 6rem;
+    margin-left: auto;
+    margin-right: auto;
+    left: 0;
+    right: 0;
+}
+.plistIcon {
+    color: $color_signal !important;
+    font-size: 1.8rem;
+}
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+  body {
+        font-size: 10px;
+        line-height: 1.5rem;
+
+        .thumbnailList {
+            height: 1rem;
+        }
+        .thumbnailImage {
+            height: 3rem;
+            max-width: 3rem;
+        }
+        .piqlTop {
+            padding-bottom: 0.7rem;
+        }
+
+        .mt2-em {
+            margin-top: 1.5em;
+        }
+        .mt-5 {
+            margin-top: 2.2rem !important;
+        }
+
+        .w-250 {
+            height: 30px !important;
+        }
+
+        .btn {
+            padding: 0.65rem !important;
+        }
+
+        .h-80 {
+            height: 60px !important;
+        }
+
+        .col-form-label-sm {
+            padding-top: calc( .2rem + 1px);
+            padding-bottom: calc( .2rem + 1px);
+            line-height: 1.2;
+        }
+    }
+}
+
+.navLinks {
+    font-size: 1.2rem;
+    padding-top: 2rem;
 }

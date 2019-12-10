@@ -8,7 +8,7 @@
                 {{item.filename}}
             </div>
             <div class="col-sm-1 ml-3 text-right align-self-center">
-                <a @click.once="download" href="#" data-toggle="tooltip" title="Download file"><i class="fas fa-file-download actionIcon text-center"></i></a>
+                <a @click.once="download" href="#" data-toggle="tooltip" title="Download normalized file"><i class="fas fa-file-download actionIcon text-center"></i></a>
               </div>
             <div class="col-sm-1"></div> 
         </div>

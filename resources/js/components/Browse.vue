@@ -1,13 +1,19 @@
 <template>
   <div>
-      <div class="row mt-5">
-          <div class="col-4 text-left ">
-              <h1> <i class="fas fa-hdd color-main-brand mr-3"/> Browse</h1>
+      <div class="row">
+          <div class="col-sm-1 text-left">
+            <i class="fas fa-hdd color-main-brand mr-3 titleIcon"></i>
           </div>
-          <div class="col-5 ml-5 font-weight-bold text-center">Access your archives</div>
-      </div>
-        <form class="form mb-2" v-on:submit.prevent>
-            <div class="row mt-5 mb-0">
+          <div class="col-sm-3 text-left">
+              <h1> Browse</h1>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-1"></div>
+          <div class="col-sm-3 text-left"><h5>Access your archives</h5></div>
+        </div>
+        <form class="form mb-1" v-on:submit.prevent>
+            <div class="row mt-1 mb-0">
                 <div class="col-sm-2">
                     <archive-picker :archives='archives' :initialSelection='selectedArchiveUuid' :label='archiveSelectLabel' @selectionChanged='archiveSelectionChanged'></archive-picker>
                 </div>
@@ -44,36 +50,32 @@
             </div>
         </form>
 
-        <!--holding-select v-if="archiveSelected" @holdingSelectionChanged="holdingSelectionChanged" :holdings="selectedArchiveHoldings"></holding-select-->
         <span v-if="fileMode === false">
             <browser-list v-if="holdingSelected" @openObject="openObject" :location="selectedLocation" :dataObjects="currentObjects"
                 @addObjectToRetrieval="addObjectToRetrieval" :selectedArchive="selectedArchiveUuid" :selectedHolding="selectedHolding"/>
             <div class="row plist thumbnailList invisible" v-for="pad in padPackageItems"></div>
-            <div class="row page-footer text-center">
+            <div class="row text-center pagerRow">
                 <div class="col">
                     <Pager :meta='packagePageMeta' @updatePage='packageUpdatePage' />
                 </div>
             </div>
-            <!--identity v-else></identity-->
     </span>
     <span v-if="fileMode">
         <browser-file-list :dataObjects="currentOpenObjectFiles" :location="selectedLocation" :dipId="currentOpenDipId"
             @close="closeFileList" @addFileToRetrieval="addFileToRetrieval" />
         <div class="row plist thumbnailList invisible" v-for="pad in padFileItems"></div>
-        <div class="row page-footer text-center">
+        <div class="row text-center pagerRow">
             <div class="col">
                 <Pager :meta='filesPageMeta' @updatePage='filesUpdatePage' />
             </div>
         </div>
     </span>
-    <!--primary-contact v-if="holdingSelected === false" /-->
+
     <online-actions v-if="online"/>
     <div v-if="offline" class="retrievalItems border-none w-75">
         Items for retrieval: <span class="float-right"> {{numberOfFilesForRetrieval}}</span>
     </div>
     <offline-actions v-if="offline"/>
-    <!--/div-->
-    <!--/div-->
 </div>
 </template>
 

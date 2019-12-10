@@ -16,9 +16,9 @@
                 {{fileCount}}
             </div>
              <div class="col-sm-3 d-inline-flex align-self-center">
-                <a class="m-auto" @click="open" href="#" data-toggle="tooltip" title="Access contents" ><i class="fas fa-folder-open titleIcon"></i></a>
-                <a class="m-auto" @click="download" href="#" data-toggle="tooltip" title="Download file"><i class="fas fa-file-download titleIcon text-center"></i></a>
-                <a class="m-auto" @click="preview" href="#" data-toggle="tooltip" title="Preview image"><i class="fas fa-eye titleIcon"></i></a>
+                <a class="m-auto" @click="open" href="#" data-toggle="tooltip" title="Access contents" ><i class="fas fa-folder-open actionIcon"></i></a>
+                <a class="m-auto" @click="download" href="#" data-toggle="tooltip" title="Download file"><i class="fas fa-file-download actionIcon text-center"></i></a>
+                <a class="m-auto" @click="preview" href="#" data-toggle="tooltip" title="Preview image"><i class="fas fa-eye actionIcon"></i></a>
               </div>
 
         </div>

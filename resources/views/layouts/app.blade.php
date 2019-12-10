@@ -4,7 +4,7 @@
         <title>piqlConnect</title>
         <meta name="csrf-token" content="{{ csrf_token() }}">
         <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=yes">
         <script type="text/javascript">Window.locale = '{{\App::getLocale()}}';</script>
         <link href="{{ asset('css/vendor.css') }}" rel="stylesheet" />
         <link href="{{ asset('css/app.css') }}" rel="stylesheet" />
@@ -19,19 +19,19 @@
         </div>
 @else
     <body>
-        <div id="app" class="container-fluid pl-0">
-            <div class="row">
+        <div id="app" class="container-fluid pl-0 pr-0" style=" max-height: 70vh; ">
+            <div class="row mb-0">
                 @section('top')
                     @include('includes.top')
                 @show
             </div>
             <div class="row">
-                <div id="sidebarWrapper" class="col-2 p-0 sidebarWrapper">
+                <div id="sidebarWrapper" class="col-sm-1 p-0 m-0 sidebarWrapper">
                     @section('sidebar')
                         @include('includes.sidebar')
                     @show
                 </div>
-                <div id="mainContent" class="col-9 pr-2 pl-5">
+                <div id="mainContent" class="col w-auto pl-5 pr-5 ml-3 mr-3 mt-4">
                     @hasSection('heading')
                             <h1>@yield('heading')</h1>
                     @endif

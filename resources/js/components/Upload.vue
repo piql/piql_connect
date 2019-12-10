@@ -1,35 +1,24 @@
 <template>
     <div>
-        <div class="row mt-5 mb-5">
-            <div class="col-md-3">
-                <h1>
-                    <i class="fas fa-upload titleIcon"></i>{{$t("upload.header")}}
-                </h1>
-            </div>
-
-            <div class="col-md-6">
-                Upload files to your archives here by clicking the 'Add file' button.
-            </div>
+    <div class="row">
+        <div class="col-sm-1 text-left">
+            <i class="fas fa-upload color-main-brand mr-3 titleIcon"></i>
         </div>
-
-    <!--div class="row mb-4 w-auto">
-        <div class="col-md-5">
-            <em class="mb-3 mt-2">{{ $t('upload.ingress') }}</em>
+        <div class="col-sm-6 text-left">
+            <h1>{{$t("upload.header")}}</h1>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-1"></div>
+        <div class="col-sm-6 text-left">
+            <h5>
+                Upload files to your archives here by clicking the 'Add file' button.
+            </h5>
         </div>
     </div>
 
-    <div class="row mb-2">
-        <div class="col-sm-2">&nbsp;</div>
-        <div v-if="compoundModeEnabled" class="col-sm-2 text-left">{{ $t('upload.sipName') }}</div>
-        <div class="col-sm-2 ">{{ $t('Archive') }}</div>
-        <div class="col-sm-2 ">{{ $t('Holding') }}</div>
-        <div v-if="compoundModeEnabled" class="col-sm-2 mr-1">{{ $t('upload.files') }}</div>
-        <div v-if="compoundModeEnabled" class="col-sm-2"></div>
-    </div-->
-
-
-        <div class="row form-group mb-3 mt-5 mr-0">
-            <div class="col-md-1 text-left mr-5 pr-0"> 
+        <div class="row form-group mt-5 mb-2">
+            <div class="col-md-2 p-1 pl-3 pr-3"> 
                 <FileInputComponent
                     :multiple="compoundModeEnabled"
                     :uploader="uploader"
@@ -38,8 +27,8 @@
                 </FileInputComponent>
             </div>
 
-            <div v-show="compoundModeEnabled" class="col-md-3 text-left">
-                <input value="" :placeholder="bag.name" v-model="bag.name" type="text" class="noTextTransform form-control pl-3" @input="setBagName" onclick="select()">
+            <div v-show="compoundModeEnabled" class="col-md-2 text-left">
+                <input value="" :placeholder="bag.name" v-model="bag.name" type="text" class="noTextTransform form-control" style="border-radius: 0.5rem" @input="setBagName" onclick="select()">
             </div>
 
             <div class="col-md-2">
@@ -50,8 +39,11 @@
                 <holding-picker :holdings="holdings" :initialSelection="selectedHoldingTitle" @selectionChanged="changedHolding"></holding-picker>
             </div>
 
-            <div v-show="compoundModeEnabled" class="col-md-3 text-right">
-                <button class="btn btn-primary btn-lg w-100" v-bind:class="[{ disabled : processDisabled  }]" v-on:click="commitBagToProcessing">{{$t('upload.processButton')}}</button>
+            <div class="col-md-2">
+            </div>
+
+            <div v-show="compoundModeEnabled" class="col-md-2 text-center">
+                <button class="btn w-100 m-0 p-2" v-bind:class="[{ disabled : processDisabled  }]" v-on:click="commitBagToProcessing">{{$t('upload.processButton')}}</button>
             </div>
         </div>
 
@@ -188,9 +180,9 @@
     holdings: [],
     selectedHoldingTitle: {},
     currentPage: 1,
-    pageSize: 6,
+    pageSize: 4,
     pageFrom: 1,
-    pageTo: 6
+    pageTo: 4
     };
     },
 

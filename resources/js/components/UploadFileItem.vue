@@ -1,5 +1,5 @@
 <template> 
-    <div class="row plist uploadFileList fg-black">
+    <div class="row plist mb-0 pb-0">
         <div class="col-md-7 col-sm-5 col-xs-3 text-left text-truncate align-self-center">
             <div v-if="isUploading" class="progress">
                 <div class="progress-bar bg-signal text-left" role="progressbar" v-bind:style="progressBarStyle" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
@@ -15,10 +15,10 @@
         <div class="col-xs-2 col-sm-2 text-center text-truncate align-self-center">
             {{humanReadableFileSize}}
         </div>
-        <div class="col-xs-2 col-sm-3 text-center">
+        <div class="col-xs-2 col-sm-3 text-center align-self-center">
             <span v-if="! file.isUploading">
-                <a @click="metadataClicked (file)" href="#" data-toggle="tooltip" title="Edit metadata"><i class="fas fa-tags actionIcon text-center"></i></a>
-                <a @click="removeClicked (file)" href="#" data-toggle="tooltip" title="Remove file"><i class="fas fa-trash-alt actionIcon text-center"></i></a>
+                <a @click="metadataClicked (file)" href="#" data-toggle="tooltip" title="Edit metadata"><i class="fas fa-tags actionIcon text-center mr-2"></i></a>
+                <a @click="removeClicked (file)" href="#" data-toggle="tooltip" title="Remove file"><i class="fas fa-trash-alt actionIcon text-center ml-2"></i></a>
             </span>
         </div>
     </div>

@@ -4,15 +4,11 @@
         {{__("Welcome")}}<br><i class="fas fa-user"></i> {{ Auth::user()->full_name }}
     </div>
 
-    <!--div id="collapseSideMenu">
-        <img onclick="collapseMenu()" src="{{asset('/images/collapsemenu.png')}}">
-    </div-->
-
     <div class="clearboth">
     </div>
 
     <ul class="list-group">
-    @if(\Request::is('/') || \Request::is("settings") ) 
+    @if(\Request::is('/'))
         <a href="{{ route('dashboard') }}">
             <li class="list-group-item  {{ \Request::is('/') ? 'active sidebar-active' : '' }} ">
                 <i class="fas fa-tachometer-alt"></i><i class="leftMenuItem">{{__('sidebar.dashboard')}}</i>
@@ -25,7 +21,7 @@
             </li>
         </a>
     @endif
-
+    @elseif( \Request::is("settings") )
         <a href="{{ route('web.showSettings') }}">
             <li class="list-group-item {{ \Request::is('settings') ? 'active sidebar-active' : '' }} ">
                 <i class="fas fa-cogs"></i><i class="leftMenuItem">{{__('sidebar.settings')}}</i>
