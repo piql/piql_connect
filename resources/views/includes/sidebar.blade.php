@@ -49,12 +49,26 @@
             </li>
         </a>
 
-    @elseif (\Request::is('access/*') || \Request::is('access/'))
+    @elseif (\Request::is('access/browse'))
         <a href="{{ route('access.browse') }}">
             <li class="list-group-item {{ \Request::is('access/browse') ? 'active sidebar-active' : '' }} ">
                 <i class="fas fa-hdd"></i><i class="leftMenuItem">{{__('sidebar.browse')}}</i>
             </li>
         </a>
+        <a href="{{ route('access.retrieve.ready') }}">
+            <li class="list-group-item {{ \Request::is('access/retrieve/ready') ? 'active sidebar-active' : '' }} ">
+                <i class="fas fa-file-export"></i><i class="leftMenuItem">{{__('sidebar.retrieve')}}</i>
+            </li>
+        </a>
+
+
+    @elseif (\Request::is('access/retrieve/*'))
+        <a href="{{ route('access.browse') }}">
+            <li class="list-group-item {{ \Request::is('access/browse') ? 'active sidebar-active' : '' }} ">
+                <i class="fas fa-hdd"></i><i class="leftMenuItem">{{__('sidebar.browse')}}</i>
+            </li>
+        </a>
+
         <a href="{{ route('access.retrieve.ready') }}">
             <li class="list-group-item {{ \Request::is('access/retrieve/ready') ? 'active sidebar-active' : '' }} ">
                 <i class="fas fa-file-export"></i><i class="leftMenuItem">{{__('sidebar.retrieve.readyToRetrieve')}}</i>
@@ -68,7 +82,7 @@
         </a>
 
         <a href="{{ route('access.retrieve.downloadable') }}">
-            <li class="list-group-item {{ \Request::is('access/retrieve/downloadable') ? 'active sidebar-active' : '' }} ">
+            <li class="list-group-item {{ \Request::is('access/retrieve/download') ? 'active sidebar-active' : '' }} ">
                 <i class="fas fa-file-download"></i><i class="leftMenuItem">{{__('sidebar.retrieve.downloadable')}}</i>
             </li>
         </a>
