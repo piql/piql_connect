@@ -22,10 +22,22 @@ class DipController extends Controller
 
     public function index( Request $request )
     {
-        return \App\Http\Resources\DipResource::collection(
-            Dip::with(['storage_properties', 'storage_properties.bag'])
-                ->latest()->paginate( env('DEFAULT_ENTRIES_PER_PAGE') )
-        );
+        $q = Dip::query();
+        $terms = collect(explode(" ", $request->query('search')));
+        if(true || $terms->count() == 1) {
+            return DipResource::collection(
+                $q->whereHas('storage_properties.bag',
+                    function( $bag ) use( $terms ) { $bag->where('name', 'LIKE', "%{$terms->first()}%"); })->get()
+            );
+        } elseif( $terms->count() > 1) {
+            return DipResource::collection(
+                $terms->map( function ($term, $key) use ($q) {
+                        return $q->whereHas('storage_properties.bag',
+                            function( $bag ) use ($term) { $bag->where('name','LIKE',"%{$term}%"); })->get();
+                }
+            )
+            );
+        }
     }
 
     public function package_thumbnail( Request $request, ArchivalStorageInterface $storage )
