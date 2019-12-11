@@ -19,8 +19,8 @@
         </div>
 @else
     <body>
-        <div id="app" class="container-fluid pl-0 pr-0" style=" max-height: 70vh; ">
-            <div class="row mb-0">
+        <div id="app" class="container-fluid" style=" max-height: 70vh; ">
+            <div class="row mb-0 m-auto">
                 @section('top')
                     @include('includes.top')
                 @show

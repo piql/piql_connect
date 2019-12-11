@@ -1,9 +1,9 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container-fluid">
+<div>
     <div class="row justify-content-center">
-        <div class="col-md-8">
+        <div class="col-md-12">
             <div class="card loginForm">
                 <div>
                     <img src="{{ asset('images/piql-connect.png') }}" alt="{{ __('Login') }}"/>
@@ -25,9 +25,8 @@
                                 @enderror
                             </div>
                         </div>
-
                         <div class="form-group row">
-                            <div class="col-md-12">
+                            <div class="col-md-8">
                             <label for="password" class="col-form-label text-md-left">{{ __('Password') }}</label>
 
                                 <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="current-password">
