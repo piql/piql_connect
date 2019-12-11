@@ -1,21 +1,19 @@
 <template>
     <div>
-    <div class="row">
-        <div class="col-sm-1 text-left">
-            <i class="fas fa-upload color-main-brand mr-3 titleIcon"></i>
+        <div class="row">
+            <div class="col-sm-1 text-right">
+                <i class="fas fa-upload color-main-brand mr-3 titleIcon"></i>
+            </div>
+            <div class="col-sm-6 text-left">
+                <h1>{{$t("upload.header")}}</h1>
+            </div>
         </div>
-        <div class="col-sm-6 text-left">
-            <h1>{{$t("upload.header")}}</h1>
+        <div class="row">
+            <div class="col-sm-1"></div>
+            <div class="col-sm-6 text-left">
+                    Upload files to your archives here by clicking the 'Add file' button.
+            </div>
         </div>
-    </div>
-    <div class="row">
-        <div class="col-sm-1"></div>
-        <div class="col-sm-6 text-left">
-            <h5>
-                Upload files to your archives here by clicking the 'Add file' button.
-            </h5>
-        </div>
-    </div>
 
         <div class="row form-group mt-5 mb-2">
             <div class="col-md-2 p-1 pl-3 pr-3"> 
@@ -28,7 +26,7 @@
             </div>
 
             <div v-show="compoundModeEnabled" class="col-md-2 text-left">
-                <input value="" :placeholder="bag.name" v-model="bag.name" type="text" class="noTextTransform form-control" style="border-radius: 0.5rem" @input="setBagName" onclick="select()">
+                <input value="" :placeholder="bag.name" v-model="bag.name" type="text" class="pl-3 noTextTransform form-control" style="border-radius: 0.5rem" @input="setBagName" onclick="select()">
             </div>
 
             <div class="col-md-2">
@@ -47,29 +45,29 @@
             </div>
         </div>
 
-    <div class="row plistHeader"> <div class="col-sm-1 text-center">
+        <div class="row plistHeader"> <div class="col-sm-1 text-center">
+            </div>
+            <div class="col-md-6 col-sm-5 col-xs-3 text-left align-self-center">
+                Filename
+            </div>
+            <div class="col-xs-2 col-sm-2 text-center align-self-center">
+                File size
+            </div>
+            <div class="col-xs-2 col-sm-3 text-center align-self-center">
+                Actions
+            </div>
         </div>
-        <div class="col-md-6 col-sm-5 col-xs-3 text-left align-self-center">
-            Filename
-        </div>
-        <div class="col-xs-2 col-sm-2 text-center align-self-center">
-            File size
-        </div>
-        <div class="col-xs-2 col-sm-3 text-center align-self-center">
-            Actions
-        </div>
-    </div>
 
-    <UploadFileItem v-for="(file,index) in filesUploading" v-bind:file="file" :key="file.id"
-        @metadataClicked="metadataClicked" @removeClicked="removeClicked"
-        v-if="index >= pageFrom-1 && index <= pageTo-1 " />
-    <div class="row plist uploadFileList invisible" v-for="pad in pagerPad"></div>
-    <div class="row page-footer text-center">
-        <div class="col">
-            <Pager :meta="filesUploadingMeta" @updatePage="updatePage" v-if="totalFilesUploading > 0" />
+        <UploadFileItem v-for="(file,index) in filesUploading" v-bind:file="file" :key="file.id"
+            @metadataClicked="metadataClicked" @removeClicked="removeClicked"
+            v-if="index >= pageFrom-1 && index <= pageTo-1 " />
+        <div class="row plist uploadFileList invisible" v-for="pad in pagerPad"></div>
+        <div class="row page-footer text-center">
+            <div class="col">
+                <Pager :meta="filesUploadingMeta" @updatePage="updatePage" v-if="totalFilesUploading > 0" />
+            </div>
         </div>
     </div>
-</div>
 </template>
 
 <script language="text/babel">
@@ -140,209 +138,208 @@
     this.processDisabled = false;
     let uploadToBagId = this.bag.id;
     axios.post('/api/v1/ingest/fileUploaded', {
-    'fileName' : name,
-    'result' : response,
-    'bagId' : uploadToBagId,
-    'fileSize': fileSize
-    }).then( async ( file ) => {
-    this.filesUploading[filesIndex].uploadedFileId = file.data.data.id;
-    this.filesUploading[filesIndex].uploadedToBagId = file.data.data.bag_id;
+      'fileName' : name,
+      'result' : response,
+      'bagId' : uploadToBagId,
+      'fileSize': fileSize
+      }).then( async ( file ) => {
+        this.filesUploading[filesIndex].uploadedFileId = file.data.data.id;
+        this.filesUploading[filesIndex].uploadedToBagId = file.data.data.bag_id;
 
-    if( this.bag.id == uploadToBagId ){ //???
-    await axios.get("/api/v1/ingest/bags/"+uploadToBagId+"/files").then( (files) => {
-    this.files = files.data.data;
-    });
-    }
+        if( this.bag.id == uploadToBagId ){ //???
+          await axios.get("/api/v1/ingest/bags/"+uploadToBagId+"/files").then( (files) => {
+            this.files = files.data.data;
+        });
+      }
     })
     } else {
     axios.post("/api/v1/ingest/files/bag", {
-    'fileName' : name,
-    'result' : response,
-    'fileSize': fileSize
-    });
-    }
+      'fileName' : name,
+      'result' : response,
+      'fileSize': fileSize
+      });
+      }
     }
     }}});
     return {
-    uploader: uploader,
-    bag: {},
-    files: {},
-    filesUploading: [],
-    userId: '',
-    userSettings: {
-    workflow: {
-    }
-    },
-    processDisabled: true,
-    fileInputDisabled: false,
-    archives: [],
-    selectedArchive: {},
-    holdings: [],
-    selectedHoldingTitle: {},
-    currentPage: 1,
-    pageSize: 4,
-    pageFrom: 1,
-    pageTo: 4
-    };
+      uploader: uploader,
+      bag: {},
+      files: {},
+      filesUploading: [],
+      userId: '',
+      userSettings: {
+        workflow: {
+        }
+      },
+      processDisabled: true,
+      fileInputDisabled: false,
+      archives: [],
+      selectedArchive: {},
+      holdings: [],
+      selectedHoldingTitle: {},
+      currentPage: 1,
+      pageSize: 4,
+      pageFrom: 1,
+      pageTo: 4
+      };
     },
 
     components: {
-    FineUploader
+      FineUploader
     },
 
     computed: {
-    numberOfFiles: function() {
-    return this.files.length;
-    },
-    compoundModeEnabled: function() {
-    return this.userSettings.workflow.ingestCompoundModeEnabled;
-    },
-    uploadInProgress: function() {
-    return this.filesUploading.length > 0;
-    },
-    totalFilesUploading: function() {
-    return this.filesUploading.length;
-    },
-    pageLast: function() {
-    return Math.ceil( this.totalFilesUploading / this.pageSize );
-    },
-    pagePrev: function() {
-    return this.currentPage < 2 ? null : this.currentPage - 1;
-    },
-    pageNext: function() {
-    return this.currentPage == this.pageLast ? null : this.currentPage + 1;
-    },
-    pagerPad: function() {
-    let entriesOnLastPage = this.totalFilesUploading % this.pageSize;
-    let padEntries = entriesOnLastPage > 0 ? ( this.pageSize - entriesOnLastPage ) : 0;
+        numberOfFiles: function() {
+            return this.files.length;
+        },
+        compoundModeEnabled: function() {
+            return this.userSettings.workflow.ingestCompoundModeEnabled;
+        },
+        uploadInProgress: function() {
+            return this.filesUploading.length > 0;
+        },
+        totalFilesUploading: function() {
+            return this.filesUploading.length;
+        },
+        pageLast: function() {
+            return Math.ceil( this.totalFilesUploading / this.pageSize );
+        },
+        pagePrev: function() {
+            return this.currentPage < 2 ? null : this.currentPage - 1;
+        },
+        pageNext: function() {
+            return this.currentPage == this.pageLast ? null : this.currentPage + 1;
+        },
+        pagerPad: function() {
+            let entriesOnLastPage = this.totalFilesUploading % this.pageSize;
+            let padEntries = entriesOnLastPage > 0 ? ( this.pageSize - entriesOnLastPage ) : 0;
 
-    return this.currentPage != this.pageLast ? 0 : padEntries;
-    },
-    filesUploadingMeta: function() {
-    return {
-    'current_page': this.currentPage,
-    'prev': this.pagePrev,
-    'next': this.pageNext,
-    'last_page': this.pageLast,
-    'from': this.pageFrom,
-    'to': this.pageTo,
-    'total': this.totalFilesUploading
-    }
-    }
-
+            return this.currentPage != this.pageLast ? 0 : padEntries;
+        },
+        filesUploadingMeta: function() {
+            return {
+                'current_page': this.currentPage,
+                'prev': this.pagePrev,
+                'next': this.pageNext,
+                'last_page': this.pageLast,
+                'from': this.pageFrom,
+                'to': this.pageTo,
+                'total': this.totalFilesUploading
+            }
+        }
     },
 
     methods: {
-    onClick(url) {
-    window.location = url;
-    },
-    metadataClicked( e ) {
-    let fileId = e.uploadedFileId;
-    let bagId = e.uploadedToBagId;
-    if( fileId && bagId ){
-    window.location = '/ingest/tasks/'+bagId+'/metadata/'+fileId+'/edit_ingest';
-    }
-    },
-    async removeClicked( e ) {
-    let fileId = e.uploadedFileId;
-    let bagId = e.uploadedToBagId;
-    axios.delete("/api/v1/ingest/bags/"+bagId+"/files/"+fileId).then ( async (response) => {
-    this.files = (await axios.get('/api/v1/ingest/bags/' + this.bag.id + '/files')).data.data;
-    this.filesUploading = this.filesUploading.filter( (file) => file.uploadedFileId !== fileId );
-    });
+        onClick(url) {
+            window.location = url;
+        },
+        metadataClicked( e ) {
+            let fileId = e.uploadedFileId;
+            let bagId = e.uploadedToBagId;
+            if( fileId && bagId ){
+                window.location = '/ingest/tasks/'+bagId+'/metadata/'+fileId+'/edit_ingest';
+            }
+        },
+        async removeClicked( e ) {
+            let fileId = e.uploadedFileId;
+            let bagId = e.uploadedToBagId;
+            axios.delete("/api/v1/ingest/bags/"+bagId+"/files/"+fileId).then ( async (response) => {
+                this.files = (await axios.get('/api/v1/ingest/bags/' + this.bag.id + '/files')).data.data;
+                this.filesUploading = this.filesUploading.filter( (file) => file.uploadedFileId !== fileId );
+        });
 
-    },
-    addFileToQueue(payload) {
-    },
-    humanReadableFileSize( fileSizeInBytes ){
-    return isNaN( fileSizeInBytes )  ? "" : filesize( fileSizeInBytes );
-    },
-    updatePage( page ) {
-    let prevCurrentPage = this.currentPage;
-    this.currentPage = page.page;
-    this.pageFrom = 1 + (this.currentPage-1) * this.pageSize;
-    this.pageTo = this.pageFrom+this.pageSize-1;
-    },
-    async commitBagToProcessing(e) {
-    if(this.processDisabled){
-    return;
-    }
-    this.processDisabled = true;
-    this.fileInputDisabled = true;
+        },
+        addFileToQueue(payload) {
+        },
+        humanReadableFileSize( fileSizeInBytes ){
+            return isNaN( fileSizeInBytes )  ? "" : filesize( fileSizeInBytes );
+        },
+        updatePage( page ) {
+            let prevCurrentPage = this.currentPage;
+            this.currentPage = page.page;
+            this.pageFrom = 1 + (this.currentPage-1) * this.pageSize;
+            this.pageTo = this.pageFrom+this.pageSize-1;
+        },
+        async commitBagToProcessing(e) {
+            if(this.processDisabled){
+                return;
+            }
+            this.processDisabled = true;
+            this.fileInputDisabled = true;
 
-    await this.doProcessing( this.bag.id );
-    this.bag = await this.createBag("", this.userId, this.selectedArchive, this.selectedHoldingTitle );
-    this.fileInputDisabled = false;
-    },
-    async doProcessing( bagId ) {
-    let committed = (await axios.post("/api/v1/ingest/bags/"+bagId+"/commit")).data.data;
-    this.uploader.methods.reset();
-    this.bagName = "";
-    this.files = [];
-    this.filesUploading = [];
-    },
-    async setBagName() {
-    let currentBagId = this.bag.id;
-    let bagName = this.bag.name;
-    axios.patch("/api/v1/ingest/bags/"+currentBagId, {
-    'name': bagName
-    }).then( (result) => {
-    this.bag = result.data.data;
-    });
-    return this.bag;
-    },
-    async createBag( bagName, userId, selectedArchive, selectedHoldingTitle ) {
-    let createdBag = (await axios.post("/api/v1/ingest/bags/", {
-    name: bagName,
-    owner: userId,
-    archive_uuid: selectedArchive,
-    holding_name: selectedHoldingTitle
-    })).data.data;
-    this.files = [];
-    this.filesUploading = [];
-    return createdBag;
-    },
-    async setupHoldings(archiveId, initialHolding) {
-    await axios.get('/api/v1/planning/archives/'+archiveId+'/holdings').then( (response) => {
-    this.holdings = response.data.data;
-    let defaultHolding = this.holdings[0].title;
-    Vue.nextTick( () => { $('#holdingPicker').selectpicker('val', initialHolding || defaultHolding);});
-    });
-    },
-    async changedArchive(archiveId) {
-    this.selectedArchive = archiveId;
-    if( this.compoundModeEnabled) {
-    await this.setupHoldings(archiveId, this.bag.holding_name);
-    axios.patch("/api/v1/ingest/bags/"+this.bag.id, {
-    archive_uuid: archiveId,
-    holding_name: this.selectedHoldingTitle
-    }).then( (response) => {
-    this.bag = response.data.data;
-    });
-    }
+            await this.doProcessing( this.bag.id );
+            this.bag = await this.createBag("", this.userId, this.selectedArchive, this.selectedHoldingTitle );
+            this.fileInputDisabled = false;
+        },
+        async doProcessing( bagId ) {
+            let committed = (await axios.post("/api/v1/ingest/bags/"+bagId+"/commit")).data.data;
+            this.uploader.methods.reset();
+            this.bagName = "";
+            this.files = [];
+            this.filesUploading = [];
+        },
+        async setBagName() {
+            let currentBagId = this.bag.id;
+            let bagName = this.bag.name;
+            axios.patch("/api/v1/ingest/bags/"+currentBagId, {
+                'name': bagName
+            }).then( (result) => {
+                this.bag = result.data.data;
+            });
+            return this.bag;
+        },
+        async createBag( bagName, userId, selectedArchive, selectedHoldingTitle ) {
+            let createdBag = (await axios.post("/api/v1/ingest/bags/", {
+            name: bagName,
+            owner: userId,
+            archive_uuid: selectedArchive,
+            holding_name: selectedHoldingTitle
+            })).data.data;
+            this.files = [];
+            this.filesUploading = [];
+            return createdBag;
+        },
+        async setupHoldings(archiveId, initialHolding) {
+            await axios.get('/api/v1/planning/archives/'+archiveId+'/holdings').then( (response) => {
+                this.holdings = response.data.data;
+                let defaultHolding = this.holdings[0].title;
+                Vue.nextTick( () => { $('#holdingPicker').selectpicker('val', initialHolding || defaultHolding);});
+            });
+        },
+        async changedArchive(archiveId) {
+            this.selectedArchive = archiveId;
+            if( this.compoundModeEnabled) {
+                await this.setupHoldings(archiveId, this.bag.holding_name);
+                axios.patch("/api/v1/ingest/bags/"+this.bag.id, {
+                    archive_uuid: archiveId,
+                    holding_name: this.selectedHoldingTitle
+                }).then( (response) => {
+                this.bag = response.data.data;
+            });
+        }
     },
     async changedHolding(holdingTitle) {
-    let selectedArchive  = this.selectedArchive;
-    this.selectedHoldingTitle = holdingTitle;
-    if( this.compoundModeEnabled ) {
-    let bag = this.bag;
-    Vue.nextTick( async () => {
-    bag = await axios.patch("/api/v1/ingest/bags/"+bag.id, {
-    archive_uuid: selectedArchive,
-    holding_name: holdingTitle
-    }).data;
-    });
-    }
-    },
+        let selectedArchive  = this.selectedArchive;
+        this.selectedHoldingTitle = holdingTitle;
+        if( this.compoundModeEnabled ) {
+            let bag = this.bag;
+            Vue.nextTick( async () => {
+            bag = await axios.patch("/api/v1/ingest/bags/"+bag.id, {
+                archive_uuid: selectedArchive,
+                holding_name: holdingTitle
+            }).data;
+            });
+            }
+        },
     },
     async mounted() {
-    this.currentPage = 1;
-    this.pageFrom = 1;
-    this.pageTo = this.pageSize;
-    await axios.get("/api/v1/planning/archives").then( (response) => {
-    this.archives = response.data.data;
-    this.selectedArchive = this.archives[0].uuid;
-    });
+        this.currentPage = 1;
+        this.pageFrom = 1;
+        this.pageTo = this.pageSize;
+        await axios.get("/api/v1/planning/archives").then( (response) => {
+            this.archives = response.data.data;
+            this.selectedArchive = this.archives[0].uuid;
+        });
 
     this.userId = (await axios.get("/api/v1/system/currentUser")).data;
     this.userSettings  = (await axios.get("/api/v1/system/currentUserSettings")).data;
@@ -352,37 +349,32 @@
     this.bag = (await axios.get("/api/v1/ingest/bags/latest")).data.data;
     Vue.nextTick( () => { $('#archivePicker').selectpicker('val', this.selectedArchive);});
 
-    if(this.bag !== undefined && this.bag.status === "open")
-    {
-    this.files = (await axios.get('/api/v1/ingest/bags/' + this.bag.id + '/files')).data.data;
-    this.filesUploading = this.files.map( (file, index) => ({
-    id: index+100000,  /*A large enough number to avoid collisions with id's provided by FineUploader */
-    filename: file.filename,
-    progressBarStyle: "width: 0%",
-    uploadedFileId: file.id,
-    uploadedToBagId: file.bag_id,
-    fileSize: file.filesize,
-    uploadedFileSize: file.filesize,
-    isUploading: false
-    }) );
-    }
-    else
-    {
-    this.bag = (await this.createBag( "", this.userId, this.selectedArchive, this.selectedHoldingTitle ));
-    }
-    if(this.filesUploading)
-    {
-    this.processDisabled = false;
-    }
-    } else {
-    Vue.nextTick( () => {
-    $('#archivePicker').selectpicker('val', this.selectedArchive);
-    this.setupHoldings( this.selectedArchive );
-    });
-    }
-    },
-    props: {
-    }
+    if(this.bag !== undefined && this.bag.status === "open") {
+        this.files = (await axios.get('/api/v1/ingest/bags/' + this.bag.id + '/files')).data.data;
+        this.filesUploading = this.files.map( (file, index) => ({
+            id: index+100000,  /*A large enough number to avoid collisions with id's provided by FineUploader */
+            filename: file.filename,
+            progressBarStyle: "width: 0%",
+            uploadedFileId: file.id,
+            uploadedToBagId: file.bag_id,
+            fileSize: file.filesize,
+            uploadedFileSize: file.filesize,
+            isUploading: false
+            }) );
+        }
+        else {
+            this.bag = (await this.createBag( "", this.userId, this.selectedArchive, this.selectedHoldingTitle ));
+        }
+        if(this.filesUploading) {
+            this.processDisabled = false;
+        }
+        } else {
+            Vue.nextTick( () => {
+                $('#archivePicker').selectpicker('val', this.selectedArchive);
+                this.setupHoldings( this.selectedArchive );
+            });
+        }
+        }
+}
 
-    };
 </script>
