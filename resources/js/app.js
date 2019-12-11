@@ -19,11 +19,13 @@ window.collapseMenu = function() {
         document.getElementById("sideMenu").setAttribute("id", "sideMenuCollapsed");
         document.getElementById("sidebarWrapper").setAttribute("class", "col-1 pl-0 sidebarWrapper");
         document.getElementById("mainContent").setAttribute("class", "col-10 ml-2 mr-1");
+        document.getElementById("poweredBy").setAttribute("style", "display: inline-flex;");
     }
     else {
         document.getElementById("sideMenuCollapsed").setAttribute("id", "sideMenu");
         document.getElementById("sidebarWrapper").setAttribute("class", "col-3 pl-0 sidebarWrapper");
         document.getElementById("mainContent").setAttribute("class", "col-8 ml-3 mr-0");
+        document.getElementById("poweredBy").setAttribute("style", "display: none;");
     }
 }
 

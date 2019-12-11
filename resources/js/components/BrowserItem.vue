@@ -1,5 +1,5 @@
 <template>
-    <div class="row plist thumbnailList">
+    <div class="row thumbnailList">
             <div class="col-sm-2 text-center align-self-center">
                 <img class="thumbnailImage" v-bind:src="thumbnailImage">
             </div>

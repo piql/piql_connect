@@ -81,7 +81,7 @@
 @endif
     </ul>
 
-    <div class="poweredBy">
+    <div id="poweredBy" class="poweredBy">
          <div class="poweredByText">Powered by </div>
         <span class="poweredByImg"><img src="{{asset('/images/piql_logo_white.png')}}"><span>
 	</div>

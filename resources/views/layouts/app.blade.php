@@ -19,8 +19,9 @@
         </div>
 @else
     <body>
-        <div id="app" class="container-fluid" style=" max-height: 70vh; ">
-            <div class="row mb-0 m-auto">
+        <div id="app" style=" max-height: 70vh;">
+            <div class="container-fluid ml-0 mr-0 pl-0 pr-0">
+            <div class="row mb-0">
                 @section('top')
                     @include('includes.top')
                 @show
@@ -31,13 +32,14 @@
                         @include('includes.sidebar')
                     @show
                 </div>
-                <div id="mainContent" class="col w-auto pl-5 pr-5 ml-3 mr-3 mt-4">
+                <div id="mainContent" class="col ml-5 mr-5 mt-4">
                     @hasSection('heading')
                             <h1>@yield('heading')</h1>
                     @endif
                     @yield('content')
                 </div>
             </div>
+        </div>
     </div>
 @endif
     </body>

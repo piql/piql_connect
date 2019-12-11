@@ -1,50 +1,53 @@
 <template>
-  <div>
+  <div class="">
       <div class="row">
-          <div class="col-sm-1 text-left">
-            <i class="fas fa-hdd color-main-brand mr-3 titleIcon"></i>
+          <div class="col-sm-2 text-center">
+              <i class="fas fa-hdd color-main-brand titleIcon"></i>
           </div>
-          <div class="col-sm-3 text-left">
-              <h1> Browse</h1>
+          <div class="text-left ml-5">
+              <h1 class="ml-1"> Browse</h1>
+              <div class="ml-1">Access your archives</div>
           </div>
         </div>
         <div class="row">
-          <div class="col-sm-1"></div>
-          <div class="col-sm-3 text-left"><h5>Access your archives</h5></div>
+          <div class="col-sm-2"></div>
+          <div class="col-xs-2 text-left"></div>
         </div>
         <form class="form mb-1" v-on:submit.prevent>
-            <div class="row mt-1 mb-0">
-                <div class="col-sm-2">
+            <div class="row mt-1 mb-0 d-inline-flex w-auto">
+                <div class="col-md-2 col-lg-2">
                     <archive-picker :archives='archives' :initialSelection='selectedArchiveUuid' :label='archiveSelectLabel' @selectionChanged='archiveSelectionChanged'></archive-picker>
                 </div>
 
-                <div class="col-sm-2">
+                <div class="col-md-2 col-lg-2">
                     <holding-picker :holdings='holdings' :initialSelection='selectedArchiveUuid' :label='holdingSelectLabel' @selectionChanged='archiveSelectionChanged' />
                 </div>
 
-                <div class="col-sm-2">
+                <div class="col-md-2 col-lg-2">
                     <label for="fromDate" class="col-form-label-sm">{{$t('access.browse.archivedFrom')}}</label>
                     <input v-model="fromDateFilter" id="fromDate" type="date" class="form-control w-auto">
                 </div>
 
-                <div class="col-sm-2">
+                <div class="col-md-2 col-lg-2">
                     <label for="toDate" class="col-form-label-sm">{{$t('access.browse.archivedTo')}}</label>
                     <input v-model="toDateFilter" id="toDate" type="date" class="form-control w-auto">
                 </div>
 
-                <div class="col-sm-2 form-group">
-                    <label for="searchContents" class="col-form-label-sm">{{$t('access.browse.withContents')}}</label>
-                    <div class="input-group">
-                        <div class="input-group addon">
-                            <input v-model="searchField" id="searchContents" type="text" class="form-control">
-                            <span class="input-group-addon">
-                                <i class="fas fa-search search-icon-inline"></i>
-                            </span>
-                        </div>
+                <div class="col-md-2 col-lg-2">
+                  <div class="form-group">
+                      <label for="searchContents" class="col-form-label-sm">{{$t('access.browse.withContents')}}</label>
+                      <div class="input-group">
+                          <div class="input-group addon">
+                              <input v-model="searchField" id="searchContents" type="text" class="form-control" style="border-radius: 3px">
+                              <span class="input-group-addon">
+                                  <i class="fas fa-search search-icon-inline"></i>
+                              </span>
+                          </div>
+                      </div>
                     </div>
-                </div>
+                  </div>
 
-                <div class="col-sm-2 text-align-right">
+                <div class="col-md-2 text-align-right">
                     <location-picker :holding='selectedArchiveUuid' :initialSelectedLocation="selectedLocation" :locations="locations" @locationSelectionChanged="locationSelectionChanged"></location-picker>
                 </div>
             </div>
@@ -53,7 +56,7 @@
         <span v-if="fileMode === false">
             <browser-list v-if="holdingSelected" @openObject="openObject" :location="selectedLocation" :dataObjects="currentObjects"
                 @addObjectToRetrieval="addObjectToRetrieval" :selectedArchive="selectedArchiveUuid" :selectedHolding="selectedHolding"/>
-            <div class="row plist thumbnailList invisible" v-for="pad in padPackageItems"></div>
+            <div class="row thumbnailList invisible" v-for="pad in padPackageItems"></div>
             <div class="row text-center pagerRow">
                 <div class="col">
                     <Pager :meta='packagePageMeta' @updatePage='packageUpdatePage' />
