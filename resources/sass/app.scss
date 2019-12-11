@@ -2355,3 +2355,32 @@ input[type=text] {
 .col-form-label-sm {
     font-size: 0.7rem;
 }
+
+.stats {
+    height: 13vw;
+}
+
+.halfStats {
+    text-align: center;
+    max-width: 7.8rem;
+    height: 5rem;
+    margin-bottom: 1rem auto;
+    padding: 1rem auto;
+
+    h2 {
+        margin-top: 0.8rem;
+        font-size: 2rem;
+        color: white;
+    }
+
+    em {
+        font-size: 0.75rem;
+        color: white;
+        margin-bottom: 0.75rem;
+    }
+}
+.halfStatsRow {
+    justify-content: space-evenly;
+    height: 5vw;
+    padding-bottom: 3rem;
+}
