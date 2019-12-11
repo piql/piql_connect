@@ -1,6 +1,6 @@
 <template>
     <span>
-    <i @click="toggleShowNotifications()" class="fas fa-bell clickable"  id="noti" data-count="0"></i>
+    <i @click="toggleShowNotifications()" class="fas fa-bell clickable" ></i>
     <div class="dropdownList" v-if="false">
         <i class="fas fa-times closeNotifications" @click="toggleShowNotifications()" ></i>
         <strong>notifications</strong>
@@ -24,7 +24,8 @@
             }
         },
         methods: {
-            toggleShowNotifications: function(){
+          toggleShowNotifications: function(){
+              return;
                 this.showNotifications = !this.showNotifications;
             }
         },
