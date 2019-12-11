@@ -1,8 +1,8 @@
 <template>
     <div>
-        <div class="row">
+        <div class="row mt-2">
             <div class="col-sm-1 text-right">
-                <i class="fas fa-upload color-main-brand mr-3 titleIcon"></i>
+                <i class="fas fa-upload mr-3 titleIcon"></i>
             </div>
             <div class="col-sm-6 text-left">
                 <h1>{{$t("upload.header")}}</h1>
@@ -61,7 +61,7 @@
         <UploadFileItem v-for="(file,index) in filesUploading" v-bind:file="file" :key="file.id"
             @metadataClicked="metadataClicked" @removeClicked="removeClicked"
             v-if="index >= pageFrom-1 && index <= pageTo-1 " />
-        <div class="row plist uploadFileList invisible" v-for="pad in pagerPad"></div>
+        <div class="row thumbnailList uploadFileList invisible" v-for="pad in pagerPad"></div>
         <div class="row page-footer text-center">
             <div class="col">
                 <Pager :meta="filesUploadingMeta" @updatePage="updatePage" v-if="totalFilesUploading > 0" />
@@ -75,6 +75,7 @@
     import FineUploaderTraditional from 'fine-uploader-wrappers'
     import axios from 'axios';
     import JQuery from 'jquery';
+    import moment from 'moment';
     let $ = JQuery;
     import selectpicker from 'bootstrap-select';
     import filesize from 'filesize';
@@ -281,12 +282,12 @@
         async setBagName() {
             let currentBagId = this.bag.id;
             let bagName = this.bag.name;
+            if( bagName.length == 0 ) {
+                bagName = moment().format("YYYYMMDDX").substring(0,14);
+            }
             axios.patch("/api/v1/ingest/bags/"+currentBagId, {
                 'name': bagName
-            }).then( (result) => {
-                this.bag = result.data.data;
             });
-            return this.bag;
         },
         async createBag( bagName, userId, selectedArchive, selectedHoldingTitle ) {
             let createdBag = (await axios.post("/api/v1/ingest/bags/", {

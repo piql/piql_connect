@@ -1,5 +1,16 @@
 <template>
-    <div class="container-fluid">
+    <div class="mt-2">
+        <div class="row">
+            <div class="col-sm-1 text-right">
+              <i class="fas fa-hourglass-half titleIcon"></i>
+            </div>
+            <div class="col text-left">
+              <h1 class="ml-0">{{ $t('ingest.processing.header') }}</h1>
+              <div class="ml-0" style="width: 40rem;">{{ $t('ingest.processing.ingress') }}</div>
+            </div>
+        </div>
+
+
         <ingest-filter-search v-bind:filters="['ingest.processing.processingFilter','ingest.processing.uploadingFilter']"></ingest-filter-search>
         <div class="row plistHeader" v-show="currentlyIdle === false">
             <div class="col-sm-5">{{$t('ingest.processing.sip')}}</div>
@@ -8,6 +19,7 @@
             <div class="col-sm-1">&nbsp;</div>
         </div>
 
+        <div v-if="currentlyIdle" class="mt-5"><h3>{{$t('ingest.processing.noItems')}}</h3></div>
         <FileInProcess v-for="item in items" v-bind:item="item" v-bind:key="item.id"/>
         <div v-for="x in padItems"><div class="row plist invisible"><div class="col">&nbsp;</div></div></div>
         <div v-if="showPager" class="row">
@@ -16,7 +28,6 @@
             </div>
         </div>
 
-        <div v-if="currentlyIdle" class="mt-5"><h3>{{$t('ingest.processing.noItems')}}</h3></div>
     </div>
 </template>
 

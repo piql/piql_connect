@@ -363,7 +363,7 @@ a {
 }
 
 .plist {
-    padding: 1.5rem;
+    padding: 0.5rem;
     min-height: 4.2rem;
     max-height: 4.2rem;
     font-size: 1.0rem;
@@ -694,9 +694,13 @@ input[type="file"] {
     }
 
 }
-.disabled {
-    background-color: $gray !important;
+
+button {
+    .disabled {
+        background-color: $gray !important;
+    }
 }
+
 .btn-right {
     float: right;
 }
@@ -1373,23 +1377,14 @@ th {
     }
 }
 .piqlIt {
+    height: 2.2rem;
     background: $color_main_brand;
     background-image: $image_piql-logo-white_url;
-    background-size: 20px;
+    background-size: 1.8rem;
     background-repeat: no-repeat;
-    background-position-x: 18px;
-    background-position-y: 0px;
-    //Instead of the line below you could use @include background-origin($origin)
+    background-position-x: 1.5rem;
+    background-position-y: -0.2rem;
     background-origin: content-box;
-    //Instead of the line below you could use @include border-radius($radius, $vertical-radius)
-    border-radius: 10px;
-    padding: 3px;
-    border: 4px solid $color_main_brand;
-    max-width: 70px !important;
-    max-width: 70px !important;
-    max-height: 28px !important;
-    min-height: 28px !important;
-    display: inline-block;
     &:hover {
         background-color: $color_fill_dark;
         border: 4px solid $color_fill_dark;
@@ -2118,7 +2113,7 @@ input[type=text] {
 }
 
 .titleIcon {
-    color: $color_signal;
+    color: $color_background_dark;
     font-size: 2.5rem;
 }
 

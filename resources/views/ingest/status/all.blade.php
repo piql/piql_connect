@@ -4,17 +4,25 @@
     @parent
 @endsection
 
-@section('heading')
-    <i class="fas fa-clipboard-check titleIcon"></i>{{__('ingest.offlineStorage.status.header')}}
-@endsection
-
 @section('content')
-    <div class="contentContainer">
-        <div class="col-6">
-            <em class="mb-3 mt-2">
-            {{__('ingest.offlineStorage.status.ingress')}}
-            </em>
-        </div>
-        <status-list :job-list-url="'/api/v1/ingest/offline_storage/archive'"/>
+    <div class="mb-5">
+        <div class="row">
+          <div class="col-sm-1 text-right">
+              <i class="fas fa-clipboard-check titleIcon"></i>
+          </div>
+          <div class="col-sm-6 text-left">
+              <h1> Status</h1>
+          </div>
+        </div> 
+        <div class="row">
+           <div class="col-sm-1"></div>
+           <div class="col-sm-6 text-left">
+                <div>Monitor the archival workflow for piqlFilm.</div>
+           </div>
+      </div>
     </div>
+
+
+
+        <status-list :job-list-url="'/api/v1/ingest/offline_storage/archive'"/>
 @endsection

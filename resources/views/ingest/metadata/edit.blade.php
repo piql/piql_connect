@@ -30,7 +30,7 @@
             @endif
             </em>
         </div>
-        @unless( $fromUpload )
+        @if( empty($fromUpload) )
             {{ Breadcrumbs::render('metadata_view', $file) }}
         @endif
     @endisset
@@ -176,7 +176,7 @@
     <div class="row mt-1">
         <div class="col-sm-3"></div>
         <div class="col-sm-8 p-4 right">
-            <a @if( $fromUpload ) href="{{ route('upload') }} " @else  href="{{ URL::previous() }}" @endif >
+            <a @if( isset( $fromUpload ) ) href="{{ route('upload') }} " @else  href="{{ URL::previous() }}" @endif >
                 <button class="btn btn p-3 mr-5 w-300">Cancel</button>
             </a>
             <a href="{{ URL::previous() }}">

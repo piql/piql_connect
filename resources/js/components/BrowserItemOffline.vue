@@ -1,28 +1,37 @@
 <template>
-        <div class="row plist">
-            <div class="col-sm-1">
-                <!--input type="checkbox" class="checkbox" id="browserList"-->
+        <div class="row thumbnailList">
+            <div class="col-sm-2 text-center align-self-center">
+                <img class="thumbnailImage" v-bind:src="thumbnailImage">
             </div>
-            <div class="col-sm-3">
-                {{item.name}}
+            <div class="col-sm-3 text-truncate align-self-center">
+                {{item.storage_properties.bag.name}}
             </div>
-            <div class="col-sm-3">
-                {{item.archive_name}}
+            <div class="col-sm-1 p-0 text-truncate align-self-center text-center">
+                {{dateFormat(item.storage_properties.ingest_time)}}
             </div>
-            <div class="col-sm-3">
-                {{item.holding_name}}
+            <div class="col-sm-2 text-truncate align-self-center text-center">
+                {{item.storage_properties.holding_name}}
             </div>
-            <div class="col-sm-2">
-                <a @click="addObjectToRetrieval" class="fas fa-file-export titleIcon signal" href="#"></i></a>
-                <a @click="open" href="#"><i class="fas fa-folder titleIcon"></i></a>
+            <div class="col-sm-1 align-self-center text-center">
+                {{fileCount}}
+            </div>
+            <div class="col-sm-3 d-inline-flex align-self-center">
+                <a class="ml-5 mr-2" @click="addObjectToRetrieval"><i class="fas fa-file-export actionIcon" href="#"></i></a>
+                <a class="ml-4" @click="open" href="#"><i class="fas fa-folder actionIcon"></i></a>
             </div>
         </div>
 </template>
 
 <script>
     import axios from 'axios';
+    import moment from 'moment';
     export default {
         async mounted() {
+          axios.get('/api/v1/access/dips/'+this.item.id+'/thumbnails', { responseType: 'blob' }).then ( async (thumbnail) => {
+              let reader = new FileReader();
+              reader.onload = e => this.thumbnailImage = reader.result;
+              reader.readAsDataURL( thumbnail.data );
+          });
         },
         props: {
             item: Object,
@@ -33,6 +42,7 @@
         data() {
             return {
                 fileName: "",
+								thumbnailImage: ""
             };
         },
         methods: {
@@ -42,7 +52,20 @@
             open: function() {
                 this.$emit('openObject', this.item.id);
             },
+            dateFormat: function(timestamp) {
+                return moment(timestamp).format('L');
+            },
+
         },
+        computed: {
+            downloadUrl: function(){
+                return "/api/v1/access/aips/"+this.item.id+"/download";
+            },
+            fileCount: function(){
+                return this.item.storage_properties.bag.fileCount;
+            }
+        }
+
 
     }
 </script>

@@ -1,26 +1,28 @@
 <template>
-  <div class="">
+  <div class="mt-2">
       <div class="row">
-          <div class="col-sm-2 text-center">
-              <i class="fas fa-hdd color-main-brand titleIcon"></i>
+          <div class="col-sm-1 text-right">
+              <i class="fas fa-hdd mr-3 titleIcon"></i>
           </div>
-          <div class="text-left ml-5">
-              <h1 class="ml-1"> Browse</h1>
-              <div class="ml-1">Access your archives</div>
+          <div class="col-sm-6 text-left">
+              <h1> Browse</h1>
           </div>
-        </div>
-        <div class="row">
-          <div class="col-sm-2"></div>
-          <div class="col-xs-2 text-left"></div>
-        </div>
-        <form class="form mb-1" v-on:submit.prevent>
-            <div class="row mt-1 mb-0 d-inline-flex w-auto">
-                <div class="col-md-2 col-lg-2">
+      </div>
+      <div class="row">
+            <div class="col-sm-1"></div>
+            <div class="col-sm-6 text-left">
+                Access your archives
+            </div>
+      </div>
+
+        <form class="form mb-1 ml-0 mr-0" v-on:submit.prevent>
+            <div class="row mt-1 mb-0 ">
+                <div class="col-md-2 col-lg-2 pl-0 pr-0 ">
                     <archive-picker :archives='archives' :initialSelection='selectedArchiveUuid' :label='archiveSelectLabel' @selectionChanged='archiveSelectionChanged'></archive-picker>
                 </div>
 
                 <div class="col-md-2 col-lg-2">
-                    <holding-picker :holdings='holdings' :initialSelection='selectedArchiveUuid' :label='holdingSelectLabel' @selectionChanged='archiveSelectionChanged' />
+                    <holding-picker :holdings='holdings' :initialSelection='selectedHolding' :label='holdingSelectLabel' @selectionChanged='holdingSelectionChanged' />
                 </div>
 
                 <div class="col-md-2 col-lg-2">
@@ -40,14 +42,14 @@
                           <div class="input-group addon">
                               <input v-model="searchField" id="searchContents" type="text" class="form-control" style="border-radius: 3px">
                               <span class="input-group-addon">
-                                  <i class="fas fa-search search-icon-inline"></i>
+                                  <i class="fas fa-search search-icon-inline mt-2 mr-2"></i>
                               </span>
                           </div>
                       </div>
                     </div>
                   </div>
 
-                <div class="col-md-2 text-align-right">
+                <div class="col-md-2 pr-0 text-align-right">
                     <location-picker :holding='selectedArchiveUuid' :initialSelectedLocation="selectedLocation" :locations="locations" @locationSelectionChanged="locationSelectionChanged"></location-picker>
                 </div>
             </div>
@@ -74,11 +76,6 @@
         </div>
     </span>
 
-    <online-actions v-if="online"/>
-    <div v-if="offline" class="retrievalItems border-none w-75">
-        Items for retrieval: <span class="float-right"> {{numberOfFilesForRetrieval}}</span>
-    </div>
-    <offline-actions v-if="offline"/>
 </div>
 </template>
 
@@ -259,7 +256,7 @@
                 this.fileMode = false;
                 if(holding == 0)
                 {
-                    this.selectedHolding = "";
+                    this.selectedHolding = "All";
                 }
                 else if(state){
                     this.lastSelectedHolding = holding.data.name;
@@ -279,7 +276,7 @@
                 this.selectedArchiveUuid = archiveUuid;
                 this.selectedHolding = "All";
                 axios.get("/api/v1/planning/archives/"+archiveUuid+"/holdings").then( (response) => {
-                    this.selectedArchiveHoldings = response.data.data;
+                    this.holdings = response.data.data;
                 });
             },
             locationSelectionChanged: function(loc) {

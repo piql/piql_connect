@@ -1,16 +1,16 @@
 <template>
     <div v-if="modal">
-        <form v-on:submit.prevent="">
             <div class="row plist">
-                <div class="col-sm-4 mt-1">
-                    <input value="" :placeholder="item.name" v-model="item.name" type="text" class="noTextTransform form-control pl-3" @input="setJobName" onclick="select()">
+                <div class="col-sm-4 mt-1 form-group" title="Title of your piqlFilm">
+                  <input value="" :placeholder="item.name" v-model="item.name" type="text"
+                    class="noTextTransform form-control pl-3" @input="setJobName" onclick="select()">
                 </div>
 
-                <div class="col-sm-2 pt-sm-3 text-center">
+                <div class="col-sm-2 pt-sm-3 text-center" title="Number of archival packages in this piqlFilm">
                     {{item.bags_count}}
                 </div>
 
-                <div class="col-sm-2 d-flex flex-row justify-content-start" style="justify-content: center">
+                <div class="col-sm-2 d-flex flex-row justify-content-start" title="Total file size of all archival packages in this piqlFilm">
                     <div class="pr-3 pt-sm-3 text-right">
                         {{ fileSize }}
                     </div>
@@ -27,27 +27,24 @@
                 </div>
 
                 <div class="col-sm-4 listActionItems d-flex flex-row justify-content-end pt-1" >
-                    <div v-if="actionIcons.list" class="mx-1">
-                        <i class="fas fa-list cursor-pointer hover-hand"  style="font-size: 21px;" @click="onListClick()"></i>
+                    <div v-if="actionIcons.list" class="actionIcon mr-3" title="Show all files">
+                        <i class="fas fa-list cursor-pointer hover-hand"  @click="onListClick()"></i>
                     </div>
-                    <div v-if="actionIcons.metadata" class="mx-1">
+                    <div v-if="actionIcons.metadata" class="actionIcon mr-3" title="Edit metadata">
                         <i class="fas fa-tags hover-hand" style="font-size: 21px;" @click="onTagsClick()"></i>
                     </div>
-                    <div v-if="actionIcons.config" class="mx-1">
-                        <i class="fas fa-cog hover-hand" style="font-size: 21px;" @click="onCogClick()"></i>
+                    <div v-if="actionIcons.config" class="actionIcon mr-3" title="Content options">
+                        <i class="fas fa-cog hover-hand" @click="onCogClick()"></i>
                     </div>
-                    <div v-if="actionIcons.delete" class="mx-1 pr-5">
-                        <i class="fas fa-trash-alt mr-2 hover-hand" style="font-size: 21px;"></i>
+                    <div v-if="actionIcons.delete" class="actionIcon mr-5" title="Delete files">
+                        <i class="fas fa-trash-alt mr-2 hover-hand"></i>
                     </div>
-                    <div v-if="actionIcons.defaultAction" class=" pt-sm-1" style="width: 70px !important; height: 28px !important; margin: 7px;">
-                        <div class="w-100" style="width: 70px !important; height: 28px !important;">
-                            <div class="piqlIt w-100" v-on:click="piqlIt">&nbsp;</div>
-                        </div>
+                    <div v-if="actionIcons.defaultAction" class="pt-sm-1" title="Store on piqlFilm" >
+                      <button class="btn btn-lg piqlIt w-100" v-on:click="piqlIt">&nbsp;</button>
                     </div>
                 </div>
 
             </div>
-        </form>
     </div>
 </template>
 
