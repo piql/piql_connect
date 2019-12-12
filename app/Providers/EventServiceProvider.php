@@ -62,6 +62,7 @@ class EventServiceProvider extends ServiceProvider
      */
     protected $subscribe = [
         'App\Listeners\EventLogger',
+        'App\Listeners\NotificationDispatcher'
     ];
 
     /**

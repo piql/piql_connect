@@ -9,7 +9,7 @@ require('bootstrap-select');
 window.Vue = require('vue');
 import VueInternationalization from 'vue-i18n';
 
-/* Function to collapse/expand sidemenu
+/** Function to collapse/expand sidemenu
 Affects the sideMenu and contentContainer. Reduces size of sideMenu
 whilst expanding the size of contentContainer (and vice versa)
 */
@@ -25,6 +25,11 @@ window.collapseMenu = function() {
     }
 }
 
+import Echo from "laravel-echo";
+window.io = require('socket.io-client');
+if (typeof io !== 'undefined') {
+    window.Echo = new Echo({    broadcaster: 'socket.io',    host: window.location.hostname + ':6001',  });
+}
 /**
  * We'll load the axios HTTP library which allows us to easily issue requests
  * to our Laravel back-end. This library automatically handles sending the
@@ -81,7 +86,7 @@ files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(
 
 /**
  * The filesize es6 module - giving us human readable file sizes -
- * must be required by full path according to the documentation at 
+ * must be required by full path according to the documentation at
  * https://www.npmjs.com/package/filesize
  */
 require('../../node_modules/filesize/lib/filesize.es6.js');
