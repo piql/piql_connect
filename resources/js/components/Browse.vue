@@ -1,5 +1,5 @@
 <template>
-  <div class="mt-2">
+  <div class="mt-2 mb-2">
       <div class="row">
           <div class="col-sm-1 text-right">
               <i class="fas fa-hdd mr-3 titleIcon"></i>
@@ -8,9 +8,9 @@
               <h1> Browse</h1>
           </div>
       </div>
-      <div class="row">
+      <div class="row mt-0 pt-0">
             <div class="col-sm-1"></div>
-            <div class="col-sm-6 text-left">
+            <div class="col-sm-6 text-left" style="font-size: 0.75rem">
                 Access your archives
             </div>
       </div>

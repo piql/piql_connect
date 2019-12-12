@@ -17,7 +17,7 @@
         </div>
         <div class="text-left mt-3">
             <h1 class="ml-1">Dashboard</h1>
-            <div class="ml-1">The dashboard gives you a breakdown of relevant information about your data.</div>
+            <div class="ml-1" style="font-size: 0.75rem">The dashboard gives you a breakdown of relevant information about on your data.</div>
         </div>
     </div>
 

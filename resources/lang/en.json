@@ -35,7 +35,7 @@
 	"dashboard.content": "Other type of content goes here.",
 
     "ingest.processing.header" : "Processing",
-    "ingest.processing.ingress" : "Display the status of the archival workflow. After the archival packages are created, the packages are moved to online and offline storage accordingly",
+    "ingest.processing.ingress" : "Monitor the steps of the archival workflow.",
 	"ingest.processing.from" : "From",
 	"ingest.processing.to" : "To",
 	"ingest.processing.statusFilter": "Status",

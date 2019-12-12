@@ -1,6 +1,6 @@
 <template>
-    <div>
-        <div class="row mt-2">
+    <div class="mb-2 mt-2">
+        <div class="row">
             <div class="col-sm-1 text-right">
                 <i class="fas fa-upload mr-3 titleIcon"></i>
             </div>
@@ -8,16 +8,18 @@
                 <h1>{{$t("upload.header")}}</h1>
             </div>
         </div>
-        <div class="row">
+        <div class="row mt-0 pt-0">
             <div class="col-sm-1"></div>
-            <div class="col-sm-6 text-left">
+            <div class="col-sm-6 text-left" style="font-size: 0.7rem">
                     Upload files to your archives here by clicking the 'Add file' button.
             </div>
         </div>
 
-        <div class="row form-group mt-5 mb-2">
-            <div class="col-md-2 p-1 pl-3 pr-3"> 
+        <div class="row form-group mt-2 mb-2">
+            <div class="col-md-2 pl-0 ml-0" title="Upload files"> 
+                <label for="uploadbutton" class="col-form-label-sm">&nbsp;</label>
                 <FileInputComponent
+                    id="uploadbutton"
                     :multiple="compoundModeEnabled"
                     :uploader="uploader"
                     :disabled="fileInputDisabled">
@@ -25,23 +27,25 @@
                 </FileInputComponent>
             </div>
 
-            <div v-show="compoundModeEnabled" class="col-md-2 text-left">
-                <input value="" :placeholder="bag.name" v-model="bag.name" type="text" class="pl-3 noTextTransform form-control" style="border-radius: 0.5rem" @input="setBagName" onclick="select()">
+            <div v-show="compoundModeEnabled" class="col-md-2 text-left" title="Give packages memorable names by giving them titles (optional)">
+                <label for="bagname" class="col-form-label-sm">Package title</label>
+                <input id="bagname" value="" :placeholder="bag.name" v-model="bag.name" type="text" class="pl-3 noTextTransform form-control" style="border-radius: 0.5rem" @input="setBagName" onclick="select()">
+            </div>
+
+            <div class="col-md-2" title="Select the archive to ingest to">
+                <archive-picker label="Archives" :archives="archives" :initialSelection="selectedArchive" @selectionChanged="changedArchive"></archive-picker>
+            </div>
+
+            <div class="col-md-2" title="Select a holding from where you can access your data later">
+                <holding-picker label="Holdings" :holdings="holdings" :initialSelection="selectedHoldingTitle" @selectionChanged="changedHolding"></holding-picker>
             </div>
 
             <div class="col-md-2">
-                <archive-picker :archives="archives" :initialSelection="selectedArchive" @selectionChanged="changedArchive"></archive-picker>
             </div>
 
-            <div class="col-md-2">
-                <holding-picker :holdings="holdings" :initialSelection="selectedHoldingTitle" @selectionChanged="changedHolding"></holding-picker>
-            </div>
-
-            <div class="col-md-2">
-            </div>
-
-            <div v-show="compoundModeEnabled" class="col-md-2 text-center">
-                <button class="btn w-100 m-0 p-2" v-bind:class="[{ disabled : processDisabled  }]" v-on:click="commitBagToProcessing">{{$t('upload.processButton')}}</button>
+            <div v-show="compoundModeEnabled" class="col-md-2 text-center pr-0">
+                <label for="processButton" class="col-form-label-sm">&nbsp;</label>
+                <button title="Start the ingest process" id="processButton" class="btn w-100 m-0 p-2" v-bind:class="[{ disabled : processDisabled  }]" v-on:click="commitBagToProcessing">{{$t('upload.processButton')}}</button>
             </div>
         </div>
 
@@ -61,8 +65,8 @@
         <UploadFileItem v-for="(file,index) in filesUploading" v-bind:file="file" :key="file.id"
             @metadataClicked="metadataClicked" @removeClicked="removeClicked"
             v-if="index >= pageFrom-1 && index <= pageTo-1 " />
-        <div class="row thumbnailList uploadFileList invisible" v-for="pad in pagerPad"></div>
-        <div class="row page-footer text-center">
+        <div class="row thumbnailList invisible" v-for="pad in pagerPad"></div>
+        <div class="row text-center pagerRow">
             <div class="col">
                 <Pager :meta="filesUploadingMeta" @updatePage="updatePage" v-if="totalFilesUploading > 0" />
             </div>
