@@ -26,9 +26,30 @@
         methods: {
             toggleShowNotifications: function(){
                 this.showNotifications = !this.showNotifications;
+            },
+            async listen() {
+                // get user ID
+                let userId = (await axios.get("/api/v1/system/currentUser")).data;
+
+                // todo: remove this when toasts are implemented
+                window.Echo.private('User.' + userId + '.Events').listen('.Info', (event) => {
+                    console.log(
+                        "%cInfo (bag: %s) : %s%c - %s",
+                        "color: Blue", event.properties.bag.id, event.properties.type,
+                        "color: black", ""
+                    );
+                });
+                window.Echo.private('User.' + userId + '.Events').listen('.Error', (event) => {
+                    console.log(
+                        "%cError (bag: %s) : %s%c - %s",
+                        "color: Red", event.properties.bag.id, event.properties.type,
+                        "color: black", event.properties.message
+                    );
+                });
             }
         },
-        mounted() {
+        async mounted() {
+            this.listen();
         }
     }
 </script>
