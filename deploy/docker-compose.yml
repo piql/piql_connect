@@ -7,8 +7,8 @@ services:
       dockerfile: ./app/Dockerfile
     volumes:
       - ".././:/var/www"
-      - "~/.am:/var/www/storage/am"
-      - ./supervisor/:/etc/supervisor/        
+      - "~/dev/piql-archivematica-compose/compose/.am:/var/www/storage/am"
+      - ./supervisor/:/etc/supervisor/
     links:
       - database
       - cache
@@ -20,14 +20,13 @@ services:
       - "REDIS_HOST=cache"
     networks:
       - piqlConnect-net
-           
+
   nginx:
     image:  nginx
     restart: unless-stopped
     tty: true
     ports:
       - "80:80"
-      - "443:443"
     volumes:
       - ../public:/var/www/public
       - ./../storage:/var/www/storage
@@ -54,11 +53,25 @@ services:
       - ./mysql/my.cnf:/etc/my.cnf
     networks:
       - piqlConnect-net
-      
+
   cache:
     image: redis
     ports:
       - "63791:6379"
+    networks:
+      - piqlConnect-net
+
+  echo:
+    restart: unless-stopped
+    build: ./echo
+    links:
+      - "cache:redis_message_server"
+      - "nginx:app_authentication_server"
+    working_dir: "/app"
+    ports:
+      - "6001:6001"
+    volumes:
+      - .././:/app
     networks:
       - piqlConnect-net
 
@@ -71,7 +84,7 @@ services:
     user: ${HOST_USERID}:${HOST_GROUPID}
     volumes:
       - .././:/app
- 
+
   npm:
     build:
       network: host
@@ -82,7 +95,7 @@ services:
     user: ${HOST_USERID}:${HOST_GROUPID}
     volumes:
       - .././:/app
- 
+
 networks:
   piqlConnect-net:
     driver: bridge
