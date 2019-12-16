@@ -104,7 +104,7 @@
     },
     chunking: {
     enabled: true,
-    partSize: 1024*256,
+    partSize: 1024*768,
     mandatory: true,
     concurrent: {
     enabled: false
