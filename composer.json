@@ -22,6 +22,7 @@
         "martinlindhe/laravel-vue-i18n-generator": "^0.1.39",
         "optimus/fineuploader-server": "^0.2.0",
         "optimus/fineuploader-server-thumbnail-creator": "^0.1.1",
+        "predis/predis": "^1.1",
         "scholarslab/bagit": "^0.3.0",
         "webpatser/laravel-uuid": "^3.0"
     },
