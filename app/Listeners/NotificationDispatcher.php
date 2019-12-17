@@ -2,6 +2,7 @@
 
 namespace App\Listeners;
 
+use App\Bag;
 use App\EventLogEntry;
 use App\Events\ArchivematicaApproveTransferError;
 use App\Events\ArchivematicaGetFileDetailsError;
@@ -52,6 +53,18 @@ class NotificationDispatcher
         ]));
     }
 
+    /**
+     * Handle info events.
+     */
+    public function dispatchFileUploadedEvent($event) {
+
+        $vars = get_object_vars($event);
+        event(new NotificationEvent("Info", $event->owner->id, [
+            'type' => get_class($event),
+            'bag' => Bag::find($event->file->bag_id),
+        ]));
+    }
+
 
 
 
@@ -87,12 +100,17 @@ class NotificationDispatcher
             'App\Events\ClearIngestStatusEvent',
             'App\Events\ClearTmpFilesEvent',
             'App\Events\ClearTransferStatusEvent',
-            'App\Events\FileUploadedEvent',
             'App\Events\IngestCompleteEvent',
             'App\Events\InitiateTransferToArchivematicaEvent',
             'App\Events\StartTransferToArchivematicaEvent',
         ],
             'App\Listeners\NotificationDispatcher@dispatchInfoEvents'
+        );
+
+        $events->listen([
+            'App\Events\FileUploadedEvent',
+        ],
+            'App\Listeners\NotificationDispatcher@dispatchFileUploadedEvent'
         );
 
     }
