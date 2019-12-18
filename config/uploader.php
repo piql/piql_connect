@@ -44,14 +44,10 @@ return [
     'naming_strategy' => Optimus\FineuploaderServer\Naming\UniqidStrategy::class,
     'middleware' => [
         [
-            
-            'class' => Optimus\FineuploaderServer\Middleware\ThumbnailCreator::class,
+            'class' => App\BypassMiddleware::class,
             'config' => [
-
             ]
-             
         ]
-        
     ]
 
 ];
