@@ -39,3 +39,6 @@ tags.temp
 zsh.sh
 .zcompdump*
 install.sh
+laravel-echo-server.lock
+deploy/nginx/ssl/fullchain.key
+deploy/nginx/ssl/fullchain.pem
