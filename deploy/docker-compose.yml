@@ -1,4 +1,15 @@
 version: '3.6'
+
+volumes:
+  archivematica_pipeline_data:
+    external: 
+      name: "am-pipeline-data"
+  archivematica_storage_service_location_data:
+    external:
+      name: "ss-location-data"
+  piqlConnect-mariadb:
+    external: true
+
 services:
   app:
     build:
@@ -7,7 +18,8 @@ services:
       dockerfile: ./app/Dockerfile
     volumes:
       - ".././:/var/www"
-      - "~/OneDrive - PIQL AS/Documents/src/piql-archivematica-compose/compose/.am:/var/www/storage/am"
+      - "archivematica_pipeline_data:/var/www/storage/am/am-pipeline-data:ro"
+      - "archivematica_storage_service_location_data:/var/www/storage/am/ss-location-data:rw"
       - ./supervisor/:/etc/supervisor/
     links:
       - database
@@ -102,6 +114,3 @@ networks:
   piqlConnect-net:
     driver: bridge
 
-volumes:
-  piqlConnect-mariadb:
-    external: true
