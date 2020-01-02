@@ -55,6 +55,14 @@ class ArchivematicaIngestingListener implements ShouldQueue
             $message = "Ingest failed with error code " . $response->statusCode;
             if (isset($response->contents->error) && ($response->contents->error == true)) {
                 $message .= " and error message: " . $response->contents->message;
+                if($response->statusCode == 400) { // the error code ought to be '404 Not Found'
+                    Log::debug( $message );
+                    Log::debug( "Retransmitting ArchivematicaIngestingEvent" );
+                    dispatch( function () use ( $bag ) {
+                        event( new ArchivematicaIngestingEvent( $bag ) );
+                    } )->delay( Carbon::now()->addSeconds( 10 ) );
+                    return;
+                }
                 event(new ArchivematicaGetIngestStatusError($bag, $message));
             } else {
                 event(new ConnectionError($bag, $message));
