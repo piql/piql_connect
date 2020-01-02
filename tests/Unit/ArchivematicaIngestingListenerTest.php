@@ -114,6 +114,72 @@ class ArchivematicaIngestingListenerTest extends TestCase
         $listener->handle($event);
 
         // assets
+        Bus::assertDispatched(CallQueuedClosure::class, function ($job) {
+            return true;
+        });
+
+        Event::assertNotDispatched(ArchivematicaGetIngestStatusError::class);
+        Event::assertNotDispatched(ArchivematicaIngestError::class);
+        Event::assertNotDispatched(ConnectionError::class);
+        Event::assertNotDispatched(ErrorEvent::class);
+        Event::assertNotDispatched(IngestCompleteEvent::class);
+    }
+
+    public function test_get_ingest_status_with_http_error_400_and_no_error_message() {
+        // setup
+        Event::fake();
+        Bus::fake();
+
+        $amClient = \Mockery::mock(ArchivematicaDashboardClientInterface::class);
+        $amClient->shouldReceive('getIngestStatus')->once()->andReturns(
+            (object)[
+                'contents' => (object) [
+                ],
+                'statusCode' => 400,
+            ]
+        );
+
+        $event = new ArchivematicaIngestingEvent($this->bag);
+        $listener = new ArchivematicaIngestingListener($amClient);
+
+        //test
+        $listener->handle($event);
+
+        // assets
+        Bus::assertNotDispatched(CallQueuedClosure::class, function ($job) {
+            return true;
+        });
+
+        Event::assertNotDispatched(ArchivematicaGetIngestStatusError::class);
+        Event::assertNotDispatched(ArchivematicaIngestError::class);
+        Event::assertDispatched(ConnectionError::class);
+        Event::assertDispatched(ErrorEvent::class);
+        Event::assertNotDispatched(IngestCompleteEvent::class);
+    }
+
+    public function test_get_ingest_status_with_http_error_404() {
+        // setup
+        Event::fake();
+        Bus::fake();
+
+        $amClient = \Mockery::mock(ArchivematicaDashboardClientInterface::class);
+        $amClient->shouldReceive('getIngestStatus')->once()->andReturns(
+            (object)[
+                'contents' => (object) [
+                    'message' => 'Approval failed.',
+                    'error' => 'true'
+                ],
+                'statusCode' => 404,
+            ]
+        );
+
+        $event = new ArchivematicaIngestingEvent($this->bag);
+        $listener = new ArchivematicaIngestingListener($amClient);
+
+        //test
+        $listener->handle($event);
+
+        // assets
         Bus::assertNotDispatched(CallQueuedClosure::class, function ($job) {
             return true;
         });
