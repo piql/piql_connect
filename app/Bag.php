@@ -91,7 +91,7 @@ class Bag extends Model
         parent::boot();
         self::creating( function( $model )
         {
-            $model->uuid = Uuid::generate();
+            $model->uuid = (string)Uuid::generate();
             $model->owner = Auth::id();
 
             if(!isset($model->status) || $model->status == "") {
