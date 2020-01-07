@@ -2,7 +2,7 @@ version: '3.6'
 
 volumes:
   archivematica_pipeline_data:
-    external: 
+    external:
       name: "am-pipeline-data"
   archivematica_storage_service_location_data:
     external:
@@ -109,6 +109,8 @@ services:
     user: ${HOST_USERID}:${HOST_GROUPID}
     volumes:
       - .././:/app
+    environment:
+      - "NPM_RUN=${NPM_RUN:-dev}"
 
 networks:
   piqlConnect-net:
