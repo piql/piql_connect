@@ -15,9 +15,9 @@ class CreateFileObjectsTable extends Migration
     {
         Schema::create('file_objects', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('fullpath');
-            $table->string('filename');
-            $table->string('path');
+            $table->text('fullpath');
+            $table->text('filename');
+            $table->text('path');
             $table->integer('size');
             $table->string('object_type');
             $table->string('info_source');
