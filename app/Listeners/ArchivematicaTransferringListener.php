@@ -80,6 +80,15 @@ class ArchivematicaTransferringListener implements ShouldQueue
 
         if($transferStatus == "COMPLETE")
         {
+            if(!isset($response->contents->sip_uuid)) {
+                Log::warning( "Transfer status is 'COMPLETE' but status doesn't contain sip_uuid." );
+                Log::debug( "Get transfer status returned: ".json_encode($response) );
+                Log::debug( "Retransmitting ArchivematicaTransferringEvent" );
+                dispatch( function () use ( $bag ) {
+                    event( new ArchivematicaTransferringEvent( $bag ) );
+                } )->delay( Carbon::now()->addSeconds( 10 ) );
+                return;
+            }
             Log::info("Transfer complete for with bag id " . $bag->id);
             $bag->storage_properties->sip_uuid = $response->contents->sip_uuid;
             $bag->storage_properties->save();
