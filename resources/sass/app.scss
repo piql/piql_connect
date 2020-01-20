@@ -2026,7 +2026,11 @@ th {
     }
 }
 
+.dashboard-halfStatsRow {
+    padding-bottom: 4rem;
+}
 .dashboard-card {
+    padding-bottom: 6rem;
     border-radius: 25px;
     background: $color_background;
     background: $color_secondary_1;
