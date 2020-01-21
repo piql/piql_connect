@@ -27,10 +27,10 @@
             <div>
                 <div class="row">
                     <div class="col-sm-6">
-                        <line-chart class="stats" title="AIPs Ingested (monthly)" url="/api/v1/stats/monthlyOnlineAIPsIngested"/>
+                        <line-chart class="stats" title="Archival Packages Ingested (monthly)" url="/api/v1/stats/monthlyOnlineAIPsIngested"/>
                     </div>
                     <div class="col-sm-6">
-                        <line-chart class="stats" title="AIPs Accessed (monthly)" url="/api/v1/stats/monthlyOnlineAIPsAccessed"/>
+                        <line-chart class="stats" title="Archival Packages Accessed (monthly)" url="/api/v1/stats/monthlyOnlineAIPsAccessed"/>
                     </div>
                 </div>
                 <div class="row mt-3">
@@ -55,7 +55,7 @@
                     <h2>
                         <strong>{{ $infoArray['onlineAIPsIngested'] }}</strong>
                     </h2>
-                    <em style="color: white;">AIPs stored online</em>
+                    <em style="color: white;">Archival Packages stored online</em>
                 </div>
                 <div class="card dashboard-card col-sm-3 halfStats">
                     <h2>
@@ -67,7 +67,7 @@
                     <h2>
                         <strong>{{ $infoArray['AIPsRetrievedCount'] }}</strong>
                     </h2>
-                    <em>AIPs retrieved</em>
+                    <em>Archival Packages retrieved</em>
                 </div>
                 <div class="card dashboard-card col-sm-3 halfStats">
                     <h2>
@@ -81,7 +81,7 @@
                     <h2>
                         <strong>{{ $infoArray['offlineAIPsIngested'] }}</strong>
                     </h2>
-                    <em>AIPs stored on film</em>
+                    <em>Archival Packages stored on film</em>
                 </div>
                 <div class="card dashboard-card col-sm-3 halfStats">
                     <h2>
