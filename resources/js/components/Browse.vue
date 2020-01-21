@@ -18,11 +18,11 @@
         <form class="form mb-1 ml-0 mr-0" v-on:submit.prevent>
             <div class="row mt-1 mb-0 ">
                 <div class="col-md-2 col-lg-2 pl-0 pr-0 ">
-                    <archive-picker :archives='archives' :initialSelection='selectedArchiveUuid' :label='archiveSelectLabel' @selectionChanged='archiveSelectionChanged'></archive-picker>
+                    <archive-picker :useWildCard=true :archives='archives' :initialSelection='selectedArchiveUuid' :label='archiveSelectLabel' @selectionChanged='archiveSelectionChanged'></archive-picker>
                 </div>
 
                 <div class="col-md-2 col-lg-2">
-                    <holding-picker :holdings='holdings' :initialSelection='selectedHolding' :label='holdingSelectLabel' @selectionChanged='holdingSelectionChanged' />
+                    <holding-picker :useWildCard=true :selectionDisabled='holdingSelectionDisabled' :holdings='holdings' :initialSelection='selectedHolding' :label='holdingSelectLabel' @selectionChanged='holdingSelectionChanged' />
                 </div>
 
                 <div class="col-md-2 col-lg-2">
@@ -162,7 +162,7 @@
             },
             queryString: function() {
                 let filter = "?location=" + encodeURI(this.selectedLocation);
-                if(this.archiveSelected) {
+                if(this.archiveSelected && this.archiveSelected !== "All") {
                     filter += "&archive=" + encodeURI(this.selectedArchiveUuid);
                 }
                 if(this.selectedHolding){
@@ -202,17 +202,14 @@
             pageQueryString: function() {
                 this.refreshFileObjects(this.pageQueryString);
             },
+            selectedArchive: function() {
+            },
 
         },
         mounted() {
             axios.get("/api/v1/planning/archives").then( (response) => {
                 this.archives = response.data.data;
-                let firstArchiveUuid = this.archives[0].uuid;
-                this.holdingSelectCounter = 1;
-                this.selectedHolding = "All";
-                Vue.nextTick( () => {
-                    $('#archivePicker').selectpicker('val', firstArchiveUuid);
-                });
+                this.refreshObjects("");
             });
         },
         methods: {
@@ -254,21 +251,21 @@
 
             holdingSelectionChanged: function(holding) {
                 this.fileMode = false;
-
-                if(holding == 0)
-                {
-                    this.selectedHolding = "All";
-                } else {
-                    this.selectedHolding = holding;
-                }
+                this.selectedHolding = holding;
             },
             archiveSelectionChanged: function(archiveUuid) {
-                this.fileMode = false;
-                this.selectedArchiveUuid = archiveUuid;
-                this.selectedHolding = "All";
-                axios.get("/api/v1/planning/archives/"+archiveUuid+"/holdings").then( (response) => {
-                    this.holdings = [{title:''}, ...response.data.data];
-                });
+              console.log("archive selection changed");
+              this.fileMode = false;
+              this.selectedArchiveUuid = archiveUuid;
+
+              if(archiveUuid === "") {
+                  this.holdingSelectionDisabled = true;
+              } else {
+                  axios.get("/api/v1/planning/archives/"+archiveUuid+"/holdings").then( (response) => {
+                      this.holdings = response.data.data;
+                      this.holdingSelectionDisabled = false;
+                  });
+              }
             },
             locationSelectionChanged: function(loc) {
                 this.fileMode = false;
