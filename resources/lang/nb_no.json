@@ -42,6 +42,7 @@
 
 	"dashboard.ingress": "Kort beskrivelse av siden her",
 	"dashboard.content": "Innhold her.",
+    "dashboard.month.abbrev.array": "['Jan', 'Feb', 'Mar', 'Apr', 'Mai', 'Jun', 'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Des']",
 
     "ingest.processing.header" : "Prosessering",
     "ingest.processing.ingress" : "Display the status of the archival workflow. After the archival packages are created, the packages are moved to online and offline storage accordingly",
@@ -147,5 +148,21 @@
 	"access.retrieve.readyToRetrieve": "Filer klare for gjenoppretting",
 	"access.retrieve.isRetrieving": "Under gjenopprettelse",
 	"access.retrieve.downloadable": "Filer klare til nedlasting",
-	"access.retrieve.history": "Gjenopprettelseshistorikk"
+	"access.retrieve.history": "Gjenopprettelseshistorikk",
+
+
+    "Archival Packages stored online": "Arkiv pakker lagret i skytjeneste",
+    "Stored online": "Lagret i skytjeneste",
+    "Archival Packages retrieved" : "Gjenopprettet arkiv pakker",
+    "Retrieved": "Gjenopprettet",
+    "Archival Packages stored on film": "Arkiv pakker lagret på film",
+    "Stored on film": "Lagret på film",
+    "Reels" : "Film ruller",
+    "Pages stored on film": "Sider lagret på film",
+    "Archival Packages Ingested (monthly)": "Opplastede arkiv pakker",
+    "Archival Packages Accessed (monthly)" : "Nedlastet arkiv pakker",
+    "Data Ingested (monthly)": "Opplastet data",
+    "Data Accessed (monthly)": "Nedlastet data",
+    "The dashboard gives you a breakdown of relevant information about on your data." : "Denne siden gir deg en oversikt med relevant informasjon om dine data.",
+    "File formats Ingested": "Opplastede filformater"
 }
