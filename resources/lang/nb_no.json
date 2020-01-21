@@ -42,7 +42,7 @@
 
 	"dashboard.ingress": "Kort beskrivelse av siden her",
 	"dashboard.content": "Innhold her.",
-    "dashboard.month.abbrev.array": "['Jan', 'Feb', 'Mar', 'Apr', 'Mai', 'Jun', 'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Des']",
+    "dashboard.month.abbrev.array": "['Feb', 'Mar', 'Apr', 'Mai', 'Jun', 'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Des', 'Jan']",
 
     "ingest.processing.header" : "Prosessering",
     "ingest.processing.ingress" : "Display the status of the archival workflow. After the archival packages are created, the packages are moved to online and offline storage accordingly",
