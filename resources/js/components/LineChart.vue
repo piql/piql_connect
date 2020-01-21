@@ -40,9 +40,11 @@
         props: {
             chartData: [],
             url: "",
-            title: ""
+            title: "",
+            labels: Array
         },
         async mounted () {
+            this.chartdata.labels = this.labels;
             let datasets = (await axios.get(this.url)).data;
             this.chartdata.datasets = datasets;
             this.options.title.text  = this.title;
