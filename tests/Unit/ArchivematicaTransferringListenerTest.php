@@ -89,7 +89,7 @@ class ArchivematicaTransferringListenerTest extends TestCase
         Event::assertDispatched(ArchivematicaIngestingEvent::class);
     }
 
-    public function test_get_transfer_status_with_http_error_400() {
+    public function test_get_transfer_status_with_http_error_400_and_no_error_message() {
         // setup
         Event::fake();
         Bus::fake();
@@ -117,6 +117,74 @@ class ArchivematicaTransferringListenerTest extends TestCase
         Event::assertNotDispatched(ArchivematicaGetTransferStatusError::class);
         Event::assertNotDispatched(ArchivematicaTransferError::class);
         Event::assertDispatched(ConnectionError::class);
+        Event::assertDispatched(ErrorEvent::class);
+        Event::assertNotDispatched(ArchivematicaIngestingEvent::class);
+    }
+
+    public function test_get_transfer_status_with_http_error_400() {
+        // setup
+        Event::fake();
+        Bus::fake();
+
+        $amClient = \Mockery::mock(ArchivematicaDashboardClientInterface::class);
+        $amClient->shouldReceive('getTransferStatus')->once()->andReturns(
+            (object)[
+                'contents' => (object) [
+                    'message' => 'Unable to determine the status of the unit',
+                    'error' => 'true'
+                ],
+                'statusCode' => 400,
+            ]
+        );
+
+        $event = new ArchivematicaTransferringEvent($this->bag);
+        $listener = new ArchivematicaTransferringListener($amClient);
+
+        //test
+        $listener->handle($event);
+
+        // assets
+        Bus::assertDispatched(CallQueuedClosure::class, function ($job) {
+            return true;
+        });
+
+        Event::assertNotDispatched(ArchivematicaGetTransferStatusError::class);
+        Event::assertNotDispatched(ArchivematicaTransferError::class);
+        Event::assertNotDispatched(ConnectionError::class);
+        Event::assertNotDispatched(ErrorEvent::class);
+        Event::assertNotDispatched(ArchivematicaIngestingEvent::class);
+    }
+
+    public function test_get_transfer_status_with_http_error_404() {
+        // setup
+        Event::fake();
+        Bus::fake();
+
+        $amClient = \Mockery::mock(ArchivematicaDashboardClientInterface::class);
+        $amClient->shouldReceive('getTransferStatus')->once()->andReturns(
+            (object)[
+                'contents' => (object) [
+                    'message' => 'Unable to determine the status of the unit',
+                    'error' => 'true'
+                ],
+                'statusCode' => 404,
+            ]
+        );
+
+        $event = new ArchivematicaTransferringEvent($this->bag);
+        $listener = new ArchivematicaTransferringListener($amClient);
+
+        //test
+        $listener->handle($event);
+
+        // assets
+        Bus::assertNotDispatched(CallQueuedClosure::class, function ($job) {
+            return true;
+        });
+
+        Event::assertDispatched(ArchivematicaGetTransferStatusError::class);
+        Event::assertNotDispatched(ArchivematicaTransferError::class);
+        Event::assertNotDispatched(ConnectionError::class);
         Event::assertDispatched(ErrorEvent::class);
         Event::assertNotDispatched(ArchivematicaIngestingEvent::class);
     }

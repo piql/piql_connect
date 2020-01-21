@@ -50,7 +50,7 @@
                     <line-chart class="stats" title="Data Accessed (monthly)" url="/api/v1/stats/monthlyOnlineDataAccessed"/>
                 </div>
             </div>
-            <div class="row pt-3 halfStatsRow mt-2">
+            <div class="row pt-sm-3 pb-sm-2 halfStatsRow dashboard-halfStatsRow mt-2">
                 <div class="card dashboard-card col-sm-3 halfStats">
                     <h2>
                         <strong>{{ $infoArray['onlineAIPsIngested'] }}</strong>
@@ -76,7 +76,7 @@
                     <em>Retrieved</em>
                 </div>
             </div>
-            <div class="row pt-5 halfStatsRow">
+            <div class="row pt-sm-0 halfStatsRow dashboard-halfStatsRow">
                 <div class="card dashboard-card col-sm-3 halfStats">
                     <h2>
                         <strong>{{ $infoArray['offlineAIPsIngested'] }}</strong>

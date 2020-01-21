@@ -123,7 +123,7 @@
                 return this.selectedArchiveUuid.length > 0;
             },
             holdingSelected: function() {
-                return this.holdingSelectCounter > 0;
+                return true;
             },
             online: function() {
                 return this.selectedLocation == "online";
@@ -252,23 +252,14 @@
                 this.currentOpenDipId = null;
             },
 
-            holdingSelectionChanged: function(holding, state) {
+            holdingSelectionChanged: function(holding) {
                 this.fileMode = false;
+
                 if(holding == 0)
                 {
                     this.selectedHolding = "All";
-                }
-                else if(state){
-                    this.lastSelectedHolding = holding.data.name;
-                    this.holdingSelectCounter++;
-                    this.selectedHolding = holding.data.name;
-                }
-                else{
-                    this.holdingSelectCounter--;
-                    if(this.holdingSelectCounter === 0)
-                    {
-                        this.selectedHolding = "";
-                    }
+                } else {
+                    this.selectedHolding = holding;
                 }
             },
             archiveSelectionChanged: function(archiveUuid) {
@@ -276,7 +267,7 @@
                 this.selectedArchiveUuid = archiveUuid;
                 this.selectedHolding = "All";
                 axios.get("/api/v1/planning/archives/"+archiveUuid+"/holdings").then( (response) => {
-                    this.holdings = response.data.data;
+                    this.holdings = [{title:''}, ...response.data.data];
                 });
             },
             locationSelectionChanged: function(loc) {

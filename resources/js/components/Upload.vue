@@ -16,7 +16,7 @@
         </div>
 
         <div class="row form-group mt-2 mb-2">
-            <div class="col-md-2 pl-0 ml-0" title="Upload files"> 
+            <div class="col-md-2 pl-0 ml-0" title="Upload files">
                 <label for="uploadbutton" class="col-form-label-sm">&nbsp;</label>
                 <FileInputComponent
                     id="uploadbutton"
@@ -307,14 +307,20 @@
         async setupHoldings(archiveId, initialHolding) {
             await axios.get('/api/v1/planning/archives/'+archiveId+'/holdings').then( (response) => {
                 this.holdings = response.data.data;
-                let defaultHolding = this.holdings[0].title;
-                Vue.nextTick( () => { $('#holdingPicker').selectpicker('val', initialHolding || defaultHolding);});
+                let defaultHolding = this.holdings.length ? this.holdings[0].title : "";
+                Vue.nextTick( () => {
+                    $('#holdingPicker').selectpicker('refresh');
+                });
+                Vue.nextTick( () => {
+                    $('#holdingPicker').selectpicker('val', initialHolding || defaultHolding);
+                });
+
             });
         },
         async changedArchive(archiveId) {
             this.selectedArchive = archiveId;
             if( this.compoundModeEnabled) {
-                await this.setupHoldings(archiveId, this.bag.holding_name);
+                await this.setupHoldings(archiveId);
                 axios.patch("/api/v1/ingest/bags/"+this.bag.id, {
                     archive_uuid: archiveId,
                     holding_name: this.selectedHoldingTitle

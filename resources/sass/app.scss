@@ -2026,7 +2026,13 @@ th {
     }
 }
 
+.dashboard-halfStatsRow {
+    padding-bottom: 4rem;
+}
+
 .dashboard-card {
+    padding-bottom: 6rem auto;
+    /*height: 8rem*/;
     border-radius: 25px;
     background: $color_background;
     background: $color_secondary_1;
@@ -2361,7 +2367,7 @@ input[type=text] {
 .halfStats {
     text-align: center;
     max-width: 7.8rem;
-    height: 5rem;
+    /*height: 5rem;*/
     margin-bottom: 1rem auto;
     padding: 1rem auto;
 
@@ -2379,6 +2385,6 @@ input[type=text] {
 }
 .halfStatsRow {
     justify-content: space-evenly;
-    height: 5vw;
-    padding-bottom: 3rem;
+    /*height: 5vw;*/
+    /*padding-bottom: 0rem auto;*/
 }

@@ -20,12 +20,14 @@ trait SeederOperations
         $jsonSeederFileName = preg_replace('/\..*$/', '.json', $class->getFileName());
 
         if(!file_exists($jsonSeederFileName)) {
+            print('Seeder file no found: '.$jsonSeederFileName."\n");
             return false;
         }
 
         $jsonString = file_get_contents($jsonSeederFileName);
         $data = json_decode($jsonString);
         if(!isset($data->data)) {
+            print('Empty data set in: '.$jsonSeederFileName."\n");
             return false;
         }
 

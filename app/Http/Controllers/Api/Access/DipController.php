@@ -24,6 +24,19 @@ class DipController extends Controller
     {
         $q = Dip::query();
         $terms = collect(explode(" ", $request->query('search')));
+        $archiveUuid = $request->query('archive');
+        $holdingTitle = $request->query('holding');
+
+        if($archiveUuid) {
+            $q->whereHas('storage_properties',
+                function ($storage_property) use ($archiveUuid, $holdingTitle) {
+                    $storage_property->where('archive_uuid', $archiveUuid);
+                    if($holdingTitle) {
+                        $storage_property->where('holding_name', $holdingTitle);
+                    }
+                });
+        }
+
         if($terms->count() == 1) {
             return DipResource::collection(
                 $q->whereHas('storage_properties.bag',
@@ -34,8 +47,8 @@ class DipController extends Controller
         } elseif( $terms->count() > 1) {
                 $terms->each( function ($term, $key) use ($q) {
                         $q->whereHas('storage_properties.bag',
-                            function( $bag ) use ($term) { 
-                                $bag->where('name','LIKE',"%{$term}%"); 
+                            function( $bag ) use ($term) {
+                                $bag->where('name','LIKE',"%{$term}%");
                             });
                 });
                 return DipResource::collection(
