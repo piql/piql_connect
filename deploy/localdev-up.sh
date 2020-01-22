@@ -1,6 +1,7 @@
 #!/bin/bash
 export HOST_USERID=333
 export HOST_GROUPID=333
+rm -f ../laravel-echo-server.lock 
 sudo chown -R $HOST_USERID:$HOST_GROUPID /var/lib/docker/volumes
 sudo chown -R $HOST_USERID:$HOST_GROUPID /var/lib/docker/volumes
 sudo chmod -R 775 ../resources/
