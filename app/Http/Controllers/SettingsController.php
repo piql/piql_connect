@@ -29,10 +29,11 @@ class SettingsController extends Controller
 
         $settings->defaultDipStorageLocationId = $request->defaultDipStorageLocation; //todo: validate form fields
 
-        $settings->ingestCompoundModeEnabled = ( $request->ingestCompoundMode == "compound" );
+        if( $request->ingestCompoundMode == "compound" || $request->ingestCompoundMode == "single") {
+            $settings->ingestCompoundModeEnabled = ( $request->ingestCompoundMode == "compound" );
+        }
 
         $settings->save();
-
 
         return view('/settings/settings', [
             'settings' => $settings,
