@@ -33,6 +33,7 @@
 
 	"dashboard.ingress": "Short descriptive text of dashboard.",
 	"dashboard.content": "Other type of content goes here.",
+    "dashboard.month.abbrev.array": "['Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec', 'Jan']",
 
     "ingest.processing.header" : "Processing",
     "ingest.processing.ingress" : "Monitor the steps of the archival workflow.",
