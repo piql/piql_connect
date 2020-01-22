@@ -15,7 +15,7 @@
 	"devMode": true,
 	"host": null,
 	"port": "6001",
-	"protocol": "https",
+	"protocol": "http",
 	"socketio": {},
 	"secureOptions": 67108864,
 	"sslCertPath": "/ssl/fullchain.pem",
@@ -27,9 +27,9 @@
 		"redis": true
 	},
 	"apiOriginAllow": {
-		"allowCors": false,
-		"allowOrigin": "",
-		"allowMethods": "",
-		"allowHeaders": ""
+		"allowCors": true,
+		"allowOrigin": "connect.local",
+		"allowMethods": "OPTIONS, GET, POST, PUT",
+		"allowHeaders": "Origin, Content-Type, Cookie"
 	}
 }
