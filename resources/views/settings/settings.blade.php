@@ -21,6 +21,7 @@
                 </select>
             </div>
 
+            @if( $singleFileIngestOption )
             <div class="row mt-5">
                 <label class="form-check-label col-sm-3" for="ingestCompoundModeEnabled">{{__("Ingest mode")}}</label>
                 <div class="col-sm-4 btn-group btn-group-toggle" data-toggle="buttons">
@@ -32,6 +33,7 @@
                     </label>
                 </div>
             </div>
+            @endif
 
             <div class="form-group row mt-5">
                 <label class="col-sm-3" for="defaultAipStorageLocation">{{__("Default AIP storage location")}}</label>

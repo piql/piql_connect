@@ -15,7 +15,8 @@ class SettingsController extends Controller
         return view('/settings/settings', [
             'settings' => $settingsProvider->forAuthUser(),
             'aipStorageLocations' => $this->fetchAipStorageLocations(),
-            'dipStorageLocations' => $this->fetchDipStorageLocations()
+            'dipStorageLocations' => $this->fetchDipStorageLocations(),
+            'singleFileIngestOption' => env('ENABLE_SINGLE_FILE_INGEST_OPTION', false)
         ] );
     }
 
@@ -38,7 +39,8 @@ class SettingsController extends Controller
         return view('/settings/settings', [
             'settings' => $settings,
             'aipStorageLocations' => $this->fetchAipStorageLocations(),
-            'dipStorageLocations' => $this->fetchDipStorageLocations()
+            'dipStorageLocations' => $this->fetchDipStorageLocations(),
+            'singleFileIngestOption' => env('ENABLE_SINGLE_FILE_INGEST_OPTION', false)
         ] );
     }
 
