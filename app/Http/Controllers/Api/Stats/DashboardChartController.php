@@ -16,26 +16,7 @@ class DashboardChartController extends Controller
     private $color_chart_line_inside = '#8f0052';
     private $color_chart_line_inside_background = '#8f005240';
 
-    // Purple
-    // private $color_chart_pie = [
-    //     '#4d324d',
-    //     '#5d3c5d',
-    //     '#6c476c',
-    //     '#7b517b',
-    //     '#8b5b8b',
-    //     '#9a659a',
-    //     '#a474a4',
-    //     '#ae84ae',
-    //     '#b893b8',
-    //     '#c3a2c3',
-    //     '#cdb2cd',
-    //     '#d7c1d7',
-    //     '#e1d1e1',
-    //     '#ebe0eb',
-    //     '#f5f0f5',
-    // ];
-
-    // Burgundy/pink
+   // Burgundy/pink
     private $color_chart_pie = [
         '#6f2a3c',
         '#813147',
