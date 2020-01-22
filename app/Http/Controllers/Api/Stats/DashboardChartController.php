@@ -162,9 +162,7 @@ class DashboardChartController extends Controller
         }
 
         $fileFormatsIngested = $this->fileFormatsIngested( $currentUser );
-        $chart = new TestChartJS;
-        $chart->dataset('fileFormatsIngested', 'pie', array_values($fileFormatsIngested))->backgroundcolor($this->color_chart_pie);
-        return $chart->api();
+        return $fileFormatsIngested;
     }
 
     private function monthlyOnlineAIPsIngested($user)
@@ -317,28 +315,13 @@ class DashboardChartController extends Controller
 
     private function fileFormatsIngested($user)
     {
-        $bags = $user->bags->where('status', 'complete');
+        $dipFiles = \App\FileObject::where('storable_type',"App\Dip")->get();
+        $uniqueMimeTypes = $dipFiles->pluck("mime_type")->unique();
 
-        $fileFormats = [];
+        $typesAndCounts = $uniqueMimeTypes->mapWithKeys( function( $type ) use ($dipFiles) {
+            return [ $type => $dipFiles->where('mime_type', $type)->count() ];
+        });
 
-        foreach ($bags as $bag)
-        {
-            $files = $bag->files;
-
-            foreach ($files as $file)
-            {
-                $extension = pathinfo($file->filename)['extension'];
-
-                if (array_key_exists($extension, $fileFormats))
-                {
-                    $fileFormats[$extension]++;
-                } else
-                {
-                    $fileFormats[$extension] = 1;
-                }
-            }
-        }
-        arsort($fileFormats);
-        return $fileFormats;
+        return \Response::json($typesAndCounts);
     }
 }

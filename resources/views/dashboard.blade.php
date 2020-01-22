@@ -17,14 +17,11 @@
         </div>
         <div class="text-left mt-3">
             <h1 class="ml-1">{{__("Dashboard")}}</h1>
-            <div class="ml-1"
-                 style="font-size: 0.75rem">{{__("The dashboard gives you a breakdown of relevant information about on your data.")}}</div>
         </div>
     </div>
 
     <div class="row">
         <div class="col-sm-6">
-            <h1 style="text-align: center;margin-bottom: 5px;">{{__("Ingest")}}</h1>
             <div>
                 <div class="row">
                     <div class="col-sm-6">
@@ -40,14 +37,13 @@
                 </div>
                 <div class="row mt-3">
                     <div class="col-sm-12" class="stats">
-                        <pie-chart class="stats" title="{{__("File formats Ingested")}}"
+                        <pie-chart class="pieChart" height="200" title="{{__("File formats Ingested")}}"
                                    url="/api/v1/stats/fileFormatsIngested"/>
                     </div>
                 </div>
             </div>
         </div>
         <div class="col-sm-6">
-            <h1 style="text-align: center;margin-bottom: 5px;">{{__("Access")}}</h1>
             <div class="row">
                 <div class="col-sm-6">
                     <line-chart class="stats" title="{{__("Archival Packages Accessed (monthly)")}}"
