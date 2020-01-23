@@ -52,7 +52,10 @@ class CommitFilesToBagListener implements ShouldQueue
 
         foreach ($files as $file)
         {
-            $this->bagIt->addFile($file->storagePathCompleted(), $file->filename);
+            if($file->filename === "metadata.csv")
+                $this->bagIt->addMetadataFile($file->storagePathCompleted(), $file->filename);
+            else
+                $this->bagIt->addFile($file->storagePathCompleted(), $file->filename);
         }
 
         $result = $this->bagIt->createBag($bag->storagePathCreated());
