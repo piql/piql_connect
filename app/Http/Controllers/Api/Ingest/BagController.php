@@ -54,7 +54,7 @@ class BagController extends Controller
             $bag = Bag::create(['name' => $bagName]);
             $bag->storage_properties()->update([
                 'archive_uuid' => Archive::first()->uuid,
-                'holding_name' => Archive::first()->holdings()->first()->title
+                'holding_name' => Archive::first()->holdings()->first()->title ?? ""
             ]);
         }
 
