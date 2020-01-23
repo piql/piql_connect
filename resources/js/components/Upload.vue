@@ -32,12 +32,18 @@
                 <input id="bagname" value="" :placeholder="bag.name" v-model="bag.name" type="text" class="pl-3 noTextTransform form-control" style="border-radius: 0.5rem" @input="setBagName" onclick="select()">
             </div>
 
-            <div class="col-md-2" title="Select the archive to ingest to">
-                <archive-picker label="Archives" :archives="archives" :initialSelection="selectedArchive" @selectionChanged="changedArchive"></archive-picker>
+            <div v-if="customerSelectsArchives" class="col-md-2" title="Select the archive to ingest to">
+                <archive-picker v-bind:label="$t('Archives')" :archives="archives" :initialSelection="selectedArchive" @selectionChanged="changedArchive"></archive-picker>
+            </div>
+            <div v-else="customerSelectsArchives" title="The archive you ingest to" class="col-md-2">
+                <label class="col-form-label-sm">{{$t('Archive')}}</label>
+                <div class="pl-0 pr-0 form-control align-middle text-center">{{singleArchiveTitle}}</div>
             </div>
 
-            <div class="col-md-2" title="Select a holding from where you can access your data later">
-                <holding-picker label="Holdings" :holdings="holdings" :initialSelection="selectedHoldingTitle" @selectionChanged="changedHolding"></holding-picker>
+            <div v-if="customerSelectsHoldings" class="col-md-2" title="Select a holding from where you can access your data later">
+                <holding-picker v-bind:label="$t('Holdings')" :holdings="holdings" :initialSelection="selectedHoldingTitle" @selectionChanged="changedHolding"></holding-picker>
+            </div>
+            <div v-else="customerSelectsHoldings" class="col-md-2">
             </div>
 
             <div class="col-md-2">
@@ -180,6 +186,7 @@
       fileInputDisabled: false,
       archives: [],
       selectedArchive: {},
+      singleArchiveTitle: "",
       holdings: [],
       selectedHoldingTitle: {},
       currentPage: 1,
@@ -197,8 +204,10 @@
         numberOfFiles: function() {
             return this.files.length;
         },
-        compoundModeEnabled: function() {
-            return this.userSettings.workflow.ingestCompoundModeEnabled;
+      compoundModeEnabled: function() {
+          let compoundSetting = this.userSettings.workflow.ingestCompoundModeEnabled;
+            console.log("Compound setting: "+compoundSetting);
+            return this.userSettings.workflow.ingestCompoundModeEnabled !== undefined ? this.userSettings.workflow.ingestCompoundModeEnabled : true;
         },
         uploadInProgress: function() {
             return this.filesUploading.length > 0;
@@ -231,7 +240,14 @@
                 'to': this.pageTo,
                 'total': this.totalFilesUploading
             }
-        }
+        },
+        customerSelectsHoldings: function() {
+            return this.holdings.length !== 0;
+        },
+        customerSelectsArchives: function() {
+            return this.archives.length > 1;
+        },
+
     },
 
     methods: {
@@ -307,6 +323,9 @@
         async setupHoldings(archiveId, initialHolding) {
             await axios.get('/api/v1/planning/archives/'+archiveId+'/holdings').then( (response) => {
                 this.holdings = response.data.data;
+                if( !this.customerSelectsHoldings ) {
+                       return;
+                }
                 let defaultHolding = this.holdings.length ? this.holdings[0].title : "";
                 Vue.nextTick( () => {
                     $('#holdingPicker').selectpicker('refresh');
@@ -350,42 +369,46 @@
         await axios.get("/api/v1/planning/archives").then( (response) => {
             this.archives = response.data.data;
             this.selectedArchive = this.archives[0].uuid;
+            this.singleArchiveTitle = this.archives[0].title;
         });
 
-    this.userId = (await axios.get("/api/v1/system/currentUser")).data;
-    this.userSettings  = (await axios.get("/api/v1/system/currentUserSettings")).data;
+        this.userId = (await axios.get("/api/v1/system/currentUser")).data;
+        this.userSettings  = (await axios.get("/api/v1/system/currentUserSettings")).data;
 
-    if( this.compoundModeEnabled ) {
+        if( this.compoundModeEnabled ) {
 
-    this.bag = (await axios.get("/api/v1/ingest/bags/latest")).data.data;
-    Vue.nextTick( () => { $('#archivePicker').selectpicker('val', this.selectedArchive);});
+            this.bag = (await axios.get("/api/v1/ingest/bags/latest")).data.data;
 
-    if(this.bag !== undefined && this.bag.status === "open") {
-        this.files = (await axios.get('/api/v1/ingest/bags/' + this.bag.id + '/files')).data.data;
-        this.filesUploading = this.files.map( (file, index) => ({
-            id: index+100000,  /*A large enough number to avoid collisions with id's provided by FineUploader */
-            filename: file.filename,
-            progressBarStyle: "width: 0%",
-            uploadedFileId: file.id,
-            uploadedToBagId: file.bag_id,
-            fileSize: file.filesize,
-            uploadedFileSize: file.filesize,
-            isUploading: false
-            }) );
-        }
-        else {
-            this.bag = (await this.createBag( "", this.userId, this.selectedArchive, this.selectedHoldingTitle ));
-        }
-        if(this.filesUploading) {
-            this.processDisabled = false;
-        }
-        } else {
+            if( this.customerSelectsArchives ) {
+                Vue.nextTick( () => { $('#archivePicker').selectpicker('val', this.selectedArchive);});
+            }
+
+            if(this.bag !== undefined && this.bag.status === "open") {
+                this.files = (await axios.get('/api/v1/ingest/bags/' + this.bag.id + '/files')).data.data;
+                this.filesUploading = this.files.map( (file, index) => ({
+                    id: index+100000,  /*A large enough number to avoid collisions with id's provided by FineUploader */
+                    filename: file.filename,
+                    progressBarStyle: "width: 0%",
+                    uploadedFileId: file.id,
+                    uploadedToBagId: file.bag_id,
+                    fileSize: file.filesize,
+                    uploadedFileSize: file.filesize,
+                    isUploading: false
+                }) );
+            }
+            else {
+                this.bag = (await this.createBag( "", this.userId, this.selectedArchive, this.selectedHoldingTitle ));
+            }
+            if(this.filesUploading) {
+                this.processDisabled = false;
+            }
+        } else if (this.customerSelectsArchive ) {
             Vue.nextTick( () => {
                 $('#archivePicker').selectpicker('val', this.selectedArchive);
                 this.setupHoldings( this.selectedArchive );
             });
         }
-        }
-}
+    }
+    }
 
 </script>
