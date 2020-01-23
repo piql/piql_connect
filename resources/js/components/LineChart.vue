@@ -45,7 +45,7 @@
         },
         methods: {
             last12Months: function (labels) {
-                let currentMonth = new Date().getMonth();
+                let currentMonth = new Date().getMonth() + 1;
                 let rest = currentMonth % 12;
                 let rotatedLabels = labels.slice(currentMonth,12).concat( labels.slice(0, rest) ) ;
                 return rotatedLabels;
