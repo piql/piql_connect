@@ -31,6 +31,8 @@ class SettingsController extends Controller
 
         $settings->ingestCompoundModeEnabled = ( $request->ingestCompoundMode == "compound" );
 
+        $settings->ingestMetadataAsFile = ($request->ingestMetadataAsFile == "true"); //todo: validate form fields
+
         $settings->save();
 
 

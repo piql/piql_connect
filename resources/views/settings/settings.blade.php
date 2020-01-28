@@ -51,6 +51,14 @@
                 </select>
             </div>
 
+            <div class="form-group row">
+                <label class="col-sm-3" for="ingestMetadataAsFile">{{__("Ingest metadata as file")}}</label>
+                <select class="selectpicker col-sm-4" name="ingestMetadataAsFile" id="ingestMetadataAsFile" >
+                    <option value="false" {{ $settings->ingestMetadataAsFile ? 'selected = "true"' : ''}}>Disabled</option>
+                    <option value="true" {{ $settings->ingestMetadataAsFile ? 'selected = "true"' : ''}}>Enabled</option>
+                </select>
+            </div>
+
         </form>
     </div>
 </div>

@@ -176,4 +176,14 @@ class UserSetting extends Model
         $this->set( 'workflow.ingestCompoundModeEnabled', $value );
     }
 
+    public function getIngestMetadataAsFileAttribute() : bool
+    {
+        return $this->get( 'workflow.ingestMetadataAsFileEnabled' , false);
+    }
+
+    public function setIngestMetadataAsFileAttribute( $value ) : void
+    {
+        $this->set( 'workflow.ingestMetadataAsFileEnabled', $value );
+    }
+
 }
