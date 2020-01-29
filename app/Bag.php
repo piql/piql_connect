@@ -50,7 +50,7 @@ class Bag extends Model
                 'to' => 'move_to_outbox',
             ],
             'initiate_transfer' => [
-                'from' => ['move_to_outbox'],
+                'from' => ['initiate_transfer', 'move_to_outbox'],
                 'to' => 'initiate_transfer',
             ],
             'approve_transfer' => [
