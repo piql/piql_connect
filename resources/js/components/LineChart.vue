@@ -6,7 +6,7 @@
         mixins: [reactiveProp],
         data: () => ({
             chartdata: {
-                labels: ["Oct","Nov","Dec","Jan","Feb","Mar","Apr","May","Jun","Jul ","Aug","Sep"],
+                labels: [],
                 datasets: []
             },
             options: {
@@ -38,13 +38,21 @@
             }
         }),
         props: {
-            chartData: [],
             url: "",
             title: "",
-            labels: Array
+            labels: Array,
+            chartData: Array,
+        },
+        methods: {
+            last12Months: function (labels) {
+                let currentMonth = new Date().getMonth() + 1;
+                let rest = currentMonth % 12;
+                let rotatedLabels = labels.slice(currentMonth,12).concat( labels.slice(0, rest) ) ;
+                return rotatedLabels;
+            },
         },
         async mounted () {
-            this.chartdata.labels = this.labels;
+            this.chartdata.labels = this.last12Months( this.labels );
             let datasets = (await axios.get(this.url)).data;
             this.chartdata.datasets = datasets;
             this.options.title.text  = this.title;

@@ -15,7 +15,8 @@ class SettingsController extends Controller
         return view('/settings/settings', [
             'settings' => $settingsProvider->forAuthUser(),
             'aipStorageLocations' => $this->fetchAipStorageLocations(),
-            'dipStorageLocations' => $this->fetchDipStorageLocations()
+            'dipStorageLocations' => $this->fetchDipStorageLocations(),
+            'singleFileIngestOption' => env('ENABLE_SINGLE_FILE_INGEST_OPTION', false)
         ] );
     }
 
@@ -29,17 +30,18 @@ class SettingsController extends Controller
 
         $settings->defaultDipStorageLocationId = $request->defaultDipStorageLocation; //todo: validate form fields
 
-        $settings->ingestCompoundModeEnabled = ( $request->ingestCompoundMode == "compound" );
+        if( $request->ingestCompoundMode == "compound" || $request->ingestCompoundMode == "single") {
+            $settings->ingestCompoundModeEnabled = ( $request->ingestCompoundMode == "compound" );
+        }
 
         $settings->ingestMetadataAsFile = ($request->ingestMetadataAsFile == "true"); //todo: validate form fields
-
         $settings->save();
-
 
         return view('/settings/settings', [
             'settings' => $settings,
             'aipStorageLocations' => $this->fetchAipStorageLocations(),
-            'dipStorageLocations' => $this->fetchDipStorageLocations()
+            'dipStorageLocations' => $this->fetchDipStorageLocations(),
+            'singleFileIngestOption' => env('ENABLE_SINGLE_FILE_INGEST_OPTION', false)
         ] );
     }
 

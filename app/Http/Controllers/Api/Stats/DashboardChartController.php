@@ -16,26 +16,7 @@ class DashboardChartController extends Controller
     private $color_chart_line_inside = '#8f0052';
     private $color_chart_line_inside_background = '#8f005240';
 
-    // Purple
-    // private $color_chart_pie = [
-    //     '#4d324d',
-    //     '#5d3c5d',
-    //     '#6c476c',
-    //     '#7b517b',
-    //     '#8b5b8b',
-    //     '#9a659a',
-    //     '#a474a4',
-    //     '#ae84ae',
-    //     '#b893b8',
-    //     '#c3a2c3',
-    //     '#cdb2cd',
-    //     '#d7c1d7',
-    //     '#e1d1e1',
-    //     '#ebe0eb',
-    //     '#f5f0f5',
-    // ];
-
-    // Burgundy/pink
+   // Burgundy/pink
     private $color_chart_pie = [
         '#6f2a3c',
         '#813147',
@@ -181,9 +162,7 @@ class DashboardChartController extends Controller
         }
 
         $fileFormatsIngested = $this->fileFormatsIngested( $currentUser );
-        $chart = new TestChartJS;
-        $chart->dataset('fileFormatsIngested', 'pie', array_values($fileFormatsIngested))->backgroundcolor($this->color_chart_pie);
-        return $chart->api();
+        return $fileFormatsIngested;
     }
 
     private function monthlyOnlineAIPsIngested($user)
@@ -336,28 +315,13 @@ class DashboardChartController extends Controller
 
     private function fileFormatsIngested($user)
     {
-        $bags = $user->bags->where('status', 'complete');
+        $dipFiles = \App\FileObject::where('storable_type',"App\Dip")->get();
+        $uniqueMimeTypes = $dipFiles->pluck("mime_type")->unique();
 
-        $fileFormats = [];
+        $typesAndCounts = $uniqueMimeTypes->mapWithKeys( function( $type ) use ($dipFiles) {
+            return [ $type => $dipFiles->where('mime_type', $type)->count() ];
+        });
 
-        foreach ($bags as $bag)
-        {
-            $files = $bag->files;
-
-            foreach ($files as $file)
-            {
-                $extension = pathinfo($file->filename)['extension'];
-
-                if (array_key_exists($extension, $fileFormats))
-                {
-                    $fileFormats[$extension]++;
-                } else
-                {
-                    $fileFormats[$extension] = 1;
-                }
-            }
-        }
-        arsort($fileFormats);
-        return $fileFormats;
+        return \Response::json($typesAndCounts);
     }
 }

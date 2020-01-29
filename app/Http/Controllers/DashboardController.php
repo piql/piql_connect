@@ -8,15 +8,8 @@ use App\Charts\TestChartJS;
 
 class DashboardController extends Controller
 {
-    public function __construct()
-    {
-    }
-
     public function showDashboard()
     {
-        Log::info('showDashboard');
-
-        $last12Months = $this->arrayRearrangeCurrentMonthLast(array_fill(0, 12, 0));
         $fileFormatCount = $this->fileFormatsIngested(auth()->user());
         $onlineDataIngested = $this->onlineDataIngested(auth()->user());
         
@@ -36,28 +29,28 @@ class DashboardController extends Controller
         $fileFormatsIngested = new TestChartJS;
 
 
-        $monthlyOnlineAIPsIngested->labels(array_keys($last12Months))->load(url('api/v1/stats/monthlyOnlineAIPsIngested'));
+        $monthlyOnlineAIPsIngested->load(url('api/v1/stats/monthlyOnlineAIPsIngested'));
         $monthlyOnlineAIPsIngested->options([
             'title' => [
                  'text' => 'AIPs Ingested (monthly)'
             ],
         ]);
 
-        $monthlyOnlineAIPsAccessed->labels(array_keys($last12Months))->load(url('api/v1/stats/monthlyOnlineAIPsAccessed'));
+        $monthlyOnlineAIPsAccessed->load(url('api/v1/stats/monthlyOnlineAIPsAccessed'));
         $monthlyOnlineAIPsAccessed->options([
             'title' => [
                  'text' => 'AIPs Accessed (monthly)'
             ],
         ]);
 
-        $monthlyOnlineDataIngested->labels(array_keys($last12Months))->load(url('api/v1/stats/monthlyOnlineDataIngested'));
+        $monthlyOnlineDataIngested->load(url('api/v1/stats/monthlyOnlineDataIngested'));
         $monthlyOnlineDataIngested->options([
             'title' => [
                  'text' => 'Data Ingested (monthly)'
             ],
         ]);
 
-        $monthlyOnlineDataAccessed->labels(array_keys($last12Months))->load(url('api/v1/stats/monthlyOnlineDataAccessed'));
+        $monthlyOnlineDataAccessed->load(url('api/v1/stats/monthlyOnlineDataAccessed'));
         $monthlyOnlineDataAccessed->options([
             'title' => [
                  'text' => 'Data Accessed (monthly)'
@@ -173,55 +166,6 @@ class DashboardController extends Controller
             }
         }
         return $this->arrayRearrangeCurrentMonthLast($monthlyDataIngested);
-    }
-
-    /**
-     * Takes an array with 12 values and transforms it to an associative array arranged with current month last. The keys are three letter month names.
-     *
-     * @param  array  $inputArray Array of size 12, 0 will bre treated as Jan, 1 as Feb etc.
-     * @return array 0 will be next month from today, 1 will be the month after etc, 11 will be this month.
-     */
-    private function arrayRearrangeCurrentMonthLast($inputArray)
-    {
-        $months = array(
-            'Jan',
-            'Feb',
-            'Mar',
-            'Apr',
-            'May',
-            'Jun',
-            'Jul ',
-            'Aug',
-            'Sep',
-            'Oct',
-            'Nov',
-            'Dec',
-            // 'January',
-            // 'February',
-            // 'March',
-            // 'April',
-            // 'May',
-            // 'June',
-            // 'July',
-            // 'August',
-            // 'September',
-            // 'October',
-            // 'November',
-            // 'December',
-        );
-
-        $todaysMonth = date('n') - 1;
-        $rearrangedArray = [];
-
-        for ($i = $todaysMonth + 1; $i < 12; $i++)
-        {
-            $rearrangedArray[$months[$i]] = $inputArray[$i];
-        }
-        for ($i = 0; $i <= $todaysMonth; $i++)
-        {
-            $rearrangedArray[$months[$i]] = $inputArray[$i];
-        }
-        return $rearrangedArray;
     }
 
     private function fileFormatsIngested($user)
