@@ -17,13 +17,21 @@
 
         <form class="form mb-1 ml-0 mr-0" v-on:submit.prevent>
             <div class="row mt-1 mb-0 ">
-                <div class="col-md-2 col-lg-2 pl-0 pr-0 ">
+                <div v-if="useArchives" class="col-md-2 col-lg-2 pl-0 pr-0 ">
                     <archive-picker :useWildCard=true :archives='archives' :initialSelection='selectedArchiveUuid' :label='archiveSelectLabel' @selectionChanged='archiveSelectionChanged'></archive-picker>
                 </div>
+                <div v-else="useArchives" class="col-md-2 col-lg-2 pl-0 pr-0">
+                    <label class="col-form-label-sm">{{$t('Archive')}}</label>
+                    <div class="pl-0 pr-0 form-control align-middle text-center">{{singleArchiveTitle}}</div>
+                </div>
 
-                <div class="col-md-2 col-lg-2">
+                <div v-if="useHoldings" class="col-md-2 col-lg-2">
                     <holding-picker :useWildCard=true :selectionDisabled='holdingSelectionDisabled' :holdings='holdings' :initialSelection='selectedHolding' :label='holdingSelectLabel' @selectionChanged='holdingSelectionChanged' />
                 </div>
+                <div v-else="useHoldings" class="col-md-2 col-lg-2">
+                    <holding-picker :useWildCard=true :selectionDisabled='true' :holdings='holdings' :initialSelection='0' :label='holdingSelectLabel' @selectionChanged='holdingSelectionChanged' />
+                </div>
+
 
                 <div class="col-md-2 col-lg-2">
                     <label for="fromDate" class="col-form-label-sm">{{$t('access.browse.archivedFrom')}}</label>
@@ -102,6 +110,7 @@
                 ],
                 archives: [],
                 selectedArchiveUuid: "",
+                singleArchiveTitle: "",
                 archiveSelectLabel: "Archive",
                 holdingSelectLabel: "Holding",
                 holdings: [],
@@ -116,14 +125,19 @@
                 pageSize: 4,
                 currentPage: 1,
                 currentFilesPage: 1,
+                useArchives: true,
             }
         },
         computed: {
+            useHoldings: function() {
+              return this.holdings.length > 0;
+            },
+
             archiveSelected: function() {
                 return this.selectedArchiveUuid.length > 0;
             },
             holdingSelected: function() {
-                return true;
+              return true; //TODO: Review, is this obsolete?
             },
             online: function() {
                 return this.selectedLocation == "online";
@@ -204,11 +218,18 @@
             },
             selectedArchive: function() {
             },
-
         },
-        mounted() {
+        async mounted() {
             axios.get("/api/v1/planning/archives").then( (response) => {
-                this.archives = response.data.data;
+              this.archives = response.data.data;
+                if( this.archives.length === 1 ) {
+                    this.selectedArchiveUuid = this.archives[0].title;
+                    this.singleArchiveTitle = this.archives[0].title;
+                    this.useArchives = false;
+                }
+                else {
+                    this.useArchives = true;
+                }
                 this.refreshObjects("");
             });
         },
@@ -254,7 +275,6 @@
                 this.selectedHolding = holding;
             },
             archiveSelectionChanged: function(archiveUuid) {
-              console.log("archive selection changed");
               this.fileMode = false;
               this.selectedArchiveUuid = archiveUuid;
 
