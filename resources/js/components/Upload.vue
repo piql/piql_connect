@@ -205,8 +205,8 @@
             return this.files.length;
         },
       compoundModeEnabled: function() {
-          let compoundSetting = this.userSettings.workflow.ingestCompoundModeEnabled;
-            console.log("Compound setting: "+compoundSetting);
+            let compoundSetting = this.userSettings.workflow.ingestCompoundModeEnabled;
+            /* Compound must explicitly be set to false to be disabled */
             return this.userSettings.workflow.ingestCompoundModeEnabled !== undefined ? this.userSettings.workflow.ingestCompoundModeEnabled : true;
         },
         uploadInProgress: function() {
