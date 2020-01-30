@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\Ingest;
 
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
@@ -112,9 +113,14 @@ class BagController extends Controller
         {
             if( $request->filled( 'archive_uuid' ) && $request->filled( 'holding_name' ) )
             {
+
+                $validatedData = $request->validate([
+                    'archive_uuid' => 'required|uuid',
+                    'holding_name' => 'required|string',
+                ]);
                 $bag->storage_properties->update([
-                    'archive_uuid' => $request->archive_uuid,
-                    'holding_name' => $request->holding_name
+                    'archive_uuid' => $validatedData->archive_uuid,
+                    'holding_name' => $validatedData->holding_name
                 ]);
 
                 $resultBag =
