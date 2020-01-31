@@ -1,24 +1,24 @@
 <template>
   <div class="mt-2 mb-2">
       <div class="row">
-          <div class="col-sm-1 text-right">
+          <div class="col-sm-1 text-left">
               <i class="fas fa-hdd mr-3 titleIcon"></i>
           </div>
           <div class="col-sm-6 text-left">
-              <h1> Browse</h1>
+              <h1>{{$t('access.browse')}}</h1>
           </div>
       </div>
       <div class="row mt-0 pt-0">
             <div class="col-sm-1"></div>
-            <div class="col-sm-6 text-left" style="font-size: 0.75rem">
-                Access your archives
+            <div class="col-sm-6 text-left ingressText">
+                {{$t('access.browse.ingress')}}
             </div>
       </div>
 
         <form class="form mb-1 ml-0 mr-0" v-on:submit.prevent>
             <div class="row mt-1 mb-0 ">
                 <div v-if="useArchives" class="col-md-2 col-lg-2 pl-0 pr-0 ">
-                    <archive-picker :useWildCard=true :archives='archives' :initialSelection='selectedArchiveUuid' :label='archiveSelectLabel' @selectionChanged='archiveSelectionChanged'></archive-picker>
+                    <archive-picker :useWildCard=true :archives='archives' :initialSelection='selectedArchiveUuid' :label='$t("Archive")' @selectionChanged='archiveSelectionChanged'></archive-picker>
                 </div>
                 <div v-else="useArchives" class="col-md-2 col-lg-2 pl-0 pr-0">
                     <label class="col-form-label-sm">{{$t('Archive')}}</label>
@@ -26,10 +26,10 @@
                 </div>
 
                 <div v-if="useHoldings" class="col-md-2 col-lg-2">
-                    <holding-picker :useWildCard=true :selectionDisabled='holdingSelectionDisabled' :holdings='holdings' :initialSelection='selectedHolding' :label='holdingSelectLabel' @selectionChanged='holdingSelectionChanged' />
+                    <holding-picker :useWildCard=true :selectionDisabled='holdingSelectionDisabled' :holdings='holdings' :initialSelection='selectedHolding' :label='$t("Holding")' @selectionChanged='holdingSelectionChanged' />
                 </div>
                 <div v-else="useHoldings" class="col-md-2 col-lg-2">
-                    <holding-picker :useWildCard=true :selectionDisabled='true' :holdings='holdings' :initialSelection='0' :label='holdingSelectLabel' @selectionChanged='holdingSelectionChanged' />
+                    <holding-picker :useWildCard=true :selectionDisabled='true' :holdings='holdings' :initialSelection='0' :label='$t("Holding")' @selectionChanged='holdingSelectionChanged' />
                 </div>
 
 
@@ -111,8 +111,6 @@
                 archives: [],
                 selectedArchiveUuid: "",
                 singleArchiveTitle: "",
-                archiveSelectLabel: "Archive",
-                holdingSelectLabel: "Holding",
                 holdings: [],
                 selectedArchiveHoldings: [],
                 retrievalItems: [],

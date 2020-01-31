@@ -1,7 +1,7 @@
 <template>
     <div class="mb-2 mt-2">
         <div class="row">
-            <div class="col-sm-1 text-right">
+            <div class="col-sm-1 text-left">
                 <i class="fas fa-upload mr-3 titleIcon"></i>
             </div>
             <div class="col-sm-6 text-left">
@@ -10,37 +10,37 @@
         </div>
         <div class="row mt-0 pt-0">
             <div class="col-sm-1"></div>
-            <div class="col-sm-6 text-left" style="font-size: 0.7rem">
-                    Upload files to your archives here by clicking the 'Add file' button.
+            <div class="col-sm-6 text-left ingressText"> 
+                {{$t("upload.ingress")}}
             </div>
         </div>
 
         <div class="row form-group mt-2 mb-2">
-            <div class="col-md-2 pl-0 ml-0" title="Upload files">
+            <div class="col-md-2 pl-0 ml-0" :title="$t('upload.addFileButtonToolTip')">
                 <label for="uploadbutton" class="col-form-label-sm">&nbsp;</label>
                 <FileInputComponent
                     id="uploadbutton"
                     :multiple="compoundModeEnabled"
                     :uploader="uploader"
                     :disabled="fileInputDisabled">
-                    <slot name="inputbuttontext" ><span class="pl-3 pr-3"><i class="fas fa-plus mr-3"></i>{{$t("upload.addFileToUpload")}}</span></slot>
+                    <slot name="inputbuttontext" ><span class="pl-3 pr-3"><i class="fas fa-plus mr-3"></i>{{$t("upload.addFileButton")}}</span></slot>
                 </FileInputComponent>
             </div>
 
-            <div v-show="compoundModeEnabled" class="col-md-2 text-left" title="Give packages memorable names by giving them titles (optional)">
-                <label for="bagname" class="col-form-label-sm">Package title</label>
+            <div v-show="compoundModeEnabled" class="col-md-2 text-left" :title="$t('upload.optionalName')">
+                <label for="bagname" class="col-form-label-sm">{{$t("upload.sipName")}}</label>
                 <input id="bagname" value="" :placeholder="bag.name" v-model="bag.name" type="text" class="pl-3 noTextTransform form-control" style="border-radius: 0.5rem" @input="setBagName" onclick="select()">
             </div>
 
-            <div v-if="customerSelectsArchives" class="col-md-2" title="Select the archive to ingest to">
-                <archive-picker v-bind:label="$t('Archives')" :archives="archives" :initialSelection="selectedArchive" @selectionChanged="changedArchive"></archive-picker>
+            <div v-if="customerSelectsArchives" class="col-md-2" :title="$t('upload.archiveToolTip')">
+                <archive-picker v-bind:label="$t('Archive')" :archives="archives" :initialSelection="selectedArchive" @selectionChanged="changedArchive"></archive-picker>
             </div>
             <div v-else="customerSelectsArchives" title="The archive you ingest to" class="col-md-2">
                 <label class="col-form-label-sm">{{$t('Archive')}}</label>
                 <div class="pl-0 pr-0 form-control align-middle text-center">{{singleArchiveTitle}}</div>
             </div>
 
-            <div v-if="customerSelectsHoldings" class="col-md-2" title="Select a holding from where you can access your data later">
+            <div v-if="customerSelectsHoldings" class="col-md-2" :title="$t('upload.holdingToolTip')">
                 <holding-picker v-bind:label="$t('Holdings')" :holdings="holdings" :initialSelection="selectedHoldingTitle" @selectionChanged="changedHolding"></holding-picker>
             </div>
             <div v-else="customerSelectsHoldings" class="col-md-2">
@@ -59,13 +59,13 @@
         <div class="row plistHeader"> <div class="col-sm-1 text-center">
             </div>
             <div class="col-md-6 col-sm-5 col-xs-3 text-left align-self-center">
-                Filename
+                {{$t('upload.fileName')}}
             </div>
             <div class="col-xs-2 col-sm-2 text-center align-self-center">
-                File size
+                {{$t('upload.fileSize')}}
             </div>
             <div class="col-xs-2 col-sm-3 text-center align-self-center">
-                Actions
+                {{$t('upload.fileActions')}}
             </div>
         </div>
 
