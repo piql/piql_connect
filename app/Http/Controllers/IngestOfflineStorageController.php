@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 class IngestOfflineStorageController extends Controller
 {
     public function index() {
-        return view('ingest.jobs.index');
+        return view('ingest.jobs.index', ['enable_offline_actions' => env('ENABLE_OFFLINE_ACTIONS', true)] );
     }
 
     public function show($jobId) {
