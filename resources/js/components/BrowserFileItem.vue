@@ -7,10 +7,11 @@
             <div class="col text-center align-self-center text-truncate">
                 {{item.filename}}
             </div>
-            <div class="col-sm-1 ml-3 text-right align-self-center">
-                <a @click.once="download" href="#" data-toggle="tooltip" title="Download normalized file"><i class="fas fa-file-download actionIcon text-center"></i></a>
-              </div>
-            <div class="col-sm-1"></div> 
+            <div class="col-sm-2 d-inline-flex align-self-center">
+                <a class="m-auto" @click.once="editMetadata()" href="#" data-toggle="tooltip" title="Edit metadata"><i class="fas fa-tags actionIcon text-center"></i></a>
+                <a class="m-auto" @click.once="download" href="#" data-toggle="tooltip" title="Download normalized file"><i class="fas fa-file-download actionIcon text-center"></i></a>
+            </div>
+            <div class="col-sm-1"></div>
         </div>
     </div>
 </template>
@@ -57,8 +58,9 @@
                 fileLink.download = this.item.filename;
                 fileLink.click();
             },
-
-
+            editMetadata() {
+                window.location = "/access/browse/files/"+this.item.id+"/metadata";
+            }
         },
         computed: {
             downloadUrl: function(){
