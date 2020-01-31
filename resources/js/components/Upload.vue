@@ -1,7 +1,7 @@
 <template>
     <div class="mb-2 mt-2">
         <div class="row">
-            <div class="col-sm-1 text-right">
+            <div class="col-sm-1 text-left">
                 <i class="fas fa-upload mr-3 titleIcon"></i>
             </div>
             <div class="col-sm-6 text-left">
@@ -10,37 +10,37 @@
         </div>
         <div class="row mt-0 pt-0">
             <div class="col-sm-1"></div>
-            <div class="col-sm-6 text-left" style="font-size: 0.7rem">
-                    Upload files to your archives here by clicking the 'Add file' button.
+            <div class="col-sm-6 text-left ingressText"> 
+                {{$t("upload.ingress")}}
             </div>
         </div>
 
         <div class="row form-group mt-2 mb-2">
-            <div class="col-md-2 pl-0 ml-0" title="Upload files">
+            <div class="col-md-2 pl-0 ml-0" :title="$t('upload.addFileButtonToolTip')">
                 <label for="uploadbutton" class="col-form-label-sm">&nbsp;</label>
                 <FileInputComponent
                     id="uploadbutton"
                     :multiple="compoundModeEnabled"
                     :uploader="uploader"
                     :disabled="fileInputDisabled">
-                    <slot name="inputbuttontext" ><span class="pl-3 pr-3"><i class="fas fa-plus mr-3"></i>{{$t("upload.addFileToUpload")}}</span></slot>
+                    <slot name="inputbuttontext" ><span class="pl-3 pr-3"><i class="fas fa-plus mr-3"></i>{{$t("upload.addFileButton")}}</span></slot>
                 </FileInputComponent>
             </div>
 
-            <div v-show="compoundModeEnabled" class="col-md-2 text-left" title="Give packages memorable names by giving them titles (optional)">
-                <label for="bagname" class="col-form-label-sm">Package title</label>
+            <div v-show="compoundModeEnabled" class="col-md-2 text-left" :title="$t('upload.optionalName')">
+                <label for="bagname" class="col-form-label-sm">{{$t("upload.sipName")}}</label>
                 <input id="bagname" value="" :placeholder="bag.name" v-model="bag.name" type="text" class="pl-3 noTextTransform form-control" style="border-radius: 0.5rem" @input="setBagName" onclick="select()">
             </div>
 
-            <div v-if="customerSelectsArchives" class="col-md-2" title="Select the archive to ingest to">
-                <archive-picker v-bind:label="$t('Archives')" :archives="archives" :initialSelection="selectedArchive" @selectionChanged="changedArchive"></archive-picker>
+            <div v-if="customerSelectsArchives" class="col-md-2" :title="$t('upload.archiveToolTip')">
+                <archive-picker v-bind:label="$t('Archive')" :archives="archives" :initialSelection="selectedArchive" @selectionChanged="changedArchive"></archive-picker>
             </div>
             <div v-else="customerSelectsArchives" title="The archive you ingest to" class="col-md-2">
                 <label class="col-form-label-sm">{{$t('Archive')}}</label>
                 <div class="pl-0 pr-0 form-control align-middle text-center">{{singleArchiveTitle}}</div>
             </div>
 
-            <div v-if="customerSelectsHoldings" class="col-md-2" title="Select a holding from where you can access your data later">
+            <div v-if="customerSelectsHoldings" class="col-md-2" :title="$t('upload.holdingToolTip')">
                 <holding-picker v-bind:label="$t('Holdings')" :holdings="holdings" :initialSelection="selectedHoldingTitle" @selectionChanged="changedHolding"></holding-picker>
             </div>
             <div v-else="customerSelectsHoldings" class="col-md-2">
@@ -51,20 +51,21 @@
 
             <div v-show="compoundModeEnabled" class="col-md-2 text-center pr-0">
                 <label for="processButton" class="col-form-label-sm">&nbsp;</label>
-                <button title="Start the ingest process" id="processButton" class="btn w-100 m-0 p-2" v-bind:class="[{ disabled : processDisabled  }]" v-on:click="commitBagToProcessing">{{$t('upload.processButton')}}</button>
+                <button v-if="processDisabled" disabled title="Start the ingest process" id="processButton" class="btn w-100 m-0 p-2">{{$t('upload.processButton')}}</button>
+                <button v-else="processDisabled" title="Start the ingest process" id="processButton" class="btn w-100 m-0 p-2"  v-on:click="commitBagToProcessing">{{$t('upload.processButton')}}</button>
             </div>
         </div>
 
         <div class="row plistHeader"> <div class="col-sm-1 text-center">
             </div>
             <div class="col-md-6 col-sm-5 col-xs-3 text-left align-self-center">
-                Filename
+                {{$t('upload.fileName')}}
             </div>
             <div class="col-xs-2 col-sm-2 text-center align-self-center">
-                File size
+                {{$t('upload.fileSize')}}
             </div>
             <div class="col-xs-2 col-sm-3 text-center align-self-center">
-                Actions
+                {{$t('upload.fileActions')}}
             </div>
         </div>
 
@@ -80,137 +81,140 @@
     </div>
 </template>
 
-<script language="text/babel">
-    import FineUploader from 'vue-fineuploader';
-    import FineUploaderTraditional from 'fine-uploader-wrappers'
-    import axios from 'axios';
-    import JQuery from 'jquery';
-    import moment from 'moment';
-    let $ = JQuery;
-    import selectpicker from 'bootstrap-select';
-    import filesize from 'filesize';
+<script>
 
-    export default {
+import FineUploader from 'vue-fineuploader';
+import FineUploaderTraditional from 'fine-uploader-wrappers'
+import axios from 'axios';
+import JQuery from 'jquery';
+import moment from 'moment';
+let $ = JQuery;
+import selectpicker from 'bootstrap-select';
+import filesize from 'filesize';
+
+export default {
     data() {
-    const uploader = new FineUploaderTraditional({
-    options: {
-    request: {
-    endpoint: '/api/v1/ingest/upload',
-    params: {
-    base_directory: 'completed',
-    sub_directory: null,
-    optimus_uploader_allowed_extensions: [],
-    optimus_uploader_size_limit: 0,
-    optimus_uploader_thumbnail_height: 100,
-    optimus_uploader_thumbnail_width: 100,
-    },
-    customHeaders: {
-    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-    }
-    },
-    chunking: {
-    enabled: true,
-    partSize: 1024*768,
-    mandatory: true,
-    concurrent: {
-    enabled: false
-    },
-    },
-    callbacks: {
-    onValidate: (id, name) => {
-    this.processDisabled = true;
-    },
-    onSubmit: (id, name) => {
-    this.filesUploading.unshift({
-    'id': id,
-    'filename': name,
-    'progressBarStyle': "width: 0%",
-    'uploadedFileId': '',
-    'fileSize': 0,
-    'uploadedFileSize': 0,
-    'isUploading': false
-    });
-    },
-    onProgress: (id, name, uploadedBytes, totalBytes) => {
-    let progress = Math.round( uploadedBytes * ( 100.0 / totalBytes ) );
-    let filesIndex = this.filesUploading.findIndex( (file) => file.id == id );
-    this.filesUploading[filesIndex].isUploading = true;
-    this.filesUploading[filesIndex].fileSize = totalBytes;
-    this.filesUploading[filesIndex].uploadedFileSize = uploadedBytes;
-    this.filesUploading[filesIndex].progressBarStyle = {'width': `${progress}%` };
-    },
-    onComplete: async (id, name, response, xhr, something) => {
-    let filesIndex = this.filesUploading.findIndex( (file) => file.id == id );
-    this.filesUploading[filesIndex].isUploading = false;
-    let fileSize = this.uploader.methods.getSize(id);
-    this.filesUploading[filesIndex].fileSize = fileSize;
+        const uploader = new FineUploaderTraditional({
+            options: {
+                request: {
+                    endpoint: '/api/v1/ingest/upload',
+                    params: {
+                        base_directory: 'completed',
+                        sub_directory: null,
+                        optimus_uploader_allowed_extensions: [],
+                        optimus_uploader_size_limit: 0,
+                        optimus_uploader_thumbnail_height: 100,
+                        optimus_uploader_thumbnail_width: 100,
+                    },
+                    customHeaders: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                },
+                chunking: {
+                    enabled: true,
+                    partSize: 1024*768,
+                    mandatory: true,
+                    concurrent: {
+                        enabled: false
+                    },
+                },
+                callbacks: {
+                    onValidate: (id, name) => {
+                    },
+                    onSubmit: (id, name) => {
+                        this.filesUploading.unshift({
+                            'id': id,
+                            'filename': name,
+                            'progressBarStyle': "width: 0%",
+                            'uploadedFileId': '',
+                            'fileSize': 0,
+                            'uploadedFileSize': 0,
+                            'isUploading': false
+                        });
+                    },
+                    onProgress: (id, name, uploadedBytes, totalBytes) => {
+                        let progress = Math.round( uploadedBytes * ( 100.0 / totalBytes ) );
+                        let filesIndex = this.filesUploading.findIndex( (file) => file.id == id );
+                        this.filesUploading[filesIndex].isUploading = true;
+                        this.filesUploading[filesIndex].fileSize = totalBytes;
+                        this.filesUploading[filesIndex].uploadedFileSize = uploadedBytes;
+                        this.filesUploading[filesIndex].progressBarStyle = {'width': `${progress}%` };
+                    },
+                    onComplete: async (id, name, response, xhr, something) => {
+                        let filesIndex = this.filesUploading.findIndex( (file) => file.id == id );
+                        this.filesUploading[filesIndex].isUploading = false;
+                        let fileSize = this.uploader.methods.getSize(id);
+                        this.filesUploading[filesIndex].fileSize = fileSize;
 
-    if( this.compoundModeEnabled ) {
-    this.processDisabled = false;
-    let uploadToBagId = this.bag.id;
-    axios.post('/api/v1/ingest/fileUploaded', {
-      'fileName' : name,
-      'result' : response,
-      'bagId' : uploadToBagId,
-      'fileSize': fileSize
-      }).then( async ( file ) => {
-        this.filesUploading[filesIndex].uploadedFileId = file.data.data.id;
-        this.filesUploading[filesIndex].uploadedToBagId = file.data.data.bag_id;
+                        if( this.compoundModeEnabled ) {
+                            let uploadToBagId = this.bag.id;
+                            axios.post('/api/v1/ingest/fileUploaded', {
+                                'fileName' : name,
+                                'result' : response,
+                                'bagId' : uploadToBagId,
+                                'fileSize': fileSize
+                            }).then( async ( file ) => {
+                                this.filesUploading[filesIndex].uploadedFileId = file.data.data.id;
+                                this.filesUploading[filesIndex].uploadedToBagId = file.data.data.bag_id;
 
-        if( this.bag.id == uploadToBagId ){ //???
-          await axios.get("/api/v1/ingest/bags/"+uploadToBagId+"/files").then( (files) => {
-            this.files = files.data.data;
+                                if( this.bag.id == uploadToBagId ){ //???
+                                    await axios.get("/api/v1/ingest/bags/"+uploadToBagId+"/files").then( (files) => {
+                                        this.files = files.data.data;
+                                    });
+                                }
+                            })
+                        } else {
+                            axios.post("/api/v1/ingest/files/bag", {
+                                'fileName' : name,
+                                'result' : response,
+                                'fileSize': fileSize
+                            });
+                        }
+                    }
+                }
+            }
         });
-      }
-    })
-    } else {
-    axios.post("/api/v1/ingest/files/bag", {
-      'fileName' : name,
-      'result' : response,
-      'fileSize': fileSize
-      });
-      }
-    }
-    }}});
-    return {
-      uploader: uploader,
-      bag: {},
-      files: {},
-      filesUploading: [],
-      userId: '',
-      userSettings: {
-        workflow: {
-        }
-      },
-      processDisabled: true,
-      fileInputDisabled: false,
-      archives: [],
-      selectedArchive: {},
-      singleArchiveTitle: "",
-      holdings: [],
-      selectedHoldingTitle: "",
-      currentPage: 1,
-      pageSize: 4,
-      pageFrom: 1,
-      pageTo: 4
-      };
+        return {
+            uploader: uploader,
+            bag: {},
+            files: {},
+            filesUploading: [],
+            userId: '',
+            userSettings: {
+                workflow: {
+                }
+            },
+            fileInputDisabled: false,
+            archives: [],
+            selectedArchive: {},
+            singleArchiveTitle: "",
+            holdings: [],
+            selectedHoldingTitle: "",
+            currentPage: 1,
+            pageSize: 4,
+            pageFrom: 1,
+            pageTo: 4
+        };
     },
 
     components: {
-      FineUploader
+        FineUploader
     },
 
     computed: {
+        processDisabled: function() {
+            return this.numberOfFiles === 0 || this.uploadInProgress;
+        },
         numberOfFiles: function() {
             return this.files.length;
         },
-      compoundModeEnabled: function() {
+        compoundModeEnabled: function() {
             let compoundSetting = this.userSettings.workflow.ingestCompoundModeEnabled;
             /* Compound must explicitly be set to false to be disabled */
             return this.userSettings.workflow.ingestCompoundModeEnabled !== undefined ? this.userSettings.workflow.ingestCompoundModeEnabled : true;
         },
         uploadInProgress: function() {
-            return this.filesUploading.length > 0;
+            return this.filesUploading.find( (file) => file.isUploading === true ) || false;
         },
         totalFilesUploading: function() {
             return this.filesUploading.length;
@@ -267,7 +271,7 @@
             axios.delete("/api/v1/ingest/bags/"+bagId+"/files/"+fileId).then ( async (response) => {
                 this.files = (await axios.get('/api/v1/ingest/bags/' + this.bag.id + '/files')).data.data;
                 this.filesUploading = this.filesUploading.filter( (file) => file.uploadedFileId !== fileId );
-        });
+            });
 
         },
         addFileToQueue(payload) {
@@ -285,7 +289,6 @@
             if(this.processDisabled){
                 return;
             }
-            this.processDisabled = true;
             this.fileInputDisabled = true;
 
             await this.doProcessing( this.bag.id );
@@ -311,10 +314,10 @@
         },
         async createBag( bagName, userId, selectedArchive, selectedHoldingTitle ) {
             let createdBag = (await axios.post("/api/v1/ingest/bags/", {
-            name: bagName,
-            owner: userId,
-            archive_uuid: selectedArchive,
-            holding_name: selectedHoldingTitle
+                name: bagName,
+                owner: userId,
+                archive_uuid: selectedArchive,
+                holding_name: selectedHoldingTitle
             })).data.data;
             this.files = [];
             this.filesUploading = [];
@@ -324,7 +327,7 @@
             await axios.get('/api/v1/planning/archives/'+archiveId+'/holdings').then( (response) => {
                 this.holdings = response.data.data;
                 if( !this.customerSelectsHoldings ) {
-                       return;
+                    return;
                 }
                 let defaultHolding = this.holdings.length ? this.holdings[0].title : "";
                 Vue.nextTick( () => {
@@ -344,21 +347,21 @@
                     archive_uuid: archiveId,
                     holding_name: this.selectedHoldingTitle
                 }).then( (response) => {
-                this.bag = response.data.data;
-            });
-        }
-    },
-    async changedHolding(holdingTitle) {
-        let selectedArchive  = this.selectedArchive;
-        this.selectedHoldingTitle = holdingTitle;
-        if( this.compoundModeEnabled ) {
-            let bag = this.bag;
-            Vue.nextTick( async () => {
-            bag = await axios.patch("/api/v1/ingest/bags/"+bag.id, {
-                archive_uuid: selectedArchive,
-                holding_name: holdingTitle
-            }).data;
-            });
+                    this.bag = response.data.data;
+                });
+            }
+        },
+        async changedHolding(holdingTitle) {
+            let selectedArchive  = this.selectedArchive;
+            this.selectedHoldingTitle = holdingTitle;
+            if( this.compoundModeEnabled ) {
+                let bag = this.bag;
+                Vue.nextTick( async () => {
+                    bag = await axios.patch("/api/v1/ingest/bags/"+bag.id, {
+                        archive_uuid: selectedArchive,
+                        holding_name: holdingTitle
+                    }).data;
+                });
             }
         },
     },
@@ -399,9 +402,6 @@
             else {
                 this.bag = (await this.createBag( "", this.userId, this.selectedArchive, this.selectedHoldingTitle ));
             }
-            if(this.filesUploading) {
-                this.processDisabled = false;
-            }
         } else if (this.customerSelectsArchive ) {
             Vue.nextTick( () => {
                 $('#archivePicker').selectpicker('val', this.selectedArchive);
@@ -409,6 +409,6 @@
             });
         }
     }
-    }
+}
 
 </script>

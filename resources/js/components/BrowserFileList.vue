@@ -1,10 +1,10 @@
 <template>
     <div> 
         <div class="row plistHeader text-truncate text-center mt-2">
-          <div class="col-sm-3">Preview</div>
-            <div class="col-sm-7">{{$t('Filename')}}</div>
-            <div class="col-sm-1 text-left">Actions</div>
-            <div class="col-sm-1"><a href="#" title="Close archival package" @click.once="close"><i class="fas fa-backspace plistIcon"></i></a></div>
+          <div class="col-sm-3">{{$t("access.browse.header.preview")}}</div>
+            <div class="col-sm-7">{{$t('access.browse.header.file')}}</div>
+            <div class="col-sm-1 text-left">{{$t('access.browse.header.actions')}}</div>
+            <div class="col-sm-1"><a href="#" :title="$t('access.browse.archive.closeButtonTitle')" @click.once="close"><i class="fas fa-backspace plistIcon"></i></a></div>
         </div>
 
         <span v-if="online">

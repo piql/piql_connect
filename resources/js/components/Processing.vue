@@ -1,12 +1,17 @@
 <template>
     <div class="mb-2 mt-2">
         <div class="row">
-            <div class="col-sm-1 text-right">
+            <div class="col-sm-1 text-left">
               <i class="fas fa-hourglass-half titleIcon"></i>
             </div>
-            <div class="col text-left">
-              <h1 class="ml-0">{{ $t('ingest.processing.header') }}</h1>
-              <div class="ml-0" style="font-size: 0.75rem;">{{ $t('ingest.processing.ingress') }}</div>
+            <div class="col-sm-6 text-left">
+                <h1>{{ $t('ingest.processing.header') }}</h1>
+            </div>
+        </div>
+        <div class="row mt-0 pt-0">
+            <div class="col-sm-1"></div>
+            <div class="col-sm-6 text-left ingressText">
+                {{$t("ingest.processing.ingress")}}
             </div>
         </div>
 

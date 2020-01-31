@@ -1,12 +1,12 @@
 <template>
     <div>
         <div class="row mb-5" style="cursor: help" :title="$t('ingest.offlineStorage.ingress')" >
-            <div class="col-sm-1 text-right">
+            <div class="col-sm-1 text-left">
               <i class="fas fa-clock titleIcon"></i>
             </div>
             <div class="col-sm-11 text-left">
                 <h1 class="ml-0 mt-2" >{{ $t('ingest.offlineStorage.header') }}</h1>
-                <div>Send packages to piqlFilm for cold storage.</div>
+                <div class="ingressText">{{$t('ingest.offlineStorage.ingress')}}</div>
             </div>
         </div>
 
