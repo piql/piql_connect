@@ -12,6 +12,25 @@ use Webpatser\Uuid\Uuid;
 
 class FileMetadataController extends Controller
 {
+    private function validateRequest(Request $request) {
+        return $request->validate([
+            "metadata.dc:title" => "string",
+            "metadata.dc:creator" => "string",
+            "metadata.dc:subject" => "string",
+            "metadata.dc:description" => "string",
+            "metadata.dc:publisher" => "string",
+            "metadata.dc:contributor" => "string",
+            "metadata.dc:date" => "string",
+            "metadata.dc:type" => "string",
+            "metadata.dc:format" => "string",
+            "metadata.dc:identifier" => "string",
+            "metadata.dc:source" => "string",
+            "metadata.dc:language" => "string",
+            "metadata.dc:relation" => "string",
+            "metadata.dc:coverage" => "string",
+            "metadata.dc:rights" => "string",
+        ]);
+    }
     /**
      * Display a listing of the resource.
      *
@@ -38,9 +57,7 @@ class FileMetadataController extends Controller
             abort( response()->json([ 'error' => 400, 'message' => 'Metadata is read only' ], 400 ) );
         }
 
-        $requestData = $request->validate([
-            "dc:title" => "string",
-        ]);
+        $requestData = $this->validateRequest($request);
 
         $metadata = new Metadata([
             "uuid" => Uuid::generate()->string,
@@ -78,12 +95,8 @@ class FileMetadataController extends Controller
         if($file->bag->status != "open") {
             abort( response()->json([ 'error' => 400, 'message' => 'Metadata is read only' ], 400 ) );
         }
-
-        $requestData = $request->validate([
-            "dc:title" => "string",
-        ]);
-
-        $metadata->metadata = $requestData + $metadata->metadata;
+        $requestData = $this->validateRequest($request);
+        $metadata->metadata = $requestData['metadata'] + $metadata->metadata;
         $metadata->save();
 
         return response()->json([ "data" => $file->refresh()->metadata->map(function($element) {

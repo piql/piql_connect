@@ -15,9 +15,8 @@ class MetadataResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'uuid' => $this->uuid,
-            'metadata' => $this->metadata
-
+            'id' => $this->id,
+            'metadata' => (object)$this->metadata
         ];
 
     }

@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Bag;
 use App\File;
+use App\Http\Resources\MetadataResource;
 use App\Metadata;
 use App\User;
 use Tests\TestCase;
@@ -76,7 +77,8 @@ class FileMetadataControllerTest extends TestCase
             "modified_by" => $this->user->id,
         ]);
         $response = $this->actingAs( $this->user )
-            ->json('POST', route('api.ingest.files.metadata.store', $this->file->id),  $metadata->metadata);
+            ->json('POST', route('api.ingest.files.metadata.store', $this->file->id),
+                (new MetadataResource($metadata))->toArray(null));
         $response->assertStatus( 200 );
 
     }
@@ -88,7 +90,8 @@ class FileMetadataControllerTest extends TestCase
         ]);
         $metadata->metadata = ['dc:title' => "Tøv"];
         $response = $this->actingAs( $this->user )
-            ->json('PATCH', route('api.ingest.files.metadata.update', [$this->file->id, $this->file->metadata[0]->id]),  $metadata->metadata);
+            ->json('PATCH', route('api.ingest.files.metadata.update', [$this->file->id, $this->file->metadata[0]->id]),
+                (new MetadataResource($metadata))->toArray(null));
         $response->assertStatus( 200 );
 
     }
@@ -102,7 +105,8 @@ class FileMetadataControllerTest extends TestCase
         ]);
         $metadata->metadata = ['dc:title' => "Tøv"];
         $response = $this->actingAs( $this->user )
-            ->json('PATCH', route('api.ingest.files.metadata.update', [$this->file->id, $this->file->metadata[0]->id]),  $metadata->metadata);
+            ->json('PATCH', route('api.ingest.files.metadata.update', [$this->file->id, $this->file->metadata[0]->id]),
+                (new MetadataResource($metadata))->toArray(null));
         $response->assertStatus( 400 );
 
     }
