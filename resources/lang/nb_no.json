@@ -152,6 +152,7 @@
     "access.browse.primaryContact": "Primærkontakt",
     "access.browse.contactArea": "Kontaktområde",
     "access.browse.contactArea.address": "Adresse",
+    "access.browse.metadata.editFile": "Fil metadata",
 
     "access.browse.header.preview": "Forhåndsvisning",
     "access.browse.header.name": "Navn",

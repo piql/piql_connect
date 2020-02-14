@@ -26,4 +26,9 @@ class File extends Model
     {
         return Storage::disk('uploader')->path($this->storagePath());
     }
+
+    public function metadata()
+    {
+        return $this->morphMany('App\Metadata', 'parent');
+    }
 }

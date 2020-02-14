@@ -145,6 +145,7 @@
     "access.browse.primaryContact": "Primary contact",
     "access.browse.contactArea": "Contact area",
     "access.browse.contactArea.address": "Address",
+    "access.browse.metadata.editFile": "File metadata",
 
     "access.browse.header.preview": "Preview",
     "access.browse.header.name": "Name",

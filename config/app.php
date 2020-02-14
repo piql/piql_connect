@@ -184,7 +184,8 @@ return [
         App\Providers\SettingsProvider::class,
         App\Providers\ArchivematicaConnectionServiceProvider::class,
         App\Providers\ArchivematicaDashboardClientProvider::class,
-        App\Providers\ArchivematicaStorageClientProvider::class
+        App\Providers\ArchivematicaStorageClientProvider::class,
+        App\Providers\MetadataGeneratorServiceProvider::class,
 
     ],
 

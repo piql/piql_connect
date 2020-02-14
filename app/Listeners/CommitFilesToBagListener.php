@@ -6,7 +6,10 @@ use App\Events\BagFilesEvent;
 use App\Events\BagCompleteEvent;
 use App\Events\ErrorEvent;
 use App\Events\InitiateTransferToArchivematicaEvent;
+use App\Interfaces\MetadataGeneratorInterface;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use Log;
 use BagitUtil;
 use App\Traits\BagOperations;
@@ -15,15 +18,17 @@ class CommitFilesToBagListener implements ShouldQueue
 {
     use BagOperations;
 
+    protected $metadataGenerator;
     protected $bagIt;
     /**
      * Create the event listener.
      *
      * @return void
      */
-    public function __construct(BagitUtil $bagIt = null)
+    public function __construct(BagitUtil $bagIt = null, MetadataGeneratorInterface $metadataGenerator)
     {
         $this->bagIt = $bagIt ?? new BagitUtil();
+        $this->metadataGenerator = $metadataGenerator;
     }
 
     /**
@@ -50,15 +55,44 @@ class CommitFilesToBagListener implements ShouldQueue
             return;
         }
 
+        $metadataFileName = Str::random(40)."-metadata.csv";
+        $metadataWriter = $this->metadataGenerator->createMetadataWriter([
+            'filename' => $metadataFileName,
+        ]);
+
         foreach ($files as $file)
         {
             if( ($file->filename === "metadata.csv") && $bag->owner()->settings->getIngestMetadataAsFileAttribute() )
                 $this->bagIt->addMetadataFile($file->storagePathCompleted(), $file->filename);
             else
                 $this->bagIt->addFile($file->storagePathCompleted(), $file->filename);
+
+            if( $bag->owner()->settings->getIngestMetadataAsFileAttribute() !== true ) {
+                if ($file->metadata->count() > 0) {
+                    // append metadata to file
+                    $retval = $metadataWriter->write([
+                        'object' => $file->filename,
+                        'metadata' => $file->metadata[0]->metadata
+                    ]);
+                    if (!$retval) {
+                        Log::error("Generating metadata for Bag " . $bag->id . " failed!");
+                        event(new ErrorEvent($bag));
+                    }
+                }
+            }
+        }
+
+        // add metadata file to bagit tool
+        if( Storage::exists($metadataFileName) && ( $bag->owner()->settings->getIngestMetadataAsFileAttribute() !== true ) ) {
+            $this->bagIt->addMetadataFile(Storage::path($metadataFileName), "metadata.csv");
         }
 
         $result = $this->bagIt->createBag($bag->storagePathCreated());
+
+        // delete metadata file
+        if( Storage::exists($metadataFileName) && ( ! env('APP_DEBUG_SAVE_METADATA_FILE', false) ) ){
+            Storage::delete($metadataFileName);
+        }
 
         if($result)
         {

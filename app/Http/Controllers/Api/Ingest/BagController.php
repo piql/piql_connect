@@ -118,10 +118,7 @@ class BagController extends Controller
                     'archive_uuid' => 'required|uuid',
                     'holding_name' => 'required|string',
                 ]);
-                $bag->storage_properties->update([
-                    'archive_uuid' => $validatedData->archive_uuid,
-                    'holding_name' => $validatedData->holding_name
-                ]);
+                $bag->storage_properties->update($validatedData);
 
                 $resultBag =
                     Bag::query()

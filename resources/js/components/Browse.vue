@@ -1,19 +1,19 @@
 <template>
-  <div class="mt-2 mb-2">
-      <div class="row">
-          <div class="col-sm-1 text-left">
-              <i class="fas fa-hdd mr-3 titleIcon"></i>
-          </div>
-          <div class="col-sm-6 text-left">
-              <h1>{{$t('access.browse')}}</h1>
-          </div>
-      </div>
-      <div class="row mt-0 pt-0">
+    <div class="mt-2 mb-2">
+        <div class="row">
+            <div class="col-sm-1 text-left">
+                <i class="fas fa-hdd mr-3 titleIcon"></i>
+            </div>
+            <div class="col-sm-6 text-left">
+                <h1>{{$t('access.browse')}}</h1>
+            </div>
+        </div>
+        <div class="row mt-0 pt-0">
             <div class="col-sm-1"></div>
             <div class="col-sm-6 text-left ingressText">
                 {{$t('access.browse.ingress')}}
             </div>
-      </div>
+        </div>
 
         <form class="form mb-1 ml-0 mr-0" v-on:submit.prevent>
             <div class="row mt-1 mb-0 ">
@@ -44,18 +44,18 @@
                 </div>
 
                 <div class="col-md-2 col-lg-2">
-                  <div class="form-group">
-                      <label for="searchContents" class="col-form-label-sm">{{$t('access.browse.withContents')}}</label>
-                      <div class="input-group">
-                          <div class="input-group addon">
-                              <input v-model="searchField" id="searchContents" type="text" class="form-control" style="border-radius: 3px">
-                              <span class="input-group-addon">
+                    <div class="form-group">
+                        <label for="searchContents" class="col-form-label-sm">{{$t('access.browse.withContents')}}</label>
+                        <div class="input-group">
+                            <div class="input-group addon">
+                                <input v-model="searchField" id="searchContents" type="text" class="form-control" style="border-radius: 3px">
+                                <span class="input-group-addon">
                                   <i class="fas fa-search search-icon-inline mt-2 mr-2"></i>
                               </span>
-                          </div>
-                      </div>
+                            </div>
+                        </div>
                     </div>
-                  </div>
+                </div>
 
                 <div class="col-md-2 pr-0 text-align-right">
                     <location-picker :holding='selectedArchiveUuid' :initialSelectedLocation="selectedLocation" :locations="locations" @locationSelectionChanged="locationSelectionChanged"></location-picker>
@@ -65,26 +65,26 @@
 
         <span v-if="fileMode === false">
             <browser-list v-if="holdingSelected" @openObject="openObject" :location="selectedLocation" :dataObjects="currentObjects"
-                @addObjectToRetrieval="addObjectToRetrieval" :selectedArchive="selectedArchiveUuid" :selectedHolding="selectedHolding"/>
+                          @addObjectToRetrieval="addObjectToRetrieval" :selectedArchive="selectedArchiveUuid" :selectedHolding="selectedHolding"/>
             <div class="row thumbnailList invisible" v-for="pad in padPackageItems"></div>
             <div class="row text-center pagerRow">
                 <div class="col">
                     <Pager :meta='packagePageMeta' @updatePage='packageUpdatePage' />
                 </div>
             </div>
-    </span>
-    <span v-if="fileMode">
-        <browser-file-list :dataObjects="currentOpenObjectFiles" :location="selectedLocation" :dipId="currentOpenDipId"
-            @close="closeFileList" @addFileToRetrieval="addFileToRetrieval" />
-        <div class="row plist thumbnailList invisible" v-for="pad in padFileItems"></div>
-        <div class="row text-center pagerRow">
-            <div class="col">
-                <Pager :meta='filesPageMeta' @updatePage='filesUpdatePage' />
+        </span>
+        <span v-if="fileMode">
+            <browser-file-list :dataObjects="currentOpenObjectFiles" :location="selectedLocation" :dipId="currentOpenDipId"
+                               @close="closeFileList" @addFileToRetrieval="addFileToRetrieval" />
+            <div class="row plist thumbnailList invisible" v-for="pad in padFileItems"></div>
+            <div class="row text-center pagerRow">
+                <div class="col">
+                    <Pager :meta='filesPageMeta' @updatePage='filesUpdatePage' />
+                </div>
             </div>
-        </div>
-    </span>
+        </span>
 
-</div>
+    </div>
 </template>
 
 <script>

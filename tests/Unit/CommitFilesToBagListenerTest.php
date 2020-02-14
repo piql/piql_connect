@@ -7,10 +7,13 @@ use App\Events\BagCompleteEvent;
 use App\Events\BagFilesEvent;
 use App\Events\ErrorEvent;
 use App\Listeners\CommitFilesToBagListener;
+use App\User;
+use App\UserSetting;
 use BagitUtil;
 use Illuminate\Support\Facades\Event;
 use Mockery;
 use Tests\TestCase;
+use App\Interfaces\MetadataGeneratorInterface;
 
 class CommitFilesToBagListenerTest extends TestCase
 {
@@ -21,10 +24,21 @@ class CommitFilesToBagListenerTest extends TestCase
         parent::setUp();
         Event::fake();
 
+        $userSetting = Mockery::mock(UserSetting::class);
+        $userSetting->shouldReceive('getIngestMetadataAsFileAttribute')->andReturn(true);
+
+        $user = Mockery::mock(User::class);
+        $user->shouldReceive('getAttribute' )
+            ->with('settings')->andReturn($userSetting);
+
         $this->bag = Mockery::mock(Bag::class);
         $this->bag->shouldReceive('canTransition')->once()->andReturn(true);
         $this->bag->shouldReceive('applyTransition')->once()->andReturnSelf();
         $this->bag->shouldReceive('save')->once()->andReturnSelf();
+        $this->bag->shouldReceive( 'owner' )
+            ->andReturn( $user );
+
+
     }
 
     public function test_given_a_bag_with_files_when_commiting_files_it_dispatches_bag_complete()
@@ -44,8 +58,12 @@ class CommitFilesToBagListenerTest extends TestCase
             ->twice()
             ->andReturn( collect([new \App\File, new \App\File] ));
 
+        $metadataGenerator = Mockery::mock( MetadataGeneratorInterface::class, function( $mock ) {
+            $mock->shouldReceive('createMetadataWriter')->once();
+        });
+
         $event = new BagFilesEvent( $bag );
-        $listener = new CommitFilesToBagListener( $bagitUtil );
+        $listener = new CommitFilesToBagListener( $bagitUtil, $metadataGenerator );
         $listener->handle( $event );
 
         Event::assertDispatched( BagCompleteEvent::class );
@@ -63,8 +81,12 @@ class CommitFilesToBagListenerTest extends TestCase
         $bagitUtil->shouldReceive('addFile')->never();
         $bagitUtil->shouldReceive('createBag')->never();
 
+        $metadataGenerator = Mockery::mock( MetadataGeneratorInterface::class, function( $mock ) {
+            $mock->shouldReceive('createMetadataWriter')->never();
+        });
+
         $event = new BagFilesEvent($bag);
-        $listener = new CommitFilesToBagListener($bagitUtil);
+        $listener = new CommitFilesToBagListener($bagitUtil, $metadataGenerator);
         $listener->handle($event);
 
         Event::assertNotDispatched( BagCompleteEvent::class );
@@ -85,8 +107,12 @@ class CommitFilesToBagListenerTest extends TestCase
         $bag->shouldReceive('storagePathCreated')->once();
         $bag->shouldReceive('getAttribute')->with('id')->once();
 
+        $metadataGenerator = Mockery::mock( MetadataGeneratorInterface::class, function( $mock ) {
+            $mock->shouldReceive('createMetadataWriter')->once();
+        });
+
         $event = new BagFilesEvent( $bag );
-        $listener = new CommitFilesToBagListener( $bagitUtil );
+        $listener = new CommitFilesToBagListener( $bagitUtil, $metadataGenerator );
         $listener->handle( $event );
 
         Event::assertNotDispatched( BagCompleteEvent::class );
