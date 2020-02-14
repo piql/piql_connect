@@ -191,5 +191,13 @@
     "Data Ingested (monthly)": "Opplastet data",
     "Data Accessed (monthly)": "Nedlastet data",
     "The dashboard gives you a breakdown of relevant information about on your data." : "Denne siden gir deg en oversikt med relevant informasjon om dine data.",
-    "File formats Ingested": "Opplastede filformater"
+    "File formats Ingested": "Opplastede filformater",
+
+    "timeout.warning": "Advarsel om inaktivitet. Automatisk utlogging om",
+    "timeout.seconds": "sekunder",
+    "timeout.text1": "Du har nå vært inaktiv i snart",
+    "timeout.minutes": "minutter",
+    "timeout.text2": "Trykk Fortsett om du ønsker å forbli innlogget, ellers vil du automatisk logges ut av piqlConnect.",
+    "timeout.continue": "Fortsett"
+
 }

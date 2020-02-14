@@ -2352,3 +2352,12 @@ input[type=text] {
     justify-content: space-evenly;
 }
 
+.modal-title {
+    margin: 0 auto;
+}
+.modalHeader {
+    font-family: $font_agenda;
+    font-size: 2rem;
+    text-align: center;
+    margin: 0 auto;
+}

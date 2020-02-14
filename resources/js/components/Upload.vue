@@ -139,6 +139,7 @@ export default {
                         this.filesUploading[filesIndex].fileSize = totalBytes;
                         this.filesUploading[filesIndex].uploadedFileSize = uploadedBytes;
                         this.filesUploading[filesIndex].progressBarStyle = {'width': `${progress}%` };
+                        this.refreshSession(); //Needed if paginate-navigated away from the first page
                     },
                     onComplete: async (id, name, response, xhr, something) => {
                         let filesIndex = this.filesUploading.findIndex( (file) => file.id == id );
