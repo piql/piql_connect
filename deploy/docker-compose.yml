@@ -18,7 +18,7 @@ services:
       dockerfile: ./app/Dockerfile
     volumes:
       - ".././:/var/www"
-      - "archivematica_pipeline_data:/var/www/storage/am/am-pipeline-data:ro"
+      - "archivematica_pipeline_data:/var/www/storage/am/am-pipeline-data:rw"
       - "archivematica_storage_service_location_data:/var/www/storage/am/ss-location-data:rw"
       - ./supervisor/:/etc/supervisor/
     links:

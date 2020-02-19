@@ -48,8 +48,8 @@ class TransferPackageToStorageTest extends TestCase
         Passport::actingAs( $this->testUser );
         $this->faker = Faker::create();
 
-        $this->destinationStorage = Storage::fake();
-        $this->sourceStorage = Storage::fake();
+        $this->destinationStorage = Storage::fake("dst");
+        $this->sourceStorage = Storage::fake("src");
 
         $this->s3Configuration = S3Configuration::create( $this->makeS3ConfigurationFromEnv( "aip" ) );
 
