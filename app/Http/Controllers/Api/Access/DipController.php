@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\DipResource;
 use App\Http\Resources\FileObjectResource;
 use App\Dip;
+use http\Env\Response;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use App\Interfaces\ArchivalStorageInterface;
@@ -87,6 +88,23 @@ class DipController extends Controller
                      ->paginate( env('DEFAULT_ENTRIES_PER_PAGE') );
 
         return FileObjectResource::collection( $files );
+    }
+
+    public function aipFile( Request $request )
+    {
+        $dipFileObject = FileObject::find( $request->fileId );
+        $dip = Dip::find( $request->dipId );
+
+        if(!preg_match('/(\/objects\/.*)(\w{8}-\w{4}-\w{4}-\w{4}-\w{12}-(.*)?(\..*))$/', $dipFileObject->fullpath, $matches, PREG_OFFSET_CAPTURE)){
+            return response();
+        }
+        $aipFileObjectPath = $matches[1][0].$matches[3][0];
+
+        $files = $dip->storage_properties->aip->fileObjects()->where('fullpath', 'LIKE', "%".$aipFileObjectPath."%")->get();
+        if(count($files))
+            return FileObjectResource::collection( $files );
+
+        return response();
     }
 
     public function file_preview( Request $request, ArchivalStorageInterface $storage )
