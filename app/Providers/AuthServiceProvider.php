@@ -27,6 +27,8 @@ class AuthServiceProvider extends ServiceProvider
         $this->registerPolicies();
 
         Passport::routes();
+        Passport::tokensExpireIn(now()->addDays(15));
         Passport::enableImplicitGrant();
+        Passport::cookie(env('APP_NAME', "piqlConnect")."_api_token" );
     }
 }

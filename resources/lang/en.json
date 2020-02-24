@@ -173,6 +173,15 @@
     "access.retrieved.noItems": "Your files are now ready for dowload!",
     "access.retrieved.idle": "No files are currently being retrieved.",
     "access.download.download": "Download",
-    "access.download.takeOffline": "Take offline"
+    "access.download.takeOffline": "Take offline",
+
+    "timeout.warning": "Inactivity warning. Automatic log out in",
+    "timeout.seconds": "seconds",
+    "timeout.text1": "You have been inactive for",
+    "timeout.minutes": "minutes",
+    "timeout.text2": "Click the Continue button if you wish to stay logged in. If you take no action, you will automatically be logged out of piqlConnect",
+    "timeout.continue": "Continue"
+
+
 
 }

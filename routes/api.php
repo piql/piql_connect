@@ -28,7 +28,7 @@ Route::group(['prefix' => 'v1'], function () {
 Route::group(['prefix' => 'v1'], function () {
 });
 
-Route::group(['prefix' => 'v1' , 'middleware' => 'auth:api'], function () {
+Route::group(['prefix' => 'v1' , 'middleware' => ['auth:api', 'activity']], function () {
     Route::post('logout', 'Auth\ApiLoginController@logout');
 
     Route::group(['prefix' => 'system'], function () {

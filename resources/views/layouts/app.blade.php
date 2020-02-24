@@ -10,6 +10,15 @@
         <link href="{{ asset('css/app.css') }}" rel="stylesheet" />
         <script type="text/javascript" src="{{ mix('js/vendor.js') }}" defer></script>
         <script type="text/javascript" src="{{ mix('js/app.js') }}" defer></script>
+@if (Route::current()->getName() == 'login')
+		<script type="text/javascript">
+			let timeout = {{env('SESSION_LIFETIME', 120) * 60000 }} - 1000;
+			console.log("refreshing in " + timeout);
+			setTimeout(function(){
+				location.reload();
+			}, timeout );
+		</script>
+@endif
     </head>
 
 @if (Route::current()->getName() == 'login')

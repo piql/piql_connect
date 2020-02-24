@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
 class LoginController extends Controller
@@ -37,8 +38,9 @@ class LoginController extends Controller
         $this->middleware('guest')->except('logout');
     }
 
-    public function showLogin()
+    public function showLogin(Request $request)
     {
+		$request->session()->put('sessionLifetimeMs', env('SESSION_LIFETIME', 120 ) * 60000 );
         return view('auth/login');
     }
 
