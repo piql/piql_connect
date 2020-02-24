@@ -7,7 +7,7 @@
                 </div>
 
                 <div class="col-sm-2 pt-sm-3 text-center" title="Number of archival packages in this piqlFilm">
-                    {{item.bags_count}}
+                    {{item.archive_objects}}
                 </div>
 
                 <div class="col-sm-2 d-flex flex-row justify-content-start" title="Total file size of all archival packages in this piqlFilm">

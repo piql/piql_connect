@@ -7,12 +7,14 @@ use Illuminate\Database\Eloquent\Model;
 use Webpatser\Uuid\Uuid;
 use Illuminate\Support\Facades\Log;
 
+
 class Job extends Model
 {
     protected $table = 'jobs';
     protected $fillable = [
         'name', 'status', 'owner'
     ];
+    protected $appends = ['size', 'archive_objects'];
 
     public static function boot()
     {
@@ -34,6 +36,11 @@ class Job extends Model
         return $this->belongsToMany('App\Bag')->using('App\BagJob');
     }
 
+    public function aips()
+    {
+        return $this->morphedByMany(Aip::class, 'archivable', null, 'archive_id');
+    }
+
     public static function currentJob($owner)
     {
         Log::info("currentJob() owner".$owner);
@@ -52,11 +59,16 @@ class Job extends Model
         return $job;
     }
 
+    public function getArchiveObjectsAttribute() {
+        return $this->aips()->count();
+    }
+
+    public function getSizeAttribute()
+    {
+        return $this->getJobSize();
+    }
+
     public function getJobSize() {
-        $bags = $this->bags;
-        $size = 0;
-        foreach ($bags as $bag)
-            $size += $bag->getBagSize();
-        return $size;
+        return $this->aips->map(function ($aip) {return $aip->fileObjects()->sum('size');})->sum();
     }
 }
