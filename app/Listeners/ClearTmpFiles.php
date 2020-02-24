@@ -9,6 +9,7 @@ use App\Events\ErrorEvent;
 use BagitUtil;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use App\Bag;
+use Illuminate\Support\Facades\Storage;
 use Log;
 
 class ClearTmpFiles implements ShouldQueue
@@ -37,6 +38,10 @@ class ClearTmpFiles implements ShouldQueue
         }
 
         $deleteFile($bag->storagePathCreated());
+
+        if(Storage::disk('am')->delete($bag->zipBagFileName()) === false) {
+            Log::warning("Failed to delete {$bag->zipBagFileName()} from storage".Storage::disk('am')->path(""));
+        }
     }
 
 }
