@@ -1,5 +1,5 @@
 {
-	"authHost": "https://app_authentication_server",
+	"authHost": "http://app_authentication_server",
 	"authEndpoint": "/broadcasting/auth",
 	"clients": [],
 	"database": "redis",

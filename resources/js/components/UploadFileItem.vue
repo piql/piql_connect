@@ -1,13 +1,13 @@
 <template> 
     <div class="row plist mb-0 pb-0">
-        <div class="pl-5 col-md-7 col-sm-5 col-xs-3 text-left text-truncate align-self-center">
-            <div v-if="isUploading" class="progress">
-                <div class="progress-bar bg-signal text-left" role="progressbar" v-bind:style="progressBarStyle" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
-                    {{file.filename}}
+        <div class="pl-3 col-md-7 col-sm-5 col-xs-3 text-left text-truncate align-self-center">
+            <div v-if="isUploading" class="progress upload-progress bg-fill">
+                <div class="progress-bar bg-brand text-left" role="progressbar" v-bind:style="progressBarStyle" v-bind:aria-valuenow="progressPercentage" aria-valuemin="0" aria-valuemax="100">
+                    <span class="upload-text pl-2">{{file.filename}}</span>
                 </div>
             </div>
             <div v-else>
-              <div class="text-left">
+              <div class="pl-2 text-left">
                 {{file.filename}}
               </div>
             </div>
@@ -57,6 +57,9 @@
             },
             progressBarStyle() {
                 return this.file.progressBarStyle;
+            },
+            progressPercentage() {
+                return this.file.progressPercentage;
             },
             isUploading() {
                 return this.file.isUploading;

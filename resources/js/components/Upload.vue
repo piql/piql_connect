@@ -126,6 +126,7 @@ export default {
                             'id': id,
                             'filename': name,
                             'progressBarStyle': "width: 0%",
+                            'progressPercentage': 0,
                             'uploadedFileId': '',
                             'fileSize': 0,
                             'uploadedFileSize': 0,
@@ -139,6 +140,7 @@ export default {
                         this.filesUploading[filesIndex].fileSize = totalBytes;
                         this.filesUploading[filesIndex].uploadedFileSize = uploadedBytes;
                         this.filesUploading[filesIndex].progressBarStyle = {'width': `${progress}%` };
+                        this.filesUploading[filesIndex].progressPercentage = progress;
                         this.refreshSession(); //Needed if paginate-navigated away from the first page
                     },
                     onComplete: async (id, name, response, xhr, something) => {
@@ -393,6 +395,7 @@ export default {
                     id: index+100000,  /*A large enough number to avoid collisions with id's provided by FineUploader */
                     filename: file.filename,
                     progressBarStyle: "width: 0%",
+                    progressPercentage: "0",
                     uploadedFileId: file.id,
                     uploadedToBagId: file.bag_id,
                     fileSize: file.filesize,

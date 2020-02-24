@@ -406,6 +406,7 @@ a {
 
 .listActionItems {
     color: $color_signal;
+    justify-content: space-evenly;
     //font-size: 28px;
 }
 .list {
@@ -1373,14 +1374,16 @@ th {
         }
     }
 }
+
 .piqlIt {
-    height: 2.2rem;
+    height: 2.7rem;
+    width: 100%;
     background: $color_main_brand;
     background-image: $image_piql-logo-white_url;
-    background-size: 1.8rem;
+    background-size: 2.2rem;
     background-repeat: no-repeat;
-    background-position-x: 1.5rem;
-    background-position-y: -0.2rem;
+    background-position-x: center;
+    background-position-y: center;
     background-origin: content-box;
     &:hover {
         background-color: $color_fill_dark;
@@ -2079,10 +2082,30 @@ th {
     background-color: $color_signal !important;
 }
 
+.bg-fill {
+    background-color: $color_fill;
+}
+
+.bg-fill-light {
+    background-color: $color_fill_1;
+}
+
+.bg-fill-verylight {
+    background-color: $color_fill_2;
+}
+
+.bg-secondary {
+    background-color: $color_secondary;
+}
 
 .fg-black {
     color: $black !important;
 }
+
+.fg-white {
+    color: $white !important;
+}
+
 
 .fill-height {
     padding-bottom: 100% !important;
@@ -2215,57 +2238,26 @@ input[type=text] {
     //font-size: 21px;
 }
 
-.progress {
+.bucket-progress {
+    width: 100%;
     height: 3rem;
 }
 
+
+.bucket-text {
+    font-size: 1.2rem;
+}
+
+.upload-text {
+    font-size: 1rem;
+    color: $white !important;
+}
+
+.upload-progress {
+    height: 2.5rem;
+}
 .uploadFileList {
     min-height: 5rem;
-}
-
-.progress-bar{
-    margin-top: 1px;
-    border-radius: 8px;
-    position:relative;
-    border:#ccc solid 1px;
-    width: auto;
-    height: 3rem;
-    vertical-align: middle;
-    overflow:hidden;
-    font-family:$font_agenda;
-    //font-size:20px;
-    .bar{
-        position:absolute;
-        top:0;
-        height:100%;
-        overflow:hidden;
-        span{
-            padding-top: 1px;
-            position:absolute;
-            display:block;
-            width: auto;
-            height:100%;
-            text-align:center;
-        }
-        &.positive{
-            background:$color_signal;
-            left:0;
-            width:54%;
-            span{
-                left:0;
-                color:$color_fill_0;
-            }
-        }
-        &.negative{
-            background:$color_fill_0;
-            right:0;
-            width:46%;
-            span{
-                right:0;
-                color:$color_fill_dark;
-            }
-        }
-    }
 }
 
 .page-item {
