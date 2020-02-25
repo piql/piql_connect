@@ -299,10 +299,15 @@
                     }));
                 });
             },
-            addFileToRetrieval: async function(file) {
-                this.retrievalItems.push(file);
+            addFileToRetrieval: async function( fileObject ) {
+                /* For now, this is a fileObject resource entity. We really need an abstraction on top,
+                    to stop leaking internal data. We could for example push a unique id linked to the
+                    film reel and a filename for visualization and that should be enough.
+                */
+
+                this.retrievalItems.push(fileObject);
                 await (axios.post('/api/v1/storage/retrievals/add', {
-                    'fileId' : file.id,
+                    'fileObjectId' : fileObject.id,
                 }));
             },
         },

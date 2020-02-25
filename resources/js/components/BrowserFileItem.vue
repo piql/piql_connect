@@ -21,13 +21,16 @@
     import axios from 'axios';
     export default {
         async mounted() {
-            let thumbnail = await axios.get('/api/v1/access/dips/'+this.dipId+'/thumbnails/files/'+this.item.id, { responseType: 'blob' });
-            this.aipItem = (await axios.get('/api/v1/access/dips/'+this.dipId+'/aipfile/'+this.item.id)).data.data[0];
-            this.fileName = this.aipItem.filename;
-            console.log(this.aipItem);
-            let reader = new FileReader();
-            reader.onload = e => this.thumbnailImage = reader.result;
-            reader.readAsDataURL( thumbnail.data );
+            axios.get( '/api/v1/access/dips/'+this.dipId+'/aipfile/'+this.item.id ).then( (result) => {
+                this.aipItem = result.data.data[0];
+                this.fileName = this.aipItem.filename;
+            });
+
+            axios.get('/api/v1/access/dips/'+this.dipId+'/thumbnails/files/'+this.item.id, { responseType: 'blob' }).then( (thumbnail) => {
+                let reader = new FileReader();
+                reader.onload = e => this.thumbnailImage = reader.result;
+                reader.readAsDataURL( thumbnail.data );
+            });
         },
         props: {
             item: Object,

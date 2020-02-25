@@ -12,7 +12,8 @@
             v-bind:item="item" v-bind:key="item.id" @openObject="openObject"/>
         </span>
         <span v-if="offline">
-            <browser-file-item-offline  v-for="item in dataObjects" :archive="selectedArchive" :holding="selectedHolding" v-bind:item="item" v-bind:key="item.id" @openObject="openObject" @addFileToRetrieval="addFileToRetrieval"/>
+            <browser-file-item-offline  v-for="item in dataObjects" :archive="selectedArchive" :holding="selectedHolding" 
+            v-bind:item="item" v-bind:key="item.id" @openObject="openObject" @addFileToRetrieval="addFileToRetrieval"/>
         </span>
 
     </div>
