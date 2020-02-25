@@ -9,7 +9,7 @@
             <div class="col-sm-1 text-center">{{$t('access.ready.remove')}}</div>
         </div>
 
-        <ReadyToRetrieveFile v-for="file in files" v-bind:item="file" v-bind:key="file.id"/>
+        <ReadyToRetrieveFile v-for="file in files" v-bind:item="file" v-bind:key="file.id" @removeFromRetrieval="removeFromRetrieval"/>
 
         <div class="row mt-5" v-show="hasFiles">
             <div class="col-sm text-center">

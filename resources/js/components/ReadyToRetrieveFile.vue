@@ -22,15 +22,18 @@
 <script>
 export default {
     async mounted() {
-        let bagId = this.item.id;
     },
     data() {
         return {
-            bag: {},
         };
     },
     props: {
-        item: Object
+        item: Object,
+    },
+    methods: {
+        removeFromRetrieval: function() {
+            this.$emit('removeFromRetrieval', this.item.id);
+        },
     }
 }
 </script>
