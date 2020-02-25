@@ -290,13 +290,8 @@
                 this.selectedLocation = loc;
             },
             addObjectToRetrieval: async function(item) {
-                let objectFiles = (await( axios.get("/api/v1/access/aips/"+item.id+"/files"))).data;
-
-                objectFiles.map( async (file) => {
-                    this.retrievalItems.push(file);
-                    await (axios.post('/api/v1/storage/retrievals/add', {
-                        'fileId' : file.id,
-                    }));
+                axios.post('/api/v1/storage/retrievals/add', {
+                    'aipUuid' : item.storage_properties.aip_uuid
                 });
             },
             addFileToRetrieval: async function( fileObject ) {

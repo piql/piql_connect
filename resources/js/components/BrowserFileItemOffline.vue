@@ -1,13 +1,16 @@
 <template>
         <div class="row plist">
-            <div class="col-sm-3 text-center">
+            <div class="col-sm-2 text-center">
                 <img class="thumbnailImage" v-bind:src="thumbnailImage">
             </div>
+            <div class="col-sm-1"></div>
             <div class="col text-center align-self-center text-truncate">
                 {{fileName}}
             </div>
-            <div class="col-sm-2">
-                <a href="#" @click="addFileToRetrieval"><i class="fas fa-file-export titleIcon"></i></a>
+            <div class="col-sm-1 d-inline-flex align-self-center">
+                <a href="#" @click="addFileToRetrieval"><i class="fas fa-file-export actionIcon"></i></a>
+            </div>
+            <div class="col-sm-1">
             </div>
         </div>
 </template>
