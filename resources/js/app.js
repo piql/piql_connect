@@ -6,8 +6,11 @@
 require('jquery');
 require('bootstrap');
 require('bootstrap-select');
+require('bootstrap-vue');
 window.Vue = require('vue');
 import VueInternationalization from 'vue-i18n';
+import {BootstrapVue} from 'bootstrap-vue';
+window.Vue.use(BootstrapVue);
 
 /** Function to collapse/expand sidemenu
 Affects the sideMenu and contentContainer. Reduces size of sideMenu
@@ -121,9 +124,26 @@ files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(
  */
 require('../../node_modules/filesize/lib/filesize.es6.js');
 
+let refreshSessionActivity = Vue.mixin({
+        beforeUpdate: function() {
+            if( this.noRefresh !== true ){ 
+                this.refreshSession();
+            }
+        },
+        methods: {
+            refreshSession: () => { sessionStorage.setItem( "lastActivityTime", Date.now() );}
+        },
+		props: {
+			noRefresh: {
+				type: Boolean,
+				default: false
+			}
+		},
+});
 const app = new Vue({
     el: '#app',
     i18n,
+    mixins: [refreshSessionActivity],
     data: {
     },
     methods: {

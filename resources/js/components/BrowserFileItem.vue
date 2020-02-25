@@ -5,12 +5,13 @@
                 <img class="thumbnailImage" v-bind:src="thumbnailImage">
             </div>
             <div class="col text-center align-self-center text-truncate">
-                {{item.filename}}
+                {{fileName}}
             </div>
-            <div class="col-sm-1 ml-3 text-right align-self-center">
-                <a @click.once="download" href="#" data-toggle="tooltip" title="Download normalized file"><i class="fas fa-file-download actionIcon text-center"></i></a>
-              </div>
-            <div class="col-sm-1"></div> 
+            <div class="col-sm-2 d-inline-flex align-self-center">
+                <a class="m-auto" @click.once="editMetadata()" href="#" data-toggle="tooltip" title="Edit metadata"><i class="fas fa-tags actionIcon text-center"></i></a>
+                <a class="m-auto" @click.once="download" href="#" data-toggle="tooltip" title="Download file"><i class="fas fa-file-download actionIcon text-center"></i></a>
+            </div>
+            <div class="col-sm-1"></div>
         </div>
     </div>
 </template>
@@ -21,6 +22,9 @@
     export default {
         async mounted() {
             let thumbnail = await axios.get('/api/v1/access/dips/'+this.dipId+'/thumbnails/files/'+this.item.id, { responseType: 'blob' });
+            this.aipItem = (await axios.get('/api/v1/access/dips/'+this.dipId+'/aipfile/'+this.item.id)).data.data[0];
+            this.fileName = this.aipItem.filename;
+            console.log(this.aipItem);
             let reader = new FileReader();
             reader.onload = e => this.thumbnailImage = reader.result;
             reader.readAsDataURL( thumbnail.data );
@@ -34,7 +38,8 @@
         data() {
             return {
                 fileName: "",
-                thumbnailImage: ""
+                thumbnailImage: "",
+                aipItem: Object
             };
         },
         methods: {
@@ -43,22 +48,15 @@
             },
             async download(e) {
                 e.stopImmediatePropagation();
-                let item = this.item;
-                let allFiles = ( await axios.get('/api/v1/access/dips/'+this.dipId+'/files') ).data.data;
-                let fileId = 0;
-                for ( var i in allFiles ) {
-                    if ( allFiles[i].filename === this.item.filename ){
-                        fileId = allFiles[i].id;
-                    }
-                }
-                let response = await axios.get('/api/v1/access/dips/'+this.dipId+'/downloads/files/'+fileId, { responseType: 'blob' });
+                let response = await axios.get('/api/v1/access/aips/' + this.aipItem.storable_id + '/file/' + this.aipItem.id + '/download', { responseType: 'blob' });
                 let fileLink = document.createElement('a');
                 fileLink.href = window.URL.createObjectURL(new Blob([response.data], {type: 'application/octet-stream'}));
-                fileLink.download = this.item.filename;
+                fileLink.download = this.aipItem.filename;
                 fileLink.click();
             },
-
-
+            editMetadata() {
+                window.location = "/access/browse/files/"+this.item.id+"/metadata";
+            }
         },
         computed: {
             downloadUrl: function(){

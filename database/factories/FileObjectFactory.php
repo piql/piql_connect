@@ -10,3 +10,19 @@ $factory->define(FileObject::class, function (Faker $faker) {
         //
     ];
 });
+
+
+$factory->state(FileObject::class, 'dummyData', function (Faker $faker) {
+
+    return [
+        "fullpath" => "./". $faker->firstName,
+        "filename" => $faker->firstName,
+        "path" => ".",
+        "size" => $faker->biasedNumberBetween(1, 10000000),
+        "object_type" => $faker->randomElement(['App\Aip', 'App\Dip']),
+        "info_source" => "",
+        "mime_type" => "text/plain",
+        "storable_type" => "",
+        "storable_id" => 0,
+    ];
+});

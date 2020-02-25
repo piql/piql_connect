@@ -8,7 +8,13 @@
                 <img style="position: fixed; left: 22rem; width: 10rem;" src="{{ asset('/images/customer_top_logo.png') }}">
             </div>
 
-            <div class="col-md-1"></div>
+            <div class="col-md-1"> 
+                <session-timeout-monitor
+                    :navigation-activity-time="{!! Session::get('lastActivityTime') !!}"
+                    :session-lifetime-ms="{!! Session::get('sessionLifetimeMs') !!}"
+                    :interval="1000"
+					:no-refresh.boolean="true" />
+            </div>
 
             <div class="col-md-7 navLinks w-100">
                 <ul class="navbar-nav m-auto signal">

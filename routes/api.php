@@ -28,7 +28,7 @@ Route::group(['prefix' => 'v1'], function () {
 Route::group(['prefix' => 'v1'], function () {
 });
 
-Route::group(['prefix' => 'v1' , 'middleware' => 'auth:api'], function () {
+Route::group(['prefix' => 'v1' , 'middleware' => ['auth:api', 'activity']], function () {
     Route::post('logout', 'Auth\ApiLoginController@logout');
 
     Route::group(['prefix' => 'system'], function () {
@@ -63,6 +63,13 @@ Route::group(['prefix' => 'v1' , 'middleware' => 'auth:api'], function () {
         Route::post('bags/{id}/piql', 'Api\Ingest\BagController@piqlIt');
         Route::get('bags/{id}/download', 'Api\Ingest\BagController@download');
         Route::get('files/{id}/download', 'Api\Ingest\BagController@downloadFile');
+
+        Route::get('files/{file}/metadata', 'Api\Ingest\FileMetadataController@index')->name('api.ingest.files.metadata.index');
+        Route::get('files/{file}/metadata/{metadata}', 'Api\Ingest\FileMetadataController@show')->name('api.ingest.files.metadata.show');
+        Route::post('files/{file}/metadata', 'Api\Ingest\FileMetadataController@store')->name('api.ingest.files.metadata.store');
+        Route::patch('files/{file}/metadata/{metadata}', 'Api\Ingest\FileMetadataController@update')->name('api.ingest.files.metadata.update');
+        Route::delete('files/{file}/metadata/{metadata}', 'Api\Ingest\FileMetadataController@destroy')->name('api.ingest.files.metadata.destroy');
+
         Route::get('offline_storage/pending/jobs/{id}/bags', 'Api\Ingest\OfflineStorageController@bags');
         Route::patch('offline_storage/pending/jobs/{id}', 'Api\Ingest\OfflineStorageController@archiveJob');
         Route::get('offline_storage/pending/jobs', 'Api\Ingest\OfflineStorageController@jobs');
@@ -104,9 +111,11 @@ Route::group(['prefix' => 'v1' , 'middleware' => 'auth:api'], function () {
         Route::get('dips/{dipId}/thumbnails/files/{fileId}', 'Api\Access\DipController@file_thumbnail');
         Route::get('dips/{dipId}/previews', 'Api\Access\DipController@package_preview');
         Route::get('dips/{dipId}/previews/files/{fileId}', 'Api\Access\DipController@file_preview');
+        Route::get('dips/{dipId}/aipfile/{fileId}', 'Api\Access\DipController@aipFile');
+        Route::get('dips/{dipId}/downloads/files/{fileId}', 'Api\Access\DipController@file_download');
         Route::get('dips/{dipId}/downloads/files/{fileId}', 'Api\Access\DipController@file_download');
         Route::get('aips/{dipId}/downloads/files/{fileId}', 'Api\Access\AipController@download');
-        Route::get('aips/{dipId}/downloads/files/{fileId}', 'Api\Access\AipController@download');
+        Route::get('aips/{aipId}/file/{fileId}/download', 'Api\Access\AipController@fileDownload');
     });
 
 

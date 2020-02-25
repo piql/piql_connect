@@ -42,7 +42,7 @@ class IngestCompleteListener implements ShouldQueue
             return;
         }
 
-        Job::currentJob($bag->owner)->bags()->toggle($bag);
+        //Job::currentJob($bag->owner)->bags()->toggle($bag);
         Log::info("Ingest complete: ".$bag->id." status: ".$bag->status);
 
         event( new ClearTransferStatusEvent($bag));

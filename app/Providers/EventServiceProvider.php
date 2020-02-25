@@ -53,6 +53,9 @@ class EventServiceProvider extends ServiceProvider
         \App\Events\ClearTmpFilesEvent::class => [
             \App\Listeners\ClearTmpFiles::class
         ],
+        \App\Events\InformationPackageUploaded::class => [
+            \App\Listeners\AddAipToBucketListener::class
+        ],
     ];
 
     /**

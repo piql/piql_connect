@@ -4,16 +4,17 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Job;
 
 class Aip extends Model
 {
     use SoftDeletes;
 
     protected $table = 'aips';
-    protected $fillable = [ 
+    protected $fillable = [
         'external_uuid', 'owner', 'online_storage_location_id', 'online_storage_path', 'offline_storage_location_id', 'offline_storage_path'
     ];
-
+    protected $appends = ['size'];
     /*
      * One for each original file inside the AIP so they can be listed and retrieved (not the extra generated files)
      * Later we need to figure out how to track and manage normalized vs original files.
@@ -56,6 +57,16 @@ class Aip extends Model
     public function online_storage_location()
     {
         return $this->belongsTo( 'App\StorageLocation', 'online_storage_location_id' );
+    }
+
+    public function jobs()
+    {
+        return $this->morphToMany(Job::class, 'archivable', null, null, 'archive_id');
+    }
+
+    public function getSizeAttribute()
+    {
+        return $this->fileObjects()->sum('size');
     }
 
 }

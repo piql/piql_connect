@@ -9,6 +9,8 @@ mix.js([
         'node_modules/fine-uploader-wrappers/traditional.js',
         'node_modules/fine-uploader/fine-uploader/fine-uploader.js',
         'node_modules/vue-chartjs/dist/vue-chartjs.js',
+        'node_modules/bootstrap-vue/dist/bootstrap-vue.js',
+        'node_modules/vue-cookie/src/vue-cookie.js',
         'node_modules/chart.js/dist/Chart.js'],
     'public/js/vendor.js')
     .sourceMaps();
@@ -34,6 +36,7 @@ mix.sass('resources/sass/app.scss', 'public/css')
 
 mix.styles([
             'resources/css/bootstrap.min.css',
+			'node_modules/bootstrap-vue/dist/bootstrap-vue.css',
             'node_modules/bootstrap-datepicker/dist/css/bootstrap-datepicker3.min.css',
             'node_modules/bootstrap-select/dist/css/bootstrap-select.min.css',
             'resources/fa/css/all.css',

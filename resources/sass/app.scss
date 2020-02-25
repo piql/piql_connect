@@ -315,14 +315,8 @@ h1 {
 }
 
 .ingressText {
-    margin-bottom: 10px;
-    padding-bottom: 0;
-    margin-top: 0;
-    margin-left: 0.75em;
-    font-family: $font_agenda !important;
-    font-weight: 800;
-    text-transform: uppercase;
-    font-size: 0.8rem;
+    font-size: 0.75em;
+    margin-bottom: 1rem;
 }
 
 
@@ -412,6 +406,7 @@ a {
 
 .listActionItems {
     color: $color_signal;
+    justify-content: space-evenly;
     //font-size: 28px;
 }
 .list {
@@ -1379,14 +1374,16 @@ th {
         }
     }
 }
+
 .piqlIt {
-    height: 2.2rem;
+    height: 2.7rem;
+    width: 100%;
     background: $color_main_brand;
     background-image: $image_piql-logo-white_url;
-    background-size: 1.8rem;
+    background-size: 2.2rem;
     background-repeat: no-repeat;
-    background-position-x: 1.5rem;
-    background-position-y: -0.2rem;
+    background-position-x: center;
+    background-position-y: center;
     background-origin: content-box;
     &:hover {
         background-color: $color_fill_dark;
@@ -2027,13 +2024,12 @@ th {
 }
 
 .dashboard-halfStatsRow {
-    padding-bottom: 4rem;
+    padding-bottom: 3rem;
+    margin-bottom: 1rem;
 }
 
 .dashboard-card {
-    padding-bottom: 6rem auto;
-    /*height: 8rem*/;
-    border-radius: 25px;
+    border-radius: 0.8rem;
     background: $color_background;
     background: $color_secondary_1;
 }
@@ -2086,10 +2082,30 @@ th {
     background-color: $color_signal !important;
 }
 
+.bg-fill {
+    background-color: $color_fill;
+}
+
+.bg-fill-light {
+    background-color: $color_fill_1;
+}
+
+.bg-fill-verylight {
+    background-color: $color_fill_2;
+}
+
+.bg-secondary {
+    background-color: $color_secondary;
+}
 
 .fg-black {
     color: $black !important;
 }
+
+.fg-white {
+    color: $white !important;
+}
+
 
 .fill-height {
     padding-bottom: 100% !important;
@@ -2222,57 +2238,26 @@ input[type=text] {
     //font-size: 21px;
 }
 
-.progress {
+.bucket-progress {
+    width: 100%;
     height: 3rem;
 }
 
+
+.bucket-text {
+    font-size: 1.2rem;
+}
+
+.upload-text {
+    font-size: 1rem;
+    color: $white !important;
+}
+
+.upload-progress {
+    height: 2.5rem;
+}
 .uploadFileList {
     min-height: 5rem;
-}
-
-.progress-bar{
-    margin-top: 1px;
-    border-radius: 8px;
-    position:relative;
-    border:#ccc solid 1px;
-    width: auto;
-    height: 3rem;
-    vertical-align: middle;
-    overflow:hidden;
-    font-family:$font_agenda;
-    //font-size:20px;
-    .bar{
-        position:absolute;
-        top:0;
-        height:100%;
-        overflow:hidden;
-        span{
-            padding-top: 1px;
-            position:absolute;
-            display:block;
-            width: auto;
-            height:100%;
-            text-align:center;
-        }
-        &.positive{
-            background:$color_signal;
-            left:0;
-            width:54%;
-            span{
-                left:0;
-                color:$color_fill_0;
-            }
-        }
-        &.negative{
-            background:$color_fill_0;
-            right:0;
-            width:46%;
-            span{
-                right:0;
-                color:$color_fill_dark;
-            }
-        }
-    }
 }
 
 .page-item {
@@ -2314,41 +2299,12 @@ input[type=text] {
     left: 0;
     right: 0;
 }
+
 .plistIcon {
     color: $color_signal !important;
     font-size: 1.8rem;
 }
-/*@media screen and (-webkit-min-device-pixel-ratio:0) {
-  body {
-        font-size: 10px;
-        line-height: 1.5rem;
-        .mt2-em {
-            margin-top: 1.5em;
-        }
-        .mt-5 {
-            margin-top: 2.2rem !important;
-        }
 
-        .w-250 {
-            height: 30px !important;
-        }
-
-        .btn {
-            padding: 0.65rem !important;
-        }
-
-        .h-80 {
-            height: 60px !important;
-        }
-
-        .col-form-label-sm {
-            padding-top: calc( .2rem + 1px);
-            padding-bottom: calc( .2rem + 1px);
-            line-height: 1.2;
-        }
-    }
-}
-*/
 .navLinks {
     top: 0;
     right: -25vw;
@@ -2361,33 +2317,39 @@ input[type=text] {
 }
 
 .stats {
-    height: 13vw;
+    height: 12vw;
 }
 
 .halfStats {
     text-align: center;
-    max-width: 7.8rem;
-    /*height: 5rem;*/
-    margin-bottom: 1rem auto;
-    padding: 1rem auto;
+    margin: 0.1rem;
+    padding: 0.3rem;
 
-    h2 {
-        margin-top: 0.8rem;
-        font-size: 2rem;
+    .value {
+        font-family: $font_open_sans_bold;
+        margin: 0.6rem;
+        font-size: 1.6rem;
         color: white;
     }
 
-    em {
-        font-size: 0.75rem;
+    .legend {
+        font-family: $font_open_sans;
+        font-size: 0.8rem;
         color: white;
-        margin-bottom: 0.75rem;
+        margin-bottom: 0rem;
+        text-overflow: ellipsis;
     }
 }
 .halfStatsRow {
     justify-content: space-evenly;
-    /*height: 5vw;*/
-    /*padding-bottom: 0rem auto;*/
 }
 
-.pieChart {
+.modal-title {
+    margin: 0 auto;
+}
+.modalHeader {
+    font-family: $font_agenda;
+    font-size: 2rem;
+    text-align: center;
+    margin: 0 auto;
 }

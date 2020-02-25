@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Events\InformationPackageUploaded;
 use App\Interfaces\ArchivalStorageInterface;
 use App\StorageLocation;
 use App\FileObject;
@@ -93,5 +94,13 @@ class TransferPackageToStorage implements ShouldQueue
                 Log::error("Failed to create file object for file at {$this->storageLocation}:{$uploadPath}");
             }
         }
+
+        if($this->localStorage->deleteDirectory($this->uploadFileAtPath) === false)
+        {
+            Log::error("Failed to delete source files {$this->uploadFileAtPath} after the upload");
+        }
+
+        event( new InformationPackageUploaded($this->storable_type::find($this->storable_id)));
+
     }
 }

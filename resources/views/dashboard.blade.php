@@ -36,9 +36,9 @@
                     </div>
                 </div>
                 <div class="row mt-3">
-                    <div class="col-sm-12" class="stats">
-                        <pie-chart class="pieChart" height="200" title="{{__("File formats Ingested")}}"
-                                   url="/api/v1/stats/fileFormatsIngested"/>
+                    <div class="col-sm-12">
+                        <pie-chart class="stats" title="{{__("File formats Ingested")}}"
+                                   url="/api/v1/stats/fileFormatsIngested" height=150 />
                     </div>
                 </div>
             </div>
@@ -56,56 +56,52 @@
                                 :labels="{{__("dashboard.month.abbrev.array")}}"/>
                 </div>
             </div>
-            <div class="row pt-sm-3 pb-sm-2 halfStatsRow dashboard-halfStatsRow mt-2">
-                <div class="card dashboard-card col-sm-3 halfStats">
-                    <h2>
-                        <strong>{{ $infoArray['onlineAIPsIngested'] }}</strong>
-                    </h2>
-                    <em style="color: white;">{{__("Archival Packages stored online")}}</em>
+            <div class="row pt-sm-3 pb-sm mt-4">
+                <div class="card dashboard-card col-sm halfStats">
+                    <div class="value">{{ $infoArray['onlineAIPsIngested'] }}</div>
+                    <div class="legend">{{__("Archival Packages stored online")}}</div>
                 </div>
-                <div class="card dashboard-card col-sm-3 halfStats">
-                    <h2>
-                        <strong>{{ $infoArray['onlineDataIngested'] }}</strong>
-                    </h2>
-                    <em>{{__("Stored online")}}</em>
+                <div class="card dashboard-card col-sm halfStats">
+                    <div class="value">{{ $infoArray['onlineDataIngested'] }}</div>
+                    <div class="legend">{{__("Stored online")}}</div>
                 </div>
-                <div class="card dashboard-card col-sm-3 halfStats">
-                    <h2>
-                        <strong>{{ $infoArray['AIPsRetrievedCount'] }}</strong>
-                    </h2>
-                    <em>{{__("Archival Packages retrieved")}}</em>
+                <div class="card dashboard-card col-sm halfStats">
+                    <div class="value">{{ $infoArray['AIPsRetrievedCount'] }}</div>
+                    <div class="legend">{{__("Archival Packages retrieved")}}</div>
                 </div>
-                <div class="card dashboard-card col-sm-3 halfStats">
-                    <h2>
-                        <strong>{{ $infoArray['DataRetrieved'] }}</strong>
-                    </h2>
-                    <em>{{__("Retrieved")}}</em>
+                <div class="card dashboard-card col-sm halfStats">
+                    <div class="value">{{ $infoArray['DataRetrieved'] }}</div>
+                    <div class="legend">{{__("Retrieved")}}</div>
                 </div>
             </div>
-            <div class="row pt-sm-0 halfStatsRow dashboard-halfStatsRow">
-                <div class="card dashboard-card col-sm-3 halfStats">
-                    <h2>
-                        <strong>{{ $infoArray['offlineAIPsIngested'] }}</strong>
-                    </h2>
-                    <em>{{__("Archival Packages stored on film")}}</em>
+            <div class="row pt-1 mt-1 halfStatsRow dashboard-halfStatsRow">
+                <div class="card dashboard-card col-sm halfStats">
+                    <div class="value">
+                        {{ $infoArray['offlineAIPsIngested'] }}
+                    </div>
+                    <div class="legend">
+                        {{__("Archival Packages stored on film")}}
+                    </div>
                 </div>
-                <div class="card dashboard-card col-sm-3 halfStats">
-                    <h2>
-                        <strong>{{ $infoArray['offlineDataIngested'] }}</strong>
-                    </h2>
-                    <em>{{__("Stored on film")}}</em>
+                <div class="card dashboard-card col-sm halfStats">
+                    <div class="value">
+                        {{ $infoArray['offlineDataIngested'] }}
+                    </div>
+                    <div class="legend">
+                        {{__("Stored on film")}}
+                    </div>
                 </div>
-                <div class="card dashboard-card halfStats col-sm-3">
-                    <h2>
-                        <strong>{{ $infoArray['offlineReelsCount'] }}</strong>
-                    </h2>
-                    <em>{{__("Reels")}}</em>
+                <div class="card dashboard-card halfStats col-sm">
+                    <div class="value">
+                        {{ $infoArray['offlineReelsCount'] }}
+                    </div>
+                    <div class="legend">
+                        {{__("Reels")}}
+                    </div>
                 </div>
-                <div class="card dashboard-card halfStats col-sm-3">
-                    <h2>
-                        <strong>{{ $infoArray['offlinePagesCount'] }}</strong>
-                    </h2>
-                    <em>{{__("Pages stored on film")}}</em>
+                <div class="dashboard-card halfStats col-sm">
+                    <div class="value">{{ $infoArray['offlinePagesCount'] }}</div>
+                    <div class="legend">{{__("Pages stored on film")}}</div>
                 </div>
             </div>
         </div>

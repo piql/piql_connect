@@ -8,13 +8,13 @@
             datasets: [
                 {
                     backgroundColor: [
-                        '#6f3c2a',
+                        '#a05974',
+                        '#2a3c6f',
                         '#473181',
                         '#389451',
                         '#a63f5b',
                         '#aa405d',
                         '#b94665',
-                        '#c05974',
                         '#c76b84',
                         '#ce7e93',
                         '#d590a2',
@@ -29,7 +29,7 @@
                 }
             ],
             labels: [],
-            options: {
+          options: {
                 maintainAspectRatio: true,
                 scales: {
                     xAxes:[],
@@ -63,10 +63,12 @@
                 }
             }
         }),
-        props: {
+      props: {
             chartData: [],
             url: "",
-            title: ""
+            title: "",
+            height: NaN,
+            width: NaN,
         },
         async mounted () {
             axios.get(this.url).then( (data) => {
