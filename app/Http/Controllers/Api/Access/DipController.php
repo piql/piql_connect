@@ -96,15 +96,15 @@ class DipController extends Controller
         $dip = Dip::find( $request->dipId );
 
         if(!preg_match('/(\/objects\/.*)(\w{8}-\w{4}-\w{4}-\w{4}-\w{12}-(.*)?(\..*))$/', $dipFileObject->fullpath, $matches, PREG_OFFSET_CAPTURE)){
-            return response();
+            return response( "File not found - no match in dip {$request->dipId} for {$dipFileObject->fullpath}", 404 );
         }
         $aipFileObjectPath = $matches[1][0].$matches[3][0];
-
-        $files = $dip->storage_properties->aip->fileObjects()->where('fullpath', 'LIKE', "%".$aipFileObjectPath."%")->get();
+        $aip = $dip->storage_properties->aip;
+        $files = $aip->fileObjects()->where('fullpath', 'LIKE', "%".$aipFileObjectPath."%")->get();
         if(count($files))
             return FileObjectResource::collection( $files );
 
-        return response();
+        return response( "File not found - no match in aip {$aip->id} for  {$aipFileObjectPath} ");
     }
 
     public function file_preview( Request $request, ArchivalStorageInterface $storage )

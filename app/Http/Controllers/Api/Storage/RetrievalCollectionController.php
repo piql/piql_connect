@@ -78,7 +78,7 @@ class RetrievalCollectionController extends Controller
 
         RetrievalFile::create([
             'retrieval_collection_id' => $retrievalCollection->id,
-            'file_id' => $request->fileId
+            'file_id' => $request->fileObjectId
         ]);
         return new RetrievalCollectionResource($retrievalCollection->refresh());
     }
@@ -87,7 +87,7 @@ class RetrievalCollectionController extends Controller
     {
         $rc = RetrievalCollection::with(['retrievalFiles'])->find($id)->retrievalFiles()->get();
         $files = $rc->map( function($sf) {
-            return \App\File::find($sf->file_id);
+            return \App\FileObject::find($sf->file_id);
         });
         return new FileCollection($files);
     }

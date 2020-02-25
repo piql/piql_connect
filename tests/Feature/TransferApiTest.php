@@ -21,10 +21,15 @@ class TransferApiTest extends TestCase
     private $testUser;
     private $faker;
     private $storageService;
+    private $targetPath;
 
     public function setUp( ) : void
     {
         parent::setUp();
+        $this->targetPath = sys_get_temp_dir() . "/target";
+        if(!file_exists( $this->targetPath ) ) {
+            mkdir(  $this->targetPath );
+        }
         $this->testUser = factory( \App\User::class )->create();
         Passport::actingAs( $this->testUser );
         $this->faker = Faker::create();
@@ -73,7 +78,7 @@ class TransferApiTest extends TestCase
 
     public function test_when_uploading_a_local_file_to_remote_storage_it_responds_with_the_remote_file_name()
     {
-        $testFilePath = $this->faker->image( sys_get_temp_dir(), 16, 16 );
+        $testFilePath = $this->faker->file( sys_get_temp_dir(), sys_get_temp_dir()."/target" );
         $payload = [ "data" => ["path" => $testFilePath ] ];
         $response = $this->post( route( 'storage.transfer.upload', $this->storageLocation->id ), $payload );
 
@@ -86,7 +91,7 @@ class TransferApiTest extends TestCase
 
     public function test_when_downloading_a_remote_file_to_local_storage_it_responds_with_the_local_file_path()
     {
-        $testFilePath = $this->faker->image( sys_get_temp_dir(), 16, 16 );
+        $testFilePath = $this->faker->file( sys_get_temp_dir(), $this->targetPath );
         $this->storageService->upload( $this->storageLocation, "", $testFilePath );
 
         $downloadLocalPath = "/testDownloads/";
@@ -105,7 +110,7 @@ class TransferApiTest extends TestCase
 
     public function test_when_deleting_a_remote_file_it_is_deleted()
     {
-        $testFilePath = $this->faker->image( sys_get_temp_dir(), 16, 16 );
+        $testFilePath = $this->faker->file( sys_get_temp_dir(), $this->targetPath );
         $this->storageService->upload( $this->storageLocation, "", $testFilePath );
 
         $testFileBasename = pathinfo( $testFilePath, PATHINFO_BASENAME );
