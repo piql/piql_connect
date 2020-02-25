@@ -127,7 +127,12 @@ export default {
                 return "---";
         },
         usage: function() {
-            return (100*this.item.size/(120*1000*1000*1000)).toFixed(0);
+            if((this.item.bucket_size === undefined) || this.item.bucket_size === 0) {
+                return 0;
+            }
+            let val = (100 * this.item.size / (this.item.bucket_size)).toFixed(0)
+            return val > 100 ? 100 : val;
+
         },
     },
     data() {

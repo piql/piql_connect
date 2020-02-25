@@ -14,7 +14,7 @@ class Aip extends Model
     protected $fillable = [
         'external_uuid', 'owner', 'online_storage_location_id', 'online_storage_path', 'offline_storage_location_id', 'offline_storage_path'
     ];
-
+    protected $appends = ['size'];
     /*
      * One for each original file inside the AIP so they can be listed and retrieved (not the extra generated files)
      * Later we need to figure out how to track and manage normalized vs original files.
@@ -62,6 +62,11 @@ class Aip extends Model
     public function jobs()
     {
         return $this->morphToMany(Job::class, 'archivable', null, null, 'archive_id');
+    }
+
+    public function getSizeAttribute()
+    {
+        return $this->fileObjects()->sum('size');
     }
 
 }

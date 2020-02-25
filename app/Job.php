@@ -14,7 +14,7 @@ class Job extends Model
     protected $fillable = [
         'name', 'status', 'owner'
     ];
-    protected $appends = ['size', 'archive_objects'];
+    protected $appends = ['size', 'archive_objects', 'bucket_size'];
 
     public static function boot()
     {
@@ -68,7 +68,12 @@ class Job extends Model
         return $this->getJobSize();
     }
 
+    public function getBucketSizeAttribute()
+    {
+        return env('APP_INGEST_BUCKET_SIZE', 150*1000*1000);
+    }
+
     public function getJobSize() {
-        return $this->aips->map(function ($aip) {return $aip->fileObjects()->sum('size');})->sum();
+        return $this->aips->map(function ($aip) {return $aip->size;})->sum();
     }
 }
