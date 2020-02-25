@@ -30,11 +30,17 @@ class AddAipToBucketListener implements ShouldQueue
     public function handle($event)
     {
         if(get_class($event->informationPackage) == 'App\Aip') {
-            // todo: bucket size limiting
-            Log::debug("Added new Aip to bucket: ".$event->informationPackage->external_uuid);
-            Job::currentJob($event->informationPackage->owner)->aips()->save($event->informationPackage);
-        }
-        //Log::info("Ingest complete: ".$bag->id." status: ".$bag->status);
+            $aip = $event->informationPackage;
+            $job = Job::currentJob($event->informationPackage->owner);
+            Log::debug("Added new Aip to bucket: ".$aip->external_uuid);
 
+            // close job and create a new one if the Aip don't fit
+            if(($job->size + $aip->size) > $job->bucketSize) {
+                $job->status = "closed";
+                $job->save();
+                $job = Job::currentJob($event->informationPackage->owner);
+            }
+            $job->aips()->save($aip);
+        }
     }
 }

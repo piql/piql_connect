@@ -27,9 +27,13 @@ class OfflineStorageController extends Controller
      */
     public function jobs()
     {
-        $jobs = Job::where('status', 'created')
-            ->where('owner', Auth::id() )
-            ->withCount('bags')
+        $jobs = Job::where('owner', Auth::id() )
+            ->where(function($query) {
+                $query->where('status', 'created')
+                    ->orWhere('status', 'closed');
+            })
+            ->withCount('aips')
+            ->latest()
             ->paginate( env('DEFAULT_ENTRIES_PER_PAGE') );
 
         return new JobCollection( $jobs );

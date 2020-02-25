@@ -60,8 +60,6 @@ class IngestCompleteListenerTest extends TestCase
 
         $this->assertTrue($bag->status == "complete",
             'Expected bag status complete but found ' . $bag->state);
-        $this->assertTrue($job->bags->first()->id == $bag->id,
-            'Expected bag id '.$job->bags->first()->id.' but found '.$bag->id);
 
     }
 }
