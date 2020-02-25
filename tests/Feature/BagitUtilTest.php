@@ -14,13 +14,18 @@ class BagitUtilTest extends TestCase
     private $generatedImageFilePaths;
     private $outputFileName;
     private $outputFilePath;
+    private $targetPath;
 
     public function setUp() : void
     {
+        $this->targetPath = sys_get_temp_dir() . "/target";
+        if(!file_exists( $this->targetPath ) ) {
+            mkdir(  $this->targetPath );
+        }
         $faker = Faker::create();
-        $this->generatedImageFilePaths = array_map( function () use (&$faker) { return $faker->image(); }, range(0,4) );
+        $this->generatedImageFilePaths = array_map( function () use (&$faker) { return $faker->file( $this->targetPath ); }, range(0,4) );
         $this->outputFileName = $faker->slug(1)."-".$faker->uuid().".zip";
-        $this->outputFilePath = sys_get_temp_dir().'/'.$this->outputFileName;
+        $this->outputFilePath = $this->targetPath .'/'.$this->outputFileName;
 
         parent::setUp();
     }

@@ -1,12 +1,12 @@
 <template>
     <div>
         <div class="row plistHeader text-truncate mt-2">
-            <div class="col-sm-2 text-center p-0 text-dark">{{$t("access.browse.header.preview")}}</div>
-            <div class="col-sm-3 text-center p-0 text-dark">{{$t("access.browse.header.name")}}</div>
-            <div class="col-sm-1 text-center p-0 text-dark">{{$t("access.browse.header.ingestDate")}}</div>
-            <div class="col-sm-2 text-center p-0 text-dark">{{$t("access.browse.header.holding")}}</div>
-            <div class="col-sm-1 text-center p-0 text-dark">{{$t("access.browse.header.files")}}</div>
-            <div class="col-sm-3 text-center p-0 text-dark">{{$t("access.browse.header.actions")}}</div>
+            <div class="col-sm-2 text-center">{{$t("access.browse.header.preview")}}</div>
+            <div class="col-sm-3 text-center">{{$t("access.browse.header.name")}}</div>
+            <div class="col-sm-1 text-center">{{$t("access.browse.header.ingestDate")}}</div>
+            <div class="col-sm-2 text-center">{{$t("access.browse.header.holding")}}</div>
+            <div class="col-sm-1 text-center">{{$t("access.browse.header.files")}}</div>
+            <div class="col-sm-3 text-center">{{$t("access.browse.header.actions")}}</div>
         </div>
 
         <span v-if="fileLocation === 'online'">
