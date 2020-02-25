@@ -1,9 +1,10 @@
 <template>
     <div>
         <div class="row plist thumbnailList">
-            <div class="col-sm-3 text-center">
+            <div class="col-sm-2 text-center">
                 <img class="thumbnailImage" v-bind:src="thumbnailImage">
             </div>
+            <div class="col-sm-1"></div>
             <div class="col text-center align-self-center text-truncate">
                 {{fileName}}
             </div>

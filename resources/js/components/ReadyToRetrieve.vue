@@ -55,6 +55,8 @@ export default {
             this.currentRetrieval = (await axios.post("/api/v1/storage/retrievals/"+this.currentRetrieval.id+"/close")).data.data;
             window.location.href="/access/retrieve/retrieving";
         },
+        removeFromRetrieval: async function() {
+        }
     },
     created() {
     },

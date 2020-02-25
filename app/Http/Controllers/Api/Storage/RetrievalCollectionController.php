@@ -76,10 +76,37 @@ class RetrievalCollectionController extends Controller
             $retrievalCollection = RetrievalCollection::create(['status' => 'open']);
         }
 
-        RetrievalFile::create([
-            'retrieval_collection_id' => $retrievalCollection->id,
-            'file_id' => $request->fileObjectId
-        ]);
+
+        if( $request->has('aipUuid') ) {
+            \App\Aip::where( 'external_uuid', $request->aipUuid )
+                ->first()
+                ->fileObjects()
+                ->where('fullpath', 'LIKE', '%/objects/%')
+                ->pluck('id')
+                ->map( function( $fileObjectId ) use ( $retrievalCollection ) {
+                    if( RetrievalFile
+                        ::where('retrieval_collection_id', $retrievalCollection->id)
+                        ->where('file_id', $fileObjectId )->count() == 0 )
+                    {
+                        RetrievalFile::create([
+                            'retrieval_collection_id' => $retrievalCollection->id,
+                            'file_id' => $fileObjectId
+                        ]);
+                    }
+                });
+        } else if( $request->has('fileObjectId') ) {
+
+            if( RetrievalFile
+                ::where('retrieval_collection_id', $retrievalCollection->id)
+                ->where('file_id', $request->fileObjectId )->count() == 0 )
+            {
+                RetrievalFile::create([
+                    'retrieval_collection_id' => $retrievalCollection->id,
+                    'file_id' => $request->fileObjectId
+                ]);
+            }
+        }
+
         return new RetrievalCollectionResource($retrievalCollection->refresh());
     }
 
