@@ -188,7 +188,7 @@
       selectedArchive: {},
       singleArchiveTitle: "",
       holdings: [],
-      selectedHoldingTitle: {},
+      selectedHoldingTitle: "",
       currentPage: 1,
       pageSize: 4,
       pageFrom: 1,
