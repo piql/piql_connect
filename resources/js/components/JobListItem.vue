@@ -129,8 +129,8 @@ export default {
             return val > 100 ? 100 : val;
         },
         usagePercentage: function() {
-            return this.usage + "%";
-        },
+            return {'width': `${this.usage}%` };
+        }
     },
     data() {
         return {
