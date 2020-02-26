@@ -290,6 +290,7 @@
                 this.selectedLocation = loc;
             },
             addObjectToRetrieval: async function(item) {
+                this.infoToast('Retrieval', `Package ${item.storage_properties.bag.name} added to retrieval basket`);
                 axios.post('/api/v1/storage/retrievals/add', {
                     'aipUuid' : item.storage_properties.aip_uuid
                 });
@@ -299,6 +300,8 @@
                     to stop leaking internal data. We could for example push a unique id linked to the
                     film reel and a filename for visualization and that should be enough.
                 */
+
+                this.infoToast('Retrieval', `Package ${fileObject.filename} added to retrieval basket`);
 
                 this.retrievalItems.push(fileObject);
                 await (axios.post('/api/v1/storage/retrievals/add', {
