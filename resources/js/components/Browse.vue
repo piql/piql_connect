@@ -58,7 +58,7 @@
                 </div>
 
                 <div class="col-md-2 pr-0 text-align-right">
-                    <location-picker :holding='selectedArchiveUuid' :initialSelectedLocation="selectedLocation" :locations="locations" @locationSelectionChanged="locationSelectionChanged"></location-picker>
+                    <location-picker :initialSelectedLocation="selectedLocation" :locations="locations" @locationSelectionChanged="locationSelectionChanged"></location-picker>
                 </div>
             </div>
         </form>
@@ -221,7 +221,7 @@
             axios.get("/api/v1/planning/archives").then( (response) => {
               this.archives = response.data.data;
                 if( this.archives.length === 1 ) {
-                    this.selectedArchiveUuid = this.archives[0].title;
+                    this.selectedArchiveUuid = this.archives[0].uuid;
                     this.singleArchiveTitle = this.archives[0].title;
                     this.useArchives = false;
                 }
