@@ -31,7 +31,7 @@ export default {
         },
     },
     async mounted() {
-        this.items = (await axios.get(this.jobListUrl+"/jobs")).data;
+        this.items = (await axios.get(this.jobListUrl+"/jobs")).data.data;
         console.log(this.items);
 
         console.log('TaskList component mounted.')
