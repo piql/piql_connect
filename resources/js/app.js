@@ -11,6 +11,8 @@ window.Vue = require('vue');
 import VueInternationalization from 'vue-i18n';
 import {BootstrapVue} from 'bootstrap-vue';
 window.Vue.use(BootstrapVue);
+import toast from './mixins/toast.js';
+window.Vue.mixin(toast);
 
 /** Function to collapse/expand sidemenu
 Affects the sideMenu and contentContainer. Reduces size of sideMenu
@@ -126,7 +128,7 @@ require('../../node_modules/filesize/lib/filesize.es6.js');
 
 let refreshSessionActivity = Vue.mixin({
         beforeUpdate: function() {
-            if( this.noRefresh !== true ){ 
+            if( this.noRefresh !== true ){
                 this.refreshSession();
             }
         },
