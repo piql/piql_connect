@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Aip;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Log;
@@ -12,7 +13,7 @@ class DashboardController extends Controller
     {
         $fileFormatCount = $this->fileFormatsIngested(auth()->user());
         $onlineDataIngested = $this->onlineDataIngested(auth()->user());
-        
+
         $infoArray['onlineDataIngested'] = $this->byteToMetricbyte($onlineDataIngested);
         $infoArray['offlineDataIngested'] = $this->byteToMetricbyte(23 * 110000000000);
         $infoArray['onlineAIPsIngested'] = $this->onlineAIPsIngested(auth()->user());
@@ -66,7 +67,7 @@ class DashboardController extends Controller
             'legend' => [
                 'display' => true,
                 'position' => 'right',
-                // 'onHover' => 
+                // 'onHover' =>
             ],
             'tooltips' => [
                 'mode' => 'point',
@@ -94,34 +95,17 @@ class DashboardController extends Controller
 
     private function onlineDataIngested($user)
     {
-        $onlineDataIngested = 0;
-        $bags = $user->bags;
-
-        foreach ($bags as $bag)
-        {
-            if ($bag->status == 'complete')
-            {
-                $files = $bag->files;
-
-                foreach ($files as $file)
-                {
-                    $onlineDataIngested += $file->filesize;
-                }
-            }
-        }
-        return $onlineDataIngested;
+        return Aip::where("owner", $user->id)->get()->map(function($aip) { return $aip->size; })->sum();
     }
 
     private function onlineAIPsIngested($user)
     {
-        $bags = $user->bags->where('status', 'complete');
-
-        return $bags->count();
+        return Aip::where("owner", $user->id)->count();
     }
 
     private function monthlyOnlineAIPsIngested($user)
     {
-        $bags = $user->bags->where('status', 'complete');
+        $aips = Aip::where("owner", $user->id)->get();
 
         $monthlyAIPsIngested = array_fill(0, 12, 0);
 
@@ -129,9 +113,9 @@ class DashboardController extends Controller
         $oneYearAgo->modify('-1 year');
         $oneYearAgo->modify('first day of next month');
 
-        foreach ($bags as $bag)
+        foreach ($aips as $aip)
         {
-            $creation_date = new \DateTime($bag->created_at);
+            $creation_date = new \DateTime($aip->created_at);
 
             if ($creation_date > $oneYearAgo) {
                 $monthlyAIPsIngested[$creation_date->format('n') - 1]++;
@@ -143,7 +127,7 @@ class DashboardController extends Controller
 
     private function monthlyOnlineDataIngested($user)
     {
-        $bags = $user->bags->where('status', 'complete');
+        $aips = Aip::where("owner", $user->id)->get();
 
         $monthlyDataIngested = array_fill(0, 12, 0);
 
@@ -151,13 +135,13 @@ class DashboardController extends Controller
         $oneYearAgo->modify('-1 year');
         $oneYearAgo->modify('first day of next month');
 
-        foreach ($bags as $bag)
+        foreach ($aips as $aip)
         {
-            $creation_date = new \DateTime($bag->created_at);
+            $creation_date = new \DateTime($aip->created_at);
 
             if ($creation_date > $oneYearAgo) {
 
-                $files = $bag->files;
+                $files = $aip->files;
 
                 foreach ($files as $file)
                 {
@@ -225,7 +209,7 @@ class DashboardController extends Controller
     {
         $last30days = [];
 
-        for ($i=0; $i < 30; $i++) { 
+        for ($i=0; $i < 30; $i++) {
             array_unshift($last30days, date('j. M', strtotime('-' . $i . ' days')));
         }
 
