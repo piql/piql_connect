@@ -138,6 +138,8 @@ class BagitUtil
 
         // Validate created bag
         $createdBag = new BagIt($outputFile);
+        array_push($this->m_TempResources, $createdBag->bagDirectory);
+
         $expectedContent = "BagIt-Version: 0.97\n" . "Tag-File-Character-Encoding: UTF-8\n";
         if (file_get_contents($createdBag->bagitFile) != $expectedContent)
         {
