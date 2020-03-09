@@ -51,8 +51,7 @@ class BagController extends Controller
             $bag = $user->bags()->latest()->first();
         }
         if( $bag == null || $bag->status !== 'open' ){
-            $bagName = Carbon::now()->format("YmdHis");
-            $bag = Bag::create(['name' => $bagName]);
+            $bag = Bag::create(['name' => ""]);
             $bag->storage_properties()->update([
                 'archive_uuid' => Archive::first()->uuid,
                 'holding_name' => Archive::first()->holdings()->first()->title ?? ""
@@ -100,16 +99,13 @@ class BagController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, \App\Interfaces\SettingsInterface $settingsProvider )
     {
+        $settings = $settingsProvider->forAuthUser();
+
         $bagName = trim( $request->name );
-        if( empty( $bagName ) )
-        {
-            $bagName = Carbon::now()->format( "YmdHis" );
-        }
-        $bag = new Bag();
-        $bag->name = $bagName;
-        if( $bag->save() )
+        $bag = Bag::create(['name' => $bagName]);
+        if( $bag )
         {
             if( $request->filled( 'archive_uuid' ) && $request->filled( 'holding_name' ) )
             {

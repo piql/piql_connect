@@ -18,6 +18,7 @@
     "upload.addFileButton" : "Legg til fil",
     "upload.addFileButtonToolTip": "Legg ny fil til denne opplastningen",
     "upload.optionalName": "Navn på opplasting (valgfritt)",
+    "upload.requiredName": "Vennligst skriv et gyldig pakkenavn: 3 bokstaver eller mer, kun bokstaver og tall",
     "upload.processButton": "Prosessere",
     "upload.fileName": "Filnavn",
     "upload.fileSize": "Filstørrelse",
