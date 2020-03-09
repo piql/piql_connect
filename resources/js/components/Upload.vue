@@ -10,7 +10,7 @@
         </div>
         <div class="row mt-0 pt-0">
             <div class="col-sm-1"></div>
-            <div class="col-sm-6 text-left ingressText"> 
+            <div class="col-sm-6 text-left ingressText">
                 {{$t("upload.ingress")}}
             </div>
         </div>
@@ -27,9 +27,13 @@
                 </FileInputComponent>
             </div>
 
-            <div v-show="compoundModeEnabled" class="col-md-2 text-left" :title="$t('upload.optionalName')">
+            <div v-show="compoundModeEnabled" class="col-md-2 text-left" >
                 <label for="bagname" class="col-form-label-sm">{{$t("upload.sipName")}}</label>
-                <input id="bagname" value="" :placeholder="bag.name" v-model="bag.name" type="text" class="pl-3 noTextTransform form-control" style="border-radius: 0.5rem" @input="setBagName" onclick="select()">
+                <input id="bagName" v-model="bagName" ref="bagName"
+                    type="text" class="pl-3 noTextTransform form-control"
+                    :title="$t('upload.requiredName')"
+                    style="border-radius: 0.5rem" @input="setBagName" onclick="select()"
+                    required="true" pattern='^((?![:\\<>"/?*|]).){3,}$'>
             </div>
 
             <div v-if="customerSelectsArchives" class="col-md-2" :title="$t('upload.archiveToolTip')">
@@ -180,6 +184,7 @@ export default {
         return {
             uploader: uploader,
             bag: {},
+            bagName: "",
             files: {},
             filesUploading: [],
             userId: '',
@@ -206,7 +211,11 @@ export default {
 
     computed: {
         processDisabled: function() {
-            return this.numberOfFiles === 0 || this.uploadInProgress;
+            return this.invalidBagName | this.numberOfFiles === 0 | this.uploadInProgress;
+        },
+        invalidBagName: function() {
+            let valid = /^((?![:\\<>"/?*|]).){3,}$/g;
+            return !this.bagName.match(valid);
         },
         numberOfFiles: function() {
             return this.files.length;
@@ -306,13 +315,13 @@ export default {
             this.filesUploading = [];
         },
         async setBagName() {
-            let currentBagId = this.bag.id;
-            let bagName = this.bag.name;
-            if( bagName.length == 0 ) {
-                bagName = moment().format("YYYYMMDDX").substring(0,14);
+            if( this.invalidBagName ){
+                return;
             }
+
+            let currentBagId = this.bag.id;
             axios.patch("/api/v1/ingest/bags/"+currentBagId, {
-                'name': bagName
+                'name': this.bagName
             });
         },
         async createBag( bagName, userId, selectedArchive, selectedHoldingTitle ) {
@@ -384,6 +393,7 @@ export default {
         if( this.compoundModeEnabled ) {
 
             this.bag = (await axios.get("/api/v1/ingest/bags/latest")).data.data;
+            this.bagName = this.bag.name;
 
             if( this.customerSelectsArchives ) {
                 Vue.nextTick( () => { $('#archivePicker').selectpicker('val', this.selectedArchive);});

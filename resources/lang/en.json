@@ -19,6 +19,7 @@
     "upload.addFileButton" : "Add file",
     "upload.addFileButtonToolTip": "Add a new file to the upload",
     "upload.optionalName": "Upload name (optional)",
+    "upload.requiredName": "Please enter a valid SIP name: 3 characters or more, letters and numbers only",
     "upload.processButton": "Process",
     "upload.sipName": "Submission package name",
     "upload.archive": "Archive",
