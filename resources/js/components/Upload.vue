@@ -75,6 +75,7 @@
 
         <UploadFileItem v-for="(file,index) in filesUploading" v-bind:file="file" :key="file.id"
             @metadataClicked="metadataClicked" @removeClicked="removeClicked"
+            @retryClicked="retryClicked" @removeFailedClicked="removeFailedClicked"
             v-if="index >= pageFrom-1 && index <= pageTo-1 " />
         <div class="row thumbnailList invisible" v-for="pad in pagerPad"></div>
         <div class="row text-center pagerRow">
@@ -114,6 +115,13 @@ export default {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     }
                 },
+                deleteFile: {
+                    enabled: true,
+                    endpoint: '/api/v1/ingest/file',
+                    customHeaders: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                },
                 chunking: {
                     enabled: true,
                     partSize: 1024*768,
@@ -134,7 +142,8 @@ export default {
                             'uploadedFileId': '',
                             'fileSize': 0,
                             'uploadedFileSize': 0,
-                            'isUploading': false
+                            'isUploading': false,
+                            'isFailed': false
                         });
                     },
                     onProgress: (id, name, uploadedBytes, totalBytes) => {
@@ -149,9 +158,13 @@ export default {
                     },
                     onComplete: async (id, name, response, xhr, something) => {
                         let filesIndex = this.filesUploading.findIndex( (file) => file.id == id );
+                        if( filesIndex === null || !this.filesUploading[filesIndex] || this.filesUploading[filesIndex].isFailed ) {
+                            return;
+                        }
                         this.filesUploading[filesIndex].isUploading = false;
                         let fileSize = this.uploader.methods.getSize(id);
                         this.filesUploading[filesIndex].fileSize = fileSize;
+                        this.infoToast('Upload complete', `Upload of ${name} complete`);
 
                         if( this.compoundModeEnabled ) {
                             let uploadToBagId = this.bag.id;
@@ -169,7 +182,7 @@ export default {
                                         this.files = files.data.data;
                                     });
                                 }
-                            })
+                            });
                         } else {
                             axios.post("/api/v1/ingest/files/bag", {
                                 'fileName' : name,
@@ -177,6 +190,13 @@ export default {
                                 'fileSize': fileSize
                             });
                         }
+
+                    },
+                    onError: async (id, name, errorReason, xhr ) => {
+                        let filesIndex = this.filesUploading.findIndex( (file) => file.id == id );
+                        this.filesUploading[filesIndex].isUploading = false;
+                        this.filesUploading[filesIndex].isFailed = true;
+                        this.errorToast('Upload failed', `Upload of ${name} failed. Please try again.`, 5);
                     }
                 }
             }
@@ -284,7 +304,18 @@ export default {
                 this.files = (await axios.get('/api/v1/ingest/bags/' + this.bag.id + '/files')).data.data;
                 this.filesUploading = this.filesUploading.filter( (file) => file.uploadedFileId !== fileId );
             });
-
+        },
+        async removeFailedClicked( e ) {
+            let fileId = e.id;
+            this.uploader.methods.deleteFile( fileId );
+            this.filesUploading = this.filesUploading.filter( (file) => file.id !== fileId );
+        },
+        retryClicked( e ) {
+            let fileId = e.id;
+            let filesIndex = this.filesUploading.findIndex( (file) => file.id == fileId );
+            this.filesUploading[filesIndex].isFailed = false;
+            this.filesUploading[filesIndex].isUploading = true;
+            this.uploader.methods.retry( fileId );
         },
         addFileToQueue(payload) {
         },

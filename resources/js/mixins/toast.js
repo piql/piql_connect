@@ -6,6 +6,15 @@ export default {
                 autoHideDelay: 1000 * hideAfter,
                 toaster: toaster
             });
+        },
+        errorToast: function( title, message, hideAfter = 3, toaster = 'b-toaster-bottom-right' ) {
+            this.$bvToast.toast( message, {
+                title: title,
+                autoHideDelay: 1000 * hideAfter,
+                toaster: toaster,
+                variant: "danger"
+            });
         }
+
     }
 }

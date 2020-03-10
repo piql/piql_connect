@@ -109,4 +109,14 @@ class FileUploadController extends Controller
         Log::info("FileUpload destroy");
         //
     }
+
+    public function deleteUploadedTemp( $request ) {
+        $folderToDelete = "/incoming/chunks/{$request}";
+        Log::debug($folderToDelete);
+        $result = Storage::deleteDirectory( $folderToDelete );
+        if( $result == false) {
+            return response()->json( "Could not delete temporary files; reason unknown", 500 );
+        }
+        return response()->json( "Deleted temporary upload folder ${folderToDelete}", 200 );
+    }
 }

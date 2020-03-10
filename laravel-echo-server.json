@@ -28,7 +28,7 @@
 	},
 	"apiOriginAllow": {
 		"allowCors": true,
-		"allowOrigin": "connect.local",
+		"allowOrigin": "connect.local:*",
 		"allowMethods": "OPTIONS, GET, POST, PUT",
 		"allowHeaders": "Origin, Content-Type, Cookie"
 	}
