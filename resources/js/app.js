@@ -26,7 +26,7 @@ window.collapseMenu = function() {
         document.getElementById("mainContent").setAttribute("class", "col-10 ml-2 mr-1");
         document.getElementById("poweredBy").setAttribute("style", "display: inline-flex;");
     }
-    else {
+    else if( document.getElementById("sideMenuCollapsed") ) {
         document.getElementById("sideMenuCollapsed").setAttribute("id", "sideMenu");
         document.getElementById("sidebarWrapper").setAttribute("class", "col-3 pl-0 sidebarWrapper");
         document.getElementById("mainContent").setAttribute("class", "col-8 ml-3 mr-0");
@@ -103,8 +103,7 @@ const i18n = new VueInternationalization({
 });
 
 /**
- * The following block of code may be used to automatically register your
- * Vue components. It will recursively scan this directory for the Vue
+ * Register all Vue components. It will recursively scan this directory for the Vue
  * components and automatically register them with their "basename".
  *
  * Eg. ./components/ExampleComponent.vue -> <example-component></example-component>
@@ -112,12 +111,6 @@ const i18n = new VueInternationalization({
 
 const files = require.context('./', true, /\.vue$/i);
 files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default));
-
-/**
- * Next, we will create a fresh Vue application instance and attach it to
- * the page. Then, you may begin adding components to this application
- * or customize the JavaScript scaffolding to fit your unique needs.
- */
 
 /**
  * The filesize es6 module - giving us human readable file sizes -
@@ -142,6 +135,11 @@ let refreshSessionActivity = Vue.mixin({
 			}
 		},
 });
+
+/**
+ * Finally, create the Vue application instance
+ */
+
 const app = new Vue({
     el: '#app',
     i18n,

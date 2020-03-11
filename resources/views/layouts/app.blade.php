@@ -5,19 +5,20 @@
         <meta name="csrf-token" content="{{ csrf_token() }}">
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=yes">
-        <script type="text/javascript">Window.locale = '{{\App::getLocale()}}';</script>
         <link href="{{ asset('css/vendor.css') }}" rel="stylesheet" />
         <link href="{{ asset('css/app.css') }}" rel="stylesheet" />
-        <script type="text/javascript" src="{{ mix('js/vendor.js') }}" defer></script>
-        <script type="text/javascript" src="{{ mix('js/app.js') }}" defer></script>
+
 @if (Route::current()->getName() == 'login')
 		<script type="text/javascript">
 			let timeout = {{env('SESSION_LIFETIME', 120) * 60000 }} - 1000;
-			console.log("refreshing in " + timeout);
 			setTimeout(function(){
 				location.reload();
 			}, timeout );
-		</script>
+        </script>
+@else
+        <script type="text/javascript">Window.locale = '{{\App::getLocale()}}';</script>
+        <script type="text/javascript" src="{{ mix('js/vendor.js') }}" defer></script>
+        <script type="text/javascript" src="{{ mix('js/app.js') }}" defer></script>
 @endif
     </head>
 
