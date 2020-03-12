@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 use App\Aip;
+use App\FileObject;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Log;
 use App\Charts\TestChartJS;
 
@@ -95,88 +97,76 @@ class DashboardController extends Controller
 
     private function onlineDataIngested($user)
     {
-        return Aip::where("owner", $user->id)->get()->map(function($aip) { return $aip->size; })->sum();
+        return FileObject::where("storable_type", 'App\Aip')
+            ->where('path','NOT LIKE','%/data/objects/metadata/%')
+            ->where('path','NOT LIKE','%/data/objects/submissionDocumentation/%')
+            ->where('path','LIKE','%/data/objects%')
+            ->sum('size');
     }
 
     private function onlineAIPsIngested($user)
     {
-        return Aip::where("owner", $user->id)->count();
+        return Aip::count();
     }
 
     private function monthlyOnlineAIPsIngested($user)
     {
-        $aips = Aip::where("owner", $user->id)->get();
+        return $this->arrayRearrangeCurrentMonthLast(
+            collect([0,1,2,3,4,5,6,7,8,9,10,11])->map(function($obj) {
+                return FileObject::where("storable_type", 'App\Aip')
+                    ->whereBetween("created_at", [
+                    (new \DateTime(date("Y-m")))->modify((-$obj)." month"),
+                    (new \DateTime(date("Y-m")))->modify((1-$obj)." month")
+                ])->count();
+            })
+        );
 
-        $monthlyAIPsIngested = array_fill(0, 12, 0);
-
-        $oneYearAgo = new \DateTime(date('Y-m-d'));
-        $oneYearAgo->modify('-1 year');
-        $oneYearAgo->modify('first day of next month');
-
-        foreach ($aips as $aip)
-        {
-            $creation_date = new \DateTime($aip->created_at);
-
-            if ($creation_date > $oneYearAgo) {
-                $monthlyAIPsIngested[$creation_date->format('n') - 1]++;
-            }
-        }
-
-        return $this->arrayRearrangeCurrentMonthLast($monthlyAIPsIngested);
     }
 
     private function monthlyOnlineDataIngested($user)
     {
-        $aips = Aip::where("owner", $user->id)->get();
-
-        $monthlyDataIngested = array_fill(0, 12, 0);
-
-        $oneYearAgo = new \DateTime(date('Y-m-d'));
-        $oneYearAgo->modify('-1 year');
-        $oneYearAgo->modify('first day of next month');
-
-        foreach ($aips as $aip)
-        {
-            $creation_date = new \DateTime($aip->created_at);
-
-            if ($creation_date > $oneYearAgo) {
-
-                $files = $aip->files;
-
-                foreach ($files as $file)
-                {
-                    $monthlyDataIngested[$creation_date->format('n') - 1] += $file->filesize;
-                }
-            }
-        }
-        return $this->arrayRearrangeCurrentMonthLast($monthlyDataIngested);
+        return $this->arrayRearrangeCurrentMonthLast(
+            collect([0,1,2,3,4,5,6,7,8,9,10,11])->map(function($obj) {
+                return FileObject::where("storable_type", 'App\Aip')
+                    ->where('path','NOT LIKE','%/data/objects/metadata/%')
+                    ->where('path','NOT LIKE','%/data/objects/submissionDocumentation/%')
+                    ->where('path','LIKE','%/data/objects%')
+                    ->whereBetween("created_at", [
+                    (new \DateTime(date("Y-m")))->modify((-$obj)." month"),
+                    (new \DateTime(date("Y-m")))->modify((1-$obj)." month")
+                ])->sum("size");
+            })
+        );
     }
 
     private function fileFormatsIngested($user)
     {
-        $bags = $user->bags->where('status', 'complete');
+        $count = FileObject::where('storable_type', 'App\Aip')
+            ->where('path','NOT LIKE','%/data/objects/metadata/%')
+            ->where('path','NOT LIKE','%/data/objects/submissionDocumentation/%')
+            ->where('path','LIKE','%/data/objects%')
+            ->count();
 
-        $fileFormats = [];
-
-        foreach ($bags as $bag)
-        {
-            $files = $bag->files;
-
-            foreach ($files as $file)
-            {
-                $extension = pathinfo($file->filename)['extension'];
-
-                if (array_key_exists($extension, $fileFormats))
-                {
-                    $fileFormats[$extension]++;
-                } else
-                {
-                    $fileFormats[$extension] = 1;
-                }
-            }
+        $fileFormats = FileObject::select('mime_type',DB::raw('count(mime_type)'))
+            ->where('storable_type', 'App\Aip')
+            ->where('path','NOT LIKE','%/data/objects/metadata/%')
+            ->where('path','NOT LIKE','%/data/objects/submissionDocumentation/%')
+            ->where('path','LIKE','%/data/objects%')
+            ->groupBy('mime_type')
+            ->orderBy('count(mime_type)', 'desc')
+            ->limit(4)
+            ->get()
+            ->flatMap(function($obj) use(&$count) {
+                $count -= $obj['count(mime_type)'];
+                return [$obj->mime_type => $obj['count(mime_type)']];
+            });
+        if($count) {
+            $fileFormats['other'] = $count;
         }
-        arsort($fileFormats);
-        return $fileFormats;
+
+        $keys = $fileFormats->toArray();
+        arsort($keys);
+        return $keys;
     }
 
     private function byteToMetricbyte($bytes)
