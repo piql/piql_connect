@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers\Api\Stats;
 
+use App\FileObject;
+use App\Aip;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 use App\Charts\TestChartJS;
 use App\User;
+use Illuminate\Support\Facades\DB;
 
 class DashboardChartController extends Controller
 {
@@ -167,54 +170,31 @@ class DashboardChartController extends Controller
 
     private function monthlyOnlineAIPsIngested($user)
     {
-        $bags = $user->bags->where('status', 'complete');
-        $monthlyOnlineAIPsIngested = array_fill(0, 12, 0);
-
-        $oneYearAgo = new \DateTime(date('Y-m-d'));
-        $oneYearAgo->modify('-1 year');
-        $oneYearAgo->modify('first day of next month');
-
-        foreach ($bags as $bag)
-        {
-            $creation_date = new \DateTime($bag->created_at);
-
-            if ($creation_date > $oneYearAgo) {
-                $monthlyOnlineAIPsIngested[$creation_date->format('n') - 1]++;
-            }
-        }
-
-        return $this->arrayRearrangeCurrentMonthLast($monthlyOnlineAIPsIngested);
+        return $this->arrayRearrangeCurrentMonthLast(
+            collect(range(0,11))->map(function($obj) {
+                return FileObject::where("storable_type", 'App\Aip')
+                    ->whereBetween("created_at", [
+                        (new \DateTime(date("Y-m")))->modify((-$obj)." month"),
+                        (new \DateTime(date("Y-m")))->modify((1-$obj)." month")
+                    ])->count();
+            })->toArray()
+        );
     }
 
     private function monthlyOnlineDataIngested($user)
     {
-        $bags = $user->bags->where('status', 'complete');
-
-        $monthlyOnlineDataIngested = array_fill(0, 12, 0);
-
-        $oneYearAgo = new \DateTime(date('Y-m-d'));
-        $oneYearAgo->modify('-1 year');
-        $oneYearAgo->modify('first day of next month');
-
-        foreach ($bags as $bag)
-        {
-            $date = new \DateTime($bag->created_at);
-
-            if ($date > $oneYearAgo) {
-
-                $files = $bag->files;
-
-                foreach ($files as $file)
-                {
-                    $monthlyOnlineDataIngested[$date->format('n') - 1] += $file->filesize / 1000000000; // In GB
-                }
-            }
-        }
-        for ($i = 0; $i < count($monthlyOnlineDataIngested); $i++)
-        {
-            $monthlyOnlineDataIngested[$i] = round($monthlyOnlineDataIngested[$i], 2);
-        }
-        return $this->arrayRearrangeCurrentMonthLast($monthlyOnlineDataIngested);
+        return $this->arrayRearrangeCurrentMonthLast(
+            collect(range(0,11))->map(function($obj) {
+                return FileObject::where("storable_type", 'App\Aip')
+                    ->where('path','NOT LIKE','%/data/objects/metadata/%')
+                    ->where('path','NOT LIKE','%/data/objects/submissionDocumentation/%')
+                    ->where('path','LIKE','%/data/objects%')
+                    ->whereBetween("created_at", [
+                        (new \DateTime(date("Y-m")))->modify((-$obj)." month"),
+                        (new \DateTime(date("Y-m")))->modify((1-$obj)." month")
+                    ])->sum("size") / 1000000000; // In GB
+            })->toArray()
+        );
     }
 
     private function dailyOnlineAIPsIngested($user)
@@ -315,13 +295,29 @@ class DashboardChartController extends Controller
 
     private function fileFormatsIngested($user)
     {
-        $dipFiles = \App\FileObject::where('storable_type',"App\Dip")->get();
-        $uniqueMimeTypes = $dipFiles->pluck("mime_type")->unique();
+        $count = FileObject::where('storable_type', 'App\Aip')
+            ->where('path','NOT LIKE','%/data/objects/metadata/%')
+            ->where('path','NOT LIKE','%/data/objects/submissionDocumentation/%')
+            ->where('path','LIKE','%/data/objects%')
+            ->count();
 
-        $typesAndCounts = $uniqueMimeTypes->mapWithKeys( function( $type ) use ($dipFiles) {
-            return [ $type => $dipFiles->where('mime_type', $type)->count() ];
-        });
+        $fileFormats = FileObject::select('mime_type',DB::raw('count(mime_type)'))
+            ->where('storable_type', 'App\Aip')
+            ->where('path','NOT LIKE','%/data/objects/metadata/%')
+            ->where('path','NOT LIKE','%/data/objects/submissionDocumentation/%')
+            ->where('path','LIKE','%/data/objects%')
+            ->groupBy('mime_type')
+            ->orderBy('count(mime_type)', 'desc')
+            ->limit(7)
+            ->get()
+            ->flatMap(function($obj) use(&$count) {
+                $count -= $obj['count(mime_type)'];
+                return [$obj->mime_type => $obj['count(mime_type)']];
+            });
+        if($count) {
+            $fileFormats['other'] = $count;
+        }
 
-        return \Response::json($typesAndCounts);
+        return \Response::json($fileFormats);
     }
 }
