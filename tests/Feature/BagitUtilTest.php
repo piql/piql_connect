@@ -2,6 +2,9 @@
 
 namespace Tests\Feature;
 
+use App\File;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Contracts\Foundation;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -15,33 +18,34 @@ class BagitUtilTest extends TestCase
     private $outputFileName;
     private $outputFilePath;
     private $targetPath;
+    private $storage;
 
     public function setUp() : void
     {
-        $this->targetPath = sys_get_temp_dir() . "/target";
-        if(!file_exists( $this->targetPath ) ) {
-            mkdir(  $this->targetPath );
-        }
+        parent::setUp();
+
+        $filePath = "/target.txt";
+        $this->storage = Storage::fake('bags');
+        $this->storage->put($filePath, "Hello world");
+        $this->targetPath = $this->storage->path('');
+
         $faker = Faker::create();
         $this->generatedImageFilePaths = array_map( function () use (&$faker) { return $faker->file( $this->targetPath ); }, range(0,4) );
         $this->outputFileName = $faker->slug(1)."-".$faker->uuid().".zip";
         $this->outputFilePath = $this->targetPath .'/'.$this->outputFileName;
-
-        parent::setUp();
     }
 
     public function tearDown() : void
     {
-        parent::tearDown();
-
         array_map( function ($filePath) { unlink($filePath); }, $this->generatedImageFilePaths );
         unlink($this->outputFilePath);
+        parent::tearDown();
     }
-  
+
    public function test_it_creates_a_valid_bag()
     {
         $bagIt = new BagitUtil();
-        array_map( function ($filePath) use (&$bagIt ) { 
+        array_map( function ($filePath) use (&$bagIt ) {
             $bagIt->addFile($filePath, basename($filePath));
         }, $this->generatedImageFilePaths );
         $createdBag = $bagIt->createBag($this->outputFilePath);
