@@ -61,13 +61,13 @@ class HoldingApiTest extends TestCase
         $f1 = Holding::create(['title' => $this->rndTitle1]+$testHoldingBase);
         $f2 = Holding::create(['title' => $this->rndTitle2]+$testHoldingBase);
         $f3 = Holding::create(['title' => $this->rndTitle3]+$testHoldingBase);
-        
+
         $response = $this->get('/api/v1/planning/archives/'.$second_archive->uuid.'/holdings');
         $response->assertJson(
             ['data' => [
-                [ 'id' => $f1->id, 'title'=> $this->rndTitle1], 
-                [ 'id' => $f2->id, 'title'=> $this->rndTitle2], 
-                [ 'id' => $f3->id, 'title'=> $this->rndTitle3] 
+                [ 'id' => $f1->id, 'title'=> $this->rndTitle1],
+                [ 'id' => $f2->id, 'title'=> $this->rndTitle2],
+                [ 'id' => $f3->id, 'title'=> $this->rndTitle3]
             ] ]);
 
         $response->assertStatus(200);
@@ -97,7 +97,7 @@ class HoldingApiTest extends TestCase
         $response = $this->post(route('planning.holdings.store'), ['title' => '' ]+$this->testHoldingData);
         $response->assertStatus(422);
         $content = $response->getContent();
-        $this->assertContains('title', $content);
+        $this->assertStringContainsString('title', $content);
     }
 
     public function test_when_creating_given_a_bad_owner_archive_it_responds_with_422()
@@ -105,7 +105,7 @@ class HoldingApiTest extends TestCase
         $response = $this->post(route('planning.holdings.store'), ['owner_archive_uuid' => '123' ]+$this->testHoldingData);
         $response->assertStatus(422);
         $content = $response->getContent();
-        $this->assertContains('owner_archive', $content);
+        $this->assertStringContainsString('owner_archive', $content);
     }
 
 
