@@ -130,6 +130,12 @@ export default {
                         enabled: false
                     },
                 },
+                resume: {
+                    enabled: true
+                },
+                retry: {
+                    enableAuto: false, /* this didn't work very well, so we have our own logic for it */
+                },
                 callbacks: {
                     onValidate: (id, name) => {
                     },
@@ -144,7 +150,8 @@ export default {
                             'uploadedFileSize': 0,
                             'isUploading': false,
                             'isFailed': false,
-                            'isComplete': false
+                            'isComplete': false,
+                            'retryCount' : 0
                         });
                     },
                     onProgress: (id, name, uploadedBytes, totalBytes) => {
@@ -199,9 +206,25 @@ export default {
                     },
                     onError: async (id, name, errorReason, xhr ) => {
                         let filesIndex = this.filesUploading.findIndex( (file) => file.id == id );
-                        this.filesUploading[filesIndex].isUploading = false;
-                        this.filesUploading[filesIndex].isFailed = true;
-                        this.errorToast('Upload failed', `Upload of ${name} failed. Please try again.`, 5);
+                        if( filesIndex === null) {
+                            return;
+                        }
+
+                        this.filesUploading[filesIndex].retryCount++;
+                        if( this.filesUploading[filesIndex].retryCount < this.maxAutoRetries ){
+                            this.filesUploading[filesIndex].isUploading = true;
+                            this.filesUploading[filesIndex].isFailed = false;
+                            let fileId = id;
+                            setTimeout( ()  => {
+                                this.uploader.methods.retry(fileId);
+                            }, this.sleepRetryGracetimeMs );
+                        }
+                        else {
+                            this.filesUploading[filesIndex].retryCount = 0;
+                            this.filesUploading[filesIndex].isUploading = false;
+                            this.filesUploading[filesIndex].isFailed = true;
+                            this.errorToast('Upload failed', `Upload of ${name} failed. Please try again.`, 5);
+                        }
                     }
                 }
             }
@@ -418,6 +441,16 @@ export default {
                     }).data;
                 });
             }
+        },
+    },
+    props: {
+        retryGracetimeMs: {
+            type: Number,
+            default: 1000
+        },
+        maxAutoRetries: {
+            type: Number,
+            default: 5
         },
     },
     async mounted() {
