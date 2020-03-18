@@ -29,6 +29,9 @@
     "upload.files": "Antall filer",
     "upload.archiveToolTip": "Velg hvilken hovedkategori du vil laste opp til",
     "upload.holdingToolTip": "Velg hvilken samling du vil laste opp til",
+    "upload.resumeOne": "Gjenoppta filopplastingen",
+    "upload.resumeAll": "Gjentoppta opplasting for alle filer",
+    "upload.remove": "Fjern filen fra opplastingen",
 
     "User interface language": "Brukergrensesnittspråk",
     "Ingest mode": "Mottaksmodus",

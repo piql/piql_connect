@@ -50,7 +50,9 @@
             <div v-else="customerSelectsHoldings" class="col-md-2">
             </div>
 
-            <div class="col-md-2">
+            <div class="col-md-2 text-center pr-0">
+                <label for="processButton" class="col-form-label-sm">&nbsp;</label>
+                <button class="btn btn-sm btn-link" @click="retryAll" href="#" data-toggle="tooltip" :title="$t('upload.resumeAll')"><i class="fas fa-redo topIcon text-center mr-2"></i></button>
             </div>
 
             <div v-show="compoundModeEnabled" class="col-md-2 text-center pr-0">
@@ -351,6 +353,16 @@ export default {
             this.filesUploading[filesIndex].isFailed = false;
             this.filesUploading[filesIndex].isUploading = true;
             this.uploader.methods.retry( fileId );
+        },
+        retryAll( e ) {
+            this.filesUploading
+                .filter( (file) => file.isFailed == true )
+                .map( (f) => {
+                    let filesIndex = this.filesUploading.findIndex( (file) => file.id == f.id );
+                    this.filesUploading[filesIndex].isFailed = false;
+                    this.filesUploading[filesIndex].isUploading = true;
+                    this.uploader.methods.retry( f.id );
+                });
         },
         addFileToQueue(payload) {
         },
