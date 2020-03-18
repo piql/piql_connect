@@ -222,7 +222,7 @@ class DashboardChartController extends Controller
         return $dailyOnlineAIPsIngested;
     }
 
-    private function dailyOnlineDataIngesteddailyOnlineDataIngested($user)
+    private function dailyOnlineDataIngested($user)
     {
         $bags = $user->bags->where('status', 'complete');
 
