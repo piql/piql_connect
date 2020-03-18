@@ -73,7 +73,7 @@
             </div>
         </div>
 
-        <UploadFileItem v-for="(file,index) in filesUploading" v-bind:file="file" :key="file.id"
+        <UploadFileItem v-for="(file,index) in sortedFilesUploading" v-bind:file="file" :key="file.id"
             @metadataClicked="metadataClicked" @removeClicked="removeClicked"
             @retryClicked="retryClicked" @removeFailedClicked="removeFailedClicked"
             v-if="index >= pageFrom-1 && index <= pageTo-1 " />
@@ -143,7 +143,8 @@ export default {
                             'fileSize': 0,
                             'uploadedFileSize': 0,
                             'isUploading': false,
-                            'isFailed': false
+                            'isFailed': false,
+                            'isComplete': false
                         });
                     },
                     onProgress: (id, name, uploadedBytes, totalBytes) => {
@@ -157,11 +158,15 @@ export default {
                         this.refreshSession(); //Needed if paginate-navigated away from the first page
                     },
                     onComplete: async (id, name, response, xhr, something) => {
+                        if( response.success == false ){
+                            return;
+                        }
                         let filesIndex = this.filesUploading.findIndex( (file) => file.id == id );
                         if( filesIndex === null || !this.filesUploading[filesIndex] || this.filesUploading[filesIndex].isFailed ) {
                             return;
                         }
                         this.filesUploading[filesIndex].isUploading = false;
+                        this.filesUploading[filesIndex].isComplete = true;
                         let fileSize = this.uploader.methods.getSize(id);
                         this.filesUploading[filesIndex].fileSize = fileSize;
                         this.infoToast('Upload complete', `Upload of ${name} complete`);
@@ -230,8 +235,12 @@ export default {
     },
 
     computed: {
+        sortedFilesUploading() {
+            return this.filesUploading.sort( (a,b)  => Number( b.isFailed ) - Number( a.isFailed ) )
+                                      .sort( (a,b)  => Number( b.isUploading) - Number( a.isUploading ) );
+        },
         processDisabled: function() {
-            return this.invalidBagName | this.numberOfFiles === 0 | this.uploadInProgress;
+            return this.invalidBagName | this.numberOfFiles === 0 | this.hasIncompleteFiles;
         },
         invalidBagName: function() {
             let valid = /^((?![:\\<>"/?*|]).){3,}$/g;
@@ -239,6 +248,9 @@ export default {
         },
         numberOfFiles: function() {
             return this.files.length;
+        },
+        hasIncompleteFiles() {
+            return this.filesUploading.some( f => !f.isComplete );
         },
         compoundModeEnabled: function() {
             let compoundSetting = this.userSettings.workflow.ingestCompoundModeEnabled;
@@ -441,7 +453,8 @@ export default {
                     uploadedToBagId: file.bag_id,
                     fileSize: file.filesize,
                     uploadedFileSize: file.filesize,
-                    isUploading: false
+                    isUploading: false,
+                    isComplete: true
                 }) );
             }
             else {

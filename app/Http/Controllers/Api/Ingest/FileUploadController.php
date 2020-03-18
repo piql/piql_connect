@@ -111,12 +111,17 @@ class FileUploadController extends Controller
     }
 
     public function deleteUploadedTemp( $request ) {
-        $folderToDelete = "/incoming/chunks/{$request}";
-        Log::debug($folderToDelete);
+        $folderToDelete = "incoming/chunks/{$request}";
+
+        if( !Storage::exists( $folderToDelete ) ) {
+            Log::debug("Temp upload folder: {$folderToDelete} does not exist.");
+            return response()->json( "Temporary upload folder ${folderToDelete} already deleted or never created.", 200 );
+        }
+        Log::debug("Deleting temp upload folder: {$folderToDelete}");
         $result = Storage::deleteDirectory( $folderToDelete );
         if( $result == false) {
             return response()->json( "Could not delete temporary files; reason unknown", 500 );
         }
-        return response()->json( "Deleted temporary upload folder ${folderToDelete}", 200 );
+        return response()->json( "Deleted temporary upload folder for {$request}", 200 );
     }
 }
