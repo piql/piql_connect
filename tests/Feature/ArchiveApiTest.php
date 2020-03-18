@@ -89,7 +89,7 @@ class ArchiveApiTest extends TestCase
     {
         $archiveId = $this->createdTestArchive->id;
         $response = $this->json( 'DELETE',
-            route( 'planning.archives.destroy', ['id' => $archiveId] )
+            route( 'planning.archives.destroy', ['archive' => $archiveId] )
         );
         $response->assertStatus(204);
         $model = Archive::withTrashed()->find($archiveId);
@@ -100,18 +100,18 @@ class ArchiveApiTest extends TestCase
     {
         $archiveId = PHP_INT_MAX;
         $response = $this->json( 'DELETE',
-            route( 'planning.archives.destroy', ['id' => $archiveId] )
+            route( 'planning.archives.destroy', ['archive' => $archiveId] )
         );
 
         $response->assertStatus(404);
-        $response->assertJson(['error' => 404, 'message' => 'No Archive with id '.$archiveId.' was found.']); 
+        $response->assertJson(['error' => 404, 'message' => 'No Archive with id '.$archiveId.' was found.']);
     }
 
     public function test_given_an_archive_exists_when_requesting_it_it_is_returned()
     {
         $archiveId = $this->createdTestArchive->id;
         $response = $this->json( 'GET',
-            route( 'planning.archives.show', ['id' => $archiveId] )
+            route( 'planning.archives.show', ['archive' => $archiveId] )
         );
 
         $response->assertStatus(200);
@@ -122,10 +122,10 @@ class ArchiveApiTest extends TestCase
     {
         $archiveId = PHP_INT_MAX;
         $response = $this->json( 'GET',
-            route( 'planning.archives.show', ['id' => $archiveId] )
+            route( 'planning.archives.show', ['archive' => $archiveId] )
         );
 
         $response->assertStatus(404);
-        $response->assertJson(['error' => 404, 'message' => 'No Archive with id '.$archiveId.' was found.']); 
+        $response->assertJson(['error' => 404, 'message' => 'No Archive with id '.$archiveId.' was found.']);
     }
 }
