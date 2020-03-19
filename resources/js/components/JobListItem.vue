@@ -76,13 +76,7 @@ export default {
             window.location = '/ingest/offline_storage/'+this.item.id;
         },
         async piqlIt(e) {
-            e.preventDefault(); //????
-
-            let job = (await axios.patch(this.jobListUrl+"/jobs/"+this.item.id, {
-                'status': 'ingesting'
-            })).data;
-            if(job.status == 'ingesting')
-                this.modal = false;
+            this.$emit('piqlIt', this.item );
         },
         async setJobName() {
             let currentId = this.item.id;

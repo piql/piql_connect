@@ -64,8 +64,18 @@ import axios from 'axios';
             this.update();
         },
         methods: {
-            async piqlIt(id) {
-                await axios.post("/api/v1/ingest/bags/"+id+"/piql");
+            async piqlIt( job ) {
+                let result = (await axios.patch(this.jobListUrl+"/jobs/"+job.id, {
+                    'status': 'ingesting'
+                }));
+                if(result.data.status == 'ingesting') {
+                    this.modal = false; //????
+                }
+                this.infoToast(
+                    this.$t('ingest.offlineStorage.toasts.piqled.title'),
+                    this.$t('ingest.offlineStorage.toasts.piqled.message'),
+                    {'PACKAGENAME': job.name }
+                );
                 this.update();
             },
             async update() {

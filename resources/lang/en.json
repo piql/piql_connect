@@ -109,6 +109,8 @@
     "ingest.offlineStorage.metadata.ingress": "This page allow you to add descriptive metadata to an offline package",
     "ingest.offlineStorage.contentOptions.header" : "Content options",
     "ingest.offlineStorage.contentOptions.ingress" : "Add metadata (representation information) and define the writing parameters on the offline package",
+    "ingest.offlineStorage.toasts.piqled.title" :"Preparing for writing to piqlFilm",
+    "ingest.offlineStorage.toasts.piqled.message" :"The package %PACKAGENAME% is now being prepared for writing to piqlFilm",
 
     "ingest.fileList.header": "File list",
     "ingest.fileList.ingress": "Displays the files included in the submission package",
