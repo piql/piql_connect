@@ -50,10 +50,15 @@
             <div v-else="customerSelectsHoldings" class="col-md-2">
             </div>
 
-            <div class="col-md-2 text-center pr-0">
+            <div v-if="hasFailedUploads" class="col-md-2 pr-0">
                 <label for="processButton" class="col-form-label-sm">&nbsp;</label>
-                <button v-if="hasFailedUploads" class="btn btn-sm btn-link" @click="retryAll" href="#" data-toggle="tooltip" :title="$t('upload.resumeAll')"><i class="fas fa-redo topIcon text-center mr-2"></i></button>
+                <button class="btn btn-sm btn-link" @click="retryAll" href="#" data-toggle="tooltip" :title="$t('upload.resumeAll')"><i class="fas fa-redo topIcon text-center mr-2"></i></button>
             </div>
+            <div v-else="hasFailedUploads" class="col-md-2 text-left pr-0 align-middle">
+                <label for="fileNameFilter" class="col-form-label-sm">{{$t("upload.fileNameFilter")}}</label>
+                <input id="fileNameFilter" v-model="fileNameFilter">
+            </div>
+
 
             <div v-show="compoundModeEnabled" class="col-md-2 text-center pr-0">
                 <label for="processButton" class="col-form-label-sm">&nbsp;</label>
@@ -153,7 +158,8 @@ export default {
                             'isUploading': false,
                             'isFailed': false,
                             'isComplete': false,
-                            'retryCount' : 0
+                            'retryCount' : 0,
+                            'isHidden': false
                         });
                     },
                     onProgress: (id, name, uploadedBytes, totalBytes) => {
@@ -259,7 +265,8 @@ export default {
             currentPage: 1,
             pageSize: 4,
             pageFrom: 1,
-            pageTo: 4
+            pageTo: 4,
+            fileNameFilter: ""
         };
     },
 
@@ -269,8 +276,10 @@ export default {
 
     computed: {
         sortedFilesUploading() {
-            return this.filesUploading.sort( (a,b)  => Number( b.isFailed ) - Number( a.isFailed ) )
-                                      .sort( (a,b)  => Number( b.isUploading) - Number( a.isUploading ) );
+            return this.filesUploading
+                .filter( f => !f.isHidden )
+                .sort( (a,b)  => Number( b.isFailed ) - Number( a.isFailed ) )
+                .sort( (a,b)  => Number( b.isUploading) - Number( a.isUploading ) );
         },
         processDisabled: function() {
             return this.invalidBagName | this.numberOfFiles === 0 | this.hasIncompleteFiles;
@@ -299,8 +308,11 @@ export default {
         totalFilesUploading: function() {
             return this.filesUploading.length;
         },
+        totalFilesSorted: function() {
+            return this.sortedFilesUploading.length;
+        },
         pageLast: function() {
-            return Math.ceil( this.totalFilesUploading / this.pageSize );
+            return Math.ceil( this.totalFilesSorted / this.pageSize );
         },
         pagePrev: function() {
             return this.currentPage < 2 ? null : this.currentPage - 1;
@@ -311,7 +323,6 @@ export default {
         pagerPad: function() {
             let entriesOnLastPage = this.totalFilesUploading % this.pageSize;
             let padEntries = entriesOnLastPage > 0 ? ( this.pageSize - entriesOnLastPage ) : 0;
-
             return this.currentPage != this.pageLast ? 0 : padEntries;
         },
         filesUploadingMeta: function() {
@@ -322,7 +333,7 @@ export default {
                 'last_page': this.pageLast,
                 'from': this.pageFrom,
                 'to': this.pageTo,
-                'total': this.totalFilesUploading
+                'total': this.totalFilesSorted
             }
         },
         customerSelectsHoldings: function() {
@@ -332,6 +343,17 @@ export default {
             return this.archives.length > 1;
         },
 
+    },
+
+    watch: {
+        fileNameFilter: function(filter) {
+            let pattern = '('+filter.split(' ').join('|').concat(')'); /* Simple fuzzy matching */
+            let matcher = new RegExp(pattern, "i");
+            this.filesUploading = this.filesUploading.map( (file) => {
+                file.isHidden = !matcher.test( file.filename )
+                return file;
+            } );
+        }
     },
 
     methods: {

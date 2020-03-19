@@ -38,6 +38,7 @@
     "upload.toasts.uploadComplete.message": "Opplasting av filen %FILENAME% er ferdig.",
     "upload.toasts.uploadFailed.title": "Opplasting mislyktes",
     "upload.toasts.uploadFailed.message": "Opplasting av filen %FILENAME% feilet!",
+    "upload.fileNameFilter": "Filter",
     "User interface language": "Brukergrensesnittspråk",
     "Ingest mode": "Mottaksmodus",
     "Compound": "Sammensatt",

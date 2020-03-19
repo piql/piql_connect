@@ -39,6 +39,7 @@
     "upload.toasts.uploadComplete.message": "Upload of %FILENAME% complete.",
     "upload.toasts.uploadFailed.title": "Upload failed",
     "upload.toasts.uploadFailed.message": "Upload of %FILENAME% failed!",
+    "upload.fileNameFilter": "Filter",
 
     "sidebar.dashboard": "Dashboard",
     "sidebar.settings": "Settings",
