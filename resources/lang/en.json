@@ -33,6 +33,12 @@
     "upload.resumeOne": "Gjenoppta filopplastingen",
     "upload.resumeAll": "Gjentoppta opplasting for alle filer",
     "upload.remove": "Fjern filen fra opplastingen",
+    "upload.toasts.sentToProcessing.title": "Ready for processing",
+    "upload.toasts.sentToProcessing.message": "The files in upload %BAGNAME% have been queued for processing.",
+    "upload.toasts.uploadComplete.title": "Upload complete",
+    "upload.toasts.uploadComplete.message": "Upload of %FILENAME% complete.",
+    "upload.toasts.uploadFailed.title": "Upload failed",
+    "upload.toasts.uploadFailed.message": "Upload of %FILENAME% failed!",
 
     "sidebar.dashboard": "Dashboard",
     "sidebar.settings": "Settings",

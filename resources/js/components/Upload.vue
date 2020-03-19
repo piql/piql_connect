@@ -178,7 +178,11 @@ export default {
                         this.filesUploading[filesIndex].isComplete = true;
                         let fileSize = this.uploader.methods.getSize(id);
                         this.filesUploading[filesIndex].fileSize = fileSize;
-                        this.infoToast('Upload complete', `Upload of ${name} complete`);
+                        this.infoToast(
+                            this.$t('upload.toasts.uploadComplete.title'),
+                            this.$t('upload.toasts.uploadComplete.message'),
+                            {'FILENAME': name }
+                        );
 
                         if( this.compoundModeEnabled ) {
                             let uploadToBagId = this.bag.id;
@@ -225,7 +229,11 @@ export default {
                             this.filesUploading[filesIndex].retryCount = 0;
                             this.filesUploading[filesIndex].isUploading = false;
                             this.filesUploading[filesIndex].isFailed = true;
-                            this.errorToast('Upload failed', `Upload of ${name} failed. Please try again.`, 5);
+                            this.errorToast(
+                                this.$t('upload.toasts.uploadFailed.title'),
+                                this.$t('upload.toasts.uploadFailed.message'),
+                                { 'FILENAME': name }
+                            );
                         }
                     }
                 }
@@ -381,9 +389,16 @@ export default {
             }
             this.fileInputDisabled = true;
 
+            let bagName = this.bagName;
             await this.doProcessing( this.bag.id );
+
+            this.infoToast(
+                this.$t('upload.toasts.sentToProcessing.title'),
+                this.$t('upload.toasts.sentToProcessing.message'),
+                {'BAGNAME': bagName }
+            );
+
             this.bag = await this.createBag("", this.userId, this.selectedArchive, this.selectedHoldingTitle );
-            this.fileInputDisabled = false;
         },
         async doProcessing( bagId ) {
             let committed = (await axios.post("/api/v1/ingest/bags/"+bagId+"/commit")).data.data;

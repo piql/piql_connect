@@ -32,7 +32,12 @@
     "upload.resumeOne": "Gjenoppta filopplastingen",
     "upload.resumeAll": "Gjentoppta opplasting for alle filer",
     "upload.remove": "Fjern filen fra opplastingen",
-
+    "upload.toasts.sentToProcessing.title": "Klar til prosessering",
+    "upload.toasts.sentToProcessing.message": "Filene i opplastingen %BAGNAME% sendes nå til prosessering.",
+    "upload.toasts.uploadComplete.title": "Opplasting fullført",
+    "upload.toasts.uploadComplete.message": "Opplasting av filen %FILENAME% er ferdig.",
+    "upload.toasts.uploadFailed.title": "Opplasting mislyktes",
+    "upload.toasts.uploadFailed.message": "Opplasting av filen %FILENAME% feilet!",
     "User interface language": "Brukergrensesnittspråk",
     "Ingest mode": "Mottaksmodus",
     "Compound": "Sammensatt",
