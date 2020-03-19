@@ -1,5 +1,5 @@
 {
-	"authHost": "http://app_authentication_server",
+	"authHost": "https://app_authentication_server",
 	"authEndpoint": "/broadcasting/auth",
 	"clients": [],
 	"database": "redis",
@@ -15,7 +15,7 @@
 	"devMode": true,
 	"host": null,
 	"port": "6001",
-	"protocol": "http",
+	"protocol": "https",
 	"socketio": {},
 	"secureOptions": 67108864,
 	"sslCertPath": "/ssl/fullchain.pem",
@@ -23,7 +23,7 @@
 	"sslCertChainPath": "",
 	"sslPassphrase": "",
 	"subscribers": {
-		"http": true,
+		"https": true,
 		"redis": true
 	},
 	"apiOriginAllow": {
