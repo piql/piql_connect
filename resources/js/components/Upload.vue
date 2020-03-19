@@ -52,7 +52,7 @@
 
             <div class="col-md-2 text-center pr-0">
                 <label for="processButton" class="col-form-label-sm">&nbsp;</label>
-                <button class="btn btn-sm btn-link" @click="retryAll" href="#" data-toggle="tooltip" :title="$t('upload.resumeAll')"><i class="fas fa-redo topIcon text-center mr-2"></i></button>
+                <button v-if="hasFailedUploads" class="btn btn-sm btn-link" @click="retryAll" href="#" data-toggle="tooltip" :title="$t('upload.resumeAll')"><i class="fas fa-redo topIcon text-center mr-2"></i></button>
             </div>
 
             <div v-show="compoundModeEnabled" class="col-md-2 text-center pr-0">
@@ -284,6 +284,9 @@ export default {
         },
         hasIncompleteFiles() {
             return this.filesUploading.some( f => !f.isComplete );
+        },
+        hasFailedUploads() {
+            return this.filesUploading.some( f => f.isFailed );
         },
         compoundModeEnabled: function() {
             let compoundSetting = this.userSettings.workflow.ingestCompoundModeEnabled;
