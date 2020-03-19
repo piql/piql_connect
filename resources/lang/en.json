@@ -30,6 +30,10 @@
     "upload.fileName": "File name",
     "upload.fileSize": "File size",
     "upload.fileActions": "Actions",
+    "upload.resumeOne": "Gjenoppta filopplastingen",
+    "upload.resumeAll": "Gjentoppta opplasting for alle filer",
+    "upload.remove": "Fjern filen fra opplastingen",
+
     "sidebar.dashboard": "Dashboard",
     "sidebar.settings": "Settings",
     "sidebar.upload": "Upload",
