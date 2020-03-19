@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.133.38",
+            "version": "3.133.39",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "5ec9442162d83f94918bc17136a2b674a04784e5"
+                "reference": "0e3b9e497bd39063cb504115c726d369d8f4d455"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/5ec9442162d83f94918bc17136a2b674a04784e5",
-                "reference": "5ec9442162d83f94918bc17136a2b674a04784e5",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/0e3b9e497bd39063cb504115c726d369d8f4d455",
+                "reference": "0e3b9e497bd39063cb504115c726d369d8f4d455",
                 "shasum": ""
             },
             "require": {
@@ -88,7 +88,7 @@
                 "s3",
                 "sdk"
             ],
-            "time": "2020-03-17T18:16:01+00:00"
+            "time": "2020-03-18T18:13:04+00:00"
         },
         {
             "name": "balping/json-raw-encoder",
@@ -1318,16 +1318,16 @@
         },
         {
             "name": "laminas/laminas-diactoros",
-            "version": "2.2.1",
+            "version": "2.2.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laminas/laminas-diactoros.git",
-                "reference": "064f0b20e832bb232d0311f915c7422fef1b1857"
+                "reference": "95178c4751d737cdf9ab0a9f70a42754ac860e7b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laminas/laminas-diactoros/zipball/064f0b20e832bb232d0311f915c7422fef1b1857",
-                "reference": "064f0b20e832bb232d0311f915c7422fef1b1857",
+                "url": "https://api.github.com/repos/laminas/laminas-diactoros/zipball/95178c4751d737cdf9ab0a9f70a42754ac860e7b",
+                "reference": "95178c4751d737cdf9ab0a9f70a42754ac860e7b",
                 "shasum": ""
             },
             "require": {
@@ -1335,6 +1335,9 @@
                 "php": "^7.1",
                 "psr/http-factory": "^1.0",
                 "psr/http-message": "^1.0"
+            },
+            "conflict": {
+                "phpspec/prophecy": "<1.9.0"
             },
             "provide": {
                 "psr/http-factory-implementation": "1.0",
@@ -1350,7 +1353,7 @@
                 "http-interop/http-factory-tests": "^0.5.0",
                 "laminas/laminas-coding-standard": "~1.0.0",
                 "php-http/psr7-integration-tests": "dev-master",
-                "phpunit/phpunit": "^7.0.2"
+                "phpunit/phpunit": "^7.5.18"
             },
             "type": "library",
             "extra": {
@@ -1395,7 +1398,7 @@
                 "psr",
                 "psr-7"
             ],
-            "time": "2019-12-31T16:41:56+00:00"
+            "time": "2020-01-07T19:39:26+00:00"
         },
         {
             "name": "laminas/laminas-zendframework-bridge",
@@ -1502,16 +1505,16 @@
         },
         {
             "name": "laravel/framework",
-            "version": "v7.2.0",
+            "version": "v7.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/framework.git",
-                "reference": "77110b6434e65b10b655ab92e645e830b1a79caf"
+                "reference": "261e74cf8c6f760fd302fb08b2b51feb066f8987"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/framework/zipball/77110b6434e65b10b655ab92e645e830b1a79caf",
-                "reference": "77110b6434e65b10b655ab92e645e830b1a79caf",
+                "url": "https://api.github.com/repos/laravel/framework/zipball/261e74cf8c6f760fd302fb08b2b51feb066f8987",
+                "reference": "261e74cf8c6f760fd302fb08b2b51feb066f8987",
                 "shasum": ""
             },
             "require": {
@@ -1649,7 +1652,7 @@
                 "framework",
                 "laravel"
             ],
-            "time": "2020-03-17T14:08:55+00:00"
+            "time": "2020-03-19T14:31:45+00:00"
         },
         {
             "name": "laravel/passport",
@@ -4079,12 +4082,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/scholarslab/BagItPHP.git",
-                "reference": "63d21094a3cef17a4177a31aeacdf639c80e6b14"
+                "reference": "8d197da6d18c06a7aa880d853eb50820f408c4bb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/scholarslab/BagItPHP/zipball/63d21094a3cef17a4177a31aeacdf639c80e6b14",
-                "reference": "63d21094a3cef17a4177a31aeacdf639c80e6b14",
+                "url": "https://api.github.com/repos/scholarslab/BagItPHP/zipball/8d197da6d18c06a7aa880d853eb50820f408c4bb",
+                "reference": "8d197da6d18c06a7aa880d853eb50820f408c4bb",
                 "shasum": ""
             },
             "require": {
