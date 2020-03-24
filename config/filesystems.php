@@ -80,17 +80,6 @@ return [
             'use_path_style_endpoint' => true
         ],
 
-/*
-        'am' => [
-            'driver' => 'sftp',
-            'host' => '172.17.0.1',
-            'port' => 22,
-            'username' => 'kare',
-            'privateKey' => '/home/kare/.ssh/id_rsa',
-            'root' => '/home/kare/.am/ss-location-data',
-            'timeout' => 30,
-        ],
-*/
         'am' => [
            'driver' => 'local',
            'root' => (storage_path(env('STORAGE_TRANSFER_PATH'))),
@@ -102,6 +91,14 @@ return [
         'am_dip' => [
             'driver' => 'local',
             'root' => (storage_path(env('STORAGE_DIP_PATH'))),
+        ],
+        'outgoing' => [
+            'driver' => 'local',
+            'root' => ( storage_path( env( 'STORAGE_OUTGOING_DOWNLOADS_FOLDER', 'outgoing' ) ) )
+        ],
+        'testdata' => [
+            'driver' => 'local',
+            'root' => ( storage_path( env( 'STORAGE_TESTDATA', 'testdata' ) ) )
         ],
     ],
 

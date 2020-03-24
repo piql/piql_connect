@@ -37,6 +37,11 @@ class ArchivalStorageService implements \App\Interfaces\ArchivalStorageInterface
             $configDto = $this->s3ConfigDto( $storageLocation->locatable );
             return $this->filesystem->createDriver( "S3", $configDto );
         }
+        if( $storageLocation->locatable_type == "fakestorage" )
+        {
+            return Storage::disk('testdata');
+        }
+
         throw new \Exception("Unsupported filesystem type requested: {$storageLocation->locatableType() }");
     }
 

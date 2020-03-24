@@ -22,3 +22,15 @@ $factory->state(Aip::class, 'dummyData', function (Faker $faker) {
         "offline_storage_path" => "."
     ];
 });
+
+$factory->state(Aip::class, 'fileArchiveServiceTest', function (Faker $faker) {
+    return [
+        "external_uuid" => Uuid::generate()->string,
+        "owner"  => Uuid::generate()->string,
+        "online_storage_location_id" => 0,
+        "online_storage_path" => "",
+        "offline_storage_location_id" => 0,
+        "offline_storage_path" => "."
+    ];
+});
+

@@ -19,10 +19,25 @@ $factory->state(FileObject::class, 'dummyData', function (Faker $faker) {
         "filename" => $faker->firstName,
         "path" => ".",
         "size" => $faker->biasedNumberBetween(1, 10000000),
-        "object_type" => $faker->randomElement(['App\Aip', 'App\Dip']),
+        "object_type" => "file",
+        "info_source" => "connect",
+        "mime_type" => "text/plain",
+        "storable_type" => $faker->randomElement(['App\Aip', 'App\Dip']),
+        "storable_id" => 0,
+    ];
+});
+
+$factory->state(FileObject::class, 'fileArchiveServiceTest', function (Faker $faker) {
+    $filename = $faker->slug(2).$faker->randomElement(['.tiff', '.pdf','.doc','.jpeg']);
+    return [
+        "fullpath" => $faker->uuid()."/".$filename,
+        "filename" => $filename,
+        "path" => ".",
+        "size" => $faker->biasedNumberBetween(1, 10000000),
+        "object_type" => 'file',
         "info_source" => "",
         "mime_type" => "text/plain",
-        "storable_type" => "",
+        "storable_type" => "App\Aip",
         "storable_id" => 0,
     ];
 });
