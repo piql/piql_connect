@@ -6,17 +6,20 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use App\Aip;
 use App\FileObject;
+use App\Interfaces\FileCollectorInterface;
 use Log;
 
 class FileArchiveService implements \App\Interfaces\FileArchiveInterface
 {
     private $storage;
     private $outgoing;
+    private $collector;
 
-    public function __construct( $app, $storage )
+    public function __construct( $app, $storage, FileCollectorInterface $collector )
     {
         $this->storage = $storage;
         $this->outgoing = Storage::disk( 'outgoing' );
+        $this->collector = $collector;
     }
 
     private function destinationPath( Aip $aip )
@@ -29,13 +32,7 @@ class FileArchiveService implements \App\Interfaces\FileArchiveInterface
         $downloadpath = $this->downloadAipFiles( $aip );
         $destinationFilePath = "{$this->destinationPath( $aip )}.tar";
 
-        try {
-            $tar = new \PharData( $destinationFilePath );
-            $tar->buildFromDirectory( $downloadpath );
-        } catch ( \Exception $ex ) {
-            Log::error( "Failed to build tar from aip {$aip->external_uuid}: {$ex}" );
-            throw $ex;
-        }
+        $this->collector->collectDirectory( $downloadpath, $destinationFilePath );
 
         try {
             $this->outgoing->deleteDirectory( $aip->external_uuid );

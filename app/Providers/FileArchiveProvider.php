@@ -15,7 +15,8 @@ class FileArchiveProvider extends ServiceProvider
     {
         $this->app->bind('App\Interfaces\FileArchiveInterface', function( $app ) {
             $archivalStorageService = $app->make('App\Interfaces\ArchivalStorageInterface');
-            return new \App\Services\FileArchiveService( $app, $archivalStorageService );
+            $fileCollectorService = $app->make('App\Interfaces\FileCollectorInterface');
+            return new \App\Services\FileArchiveService( $app, $archivalStorageService, $fileCollectorService );
         });
     }
 
