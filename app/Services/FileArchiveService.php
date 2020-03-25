@@ -6,16 +6,17 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use App\Aip;
 use App\FileObject;
+use Log;
 
 class FileArchiveService implements \App\Interfaces\FileArchiveInterface
 {
     private $storage;
     private $outgoing;
 
-    public function __construct( $app, $storage, $outgoing = null )
+    public function __construct( $app, $storage )
     {
         $this->storage = $storage;
-        $this->outgoing = $outgoing ?? Storage::disk( 'outgoing' );
+        $this->outgoing = Storage::disk( 'outgoing' );
     }
 
     private function destinationPath( Aip $aip )
@@ -25,8 +26,24 @@ class FileArchiveService implements \App\Interfaces\FileArchiveInterface
 
     public function buildTarFromAip( Aip $aip ) : string
     {
-        $storedFiles = $this->getAipFileNames( $aip );
-        return $this->destinationPath( $aip );
+        $downloadpath = $this->downloadAipFiles( $aip );
+        $destinationFilePath = "{$this->destinationPath( $aip )}.tar";
+
+        try {
+            $tar = new \PharData( $destinationFilePath );
+            $tar->buildFromDirectory( $downloadpath );
+        } catch ( \Exception $ex ) {
+            Log::error( "Failed to build tar from aip {$aip->external_uuid}: {$ex}" );
+            throw $ex;
+        }
+
+        try {
+            $this->outgoing->deleteDirectory( $aip->external_uuid );
+        } catch ( \Exception $ex ) {
+            Log::warn( "Failed to clean up temporary files from aip {$aip->external_uuid}: {$ex}" );
+        }
+
+        return $destinationFilePath;
     }
         
     public function getAipFileNames( Aip $aip ) : array
@@ -42,20 +59,22 @@ class FileArchiveService implements \App\Interfaces\FileArchiveInterface
         return $storedFiles->toArray();
     }
 
+    private static function stripAipOnlinePath( string $filepath, Aip $aip ) : string
+    {
+        return Str::after( $filepath, "{$aip->online_storage_path}/" );
+    }
+
     public function downloadFile( Aip $aip, FileObject $file ) : string
     {
-        $destinationPath = $this->destinationPath( $aip );
-        $this->outgoing->makeDirectory( $destinationPath );
-        $location = $aip->online_storage_location;
-
-        return $this->storage->download( $location, $file->fullpath, $destinationPath );
+        $relativePath = "{$aip->external_uuid}/{$this->stripAipOnlinePath( $file->fullpath, $aip )}";
+        $this->outgoing->makeDirectory( $aip->external_uuid );
+        return $this->storage->download( $aip->online_storage_location, $file->fullpath, $relativePath );
     }
 
     public function downloadAipFiles( Aip $aip ) : string
     {
         $location = $aip->online_storage_location;
         $destinationPath = $this->destinationPath( $aip );
-        $this->outgoing->makeDirectory( $destinationPath );
 
         $aip->fileObjects->map( function ( $file ) use ( $aip ) {
             return $this->downloadFile( $aip, $file );

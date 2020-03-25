@@ -3,17 +3,20 @@
 namespace App\Services;
 
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\FilesystemAdapter;
 use Illuminate\Support\Str;
 
 class ArchivalStorageService implements \App\Interfaces\ArchivalStorageInterface
 {
     private $app;
     private $filesystem;
+    private $destinationDisk;
 
-    public function __construct( $app, \App\Interfaces\FilesystemDriverInterface $filesystem )
+    public function __construct( $app, \App\Interfaces\FilesystemDriverInterface $filesystem, FilesystemAdapter $destinationDisk = null )
     {
         $this->app = $app;
         $this->filesystem = $filesystem;
+        $this->destinationDisk = $destinationDisk ?? Storage::disk('outgoing'); 
     }
 
     private function s3ConfigDto( \App\S3Configuration $config )
@@ -64,9 +67,9 @@ class ArchivalStorageService implements \App\Interfaces\ArchivalStorageInterface
     {
         $driver = $this->getDriverFromConfig( $storage );
         $downloadFileContents = $driver->get( $storagePath );
-        $filename = pathinfo( $storagePath, PATHINFO_BASENAME );
+        $filename = $storagePath; //pathinfo( $storagePath, PATHINFO_BASENAME );
         $localFilenameWithDir = Str::finish( $destinationPath, "/" ) . $filename;
-        Storage::disk('local')->put( $localFilenameWithDir, $downloadFileContents );
+        $this->destinationDisk->put( $destinationPath, $downloadFileContents );
         return $localFilenameWithDir;
     }
 
