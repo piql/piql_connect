@@ -10,7 +10,8 @@
             </div>
             <div class="col-sm-2 d-inline-flex align-self-center">
                 <a class="m-auto" @click.once="editMetadata()" href="#" data-toggle="tooltip" title="Edit metadata"><i class="fas fa-tags actionIcon text-center"></i></a>
-                <a class="m-auto" @click.once="download" href="#" data-toggle="tooltip" title="Download file"><i class="fas fa-file-download actionIcon text-center"></i></a>
+                <a v-if="isPreparingDownload" class="m-auto" href="#" data-toggle="tooltip" title="Download file"><i class="fa fa-spinner fa-spin actionIcon text-center"></i></a>
+                <a v-else="isPreparingDownload" class="m-auto" @click.once="download" href="#" data-toggle="tooltip" title="Download file"><i class="fas fa-file-download actionIcon text-center"></i></a>
             </div>
             <div class="col-sm-1"></div>
         </div>
@@ -22,6 +23,7 @@
     import axios from 'axios';
     export default {
         async mounted() {
+            this.isPreparingDownload = false;
             axios.get( '/api/v1/access/dips/'+this.dipId+'/aipfile/'+this.item.id ).then( (result) => {
                 this.aipItem = result.data.data[0];
                 this.fileName = this.aipItem.filename;
@@ -43,7 +45,8 @@
             return {
                 fileName: "",
                 thumbnailImage: "",
-                aipItem: Object
+                aipItem: Object,
+                isPreparingDownload: false
             };
         },
         methods: {
@@ -52,10 +55,12 @@
             },
             async download(e) {
                 e.stopImmediatePropagation();
+                this.isPreparingDownload = true;
                 let response = await axios.get('/api/v1/access/aips/' + this.aipItem.storable_id + '/file/' + this.aipItem.id + '/download', { responseType: 'blob' });
                 let fileLink = document.createElement('a');
                 fileLink.href = window.URL.createObjectURL(new Blob([response.data], {type: 'application/octet-stream'}));
                 fileLink.download = this.aipItem.filename;
+                this.isPreparingDownload = false;
                 fileLink.click();
             },
             editMetadata() {
@@ -63,10 +68,6 @@
             }
         },
         computed: {
-            downloadUrl: function(){
-                return "/api/v1/ingest/files/"+this.item.id+"/download";
-
-            },
             dipId: function() {
                 return this.item.storable_id;
             }

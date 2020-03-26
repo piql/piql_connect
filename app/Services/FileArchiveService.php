@@ -50,7 +50,6 @@ class FileArchiveService implements \App\Interfaces\FileArchiveInterface
         $prefix = ($prefix == null) ? Str::uuid()."-" : $prefix;
         $destinationFilePath = "{$this->destinationPath( $aip, $prefix )}.tar";
         $aip->fileObjects->map( function ( $file ) use ( $aip, $destinationFilePath, $prefix ) {
-            printf("source: {$file->path}");
             $downloadedFileSourcePath = $this->downloadFile( $aip, $file, $prefix );
             $downloadedFileCollectionPath = Str::after( $file->fullpath, "{$aip->online_storage_path}/" );
             $this->collector->collectSingleFile(

@@ -17,7 +17,8 @@
             </div>
              <div class="col-sm-3 d-inline-flex align-self-center">
                 <a class="m-auto" @click="open" href="#" data-toggle="tooltip" title="Access contents" ><i class="fas fa-folder-open actionIcon"></i></a>
-                <a class="m-auto" @click="download" href="#" data-toggle="tooltip" title="Download file"><i class="fas fa-file-download actionIcon text-center"></i></a>
+                <a v-if="isPreparingDownload" class="m-auto" href="#" data-toggle="tooltip" title="Download file"><i class="fa fa-spinner fa-spin actionIcon text-center"></i></a>
+                <a v-else="isPreparingDownload" class="m-auto" @click="download" href="#" data-toggle="tooltip" title="Download file"><i class="fas fa-file-download actionIcon text-center"></i></a>
                 <a class="m-auto" @click="preview" href="#" data-toggle="tooltip" title="Preview image"><i class="fas fa-eye actionIcon"></i></a>
               </div>
 
@@ -29,6 +30,7 @@
     import axios from 'axios';
     export default {
         async mounted() {
+            this.isPreparingDownload = false;
           axios.get('/api/v1/access/dips/'+this.item.id+'/thumbnails', { responseType: 'blob' }).then ( async (thumbnail) => {
               let reader = new FileReader();
               reader.onload = e => this.thumbnailImage = reader.result;
@@ -44,7 +46,8 @@
         data() {
             return {
                 fileName: "",
-								thumbnailImage: ""
+                thumbnailImage: "",
+                isPreparingDownload: false,
 						}
         },
         methods: {
@@ -58,13 +61,15 @@
                 this.$emit('showPreview', this.item);
             },
             async download(){
-                let filename = (await axios.get('/api/v1/access/aips/dips/'+this.item.id+'/filename')).data;
+                this.isPreparingDownload = true;
+                let filename = `${this.item.storage_properties.bag.name}.tar`; // (await axios.get('/api/v1/access/aips/dips/'+this.item.id+'/filename')).data;
                 let response = await axios.get('/api/v1/access/aips/dips/'+this.item.id+'/download', { responseType: 'blob' });
                 let fileUrl = window.URL.createObjectURL(new Blob([response.data]));
                 let fileLink = document.createElement('a');
                 fileLink.href = fileUrl;
                 fileLink.setAttribute('download', filename);
                 document.body.appendChild(fileLink);
+                this.isPreparingDownload = false;
                 await fileLink.click();
                 document.body.removeChild(fileLink);
             },

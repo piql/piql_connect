@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Aip;
 use Illuminate\Http\Request;
 use App\Interfaces\ArchivalStorageInterface;
+use App\Interfaces\FileArchiveInterface;
 use App\FileObject;
 use Log;
 
@@ -71,9 +72,9 @@ class AipController extends Controller
 
     public function fileDownload(ArchivalStorageInterface $storage, Request $request)
     {
+        /*USED FOR SINGLE FILE DOWNLOAD */
         $aip = Aip::find($request->aipId);
         $file = $aip->fileObjects()->findOrFail($request->fileId);
-
         return response()->streamDownload(function () use( $storage, $aip, $file ) {
             echo $storage->stream( $aip->online_storage_location, $file->fullpath );
         }, basename( $file->path ), [
@@ -82,31 +83,26 @@ class AipController extends Controller
         ]);
     }
 
-    public function download(ArchivalStorageInterface $storage, Request $request)
+    public function download(FileArchiveInterface $fileArchiveService, Request $request )
     {
         $aip = Aip::find($request->aipId);
         $file = $aip->fileObjects->first();
 
-        return response()->streamDownload(function () use( $storage, $aip, $file ) {
-            echo $storage->stream( $aip->online_storage_location, $file->fullpath );
-        }, basename( $file->path ), [
+        $result = $fileArchiveService->buildTarFromAipIncrementally( $aip );
+
+        return response()->download(function () use( $aip, $result ) {
+        }, basename( $result ), [
             "Content-Type" => "application/x-tar",
-            "Content-Disposition" => "attachment; { $file->filename }"
-        ]);
+            "Content-Disposition" => "attachment; { $result }"
+        ])->deleteFileAfterSend();
     }
 
-    public function downloadFromDipId(ArchivalStorageInterface $storage, Request $request)
-    {
+    public function downloadFromDipId( FileArchiveInterface $fileArchiveService, Request $request )
+    { /* USED FOR FULL AIP DOWNLOAD */
         $dip = \App\Dip::find( $request->dipId );
         $aip = $dip->storage_properties->aip;
-        $file = $aip->fileObjects->first();
-
-        return response()->streamDownload(function () use( $storage, $aip, $file ) {
-            echo $storage->stream( $aip->online_storage_location, $file->fullpath );
-        }, basename( $file->path ), [
-            "Content-Type" => "application/x-tar",
-            "Content-Disposition" => "attachment; { $file->filename }"
-        ]);
+        $result = $fileArchiveService->buildTarFromAipIncrementally( $aip );
+        return response()->download( $result )->deleteFileAfterSend(); 
     }
 
 

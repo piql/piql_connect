@@ -15,7 +15,7 @@ class FileCollectorProvider extends ServiceProvider implements DeferrableProvide
      */
     public function register()
     {
-         $this->app->singleton( FileCollectorInterface::class, function( $app ) {
+         $this->app->bind( FileCollectorInterface::class, function( $app ) {
             return new \App\Services\TarFileService( $app );
         });
     }
