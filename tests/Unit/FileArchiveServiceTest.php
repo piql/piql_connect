@@ -50,6 +50,7 @@ class FileArchiveServiceTest extends TestCase
              ->create([
                  "filename" => basename( $file ),
                  "fullpath" => "{$this->aipAmPath}/{$file}",
+                 "path" => $file,
                  "storable_type" => "App\Aip",
                  "storable_id" => $this->aip->id
              ]);
@@ -80,7 +81,7 @@ class FileArchiveServiceTest extends TestCase
     {
         $filePath = "{$this->aip->external_uuid}/{$this->aipFiles[0]}";
         $contents = $this->faker->text();
-        $this->instance( ArchivalStorageInterface::class, Mockery::mock( 
+        $this->instance( ArchivalStorageInterface::class, Mockery::mock(
             ArchivalStorageService::class, function ( $mock ) use ( $filePath, $contents ) {
                 $mock->shouldReceive( 'download' )->once()
                      ->withArgs( function ( \App\StorageLocation $storageLocation, string $storagePath, string $destinationPath )
@@ -96,7 +97,7 @@ class FileArchiveServiceTest extends TestCase
         ));
 
         $service = $this->app->make( FileArchiveInterface::class );
-        $actual = $service->downloadFile( $this->aip, $this->files[0] ); 
+        $actual = $service->downloadFile( $this->aip, $this->files[0] );
         $this->assertFileExists( Storage::disk('outgoing')->path( $actual ) );
         $this->assertStringEqualsFile( Storage::disk('outgoing')->path($filePath ), $contents );
     }
@@ -130,21 +131,42 @@ class FileArchiveServiceTest extends TestCase
 
     public function test_when_building_tars_it_returns_the_full_path_of_the_tar()
     {
+        $prefix = Str::uuid()."-";
+
+        $this->app->instance( FileCollectorInterface::class, Mockery::mock(
+            TarFileService::class, function ( $mock ) {
+                $mock->shouldReceive( 'collectDirectory' )
+                     ->once()
+                     ->andReturn( true );
+            }
+        ));
+
+
         $this->instance( ArchivalStorageInterface::class, Mockery::mock(
             ArchivalStorageService::class, function ( $mock ) {
                 $mock->shouldReceive( 'download' )
                     ->andReturn( Str::slug(3) );
             }
         ));
-        $service = $this->app->make( FileArchiveInterface::class );
-        $exp = Storage::disk( 'outgoing' )->path( $this->aip->external_uuid );
-        $expected = "{$exp}.tar";
-        $actual = $service->buildTarFromAip( $this->aip );
-        $this->assertEquals( $expected, $actual );
+        $service = new FileArchiveService( $this->app,
+            $this->app->make( ArchivalStorageInterface::class),
+            $this->app->make( FileCollectorInterface::class)
+        );
+        $expected = Storage::disk( 'outgoing' )->path( "{$prefix}{$this->aip->external_uuid}" ).".tar";
+        $actual = $service->buildTarFromAip( $this->aip, $prefix );
+        $this->assertContains( $expected, $actual );
     }
 
     public function test_given_an_aip_has_three_files_when_building_a_tar_three_files_are_downloaded()
     {
+        $prefix = Str::uuid()."-";
+        $this->instance( FileCollectorInterface::class, Mockery::mock(
+            TarFileService::class, function ( $mock ) {
+                $mock->shouldReceive( 'collectDirectory' )
+                     ->once();
+            }
+        ));
+
         $this->instance( ArchivalStorageInterface::class, Mockery::mock(
             ArchivalStorageService::class, function ( $mock ) {
                 $mock->shouldReceive( 'download' )
@@ -153,20 +175,22 @@ class FileArchiveServiceTest extends TestCase
                      ->andReturn( Str::slug(3) );
             }
         ));
-        $service = $this->app->make( FileArchiveInterface::class );
-        $service->buildTarFromAip( $this->aip );
+
+        $service = new FileArchiveService( $this->app, $this->app->make( ArchivalStorageInterface::class),  $this->app->make( FileCollectorInterface::class)  );
+        $service->buildTarFromAip( $this->aip, $prefix );
     }
 
     public function test_given_an_aip_when_adding_data_to_a_tar_the_resulting_tar_has_this_data_as_content()
     {
+        $prefix = Str::uuid()."-";
         $texts = Collection::times(3, function() { return $this->faker->text(); } );
         $filesWithTexts = $this->files->combine( $texts );
         $this->instance( ArchivalStorageInterface::class, Mockery::mock(
-            ArchivalStorageService::class, function ( $mock ) use ( $filesWithTexts ) {
-                $filesWithTexts->map( function( $text, $file ) use ( $mock ) {
+            ArchivalStorageService::class, function ( $mock ) use ( $filesWithTexts, $prefix ) {
+                $filesWithTexts->map( function( $text, $file ) use ( $mock, $prefix ) {
 
                     $relPath =  Str::after( json_decode($file)->fullpath, "{$this->aipAmPath}/" );  /* path relative to AIP root */
-                    $filePath = "{$this->aip->external_uuid}/{$relPath}";
+                    $filePath = "{$prefix}{$this->aip->external_uuid}/{$relPath}";
                     Storage::disk( 'outgoing' )->put( $filePath, $text );
 
                     $mock->shouldReceive( 'download' )
@@ -177,7 +201,7 @@ class FileArchiveServiceTest extends TestCase
         ));
 
         $service = $this->app->make( FileArchiveInterface::class );
-        $actualFilePath = $service->buildTarFromAip( $this->aip );
+        $actualFilePath = $service->buildTarFromAip( $this->aip, $prefix );
         $this->assertFileExists( $actualFilePath );
 
         $expected = $texts->reduce( function ( $carry, $item ) { return "{$carry}{$item}"; } );
@@ -194,5 +218,63 @@ class FileArchiveServiceTest extends TestCase
         $this->assertEquals( $expected, $actual );
         $this->assertDirectoryNotExists( Storage::disk('outgoing')->path( $this->aip->external_uuid ) );    //Must clean up after tar'ing
     }
+
+    public function test_given_an_aip_when_incrementally_building_a_tar_from_it_the_resulting_tar_has_this_data_as_content()
+    {
+        $prefix = Str::uuid()."-";
+        $texts = Collection::times(3, function() { return $this->faker->text(); } );
+        $filesWithTexts = $this->files->pluck("path")->combine( $texts );
+
+        $this->instance( FileCollectorInterface::class, Mockery::mock(
+            TarFileService::class, function ( $mock ) use ( $filesWithTexts ) {
+                $mock->shouldReceive( 'collectSingleFile' )
+                     ->times(3)
+                     ->with( Mockery::type('string'), Mockery::type('string'), Mockery::type('string'), Mockery::type('bool') )
+                     ->andReturnUsing( function ( $downloadPath, $tarlocalPath, $tarfile, $delete ) use ( $filesWithTexts ) {
+                         $dPath = Str::after( $downloadPath , "/" );
+                         $tar = new \PharData( $tarfile );
+                         $tar->addFromString(  $tarlocalPath, $filesWithTexts[$dPath] );
+                         return true;
+                     } );
+            }
+        ));
+
+        $this->instance( ArchivalStorageInterface::class, Mockery::mock(
+            ArchivalStorageService::class, function ( $mock ) use ( $filesWithTexts, $prefix ) {
+                $filesWithTexts->map( function( $text, $file ) use ( $mock, $prefix ) {
+
+                    $filePath = "{$prefix}{$this->aip->external_uuid}/{$file}";
+                    Storage::disk( 'outgoing' )->put( $filePath, $text );
+
+                    $mock->shouldReceive( 'download' )
+                         ->with( Mockery::type('\App\StorageLocation'), Mockery::type('string'), Mockery::type('string') )
+                         ->andReturnUsing(  function ($storageLocation, $storagePath, $destinationPath ){
+                             return $destinationPath;
+                         });
+                });
+            }
+        ));
+        $service = new FileArchiveService( $this->app,
+            $this->app->make( ArchivalStorageInterface::class),
+            $this->app->make( FileCollectorInterface::class)
+        );
+
+        $actualFilePath = $service->buildTarFromAipIncrementally( $this->aip, $prefix );
+        $this->assertFileExists( $actualFilePath );
+
+        $expected = $texts->reduce( function ( $carry, $item ) { return "{$carry}{$item}"; } );
+        $tar = new \PharData( $actualFilePath );
+        $actual = $filesWithTexts
+            ->map( function( $text, $file ) use( $tar ) {
+                $pharFileInfo = $tar->offsetGet( $file );
+                return $pharFileInfo->getContent();
+            })->reduce( function( $combined, $text ) {
+                return "{$combined}{$text}";
+            }, "");
+        $this->assertNotEmpty( $actual );
+        $this->assertEquals( $expected, $actual );
+        $this->assertDirectoryNotExists( Storage::disk('outgoing')->path( $this->aip->external_uuid ) );    //Must clean up after tar'ing
+    }
+
 
 }

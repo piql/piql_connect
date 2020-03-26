@@ -16,7 +16,7 @@ class ArchivalStorageService implements \App\Interfaces\ArchivalStorageInterface
     {
         $this->app = $app;
         $this->filesystem = $filesystem;
-        $this->destinationDisk = $destinationDisk ?? Storage::disk('outgoing'); 
+        $this->destinationDisk = $destinationDisk ?? Storage::disk('outgoing');
     }
 
     private function s3ConfigDto( \App\S3Configuration $config )
@@ -67,10 +67,8 @@ class ArchivalStorageService implements \App\Interfaces\ArchivalStorageInterface
     {
         $driver = $this->getDriverFromConfig( $storage );
         $downloadFileContents = $driver->get( $storagePath );
-        $filename = $storagePath; //pathinfo( $storagePath, PATHINFO_BASENAME );
-        $localFilenameWithDir = Str::finish( $destinationPath, "/" ) . $filename;
         $this->destinationDisk->put( $destinationPath, $downloadFileContents );
-        return $localFilenameWithDir;
+        return $this->destinationDisk->path( $destinationPath );
     }
 
     public function stream( \App\StorageLocation $storage, string $storagePath )

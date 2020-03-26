@@ -3,8 +3,10 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Contracts\Support\DeferrableProvider;
+use App\Interfaces\FileCollectorInterface;
 
-class FileCollectorProvider extends ServiceProvider
+class FileCollectorProvider extends ServiceProvider implements DeferrableProvider
 {
     /**
      * Register services.
@@ -13,7 +15,7 @@ class FileCollectorProvider extends ServiceProvider
      */
     public function register()
     {
-         $this->app->bind('App\Interfaces\FileCollectorInterface', function( $app ) {
+         $this->app->singleton( FileCollectorInterface::class, function( $app ) {
             return new \App\Services\TarFileService( $app );
         });
     }
@@ -26,5 +28,10 @@ class FileCollectorProvider extends ServiceProvider
     public function boot()
     {
         //
+    }
+
+    public function provides()
+    {
+        return [FileCollectorInterface::class];
     }
 }

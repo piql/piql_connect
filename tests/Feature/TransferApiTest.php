@@ -29,7 +29,7 @@ class TransferApiTest extends TestCase
     {
         parent::setUp();
         $filePath = "/target.txt";
-        $this->storage = Storage::fake('bags');
+        $this->storage = Storage::fake('outgoing');
         $this->storage->put($filePath, "Hello world");
         $this->targetPath = $this->storage->path('');
 
@@ -97,7 +97,7 @@ class TransferApiTest extends TestCase
         $testFilePath = $this->faker->file( $this->targetPath );
         $this->storageService->upload( $this->storageLocation, "", $testFilePath );
 
-        $downloadLocalPath = "testDownloads/";
+        $downloadLocalPath = "/testDownloads";
         $testFileBasename = pathinfo( $testFilePath, PATHINFO_BASENAME );
         $payload = [ "data" => ["remotePath" => $testFileBasename, "localPath" => $downloadLocalPath ] ];
         $response = $this->post( route( 'storage.transfer.download',
@@ -105,11 +105,10 @@ class TransferApiTest extends TestCase
 
         $this->storageService->delete( $this->storageLocation, $testFileBasename );
 
-        $expected = $downloadLocalPath . pathinfo( $testFilePath, PATHINFO_BASENAME );
+        $expected = $this->storage->path( $downloadLocalPath );
         $response->assertStatus(200)
                  ->assertJson([ 'data' => $expected ]);
 
-        $testFileBasename = pathinfo( $testFilePath, PATHINFO_BASENAME );
     }
 
     public function test_when_deleting_a_remote_file_it_is_deleted()

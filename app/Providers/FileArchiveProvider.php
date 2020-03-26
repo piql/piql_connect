@@ -3,8 +3,11 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use App\Services\TarFileService;
+use App\Interfaces\FileCollectorInterface;
+use Illuminate\Contracts\Support\DeferrableProvider;
 
-class FileArchiveProvider extends ServiceProvider
+class FileArchiveProvider extends ServiceProvider implements DeferrableProvider
 {
     /**
      * Register services.
@@ -13,9 +16,9 @@ class FileArchiveProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->bind('App\Interfaces\FileArchiveInterface', function( $app ) {
+        $this->app->singleton('App\Interfaces\FileArchiveInterface', function( $app ) {
             $archivalStorageService = $app->make('App\Interfaces\ArchivalStorageInterface');
-            $fileCollectorService = $app->make('App\Interfaces\FileCollectorInterface');
+            $fileCollectorService = $app->make( FileCollectorInterface::class );
             return new \App\Services\FileArchiveService( $app, $archivalStorageService, $fileCollectorService );
         });
     }
@@ -28,5 +31,10 @@ class FileArchiveProvider extends ServiceProvider
     public function boot()
     {
         //
+    }
+
+    public function provides()
+    {
+        return [FileArchiveInterface::class];
     }
 }
