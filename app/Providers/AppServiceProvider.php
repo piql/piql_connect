@@ -3,11 +3,13 @@
 namespace App\Providers;
 
 use App\ArchivematicaService;
+use App\Customer;
 use App\Listeners\ArchivematicaServiceConnection;
 use App\Listeners\SendBagToArchivematicaListener;
 use App\Services\ArchivematicaConnectionService;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\ServiceProvider;
+use Tenancy\Identification\Contracts\ResolvesTenants;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -34,6 +36,9 @@ class AppServiceProvider extends ServiceProvider
             return new ArchivematicaConnectionService($this->app);
         });
 
+        $this->app->resolving(ResolvesTenants::class, function (ResolvesTenants $resolver) {
+            $resolver->addModel(Customer::class);
+        });
     }
 
     /**

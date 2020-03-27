@@ -3,6 +3,11 @@
 namespace App\Providers;
 
 use App\Events\ArchivematicaTransferringEvent;
+use App\Listeners\ConfiguringConnectionListener;
+use App\Listeners\ConfiguringDatabaseListener;
+use App\Listeners\ConfiguringMigrationListener;
+use App\Listeners\ResolvingConnectionListener;
+use App\Listeners\ResolvingTenantListener;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
@@ -56,6 +61,22 @@ class EventServiceProvider extends ServiceProvider
         \App\Events\InformationPackageUploaded::class => [
             \App\Listeners\AddAipToBucketListener::class
         ],
+
+        \Tenancy\Affects\Connections\Events\Resolving::class => [
+            ResolvingConnectionListener::class
+        ],
+        \Tenancy\Hooks\Migration\Events\ConfigureMigrations::class => [
+            ConfiguringMigrationListener::class
+        ],
+        \Tenancy\Affects\Connections\Events\Drivers\Configuring::class => [
+            ConfiguringConnectionListener::class
+        ],
+        \Tenancy\Hooks\Database\Events\Drivers\Configuring::class => [
+            ConfiguringDatabaseListener::class
+        ],
+        \Tenancy\Identification\Events\Resolving::class => [
+            ResolvingTenantListener::class
+        ]
     ];
 
     /**

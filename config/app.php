@@ -168,6 +168,18 @@ return [
         Optimus\FineuploaderServer\Provider\LaravelServiceProvider::class,
         MartinLindhe\VueInternationalizationGenerator\GeneratorProvider::class,
 
+        /*
+                 * Laravel Tenancy service provider.
+                 *
+                 * @warn has to be loaded before anything else, but
+                 * after the Illuminate stack.
+                 */
+        Tenancy\Identification\Drivers\Console\Providers\IdentificationProvider::class,
+        Tenancy\Hooks\Migration\Provider::class,
+        Tenancy\Hooks\Database\Provider::class,
+        Tenancy\Affects\Connections\Provider::class,
+        Tenancy\Database\Drivers\Mysql\Provider::class,
+        Tenancy\Providers\TenancyProvider::class,
 
         /*
          * Application Service Providers...
