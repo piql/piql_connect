@@ -39,7 +39,7 @@ class ArchivematicaServiceSeeder extends Seeder
 
         // Override storage id from config
         $storage->id = env('ARCHIVEMATICA_SERVICE_SEEDER_STORAGE_ID', $storage->id);
-        $storage->store();
+        $storage->save();
 
         // Create a Personal Access Client if no one exists
         $clientRepository = new ClientRepository();
