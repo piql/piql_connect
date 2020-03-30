@@ -11,7 +11,7 @@ replaceString=$(cat .env | grep STORAGE_LOCATION_ID)
 sed -i "s/$replaceString/STORAGE_LOCATION_ID=095675df-6ef3-43b1-8180-05efd5578df0/g" .env || exit $?
 
 echo 'Update storage url'
-if [[ -v $ARCHIVEMATICA_SERVICE_SEEDER_STORAGE_ID ]]
+if [[ -v $ARCHIVEMATICA_SERVICE_SEEDER_STORAGE_ID ]] ; then
   echo "" >> .env
   echo "ARCHIVEMATICA_SERVICE_SEEDER_STORAGE_ID=$ARCHIVEMATICA_SERVICE_SEEDER_STORAGE_ID" >> .env
 fi
