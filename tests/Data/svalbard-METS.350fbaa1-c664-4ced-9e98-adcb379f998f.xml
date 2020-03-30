@@ -1,0 +1,2183 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<mets:mets xmlns:mets="http://www.loc.gov/METS/" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.loc.gov/METS/ http://www.loc.gov/standards/mets/version111/mets.xsd">
+  <mets:metsHdr CREATEDATE="2020-03-30T13:26:41"/>
+  <mets:dmdSec ID="dmdSec_1">
+    <mets:mdWrap MDTYPE="PREMIS:OBJECT">
+      <mets:xmlData>
+        <premis:object xmlns:premis="http://www.loc.gov/premis/v3" xsi:type="premis:intellectualEntity" xsi:schemaLocation="http://www.loc.gov/premis/v3 http://www.loc.gov/standards/premis/v3/premis.xsd" version="3.0">
+          <premis:objectIdentifier>
+            <premis:objectIdentifierType>UUID</premis:objectIdentifierType>
+            <premis:objectIdentifierValue>350fbaa1-c664-4ced-9e98-adcb379f998f</premis:objectIdentifierValue>
+          </premis:objectIdentifier>
+          <premis:originalName>svalbard_metadata_test-e5206400-700a-11ea-9061-8f11f49b83d2-350fbaa1-c664-4ced-9e98-adcb379f998f</premis:originalName>
+        </premis:object>
+      </mets:xmlData>
+    </mets:mdWrap>
+  </mets:dmdSec>
+  <mets:dmdSec ID="dmdSec_2">
+    <mets:mdWrap MDTYPE="DC">
+      <mets:xmlData>
+        <dcterms:dublincore xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/" xsi:schemaLocation="http://purl.org/dc/terms/ http://dublincore.org/schemas/xmls/qdc/2008/02/11/dcterms.xsd">
+          <dc:title>Polar Bear on Svalbard</dc:title>
+          <dc:creator>A photographer</dc:creator>
+          <dc:subject>A polar bear</dc:subject>
+          <dc:description>It looks quite polary and also mostly beary</dc:description>
+          <dc:publisher>Piql AS</dc:publisher>
+          <dc:contributor>A contributor</dc:contributor>
+          <dc:date>3.30.2020</dc:date>
+          <dc:type>Photograph</dc:type>
+          <dc:format>Portable Network Graphics</dc:format>
+          <dc:identifier>polarbear</dc:identifier>
+          <dc:source>A stock photo repository</dc:source>
+          <dc:language>n/a</dc:language>
+          <dc:relation>AWA</dc:relation>
+          <dc:coverage>Great</dc:coverage>
+          <dc:rights>Some rights reserved</dc:rights>
+        </dcterms:dublincore>
+      </mets:xmlData>
+    </mets:mdWrap>
+  </mets:dmdSec>
+  <mets:dmdSec ID="dmdSec_3">
+    <mets:mdWrap MDTYPE="DC">
+      <mets:xmlData>
+        <dcterms:dublincore xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/" xsi:schemaLocation="http://purl.org/dc/terms/ http://dublincore.org/schemas/xmls/qdc/2008/02/11/dcterms.xsd">
+          <dc:title>Svalbard</dc:title>
+          <dc:creator>Some photographer</dc:creator>
+          <dc:subject>AWA and the seed vault</dc:subject>
+          <dc:description>A lot of ice and snow</dc:description>
+          <dc:publisher>Some publisher</dc:publisher>
+          <dc:contributor>Some other contributor</dc:contributor>
+          <dc:date>30.3.2020</dc:date>
+          <dc:type>Photography</dc:type>
+          <dc:format>Portable Network Graphics</dc:format>
+          <dc:identifier>svb</dc:identifier>
+          <dc:source>Stock photo</dc:source>
+          <dc:language>N/A</dc:language>
+          <dc:relation>AWA</dc:relation>
+          <dc:coverage>Decent</dc:coverage>
+          <dc:rights>Several rights reserved</dc:rights>
+        </dcterms:dublincore>
+      </mets:xmlData>
+    </mets:mdWrap>
+  </mets:dmdSec>
+  <mets:amdSec ID="amdSec_1">
+    <mets:techMD ID="techMD_1">
+      <mets:mdWrap MDTYPE="PREMIS:OBJECT">
+        <mets:xmlData>
+          <premis:object xmlns:premis="http://www.loc.gov/premis/v3" xsi:type="premis:file" xsi:schemaLocation="http://www.loc.gov/premis/v3 http://www.loc.gov/standards/premis/v3/premis.xsd" version="3.0">
+            <premis:objectIdentifier>
+              <premis:objectIdentifierType>UUID</premis:objectIdentifierType>
+              <premis:objectIdentifierValue>80a0f657-3f6f-4d43-8b36-7bbb773254bb</premis:objectIdentifierValue>
+            </premis:objectIdentifier>
+            <premis:objectCharacteristics>
+              <premis:compositionLevel>0</premis:compositionLevel>
+              <premis:fixity>
+                <premis:messageDigestAlgorithm>sha256</premis:messageDigestAlgorithm>
+                <premis:messageDigest>83d3855f965d76947be79119bfd84f9c49cdb84bd85b9e84f8faa590a8549a5d</premis:messageDigest>
+              </premis:fixity>
+              <premis:size>510427</premis:size>
+              <premis:format>
+                <premis:formatDesignation>
+                  <premis:formatName>Portable Network Graphics</premis:formatName>
+                  <premis:formatVersion>1.0</premis:formatVersion>
+                </premis:formatDesignation>
+                <premis:formatRegistry>
+                  <premis:formatRegistryName>PRONOM</premis:formatRegistryName>
+                  <premis:formatRegistryKey>fmt/11</premis:formatRegistryKey>
+                </premis:formatRegistry>
+              </premis:format>
+              <premis:creatingApplication>
+                <premis:dateCreatedByApplication>2020-03-30</premis:dateCreatedByApplication>
+              </premis:creatingApplication>
+              <premis:objectCharacteristicsExtension>
+                <ffprobe>
+                  <program_version version="3.4.4-0ubuntu0.18.04.1" copyright="Copyright (c) 2007-2018 the FFmpeg developers" compiler_ident="gcc 7 (Ubuntu 7.3.0-16ubuntu3)" configuration="--prefix=/usr --extra-version=0ubuntu0.18.04.1 --toolchain=hardened --libdir=/usr/lib/x86_64-linux-gnu --incdir=/usr/include/x86_64-linux-gnu --enable-gpl --disable-stripping --enable-avresample --enable-avisynth --enable-gnutls --enable-ladspa --enable-libass --enable-libbluray --enable-libbs2b --enable-libcaca --enable-libcdio --enable-libflite --enable-libfontconfig --enable-libfreetype --enable-libfribidi --enable-libgme --enable-libgsm --enable-libmp3lame --enable-libmysofa --enable-libopenjpeg --enable-libopenmpt --enable-libopus --enable-libpulse --enable-librubberband --enable-librsvg --enable-libshine --enable-libsnappy --enable-libsoxr --enable-libspeex --enable-libssh --enable-libtheora --enable-libtwolame --enable-libvorbis --enable-libvpx --enable-libwavpack --enable-libwebp --enable-libx265 --enable-libxml2 --enable-libxvid --enable-libzmq --enable-libzvbi --enable-omx --enable-openal --enable-opengl --enable-sdl2 --enable-libdc1394 --enable-libdrm --enable-libiec61883 --enable-chromaprint --enable-frei0r --enable-libopencv --enable-libx264 --enable-shared"/>
+                  <library_versions>
+                    <library_version name="libavutil" major="55" minor="78" micro="100" version="3624548" ident="Lavu55.78.100"/>
+                    <library_version name="libavcodec" major="57" minor="107" micro="100" version="3763044" ident="Lavc57.107.100"/>
+                    <library_version name="libavformat" major="57" minor="83" micro="100" version="3756900" ident="Lavf57.83.100"/>
+                    <library_version name="libavdevice" major="57" minor="10" micro="100" version="3738212" ident="Lavd57.10.100"/>
+                    <library_version name="libavfilter" major="6" minor="107" micro="100" version="420708" ident="Lavfi6.107.100"/>
+                    <library_version name="libswscale" major="4" minor="8" micro="100" version="264292" ident="SwS4.8.100"/>
+                    <library_version name="libswresample" major="2" minor="9" micro="100" version="133476" ident="SwR2.9.100"/>
+                    <library_version name="libpostproc" major="54" minor="7" micro="100" version="3540836" ident="postproc54.7.100"/>
+                  </library_versions>
+                  <streams>
+                    <stream index="0" codec_name="png" codec_long_name="PNG (Portable Network Graphics) image" codec_type="video" codec_time_base="0/1" codec_tag_string="[0][0][0][0]" codec_tag="0x0000" width="894" height="756" coded_width="894" coded_height="756" has_b_frames="0" sample_aspect_ratio="1:1" display_aspect_ratio="149:126" pix_fmt="rgb24" level="-99" color_range="pc" refs="1" r_frame_rate="25/1" avg_frame_rate="0/0" time_base="1/25" extradata=" ">
+                      <disposition default="0" dub="0" original="0" comment="0" lyrics="0" karaoke="0" forced="0" hearing_impaired="0" visual_impaired="0" clean_effects="0" attached_pic="0" timed_thumbnails="0"/>
+                    </stream>
+                  </streams>
+                  <chapters>
+    </chapters>
+                  <format filename="/var/archivematica/sharedDirectory/watchedDirectories/workFlowDecisions/extractPackagesChoice/svalbard_metadata_test-e5206400-700a-11ea-9061-8f11f49b83d2-c2694972-bb96-4790-9fff-95224af79849/objects/PolarBear.png" nb_streams="1" nb_programs="0" format_name="png_pipe" format_long_name="piped png sequence" size="510427" probe_score="99"/>
+                </ffprobe>
+                <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+                  <rdf:Description xmlns:et="http://ns.exiftool.ca/1.0/" xmlns:ExifTool="http://ns.exiftool.ca/ExifTool/1.0/" xmlns:System="http://ns.exiftool.ca/File/System/1.0/" xmlns:File="http://ns.exiftool.ca/File/1.0/" xmlns:PNG="http://ns.exiftool.ca/PNG/PNG/1.0/" xmlns:PNG-pHYs="http://ns.exiftool.ca/PNG/PNG-pHYs/1.0/" xmlns:Composite="http://ns.exiftool.ca/Composite/1.0/" rdf:about="/var/archivematica/sharedDirectory/watchedDirectories/workFlowDecisions/extractPackagesChoice/svalbard_metadata_test-e5206400-700a-11ea-9061-8f11f49b83d2-c2694972-bb96-4790-9fff-95224af79849/objects/PolarBear.png" et:toolkit="Image::ExifTool 10.80">
+                    <ExifTool:ExifToolVersion>10.80</ExifTool:ExifToolVersion>
+                    <System:FileName>PolarBear.png</System:FileName>
+                    <System:Directory>/var/archivematica/sharedDirectory/watchedDirectories/workFlowDecisions/extractPackagesChoice/svalbard_metadata_test-e5206400-700a-11ea-9061-8f11f49b83d2-c2694972-bb96-4790-9fff-95224af79849/objects</System:Directory>
+                    <System:FileSize>498 kB</System:FileSize>
+                    <System:FileModifyDate>2020:03:30 13:25:12+00:00</System:FileModifyDate>
+                    <System:FileAccessDate>2020:03:30 13:25:32+00:00</System:FileAccessDate>
+                    <System:FileInodeChangeDate>2020:03:30 13:25:27+00:00</System:FileInodeChangeDate>
+                    <System:FilePermissions>rw-r--r--</System:FilePermissions>
+                    <File:FileType>PNG</File:FileType>
+                    <File:FileTypeExtension>png</File:FileTypeExtension>
+                    <File:MIMEType>image/png</File:MIMEType>
+                    <PNG:ImageWidth>894</PNG:ImageWidth>
+                    <PNG:ImageHeight>756</PNG:ImageHeight>
+                    <PNG:BitDepth>8</PNG:BitDepth>
+                    <PNG:ColorType>RGB</PNG:ColorType>
+                    <PNG:Compression>Deflate/Inflate</PNG:Compression>
+                    <PNG:Filter>Adaptive</PNG:Filter>
+                    <PNG:Interlace>Noninterlaced</PNG:Interlace>
+                    <PNG-pHYs:PixelsPerUnitX>3780</PNG-pHYs:PixelsPerUnitX>
+                    <PNG-pHYs:PixelsPerUnitY>3780</PNG-pHYs:PixelsPerUnitY>
+                    <PNG-pHYs:PixelUnits>meters</PNG-pHYs:PixelUnits>
+                    <Composite:ImageSize>894x756</Composite:ImageSize>
+                    <Composite:Megapixels>0.676</Composite:Megapixels>
+                  </rdf:Description>
+                </rdf:RDF>
+                <MediaInfo xmlns="https://mediaarea.net/mediainfo" xsi:schemaLocation="https://mediaarea.net/mediainfo https://mediaarea.net/mediainfo/mediainfo_2_0.xsd" version="2.0">
+                  <creatingLibrary version="18.05" url="https://mediaarea.net/MediaInfo">MediaInfoLib</creatingLibrary>
+                  <media ref="/var/archivematica/sharedDirectory/watchedDirectories/workFlowDecisions/extractPackagesChoice/svalbard_metadata_test-e5206400-700a-11ea-9061-8f11f49b83d2-c2694972-bb96-4790-9fff-95224af79849/objects/PolarBear.png">
+                    <track type="General">
+                      <ImageCount>1</ImageCount>
+                      <FileExtension>png</FileExtension>
+                      <Format>PNG</Format>
+                      <FileSize>510427</FileSize>
+                      <StreamSize>0</StreamSize>
+                      <File_Modified_Date>UTC 2020-03-30 13:25:12</File_Modified_Date>
+                      <File_Modified_Date_Local>2020-03-30 13:25:12</File_Modified_Date_Local>
+                    </track>
+                    <track type="Image">
+                      <Format>PNG</Format>
+                      <Format_Compression>LZ77</Format_Compression>
+                      <Width>894</Width>
+                      <Height>756</Height>
+                      <BitDepth>24</BitDepth>
+                      <Compression_Mode>Lossless</Compression_Mode>
+                      <StreamSize>510427</StreamSize>
+                    </track>
+                  </media>
+                </MediaInfo>
+              </premis:objectCharacteristicsExtension>
+            </premis:objectCharacteristics>
+            <premis:originalName>%transferDirectory%data/PolarBear.png</premis:originalName>
+          </premis:object>
+        </mets:xmlData>
+      </mets:mdWrap>
+    </mets:techMD>
+    <mets:digiprovMD ID="digiprovMD_1">
+      <mets:mdWrap MDTYPE="PREMIS:EVENT">
+        <mets:xmlData>
+          <premis:event xmlns:premis="http://www.loc.gov/premis/v3" xsi:schemaLocation="http://www.loc.gov/premis/v3 http://www.loc.gov/standards/premis/v3/premis.xsd" version="3.0">
+            <premis:eventIdentifier>
+              <premis:eventIdentifierType>UUID</premis:eventIdentifierType>
+              <premis:eventIdentifierValue>f01fffc0-2ca1-4435-9852-59b46dad97f8</premis:eventIdentifierValue>
+            </premis:eventIdentifier>
+            <premis:eventType>ingestion</premis:eventType>
+            <premis:eventDateTime>2020-03-30T13:25:26.544369+00:00</premis:eventDateTime>
+            <premis:eventDetailInformation>
+              <premis:eventDetail></premis:eventDetail>
+            </premis:eventDetailInformation>
+            <premis:eventOutcomeInformation>
+              <premis:eventOutcome></premis:eventOutcome>
+              <premis:eventOutcomeDetail>
+                <premis:eventOutcomeDetailNote></premis:eventOutcomeDetailNote>
+              </premis:eventOutcomeDetail>
+            </premis:eventOutcomeInformation>
+            <premis:linkingAgentIdentifier>
+              <premis:linkingAgentIdentifierType>preservation system</premis:linkingAgentIdentifierType>
+              <premis:linkingAgentIdentifierValue>Archivematica-1.10</premis:linkingAgentIdentifierValue>
+            </premis:linkingAgentIdentifier>
+            <premis:linkingAgentIdentifier>
+              <premis:linkingAgentIdentifierType>repository code</premis:linkingAgentIdentifierType>
+              <premis:linkingAgentIdentifierValue>test</premis:linkingAgentIdentifierValue>
+            </premis:linkingAgentIdentifier>
+            <premis:linkingAgentIdentifier>
+              <premis:linkingAgentIdentifierType>Archivematica user pk</premis:linkingAgentIdentifierType>
+              <premis:linkingAgentIdentifierValue>1</premis:linkingAgentIdentifierValue>
+            </premis:linkingAgentIdentifier>
+          </premis:event>
+        </mets:xmlData>
+      </mets:mdWrap>
+    </mets:digiprovMD>
+    <mets:digiprovMD ID="digiprovMD_2">
+      <mets:mdWrap MDTYPE="PREMIS:EVENT">
+        <mets:xmlData>
+          <premis:event xmlns:premis="http://www.loc.gov/premis/v3" xsi:schemaLocation="http://www.loc.gov/premis/v3 http://www.loc.gov/standards/premis/v3/premis.xsd" version="3.0">
+            <premis:eventIdentifier>
+              <premis:eventIdentifierType>UUID</premis:eventIdentifierType>
+              <premis:eventIdentifierValue>3dfd993c-94a6-4c90-8f62-3632cb8aac0c</premis:eventIdentifierValue>
+            </premis:eventIdentifier>
+            <premis:eventType>registration</premis:eventType>
+            <premis:eventDateTime>2020-03-30T13:25:26.556591+00:00</premis:eventDateTime>
+            <premis:eventDetailInformation>
+              <premis:eventDetail></premis:eventDetail>
+            </premis:eventDetailInformation>
+            <premis:eventOutcomeInformation>
+              <premis:eventOutcome></premis:eventOutcome>
+              <premis:eventOutcomeDetail>
+                <premis:eventOutcomeDetailNote>accession#e5206400-700a-11ea-9061-8f11f49b83d2</premis:eventOutcomeDetailNote>
+              </premis:eventOutcomeDetail>
+            </premis:eventOutcomeInformation>
+            <premis:linkingAgentIdentifier>
+              <premis:linkingAgentIdentifierType>preservation system</premis:linkingAgentIdentifierType>
+              <premis:linkingAgentIdentifierValue>Archivematica-1.10</premis:linkingAgentIdentifierValue>
+            </premis:linkingAgentIdentifier>
+            <premis:linkingAgentIdentifier>
+              <premis:linkingAgentIdentifierType>repository code</premis:linkingAgentIdentifierType>
+              <premis:linkingAgentIdentifierValue>test</premis:linkingAgentIdentifierValue>
+            </premis:linkingAgentIdentifier>
+            <premis:linkingAgentIdentifier>
+              <premis:linkingAgentIdentifierType>Archivematica user pk</premis:linkingAgentIdentifierType>
+              <premis:linkingAgentIdentifierValue>1</premis:linkingAgentIdentifierValue>
+            </premis:linkingAgentIdentifier>
+          </premis:event>
+        </mets:xmlData>
+      </mets:mdWrap>
+    </mets:digiprovMD>
+    <mets:digiprovMD ID="digiprovMD_3">
+      <mets:mdWrap MDTYPE="PREMIS:EVENT">
+        <mets:xmlData>
+          <premis:event xmlns:premis="http://www.loc.gov/premis/v3" xsi:schemaLocation="http://www.loc.gov/premis/v3 http://www.loc.gov/standards/premis/v3/premis.xsd" version="3.0">
+            <premis:eventIdentifier>
+              <premis:eventIdentifierType>UUID</premis:eventIdentifierType>
+              <premis:eventIdentifierValue>ba8d805b-dd05-476c-82ca-5e99b3364e98</premis:eventIdentifierValue>
+            </premis:eventIdentifier>
+            <premis:eventType>message digest calculation</premis:eventType>
+            <premis:eventDateTime>2020-03-30T13:25:26.952781+00:00</premis:eventDateTime>
+            <premis:eventDetailInformation>
+              <premis:eventDetail>program="python"; module="hashlib.sha256()"</premis:eventDetail>
+            </premis:eventDetailInformation>
+            <premis:eventOutcomeInformation>
+              <premis:eventOutcome></premis:eventOutcome>
+              <premis:eventOutcomeDetail>
+                <premis:eventOutcomeDetailNote>83d3855f965d76947be79119bfd84f9c49cdb84bd85b9e84f8faa590a8549a5d</premis:eventOutcomeDetailNote>
+              </premis:eventOutcomeDetail>
+            </premis:eventOutcomeInformation>
+            <premis:linkingAgentIdentifier>
+              <premis:linkingAgentIdentifierType>preservation system</premis:linkingAgentIdentifierType>
+              <premis:linkingAgentIdentifierValue>Archivematica-1.10</premis:linkingAgentIdentifierValue>
+            </premis:linkingAgentIdentifier>
+            <premis:linkingAgentIdentifier>
+              <premis:linkingAgentIdentifierType>repository code</premis:linkingAgentIdentifierType>
+              <premis:linkingAgentIdentifierValue>test</premis:linkingAgentIdentifierValue>
+            </premis:linkingAgentIdentifier>
+            <premis:linkingAgentIdentifier>
+              <premis:linkingAgentIdentifierType>Archivematica user pk</premis:linkingAgentIdentifierType>
+              <premis:linkingAgentIdentifierValue>1</premis:linkingAgentIdentifierValue>
+            </premis:linkingAgentIdentifier>
+          </premis:event>
+        </mets:xmlData>
+      </mets:mdWrap>
+    </mets:digiprovMD>
+    <mets:digiprovMD ID="digiprovMD_4">
+      <mets:mdWrap MDTYPE="PREMIS:EVENT">
+        <mets:xmlData>
+          <premis:event xmlns:premis="http://www.loc.gov/premis/v3" xsi:schemaLocation="http://www.loc.gov/premis/v3 http://www.loc.gov/standards/premis/v3/premis.xsd" version="3.0">
+            <premis:eventIdentifier>
+              <premis:eventIdentifierType>UUID</premis:eventIdentifierType>
+              <premis:eventIdentifierValue>7a7fa20c-5b16-4bf2-a6ad-cd1c2e46e7db</premis:eventIdentifierValue>
+            </premis:eventIdentifier>
+            <premis:eventType>fixity check</premis:eventType>
+            <premis:eventDateTime>2020-03-30T13:25:27.929495+00:00</premis:eventDateTime>
+            <premis:eventDetailInformation>
+              <premis:eventDetail>Bagit - verifypayloadmanifests</premis:eventDetail>
+            </premis:eventDetailInformation>
+            <premis:eventOutcomeInformation>
+              <premis:eventOutcome>Pass</premis:eventOutcome>
+              <premis:eventOutcomeDetail>
+                <premis:eventOutcomeDetailNote></premis:eventOutcomeDetailNote>
+              </premis:eventOutcomeDetail>
+            </premis:eventOutcomeInformation>
+            <premis:linkingAgentIdentifier>
+              <premis:linkingAgentIdentifierType>preservation system</premis:linkingAgentIdentifierType>
+              <premis:linkingAgentIdentifierValue>Archivematica-1.10</premis:linkingAgentIdentifierValue>
+            </premis:linkingAgentIdentifier>
+            <premis:linkingAgentIdentifier>
+              <premis:linkingAgentIdentifierType>repository code</premis:linkingAgentIdentifierType>
+              <premis:linkingAgentIdentifierValue>test</premis:linkingAgentIdentifierValue>
+            </premis:linkingAgentIdentifier>
+            <premis:linkingAgentIdentifier>
+              <premis:linkingAgentIdentifierType>Archivematica user pk</premis:linkingAgentIdentifierType>
+              <premis:linkingAgentIdentifierValue>1</premis:linkingAgentIdentifierValue>
+            </premis:linkingAgentIdentifier>
+          </premis:event>
+        </mets:xmlData>
+      </mets:mdWrap>
+    </mets:digiprovMD>
+    <mets:digiprovMD ID="digiprovMD_5">
+      <mets:mdWrap MDTYPE="PREMIS:EVENT">
+        <mets:xmlData>
+          <premis:event xmlns:premis="http://www.loc.gov/premis/v3" xsi:schemaLocation="http://www.loc.gov/premis/v3 http://www.loc.gov/standards/premis/v3/premis.xsd" version="3.0">
+            <premis:eventIdentifier>
+              <premis:eventIdentifierType>UUID</premis:eventIdentifierType>
+              <premis:eventIdentifierValue>3bbda943-c9dc-4707-b45a-7f601a877e74</premis:eventIdentifierValue>
+            </premis:eventIdentifier>
+            <premis:eventType>virus check</premis:eventType>
+            <premis:eventDateTime>2020-03-30T13:25:32.691957+00:00</premis:eventDateTime>
+            <premis:eventDetailInformation>
+              <premis:eventDetail>program="ClamAV (clamd)"; version="ClamAV 0.99.2"; virusDefinitions="25764/Fri Mar 27 13:11:26 2020"</premis:eventDetail>
+            </premis:eventDetailInformation>
+            <premis:eventOutcomeInformation>
+              <premis:eventOutcome>Pass</premis:eventOutcome>
+              <premis:eventOutcomeDetail>
+                <premis:eventOutcomeDetailNote></premis:eventOutcomeDetailNote>
+              </premis:eventOutcomeDetail>
+            </premis:eventOutcomeInformation>
+            <premis:linkingAgentIdentifier>
+              <premis:linkingAgentIdentifierType>preservation system</premis:linkingAgentIdentifierType>
+              <premis:linkingAgentIdentifierValue>Archivematica-1.10</premis:linkingAgentIdentifierValue>
+            </premis:linkingAgentIdentifier>
+            <premis:linkingAgentIdentifier>
+              <premis:linkingAgentIdentifierType>repository code</premis:linkingAgentIdentifierType>
+              <premis:linkingAgentIdentifierValue>test</premis:linkingAgentIdentifierValue>
+            </premis:linkingAgentIdentifier>
+            <premis:linkingAgentIdentifier>
+              <premis:linkingAgentIdentifierType>Archivematica user pk</premis:linkingAgentIdentifierType>
+              <premis:linkingAgentIdentifierValue>1</premis:linkingAgentIdentifierValue>
+            </premis:linkingAgentIdentifier>
+          </premis:event>
+        </mets:xmlData>
+      </mets:mdWrap>
+    </mets:digiprovMD>
+    <mets:digiprovMD ID="digiprovMD_6">
+      <mets:mdWrap MDTYPE="PREMIS:EVENT">
+        <mets:xmlData>
+          <premis:event xmlns:premis="http://www.loc.gov/premis/v3" xsi:schemaLocation="http://www.loc.gov/premis/v3 http://www.loc.gov/standards/premis/v3/premis.xsd" version="3.0">
+            <premis:eventIdentifier>
+              <premis:eventIdentifierType>UUID</premis:eventIdentifierType>
+              <premis:eventIdentifierValue>40437c7c-cdcc-474c-98f8-4ee4e2afb4da</premis:eventIdentifierValue>
+            </premis:eventIdentifier>
+            <premis:eventType>format identification</premis:eventType>
+            <premis:eventDateTime>2020-03-30T13:25:38.958622+00:00</premis:eventDateTime>
+            <premis:eventDetailInformation>
+              <premis:eventDetail>program="Siegfried"; version="1.7.10"</premis:eventDetail>
+            </premis:eventDetailInformation>
+            <premis:eventOutcomeInformation>
+              <premis:eventOutcome>Positive</premis:eventOutcome>
+              <premis:eventOutcomeDetail>
+                <premis:eventOutcomeDetailNote>fmt/11</premis:eventOutcomeDetailNote>
+              </premis:eventOutcomeDetail>
+            </premis:eventOutcomeInformation>
+            <premis:linkingAgentIdentifier>
+              <premis:linkingAgentIdentifierType>preservation system</premis:linkingAgentIdentifierType>
+              <premis:linkingAgentIdentifierValue>Archivematica-1.10</premis:linkingAgentIdentifierValue>
+            </premis:linkingAgentIdentifier>
+            <premis:linkingAgentIdentifier>
+              <premis:linkingAgentIdentifierType>repository code</premis:linkingAgentIdentifierType>
+              <premis:linkingAgentIdentifierValue>test</premis:linkingAgentIdentifierValue>
+            </premis:linkingAgentIdentifier>
+            <premis:linkingAgentIdentifier>
+              <premis:linkingAgentIdentifierType>Archivematica user pk</premis:linkingAgentIdentifierType>
+              <premis:linkingAgentIdentifierValue>1</premis:linkingAgentIdentifierValue>
+            </premis:linkingAgentIdentifier>
+          </premis:event>
+        </mets:xmlData>
+      </mets:mdWrap>
+    </mets:digiprovMD>
+    <mets:digiprovMD ID="digiprovMD_7">
+      <mets:mdWrap MDTYPE="PREMIS:AGENT">
+        <mets:xmlData>
+          <premis:agent xmlns:premis="http://www.loc.gov/premis/v3" xsi:schemaLocation="http://www.loc.gov/premis/v3 http://www.loc.gov/standards/premis/v3/premis.xsd" version="3.0">
+            <premis:agentIdentifier>
+              <premis:agentIdentifierType>preservation system</premis:agentIdentifierType>
+              <premis:agentIdentifierValue>Archivematica-1.10</premis:agentIdentifierValue>
+            </premis:agentIdentifier>
+            <premis:agentName>Archivematica</premis:agentName>
+            <premis:agentType>software</premis:agentType>
+          </premis:agent>
+        </mets:xmlData>
+      </mets:mdWrap>
+    </mets:digiprovMD>
+    <mets:digiprovMD ID="digiprovMD_8">
+      <mets:mdWrap MDTYPE="PREMIS:AGENT">
+        <mets:xmlData>
+          <premis:agent xmlns:premis="http://www.loc.gov/premis/v3" xsi:schemaLocation="http://www.loc.gov/premis/v3 http://www.loc.gov/standards/premis/v3/premis.xsd" version="3.0">
+            <premis:agentIdentifier>
+              <premis:agentIdentifierType>repository code</premis:agentIdentifierType>
+              <premis:agentIdentifierValue>test</premis:agentIdentifierValue>
+            </premis:agentIdentifier>
+            <premis:agentName>test</premis:agentName>
+            <premis:agentType>organization</premis:agentType>
+          </premis:agent>
+        </mets:xmlData>
+      </mets:mdWrap>
+    </mets:digiprovMD>
+    <mets:digiprovMD ID="digiprovMD_9">
+      <mets:mdWrap MDTYPE="PREMIS:AGENT">
+        <mets:xmlData>
+          <premis:agent xmlns:premis="http://www.loc.gov/premis/v3" xsi:schemaLocation="http://www.loc.gov/premis/v3 http://www.loc.gov/standards/premis/v3/premis.xsd" version="3.0">
+            <premis:agentIdentifier>
+              <premis:agentIdentifierType>Archivematica user pk</premis:agentIdentifierType>
+              <premis:agentIdentifierValue>1</premis:agentIdentifierValue>
+            </premis:agentIdentifier>
+            <premis:agentName>username="test", first_name="", last_name=""</premis:agentName>
+            <premis:agentType>Archivematica user</premis:agentType>
+          </premis:agent>
+        </mets:xmlData>
+      </mets:mdWrap>
+    </mets:digiprovMD>
+  </mets:amdSec>
+  <mets:amdSec ID="amdSec_2">
+    <mets:techMD ID="techMD_2">
+      <mets:mdWrap MDTYPE="PREMIS:OBJECT">
+        <mets:xmlData>
+          <premis:object xmlns:premis="http://www.loc.gov/premis/v3" xsi:type="premis:file" xsi:schemaLocation="http://www.loc.gov/premis/v3 http://www.loc.gov/standards/premis/v3/premis.xsd" version="3.0">
+            <premis:objectIdentifier>
+              <premis:objectIdentifierType>UUID</premis:objectIdentifierType>
+              <premis:objectIdentifierValue>9717c415-7529-40c6-b103-62044a9896d0</premis:objectIdentifierValue>
+            </premis:objectIdentifier>
+            <premis:objectCharacteristics>
+              <premis:compositionLevel>0</premis:compositionLevel>
+              <premis:fixity>
+                <premis:messageDigestAlgorithm>sha256</premis:messageDigestAlgorithm>
+                <premis:messageDigest>0fda74ec72c70b06dd33d7f28a38f64ebf9ba5da0f2a0468e81411aa73c7c1a5</premis:messageDigest>
+              </premis:fixity>
+              <premis:size>789848</premis:size>
+              <premis:format>
+                <premis:formatDesignation>
+                  <premis:formatName>Portable Network Graphics</premis:formatName>
+                  <premis:formatVersion>1.0</premis:formatVersion>
+                </premis:formatDesignation>
+                <premis:formatRegistry>
+                  <premis:formatRegistryName>PRONOM</premis:formatRegistryName>
+                  <premis:formatRegistryKey>fmt/11</premis:formatRegistryKey>
+                </premis:formatRegistry>
+              </premis:format>
+              <premis:creatingApplication>
+                <premis:dateCreatedByApplication>2020-03-30</premis:dateCreatedByApplication>
+              </premis:creatingApplication>
+              <premis:objectCharacteristicsExtension>
+                <ffprobe>
+                  <program_version version="3.4.4-0ubuntu0.18.04.1" copyright="Copyright (c) 2007-2018 the FFmpeg developers" compiler_ident="gcc 7 (Ubuntu 7.3.0-16ubuntu3)" configuration="--prefix=/usr --extra-version=0ubuntu0.18.04.1 --toolchain=hardened --libdir=/usr/lib/x86_64-linux-gnu --incdir=/usr/include/x86_64-linux-gnu --enable-gpl --disable-stripping --enable-avresample --enable-avisynth --enable-gnutls --enable-ladspa --enable-libass --enable-libbluray --enable-libbs2b --enable-libcaca --enable-libcdio --enable-libflite --enable-libfontconfig --enable-libfreetype --enable-libfribidi --enable-libgme --enable-libgsm --enable-libmp3lame --enable-libmysofa --enable-libopenjpeg --enable-libopenmpt --enable-libopus --enable-libpulse --enable-librubberband --enable-librsvg --enable-libshine --enable-libsnappy --enable-libsoxr --enable-libspeex --enable-libssh --enable-libtheora --enable-libtwolame --enable-libvorbis --enable-libvpx --enable-libwavpack --enable-libwebp --enable-libx265 --enable-libxml2 --enable-libxvid --enable-libzmq --enable-libzvbi --enable-omx --enable-openal --enable-opengl --enable-sdl2 --enable-libdc1394 --enable-libdrm --enable-libiec61883 --enable-chromaprint --enable-frei0r --enable-libopencv --enable-libx264 --enable-shared"/>
+                  <library_versions>
+                    <library_version name="libavutil" major="55" minor="78" micro="100" version="3624548" ident="Lavu55.78.100"/>
+                    <library_version name="libavcodec" major="57" minor="107" micro="100" version="3763044" ident="Lavc57.107.100"/>
+                    <library_version name="libavformat" major="57" minor="83" micro="100" version="3756900" ident="Lavf57.83.100"/>
+                    <library_version name="libavdevice" major="57" minor="10" micro="100" version="3738212" ident="Lavd57.10.100"/>
+                    <library_version name="libavfilter" major="6" minor="107" micro="100" version="420708" ident="Lavfi6.107.100"/>
+                    <library_version name="libswscale" major="4" minor="8" micro="100" version="264292" ident="SwS4.8.100"/>
+                    <library_version name="libswresample" major="2" minor="9" micro="100" version="133476" ident="SwR2.9.100"/>
+                    <library_version name="libpostproc" major="54" minor="7" micro="100" version="3540836" ident="postproc54.7.100"/>
+                  </library_versions>
+                  <streams>
+                    <stream index="0" codec_name="png" codec_long_name="PNG (Portable Network Graphics) image" codec_type="video" codec_time_base="0/1" codec_tag_string="[0][0][0][0]" codec_tag="0x0000" width="1387" height="718" coded_width="1387" coded_height="718" has_b_frames="0" sample_aspect_ratio="1:1" display_aspect_ratio="1387:718" pix_fmt="rgb24" level="-99" color_range="pc" refs="1" r_frame_rate="25/1" avg_frame_rate="0/0" time_base="1/25" extradata=" ">
+                      <disposition default="0" dub="0" original="0" comment="0" lyrics="0" karaoke="0" forced="0" hearing_impaired="0" visual_impaired="0" clean_effects="0" attached_pic="0" timed_thumbnails="0"/>
+                    </stream>
+                  </streams>
+                  <chapters>
+    </chapters>
+                  <format filename="/var/archivematica/sharedDirectory/watchedDirectories/workFlowDecisions/extractPackagesChoice/svalbard_metadata_test-e5206400-700a-11ea-9061-8f11f49b83d2-c2694972-bb96-4790-9fff-95224af79849/objects/Svalbard.png" nb_streams="1" nb_programs="0" format_name="png_pipe" format_long_name="piped png sequence" size="789848" probe_score="99"/>
+                </ffprobe>
+                <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+                  <rdf:Description xmlns:et="http://ns.exiftool.ca/1.0/" xmlns:ExifTool="http://ns.exiftool.ca/ExifTool/1.0/" xmlns:System="http://ns.exiftool.ca/File/System/1.0/" xmlns:File="http://ns.exiftool.ca/File/1.0/" xmlns:PNG="http://ns.exiftool.ca/PNG/PNG/1.0/" xmlns:PNG-pHYs="http://ns.exiftool.ca/PNG/PNG-pHYs/1.0/" xmlns:Composite="http://ns.exiftool.ca/Composite/1.0/" rdf:about="/var/archivematica/sharedDirectory/watchedDirectories/workFlowDecisions/extractPackagesChoice/svalbard_metadata_test-e5206400-700a-11ea-9061-8f11f49b83d2-c2694972-bb96-4790-9fff-95224af79849/objects/Svalbard.png" et:toolkit="Image::ExifTool 10.80">
+                    <ExifTool:ExifToolVersion>10.80</ExifTool:ExifToolVersion>
+                    <System:FileName>Svalbard.png</System:FileName>
+                    <System:Directory>/var/archivematica/sharedDirectory/watchedDirectories/workFlowDecisions/extractPackagesChoice/svalbard_metadata_test-e5206400-700a-11ea-9061-8f11f49b83d2-c2694972-bb96-4790-9fff-95224af79849/objects</System:Directory>
+                    <System:FileSize>771 kB</System:FileSize>
+                    <System:FileModifyDate>2020:03:30 13:25:12+00:00</System:FileModifyDate>
+                    <System:FileAccessDate>2020:03:30 13:25:32+00:00</System:FileAccessDate>
+                    <System:FileInodeChangeDate>2020:03:30 13:25:27+00:00</System:FileInodeChangeDate>
+                    <System:FilePermissions>rw-r--r--</System:FilePermissions>
+                    <File:FileType>PNG</File:FileType>
+                    <File:FileTypeExtension>png</File:FileTypeExtension>
+                    <File:MIMEType>image/png</File:MIMEType>
+                    <PNG:ImageWidth>1387</PNG:ImageWidth>
+                    <PNG:ImageHeight>718</PNG:ImageHeight>
+                    <PNG:BitDepth>8</PNG:BitDepth>
+                    <PNG:ColorType>RGB</PNG:ColorType>
+                    <PNG:Compression>Deflate/Inflate</PNG:Compression>
+                    <PNG:Filter>Adaptive</PNG:Filter>
+                    <PNG:Interlace>Noninterlaced</PNG:Interlace>
+                    <PNG-pHYs:PixelsPerUnitX>3780</PNG-pHYs:PixelsPerUnitX>
+                    <PNG-pHYs:PixelsPerUnitY>3780</PNG-pHYs:PixelsPerUnitY>
+                    <PNG-pHYs:PixelUnits>meters</PNG-pHYs:PixelUnits>
+                    <Composite:ImageSize>1387x718</Composite:ImageSize>
+                    <Composite:Megapixels>0.996</Composite:Megapixels>
+                  </rdf:Description>
+                </rdf:RDF>
+                <MediaInfo xmlns="https://mediaarea.net/mediainfo" xsi:schemaLocation="https://mediaarea.net/mediainfo https://mediaarea.net/mediainfo/mediainfo_2_0.xsd" version="2.0">
+                  <creatingLibrary version="18.05" url="https://mediaarea.net/MediaInfo">MediaInfoLib</creatingLibrary>
+                  <media ref="/var/archivematica/sharedDirectory/watchedDirectories/workFlowDecisions/extractPackagesChoice/svalbard_metadata_test-e5206400-700a-11ea-9061-8f11f49b83d2-c2694972-bb96-4790-9fff-95224af79849/objects/Svalbard.png">
+                    <track type="General">
+                      <ImageCount>1</ImageCount>
+                      <FileExtension>png</FileExtension>
+                      <Format>PNG</Format>
+                      <FileSize>789848</FileSize>
+                      <StreamSize>0</StreamSize>
+                      <File_Modified_Date>UTC 2020-03-30 13:25:12</File_Modified_Date>
+                      <File_Modified_Date_Local>2020-03-30 13:25:12</File_Modified_Date_Local>
+                    </track>
+                    <track type="Image">
+                      <Format>PNG</Format>
+                      <Format_Compression>LZ77</Format_Compression>
+                      <Width>1387</Width>
+                      <Height>718</Height>
+                      <BitDepth>24</BitDepth>
+                      <Compression_Mode>Lossless</Compression_Mode>
+                      <StreamSize>789848</StreamSize>
+                    </track>
+                  </media>
+                </MediaInfo>
+              </premis:objectCharacteristicsExtension>
+            </premis:objectCharacteristics>
+            <premis:originalName>%transferDirectory%data/Svalbard.png</premis:originalName>
+          </premis:object>
+        </mets:xmlData>
+      </mets:mdWrap>
+    </mets:techMD>
+    <mets:digiprovMD ID="digiprovMD_10">
+      <mets:mdWrap MDTYPE="PREMIS:EVENT">
+        <mets:xmlData>
+          <premis:event xmlns:premis="http://www.loc.gov/premis/v3" xsi:schemaLocation="http://www.loc.gov/premis/v3 http://www.loc.gov/standards/premis/v3/premis.xsd" version="3.0">
+            <premis:eventIdentifier>
+              <premis:eventIdentifierType>UUID</premis:eventIdentifierType>
+              <premis:eventIdentifierValue>10a73d44-cf9b-43d7-b016-e4cfb533b8f4</premis:eventIdentifierValue>
+            </premis:eventIdentifier>
+            <premis:eventType>ingestion</premis:eventType>
+            <premis:eventDateTime>2020-03-30T13:25:26.396124+00:00</premis:eventDateTime>
+            <premis:eventDetailInformation>
+              <premis:eventDetail></premis:eventDetail>
+            </premis:eventDetailInformation>
+            <premis:eventOutcomeInformation>
+              <premis:eventOutcome></premis:eventOutcome>
+              <premis:eventOutcomeDetail>
+                <premis:eventOutcomeDetailNote></premis:eventOutcomeDetailNote>
+              </premis:eventOutcomeDetail>
+            </premis:eventOutcomeInformation>
+            <premis:linkingAgentIdentifier>
+              <premis:linkingAgentIdentifierType>preservation system</premis:linkingAgentIdentifierType>
+              <premis:linkingAgentIdentifierValue>Archivematica-1.10</premis:linkingAgentIdentifierValue>
+            </premis:linkingAgentIdentifier>
+            <premis:linkingAgentIdentifier>
+              <premis:linkingAgentIdentifierType>repository code</premis:linkingAgentIdentifierType>
+              <premis:linkingAgentIdentifierValue>test</premis:linkingAgentIdentifierValue>
+            </premis:linkingAgentIdentifier>
+            <premis:linkingAgentIdentifier>
+              <premis:linkingAgentIdentifierType>Archivematica user pk</premis:linkingAgentIdentifierType>
+              <premis:linkingAgentIdentifierValue>1</premis:linkingAgentIdentifierValue>
+            </premis:linkingAgentIdentifier>
+          </premis:event>
+        </mets:xmlData>
+      </mets:mdWrap>
+    </mets:digiprovMD>
+    <mets:digiprovMD ID="digiprovMD_11">
+      <mets:mdWrap MDTYPE="PREMIS:EVENT">
+        <mets:xmlData>
+          <premis:event xmlns:premis="http://www.loc.gov/premis/v3" xsi:schemaLocation="http://www.loc.gov/premis/v3 http://www.loc.gov/standards/premis/v3/premis.xsd" version="3.0">
+            <premis:eventIdentifier>
+              <premis:eventIdentifierType>UUID</premis:eventIdentifierType>
+              <premis:eventIdentifierValue>f05a7eb9-23b3-4ce6-86db-5f1239b53c0c</premis:eventIdentifierValue>
+            </premis:eventIdentifier>
+            <premis:eventType>registration</premis:eventType>
+            <premis:eventDateTime>2020-03-30T13:25:26.414813+00:00</premis:eventDateTime>
+            <premis:eventDetailInformation>
+              <premis:eventDetail></premis:eventDetail>
+            </premis:eventDetailInformation>
+            <premis:eventOutcomeInformation>
+              <premis:eventOutcome></premis:eventOutcome>
+              <premis:eventOutcomeDetail>
+                <premis:eventOutcomeDetailNote>accession#e5206400-700a-11ea-9061-8f11f49b83d2</premis:eventOutcomeDetailNote>
+              </premis:eventOutcomeDetail>
+            </premis:eventOutcomeInformation>
+            <premis:linkingAgentIdentifier>
+              <premis:linkingAgentIdentifierType>preservation system</premis:linkingAgentIdentifierType>
+              <premis:linkingAgentIdentifierValue>Archivematica-1.10</premis:linkingAgentIdentifierValue>
+            </premis:linkingAgentIdentifier>
+            <premis:linkingAgentIdentifier>
+              <premis:linkingAgentIdentifierType>repository code</premis:linkingAgentIdentifierType>
+              <premis:linkingAgentIdentifierValue>test</premis:linkingAgentIdentifierValue>
+            </premis:linkingAgentIdentifier>
+            <premis:linkingAgentIdentifier>
+              <premis:linkingAgentIdentifierType>Archivematica user pk</premis:linkingAgentIdentifierType>
+              <premis:linkingAgentIdentifierValue>1</premis:linkingAgentIdentifierValue>
+            </premis:linkingAgentIdentifier>
+          </premis:event>
+        </mets:xmlData>
+      </mets:mdWrap>
+    </mets:digiprovMD>
+    <mets:digiprovMD ID="digiprovMD_12">
+      <mets:mdWrap MDTYPE="PREMIS:EVENT">
+        <mets:xmlData>
+          <premis:event xmlns:premis="http://www.loc.gov/premis/v3" xsi:schemaLocation="http://www.loc.gov/premis/v3 http://www.loc.gov/standards/premis/v3/premis.xsd" version="3.0">
+            <premis:eventIdentifier>
+              <premis:eventIdentifierType>UUID</premis:eventIdentifierType>
+              <premis:eventIdentifierValue>fbd127b4-5be9-4c3f-a9ca-2506c20e6761</premis:eventIdentifierValue>
+            </premis:eventIdentifier>
+            <premis:eventType>message digest calculation</premis:eventType>
+            <premis:eventDateTime>2020-03-30T13:25:27.072040+00:00</premis:eventDateTime>
+            <premis:eventDetailInformation>
+              <premis:eventDetail>program="python"; module="hashlib.sha256()"</premis:eventDetail>
+            </premis:eventDetailInformation>
+            <premis:eventOutcomeInformation>
+              <premis:eventOutcome></premis:eventOutcome>
+              <premis:eventOutcomeDetail>
+                <premis:eventOutcomeDetailNote>0fda74ec72c70b06dd33d7f28a38f64ebf9ba5da0f2a0468e81411aa73c7c1a5</premis:eventOutcomeDetailNote>
+              </premis:eventOutcomeDetail>
+            </premis:eventOutcomeInformation>
+            <premis:linkingAgentIdentifier>
+              <premis:linkingAgentIdentifierType>preservation system</premis:linkingAgentIdentifierType>
+              <premis:linkingAgentIdentifierValue>Archivematica-1.10</premis:linkingAgentIdentifierValue>
+            </premis:linkingAgentIdentifier>
+            <premis:linkingAgentIdentifier>
+              <premis:linkingAgentIdentifierType>repository code</premis:linkingAgentIdentifierType>
+              <premis:linkingAgentIdentifierValue>test</premis:linkingAgentIdentifierValue>
+            </premis:linkingAgentIdentifier>
+            <premis:linkingAgentIdentifier>
+              <premis:linkingAgentIdentifierType>Archivematica user pk</premis:linkingAgentIdentifierType>
+              <premis:linkingAgentIdentifierValue>1</premis:linkingAgentIdentifierValue>
+            </premis:linkingAgentIdentifier>
+          </premis:event>
+        </mets:xmlData>
+      </mets:mdWrap>
+    </mets:digiprovMD>
+    <mets:digiprovMD ID="digiprovMD_13">
+      <mets:mdWrap MDTYPE="PREMIS:EVENT">
+        <mets:xmlData>
+          <premis:event xmlns:premis="http://www.loc.gov/premis/v3" xsi:schemaLocation="http://www.loc.gov/premis/v3 http://www.loc.gov/standards/premis/v3/premis.xsd" version="3.0">
+            <premis:eventIdentifier>
+              <premis:eventIdentifierType>UUID</premis:eventIdentifierType>
+              <premis:eventIdentifierValue>d208ea3d-c625-4968-8229-86e2f1b888b0</premis:eventIdentifierValue>
+            </premis:eventIdentifier>
+            <premis:eventType>fixity check</premis:eventType>
+            <premis:eventDateTime>2020-03-30T13:25:27.941883+00:00</premis:eventDateTime>
+            <premis:eventDetailInformation>
+              <premis:eventDetail>Bagit - verifypayloadmanifests</premis:eventDetail>
+            </premis:eventDetailInformation>
+            <premis:eventOutcomeInformation>
+              <premis:eventOutcome>Pass</premis:eventOutcome>
+              <premis:eventOutcomeDetail>
+                <premis:eventOutcomeDetailNote></premis:eventOutcomeDetailNote>
+              </premis:eventOutcomeDetail>
+            </premis:eventOutcomeInformation>
+            <premis:linkingAgentIdentifier>
+              <premis:linkingAgentIdentifierType>preservation system</premis:linkingAgentIdentifierType>
+              <premis:linkingAgentIdentifierValue>Archivematica-1.10</premis:linkingAgentIdentifierValue>
+            </premis:linkingAgentIdentifier>
+            <premis:linkingAgentIdentifier>
+              <premis:linkingAgentIdentifierType>repository code</premis:linkingAgentIdentifierType>
+              <premis:linkingAgentIdentifierValue>test</premis:linkingAgentIdentifierValue>
+            </premis:linkingAgentIdentifier>
+            <premis:linkingAgentIdentifier>
+              <premis:linkingAgentIdentifierType>Archivematica user pk</premis:linkingAgentIdentifierType>
+              <premis:linkingAgentIdentifierValue>1</premis:linkingAgentIdentifierValue>
+            </premis:linkingAgentIdentifier>
+          </premis:event>
+        </mets:xmlData>
+      </mets:mdWrap>
+    </mets:digiprovMD>
+    <mets:digiprovMD ID="digiprovMD_14">
+      <mets:mdWrap MDTYPE="PREMIS:EVENT">
+        <mets:xmlData>
+          <premis:event xmlns:premis="http://www.loc.gov/premis/v3" xsi:schemaLocation="http://www.loc.gov/premis/v3 http://www.loc.gov/standards/premis/v3/premis.xsd" version="3.0">
+            <premis:eventIdentifier>
+              <premis:eventIdentifierType>UUID</premis:eventIdentifierType>
+              <premis:eventIdentifierValue>c6662e59-4f67-46e4-9ba8-7a92225514b9</premis:eventIdentifierValue>
+            </premis:eventIdentifier>
+            <premis:eventType>virus check</premis:eventType>
+            <premis:eventDateTime>2020-03-30T13:25:32.744134+00:00</premis:eventDateTime>
+            <premis:eventDetailInformation>
+              <premis:eventDetail>program="ClamAV (clamd)"; version="ClamAV 0.99.2"; virusDefinitions="25764/Fri Mar 27 13:11:26 2020"</premis:eventDetail>
+            </premis:eventDetailInformation>
+            <premis:eventOutcomeInformation>
+              <premis:eventOutcome>Pass</premis:eventOutcome>
+              <premis:eventOutcomeDetail>
+                <premis:eventOutcomeDetailNote></premis:eventOutcomeDetailNote>
+              </premis:eventOutcomeDetail>
+            </premis:eventOutcomeInformation>
+            <premis:linkingAgentIdentifier>
+              <premis:linkingAgentIdentifierType>preservation system</premis:linkingAgentIdentifierType>
+              <premis:linkingAgentIdentifierValue>Archivematica-1.10</premis:linkingAgentIdentifierValue>
+            </premis:linkingAgentIdentifier>
+            <premis:linkingAgentIdentifier>
+              <premis:linkingAgentIdentifierType>repository code</premis:linkingAgentIdentifierType>
+              <premis:linkingAgentIdentifierValue>test</premis:linkingAgentIdentifierValue>
+            </premis:linkingAgentIdentifier>
+            <premis:linkingAgentIdentifier>
+              <premis:linkingAgentIdentifierType>Archivematica user pk</premis:linkingAgentIdentifierType>
+              <premis:linkingAgentIdentifierValue>1</premis:linkingAgentIdentifierValue>
+            </premis:linkingAgentIdentifier>
+          </premis:event>
+        </mets:xmlData>
+      </mets:mdWrap>
+    </mets:digiprovMD>
+    <mets:digiprovMD ID="digiprovMD_15">
+      <mets:mdWrap MDTYPE="PREMIS:EVENT">
+        <mets:xmlData>
+          <premis:event xmlns:premis="http://www.loc.gov/premis/v3" xsi:schemaLocation="http://www.loc.gov/premis/v3 http://www.loc.gov/standards/premis/v3/premis.xsd" version="3.0">
+            <premis:eventIdentifier>
+              <premis:eventIdentifierType>UUID</premis:eventIdentifierType>
+              <premis:eventIdentifierValue>dc87fd07-c63d-49ee-9276-2df984ed7198</premis:eventIdentifierValue>
+            </premis:eventIdentifier>
+            <premis:eventType>format identification</premis:eventType>
+            <premis:eventDateTime>2020-03-30T13:25:38.644172+00:00</premis:eventDateTime>
+            <premis:eventDetailInformation>
+              <premis:eventDetail>program="Siegfried"; version="1.7.10"</premis:eventDetail>
+            </premis:eventDetailInformation>
+            <premis:eventOutcomeInformation>
+              <premis:eventOutcome>Positive</premis:eventOutcome>
+              <premis:eventOutcomeDetail>
+                <premis:eventOutcomeDetailNote>fmt/11</premis:eventOutcomeDetailNote>
+              </premis:eventOutcomeDetail>
+            </premis:eventOutcomeInformation>
+            <premis:linkingAgentIdentifier>
+              <premis:linkingAgentIdentifierType>preservation system</premis:linkingAgentIdentifierType>
+              <premis:linkingAgentIdentifierValue>Archivematica-1.10</premis:linkingAgentIdentifierValue>
+            </premis:linkingAgentIdentifier>
+            <premis:linkingAgentIdentifier>
+              <premis:linkingAgentIdentifierType>repository code</premis:linkingAgentIdentifierType>
+              <premis:linkingAgentIdentifierValue>test</premis:linkingAgentIdentifierValue>
+            </premis:linkingAgentIdentifier>
+            <premis:linkingAgentIdentifier>
+              <premis:linkingAgentIdentifierType>Archivematica user pk</premis:linkingAgentIdentifierType>
+              <premis:linkingAgentIdentifierValue>1</premis:linkingAgentIdentifierValue>
+            </premis:linkingAgentIdentifier>
+          </premis:event>
+        </mets:xmlData>
+      </mets:mdWrap>
+    </mets:digiprovMD>
+    <mets:digiprovMD ID="digiprovMD_16">
+      <mets:mdWrap MDTYPE="PREMIS:AGENT">
+        <mets:xmlData>
+          <premis:agent xmlns:premis="http://www.loc.gov/premis/v3" xsi:schemaLocation="http://www.loc.gov/premis/v3 http://www.loc.gov/standards/premis/v3/premis.xsd" version="3.0">
+            <premis:agentIdentifier>
+              <premis:agentIdentifierType>preservation system</premis:agentIdentifierType>
+              <premis:agentIdentifierValue>Archivematica-1.10</premis:agentIdentifierValue>
+            </premis:agentIdentifier>
+            <premis:agentName>Archivematica</premis:agentName>
+            <premis:agentType>software</premis:agentType>
+          </premis:agent>
+        </mets:xmlData>
+      </mets:mdWrap>
+    </mets:digiprovMD>
+    <mets:digiprovMD ID="digiprovMD_17">
+      <mets:mdWrap MDTYPE="PREMIS:AGENT">
+        <mets:xmlData>
+          <premis:agent xmlns:premis="http://www.loc.gov/premis/v3" xsi:schemaLocation="http://www.loc.gov/premis/v3 http://www.loc.gov/standards/premis/v3/premis.xsd" version="3.0">
+            <premis:agentIdentifier>
+              <premis:agentIdentifierType>repository code</premis:agentIdentifierType>
+              <premis:agentIdentifierValue>test</premis:agentIdentifierValue>
+            </premis:agentIdentifier>
+            <premis:agentName>test</premis:agentName>
+            <premis:agentType>organization</premis:agentType>
+          </premis:agent>
+        </mets:xmlData>
+      </mets:mdWrap>
+    </mets:digiprovMD>
+    <mets:digiprovMD ID="digiprovMD_18">
+      <mets:mdWrap MDTYPE="PREMIS:AGENT">
+        <mets:xmlData>
+          <premis:agent xmlns:premis="http://www.loc.gov/premis/v3" xsi:schemaLocation="http://www.loc.gov/premis/v3 http://www.loc.gov/standards/premis/v3/premis.xsd" version="3.0">
+            <premis:agentIdentifier>
+              <premis:agentIdentifierType>Archivematica user pk</premis:agentIdentifierType>
+              <premis:agentIdentifierValue>1</premis:agentIdentifierValue>
+            </premis:agentIdentifier>
+            <premis:agentName>username="test", first_name="", last_name=""</premis:agentName>
+            <premis:agentType>Archivematica user</premis:agentType>
+          </premis:agent>
+        </mets:xmlData>
+      </mets:mdWrap>
+    </mets:digiprovMD>
+  </mets:amdSec>
+  <mets:amdSec ID="amdSec_3">
+    <mets:techMD ID="techMD_3">
+      <mets:mdWrap MDTYPE="PREMIS:OBJECT">
+        <mets:xmlData>
+          <premis:object xmlns:premis="http://www.loc.gov/premis/v3" xsi:type="premis:file" xsi:schemaLocation="http://www.loc.gov/premis/v3 http://www.loc.gov/standards/premis/v3/premis.xsd" version="3.0">
+            <premis:objectIdentifier>
+              <premis:objectIdentifierType>UUID</premis:objectIdentifierType>
+              <premis:objectIdentifierValue>27914c01-8ded-4769-acd8-b3610442d2b8</premis:objectIdentifierValue>
+            </premis:objectIdentifier>
+            <premis:objectCharacteristics>
+              <premis:compositionLevel>0</premis:compositionLevel>
+              <premis:fixity>
+                <premis:messageDigestAlgorithm>sha256</premis:messageDigestAlgorithm>
+                <premis:messageDigest>68c7f9b74623d4eef8371c2df5e606b0fe037d48e0be4091f5b50cad69d4eb8d</premis:messageDigest>
+              </premis:fixity>
+              <premis:size>187</premis:size>
+              <premis:format>
+                <premis:formatDesignation>
+                  <premis:formatName>Plain Text</premis:formatName>
+                  <premis:formatVersion></premis:formatVersion>
+                </premis:formatDesignation>
+                <premis:formatRegistry>
+                  <premis:formatRegistryName>PRONOM</premis:formatRegistryName>
+                  <premis:formatRegistryKey>x-fmt/111</premis:formatRegistryKey>
+                </premis:formatRegistry>
+              </premis:format>
+              <premis:creatingApplication>
+                <premis:dateCreatedByApplication>2020-03-30</premis:dateCreatedByApplication>
+              </premis:creatingApplication>
+              <premis:objectCharacteristicsExtension>
+                <fits xmlns="http://hul.harvard.edu/ois/xml/ns/fits/fits_output" xsi:schemaLocation="http://hul.harvard.edu/ois/xml/ns/fits/fits_output http://hul.harvard.edu/ois/xml/xsd/fits/fits_output.xsd" version="0.8.4" timestamp="3/30/20 1:26 PM">
+                  <identification status="SINGLE_RESULT">
+                    <identity format="Plain text" mimetype="text/plain" toolname="FITS" toolversion="0.8.4">
+                      <tool toolname="file utility" toolversion="5.14"/>
+                    </identity>
+                  </identification>
+                  <fileinfo>
+                    <filepath toolname="OIS File Information" toolversion="0.2" status="SINGLE_RESULT">/var/archivematica/sharedDirectory/watchedDirectories/workFlowDecisions/metadataReminder/svalbard_metadata_test-e5206400-700a-11ea-9061-8f11f49b83d2-350fbaa1-c664-4ced-9e98-adcb379f998f/objects/metadata/transfers/svalbard_metadata_test-e5206400-700a-11ea-9061-8f11f49b83d2-c2694972-bb96-4790-9fff-95224af79849/manifest-sha1.txt</filepath>
+                    <filename toolname="OIS File Information" toolversion="0.2" status="SINGLE_RESULT">manifest-sha1.txt</filename>
+                    <size toolname="OIS File Information" toolversion="0.2" status="SINGLE_RESULT">187</size>
+                    <fslastmodified toolname="OIS File Information" toolversion="0.2" status="SINGLE_RESULT">1585574785000</fslastmodified>
+                  </fileinfo>
+                  <filestatus/>
+                  <metadata>
+                    <text>
+                      <charset toolname="file utility" toolversion="5.14" status="SINGLE_RESULT">US-ASCII</charset>
+                    </text>
+                  </metadata>
+                  <toolOutput>
+                    <tool name="file utility" version="5.14">
+                      <fileUtilityOutput xmlns="">
+                        <rawOutput>ASCII text
+text/plain; charset=us-ascii</rawOutput>
+                        <mimetype>text/plain</mimetype>
+                        <format>Plain text</format>
+                        <charset>US-ASCII</charset>
+                      </fileUtilityOutput>
+                    </tool>
+                    <tool name="NLNZ Metadata Extractor" version="3.4GA">
+                      <DEFAULT xmlns="">
+                        <METADATA>
+                          <FILENAME>manifest-sha1.txt</FILENAME>
+                          <SEPARATOR>/</SEPARATOR>
+                          <PARENT>/var/archivematica/sharedDirectory/watchedDirectories/workFlowDecisions/metadataReminder/svalbard_metadata_test-e5206400-700a-11ea-9061-8f11f49b83d2-350fbaa1-c664-4ced-9e98-adcb379f998f/objects/metadata/transfers/svalbard_metadata_test-e5206400-700a-11ea-9061-8f11f49b83d2-c2694972-bb96-4790-9fff-95224af79849</PARENT>
+                          <CANONICALPATH>/var/archivematica/sharedDirectory/watchedDirectories/workFlowDecisions/metadataReminder/svalbard_metadata_test-e5206400-700a-11ea-9061-8f11f49b83d2-350fbaa1-c664-4ced-9e98-adcb379f998f/objects/metadata/transfers/svalbard_metadata_test-e5206400-700a-11ea-9061-8f11f49b83d2-c2694972-bb96-4790-9fff-95224af79849/manifest-sha1.txt</CANONICALPATH>
+                          <ABSOLUTEPATH>/var/archivematica/sharedDirectory/watchedDirectories/workFlowDecisions/metadataReminder/svalbard_metadata_test-e5206400-700a-11ea-9061-8f11f49b83d2-350fbaa1-c664-4ced-9e98-adcb379f998f/objects/metadata/transfers/svalbard_metadata_test-e5206400-700a-11ea-9061-8f11f49b83d2-c2694972-bb96-4790-9fff-95224af79849/manifest-sha1.txt</ABSOLUTEPATH>
+                          <PATH>/var/archivematica/sharedDirectory/watchedDirectories/workFlowDecisions/metadataReminder/svalbard_metadata_test-e5206400-700a-11ea-9061-8f11f49b83d2-350fbaa1-c664-4ced-9e98-adcb379f998f/objects/metadata/transfers/svalbard_metadata_test-e5206400-700a-11ea-9061-8f11f49b83d2-c2694972-bb96-4790-9fff-95224af79849/manifest-sha1.txt</PATH>
+                          <FILE>true</FILE>
+                          <DIRECTORY>false</DIRECTORY>
+                          <FILELENGTH>187</FILELENGTH>
+                          <HIDDEN>false</HIDDEN>
+                          <ABSOLUTE>true</ABSOLUTE>
+                          <URL>file:/var/archivematica/sharedDirectory/watchedDirectories/workFlowDecisions/metadataReminder/svalbard_metadata_test-e5206400-700a-11ea-9061-8f11f49b83d2-350fbaa1-c664-4ced-9e98-adcb379f998f/objects/metadata/transfers/svalbard_metadata_test-e5206400-700a-11ea-9061-8f11f49b83d2-c2694972-bb96-4790-9fff-95224af79849/manifest-sha1.txt</URL>
+                          <URI>file:/var/archivematica/sharedDirectory/watchedDirectories/workFlowDecisions/metadataReminder/svalbard_metadata_test-e5206400-700a-11ea-9061-8f11f49b83d2-350fbaa1-c664-4ced-9e98-adcb379f998f/objects/metadata/transfers/svalbard_metadata_test-e5206400-700a-11ea-9061-8f11f49b83d2-c2694972-bb96-4790-9fff-95224af79849/manifest-sha1.txt</URI>
+                          <READ>true</READ>
+                          <WRITE>true</WRITE>
+                          <EXTENSION>txt</EXTENSION>
+                          <MODIFIED>2020-03-30 13:26:25</MODIFIED>
+                          <DATE>20200330</DATE>
+                          <DATEPATTERN>yyyyMMdd</DATEPATTERN>
+                          <TIME>132625000</TIME>
+                          <TIMEPATTERN>HHmmssSSS</TIMEPATTERN>
+                          <TYPE>text/plain</TYPE>
+                          <PID>null</PID>
+                          <OID>null</OID>
+                          <FID>null</FID>
+                          <PROCESSOR>unknown</PROCESSOR>
+                        </METADATA>
+                      </DEFAULT>
+                    </tool>
+                    <tool name="OIS File Information" version="0.2">
+                      <fits xsi:schemaLocation="http://hul.harvard.edu/ois/xml/ns/fits/fits_output http://hul.harvard.edu/ois/xml/xsd/fits/fits_output.xsd">
+                        <fileinfo>
+                          <filepath>/var/archivematica/sharedDirectory/watchedDirectories/workFlowDecisions/metadataReminder/svalbard_metadata_test-e5206400-700a-11ea-9061-8f11f49b83d2-350fbaa1-c664-4ced-9e98-adcb379f998f/objects/metadata/transfers/svalbard_metadata_test-e5206400-700a-11ea-9061-8f11f49b83d2-c2694972-bb96-4790-9fff-95224af79849/manifest-sha1.txt</filepath>
+                          <filename>manifest-sha1.txt</filename>
+                          <size>187</size>
+                          <fslastmodified>1585574785000</fslastmodified>
+                        </fileinfo>
+                      </fits>
+                    </tool>
+                    <tool name="ffident" version="0.2">
+                      <ffidentOutput xmlns="">
+                        <shortName/>
+                        <longName>Unknown Binary</longName>
+                        <group/>
+                        <mimetypes>
+                          <mimetype>application/octet-stream</mimetype>
+                        </mimetypes>
+                        <fileExtensions/>
+                      </ffidentOutput>
+                    </tool>
+                    <tool name="Tika" version="1.3">
+                      <metadata xmlns="">
+                        <field name="Content-Encoding">
+                          <value>ISO-8859-1</value>
+                        </field>
+                        <field name="Content-Type">
+                          <value>text/plain; charset=ISO-8859-1</value>
+                        </field>
+                      </metadata>
+                    </tool>
+                  </toolOutput>
+                </fits>
+              </premis:objectCharacteristicsExtension>
+            </premis:objectCharacteristics>
+            <premis:originalName>%SIPDirectory%objects/metadata/transfers/svalbard_metadata_test-e5206400-700a-11ea-9061-8f11f49b83d2-c2694972-bb96-4790-9fff-95224af79849/manifest-sha1.txt</premis:originalName>
+          </premis:object>
+        </mets:xmlData>
+      </mets:mdWrap>
+    </mets:techMD>
+    <mets:digiprovMD ID="digiprovMD_19">
+      <mets:mdWrap MDTYPE="PREMIS:EVENT">
+        <mets:xmlData>
+          <premis:event xmlns:premis="http://www.loc.gov/premis/v3" xsi:schemaLocation="http://www.loc.gov/premis/v3 http://www.loc.gov/standards/premis/v3/premis.xsd" version="3.0">
+            <premis:eventIdentifier>
+              <premis:eventIdentifierType>UUID</premis:eventIdentifierType>
+              <premis:eventIdentifierValue>8a4714e5-b888-4f67-80ea-1779588c25ee</premis:eventIdentifierValue>
+            </premis:eventIdentifier>
+            <premis:eventType>ingestion</premis:eventType>
+            <premis:eventDateTime>2020-03-30T13:26:26.916914+00:00</premis:eventDateTime>
+            <premis:eventDetailInformation>
+              <premis:eventDetail></premis:eventDetail>
+            </premis:eventDetailInformation>
+            <premis:eventOutcomeInformation>
+              <premis:eventOutcome></premis:eventOutcome>
+              <premis:eventOutcomeDetail>
+                <premis:eventOutcomeDetailNote></premis:eventOutcomeDetailNote>
+              </premis:eventOutcomeDetail>
+            </premis:eventOutcomeInformation>
+            <premis:linkingAgentIdentifier>
+              <premis:linkingAgentIdentifierType>preservation system</premis:linkingAgentIdentifierType>
+              <premis:linkingAgentIdentifierValue>Archivematica-1.10</premis:linkingAgentIdentifierValue>
+            </premis:linkingAgentIdentifier>
+            <premis:linkingAgentIdentifier>
+              <premis:linkingAgentIdentifierType>repository code</premis:linkingAgentIdentifierType>
+              <premis:linkingAgentIdentifierValue>test</premis:linkingAgentIdentifierValue>
+            </premis:linkingAgentIdentifier>
+            <premis:linkingAgentIdentifier>
+              <premis:linkingAgentIdentifierType>Archivematica user pk</premis:linkingAgentIdentifierType>
+              <premis:linkingAgentIdentifierValue>1</premis:linkingAgentIdentifierValue>
+            </premis:linkingAgentIdentifier>
+          </premis:event>
+        </mets:xmlData>
+      </mets:mdWrap>
+    </mets:digiprovMD>
+    <mets:digiprovMD ID="digiprovMD_20">
+      <mets:mdWrap MDTYPE="PREMIS:EVENT">
+        <mets:xmlData>
+          <premis:event xmlns:premis="http://www.loc.gov/premis/v3" xsi:schemaLocation="http://www.loc.gov/premis/v3 http://www.loc.gov/standards/premis/v3/premis.xsd" version="3.0">
+            <premis:eventIdentifier>
+              <premis:eventIdentifierType>UUID</premis:eventIdentifierType>
+              <premis:eventIdentifierValue>3c10a7b7-a0f4-4752-bb8a-9d4375b1ce46</premis:eventIdentifierValue>
+            </premis:eventIdentifier>
+            <premis:eventType>message digest calculation</premis:eventType>
+            <premis:eventDateTime>2020-03-30T13:26:27.349743+00:00</premis:eventDateTime>
+            <premis:eventDetailInformation>
+              <premis:eventDetail>program="python"; module="hashlib.sha256()"</premis:eventDetail>
+            </premis:eventDetailInformation>
+            <premis:eventOutcomeInformation>
+              <premis:eventOutcome></premis:eventOutcome>
+              <premis:eventOutcomeDetail>
+                <premis:eventOutcomeDetailNote>68c7f9b74623d4eef8371c2df5e606b0fe037d48e0be4091f5b50cad69d4eb8d</premis:eventOutcomeDetailNote>
+              </premis:eventOutcomeDetail>
+            </premis:eventOutcomeInformation>
+            <premis:linkingAgentIdentifier>
+              <premis:linkingAgentIdentifierType>preservation system</premis:linkingAgentIdentifierType>
+              <premis:linkingAgentIdentifierValue>Archivematica-1.10</premis:linkingAgentIdentifierValue>
+            </premis:linkingAgentIdentifier>
+            <premis:linkingAgentIdentifier>
+              <premis:linkingAgentIdentifierType>repository code</premis:linkingAgentIdentifierType>
+              <premis:linkingAgentIdentifierValue>test</premis:linkingAgentIdentifierValue>
+            </premis:linkingAgentIdentifier>
+            <premis:linkingAgentIdentifier>
+              <premis:linkingAgentIdentifierType>Archivematica user pk</premis:linkingAgentIdentifierType>
+              <premis:linkingAgentIdentifierValue>1</premis:linkingAgentIdentifierValue>
+            </premis:linkingAgentIdentifier>
+          </premis:event>
+        </mets:xmlData>
+      </mets:mdWrap>
+    </mets:digiprovMD>
+    <mets:digiprovMD ID="digiprovMD_21">
+      <mets:mdWrap MDTYPE="PREMIS:EVENT">
+        <mets:xmlData>
+          <premis:event xmlns:premis="http://www.loc.gov/premis/v3" xsi:schemaLocation="http://www.loc.gov/premis/v3 http://www.loc.gov/standards/premis/v3/premis.xsd" version="3.0">
+            <premis:eventIdentifier>
+              <premis:eventIdentifierType>UUID</premis:eventIdentifierType>
+              <premis:eventIdentifierValue>cd571c25-0c67-4ee2-8c98-03458cd961d3</premis:eventIdentifierValue>
+            </premis:eventIdentifier>
+            <premis:eventType>virus check</premis:eventType>
+            <premis:eventDateTime>2020-03-30T13:26:30.970226+00:00</premis:eventDateTime>
+            <premis:eventDetailInformation>
+              <premis:eventDetail>program="ClamAV (clamd)"; version="ClamAV 0.99.2"; virusDefinitions="25764/Fri Mar 27 13:11:26 2020"</premis:eventDetail>
+            </premis:eventDetailInformation>
+            <premis:eventOutcomeInformation>
+              <premis:eventOutcome>Pass</premis:eventOutcome>
+              <premis:eventOutcomeDetail>
+                <premis:eventOutcomeDetailNote></premis:eventOutcomeDetailNote>
+              </premis:eventOutcomeDetail>
+            </premis:eventOutcomeInformation>
+            <premis:linkingAgentIdentifier>
+              <premis:linkingAgentIdentifierType>preservation system</premis:linkingAgentIdentifierType>
+              <premis:linkingAgentIdentifierValue>Archivematica-1.10</premis:linkingAgentIdentifierValue>
+            </premis:linkingAgentIdentifier>
+            <premis:linkingAgentIdentifier>
+              <premis:linkingAgentIdentifierType>repository code</premis:linkingAgentIdentifierType>
+              <premis:linkingAgentIdentifierValue>test</premis:linkingAgentIdentifierValue>
+            </premis:linkingAgentIdentifier>
+            <premis:linkingAgentIdentifier>
+              <premis:linkingAgentIdentifierType>Archivematica user pk</premis:linkingAgentIdentifierType>
+              <premis:linkingAgentIdentifierValue>1</premis:linkingAgentIdentifierValue>
+            </premis:linkingAgentIdentifier>
+          </premis:event>
+        </mets:xmlData>
+      </mets:mdWrap>
+    </mets:digiprovMD>
+    <mets:digiprovMD ID="digiprovMD_22">
+      <mets:mdWrap MDTYPE="PREMIS:EVENT">
+        <mets:xmlData>
+          <premis:event xmlns:premis="http://www.loc.gov/premis/v3" xsi:schemaLocation="http://www.loc.gov/premis/v3 http://www.loc.gov/standards/premis/v3/premis.xsd" version="3.0">
+            <premis:eventIdentifier>
+              <premis:eventIdentifierType>UUID</premis:eventIdentifierType>
+              <premis:eventIdentifierValue>cb7c08b0-f068-47b9-bd18-75c6b84a0938</premis:eventIdentifierValue>
+            </premis:eventIdentifier>
+            <premis:eventType>format identification</premis:eventType>
+            <premis:eventDateTime>2020-03-30T13:26:34.744698+00:00</premis:eventDateTime>
+            <premis:eventDetailInformation>
+              <premis:eventDetail>program="Siegfried"; version="1.7.10"</premis:eventDetail>
+            </premis:eventDetailInformation>
+            <premis:eventOutcomeInformation>
+              <premis:eventOutcome>Positive</premis:eventOutcome>
+              <premis:eventOutcomeDetail>
+                <premis:eventOutcomeDetailNote>x-fmt/111</premis:eventOutcomeDetailNote>
+              </premis:eventOutcomeDetail>
+            </premis:eventOutcomeInformation>
+            <premis:linkingAgentIdentifier>
+              <premis:linkingAgentIdentifierType>preservation system</premis:linkingAgentIdentifierType>
+              <premis:linkingAgentIdentifierValue>Archivematica-1.10</premis:linkingAgentIdentifierValue>
+            </premis:linkingAgentIdentifier>
+            <premis:linkingAgentIdentifier>
+              <premis:linkingAgentIdentifierType>repository code</premis:linkingAgentIdentifierType>
+              <premis:linkingAgentIdentifierValue>test</premis:linkingAgentIdentifierValue>
+            </premis:linkingAgentIdentifier>
+            <premis:linkingAgentIdentifier>
+              <premis:linkingAgentIdentifierType>Archivematica user pk</premis:linkingAgentIdentifierType>
+              <premis:linkingAgentIdentifierValue>1</premis:linkingAgentIdentifierValue>
+            </premis:linkingAgentIdentifier>
+          </premis:event>
+        </mets:xmlData>
+      </mets:mdWrap>
+    </mets:digiprovMD>
+    <mets:digiprovMD ID="digiprovMD_23">
+      <mets:mdWrap MDTYPE="PREMIS:AGENT">
+        <mets:xmlData>
+          <premis:agent xmlns:premis="http://www.loc.gov/premis/v3" xsi:schemaLocation="http://www.loc.gov/premis/v3 http://www.loc.gov/standards/premis/v3/premis.xsd" version="3.0">
+            <premis:agentIdentifier>
+              <premis:agentIdentifierType>preservation system</premis:agentIdentifierType>
+              <premis:agentIdentifierValue>Archivematica-1.10</premis:agentIdentifierValue>
+            </premis:agentIdentifier>
+            <premis:agentName>Archivematica</premis:agentName>
+            <premis:agentType>software</premis:agentType>
+          </premis:agent>
+        </mets:xmlData>
+      </mets:mdWrap>
+    </mets:digiprovMD>
+    <mets:digiprovMD ID="digiprovMD_24">
+      <mets:mdWrap MDTYPE="PREMIS:AGENT">
+        <mets:xmlData>
+          <premis:agent xmlns:premis="http://www.loc.gov/premis/v3" xsi:schemaLocation="http://www.loc.gov/premis/v3 http://www.loc.gov/standards/premis/v3/premis.xsd" version="3.0">
+            <premis:agentIdentifier>
+              <premis:agentIdentifierType>repository code</premis:agentIdentifierType>
+              <premis:agentIdentifierValue>test</premis:agentIdentifierValue>
+            </premis:agentIdentifier>
+            <premis:agentName>test</premis:agentName>
+            <premis:agentType>organization</premis:agentType>
+          </premis:agent>
+        </mets:xmlData>
+      </mets:mdWrap>
+    </mets:digiprovMD>
+    <mets:digiprovMD ID="digiprovMD_25">
+      <mets:mdWrap MDTYPE="PREMIS:AGENT">
+        <mets:xmlData>
+          <premis:agent xmlns:premis="http://www.loc.gov/premis/v3" xsi:schemaLocation="http://www.loc.gov/premis/v3 http://www.loc.gov/standards/premis/v3/premis.xsd" version="3.0">
+            <premis:agentIdentifier>
+              <premis:agentIdentifierType>Archivematica user pk</premis:agentIdentifierType>
+              <premis:agentIdentifierValue>1</premis:agentIdentifierValue>
+            </premis:agentIdentifier>
+            <premis:agentName>username="test", first_name="", last_name=""</premis:agentName>
+            <premis:agentType>Archivematica user</premis:agentType>
+          </premis:agent>
+        </mets:xmlData>
+      </mets:mdWrap>
+    </mets:digiprovMD>
+  </mets:amdSec>
+  <mets:amdSec ID="amdSec_4">
+    <mets:techMD ID="techMD_4">
+      <mets:mdWrap MDTYPE="PREMIS:OBJECT">
+        <mets:xmlData>
+          <premis:object xmlns:premis="http://www.loc.gov/premis/v3" xsi:type="premis:file" xsi:schemaLocation="http://www.loc.gov/premis/v3 http://www.loc.gov/standards/premis/v3/premis.xsd" version="3.0">
+            <premis:objectIdentifier>
+              <premis:objectIdentifierType>UUID</premis:objectIdentifierType>
+              <premis:objectIdentifierValue>d1c9f57c-68bc-443a-a891-23158db2ad0e</premis:objectIdentifierValue>
+            </premis:objectIdentifier>
+            <premis:objectCharacteristics>
+              <premis:compositionLevel>0</premis:compositionLevel>
+              <premis:fixity>
+                <premis:messageDigestAlgorithm>sha256</premis:messageDigestAlgorithm>
+                <premis:messageDigest>ef04b5b046434f658a536d3b1e5d954e38f3fac846e04dcd68b3009884e5172c</premis:messageDigest>
+              </premis:fixity>
+              <premis:size>662</premis:size>
+              <premis:format>
+                <premis:formatDesignation>
+                  <premis:formatName>CSV</premis:formatName>
+                  <premis:formatVersion></premis:formatVersion>
+                </premis:formatDesignation>
+                <premis:formatRegistry>
+                  <premis:formatRegistryName>PRONOM</premis:formatRegistryName>
+                  <premis:formatRegistryKey>x-fmt/18</premis:formatRegistryKey>
+                </premis:formatRegistry>
+              </premis:format>
+              <premis:creatingApplication>
+                <premis:dateCreatedByApplication>2020-03-30</premis:dateCreatedByApplication>
+              </premis:creatingApplication>
+              <premis:objectCharacteristicsExtension>
+                <fits xmlns="http://hul.harvard.edu/ois/xml/ns/fits/fits_output" xsi:schemaLocation="http://hul.harvard.edu/ois/xml/ns/fits/fits_output http://hul.harvard.edu/ois/xml/xsd/fits/fits_output.xsd" version="0.8.4" timestamp="3/30/20 1:26 PM">
+                  <identification status="SINGLE_RESULT">
+                    <identity format="Plain text" mimetype="text/plain" toolname="FITS" toolversion="0.8.4">
+                      <tool toolname="file utility" toolversion="5.14"/>
+                    </identity>
+                  </identification>
+                  <fileinfo>
+                    <filepath toolname="OIS File Information" toolversion="0.2" status="SINGLE_RESULT">/var/archivematica/sharedDirectory/watchedDirectories/workFlowDecisions/metadataReminder/svalbard_metadata_test-e5206400-700a-11ea-9061-8f11f49b83d2-350fbaa1-c664-4ced-9e98-adcb379f998f/objects/metadata/transfers/svalbard_metadata_test-e5206400-700a-11ea-9061-8f11f49b83d2-c2694972-bb96-4790-9fff-95224af79849/metadata.csv</filepath>
+                    <filename toolname="OIS File Information" toolversion="0.2" status="SINGLE_RESULT">metadata.csv</filename>
+                    <size toolname="OIS File Information" toolversion="0.2" status="SINGLE_RESULT">662</size>
+                    <fslastmodified toolname="OIS File Information" toolversion="0.2" status="SINGLE_RESULT">1585574785000</fslastmodified>
+                  </fileinfo>
+                  <filestatus/>
+                  <metadata>
+                    <text>
+                      <charset toolname="file utility" toolversion="5.14" status="SINGLE_RESULT">US-ASCII</charset>
+                    </text>
+                  </metadata>
+                  <toolOutput>
+                    <tool name="file utility" version="5.14">
+                      <fileUtilityOutput xmlns="">
+                        <rawOutput>ASCII text
+text/plain; charset=us-ascii</rawOutput>
+                        <mimetype>text/plain</mimetype>
+                        <format>Plain text</format>
+                        <charset>US-ASCII</charset>
+                      </fileUtilityOutput>
+                    </tool>
+                    <tool name="Exiftool" version="9.13">
+                      <exiftool xmlns="">
+                        <rawOutput>ExifToolVersion	9.13
+FileName	metadata.csv
+Directory	/var/archivematica/sharedDirectory/watchedDirectories/workFlowDecisions/metadataReminder/svalbard_metadata_test-e5206400-700a-11ea-9061-8f11f49b83d2-350fbaa1-c664-4ced-9e98-adcb379f998f/objects/metadata/transfers/svalbard_metadata_test-e5206400-700a-11ea-9061-8f11f49b83d2-c2694972-bb96-4790-9fff-95224af79849
+FileSize	662 bytes
+FileModifyDate	2020:03:30 13:26:25+00:00
+FileAccessDate	2020:03:30 13:26:27+00:00
+FileInodeChangeDate	2020:03:30 13:26:25+00:00
+FilePermissions	rw-r--r--
+Error	Unknown file type</rawOutput>
+                        <ExifToolVersion>9.13</ExifToolVersion>
+                        <FileName>metadata.csv</FileName>
+                        <Directory>/var/archivematica/sharedDirectory/watchedDirectories/workFlowDecisions/metadataReminder/svalbard_metadata_test-e5206400-700a-11ea-9061-8f11f49b83d2-350fbaa1-c664-4ced-9e98-adcb379f998f/objects/metadata/transfers/svalbard_metadata_test-e5206400-700a-11ea-9061-8f11f49b83d2-c2694972-bb96-4790-9fff-95224af79849</Directory>
+                        <FileSize>662 bytes</FileSize>
+                        <FileModifyDate>2020:03:30 13:26:25+00:00</FileModifyDate>
+                        <FileAccessDate>2020:03:30 13:26:27+00:00</FileAccessDate>
+                        <FileInodeChangeDate>2020:03:30 13:26:25+00:00</FileInodeChangeDate>
+                        <FilePermissions>rw-r--r--</FilePermissions>
+                        <Error>Unknown file type</Error>
+                      </exiftool>
+                    </tool>
+                    <tool name="NLNZ Metadata Extractor" version="3.4GA">
+                      <DEFAULT xmlns="">
+                        <METADATA>
+                          <FILENAME>metadata.csv</FILENAME>
+                          <SEPARATOR>/</SEPARATOR>
+                          <PARENT>/var/archivematica/sharedDirectory/watchedDirectories/workFlowDecisions/metadataReminder/svalbard_metadata_test-e5206400-700a-11ea-9061-8f11f49b83d2-350fbaa1-c664-4ced-9e98-adcb379f998f/objects/metadata/transfers/svalbard_metadata_test-e5206400-700a-11ea-9061-8f11f49b83d2-c2694972-bb96-4790-9fff-95224af79849</PARENT>
+                          <CANONICALPATH>/var/archivematica/sharedDirectory/watchedDirectories/workFlowDecisions/metadataReminder/svalbard_metadata_test-e5206400-700a-11ea-9061-8f11f49b83d2-350fbaa1-c664-4ced-9e98-adcb379f998f/objects/metadata/transfers/svalbard_metadata_test-e5206400-700a-11ea-9061-8f11f49b83d2-c2694972-bb96-4790-9fff-95224af79849/metadata.csv</CANONICALPATH>
+                          <ABSOLUTEPATH>/var/archivematica/sharedDirectory/watchedDirectories/workFlowDecisions/metadataReminder/svalbard_metadata_test-e5206400-700a-11ea-9061-8f11f49b83d2-350fbaa1-c664-4ced-9e98-adcb379f998f/objects/metadata/transfers/svalbard_metadata_test-e5206400-700a-11ea-9061-8f11f49b83d2-c2694972-bb96-4790-9fff-95224af79849/metadata.csv</ABSOLUTEPATH>
+                          <PATH>/var/archivematica/sharedDirectory/watchedDirectories/workFlowDecisions/metadataReminder/svalbard_metadata_test-e5206400-700a-11ea-9061-8f11f49b83d2-350fbaa1-c664-4ced-9e98-adcb379f998f/objects/metadata/transfers/svalbard_metadata_test-e5206400-700a-11ea-9061-8f11f49b83d2-c2694972-bb96-4790-9fff-95224af79849/metadata.csv</PATH>
+                          <FILE>true</FILE>
+                          <DIRECTORY>false</DIRECTORY>
+                          <FILELENGTH>662</FILELENGTH>
+                          <HIDDEN>false</HIDDEN>
+                          <ABSOLUTE>true</ABSOLUTE>
+                          <URL>file:/var/archivematica/sharedDirectory/watchedDirectories/workFlowDecisions/metadataReminder/svalbard_metadata_test-e5206400-700a-11ea-9061-8f11f49b83d2-350fbaa1-c664-4ced-9e98-adcb379f998f/objects/metadata/transfers/svalbard_metadata_test-e5206400-700a-11ea-9061-8f11f49b83d2-c2694972-bb96-4790-9fff-95224af79849/metadata.csv</URL>
+                          <URI>file:/var/archivematica/sharedDirectory/watchedDirectories/workFlowDecisions/metadataReminder/svalbard_metadata_test-e5206400-700a-11ea-9061-8f11f49b83d2-350fbaa1-c664-4ced-9e98-adcb379f998f/objects/metadata/transfers/svalbard_metadata_test-e5206400-700a-11ea-9061-8f11f49b83d2-c2694972-bb96-4790-9fff-95224af79849/metadata.csv</URI>
+                          <READ>true</READ>
+                          <WRITE>true</WRITE>
+                          <EXTENSION>csv</EXTENSION>
+                          <MODIFIED>2020-03-30 13:26:25</MODIFIED>
+                          <DATE>20200330</DATE>
+                          <DATEPATTERN>yyyyMMdd</DATEPATTERN>
+                          <TIME>132625000</TIME>
+                          <TIMEPATTERN>HHmmssSSS</TIMEPATTERN>
+                          <TYPE>file/unknown</TYPE>
+                          <PID>null</PID>
+                          <OID>null</OID>
+                          <FID>null</FID>
+                          <PROCESSOR>unknown</PROCESSOR>
+                        </METADATA>
+                      </DEFAULT>
+                    </tool>
+                    <tool name="OIS File Information" version="0.2">
+                      <fits xsi:schemaLocation="http://hul.harvard.edu/ois/xml/ns/fits/fits_output http://hul.harvard.edu/ois/xml/xsd/fits/fits_output.xsd">
+                        <fileinfo>
+                          <filepath>/var/archivematica/sharedDirectory/watchedDirectories/workFlowDecisions/metadataReminder/svalbard_metadata_test-e5206400-700a-11ea-9061-8f11f49b83d2-350fbaa1-c664-4ced-9e98-adcb379f998f/objects/metadata/transfers/svalbard_metadata_test-e5206400-700a-11ea-9061-8f11f49b83d2-c2694972-bb96-4790-9fff-95224af79849/metadata.csv</filepath>
+                          <filename>metadata.csv</filename>
+                          <size>662</size>
+                          <fslastmodified>1585574785000</fslastmodified>
+                        </fileinfo>
+                      </fits>
+                    </tool>
+                    <tool name="ffident" version="0.2">
+                      <ffidentOutput xmlns="">
+                        <shortName/>
+                        <longName>Unknown Binary</longName>
+                        <group/>
+                        <mimetypes>
+                          <mimetype>application/octet-stream</mimetype>
+                        </mimetypes>
+                        <fileExtensions/>
+                      </ffidentOutput>
+                    </tool>
+                    <tool name="Tika" version="1.3">
+                      <metadata xmlns="">
+                        <field name="Content-Encoding">
+                          <value>ISO-8859-1</value>
+                        </field>
+                        <field name="Content-Type">
+                          <value>text/plain; charset=ISO-8859-1</value>
+                        </field>
+                      </metadata>
+                    </tool>
+                  </toolOutput>
+                </fits>
+              </premis:objectCharacteristicsExtension>
+            </premis:objectCharacteristics>
+            <premis:originalName>%SIPDirectory%objects/metadata/transfers/svalbard_metadata_test-e5206400-700a-11ea-9061-8f11f49b83d2-c2694972-bb96-4790-9fff-95224af79849/metadata.csv</premis:originalName>
+          </premis:object>
+        </mets:xmlData>
+      </mets:mdWrap>
+    </mets:techMD>
+    <mets:digiprovMD ID="digiprovMD_26">
+      <mets:mdWrap MDTYPE="PREMIS:EVENT">
+        <mets:xmlData>
+          <premis:event xmlns:premis="http://www.loc.gov/premis/v3" xsi:schemaLocation="http://www.loc.gov/premis/v3 http://www.loc.gov/standards/premis/v3/premis.xsd" version="3.0">
+            <premis:eventIdentifier>
+              <premis:eventIdentifierType>UUID</premis:eventIdentifierType>
+              <premis:eventIdentifierValue>d12b2448-d046-41c9-95bd-4c406638b153</premis:eventIdentifierValue>
+            </premis:eventIdentifier>
+            <premis:eventType>ingestion</premis:eventType>
+            <premis:eventDateTime>2020-03-30T13:26:26.903606+00:00</premis:eventDateTime>
+            <premis:eventDetailInformation>
+              <premis:eventDetail></premis:eventDetail>
+            </premis:eventDetailInformation>
+            <premis:eventOutcomeInformation>
+              <premis:eventOutcome></premis:eventOutcome>
+              <premis:eventOutcomeDetail>
+                <premis:eventOutcomeDetailNote></premis:eventOutcomeDetailNote>
+              </premis:eventOutcomeDetail>
+            </premis:eventOutcomeInformation>
+            <premis:linkingAgentIdentifier>
+              <premis:linkingAgentIdentifierType>preservation system</premis:linkingAgentIdentifierType>
+              <premis:linkingAgentIdentifierValue>Archivematica-1.10</premis:linkingAgentIdentifierValue>
+            </premis:linkingAgentIdentifier>
+            <premis:linkingAgentIdentifier>
+              <premis:linkingAgentIdentifierType>repository code</premis:linkingAgentIdentifierType>
+              <premis:linkingAgentIdentifierValue>test</premis:linkingAgentIdentifierValue>
+            </premis:linkingAgentIdentifier>
+            <premis:linkingAgentIdentifier>
+              <premis:linkingAgentIdentifierType>Archivematica user pk</premis:linkingAgentIdentifierType>
+              <premis:linkingAgentIdentifierValue>1</premis:linkingAgentIdentifierValue>
+            </premis:linkingAgentIdentifier>
+          </premis:event>
+        </mets:xmlData>
+      </mets:mdWrap>
+    </mets:digiprovMD>
+    <mets:digiprovMD ID="digiprovMD_27">
+      <mets:mdWrap MDTYPE="PREMIS:EVENT">
+        <mets:xmlData>
+          <premis:event xmlns:premis="http://www.loc.gov/premis/v3" xsi:schemaLocation="http://www.loc.gov/premis/v3 http://www.loc.gov/standards/premis/v3/premis.xsd" version="3.0">
+            <premis:eventIdentifier>
+              <premis:eventIdentifierType>UUID</premis:eventIdentifierType>
+              <premis:eventIdentifierValue>e7ce84ec-11c8-4e8e-8a1a-24114e8f040e</premis:eventIdentifierValue>
+            </premis:eventIdentifier>
+            <premis:eventType>message digest calculation</premis:eventType>
+            <premis:eventDateTime>2020-03-30T13:26:27.328710+00:00</premis:eventDateTime>
+            <premis:eventDetailInformation>
+              <premis:eventDetail>program="python"; module="hashlib.sha256()"</premis:eventDetail>
+            </premis:eventDetailInformation>
+            <premis:eventOutcomeInformation>
+              <premis:eventOutcome></premis:eventOutcome>
+              <premis:eventOutcomeDetail>
+                <premis:eventOutcomeDetailNote>ef04b5b046434f658a536d3b1e5d954e38f3fac846e04dcd68b3009884e5172c</premis:eventOutcomeDetailNote>
+              </premis:eventOutcomeDetail>
+            </premis:eventOutcomeInformation>
+            <premis:linkingAgentIdentifier>
+              <premis:linkingAgentIdentifierType>preservation system</premis:linkingAgentIdentifierType>
+              <premis:linkingAgentIdentifierValue>Archivematica-1.10</premis:linkingAgentIdentifierValue>
+            </premis:linkingAgentIdentifier>
+            <premis:linkingAgentIdentifier>
+              <premis:linkingAgentIdentifierType>repository code</premis:linkingAgentIdentifierType>
+              <premis:linkingAgentIdentifierValue>test</premis:linkingAgentIdentifierValue>
+            </premis:linkingAgentIdentifier>
+            <premis:linkingAgentIdentifier>
+              <premis:linkingAgentIdentifierType>Archivematica user pk</premis:linkingAgentIdentifierType>
+              <premis:linkingAgentIdentifierValue>1</premis:linkingAgentIdentifierValue>
+            </premis:linkingAgentIdentifier>
+          </premis:event>
+        </mets:xmlData>
+      </mets:mdWrap>
+    </mets:digiprovMD>
+    <mets:digiprovMD ID="digiprovMD_28">
+      <mets:mdWrap MDTYPE="PREMIS:EVENT">
+        <mets:xmlData>
+          <premis:event xmlns:premis="http://www.loc.gov/premis/v3" xsi:schemaLocation="http://www.loc.gov/premis/v3 http://www.loc.gov/standards/premis/v3/premis.xsd" version="3.0">
+            <premis:eventIdentifier>
+              <premis:eventIdentifierType>UUID</premis:eventIdentifierType>
+              <premis:eventIdentifierValue>9989de38-e715-4f33-9270-415b3fb266ff</premis:eventIdentifierValue>
+            </premis:eventIdentifier>
+            <premis:eventType>virus check</premis:eventType>
+            <premis:eventDateTime>2020-03-30T13:26:31.014584+00:00</premis:eventDateTime>
+            <premis:eventDetailInformation>
+              <premis:eventDetail>program="ClamAV (clamd)"; version="ClamAV 0.99.2"; virusDefinitions="25764/Fri Mar 27 13:11:26 2020"</premis:eventDetail>
+            </premis:eventDetailInformation>
+            <premis:eventOutcomeInformation>
+              <premis:eventOutcome>Pass</premis:eventOutcome>
+              <premis:eventOutcomeDetail>
+                <premis:eventOutcomeDetailNote></premis:eventOutcomeDetailNote>
+              </premis:eventOutcomeDetail>
+            </premis:eventOutcomeInformation>
+            <premis:linkingAgentIdentifier>
+              <premis:linkingAgentIdentifierType>preservation system</premis:linkingAgentIdentifierType>
+              <premis:linkingAgentIdentifierValue>Archivematica-1.10</premis:linkingAgentIdentifierValue>
+            </premis:linkingAgentIdentifier>
+            <premis:linkingAgentIdentifier>
+              <premis:linkingAgentIdentifierType>repository code</premis:linkingAgentIdentifierType>
+              <premis:linkingAgentIdentifierValue>test</premis:linkingAgentIdentifierValue>
+            </premis:linkingAgentIdentifier>
+            <premis:linkingAgentIdentifier>
+              <premis:linkingAgentIdentifierType>Archivematica user pk</premis:linkingAgentIdentifierType>
+              <premis:linkingAgentIdentifierValue>1</premis:linkingAgentIdentifierValue>
+            </premis:linkingAgentIdentifier>
+          </premis:event>
+        </mets:xmlData>
+      </mets:mdWrap>
+    </mets:digiprovMD>
+    <mets:digiprovMD ID="digiprovMD_29">
+      <mets:mdWrap MDTYPE="PREMIS:EVENT">
+        <mets:xmlData>
+          <premis:event xmlns:premis="http://www.loc.gov/premis/v3" xsi:schemaLocation="http://www.loc.gov/premis/v3 http://www.loc.gov/standards/premis/v3/premis.xsd" version="3.0">
+            <premis:eventIdentifier>
+              <premis:eventIdentifierType>UUID</premis:eventIdentifierType>
+              <premis:eventIdentifierValue>aaddb941-2554-4622-a232-661559e0be10</premis:eventIdentifierValue>
+            </premis:eventIdentifier>
+            <premis:eventType>format identification</premis:eventType>
+            <premis:eventDateTime>2020-03-30T13:26:34.528115+00:00</premis:eventDateTime>
+            <premis:eventDetailInformation>
+              <premis:eventDetail>program="Siegfried"; version="1.7.10"</premis:eventDetail>
+            </premis:eventDetailInformation>
+            <premis:eventOutcomeInformation>
+              <premis:eventOutcome>Positive</premis:eventOutcome>
+              <premis:eventOutcomeDetail>
+                <premis:eventOutcomeDetailNote>x-fmt/18</premis:eventOutcomeDetailNote>
+              </premis:eventOutcomeDetail>
+            </premis:eventOutcomeInformation>
+            <premis:linkingAgentIdentifier>
+              <premis:linkingAgentIdentifierType>preservation system</premis:linkingAgentIdentifierType>
+              <premis:linkingAgentIdentifierValue>Archivematica-1.10</premis:linkingAgentIdentifierValue>
+            </premis:linkingAgentIdentifier>
+            <premis:linkingAgentIdentifier>
+              <premis:linkingAgentIdentifierType>repository code</premis:linkingAgentIdentifierType>
+              <premis:linkingAgentIdentifierValue>test</premis:linkingAgentIdentifierValue>
+            </premis:linkingAgentIdentifier>
+            <premis:linkingAgentIdentifier>
+              <premis:linkingAgentIdentifierType>Archivematica user pk</premis:linkingAgentIdentifierType>
+              <premis:linkingAgentIdentifierValue>1</premis:linkingAgentIdentifierValue>
+            </premis:linkingAgentIdentifier>
+          </premis:event>
+        </mets:xmlData>
+      </mets:mdWrap>
+    </mets:digiprovMD>
+    <mets:digiprovMD ID="digiprovMD_30">
+      <mets:mdWrap MDTYPE="PREMIS:AGENT">
+        <mets:xmlData>
+          <premis:agent xmlns:premis="http://www.loc.gov/premis/v3" xsi:schemaLocation="http://www.loc.gov/premis/v3 http://www.loc.gov/standards/premis/v3/premis.xsd" version="3.0">
+            <premis:agentIdentifier>
+              <premis:agentIdentifierType>preservation system</premis:agentIdentifierType>
+              <premis:agentIdentifierValue>Archivematica-1.10</premis:agentIdentifierValue>
+            </premis:agentIdentifier>
+            <premis:agentName>Archivematica</premis:agentName>
+            <premis:agentType>software</premis:agentType>
+          </premis:agent>
+        </mets:xmlData>
+      </mets:mdWrap>
+    </mets:digiprovMD>
+    <mets:digiprovMD ID="digiprovMD_31">
+      <mets:mdWrap MDTYPE="PREMIS:AGENT">
+        <mets:xmlData>
+          <premis:agent xmlns:premis="http://www.loc.gov/premis/v3" xsi:schemaLocation="http://www.loc.gov/premis/v3 http://www.loc.gov/standards/premis/v3/premis.xsd" version="3.0">
+            <premis:agentIdentifier>
+              <premis:agentIdentifierType>repository code</premis:agentIdentifierType>
+              <premis:agentIdentifierValue>test</premis:agentIdentifierValue>
+            </premis:agentIdentifier>
+            <premis:agentName>test</premis:agentName>
+            <premis:agentType>organization</premis:agentType>
+          </premis:agent>
+        </mets:xmlData>
+      </mets:mdWrap>
+    </mets:digiprovMD>
+    <mets:digiprovMD ID="digiprovMD_32">
+      <mets:mdWrap MDTYPE="PREMIS:AGENT">
+        <mets:xmlData>
+          <premis:agent xmlns:premis="http://www.loc.gov/premis/v3" xsi:schemaLocation="http://www.loc.gov/premis/v3 http://www.loc.gov/standards/premis/v3/premis.xsd" version="3.0">
+            <premis:agentIdentifier>
+              <premis:agentIdentifierType>Archivematica user pk</premis:agentIdentifierType>
+              <premis:agentIdentifierValue>1</premis:agentIdentifierValue>
+            </premis:agentIdentifier>
+            <premis:agentName>username="test", first_name="", last_name=""</premis:agentName>
+            <premis:agentType>Archivematica user</premis:agentType>
+          </premis:agent>
+        </mets:xmlData>
+      </mets:mdWrap>
+    </mets:digiprovMD>
+  </mets:amdSec>
+  <mets:amdSec ID="amdSec_5">
+    <mets:techMD ID="techMD_5">
+      <mets:mdWrap MDTYPE="PREMIS:OBJECT">
+        <mets:xmlData>
+          <premis:object xmlns:premis="http://www.loc.gov/premis/v3" xsi:type="premis:file" xsi:schemaLocation="http://www.loc.gov/premis/v3 http://www.loc.gov/standards/premis/v3/premis.xsd" version="3.0">
+            <premis:objectIdentifier>
+              <premis:objectIdentifierType>UUID</premis:objectIdentifierType>
+              <premis:objectIdentifierValue>9573d823-c3c4-4a65-982f-211a7979869f</premis:objectIdentifierValue>
+            </premis:objectIdentifier>
+            <premis:objectCharacteristics>
+              <premis:compositionLevel>0</premis:compositionLevel>
+              <premis:fixity>
+                <premis:messageDigestAlgorithm>sha256</premis:messageDigestAlgorithm>
+                <premis:messageDigest>12a55553488a26543e9d1a23054e4cb120855a109345268e87c88c788edd881b</premis:messageDigest>
+              </premis:fixity>
+              <premis:size>103288</premis:size>
+              <premis:format>
+                <premis:formatDesignation>
+                  <premis:formatName>XML</premis:formatName>
+                  <premis:formatVersion>1.0</premis:formatVersion>
+                </premis:formatDesignation>
+                <premis:formatRegistry>
+                  <premis:formatRegistryName>PRONOM</premis:formatRegistryName>
+                  <premis:formatRegistryKey>fmt/101</premis:formatRegistryKey>
+                </premis:formatRegistry>
+              </premis:format>
+              <premis:creatingApplication>
+                <premis:dateCreatedByApplication>2020-03-30</premis:dateCreatedByApplication>
+              </premis:creatingApplication>
+              <premis:objectCharacteristicsExtension>
+                <fits xmlns="http://hul.harvard.edu/ois/xml/ns/fits/fits_output" xsi:schemaLocation="http://hul.harvard.edu/ois/xml/ns/fits/fits_output http://hul.harvard.edu/ois/xml/xsd/fits/fits_output.xsd" version="0.8.4" timestamp="3/30/20 1:26 PM">
+                  <identification>
+                    <identity format="Extensible Markup Language" mimetype="text/xml" toolname="FITS" toolversion="0.8.4">
+                      <tool toolname="Exiftool" toolversion="9.13"/>
+                      <tool toolname="NLNZ Metadata Extractor" toolversion="3.4GA"/>
+                      <tool toolname="OIS XML Metadata" toolversion="0.2"/>
+                      <tool toolname="ffident" toolversion="0.2"/>
+                      <version toolname="NLNZ Metadata Extractor" toolversion="3.4GA">1.0</version>
+                    </identity>
+                  </identification>
+                  <fileinfo>
+                    <lastmodified toolname="Exiftool" toolversion="9.13" status="SINGLE_RESULT">2020:03:30 13:25:46+00:00</lastmodified>
+                    <filepath toolname="OIS File Information" toolversion="0.2" status="SINGLE_RESULT">/var/archivematica/sharedDirectory/watchedDirectories/workFlowDecisions/metadataReminder/svalbard_metadata_test-e5206400-700a-11ea-9061-8f11f49b83d2-350fbaa1-c664-4ced-9e98-adcb379f998f/objects/submissionDocumentation/transfer-svalbard_metadata_test-e5206400-700a-11ea-9061-8f11f49b83d2-c2694972-bb96-4790-9fff-95224af79849/METS.xml</filepath>
+                    <filename toolname="OIS File Information" toolversion="0.2" status="SINGLE_RESULT">METS.xml</filename>
+                    <size toolname="OIS File Information" toolversion="0.2" status="SINGLE_RESULT">103288</size>
+                    <fslastmodified toolname="OIS File Information" toolversion="0.2" status="SINGLE_RESULT">1585574746000</fslastmodified>
+                  </fileinfo>
+                  <filestatus/>
+                  <metadata>
+                    <text>
+                      <charset toolname="NLNZ Metadata Extractor" toolversion="3.4GA" status="SINGLE_RESULT">UTF-8</charset>
+                      <markupBasis toolname="Exiftool" toolversion="9.13">XML</markupBasis>
+                      <markupBasisVersion toolname="NLNZ Metadata Extractor" toolversion="3.4GA" status="SINGLE_RESULT">1.0</markupBasisVersion>
+                      <markupLanguage toolname="OIS XML Metadata" toolversion="0.2" status="SINGLE_RESULT">http://www.loc.gov/standards/mets/version111/mets.xsd</markupLanguage>
+                    </text>
+                  </metadata>
+                  <toolOutput>
+                    <tool name="file utility" version="5.14">
+                      <fileUtilityOutput xmlns="">
+                        <rawOutput>XML 1.0 document text
+application/xml; charset=us-ascii</rawOutput>
+                        <mimetype>application/xml</mimetype>
+                        <format>XML 1.0 document text</format>
+                      </fileUtilityOutput>
+                    </tool>
+                    <tool name="Exiftool" version="9.13">
+                      <exiftool xmlns="">
+                        <rawOutput>ExifToolVersion	9.13
+FileName	METS.xml
+Directory	/var/archivematica/sharedDirectory/watchedDirectories/workFlowDecisions/metadataReminder/svalbard_metadata_test-e5206400-700a-11ea-9061-8f11f49b83d2-350fbaa1-c664-4ced-9e98-adcb379f998f/objects/submissionDocumentation/transfer-svalbard_metadata_test-e5206400-700a-11ea-9061-8f11f49b83d2-c2694972-bb96-4790-9fff-95224af79849
+FileSize	101 kB
+FileModifyDate	2020:03:30 13:25:46+00:00
+FileAccessDate	2020:03:30 13:26:10+00:00
+FileInodeChangeDate	2020:03:30 13:26:08+00:00
+FilePermissions	rw-r--r--
+FileType	XML
+MIMEType	application/xml
+MetsObjid	c2694972-bb96-4790-9fff-95224af79849
+MetsSchemaLocation	http://www.loc.gov/METS/ http://www.loc.gov/standards/mets/version111/mets.xsd
+MetsMetsHdrCreatedate	2020:03:30 13:25:46
+MetsMetsHdrAgentOthertype	SOFTWARE
+MetsMetsHdrAgentRole	CREATOR
+MetsMetsHdrAgentType	OTHER
+MetsMetsHdrAgentName	10fc7130-9062-4876-90eb-67ca0fa459b2
+MetsMetsHdrAgentNote	Archivematica dashboard UUID
+MetsMetsHdrAltRecordIDType	Accession ID
+MetsMetsHdrAltRecordID	e5206400-700a-11ea-9061-8f11f49b83d2
+MetsAmdSecId	amdSec_7
+MetsAmdSecTechMDId	techMD_7
+MetsAmdSecTechMDCreated	2020:03:30 13:25:46
+MetsAmdSecTechMDStatus	current
+MetsAmdSecTechMDMdWrapMdtype	PREMIS:OBJECT
+MetsAmdSecTechMDMdWrapXmlDataObjectSchemaLocation	http://www.loc.gov/premis/v3 http://www.loc.gov/standards/premis/v3/premis.xsd
+MetsAmdSecTechMDMdWrapXmlDataObjectType	premis:file
+MetsAmdSecTechMDMdWrapXmlDataObjectVersion	3.0
+MetsAmdSecTechMDMdWrapXmlDataObjectObjectIdentifierObjectIdentifierType	UUID
+MetsAmdSecTechMDMdWrapXmlDataObjectObjectIdentifierObjectIdentifierValue	9717c415-7529-40c6-b103-62044a9896d0
+MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsCompositionLevel	0
+MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsFixityMessageDigestAlgorithm	SHA-256
+MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsFixityMessageDigest	0fda74ec72c70b06dd33d7f28a38f64ebf9ba5da0f2a0468e81411aa73c7c1a5
+MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsSize	789848
+MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsFormatFormatDesignationFormatName	Portable Network Graphics
+MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsFormatFormatDesignationFormatVersion	1.0
+MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsFormatFormatRegistryFormatRegistryName	PRONOM
+MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsFormatFormatRegistryFormatRegistryKey	fmt/11
+MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsCreatingApplicationDateCreatedByApplication	2020-03-30
+MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFfprobeProgram_versionVersion	3.4.4-0ubuntu0.18.04.1
+MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFfprobeProgram_versionCopyright	Copyright (c) 2007-2018 the FFmpeg developers
+MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFfprobeProgram_versionCompiler_ident	gcc 7 (Ubuntu 7.3.0-16ubuntu3)
+MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFfprobeProgram_versionConfiguration	--prefix=/usr --extra-version=0ubuntu0.18.04.1 --toolchain=hardened --libdir=/usr/lib/x86_64-linux-gnu --incdir=/usr/include/x86_64-linux-gnu --enable-gpl --disable-stripping --enable-avresample --enable-avisynth --enable-gnutls --enable-ladspa --enable-libass --enable-libbluray --enable-libbs2b --enable-libcaca --enable-libcdio --enable-libflite --enable-libfontconfig --enable-libfreetype --enable-libfribidi --enable-libgme --enable-libgsm --enable-libmp3lame --enable-libmysofa --enable-libopenjpeg --enable-libopenmpt --enable-libopus --enable-libpulse --enable-librubberband --enable-librsvg --enable-libshine --enable-libsnappy --enable-libsoxr --enable-libspeex --enable-libssh --enable-libtheora --enable-libtwolame --enable-libvorbis --enable-libvpx --enable-libwavpack --enable-libwebp --enable-libx265 --enable-libxml2 --enable-libxvid --enable-libzmq --enable-libzvbi --enable-omx --enable-openal --enable-opengl --enable-sdl2 --enable-libdc1394 --enable-libdrm --enable-libiec61883 --enable-chromaprint --enable-frei0r --enable-libopencv --enable-libx264 --enable-shared
+MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFfprobeLibrary_versionsLibrary_versionName	libpostproc
+MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFfprobeLibrary_versionsLibrary_versionMajor	54
+MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFfprobeLibrary_versionsLibrary_versionMinor	7
+MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFfprobeLibrary_versionsLibrary_versionMicro	100
+MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFfprobeLibrary_versionsLibrary_versionVersion	3540836
+MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFfprobeLibrary_versionsLibrary_versionIdent	postproc54.7.100
+MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFfprobeStreamsStreamIndex	0
+MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFfprobeStreamsStreamCodec_name	png
+MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFfprobeStreamsStreamCodec_long_name	PNG (Portable Network Graphics) image
+MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFfprobeStreamsStreamCodec_type	video
+MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFfprobeStreamsStreamCodec_time_base	0
+MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFfprobeStreamsStreamCodec_tag_string	[0][0][0][0]
+MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFfprobeStreamsStreamCodec_tag	0x0000
+MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFfprobeStreamsStreamWidth	1387
+MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFfprobeStreamsStreamHeight	718
+MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFfprobeStreamsStreamCoded_width	1387
+MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFfprobeStreamsStreamCoded_height	718
+MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFfprobeStreamsStreamHas_b_frames	0
+MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFfprobeStreamsStreamSample_aspect_ratio	1:1
+MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFfprobeStreamsStreamDisplay_aspect_ratio	1387:718
+MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFfprobeStreamsStreamPix_fmt	rgb24
+MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFfprobeStreamsStreamLevel	-99
+MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFfprobeStreamsStreamColor_range	pc
+MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFfprobeStreamsStreamRefs	1
+MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFfprobeStreamsStreamR_frame_rate	25
+MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFfprobeStreamsStreamAvg_frame_rate	undef
+MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFfprobeStreamsStreamTime_base	0.04
+MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFfprobeStreamsStreamExtradata	
+MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFfprobeStreamsStreamDispositionDefault	0
+MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFfprobeStreamsStreamDispositionDub	0
+MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFfprobeStreamsStreamDispositionOriginal	0
+MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFfprobeStreamsStreamDispositionComment	0
+MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFfprobeStreamsStreamDispositionLyrics	0
+MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFfprobeStreamsStreamDispositionKaraoke	0
+MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFfprobeStreamsStreamDispositionForced	0
+MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFfprobeStreamsStreamDispositionHearing_impaired	0
+MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFfprobeStreamsStreamDispositionVisual_impaired	0
+MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFfprobeStreamsStreamDispositionClean_effects	0
+MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFfprobeStreamsStreamDispositionAttached_pic	0
+MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFfprobeStreamsStreamDispositionTimed_thumbnails	0
+MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFfprobeChapters	.
+MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFfprobeFormatFilename	/var/archivematica/sharedDirectory/watchedDirectories/workFlowDecisions/extractPackagesChoice/svalbard_metadata_test-e5206400-700a-11ea-9061-8f11f49b83d2-c2694972-bb96-4790-9fff-95224af79849/objects/Svalbard.png
+MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFfprobeFormatNb_streams	1
+MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFfprobeFormatNb_programs	0
+MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFfprobeFormatFormat_name	png_pipe
+MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFfprobeFormatFormat_long_name	piped png sequence
+MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFfprobeFormatSize	789848
+MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFfprobeFormatProbe_score	99
+About	/var/archivematica/sharedDirectory/watchedDirectories/workFlowDecisions/extractPackagesChoice/svalbard_metadata_test-e5206400-700a-11ea-9061-8f11f49b83d2-c2694972-bb96-4790-9fff-95224af79849/objects/Svalbard.png
+MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionExifToolVersion	10.80
+MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFileName	Svalbard.png
+MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionDirectory	/var/archivematica/sharedDirectory/watchedDirectories/workFlowDecisions/extractPackagesChoice/svalbard_metadata_test-e5206400-700a-11ea-9061-8f11f49b83d2-c2694972-bb96-4790-9fff-95224af79849/objects
+MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFileSize	771 kB
+MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFileModifyDate	2020:03:30 13:25:12+00:00
+MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFileAccessDate	2020:03:30 13:25:32+00:00
+MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFileInodeChangeDate	2020:03:30 13:25:27+00:00
+MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFilePermissions	rw-r--r--
+MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFileType	PNG
+MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFileTypeExtension	png
+MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionMIMEType	image/png
+MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionImageWidth	1387
+MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionImageHeight	718
+MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionBitDepth	8
+MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionColorType	RGB
+MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionCompression	Deflate/Inflate
+MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFilter	Adaptive
+MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionInterlace	Noninterlaced
+MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionPixelsPerUnitX	3780
+MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionPixelsPerUnitY	3780
+MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionPixelUnits	meters
+MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionImageSize	1387x718
+MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionMegapixels	0.996
+MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionMediaInfoXmlns	https://mediaarea.net/mediainfo
+MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionMediaInfoSchemaLocation	https://mediaarea.net/mediainfo https://mediaarea.net/mediainfo/mediainfo_2_0.xsd
+MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionMediaInfoVersion	2.0
+MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionMediaInfoCreatingLibraryVersion	18.05
+MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionMediaInfoCreatingLibraryUrl	https://mediaarea.net/MediaInfo
+MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionMediaInfoCreatingLibrary	MediaInfoLib
+MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionMediaInfoMediaRef	/var/archivematica/sharedDirectory/watchedDirectories/workFlowDecisions/extractPackagesChoice/svalbard_metadata_test-e5206400-700a-11ea-9061-8f11f49b83d2-c2694972-bb96-4790-9fff-95224af79849/objects/Svalbard.png
+MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionMediaInfoMediaTrackImageCount	1
+MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionMediaInfoMediaTrackFileExtension	png
+MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionMediaInfoMediaTrackFileSize	789848
+MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionMediaInfoMediaTrackFile_Modified_Date	UTC 2020-03-30 13:25:12
+MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionMediaInfoMediaTrackFile_Modified_Date_Local	2020:03:30 13:25:12
+MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionMediaInfoMediaTrackType	Image
+MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionMediaInfoMediaTrackFormat	PNG
+MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionMediaInfoMediaTrackFormat_Compression	LZ77
+MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionMediaInfoMediaTrackWidth	1387
+MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionMediaInfoMediaTrackHeight	718
+MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionMediaInfoMediaTrackBitDepth	24
+MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionMediaInfoMediaTrackCompression_Mode	Lossless
+MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionMediaInfoMediaTrackStreamSize	789848
+MetsAmdSecTechMDMdWrapXmlDataObjectOriginalName	%transferDirectory%data/Svalbard.png
+MetsAmdSecDigiprovMDId	digiprovMD_32
+MetsAmdSecDigiprovMDCreated	2020:03:30 13:25:46
+MetsAmdSecDigiprovMDMdWrapMdtype	PREMIS:EVENT
+MetsAmdSecDigiprovMDMdWrapXmlDataEventSchemaLocation	http://www.loc.gov/premis/v3 http://www.loc.gov/standards/premis/v3/premis.xsd
+MetsAmdSecDigiprovMDMdWrapXmlDataEventVersion	3.0
+MetsAmdSecDigiprovMDMdWrapXmlDataEventEventIdentifierEventIdentifierType	UUID
+MetsAmdSecDigiprovMDMdWrapXmlDataEventEventIdentifierEventIdentifierValue	dc87fd07-c63d-49ee-9276-2df984ed7198
+MetsAmdSecDigiprovMDMdWrapXmlDataEventEventType	format identification
+MetsAmdSecDigiprovMDMdWrapXmlDataEventEventDateTime	2020:03:30 13:25:38.644172+00:00
+MetsAmdSecDigiprovMDMdWrapXmlDataEventEventDetailInformationEventDetail	program="Siegfried"; version="1.7.10"
+MetsAmdSecDigiprovMDMdWrapXmlDataEventEventOutcomeInformationEventOutcome	Positive
+MetsAmdSecDigiprovMDMdWrapXmlDataEventEventOutcomeInformationEventOutcomeDetailEventOutcomeDetailNote	fmt/11
+MetsAmdSecDigiprovMDMdWrapXmlDataEventLinkingAgentIdentifierLinkingAgentIdentifierType	Archivematica user pk
+MetsAmdSecDigiprovMDMdWrapXmlDataEventLinkingAgentIdentifierLinkingAgentIdentifierValue	1
+MetsFileSecFileGrpUse	original
+MetsFileSecFileGrpFileId	file-80a0f657-3f6f-4d43-8b36-7bbb773254bb
+MetsFileSecFileGrpFileGroupid	Group-80a0f657-3f6f-4d43-8b36-7bbb773254bb
+MetsFileSecFileGrpFileAdmid	amdSec_6
+MetsFileSecFileGrpFileChecksum	83d3855f965d76947be79119bfd84f9c49cdb84bd85b9e84f8faa590a8549a5d
+MetsFileSecFileGrpFileChecksumtype	SHA-256
+MetsFileSecFileGrpFileFLocatHref	objects/PolarBear.png
+MetsFileSecFileGrpFileFLocatLoctype	OTHER
+MetsFileSecFileGrpFileFLocatOtherloctype	SYSTEM
+MetsStructMapDivDivDivDivFptrFileid	file-a980cbc2-e82e-4dc5-8a70-552b8180f515
+MetsStructMapDivDivDivFptrFileid	file-9717c415-7529-40c6-b103-62044a9896d0
+MetsStructMapId	structMap_2
+MetsStructMapLabel	Normative Directory Structure
+MetsStructMapType	logical
+MetsStructMapDivType	Directory
+MetsStructMapDivLabel	svalbard_metadata_test-e5206400-700a-11ea-9061-8f11f49b83d2-c2694972-bb96-4790-9fff-95224af79849
+MetsStructMapDivDivDivDivType	Item
+MetsStructMapDivDivDivDivLabel	tagmanifest-sha1.txt
+MetsStructMapDivDivType	Directory
+MetsStructMapDivDivLabel	objects
+MetsStructMapDivDivDivType	Item
+MetsStructMapDivDivDivLabel	Svalbard.png</rawOutput>
+                        <ExifToolVersion>9.13</ExifToolVersion>
+                        <FileName>METS.xml</FileName>
+                        <Directory>/var/archivematica/sharedDirectory/watchedDirectories/workFlowDecisions/metadataReminder/svalbard_metadata_test-e5206400-700a-11ea-9061-8f11f49b83d2-350fbaa1-c664-4ced-9e98-adcb379f998f/objects/submissionDocumentation/transfer-svalbard_metadata_test-e5206400-700a-11ea-9061-8f11f49b83d2-c2694972-bb96-4790-9fff-95224af79849</Directory>
+                        <FileSize>101 kB</FileSize>
+                        <FileModifyDate>2020:03:30 13:25:46+00:00</FileModifyDate>
+                        <FileAccessDate>2020:03:30 13:26:10+00:00</FileAccessDate>
+                        <FileInodeChangeDate>2020:03:30 13:26:08+00:00</FileInodeChangeDate>
+                        <FilePermissions>rw-r--r--</FilePermissions>
+                        <FileType>XML</FileType>
+                        <MIMEType>application/xml</MIMEType>
+                        <MetsObjid>c2694972-bb96-4790-9fff-95224af79849</MetsObjid>
+                        <MetsSchemaLocation>http://www.loc.gov/METS/ http://www.loc.gov/standards/mets/version111/mets.xsd</MetsSchemaLocation>
+                        <MetsMetsHdrCreatedate>2020:03:30 13:25:46</MetsMetsHdrCreatedate>
+                        <MetsMetsHdrAgentOthertype>SOFTWARE</MetsMetsHdrAgentOthertype>
+                        <MetsMetsHdrAgentRole>CREATOR</MetsMetsHdrAgentRole>
+                        <MetsMetsHdrAgentType>OTHER</MetsMetsHdrAgentType>
+                        <MetsMetsHdrAgentName>10fc7130-9062-4876-90eb-67ca0fa459b2</MetsMetsHdrAgentName>
+                        <MetsMetsHdrAgentNote>Archivematica dashboard UUID</MetsMetsHdrAgentNote>
+                        <MetsMetsHdrAltRecordIDType>Accession ID</MetsMetsHdrAltRecordIDType>
+                        <MetsMetsHdrAltRecordID>e5206400-700a-11ea-9061-8f11f49b83d2</MetsMetsHdrAltRecordID>
+                        <MetsAmdSecId>amdSec_7</MetsAmdSecId>
+                        <MetsAmdSecTechMDId>techMD_7</MetsAmdSecTechMDId>
+                        <MetsAmdSecTechMDCreated>2020:03:30 13:25:46</MetsAmdSecTechMDCreated>
+                        <MetsAmdSecTechMDStatus>current</MetsAmdSecTechMDStatus>
+                        <MetsAmdSecTechMDMdWrapMdtype>PREMIS:OBJECT</MetsAmdSecTechMDMdWrapMdtype>
+                        <MetsAmdSecTechMDMdWrapXmlDataObjectSchemaLocation>http://www.loc.gov/premis/v3 http://www.loc.gov/standards/premis/v3/premis.xsd</MetsAmdSecTechMDMdWrapXmlDataObjectSchemaLocation>
+                        <MetsAmdSecTechMDMdWrapXmlDataObjectType>premis:file</MetsAmdSecTechMDMdWrapXmlDataObjectType>
+                        <MetsAmdSecTechMDMdWrapXmlDataObjectVersion>3.0</MetsAmdSecTechMDMdWrapXmlDataObjectVersion>
+                        <MetsAmdSecTechMDMdWrapXmlDataObjectObjectIdentifierObjectIdentifierType>UUID</MetsAmdSecTechMDMdWrapXmlDataObjectObjectIdentifierObjectIdentifierType>
+                        <MetsAmdSecTechMDMdWrapXmlDataObjectObjectIdentifierObjectIdentifierValue>9717c415-7529-40c6-b103-62044a9896d0</MetsAmdSecTechMDMdWrapXmlDataObjectObjectIdentifierObjectIdentifierValue>
+                        <MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsCompositionLevel>0</MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsCompositionLevel>
+                        <MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsFixityMessageDigestAlgorithm>SHA-256</MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsFixityMessageDigestAlgorithm>
+                        <MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsFixityMessageDigest>0fda74ec72c70b06dd33d7f28a38f64ebf9ba5da0f2a0468e81411aa73c7c1a5</MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsFixityMessageDigest>
+                        <MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsSize>789848</MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsSize>
+                        <MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsFormatFormatDesignationFormatName>Portable Network Graphics</MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsFormatFormatDesignationFormatName>
+                        <MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsFormatFormatDesignationFormatVersion>1.0</MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsFormatFormatDesignationFormatVersion>
+                        <MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsFormatFormatRegistryFormatRegistryName>PRONOM</MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsFormatFormatRegistryFormatRegistryName>
+                        <MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsFormatFormatRegistryFormatRegistryKey>fmt/11</MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsFormatFormatRegistryFormatRegistryKey>
+                        <MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsCreatingApplicationDateCreatedByApplication>2020-03-30</MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsCreatingApplicationDateCreatedByApplication>
+                        <MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFfprobeProgram_versionVersion>3.4.4-0ubuntu0.18.04.1</MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFfprobeProgram_versionVersion>
+                        <MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFfprobeProgram_versionCopyright>Copyright (c) 2007-2018 the FFmpeg developers</MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFfprobeProgram_versionCopyright>
+                        <MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFfprobeProgram_versionCompiler_ident>gcc 7 (Ubuntu 7.3.0-16ubuntu3)</MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFfprobeProgram_versionCompiler_ident>
+                        <MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFfprobeProgram_versionConfiguration>--prefix=/usr --extra-version=0ubuntu0.18.04.1 --toolchain=hardened --libdir=/usr/lib/x86_64-linux-gnu --incdir=/usr/include/x86_64-linux-gnu --enable-gpl --disable-stripping --enable-avresample --enable-avisynth --enable-gnutls --enable-ladspa --enable-libass --enable-libbluray --enable-libbs2b --enable-libcaca --enable-libcdio --enable-libflite --enable-libfontconfig --enable-libfreetype --enable-libfribidi --enable-libgme --enable-libgsm --enable-libmp3lame --enable-libmysofa --enable-libopenjpeg --enable-libopenmpt --enable-libopus --enable-libpulse --enable-librubberband --enable-librsvg --enable-libshine --enable-libsnappy --enable-libsoxr --enable-libspeex --enable-libssh --enable-libtheora --enable-libtwolame --enable-libvorbis --enable-libvpx --enable-libwavpack --enable-libwebp --enable-libx265 --enable-libxml2 --enable-libxvid --enable-libzmq --enable-libzvbi --enable-omx --enable-openal --enable-opengl --enable-sdl2 --enable-libdc1394 --enable-libdrm --enable-libiec61883 --enable-chromaprint --enable-frei0r --enable-libopencv --enable-libx264 --enable-shared</MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFfprobeProgram_versionConfiguration>
+                        <MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFfprobeLibrary_versionsLibrary_versionName>libpostproc</MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFfprobeLibrary_versionsLibrary_versionName>
+                        <MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFfprobeLibrary_versionsLibrary_versionMajor>54</MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFfprobeLibrary_versionsLibrary_versionMajor>
+                        <MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFfprobeLibrary_versionsLibrary_versionMinor>7</MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFfprobeLibrary_versionsLibrary_versionMinor>
+                        <MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFfprobeLibrary_versionsLibrary_versionMicro>100</MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFfprobeLibrary_versionsLibrary_versionMicro>
+                        <MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFfprobeLibrary_versionsLibrary_versionVersion>3540836</MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFfprobeLibrary_versionsLibrary_versionVersion>
+                        <MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFfprobeLibrary_versionsLibrary_versionIdent>postproc54.7.100</MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFfprobeLibrary_versionsLibrary_versionIdent>
+                        <MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFfprobeStreamsStreamIndex>0</MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFfprobeStreamsStreamIndex>
+                        <MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFfprobeStreamsStreamCodec_name>png</MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFfprobeStreamsStreamCodec_name>
+                        <MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFfprobeStreamsStreamCodec_long_name>PNG (Portable Network Graphics) image</MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFfprobeStreamsStreamCodec_long_name>
+                        <MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFfprobeStreamsStreamCodec_type>video</MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFfprobeStreamsStreamCodec_type>
+                        <MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFfprobeStreamsStreamCodec_time_base>0</MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFfprobeStreamsStreamCodec_time_base>
+                        <MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFfprobeStreamsStreamCodec_tag_string>[0][0][0][0]</MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFfprobeStreamsStreamCodec_tag_string>
+                        <MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFfprobeStreamsStreamCodec_tag>0x0000</MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFfprobeStreamsStreamCodec_tag>
+                        <MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFfprobeStreamsStreamWidth>1387</MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFfprobeStreamsStreamWidth>
+                        <MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFfprobeStreamsStreamHeight>718</MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFfprobeStreamsStreamHeight>
+                        <MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFfprobeStreamsStreamCoded_width>1387</MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFfprobeStreamsStreamCoded_width>
+                        <MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFfprobeStreamsStreamCoded_height>718</MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFfprobeStreamsStreamCoded_height>
+                        <MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFfprobeStreamsStreamHas_b_frames>0</MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFfprobeStreamsStreamHas_b_frames>
+                        <MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFfprobeStreamsStreamSample_aspect_ratio>1:1</MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFfprobeStreamsStreamSample_aspect_ratio>
+                        <MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFfprobeStreamsStreamDisplay_aspect_ratio>1387:718</MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFfprobeStreamsStreamDisplay_aspect_ratio>
+                        <MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFfprobeStreamsStreamPix_fmt>rgb24</MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFfprobeStreamsStreamPix_fmt>
+                        <MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFfprobeStreamsStreamLevel>-99</MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFfprobeStreamsStreamLevel>
+                        <MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFfprobeStreamsStreamColor_range>pc</MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFfprobeStreamsStreamColor_range>
+                        <MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFfprobeStreamsStreamRefs>1</MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFfprobeStreamsStreamRefs>
+                        <MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFfprobeStreamsStreamR_frame_rate>25</MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFfprobeStreamsStreamR_frame_rate>
+                        <MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFfprobeStreamsStreamAvg_frame_rate>undef</MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFfprobeStreamsStreamAvg_frame_rate>
+                        <MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFfprobeStreamsStreamTime_base>0.04</MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFfprobeStreamsStreamTime_base>
+                        <MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFfprobeStreamsStreamDispositionDefault>0</MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFfprobeStreamsStreamDispositionDefault>
+                        <MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFfprobeStreamsStreamDispositionDub>0</MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFfprobeStreamsStreamDispositionDub>
+                        <MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFfprobeStreamsStreamDispositionOriginal>0</MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFfprobeStreamsStreamDispositionOriginal>
+                        <MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFfprobeStreamsStreamDispositionComment>0</MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFfprobeStreamsStreamDispositionComment>
+                        <MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFfprobeStreamsStreamDispositionLyrics>0</MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFfprobeStreamsStreamDispositionLyrics>
+                        <MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFfprobeStreamsStreamDispositionKaraoke>0</MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFfprobeStreamsStreamDispositionKaraoke>
+                        <MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFfprobeStreamsStreamDispositionForced>0</MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFfprobeStreamsStreamDispositionForced>
+                        <MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFfprobeStreamsStreamDispositionHearing_impaired>0</MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFfprobeStreamsStreamDispositionHearing_impaired>
+                        <MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFfprobeStreamsStreamDispositionVisual_impaired>0</MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFfprobeStreamsStreamDispositionVisual_impaired>
+                        <MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFfprobeStreamsStreamDispositionClean_effects>0</MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFfprobeStreamsStreamDispositionClean_effects>
+                        <MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFfprobeStreamsStreamDispositionAttached_pic>0</MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFfprobeStreamsStreamDispositionAttached_pic>
+                        <MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFfprobeStreamsStreamDispositionTimed_thumbnails>0</MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFfprobeStreamsStreamDispositionTimed_thumbnails>
+                        <MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFfprobeChapters>.</MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFfprobeChapters>
+                        <MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFfprobeFormatFilename>/var/archivematica/sharedDirectory/watchedDirectories/workFlowDecisions/extractPackagesChoice/svalbard_metadata_test-e5206400-700a-11ea-9061-8f11f49b83d2-c2694972-bb96-4790-9fff-95224af79849/objects/Svalbard.png</MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFfprobeFormatFilename>
+                        <MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFfprobeFormatNb_streams>1</MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFfprobeFormatNb_streams>
+                        <MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFfprobeFormatNb_programs>0</MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFfprobeFormatNb_programs>
+                        <MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFfprobeFormatFormat_name>png_pipe</MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFfprobeFormatFormat_name>
+                        <MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFfprobeFormatFormat_long_name>piped png sequence</MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFfprobeFormatFormat_long_name>
+                        <MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFfprobeFormatSize>789848</MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFfprobeFormatSize>
+                        <MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFfprobeFormatProbe_score>99</MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFfprobeFormatProbe_score>
+                        <About>/var/archivematica/sharedDirectory/watchedDirectories/workFlowDecisions/extractPackagesChoice/svalbard_metadata_test-e5206400-700a-11ea-9061-8f11f49b83d2-c2694972-bb96-4790-9fff-95224af79849/objects/Svalbard.png</About>
+                        <MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionExifToolVersion>10.80</MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionExifToolVersion>
+                        <MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFileName>Svalbard.png</MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFileName>
+                        <MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionDirectory>/var/archivematica/sharedDirectory/watchedDirectories/workFlowDecisions/extractPackagesChoice/svalbard_metadata_test-e5206400-700a-11ea-9061-8f11f49b83d2-c2694972-bb96-4790-9fff-95224af79849/objects</MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionDirectory>
+                        <MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFileSize>771 kB</MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFileSize>
+                        <MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFileModifyDate>2020:03:30 13:25:12+00:00</MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFileModifyDate>
+                        <MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFileAccessDate>2020:03:30 13:25:32+00:00</MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFileAccessDate>
+                        <MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFileInodeChangeDate>2020:03:30 13:25:27+00:00</MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFileInodeChangeDate>
+                        <MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFilePermissions>rw-r--r--</MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFilePermissions>
+                        <MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFileType>PNG</MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFileType>
+                        <MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFileTypeExtension>png</MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFileTypeExtension>
+                        <MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionMIMEType>image/png</MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionMIMEType>
+                        <MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionImageWidth>1387</MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionImageWidth>
+                        <MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionImageHeight>718</MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionImageHeight>
+                        <MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionBitDepth>8</MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionBitDepth>
+                        <MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionColorType>RGB</MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionColorType>
+                        <MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionCompression>Deflate/Inflate</MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionCompression>
+                        <MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFilter>Adaptive</MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionFilter>
+                        <MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionInterlace>Noninterlaced</MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionInterlace>
+                        <MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionPixelsPerUnitX>3780</MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionPixelsPerUnitX>
+                        <MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionPixelsPerUnitY>3780</MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionPixelsPerUnitY>
+                        <MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionPixelUnits>meters</MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionPixelUnits>
+                        <MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionImageSize>1387x718</MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionImageSize>
+                        <MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionMegapixels>0.996</MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionMegapixels>
+                        <MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionMediaInfoXmlns>https://mediaarea.net/mediainfo</MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionMediaInfoXmlns>
+                        <MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionMediaInfoSchemaLocation>https://mediaarea.net/mediainfo https://mediaarea.net/mediainfo/mediainfo_2_0.xsd</MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionMediaInfoSchemaLocation>
+                        <MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionMediaInfoVersion>2.0</MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionMediaInfoVersion>
+                        <MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionMediaInfoCreatingLibraryVersion>18.05</MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionMediaInfoCreatingLibraryVersion>
+                        <MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionMediaInfoCreatingLibraryUrl>https://mediaarea.net/MediaInfo</MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionMediaInfoCreatingLibraryUrl>
+                        <MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionMediaInfoCreatingLibrary>MediaInfoLib</MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionMediaInfoCreatingLibrary>
+                        <MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionMediaInfoMediaRef>/var/archivematica/sharedDirectory/watchedDirectories/workFlowDecisions/extractPackagesChoice/svalbard_metadata_test-e5206400-700a-11ea-9061-8f11f49b83d2-c2694972-bb96-4790-9fff-95224af79849/objects/Svalbard.png</MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionMediaInfoMediaRef>
+                        <MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionMediaInfoMediaTrackImageCount>1</MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionMediaInfoMediaTrackImageCount>
+                        <MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionMediaInfoMediaTrackFileExtension>png</MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionMediaInfoMediaTrackFileExtension>
+                        <MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionMediaInfoMediaTrackFileSize>789848</MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionMediaInfoMediaTrackFileSize>
+                        <MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionMediaInfoMediaTrackFile_Modified_Date>UTC 2020-03-30 13:25:12</MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionMediaInfoMediaTrackFile_Modified_Date>
+                        <MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionMediaInfoMediaTrackFile_Modified_Date_Local>2020:03:30 13:25:12</MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionMediaInfoMediaTrackFile_Modified_Date_Local>
+                        <MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionMediaInfoMediaTrackType>Image</MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionMediaInfoMediaTrackType>
+                        <MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionMediaInfoMediaTrackFormat>PNG</MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionMediaInfoMediaTrackFormat>
+                        <MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionMediaInfoMediaTrackFormat_Compression>LZ77</MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionMediaInfoMediaTrackFormat_Compression>
+                        <MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionMediaInfoMediaTrackWidth>1387</MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionMediaInfoMediaTrackWidth>
+                        <MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionMediaInfoMediaTrackHeight>718</MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionMediaInfoMediaTrackHeight>
+                        <MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionMediaInfoMediaTrackBitDepth>24</MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionMediaInfoMediaTrackBitDepth>
+                        <MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionMediaInfoMediaTrackCompression_Mode>Lossless</MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionMediaInfoMediaTrackCompression_Mode>
+                        <MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionMediaInfoMediaTrackStreamSize>789848</MetsAmdSecTechMDMdWrapXmlDataObjectObjectCharacteristicsObjectCharacteristicsExtensionMediaInfoMediaTrackStreamSize>
+                        <MetsAmdSecTechMDMdWrapXmlDataObjectOriginalName>%transferDirectory%data/Svalbard.png</MetsAmdSecTechMDMdWrapXmlDataObjectOriginalName>
+                        <MetsAmdSecDigiprovMDId>digiprovMD_32</MetsAmdSecDigiprovMDId>
+                        <MetsAmdSecDigiprovMDCreated>2020:03:30 13:25:46</MetsAmdSecDigiprovMDCreated>
+                        <MetsAmdSecDigiprovMDMdWrapMdtype>PREMIS:EVENT</MetsAmdSecDigiprovMDMdWrapMdtype>
+                        <MetsAmdSecDigiprovMDMdWrapXmlDataEventSchemaLocation>http://www.loc.gov/premis/v3 http://www.loc.gov/standards/premis/v3/premis.xsd</MetsAmdSecDigiprovMDMdWrapXmlDataEventSchemaLocation>
+                        <MetsAmdSecDigiprovMDMdWrapXmlDataEventVersion>3.0</MetsAmdSecDigiprovMDMdWrapXmlDataEventVersion>
+                        <MetsAmdSecDigiprovMDMdWrapXmlDataEventEventIdentifierEventIdentifierType>UUID</MetsAmdSecDigiprovMDMdWrapXmlDataEventEventIdentifierEventIdentifierType>
+                        <MetsAmdSecDigiprovMDMdWrapXmlDataEventEventIdentifierEventIdentifierValue>dc87fd07-c63d-49ee-9276-2df984ed7198</MetsAmdSecDigiprovMDMdWrapXmlDataEventEventIdentifierEventIdentifierValue>
+                        <MetsAmdSecDigiprovMDMdWrapXmlDataEventEventType>format identification</MetsAmdSecDigiprovMDMdWrapXmlDataEventEventType>
+                        <MetsAmdSecDigiprovMDMdWrapXmlDataEventEventDateTime>2020:03:30 13:25:38.644172+00:00</MetsAmdSecDigiprovMDMdWrapXmlDataEventEventDateTime>
+                        <MetsAmdSecDigiprovMDMdWrapXmlDataEventEventDetailInformationEventDetail>program="Siegfried"; version="1.7.10"</MetsAmdSecDigiprovMDMdWrapXmlDataEventEventDetailInformationEventDetail>
+                        <MetsAmdSecDigiprovMDMdWrapXmlDataEventEventOutcomeInformationEventOutcome>Positive</MetsAmdSecDigiprovMDMdWrapXmlDataEventEventOutcomeInformationEventOutcome>
+                        <MetsAmdSecDigiprovMDMdWrapXmlDataEventEventOutcomeInformationEventOutcomeDetailEventOutcomeDetailNote>fmt/11</MetsAmdSecDigiprovMDMdWrapXmlDataEventEventOutcomeInformationEventOutcomeDetailEventOutcomeDetailNote>
+                        <MetsAmdSecDigiprovMDMdWrapXmlDataEventLinkingAgentIdentifierLinkingAgentIdentifierType>Archivematica user pk</MetsAmdSecDigiprovMDMdWrapXmlDataEventLinkingAgentIdentifierLinkingAgentIdentifierType>
+                        <MetsAmdSecDigiprovMDMdWrapXmlDataEventLinkingAgentIdentifierLinkingAgentIdentifierValue>1</MetsAmdSecDigiprovMDMdWrapXmlDataEventLinkingAgentIdentifierLinkingAgentIdentifierValue>
+                        <MetsFileSecFileGrpUse>original</MetsFileSecFileGrpUse>
+                        <MetsFileSecFileGrpFileId>file-80a0f657-3f6f-4d43-8b36-7bbb773254bb</MetsFileSecFileGrpFileId>
+                        <MetsFileSecFileGrpFileGroupid>Group-80a0f657-3f6f-4d43-8b36-7bbb773254bb</MetsFileSecFileGrpFileGroupid>
+                        <MetsFileSecFileGrpFileAdmid>amdSec_6</MetsFileSecFileGrpFileAdmid>
+                        <MetsFileSecFileGrpFileChecksum>83d3855f965d76947be79119bfd84f9c49cdb84bd85b9e84f8faa590a8549a5d</MetsFileSecFileGrpFileChecksum>
+                        <MetsFileSecFileGrpFileChecksumtype>SHA-256</MetsFileSecFileGrpFileChecksumtype>
+                        <MetsFileSecFileGrpFileFLocatHref>objects/PolarBear.png</MetsFileSecFileGrpFileFLocatHref>
+                        <MetsFileSecFileGrpFileFLocatLoctype>OTHER</MetsFileSecFileGrpFileFLocatLoctype>
+                        <MetsFileSecFileGrpFileFLocatOtherloctype>SYSTEM</MetsFileSecFileGrpFileFLocatOtherloctype>
+                        <MetsStructMapDivDivDivDivFptrFileid>file-a980cbc2-e82e-4dc5-8a70-552b8180f515</MetsStructMapDivDivDivDivFptrFileid>
+                        <MetsStructMapDivDivDivFptrFileid>file-9717c415-7529-40c6-b103-62044a9896d0</MetsStructMapDivDivDivFptrFileid>
+                        <MetsStructMapId>structMap_2</MetsStructMapId>
+                        <MetsStructMapLabel>Normative Directory Structure</MetsStructMapLabel>
+                        <MetsStructMapType>logical</MetsStructMapType>
+                        <MetsStructMapDivType>Directory</MetsStructMapDivType>
+                        <MetsStructMapDivLabel>svalbard_metadata_test-e5206400-700a-11ea-9061-8f11f49b83d2-c2694972-bb96-4790-9fff-95224af79849</MetsStructMapDivLabel>
+                        <MetsStructMapDivDivDivDivType>Item</MetsStructMapDivDivDivDivType>
+                        <MetsStructMapDivDivDivDivLabel>tagmanifest-sha1.txt</MetsStructMapDivDivDivDivLabel>
+                        <MetsStructMapDivDivType>Directory</MetsStructMapDivDivType>
+                        <MetsStructMapDivDivLabel>objects</MetsStructMapDivDivLabel>
+                        <MetsStructMapDivDivDivType>Item</MetsStructMapDivDivDivType>
+                        <MetsStructMapDivDivDivLabel>Svalbard.png</MetsStructMapDivDivDivLabel>
+                      </exiftool>
+                    </tool>
+                    <tool name="NLNZ Metadata Extractor" version="3.4GA">
+                      <XML xmlns="">
+                        <METADATA>
+                          <FILENAME>METS.xml</FILENAME>
+                          <SEPARATOR>/</SEPARATOR>
+                          <PARENT>/var/archivematica/sharedDirectory/watchedDirectories/workFlowDecisions/metadataReminder/svalbard_metadata_test-e5206400-700a-11ea-9061-8f11f49b83d2-350fbaa1-c664-4ced-9e98-adcb379f998f/objects/submissionDocumentation/transfer-svalbard_metadata_test-e5206400-700a-11ea-9061-8f11f49b83d2-c2694972-bb96-4790-9fff-95224af79849</PARENT>
+                          <CANONICALPATH>/var/archivematica/sharedDirectory/watchedDirectories/workFlowDecisions/metadataReminder/svalbard_metadata_test-e5206400-700a-11ea-9061-8f11f49b83d2-350fbaa1-c664-4ced-9e98-adcb379f998f/objects/submissionDocumentation/transfer-svalbard_metadata_test-e5206400-700a-11ea-9061-8f11f49b83d2-c2694972-bb96-4790-9fff-95224af79849/METS.xml</CANONICALPATH>
+                          <ABSOLUTEPATH>/var/archivematica/sharedDirectory/watchedDirectories/workFlowDecisions/metadataReminder/svalbard_metadata_test-e5206400-700a-11ea-9061-8f11f49b83d2-350fbaa1-c664-4ced-9e98-adcb379f998f/objects/submissionDocumentation/transfer-svalbard_metadata_test-e5206400-700a-11ea-9061-8f11f49b83d2-c2694972-bb96-4790-9fff-95224af79849/METS.xml</ABSOLUTEPATH>
+                          <PATH>/var/archivematica/sharedDirectory/watchedDirectories/workFlowDecisions/metadataReminder/svalbard_metadata_test-e5206400-700a-11ea-9061-8f11f49b83d2-350fbaa1-c664-4ced-9e98-adcb379f998f/objects/submissionDocumentation/transfer-svalbard_metadata_test-e5206400-700a-11ea-9061-8f11f49b83d2-c2694972-bb96-4790-9fff-95224af79849/METS.xml</PATH>
+                          <FILE>true</FILE>
+                          <DIRECTORY>false</DIRECTORY>
+                          <FILELENGTH>103288</FILELENGTH>
+                          <HIDDEN>false</HIDDEN>
+                          <ABSOLUTE>true</ABSOLUTE>
+                          <URL>file:/var/archivematica/sharedDirectory/watchedDirectories/workFlowDecisions/metadataReminder/svalbard_metadata_test-e5206400-700a-11ea-9061-8f11f49b83d2-350fbaa1-c664-4ced-9e98-adcb379f998f/objects/submissionDocumentation/transfer-svalbard_metadata_test-e5206400-700a-11ea-9061-8f11f49b83d2-c2694972-bb96-4790-9fff-95224af79849/METS.xml</URL>
+                          <URI>file:/var/archivematica/sharedDirectory/watchedDirectories/workFlowDecisions/metadataReminder/svalbard_metadata_test-e5206400-700a-11ea-9061-8f11f49b83d2-350fbaa1-c664-4ced-9e98-adcb379f998f/objects/submissionDocumentation/transfer-svalbard_metadata_test-e5206400-700a-11ea-9061-8f11f49b83d2-c2694972-bb96-4790-9fff-95224af79849/METS.xml</URI>
+                          <READ>true</READ>
+                          <WRITE>true</WRITE>
+                          <EXTENSION>xml</EXTENSION>
+                          <MODIFIED>2020-03-30 13:25:46</MODIFIED>
+                          <DATE>20200330</DATE>
+                          <DATEPATTERN>yyyyMMdd</DATEPATTERN>
+                          <TIME>132546000</TIME>
+                          <TIMEPATTERN>HHmmssSSS</TIMEPATTERN>
+                          <TYPE>application/xml</TYPE>
+                          <PID>null</PID>
+                          <OID>null</OID>
+                          <FID>null</FID>
+                          <PROCESSOR>unknown</PROCESSOR>
+                        </METADATA>
+                        <INFORMATION>
+                          <VERSION>1.0</VERSION>
+                          <ENCODING>UTF-8</ENCODING>
+                          <STANDALONE>unspecified</STANDALONE>
+                        </INFORMATION>
+                      </XML>
+                    </tool>
+                    <tool name="OIS File Information" version="0.2">
+                      <fits xsi:schemaLocation="http://hul.harvard.edu/ois/xml/ns/fits/fits_output http://hul.harvard.edu/ois/xml/xsd/fits/fits_output.xsd">
+                        <fileinfo>
+                          <filepath>/var/archivematica/sharedDirectory/watchedDirectories/workFlowDecisions/metadataReminder/svalbard_metadata_test-e5206400-700a-11ea-9061-8f11f49b83d2-350fbaa1-c664-4ced-9e98-adcb379f998f/objects/submissionDocumentation/transfer-svalbard_metadata_test-e5206400-700a-11ea-9061-8f11f49b83d2-c2694972-bb96-4790-9fff-95224af79849/METS.xml</filepath>
+                          <filename>METS.xml</filename>
+                          <size>103288</size>
+                          <fslastmodified>1585574746000</fslastmodified>
+                        </fileinfo>
+                      </fits>
+                    </tool>
+                    <tool name="OIS XML Metadata" version="0.2">
+                      <fits xsi:schemaLocation="http://hul.harvard.edu/ois/xml/ns/fits/fits_output http://hul.harvard.edu/ois/xml/xsd/fits/fits_output.xsd">
+                        <identification>
+                          <identity format="Extensible Markup Language" mimetype="text/xml"/>
+                        </identification>
+                        <metadata>
+                          <text>
+                            <markupLanguage>http://www.loc.gov/standards/mets/version111/mets.xsd</markupLanguage>
+                          </text>
+                        </metadata>
+                      </fits>
+                    </tool>
+                    <tool name="ffident" version="0.2">
+                      <ffidentOutput xmlns="">
+                        <shortName>XML</shortName>
+                        <longName>Extensible Markup Language</longName>
+                        <group>doc</group>
+                        <mimetypes>
+                          <mimetype>text/xml</mimetype>
+                        </mimetypes>
+                        <fileExtensions>
+                          <extension>xml</extension>
+                        </fileExtensions>
+                      </ffidentOutput>
+                    </tool>
+                    <tool name="Tika" version="1.3">
+                      <metadata xmlns="">
+                        <field name="Content-Type">
+                          <value>application/xml</value>
+                        </field>
+                      </metadata>
+                    </tool>
+                  </toolOutput>
+                </fits>
+              </premis:objectCharacteristicsExtension>
+            </premis:objectCharacteristics>
+            <premis:originalName>%SIPDirectory%objects/submissionDocumentation/transfer-svalbard_metadata_test-e5206400-700a-11ea-9061-8f11f49b83d2-c2694972-bb96-4790-9fff-95224af79849/METS.xml</premis:originalName>
+          </premis:object>
+        </mets:xmlData>
+      </mets:mdWrap>
+    </mets:techMD>
+    <mets:digiprovMD ID="digiprovMD_33">
+      <mets:mdWrap MDTYPE="PREMIS:EVENT">
+        <mets:xmlData>
+          <premis:event xmlns:premis="http://www.loc.gov/premis/v3" xsi:schemaLocation="http://www.loc.gov/premis/v3 http://www.loc.gov/standards/premis/v3/premis.xsd" version="3.0">
+            <premis:eventIdentifier>
+              <premis:eventIdentifierType>UUID</premis:eventIdentifierType>
+              <premis:eventIdentifierValue>abdb01eb-3fe3-4805-8a19-7f5a04eb3420</premis:eventIdentifierValue>
+            </premis:eventIdentifier>
+            <premis:eventType>ingestion</premis:eventType>
+            <premis:eventDateTime>2020-03-30T13:26:09.904866+00:00</premis:eventDateTime>
+            <premis:eventDetailInformation>
+              <premis:eventDetail></premis:eventDetail>
+            </premis:eventDetailInformation>
+            <premis:eventOutcomeInformation>
+              <premis:eventOutcome></premis:eventOutcome>
+              <premis:eventOutcomeDetail>
+                <premis:eventOutcomeDetailNote></premis:eventOutcomeDetailNote>
+              </premis:eventOutcomeDetail>
+            </premis:eventOutcomeInformation>
+            <premis:linkingAgentIdentifier>
+              <premis:linkingAgentIdentifierType>preservation system</premis:linkingAgentIdentifierType>
+              <premis:linkingAgentIdentifierValue>Archivematica-1.10</premis:linkingAgentIdentifierValue>
+            </premis:linkingAgentIdentifier>
+            <premis:linkingAgentIdentifier>
+              <premis:linkingAgentIdentifierType>repository code</premis:linkingAgentIdentifierType>
+              <premis:linkingAgentIdentifierValue>test</premis:linkingAgentIdentifierValue>
+            </premis:linkingAgentIdentifier>
+            <premis:linkingAgentIdentifier>
+              <premis:linkingAgentIdentifierType>Archivematica user pk</premis:linkingAgentIdentifierType>
+              <premis:linkingAgentIdentifierValue>1</premis:linkingAgentIdentifierValue>
+            </premis:linkingAgentIdentifier>
+          </premis:event>
+        </mets:xmlData>
+      </mets:mdWrap>
+    </mets:digiprovMD>
+    <mets:digiprovMD ID="digiprovMD_34">
+      <mets:mdWrap MDTYPE="PREMIS:EVENT">
+        <mets:xmlData>
+          <premis:event xmlns:premis="http://www.loc.gov/premis/v3" xsi:schemaLocation="http://www.loc.gov/premis/v3 http://www.loc.gov/standards/premis/v3/premis.xsd" version="3.0">
+            <premis:eventIdentifier>
+              <premis:eventIdentifierType>UUID</premis:eventIdentifierType>
+              <premis:eventIdentifierValue>d49ff9b2-84fb-403e-b13c-24939db44732</premis:eventIdentifierValue>
+            </premis:eventIdentifier>
+            <premis:eventType>message digest calculation</premis:eventType>
+            <premis:eventDateTime>2020-03-30T13:26:10.313581+00:00</premis:eventDateTime>
+            <premis:eventDetailInformation>
+              <premis:eventDetail>program="python"; module="hashlib.sha256()"</premis:eventDetail>
+            </premis:eventDetailInformation>
+            <premis:eventOutcomeInformation>
+              <premis:eventOutcome></premis:eventOutcome>
+              <premis:eventOutcomeDetail>
+                <premis:eventOutcomeDetailNote>12a55553488a26543e9d1a23054e4cb120855a109345268e87c88c788edd881b</premis:eventOutcomeDetailNote>
+              </premis:eventOutcomeDetail>
+            </premis:eventOutcomeInformation>
+            <premis:linkingAgentIdentifier>
+              <premis:linkingAgentIdentifierType>preservation system</premis:linkingAgentIdentifierType>
+              <premis:linkingAgentIdentifierValue>Archivematica-1.10</premis:linkingAgentIdentifierValue>
+            </premis:linkingAgentIdentifier>
+            <premis:linkingAgentIdentifier>
+              <premis:linkingAgentIdentifierType>repository code</premis:linkingAgentIdentifierType>
+              <premis:linkingAgentIdentifierValue>test</premis:linkingAgentIdentifierValue>
+            </premis:linkingAgentIdentifier>
+            <premis:linkingAgentIdentifier>
+              <premis:linkingAgentIdentifierType>Archivematica user pk</premis:linkingAgentIdentifierType>
+              <premis:linkingAgentIdentifierValue>1</premis:linkingAgentIdentifierValue>
+            </premis:linkingAgentIdentifier>
+          </premis:event>
+        </mets:xmlData>
+      </mets:mdWrap>
+    </mets:digiprovMD>
+    <mets:digiprovMD ID="digiprovMD_35">
+      <mets:mdWrap MDTYPE="PREMIS:EVENT">
+        <mets:xmlData>
+          <premis:event xmlns:premis="http://www.loc.gov/premis/v3" xsi:schemaLocation="http://www.loc.gov/premis/v3 http://www.loc.gov/standards/premis/v3/premis.xsd" version="3.0">
+            <premis:eventIdentifier>
+              <premis:eventIdentifierType>UUID</premis:eventIdentifierType>
+              <premis:eventIdentifierValue>d114755e-635a-4ede-a5a7-f67491088f77</premis:eventIdentifierValue>
+            </premis:eventIdentifier>
+            <premis:eventType>virus check</premis:eventType>
+            <premis:eventDateTime>2020-03-30T13:26:14.011695+00:00</premis:eventDateTime>
+            <premis:eventDetailInformation>
+              <premis:eventDetail>program="ClamAV (clamd)"; version="ClamAV 0.99.2"; virusDefinitions="25764/Fri Mar 27 13:11:26 2020"</premis:eventDetail>
+            </premis:eventDetailInformation>
+            <premis:eventOutcomeInformation>
+              <premis:eventOutcome>Pass</premis:eventOutcome>
+              <premis:eventOutcomeDetail>
+                <premis:eventOutcomeDetailNote></premis:eventOutcomeDetailNote>
+              </premis:eventOutcomeDetail>
+            </premis:eventOutcomeInformation>
+            <premis:linkingAgentIdentifier>
+              <premis:linkingAgentIdentifierType>preservation system</premis:linkingAgentIdentifierType>
+              <premis:linkingAgentIdentifierValue>Archivematica-1.10</premis:linkingAgentIdentifierValue>
+            </premis:linkingAgentIdentifier>
+            <premis:linkingAgentIdentifier>
+              <premis:linkingAgentIdentifierType>repository code</premis:linkingAgentIdentifierType>
+              <premis:linkingAgentIdentifierValue>test</premis:linkingAgentIdentifierValue>
+            </premis:linkingAgentIdentifier>
+            <premis:linkingAgentIdentifier>
+              <premis:linkingAgentIdentifierType>Archivematica user pk</premis:linkingAgentIdentifierType>
+              <premis:linkingAgentIdentifierValue>1</premis:linkingAgentIdentifierValue>
+            </premis:linkingAgentIdentifier>
+          </premis:event>
+        </mets:xmlData>
+      </mets:mdWrap>
+    </mets:digiprovMD>
+    <mets:digiprovMD ID="digiprovMD_36">
+      <mets:mdWrap MDTYPE="PREMIS:EVENT">
+        <mets:xmlData>
+          <premis:event xmlns:premis="http://www.loc.gov/premis/v3" xsi:schemaLocation="http://www.loc.gov/premis/v3 http://www.loc.gov/standards/premis/v3/premis.xsd" version="3.0">
+            <premis:eventIdentifier>
+              <premis:eventIdentifierType>UUID</premis:eventIdentifierType>
+              <premis:eventIdentifierValue>c27a2cc9-fb51-4693-98a9-7deb914eee88</premis:eventIdentifierValue>
+            </premis:eventIdentifier>
+            <premis:eventType>format identification</premis:eventType>
+            <premis:eventDateTime>2020-03-30T13:26:17.589982+00:00</premis:eventDateTime>
+            <premis:eventDetailInformation>
+              <premis:eventDetail>program="Siegfried"; version="1.7.10"</premis:eventDetail>
+            </premis:eventDetailInformation>
+            <premis:eventOutcomeInformation>
+              <premis:eventOutcome>Positive</premis:eventOutcome>
+              <premis:eventOutcomeDetail>
+                <premis:eventOutcomeDetailNote>fmt/101</premis:eventOutcomeDetailNote>
+              </premis:eventOutcomeDetail>
+            </premis:eventOutcomeInformation>
+            <premis:linkingAgentIdentifier>
+              <premis:linkingAgentIdentifierType>preservation system</premis:linkingAgentIdentifierType>
+              <premis:linkingAgentIdentifierValue>Archivematica-1.10</premis:linkingAgentIdentifierValue>
+            </premis:linkingAgentIdentifier>
+            <premis:linkingAgentIdentifier>
+              <premis:linkingAgentIdentifierType>repository code</premis:linkingAgentIdentifierType>
+              <premis:linkingAgentIdentifierValue>test</premis:linkingAgentIdentifierValue>
+            </premis:linkingAgentIdentifier>
+            <premis:linkingAgentIdentifier>
+              <premis:linkingAgentIdentifierType>Archivematica user pk</premis:linkingAgentIdentifierType>
+              <premis:linkingAgentIdentifierValue>1</premis:linkingAgentIdentifierValue>
+            </premis:linkingAgentIdentifier>
+          </premis:event>
+        </mets:xmlData>
+      </mets:mdWrap>
+    </mets:digiprovMD>
+    <mets:digiprovMD ID="digiprovMD_37">
+      <mets:mdWrap MDTYPE="PREMIS:AGENT">
+        <mets:xmlData>
+          <premis:agent xmlns:premis="http://www.loc.gov/premis/v3" xsi:schemaLocation="http://www.loc.gov/premis/v3 http://www.loc.gov/standards/premis/v3/premis.xsd" version="3.0">
+            <premis:agentIdentifier>
+              <premis:agentIdentifierType>preservation system</premis:agentIdentifierType>
+              <premis:agentIdentifierValue>Archivematica-1.10</premis:agentIdentifierValue>
+            </premis:agentIdentifier>
+            <premis:agentName>Archivematica</premis:agentName>
+            <premis:agentType>software</premis:agentType>
+          </premis:agent>
+        </mets:xmlData>
+      </mets:mdWrap>
+    </mets:digiprovMD>
+    <mets:digiprovMD ID="digiprovMD_38">
+      <mets:mdWrap MDTYPE="PREMIS:AGENT">
+        <mets:xmlData>
+          <premis:agent xmlns:premis="http://www.loc.gov/premis/v3" xsi:schemaLocation="http://www.loc.gov/premis/v3 http://www.loc.gov/standards/premis/v3/premis.xsd" version="3.0">
+            <premis:agentIdentifier>
+              <premis:agentIdentifierType>repository code</premis:agentIdentifierType>
+              <premis:agentIdentifierValue>test</premis:agentIdentifierValue>
+            </premis:agentIdentifier>
+            <premis:agentName>test</premis:agentName>
+            <premis:agentType>organization</premis:agentType>
+          </premis:agent>
+        </mets:xmlData>
+      </mets:mdWrap>
+    </mets:digiprovMD>
+    <mets:digiprovMD ID="digiprovMD_39">
+      <mets:mdWrap MDTYPE="PREMIS:AGENT">
+        <mets:xmlData>
+          <premis:agent xmlns:premis="http://www.loc.gov/premis/v3" xsi:schemaLocation="http://www.loc.gov/premis/v3 http://www.loc.gov/standards/premis/v3/premis.xsd" version="3.0">
+            <premis:agentIdentifier>
+              <premis:agentIdentifierType>Archivematica user pk</premis:agentIdentifierType>
+              <premis:agentIdentifierValue>1</premis:agentIdentifierValue>
+            </premis:agentIdentifier>
+            <premis:agentName>username="test", first_name="", last_name=""</premis:agentName>
+            <premis:agentType>Archivematica user</premis:agentType>
+          </premis:agent>
+        </mets:xmlData>
+      </mets:mdWrap>
+    </mets:digiprovMD>
+  </mets:amdSec>
+  <mets:amdSec ID="amdSec_6">
+    <mets:sourceMD ID="sourceMD_1">
+      <mets:mdWrap MDTYPE="OTHER" OTHERMDTYPE="BagIt">
+        <mets:xmlData>
+          <transfer_metadata>
+            <Bagging-Date>2020-03-30</Bagging-Date>
+            <External-Description>Generated by Piql Connect</External-Description>
+            <Source-Organization>Piql</Source-Organization>
+          </transfer_metadata>
+        </mets:xmlData>
+      </mets:mdWrap>
+    </mets:sourceMD>
+  </mets:amdSec>
+  <mets:fileSec>
+    <mets:fileGrp USE="original">
+      <mets:file GROUPID="Group-80a0f657-3f6f-4d43-8b36-7bbb773254bb" ID="file-80a0f657-3f6f-4d43-8b36-7bbb773254bb" ADMID="amdSec_1">
+        <mets:FLocat xlink:href="objects/PolarBear.png" LOCTYPE="OTHER" OTHERLOCTYPE="SYSTEM"/>
+      </mets:file>
+      <mets:file GROUPID="Group-9717c415-7529-40c6-b103-62044a9896d0" ID="file-9717c415-7529-40c6-b103-62044a9896d0" ADMID="amdSec_2">
+        <mets:FLocat xlink:href="objects/Svalbard.png" LOCTYPE="OTHER" OTHERLOCTYPE="SYSTEM"/>
+      </mets:file>
+    </mets:fileGrp>
+    <mets:fileGrp USE="submissionDocumentation">
+      <mets:file GROUPID="Group-9573d823-c3c4-4a65-982f-211a7979869f" ID="file-9573d823-c3c4-4a65-982f-211a7979869f" ADMID="amdSec_5">
+        <mets:FLocat xlink:href="objects/submissionDocumentation/transfer-svalbard_metadata_test-e5206400-700a-11ea-9061-8f11f49b83d2-c2694972-bb96-4790-9fff-95224af79849/METS.xml" LOCTYPE="OTHER" OTHERLOCTYPE="SYSTEM"/>
+      </mets:file>
+    </mets:fileGrp>
+    <mets:fileGrp USE="metadata">
+      <mets:file GROUPID="Group-27914c01-8ded-4769-acd8-b3610442d2b8" ID="file-27914c01-8ded-4769-acd8-b3610442d2b8" ADMID="amdSec_3">
+        <mets:FLocat xlink:href="objects/metadata/transfers/svalbard_metadata_test-e5206400-700a-11ea-9061-8f11f49b83d2-c2694972-bb96-4790-9fff-95224af79849/manifest-sha1.txt" LOCTYPE="OTHER" OTHERLOCTYPE="SYSTEM"/>
+      </mets:file>
+      <mets:file GROUPID="Group-d1c9f57c-68bc-443a-a891-23158db2ad0e" ID="file-d1c9f57c-68bc-443a-a891-23158db2ad0e" ADMID="amdSec_4">
+        <mets:FLocat xlink:href="objects/metadata/transfers/svalbard_metadata_test-e5206400-700a-11ea-9061-8f11f49b83d2-c2694972-bb96-4790-9fff-95224af79849/metadata.csv" LOCTYPE="OTHER" OTHERLOCTYPE="SYSTEM"/>
+      </mets:file>
+    </mets:fileGrp>
+  </mets:fileSec>
+  <mets:structMap ID="structMap_1" LABEL="Archivematica default" TYPE="physical">
+    <mets:div LABEL="svalbard_metadata_test-e5206400-700a-11ea-9061-8f11f49b83d2-350fbaa1-c664-4ced-9e98-adcb379f998f" TYPE="Directory" DMDID="dmdSec_1">
+      <mets:div LABEL="objects" TYPE="Directory" ADMID="amdSec_6">
+        <mets:div LABEL="PolarBear.png" TYPE="Item" DMDID="dmdSec_2">
+          <mets:fptr FILEID="file-80a0f657-3f6f-4d43-8b36-7bbb773254bb"/>
+        </mets:div>
+        <mets:div LABEL="Svalbard.png" TYPE="Item" DMDID="dmdSec_3">
+          <mets:fptr FILEID="file-9717c415-7529-40c6-b103-62044a9896d0"/>
+        </mets:div>
+        <mets:div LABEL="metadata" TYPE="Directory">
+          <mets:div LABEL="transfers" TYPE="Directory">
+            <mets:div LABEL="svalbard_metadata_test-e5206400-700a-11ea-9061-8f11f49b83d2-c2694972-bb96-4790-9fff-95224af79849" TYPE="Directory">
+              <mets:div LABEL="manifest-sha1.txt" TYPE="Item">
+                <mets:fptr FILEID="file-27914c01-8ded-4769-acd8-b3610442d2b8"/>
+              </mets:div>
+              <mets:div LABEL="metadata.csv" TYPE="Item">
+                <mets:fptr FILEID="file-d1c9f57c-68bc-443a-a891-23158db2ad0e"/>
+              </mets:div>
+            </mets:div>
+          </mets:div>
+        </mets:div>
+        <mets:div LABEL="submissionDocumentation" TYPE="Directory">
+          <mets:div LABEL="transfer-svalbard_metadata_test-e5206400-700a-11ea-9061-8f11f49b83d2-c2694972-bb96-4790-9fff-95224af79849" TYPE="Directory">
+            <mets:div LABEL="METS.xml" TYPE="Item">
+              <mets:fptr FILEID="file-9573d823-c3c4-4a65-982f-211a7979869f"/>
+            </mets:div>
+          </mets:div>
+        </mets:div>
+      </mets:div>
+    </mets:div>
+  </mets:structMap>
+</mets:mets>
