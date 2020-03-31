@@ -1,6 +1,8 @@
 #!/bin/bash
 export HOST_USERID=333
 export HOST_GROUPID=333
+export STORAGE_LOCATION_ID=095675df-6ef3-43b1-8180-05efd5578df0
+export ARCHIVEMATICA_SERVICE_SERVICE_SEEDER_STORAGE_ID=4d3d72a0-7023-11ea-9e4b-9d55b3d96e2e
 
 echo 'Copy env file'
 cd .. || exit $?
@@ -8,7 +10,7 @@ cp .env.example .env || exit $?
 
 echo 'Update storage location id'
 replaceString=$(cat .env | grep STORAGE_LOCATION_ID)
-sed -i "s/$replaceString/STORAGE_LOCATION_ID=095675df-6ef3-43b1-8180-05efd5578df0/g" .env || exit $?
+sed -i "s/$replaceString/STORAGE_LOCATION_ID=$STORAGE_LOCATION_ID/g" .env || exit $?
 
 echo 'Update storage url'
 if [[ -v $ARCHIVEMATICA_SERVICE_SEEDER_STORAGE_ID ]] ; then
