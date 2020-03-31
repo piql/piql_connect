@@ -182,6 +182,7 @@ return [
         App\Providers\ArchivalStorageServiceProvider::class,
         App\Providers\FileArchiveProvider::class,
         App\Providers\FileCollectorProvider::class,
+        App\Providers\MetsParserProvider::class,
         App\Providers\FilesystemDriverProvider::class,
         App\Providers\SettingsProvider::class,
         App\Providers\ArchivematicaConnectionServiceProvider::class,
