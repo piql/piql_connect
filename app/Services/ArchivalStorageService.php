@@ -5,6 +5,7 @@ namespace App\Services;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\FilesystemAdapter;
 use Illuminate\Support\Str;
+use Log;
 
 class ArchivalStorageService implements \App\Interfaces\ArchivalStorageInterface
 {

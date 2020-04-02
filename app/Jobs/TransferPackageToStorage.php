@@ -12,6 +12,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use Log;
 
 class TransferPackageToStorage implements ShouldQueue
@@ -48,9 +49,9 @@ class TransferPackageToStorage implements ShouldQueue
      * @param ArchivalStorageInterface $storage
      * @return void
      */
-    public function handle(ArchivalStorageInterface $storage)
+    public function handle(ArchivalStorageInterface $storage )
     {
-        Log::info("Uploading files to " . $this->storageLocation->human_readable_name);
+        $metsParser = \App::make(\App\Interfaces\MetsParserInterface::class );
 
         if($this->localStorage->exists($this->uploadFileAtPath) !== true) {
             Log::error("Upload failed: file does not exist '".$this->uploadFileAtPath."'");
@@ -59,9 +60,27 @@ class TransferPackageToStorage implements ShouldQueue
         $baseDir = $this->localStorage->path('');
         $baseDirLen = strlen($baseDir);
         $files = $this->localStorage->allFiles($this->uploadFileAtPath);
-        if(count($files) == 0) {
-            $files = [ $this->uploadFileAtPath ];
+
+        $dublinCoreMetadata = false;
+        if( $this->storable_type == "App\Aip" ) {
+            $storable = \App\Aip::find( $this->storable_id );
+            $metsFilePath = collect( $files )->first( function ( $f ) use ( $storable ) {
+                return Str::endsWith( $f, "/data/METS.{$storable->external_uuid}.xml" );
+            } );
+            if( $metsFilePath !== null ) {
+                $metsFileFullPath = $this->localStorage->path( $metsFilePath );
+                $metsXmlContents = file_get_contents( $metsFileFullPath );
+                if ( $metsXmlContents ) {
+                    $dublinCoreMetadata = $metsParser->parseDublinCoreFields( $metsXmlContents );
+                } else {
+                    Log::error( "Could not read METS file at {$metsFileFullPath}" );
+                }
+            }
+            else {
+                Log::warn("Could not locate METS file for AIP {$storable->external_uuid}. No metadata will be available.");
+            }
         }
+
         foreach ($files as $filePath) {
             $file = new \Illuminate\Http\File($this->localStorage->path($filePath), false);
             if($file->isDir()) {
@@ -70,7 +89,6 @@ class TransferPackageToStorage implements ShouldQueue
             }
             $uploadPath = substr($file->getPath(), $baseDirLen);
             $uploadRealPath = "{$uploadPath}/{$file->getFileName()}";
-            Log::debug("Uploading file to '{$this->storageLocation->human_readable_name}:{$uploadRealPath}'" );
             $result = $storage->upload( $this->storageLocation, $uploadPath, $file );
             if($result === false) {
                 Log::error("Upload failed : " . $result);
@@ -78,29 +96,33 @@ class TransferPackageToStorage implements ShouldQueue
             }
 
             try {
-            FileObject::create([
-                'fullpath' => $uploadRealPath,
-                'filename' => $file->getFilename(),
-                'path' => $file->getPath(),
-                'size' => $file->getSize(),
-                'object_type' => 'file',
-                'info_source' => "connect",
-                'mime_type' => $file->getMimeType(),
-                'storable_type' => $this->storable_type,
-                'storable_id' => $this->storable_id
-            ]);
+                $fileObject = FileObject::create([
+                    'fullpath' => $uploadRealPath,
+                    'filename' => $file->getFilename(),
+                    'path' => $file->getPath(),
+                    'size' => $file->getSize(),
+                    'object_type' => 'file',
+                    'info_source' => "connect",
+                    'mime_type' => $file->getMimeType(),
+                    'storable_type' => $this->storable_type,
+                    'storable_id' => $this->storable_id
+                ]);
             } catch( \Exception $ex )
             {
                 Log::error("Failed to create file object for file at {$this->storageLocation}:{$uploadPath}");
             }
-        }
+            if( $dublinCoreMetadata && Str::endsWith( $fileObject->path, "/data/objects" ) ) {
+                $fileObject->populateMetadataFromArray( $dublinCoreMetadata[$fileObject->filename] );
+            }
 
+        }
         if($this->localStorage->deleteDirectory($this->uploadFileAtPath) === false)
         {
             Log::error("Failed to delete source files {$this->uploadFileAtPath} after the upload");
         }
 
         event( new InformationPackageUploaded($this->storable_type::find($this->storable_id)));
+        Log::debug("Dispatched event for uploaded storable: {$this->storable_type}:{$this->storable_id}");
 
     }
 }
