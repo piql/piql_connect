@@ -4,8 +4,9 @@ namespace App\Listeners;
 
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
+use Tenancy\Hooks\Migration\Events\ConfigureSeeds;
 
-class ConfiguringConnectionListener
+class ConfigureSeedsListener
 {
     /**
      * Create the event listener.
@@ -23,14 +24,13 @@ class ConfiguringConnectionListener
      * @param  object  $event
      * @return void
      */
-    public function handle($event)
+    public function handle(ConfigureSeeds $event)
     {
         dump(__CLASS__);
-        $path = config_path().DIRECTORY_SEPARATOR.'tenancy'.DIRECTORY_SEPARATOR.'tenant_connection.php';
-        dump($path);
-        $event->useConfig($path, [
-                'database' => $event->tenant->getTenantKey(),
-            ]);
+        $path = env("TENANT_SEED_PATH",database_path().DIRECTORY_SEPARATOR.'seeds'.DIRECTORY_SEPARATOR.'tenant'.DIRECTORY_SEPARATOR.'DatabaseSeeder.php');
+        $seeder = basename($path, '.php');
+        dump($seeder);
+        $event->seed($seeder);
         //dump($event);
     }
 }

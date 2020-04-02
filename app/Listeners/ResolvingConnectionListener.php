@@ -18,7 +18,7 @@ class ResolvingConnectionListener implements ProvidesConfiguration
     public function handle(Resolving $event)
     {
         dump(__CLASS__);
-        dump($event);
+        //dump($event);
         return $this;
     }
 
@@ -28,7 +28,7 @@ class ResolvingConnectionListener implements ProvidesConfiguration
         $config = [];
 
         $this->events()->dispatch(new Configuring($tenant, $config, $this));
-
+        dump($config);
         return $config;
     }
 }

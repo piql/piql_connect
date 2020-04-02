@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Events\ArchivematicaTransferringEvent;
+use App\Listeners\ConfigureSeedsListener;
 use App\Listeners\ConfiguringConnectionListener;
 use App\Listeners\ConfiguringDatabaseListener;
 use App\Listeners\ConfiguringMigrationListener;
@@ -62,11 +63,14 @@ class EventServiceProvider extends ServiceProvider
             \App\Listeners\AddAipToBucketListener::class
         ],
 
-        \Tenancy\Affects\Connections\Events\Resolving::class => [
-            ResolvingConnectionListener::class
-        ],
         \Tenancy\Hooks\Migration\Events\ConfigureMigrations::class => [
             ConfiguringMigrationListener::class
+        ],
+        \Tenancy\Hooks\Migration\Events\ConfigureSeeds::class => [
+            ConfigureSeedsListener::class,
+        ],
+        \Tenancy\Affects\Connections\Events\Resolving::class => [
+            ResolvingConnectionListener::class
         ],
         \Tenancy\Affects\Connections\Events\Drivers\Configuring::class => [
             ConfiguringConnectionListener::class
@@ -76,7 +80,7 @@ class EventServiceProvider extends ServiceProvider
         ],
         \Tenancy\Identification\Events\Resolving::class => [
             ResolvingTenantListener::class
-        ]
+        ],
     ];
 
     /**

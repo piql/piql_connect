@@ -29,5 +29,6 @@ class ConfiguringMigrationListener
         dump(__CLASS__);
         $path = env("TENANT_MIGRATION_PATH",database_path().DIRECTORY_SEPARATOR.'migrations'.DIRECTORY_SEPARATOR.'tenant');
         $event->path($path);
+        dump($path);
     }
 }

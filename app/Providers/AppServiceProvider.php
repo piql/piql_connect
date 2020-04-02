@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\ArchivematicaService;
 use App\Customer;
+use App\User;
 use App\Listeners\ArchivematicaServiceConnection;
 use App\Listeners\SendBagToArchivematicaListener;
 use App\Services\ArchivematicaConnectionService;
@@ -39,6 +40,10 @@ class AppServiceProvider extends ServiceProvider
         $this->app->resolving(ResolvesTenants::class, function (ResolvesTenants $resolver) {
             $resolver->addModel(Customer::class);
         });
+
+        //$this->app->resolving(ResolvesTenants::class, function (ResolvesTenants $resolver) {
+        //    $resolver->addModel(User::class);
+        //});
     }
 
     /**

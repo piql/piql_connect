@@ -27,6 +27,7 @@ class ConfiguringDatabaseListener
     {
         dump(__CLASS__);
         $path = config_path().DIRECTORY_SEPARATOR.'tenancy'.DIRECTORY_SEPARATOR.'tenant_connection.php';
+        dump($path);
         $event->useConfig($path, [
                 'database' => $event->tenant->getTenantKey(),
             ]);

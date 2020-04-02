@@ -8,12 +8,17 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Facades\Hash;
 use Laravel\Passport\HasApiTokens;
+use Tenancy\Affects\Connections\Support\Traits\OnTenant;
+use Tenancy\Identification\Concerns\AllowsTenantIdentification;
+use Tenancy\Identification\Contracts\Tenant;
 use Webpatser\Uuid\Uuid;
 use App\Traits\Uuids;
 
-class User extends Authenticatable
+class User extends Authenticatable //implements Tenant
 {
     use HasApiTokens, Notifiable, Uuids;
+    //use AllowsTenantIdentification;
+    use OnTenant;
 
     public $incrementing = false; /* Do not try to auto increment the id (uuid) */
 
