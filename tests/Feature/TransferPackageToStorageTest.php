@@ -15,6 +15,7 @@ use App\Bag;
 use Faker\Factory as faker;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Collection;
 use Laravel\Passport\Passport;
 use Mockery;
 use Tests\TestCase;
@@ -96,74 +97,55 @@ class TransferPackageToStorageTest extends TestCase
 
     public function test_upload_DIP_with_4_files()
     {
-        $fileCount = 4;
         $filesystemDriver = Mockery::mock(FilesystemDriverInterface::class);
-        $filesystemDriver->expects('createDriver')->times($fileCount)->andReturns($this->destinationStorage);
-        $this->app->bind('App\Interfaces\FilesystemDriverInterface', function( $app ) use($filesystemDriver) {
-            return $filesystemDriver;
-        });
+        $filesystemDriver->expects('createDriver')
+                         ->times(4)
+                         ->andReturns($this->destinationStorage);
+
+        $this->app->bind('App\Interfaces\FilesystemDriverInterface',
+            function( $app ) use($filesystemDriver) {
+                return $filesystemDriver;
+            }
+        );
 
         $storageService = $this->app->make('App\Interfaces\ArchivalStorageInterface');
-
         $basePath = '0753/029c/165e/4ec4/9117/2844/9ff6/8cf9/';
-        $files = array();
-        for($n = 0; $n < $fileCount; $n++) {
-            $path = $basePath."file".$n.".txt";
-            $this->sourceStorage->put($path, $path);
-            $files[] = $path;
-        }
+        $this->sourceStorage->makeDirectory( $basePath );
 
-
+        $testFiles = Collection::times( 4 , function ( $index ) use ( $basePath ) {
+            return $this->faker->file( "/tmp", $this->sourceStorage->path($basePath), false );
+        });
 
         $job = new TransferPackageToStorage($this->storageLocation, $this->sourceStorage, $basePath, 'App\Dip', $this->dip->id );
         $job->handle( $storageService);
-        foreach ($files as $file) {
-            $this->assertFileExists($this->destinationStorage->path($file));
-        }
-    }
-
-    public function test_upload_DIP_with_0_files()
-    {
-        $fileCount = 0;
-        $filesystemDriver = Mockery::mock(FilesystemDriverInterface::class);
-        $filesystemDriver->expects('createDriver')->times($fileCount)->andReturns($this->destinationStorage);
-        $this->app->bind('App\Interfaces\FilesystemDriverInterface', function( $app ) use($filesystemDriver) {
-            return $filesystemDriver;
+        $actual = $testFiles->every( function ( $file ) use ( $basePath ) {
+            return $this->destinationStorage->exists( $basePath.$file );
         });
-
-        $storageService = $this->app->make('App\Interfaces\ArchivalStorageInterface');
-        Log::shouldReceive('info')->times(1)->with(\Mockery::pattern('/^Uploading files to /'));
-
-        $basePath = '0753/029c/165e/4ec4/9117/2844/9ff6/8cf9/';
-        $this->sourceStorage->makeDirectory($basePath);
-
-        $job = new TransferPackageToStorage($this->storageLocation, $this->sourceStorage, $basePath, 'App\Dip', $this->dip->id );
-        $this->expectException(\Exception::class);
-        $this->expectExceptionMessage("ArchivalStorage cannot upload directories yet");
-        $job->handle( $storageService);
-        self::assertEquals(0, count($this->destinationStorage->allFiles($basePath)), "");
+        $this->assertTrue( $actual );
     }
 
     public function test_upload_AIP_with_1_files()
     {
-        $fileCount = 1;
         $filesystemDriver = Mockery::mock(FilesystemDriverInterface::class);
-        $filesystemDriver->expects('createDriver')->times($fileCount)->andReturns($this->destinationStorage);
-        $this->app->bind('App\Interfaces\FilesystemDriverInterface', function( $app ) use($filesystemDriver) {
-            return $filesystemDriver;
-        });
+        $filesystemDriver->expects('createDriver')
+                         ->once()
+                         ->andReturns($this->destinationStorage);
+
+        $this->app->bind('App\Interfaces\FilesystemDriverInterface',
+            function( $app ) use($filesystemDriver) {
+                return $filesystemDriver;
+            }
+        );
 
         $storageService = $this->app->make('App\Interfaces\ArchivalStorageInterface');
+        $basePath = '0753/029c/165e/4ec4/9117/2844/9ff6/8cf9/';
+        $this->sourceStorage->makeDirectory( $basePath );
 
-        $path = '0753/029c/165e/4ec4/9117/2844/9ff6/8cf9/file.txt';
-        $files = array();
-        $this->sourceStorage->put($path, $path);
+        $testFile = $this->faker->file( "/tmp", $this->sourceStorage->path($basePath), false );
 
-        $job = new TransferPackageToStorage($this->storageLocation, $this->sourceStorage, $path, 'App\Aip', $this->aip->id );
-        $job->handle( $storageService);
-        foreach ($files as $file) {
-            $this->assertFileExists($this->destinationStorage->path($file));
-        }
+        $job = new TransferPackageToStorage($this->storageLocation, $this->sourceStorage, $basePath, 'App\Aip', $this->aip->id );
+        $job->handle( $storageService );
+        $this->assertFileExists( $this->destinationStorage->path( $basePath.$testFile ) );
     }
 
     public function test_upload_AIP_with_non_existing_path()
