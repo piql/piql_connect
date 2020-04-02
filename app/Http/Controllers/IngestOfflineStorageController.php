@@ -23,7 +23,6 @@ class IngestOfflineStorageController extends Controller
 
     public function configurationEdit( $jobId) {
         $job = Job::findOrFail($jobId);
-        $job->size = $job->getJobSize();
         return view('ingest.jobs.configuration', ['job' => $job]);
     }
 

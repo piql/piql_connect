@@ -44,9 +44,6 @@ class OfflineStorageController extends Controller
         // This is a bit nasty because there is no owner validation here
         // Should be safe when used internally e.i when owner is valid
         $jobs = \App\Job::where('status', '=', 'ingesting');
-        //foreach ($jobs as $job) {
-        //    $job->size = $job->getJobSize();
-        //}
 
         return new JobCollection( $jobs->paginate( env('DEFAULT_ENTRIES_PER_PAGE') ) );
     }
@@ -69,7 +66,6 @@ class OfflineStorageController extends Controller
             $job->status = "ingesting";
         }
         $job->save();
-        $job->size = $job->getJobSize();
         return new JobResource( $job );
     }
 
