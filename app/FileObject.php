@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
+use Log;
 
 class FileObject extends Model
 {
@@ -33,15 +34,19 @@ class FileObject extends Model
         return $this->morphMany('App\Metadata', 'parent');
     }
 
-    public function firstDublinCoreMetadata()
+    public function metsDublinCoreMetadata()
     {
-        $dcFields = $this->metadata->filter( function( $md ){
-            return( isset( $md->metadata["dc"] ) );
-        })->first()->metadata["dc"] ?? [];
-        return ["dc" => $dcFields ];
+        return $this->metadata->filter(
+            function( $md ){
+                return( isset( $md->metadata["mets"] ) && isset( $md->metadata["mets"]["dc"] ) );
+            }
+        )->first()->metadata["mets"]["dc"] ?? ["mets" => ["dc" => [] ]];
     }
 
-    public function populateMetadata( \App\Interfaces\FileArchiveInterface $fileArchive = null, \App\Interfaces\MetsParserInterface $metsParser = null )
+    /*
+     * populateDcMetadata is used for "manually" parsing and setting METS Dublin Core fields for the model
+     * */
+    public function populateDcMetadata( \App\Interfaces\FileArchiveInterface $fileArchive = null, \App\Interfaces\MetsParserInterface $metsParser = null, string $source = "mets" )
     {
         if( $this->storable_type != "App\Aip" ) return; //TODO: For now we only support AIPs. Add DIP mets parsing when needed.
 
@@ -58,20 +63,28 @@ class FileObject extends Model
         if( $metsFileObject == null )  return;
 
         $metsPath = $fileArchive->downloadFile( $this->storable, $metsFileObject );
-        Log::debug( "Downloading mets to: {$metsPath}");
         $metsXmlContents = file_get_contents( $metsPath );
+        if( $metsXmlContents === false ) {
+            Log::warn("Could not get contents of mets at {$metsPath}");
+            return;
+        }
         $dublinCore = $metsParser->parseDublinCoreFields( $metsXmlContents );
         $fileDc = $dublinCore[$this->filename];
 
-        return $this->populateMetadataFromString( $fileDc );
+        return $this->populateMetadataFromArray( [ $source => [ "dc" => $fileDc ] ] );
     }
 
-    public function populateMetadataFromArray( array $fileMetadata )
+    /*
+     * populateMetadataFromArray is used by services to associate metadata fields with the model
+     *
+     * $fileMetadata - An array
+     * */
+    public function populateMetadataFromArray( array $fileMetadata, string $source )
     {
         $metadata = new Metadata([
             "uuid" => Str::uuid(),
             "modified_by" => $this->storable->owner,
-            "metadata" => ['dc' => $fileMetadata]
+            "metadata" => [$source => $fileMetadata]
         ]);
         $metadata->parent()->associate($this);
         $metadata->save();

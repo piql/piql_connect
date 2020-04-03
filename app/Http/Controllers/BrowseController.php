@@ -43,7 +43,7 @@ class BrowseController extends Controller
         ];
 
         try {
-            $dc = $file->metadata->first()->metadata["dc"];
+            $dc = $file->metsDublinCoreMetadata();
         } catch ( \Exception $ex )
         {
             //TODO: TEMP HACK TO GET AROUND MISSING METADATA. DESTROY.

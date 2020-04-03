@@ -16,6 +16,7 @@ class FileObjectResource extends JsonResource
      */
     public function toArray( $request )
     {
+        $metadata = ["mets" => ["dc" => $this->metsDublinCoreMetadata() ] ];
         return [
             'id' => $this->id,
             'fullpath' => $this->fullpath,
@@ -27,7 +28,7 @@ class FileObjectResource extends JsonResource
             'mime_type' => $this->mime_type,
             'storable_type' => $this->storable_type,
             'storable_id' => $this->storable_id,
-            'metadata' => [ 'ingested' => $this->firstDublinCoreMetadata() ]
+            'metadata' => $metadata
         ];
     }
 }

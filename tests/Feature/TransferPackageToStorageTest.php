@@ -165,32 +165,38 @@ class TransferPackageToStorageTest extends TestCase
         $this->sourceStorage->makeDirectory( $basePath );
         $this->sourceStorage->makeDirectory( "{$basePath}data/objects" );
         $mets = file_get_contents( "tests/Data/gotmetadata-METS.8149cfad-2ba1-4ccf-b132-255dd6399ed1.xml" );
-        $this->sourceStorage->put( "{$basePath}data/METS.{$this->aip->external_uuid}.xml", $mets );
+        $metsPath = "{$basePath}data/METS.{$this->aip->external_uuid}.xml";
+        $this->sourceStorage->put( $metsPath, $mets );
 
         $testFile = $this->faker->file( "/tmp", $this->sourceStorage->path($basePath), false );
         $fileFromMets = "{$basePath}data/objects/FMU.420001.tif";
         $this->sourceStorage->move( "{$basePath}{$testFile}", $fileFromMets );
+        $this->assertFileExists( $this->sourceStorage->path( $fileFromMets ) );
 
         $job = new TransferPackageToStorage($this->storageLocation, $this->sourceStorage, $basePath, 'App\Aip', $this->aip->id );
         $job->handle( $storageService );
         $this->assertFileExists( $this->destinationStorage->path( $fileFromMets ) );
+        $this->assertFileExists( $this->destinationStorage->path( $metsPath ) );
 
-        $expected = [ "dc" => [
-                "title" => "Krigsskip",
-                "creator" => "Forsvarsmuseet",
-                "subject" => "Skip",
-                "description" => "Et skip som kjører fort",
-                "publisher" => "En eller annen veteran",
-                "contributor" => "Noen folk",
-                "date" => "03.23.2020",
-                "type" => "Image",
-                "format" => "TIF",
-                "identifier" => "FMU.420001",
-                "source" => "Scanning",
-                "language" => "Norsk",
-                "relation" => "Ingen",
-                "coverage" => "Bra",
-                "rights" => "Public Domain"
+        $expected =
+            ["mets" =>
+                [ "dc" => [
+                    "title" => "Krigsskip",
+                    "creator" => "Forsvarsmuseet",
+                    "subject" => "Skip",
+                    "description" => "Et skip som kjører fort",
+                    "publisher" => "En eller annen veteran",
+                    "contributor" => "Noen folk",
+                    "date" => "03.23.2020",
+                    "type" => "Image",
+                    "format" => "TIF",
+                    "identifier" => "FMU.420001",
+                    "source" => "Scanning",
+                    "language" => "Norsk",
+                    "relation" => "Ingen",
+                    "coverage" => "Bra",
+                    "rights" => "Public Domain"
+                ]
             ]
         ];
 

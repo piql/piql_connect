@@ -112,7 +112,7 @@ class TransferPackageToStorage implements ShouldQueue
                 Log::error("Failed to create file object for file at {$this->storageLocation}:{$uploadPath}");
             }
             if( $dublinCoreMetadata && Str::endsWith( $fileObject->path, "/data/objects" ) ) {
-                $fileObject->populateMetadataFromArray( $dublinCoreMetadata[$fileObject->filename] );
+                $fileObject->populateMetadataFromArray( ["dc" => $dublinCoreMetadata[$fileObject->filename]], "mets" );
             }
 
         }
@@ -122,7 +122,5 @@ class TransferPackageToStorage implements ShouldQueue
         }
 
         event( new InformationPackageUploaded($this->storable_type::find($this->storable_id)));
-        Log::debug("Dispatched event for uploaded storable: {$this->storable_type}:{$this->storable_id}");
-
     }
 }
