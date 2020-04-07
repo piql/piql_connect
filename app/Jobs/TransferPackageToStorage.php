@@ -111,7 +111,7 @@ class TransferPackageToStorage implements ShouldQueue
             {
                 Log::error("Failed to create file object for file at {$this->storageLocation}:{$uploadPath}");
             }
-            if( $dublinCoreMetadata && Str::endsWith( $fileObject->path, "/data/objects" ) ) {
+            if( $dublinCoreMetadata && Str::endsWith( $fileObject->path, "/data/objects" ) && isset( $dublinCoreMetadata[$fileObject->filename] ) ) {
                 $fileObject->populateMetadataFromArray( ["dc" => $dublinCoreMetadata[$fileObject->filename]], "mets" );
             }
 
