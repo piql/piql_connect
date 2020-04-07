@@ -18,7 +18,7 @@ class Bag extends Model
         'name', 'status' // todo: remove 'status'
     ];
 
-    protected $smConfig = [
+    protected const smConfig = [
         'states' => [
             'empty',               // empty
             'open',                // files can be added
@@ -82,6 +82,15 @@ class Bag extends Model
                     'ingesting',
                     'complete'],
                 'to' => 'error',
+            ],
+            'open' => [
+                'from' => [
+                    'empty',
+                    'open',
+                    'closed',
+                    'complete',
+                    'error'],
+                'to' => 'open',
             ],
         ],
     ];
@@ -156,26 +165,27 @@ class Bag extends Model
 
     public function canTransition($transition)
     {
-        return !(array_search($this->status, $this->smConfig["transitions"][$transition]["from"]) === false);
+        return !(array_search($this->status, Bag::smConfig["transitions"][$transition]["from"]) === false);
     }
 
-    public function applyTransition($transition)
+    public function applyTransition($transition, bool $force = false)
     {
-        if(!isset($this->smConfig['transitions'][$transition]))
+
+        if(!isset(Bag::smConfig['transitions'][$transition]))
         {
             throw new BagTransitionException("transition '{$transition}' doesn't exist");
         }
 
-        if(!$this->canTransition($transition))
+        if(!($this->canTransition($transition) || $force))
         {
             throw new BagTransitionException("transition '{$transition}' is not allowed from state '{$this->status}'");
         }
 
-        if(!isset($this->smConfig['transitions'][$transition]['to'])) {
+        if(!isset(Bag::smConfig['transitions'][$transition]['to'])) {
             throw new BagTransitionException("No 'to' state for transition '{$transition}'' is defined");
         }
 
-        $this->status = $this->smConfig['transitions'][$transition]['to'];
+        $this->status = Bag::smConfig['transitions'][$transition]['to'];
         return $this;
     }
 
@@ -186,6 +196,10 @@ class Bag extends Model
             $size += $file->filesize;
         }
         return $size;
+    }
+
+    public static function transitions() {
+        return Bag::smConfig['transitions'];
     }
 
     public function events()
