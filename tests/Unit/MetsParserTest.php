@@ -12,11 +12,13 @@ class MetsParserTest extends TestCase
 {
     protected static $singleMetsContents;
     protected static $multiMetsContents;
+    protected static $noDublinCoreMetsContents;
 
     public static function setupBeforeClass()
     {
         self::$singleMetsContents = file_get_contents( "tests/Data/gotmetadata-METS.8149cfad-2ba1-4ccf-b132-255dd6399ed1.xml" );
         self::$multiMetsContents = file_get_contents( "tests/Data/svalbard-METS.350fbaa1-c664-4ced-9e98-adcb379f998f.xml" );
+        self::$noDublinCoreMetsContents = file_get_contents( "tests/Data/no-metadata.METS.9366157d-2066-4ff8-9cb7-744e0f826b58.xml" );
     }
 
     public function test_when_injecting_an_instance_of_MetsParserInterface_it_makes_a_MetsParserService()
@@ -74,12 +76,20 @@ class MetsParserTest extends TestCase
         $this->assertEquals( $expected, $actual );
     }
 
-    public function test_given_a_mets_file_two_ingested_files_when_parsing_it_finds_two_files()
+    public function test_given_a_mets_file_containing_two_ingested_files_when_parsing_it_finds_two_files()
     {
         $service = $this->app->make( MetsParserInterface::class );
         $actual = $service->parseDublinCoreFields( self::$multiMetsContents );
         $this->assertCount( 2, $actual );
     }
+
+    public function test_given_a_mets_file_containing_no_dublin_core_metadata_it_is_handled_gracefully()
+    {
+        $service = $this->app->make( MetsParserInterface::class );
+        $actual = $service->parseDublinCoreFields( self::$noDublinCoreMetsContents );
+        $this->assertCount( 0, $actual );
+    }
+
 
     public function test_given_a_mets_file_for_multiple_ingested_files_when_parsing_dublin_core_fields_they_are_related_to_their_file()
     {
