@@ -23,9 +23,10 @@ class MetsParserService implements \App\Interfaces\MetsParserInterface
     {
         $xml = simplexml_load_string( $mets );
         $files = collect( $this->parseStructMapFiles( $xml ) );
-        $dc = $files->flatMap( function ( $file, $filename ) use ( $xml ) {
+        $dc = $files->filter( function ($file, $filename) { return isset( $file["dmdId"] ); } )
+                    ->flatMap( function ( $file, $filename ) use ( $xml ) {
             return [ $filename => $this->mapDublinCoreFields( $xml, $file["dmdId"] ) ];
-        });
+        } );
         return $dc->toArray();
     }
 
@@ -35,7 +36,7 @@ class MetsParserService implements \App\Interfaces\MetsParserInterface
         return [$filename => $this->parseDublinCoreFields( $mets, $filename )];
     }
 
-    private function parseStructMapFiles( \SimpleXMLElement $xml ): array
+    public function parseStructMapFiles( \SimpleXMLElement $xml ): array
     {
 
 
@@ -79,7 +80,7 @@ class MetsParserService implements \App\Interfaces\MetsParserInterface
         return $files->toArray();
     }
 
-    private function mapDublinCoreFields( \SimpleXMLElement $xml, string $dmdId ) : array
+    public function mapDublinCoreFields( \SimpleXMLElement $xml, string $dmdId ) : array
     {
         $xml->registerXPathNamespace("dc", "http://purl.org/dc/elements/1.1/");
         $xml->registerXPathNamespace("dcterms", "http://purl.org/dc/terms/");
