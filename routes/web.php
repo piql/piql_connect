@@ -27,7 +27,7 @@ Route::middleware(['auth', 'locale', 'activity'])->group( function () {
     });
 
     Route::prefix('access')->group( function () {
-        Route::get('browse/files/{fileId}/metadata', 'BrowseController@metadata')->name('access.browse.file.metadata');
+        Route::get('browse/files/{fileId}/metadata', 'BrowseController@accessShowMetadata')->name('access.browse.file.metadata');
         Route::get('browse', 'BrowseController@index')->name('access.browse');
         Route::redirect('retrieve', 'retrieve/ready');
         Route::get('retrieve/ready', 'AccessController@ready')->name('access.retrieve.ready');

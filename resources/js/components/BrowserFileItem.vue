@@ -9,7 +9,7 @@
                 {{fileName}}
             </div>
             <div class="col-sm-2 d-inline-flex align-self-center">
-                <a class="m-auto" @click.once="editMetadata()" href="#" data-toggle="tooltip" title="Edit metadata"><i class="fas fa-tags actionIcon text-center"></i></a>
+                <a class="m-auto" @click.once="showMetadata" href="#" data-toggle="tooltip" title="Edit metadata"><i class="fas fa-tags actionIcon text-center"></i></a>
                 <a v-if="isPreparingDownload" class="m-auto" href="#" data-toggle="tooltip" title="Download file"><i class="fa fa-spinner fa-spin actionIcon text-center"></i></a>
                 <a v-else="isPreparingDownload" class="m-auto" @click.once="download" href="#" data-toggle="tooltip" title="Download file"><i class="fas fa-file-download actionIcon text-center"></i></a>
             </div>
@@ -63,8 +63,8 @@
                 this.isPreparingDownload = false;
                 fileLink.click();
             },
-            editMetadata() {
-                window.location = "/access/browse/files/"+this.item.id+"/metadata";
+            showMetadata() {
+                window.location = "/access/browse/files/"+this.aipItem.id+"/metadata";
             }
         },
         computed: {

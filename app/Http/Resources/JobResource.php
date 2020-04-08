@@ -21,7 +21,7 @@ class JobResource extends JsonResource
             'owner' => $this->owner,
             'created_at' => $this->created_at,
             'update_at' => $this->updated_at,
-            'size' => $this->getJobSize()
+            'size' => $this->size
         ];
     }
 }

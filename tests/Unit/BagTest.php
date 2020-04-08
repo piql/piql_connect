@@ -13,7 +13,7 @@ use Tests\TestCase;
 use function Psy\debug;
 class TestBag extends Bag {
     public function getSmConfig() {
-        return $this->smConfig;
+        return Bag::smConfig;
     }
 }
 

@@ -54,7 +54,7 @@ class AddAipToBucketListenerTest extends TestCase
         $this->job->aips()->save($this->aips[0]);
         $listener = new AddAipToBucketListener();
         $listener->handle( new InformationPackageUploaded($this->aips[1]));
-        $this->assertEquals(2, Job::where('owner', $this->testUser->id)->count());
+        $this->assertEquals(1, Job::where('owner', $this->testUser->id)->count());
     }
 
 }

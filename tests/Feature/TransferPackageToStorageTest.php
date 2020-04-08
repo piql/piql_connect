@@ -11,10 +11,11 @@ use App\Services\ArchivematicaConnectionService;
 use App\StorageLocation;
 use App\Aip;
 use App\Dip;
-use App\Bag;
+use App\FileObject;
 use Faker\Factory as faker;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Collection;
 use Laravel\Passport\Passport;
 use Mockery;
 use Tests\TestCase;
@@ -57,15 +58,14 @@ class TransferPackageToStorageTest extends TestCase
             $this->testUser->id, $this->s3Configuration->id, "App\Aip" );
         $this->storageLocation = StorageLocation::create( $this->storageLocationData );
 
-        $this->bag = Bag::create(['name' => 'testBag']);
         $this->dip = Dip::create([
-            'bag_uuid' => $this->bag->uuid,
+            'bag_uuid' => Uuid::generate(),
             'external_uuid' => Uuid::generate(),
             'owner' => $this->testUser->id
         ]);
 
         $this->aip = Aip::create([
-            'bag_uuid' => $this->bag->uuid,
+            'bag_uuid' => Uuid::generate(),
             'external_uuid' => Uuid::generate(),
             'owner' => $this->testUser->id
         ]);
@@ -96,74 +96,117 @@ class TransferPackageToStorageTest extends TestCase
 
     public function test_upload_DIP_with_4_files()
     {
-        $fileCount = 4;
         $filesystemDriver = Mockery::mock(FilesystemDriverInterface::class);
-        $filesystemDriver->expects('createDriver')->times($fileCount)->andReturns($this->destinationStorage);
-        $this->app->bind('App\Interfaces\FilesystemDriverInterface', function( $app ) use($filesystemDriver) {
-            return $filesystemDriver;
-        });
+        $filesystemDriver->expects('createDriver')
+                         ->times(4)
+                         ->andReturns($this->destinationStorage);
+
+        $this->app->bind('App\Interfaces\FilesystemDriverInterface',
+            function( $app ) use($filesystemDriver) {
+                return $filesystemDriver;
+            }
+        );
 
         $storageService = $this->app->make('App\Interfaces\ArchivalStorageInterface');
-
         $basePath = '0753/029c/165e/4ec4/9117/2844/9ff6/8cf9/';
-        $files = array();
-        for($n = 0; $n < $fileCount; $n++) {
-            $path = $basePath."file".$n.".txt";
-            $this->sourceStorage->put($path, $path);
-            $files[] = $path;
-        }
+        $this->sourceStorage->makeDirectory( $basePath );
 
-
+        $testFiles = Collection::times( 4 , function ( $index ) use ( $basePath ) {
+            return $this->faker->file( "/tmp", $this->sourceStorage->path($basePath), false );
+        });
 
         $job = new TransferPackageToStorage($this->storageLocation, $this->sourceStorage, $basePath, 'App\Dip', $this->dip->id );
         $job->handle( $storageService);
-        foreach ($files as $file) {
-            $this->assertFileExists($this->destinationStorage->path($file));
-        }
-    }
-
-    public function test_upload_DIP_with_0_files()
-    {
-        $fileCount = 0;
-        $filesystemDriver = Mockery::mock(FilesystemDriverInterface::class);
-        $filesystemDriver->expects('createDriver')->times($fileCount)->andReturns($this->destinationStorage);
-        $this->app->bind('App\Interfaces\FilesystemDriverInterface', function( $app ) use($filesystemDriver) {
-            return $filesystemDriver;
+        $actual = $testFiles->every( function ( $file ) use ( $basePath ) {
+            return $this->destinationStorage->exists( $basePath.$file );
         });
-
-        $storageService = $this->app->make('App\Interfaces\ArchivalStorageInterface');
-        Log::shouldReceive('info')->times(1)->with(\Mockery::pattern('/^Uploading files to /'));
-
-        $basePath = '0753/029c/165e/4ec4/9117/2844/9ff6/8cf9/';
-        $this->sourceStorage->makeDirectory($basePath);
-
-        $job = new TransferPackageToStorage($this->storageLocation, $this->sourceStorage, $basePath, 'App\Dip', $this->dip->id );
-        $this->expectException(\Exception::class);
-        $this->expectExceptionMessage("ArchivalStorage cannot upload directories yet");
-        $job->handle( $storageService);
-        self::assertEquals(0, count($this->destinationStorage->allFiles($basePath)), "");
+        $this->assertTrue( $actual );
     }
 
     public function test_upload_AIP_with_1_files()
     {
-        $fileCount = 1;
         $filesystemDriver = Mockery::mock(FilesystemDriverInterface::class);
-        $filesystemDriver->expects('createDriver')->times($fileCount)->andReturns($this->destinationStorage);
-        $this->app->bind('App\Interfaces\FilesystemDriverInterface', function( $app ) use($filesystemDriver) {
-            return $filesystemDriver;
-        });
+        $filesystemDriver->expects('createDriver')
+                         ->once()
+                         ->andReturns($this->destinationStorage);
+
+        $this->app->bind('App\Interfaces\FilesystemDriverInterface',
+            function( $app ) use($filesystemDriver) {
+                return $filesystemDriver;
+            }
+        );
 
         $storageService = $this->app->make('App\Interfaces\ArchivalStorageInterface');
+        $basePath = '0753/029c/165e/4ec4/9117/2844/9ff6/8cf9/';
+        $this->sourceStorage->makeDirectory( $basePath );
 
-        $path = '0753/029c/165e/4ec4/9117/2844/9ff6/8cf9/file.txt';
-        $files = array();
-        $this->sourceStorage->put($path, $path);
+        $testFile = $this->faker->file( "/tmp", $this->sourceStorage->path($basePath), false );
 
-        $job = new TransferPackageToStorage($this->storageLocation, $this->sourceStorage, $path, 'App\Aip', $this->aip->id );
-        $job->handle( $storageService);
-        foreach ($files as $file) {
-            $this->assertFileExists($this->destinationStorage->path($file));
-        }
+        $job = new TransferPackageToStorage($this->storageLocation, $this->sourceStorage, $basePath, 'App\Aip', $this->aip->id );
+        $job->handle( $storageService );
+        $this->assertFileExists( $this->destinationStorage->path( $basePath.$testFile ) );
+    }
+
+    public function test_upload_AIP_with_METS_file()
+    {
+        $filesystemDriver = Mockery::mock(FilesystemDriverInterface::class);
+        $filesystemDriver->expects('createDriver')
+                         ->twice()
+                         ->andReturns($this->destinationStorage);
+
+        $this->app->bind('App\Interfaces\FilesystemDriverInterface',
+            function( $app ) use($filesystemDriver) {
+                return $filesystemDriver;
+            }
+        );
+
+        $storageService = $this->app->make('App\Interfaces\ArchivalStorageInterface');
+        $basePath = $this->aip->external_uuid."/";
+        $this->sourceStorage->makeDirectory( $basePath );
+        $this->sourceStorage->makeDirectory( "{$basePath}data/objects" );
+        $mets = file_get_contents( "tests/Data/gotmetadata-METS.8149cfad-2ba1-4ccf-b132-255dd6399ed1.xml" );
+        $metsPath = "{$basePath}data/METS.{$this->aip->external_uuid}.xml";
+        $this->sourceStorage->put( $metsPath, $mets );
+
+        $testFile = $this->faker->file( "/tmp", $this->sourceStorage->path($basePath), false );
+        $fileFromMets = "{$basePath}data/objects/FMU.420001.tif";
+        $this->sourceStorage->move( "{$basePath}{$testFile}", $fileFromMets );
+        $this->assertFileExists( $this->sourceStorage->path( $fileFromMets ) );
+
+        $job = new TransferPackageToStorage($this->storageLocation, $this->sourceStorage, $basePath, 'App\Aip', $this->aip->id );
+        $job->handle( $storageService );
+        $this->assertFileExists( $this->destinationStorage->path( $fileFromMets ) );
+        $this->assertFileExists( $this->destinationStorage->path( $metsPath ) );
+
+        $expected =
+            ["mets" =>
+                [ "dc" => [
+                    "title" => "Krigsskip",
+                    "creator" => "Forsvarsmuseet",
+                    "subject" => "Skip",
+                    "description" => "Et skip som kjører fort",
+                    "publisher" => "En eller annen veteran",
+                    "contributor" => "Noen folk",
+                    "date" => "03.23.2020",
+                    "type" => "Image",
+                    "format" => "TIF",
+                    "identifier" => "FMU.420001",
+                    "source" => "Scanning",
+                    "language" => "Norsk",
+                    "relation" => "Ingen",
+                    "coverage" => "Bra",
+                    "rights" => "Public Domain"
+                ]
+            ]
+        ];
+
+        $actual = FileObject::whereHasMorph("storable", ["App\Aip"],
+            function ( $q) {
+                $q->where('external_uuid', $this->aip->external_uuid);
+            } )->where("filename","FMU.420001.tif")
+               ->first()
+               ->metadata->first()->metadata;
+        $this->assertEquals( $expected, $actual );
     }
 
     public function test_upload_AIP_with_non_existing_path()
@@ -176,7 +219,6 @@ class TransferPackageToStorageTest extends TestCase
         });
 
         $storageService = $this->app->make('App\Interfaces\ArchivalStorageInterface');
-        Log::shouldReceive('info')->times(1)->with(\Mockery::pattern('/^Uploading files to /'));
         Log::shouldReceive('error')->times(1)->with(\Mockery::pattern('/^Upload failed: file does not exist/'));
 
         $basePath = '0753/029c/165e/4ec4/9117/2844/9ff6/8cf9/';
