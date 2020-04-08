@@ -57,8 +57,23 @@ class BagReingest extends Command
         $query->get()->map(function($bag) use($dryRun) {
             $this->info($bag->id." ".$bag->status." ".$bag->name);
 
+            $missingFiles = [];
+            // validate files
+            $bag->files->map(function($file) use($bag, &$missingFiles) {
+                if(!is_dir("$file") && !file_exists("$file")) {
+                    $missingFiles[] = $file;
+                }
+            });
+
+            if(count($missingFiles) > 0) {
+                $this->warn("Can't reingest bag $bag->name ($bag->id). Files not found");
+                collect($missingFiles)->map(function($file) {
+                    $this->warn("Missing file: ".$file->filename);
+                });
+                return;
+            }
+
             if(!$dryRun) {
-                $this->info('! dry-run');
                 $bag->status = 'closed';
                 $bag->save();
                 event(new BagFilesEvent($bag));
