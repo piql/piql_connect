@@ -1,18 +1,18 @@
 # piqlConnect
 
-**piqlConnect** is an interface for a secure and reliable offline and online digital repository solution complying with the OAIS (Open Archival Information System) repository reference model. 
-
-This service is offered to clients for data ingestion, preservation and access.
-
-
+**piqlConnect** is a software platform for secure and reliable online digital preservation and long term storage based on the Open Archival Information System.
 
 
 ## Features
 
-
-
-## Getting started
-
+- Fully integrated with Archivematica supporting industry standard, OAIS compliant archival workflows
+- Configurable S3 online archival storage 
+- File ingest from a dedicated, web based file uploader
+- Metadata editing directly from the browser
+- Dashboard for user data statistics
+- Access panel with previews for supported file types
+- Long term storage options, including sending archives to piqlFilm
+- Direct downloads from the access panel in the browser
 
 
 ### Requirements
@@ -22,7 +22,14 @@ sudo apt-get install php7.2-cli composer npm docker.io docker-compose
 
 An installation of Archivematica ( git@github.com:artefactual/archivematica.git ) set up using docker-compose (See Archivematica Documentation)
 
-### Installation
+### Installing for production environments
+
+- TBD, probably built around Ansible
+
+
+
+
+
 
 ### Installing the development environment
 
