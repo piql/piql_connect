@@ -18,8 +18,9 @@
 ### Requirements
 
 Ubuntu 18.04 or similar operating system. Run the following to get prerequisites installed:
+```
 sudo apt-get install php7.2-cli composer npm docker.io docker-compose
-
+```
 An installation of Archivematica ( git@github.com:artefactual/archivematica.git ) set up using docker-compose (See Archivematica Documentation)
 
 ### Installing for production environments
