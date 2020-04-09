@@ -7,19 +7,37 @@ trait CommandDisplayUtil
     public function  displayAipFull($aip) {
         $this->displayAip($aip);
         if($this->getOutput()->isVerbose()) {
-            $this->displayDip($aip->storage_properties->dip);
-            $this->displayBag($aip->storage_properties->bag);
+            if($aip->storage_properties) {
+                if ($aip->storage_properties->dip) {
+                    $this->displayDip($aip->storage_properties->dip);
+                }
+
+                if ($aip->storage_properties->bag) {
+                    $this->displayBag($aip->storage_properties->bag);
+                }
+            }
         }
     }
 
     public function displayAip($aip) {
+        $bagName = "<no ref>";
+        if(!$aip->storage_properties) {
+            $this->warn("Aip have no storage properties");
+        } else {
+            $bagName = ($aip->storage_properties->bag) ? $aip->storage_properties->bag->name : $bagName;
+        }
         if($this->getOutput()->isVerbose()) {
             $this->info("\nAip");
             $this->info("=====================================================");
             $this->info("Id                      : " . $aip->id);
             $this->info("External uuid           : " . $aip->external_uuid);
-            $this->info("Name                    : " . $aip->storage_properties->bag->name);
+            $this->info("Name                    : " . $bagName);
             $this->info("Is connected to buckets : " . ($aip->jobs()->count() > 0 ? "true" : "false"));
+            if($this->getOutput()->isVeryVerbose()) {
+                $aip->jobs->map(function ($job) {
+                    $this->info("$job->name ($job->id)");
+                });
+            }
             $this->info("Files                   : " . $aip->fileObjects()->count());
             if($this->getOutput()->isVeryVerbose()) {
                 $aip->fileObjects->map(function ($file) {
@@ -27,16 +45,23 @@ trait CommandDisplayUtil
                 });
             }
         } else {
-            $this->info($aip->id." ".$aip->external_uuid." ".$aip->storage_properties->bag->name);
+            $this->info($aip->id." ".$aip->external_uuid." ".$bagName);
         }
     }
 
     public function displayDip($dip) {
+        $bagName = "<no ref>";
+        if(!$dip->storage_properties) {
+            $this->warn("Aip have no storage properties");
+        } else {
+            $bagName = ($dip->storage_properties->bag) ? $dip->storage_properties->bag->name : $bagName;
+        }
         if($this->getOutput()->isVerbose()) {
             $this->info("\nDip");
             $this->info("=====================================================");
             $this->info("Id                      : " . $dip->id);
             $this->info("External uuid           : " . $dip->external_uuid);
+            $this->info("Name                    : " . $bagName);
             $this->info("AIP External uuid       : " . $dip->aip_external_uuid);
             $this->info("Files                   : " . $dip->fileObjects()->count());
             if($this->getOutput()->isVeryVerbose()) {
@@ -45,7 +70,7 @@ trait CommandDisplayUtil
                 });
             }
         } else {
-            $this->info($dip->id . " " . $dip->external_uuid . " " . $dip->storage_properties->bag->name);
+            $this->info($dip->id . " " . $dip->external_uuid . " " . $bagName);
         }
     }
 

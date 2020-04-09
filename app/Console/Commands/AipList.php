@@ -15,7 +15,7 @@ class AipList extends Command
      *
      * @var string
      */
-    protected $signature = 'aip:list {id?} {--limit=} {--name=} {--no-bucket} {--no-files}';
+    protected $signature = 'aip:list {id?} {--limit=} {--name=} {--no-bucket} {--no-files} {--validate}';
 
     /**
      * The console command description.
@@ -46,6 +46,7 @@ class AipList extends Command
         $limit = $this->option('limit', false);
         $noBucket = $this->option('no-bucket');
         $noFiles = $this->option('no-files');
+        $validate = $this->option('validate');
 
         $query = Aip::query();
 
@@ -77,8 +78,42 @@ class AipList extends Command
             });
         }
 
-        $query->get()->map(function($aip) {
-            $this->displayAipFull($aip);
+        $query->get()->map(function($aip) use ($validate) {
+            if($validate) {
+                $errorMsg = "";
+                $bagName = "";
+
+                if (!$aip->storage_properties) {
+                    $errorMsg = "No storage properties";
+                } else {
+                    $bag = $aip->storage_properties->bag;
+                    if ($bag) {
+                        $bagName = $bag->name;
+                    }
+
+                    if (!$bag) {
+                        $errorMsg .= $errorMsg == "" ? "" : ", ";
+                        $errorMsg .= "No bag";
+
+                    } elseif ($bag->status == "error") {
+                        $errorMsg .= $errorMsg == "" ? "" : ", ";
+                        $errorMsg .= "Bag error";
+                    }
+
+                    if (!$aip->storage_properties->dip) {
+                        $errorMsg .= $errorMsg == "" ? "" : ", ";
+                        $errorMsg .= "No dip";
+                    }
+                }
+                if($errorMsg == "") {
+                    return;
+                }
+
+                $this->warn($aip->id." ".$aip->external_uuid." ".$bagName." : ".$errorMsg);
+            } else {
+                $this->displayAipFull($aip);
+
+            }
         });
 
         //
