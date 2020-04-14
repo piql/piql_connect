@@ -15,19 +15,19 @@
                     <div class="row">
                         <div class="col-sm-6">
                             <line-chart class="stats" :title="$t('Archival Packages Ingested (monthly)')"
-                                url="/api/v1/stats/monthlyOnlineAIPsIngested"
-                                :labels="$t('dashboard.month.abbrev.array')"/>
+                                url="/api/v1/stats/charts/monthlyOnlineAIPsIngested"
+                                :labels="monthNames" />
                         </div>
                         <div class="col-sm-6">
                             <line-chart class="stats" :title="$t('Data Ingested (monthly)')"
-                                url="/api/v1/stats/monthlyOnlineDataIngested"
-                                :labels="$t('dashboard.month.abbrev.array')"/>
+                                url="/api/v1/stats/charts/monthlyOnlineDataIngested"
+                                :labels="monthNames" />
                         </div>
                     </div>
                     <div class="row mt-3">
                         <div class="col-sm-12">
                             <pie-chart class="stats" :title="$t('File formats Ingested')"
-                                url="/api/v1/stats/fileFormatsIngested" height=150 />
+                                url="/api/v1/stats/charts/fileFormatsIngested" />
                         </div>
                     </div>
                 </div>
@@ -36,13 +36,13 @@
                 <div class="row">
                     <div class="col-sm-6">
                         <line-chart class="stats" :title="$t('Archival Packages Accessed (monthly)')"
-                            url="/api/v1/stats/monthlyOnlineAIPsAccessed"
-                            :labels="$t('dashboard.month.abbrev.array')"/>
+                            url="/api/v1/stats/charts/monthlyOnlineAIPsAccessed"
+                            :labels="monthNames" />
                     </div>
                     <div class="col-sm-6">
                         <line-chart class="stats" :title="$t('Data Accessed (monthly)')"
-                            url="/api/v1/stats/monthlyOnlineDataAccessed"
-                            :labels="$t('dashboard.month.abbrev.array')"/>
+                            url="/api/v1/stats/charts/monthlyOnlineDataAccessed"
+                            :labels="monthNames"/>
                     </div>
                 </div>
                 <div class="row pt-sm-3 pb-sm mt-4">
@@ -100,7 +100,56 @@
 <script>
 export default {
     mounted() {
-        console.log('Dashboard view mounted.')
+        axios.get("/api/v1/stats/user/current").then( (response) => {
+            this.userStats = response.data.data;
+        });
+    },
+    data() {
+        return {
+            userStats: [],
+        };
+    },
+    computed: {
+        onlineDataIngested: function() {
+            return this.userStats['onlineDataIngested'];
+        },
+        offlineDataIngested: function() {
+            return this.userStats['offlineDataIngested'];
+        },
+        onlineAIPsIngested: function() {
+            return this.userStats['onlineAIPsIngested'];
+        },
+
+        offlineAIPsIngested: function() {
+            return this.userStats['offlineAIPsIngested'];
+        },
+
+        offlinePagesCount: function() {
+            return this.userStats['offlinePagesCount'];
+        },
+
+        offlineReelsCount: function() {
+            return this.userStats['offlineReelsCount'];
+        },
+
+        AIPsRetrievedCount: function() {
+            return this.userStats['AIPsRetrievedCount'];
+        },
+
+        DataRetrieved: function() {
+            return this.userStats['DataRetrieved'];
+        },
+        monthNames: function() {
+            let translated = this.$t('dashboard.month.abbrev.array');
+            return translated.split("'").filter( t => t != "[" && t != "]" && t != ", ");
+        },
+
+
+
+
+
+
+
     }
 }
 </script>

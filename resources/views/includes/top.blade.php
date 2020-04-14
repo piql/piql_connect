@@ -16,19 +16,19 @@
 					:no-refresh.boolean="true" />
             </div>
 
-            <div class="col-md-7 navLinks w-100">
+            <!-- div class="col-md-7 navLinks w-100">
                 <ul class="navbar-nav m-auto signal">
-                    <li class="navbar {{ \Request::is('/*') ? 'top-active' : 'top-inactive'  }}" ><a href="{{ route('dashboard') }}">{{__('Home')}}</a></li>
-                    <li class="navbar {{ \Request::is('ingest/*') ? 'top-active' : 'top-inactive'  }} "><a href="{{ route('upload') }}">{{__('Ingest') }}</a></li>
-                    <li class="navbar {{ \Request::is('access/*') ? 'top-active' : 'top-inactive' }} " ><a href="{{ route('access.browse') }}">{{__('Access') }}</a></li>
+                    <li class="navbar {{ \Request::is('/*') ? 'top-active' : 'top-inactive'  }}" ><a href="{{ route('/') }}">{{__('Home')}}</a></li>
+                    <li class="navbar {{ \Request::is('ingest/*') ? 'top-active' : 'top-inactive'  }} "><a href="{{ route('/') }}">{{__('Ingest') }}</a></li>
+                    <li class="navbar {{ \Request::is('access/*') ? 'top-active' : 'top-inactive' }} " ><a href="{{ route('/') }}">{{__('Access') }}</a></li>
                 @if (false) /*TODO: Auth check*/
-                    <li class="navbar {{ \Request::is('planning/*') ? 'top-active' : 'top-inactive' }} " ><a href="{{ route('planning.archives') }}">{{__('Planning') }}</a></li>
+                    <li class="navbar {{ \Request::is('planning/*') ? 'top-active' : 'top-inactive' }} " ><a href="{{ route('/') }}">{{__('Planning') }}</a></li>
                 @endif
                     <li class="pl-3 pr-3 plistIcon navbar"><settings-dropdown></settings-dropdown></li>
                     <li class="pr-3 plistIcon navbar"><notifications></notifications></li>
                     <li class="pr-3 plistIcon navbar"><a href="/logout"><i class="fas fa-sign-out-alt signal"></i></a></li>
                 </ul>
             </div>
-        </div>
+        </div-->
     </nav>
 </div>
