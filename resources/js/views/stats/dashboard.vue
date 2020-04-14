@@ -1,15 +1,13 @@
 <template>
     <div>
-        <div class="row mb-5">
-            <div class="col-sm-1 text-center">
+        <div class="row componentHeader">
                 <i class="fas fa-tachometer-alt color-main-brand titleIcon"></i>
-            </div>
-            <div class="text-left mt-3">
-                <h1 class="ml-1">{{$t('Dashboard')}}</h1>
-            </div>
+			<div class="align-center">
+				<h1 class="ml-1 titleText">{{$t('Dashboard')}}</h1>
+			</div>
         </div>
 
-        <div class="row">
+        <div class="row componentBody">
             <div class="col-sm-6">
                 <div>
                     <div class="row">
@@ -135,21 +133,14 @@ export default {
         AIPsRetrievedCount: function() {
             return this.userStats['AIPsRetrievedCount'];
         },
-
         DataRetrieved: function() {
             return this.userStats['DataRetrieved'];
         },
         monthNames: function() {
+			// TODO: Rethink how we represent months in the translation file
             let translated = this.$t('dashboard.month.abbrev.array');
             return translated.split("'").filter( t => t != "[" && t != "]" && t != ", ");
         },
-
-
-
-
-
-
-
     }
 }
 </script>

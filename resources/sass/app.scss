@@ -2142,6 +2142,15 @@ input[type=text] {
     font-size: 2.5rem;
 }
 
+.titleText {
+    color: $color_background_dark;
+    font-size: 2rem;
+    vertical-align: middle;
+    margin: 0.5rem;
+}
+
+
+
 .actionIcon {
     color: $color_signal;
     font-size: 1.75rem;
@@ -2359,4 +2368,13 @@ input[type=text] {
     font-size: 2rem;
     text-align: center;
     margin: 0 auto;
+}
+
+.componentHeader {
+    margin: 3rem;
+    height: 10rem;
+}
+
+.componentBody {
+    margin: 3rem;
 }
