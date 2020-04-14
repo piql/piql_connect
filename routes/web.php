@@ -4,8 +4,11 @@ Route::get('/login', array('uses' => 'Auth\LoginController@showLogin'))->name('l
 Route::get('/logout', array('uses' => 'Auth\LoginController@logout'))->name('logout');
 
 Route::middleware(['auth', 'locale', 'activity'])->group( function () {
-
-    Route::get('/', 'DashboardController@showDashboard')->name('dashboard');
+    Route::get('/', function() {
+        return view('index');
+    })->name('/');
+    //TODO: Convert these to vue routes
+    Route::get('dashboard', 'DashboardController@showDashboard')->name('dashboard');
     Route::get('reports', 'ReportsController@showReports');
     Route::get('settings', 'SettingsController@showSettings')->name('web.showSettings');
     Route::post('settings', 'SettingsController@updateSettings')->name('web.updateSettings');
@@ -45,7 +48,6 @@ Route::middleware(['auth', 'locale', 'activity'])->group( function () {
         })->name('planning.holdings');
 
     });
-
 });
 
 Auth::routes();
