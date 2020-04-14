@@ -30,6 +30,8 @@
 @else
     <body>
         <div id="app">
+            <topbar></topbar>
+            <div class="piqlTopPad"></div>
             <router-view></router-view>
         </div>
     </div>

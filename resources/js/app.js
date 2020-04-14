@@ -3,8 +3,8 @@
  * includes Vue and other libraries. It is a great starting point when
  * building robust, powerful web applications using Vue and Laravel.
  */
-require('jquery');
 require('bootstrap');
+require('bootstrap-select');
 require('filesize');
 
 window.Vue = require('vue');
@@ -87,14 +87,30 @@ let refreshSessionActivity = Vue.mixin({
  */
 
 import Dashboard from './views/stats/dashboard.vue';
+import Upload from './components/Upload.vue';
+import Browse from './components/Browse.vue';
+import Topbar from './views/partials/Topbar.vue';
+
 const router = new VueRouter({
     mode: 'history',
     routes: [
         {
             path: "/",
-            name: "dashboard",
+            name: "home.dashboard",
             component: Dashboard
         },
+        {
+            path: "/ingest/upload",
+            name: "ingest.upload",
+            component: Upload
+        },
+        {
+            path: "/access/browse",
+            name: "access.browse",
+            component: Browse
+        },
+
+
     ],
 });
 

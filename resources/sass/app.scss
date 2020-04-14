@@ -842,11 +842,19 @@ button {
 .piqlTop {
     width: 100%;
     background-color: $white;
+    margin-top: 0;
+    padding-top: 0;
     padding-bottom: 0.7rem;
     padding-left: 0;
     padding-right: 0;
     margin-left: 0;
     margin-right: 0;
+    position: absolute;
+    top: 0;
+    height: 8rem;
+}
+.piqlTopPad {
+    height: 8rem;
 }
 .piqlLogoOuter {
     box-shadow: 3px 0 0 0 $color_main_brand;
