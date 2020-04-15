@@ -1,6 +1,6 @@
 <template>
     <div class="piqlTop">
-        <nav class="mb-2 mt-3 navbar-expand-xl navbar-expand-sm navbar-light">
+        <nav class="mb-2 mt-0 navbar-expand-xl navbar-expand-sm navbar-light">
             <div class="row pt-3">
                 <div class="col-md-3 ">
                     <a class="navbar-brand" href="/">
@@ -61,7 +61,6 @@ export default {
         },
         isCurrentComponentRoute( checkRoute ) {
             let base = this.$route.name.split(".")[0];
-            console.log(base);
             return base === checkRoute;
         },
         currentRouteActiveClass( route ) {

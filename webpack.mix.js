@@ -42,6 +42,7 @@ mix.styles([
             'resources/fa/css/all.css',
             'node_modules/fine-uploader/fine-uploader/fine-uploader.css',
             'node_modules/fine-uploader/fine-uploader/fine-uploader-gallery.css',
+            'node_modules/vue-resize/dist/vue-resize.css',
 ], 'public/css/vendor.css').sourceMaps();
 
 mix.browserSync({

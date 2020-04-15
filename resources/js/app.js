@@ -11,6 +11,8 @@ window.Vue = require('vue');
 import VueRouter from 'vue-router';
 window.Vue.use(VueRouter);
 import VueInternationalization from 'vue-i18n';
+import VueResize from 'vue-resize';
+window.Vue.use(VueResize);
 import toast from './mixins/toast.js';
 window.Vue.mixin(toast);
 import Echo from "laravel-echo";
@@ -89,7 +91,8 @@ let refreshSessionActivity = Vue.mixin({
 import Dashboard from './views/stats/dashboard.vue';
 import Upload from './components/Upload.vue';
 import Browse from './components/Browse.vue';
-import Topbar from './views/partials/Topbar.vue';
+import TopBar from './views/partials/TopBar.vue';
+import SideBar from './views/partials/SideBar.vue';
 
 const router = new VueRouter({
     mode: 'history',
@@ -109,7 +112,21 @@ const router = new VueRouter({
             name: "access.browse",
             component: Browse
         },
-
+        {
+            path: "/access/retrieve/ready",
+            name: "access.retrieve.ready",
+            component: Browse
+        },
+        {
+            path: "/access/retrieve/retrieving",
+            name: "access.retrieve.retrieving",
+            component: Browse
+        },
+        {
+            path: "/access/retrieve/download",
+            name: "access.retrieve.download",
+            component: Browse
+        },
 
     ],
 });

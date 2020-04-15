@@ -101,7 +101,6 @@ import axios from 'axios';
 import JQuery from 'jquery';
 import moment from 'moment';
 let $ = JQuery;
-import selectpicker from 'bootstrap-select';
 import filesize from 'filesize';
 
 export default {

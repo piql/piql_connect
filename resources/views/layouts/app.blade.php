@@ -30,11 +30,8 @@
 @else
     <body>
         <div id="app">
-            <topbar></topbar>
-            <div class="piqlTopPad"></div>
-            <router-view></router-view>
+            <index fullname="{{ Auth::user()->full_name }}"></index>
         </div>
-    </div>
 @endif
     </body>
 </html>
