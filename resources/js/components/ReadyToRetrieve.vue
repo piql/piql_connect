@@ -1,5 +1,9 @@
 <template>
     <div class="container-fluid">
+        <div class="mb-5">
+            <h1>{{$t('access.retrieve.readyToRetrieve')}}</h1>
+            <em>{{$t('access.ready.ingress')}}</em>
+        </div>
 
         <div class="row plistHeader" v-show="hasFiles">
             <div class="col-sm-6">{{$t('access.ready.aipName')}}</div>
@@ -18,7 +22,6 @@
         </div>
 
         <div v-if="noFiles" class="mt-5"><h3>{{$t('access.ready.noItems')}}</h3></div>
-
 
     </div>
 </template>
@@ -63,9 +66,9 @@ export default {
     beforeDestroy(){
     },
 
-  async mounted() {
-            this.allFiles = [{}];
-            this.updateFiles();
+    async mounted() {
+        this.allFiles = [{}];
+        this.updateFiles();
     },
 }
 </script>

@@ -89,10 +89,11 @@ let refreshSessionActivity = Vue.mixin({
  */
 
 import Dashboard from './views/stats/dashboard.vue';
-import Upload from './components/Upload.vue';
-import Browse from './components/Browse.vue';
 import TopBar from './views/partials/TopBar.vue';
 import SideBar from './views/partials/SideBar.vue';
+import Upload from './components/Upload.vue';
+import Browse from './components/Browse.vue';
+import ReadyToRetrieve from './components/ReadyToRetrieve.vue';
 
 const router = new VueRouter({
     mode: 'history',
@@ -115,7 +116,7 @@ const router = new VueRouter({
         {
             path: "/access/retrieve/ready",
             name: "access.retrieve.ready",
-            component: Browse
+            component: ReadyToRetrieve
         },
         {
             path: "/access/retrieve/retrieving",
