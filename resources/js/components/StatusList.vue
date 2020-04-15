@@ -31,10 +31,9 @@ export default {
         },
     },
     async mounted() {
-        this.items = (await axios.get(this.jobListUrl+"/jobs")).data.data;
-        console.log(this.items);
-
-        console.log('TaskList component mounted.')
+        axios.get(this.jobListUrl+"/jobs").then( (response) => {
+            this.items = response.data.data;
+        });
     },
     methods: {
         async piqlIt(id) {

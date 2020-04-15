@@ -94,6 +94,7 @@ import SideBar from './views/partials/SideBar.vue';
 import Upload from './components/Upload.vue';
 import Browse from './components/Browse.vue';
 import ReadyToRetrieve from './components/ReadyToRetrieve.vue';
+import IngestStatus from './views/ingest/IngestStatus.vue';
 
 const router = new VueRouter({
     mode: 'history',
@@ -107,6 +108,11 @@ const router = new VueRouter({
             path: "/ingest/upload",
             name: "ingest.upload",
             component: Upload
+        },
+        {
+            path: "/ingest/status",
+            name: "ingest.status",
+            component: IngestStatus
         },
         {
             path: "/access/browse",
