@@ -71,9 +71,15 @@ class AipDelete extends Command
     }
 
     private function deleteObjects($aip, $deleteBag) {
+        $bag = NULL;
+        $dip = NULL;
 
-        if($deleteBag) {
+        if($aip->storage_properties) {
             $bag = $aip->storage_properties->bag;
+            $dip = $aip->storage_properties->dip;
+        }
+
+        if($deleteBag && $bag) {
 
             $deleteFile = function ($file) use ($bag) {
                 if(!is_dir("$file") && file_exists("$file")) {
@@ -97,28 +103,33 @@ class AipDelete extends Command
         }
 
 
-        $dip = $aip->storage_properties->dip;
-        $dip->fileObjects->map(function($file) use($dip) {
-            $storage = \App::make(ArchivalStorageInterface::class );
-            $result = $storage->ls( $dip->storage_location, $file->fullpath);
-            if($result === false) {
-                Log::error("ls failed : " . $result);
-                return;
-            }
-            $file->delete();
-        });
-        $dip->delete();
+        if($dip) {
+            $dip->fileObjects->map(function ($file) use ($dip) {
+                $storage = \App::make(ArchivalStorageInterface::class);
+                $result = $storage->delete($dip->storage_location, $file->fullpath);
+                if ($result === false) {
+                    $this->warn("delete failed : " . $result);
+                    return;
+                }
+                $file->delete();
+            });
+            $dip->delete();
+        }
 
         $aip->fileObjects->map(function($file) use($aip) {
             $storage = \App::make(ArchivalStorageInterface::class );
-            $result = $storage->ls( $aip->online_storage_location, $file->fullpath);
+            $result = $storage->delete( $aip->online_storage_location, $file->fullpath);
             if($result === false) {
-                Log::error("ls failed : " . $result);
+                $this->warn("delete failed : " . $result);
                 return;
             }
 
             $file->delete();
         });
+
+        // disconnect jobs
+        $aip->jobs()->detach();
+
         $aip->delete();
     }
 }
