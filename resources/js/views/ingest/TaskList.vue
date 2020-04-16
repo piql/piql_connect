@@ -1,5 +1,10 @@
 <template>
     <div>
+        <div>
+            <i class="fas fa-list-ul titleIcon"></i>
+            {{$t("ingest.fileList.header")}}
+        </div>
+
         <form>
             <div class="row listFilter">
                 <label for="fromDate">{{$t('ingest.taskList.from')}}</label>
@@ -22,12 +27,12 @@
                 <div class="col piqlIt">&nbsp;</div>
             </div>
 
-            <Task v-for="item in items" v-bind:item="item" v-bind:key="item.id" @piqlIt="piqlIt"/>
+            <Task v-for="item in jobs" v-bind:item="item" v-bind:key="item.id" @piqlIt="piqlIt"/>
         </form>
 
         <div class="row">
             <div class="col">
-                <Pager :meta="pageMeta" @updatePage="updatePage" />
+                <Pager :meta="meta" @updatePage="updatePage" />
             </div>
         </div>
     </div>
@@ -40,17 +45,17 @@
         data() {
             return {
                 pageQuery: "",
-                result: null
+                result: null,
             }
         },
         props: {
             baseUrl: {
                 type: String,
-                default: "/api/v1/ingest/offline_storage"
+                default: "/api/v1/ingest/offline_storage/pending/jobs"
             }
         },
         computed: {
-            url() { return this.baseUrl + "&" + this.pageQuery; },
+            url() { return this.baseUrl },
             success() { return this.result ? ( this.result.status == 200 ) : false; },
             jobs() { return this.success ? this.result.data.data : null; },
             meta() { return this.success ? this.result.data.meta : null; }
@@ -64,7 +69,7 @@
                 this.update();
             },
             async update() {
-                this.result = await axios.get( this.url );
+                this.items = await axios.get( this.url );
             },
             updatePage( page ) {
                 this.pageQuery = page.Query;

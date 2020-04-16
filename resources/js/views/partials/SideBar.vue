@@ -41,7 +41,7 @@
                     </a>
 
                     <a href="/ingest/offline_storage">
-                        <li class="list-group-item" :class="currentRouteActiveClass('ingest.process')" >
+                        <li class="list-group-item" :class="currentRouteActiveClass('ingest.offline_storage')" >
                             <i class="fas fa-clock"></i><i class="leftMenuItem">{{$t('sidebar.taskList')}}</i>
                         </li>
                     </a>

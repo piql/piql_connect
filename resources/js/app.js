@@ -10,6 +10,8 @@ require('filesize');
 window.Vue = require('vue');
 import VueRouter from 'vue-router';
 window.Vue.use(VueRouter);
+import {BootstrapVue} from 'bootstrap-vue';
+window.Vue.use(BootstrapVue);
 import VueInternationalization from 'vue-i18n';
 import VueResize from 'vue-resize';
 window.Vue.use(VueResize);
@@ -91,10 +93,21 @@ let refreshSessionActivity = Vue.mixin({
 import Dashboard from './views/stats/dashboard.vue';
 import TopBar from './views/partials/TopBar.vue';
 import SideBar from './views/partials/SideBar.vue';
-import Upload from './components/Upload.vue';
-import Browse from './components/Browse.vue';
-import ReadyToRetrieve from './components/ReadyToRetrieve.vue';
+
+import Upload from './views/ingest/Upload.vue';
+import Processing from './views/ingest/Processing.vue';
+import TaskList from './views/ingest/TaskList.vue';
 import IngestStatus from './views/ingest/IngestStatus.vue';
+
+import Browse from './views/access/Browse.vue';
+import ReadyToRetrieve from './views/access/ReadyToRetrieve.vue';
+import ReadyForDownload from './views/access/ReadyForDownload.vue';
+import RetrievalHistory from './views/access/RetrievalHistory.vue';
+import NowRetrieving from './views/access/NowRetrieving.vue';
+
+import Settings from './views/settings/Settings.vue';
+import PageNotFound from './views/PageNotFound.vue';
+
 
 const router = new VueRouter({
     mode: 'history',
@@ -108,6 +121,16 @@ const router = new VueRouter({
             path: "/ingest/upload",
             name: "ingest.upload",
             component: Upload
+        },
+        {
+            path: "/ingest/process",
+            name: "ingest.process",
+            component: Processing
+        },
+        {
+            path: "/ingest/offline_storage",
+            name: "ingest.offline_storage",
+            component: TaskList
         },
         {
             path: "/ingest/status",
@@ -127,14 +150,28 @@ const router = new VueRouter({
         {
             path: "/access/retrieve/retrieving",
             name: "access.retrieve.retrieving",
-            component: Browse
+            component: NowRetrieving
         },
         {
             path: "/access/retrieve/download",
             name: "access.retrieve.download",
-            component: Browse
+            component: ReadyForDownload
         },
-
+        {
+            path: "/access/retrieve/history",
+            name: "access.retrieve.history",
+            component: RetrievalHistory
+        },
+        {
+            path: "/settings",
+            name: "settings",
+            redirect: "/static/settings"
+        },
+        {
+            path: "*",
+            name: "PageNotFound",
+            component: PageNotFound
+        }
     ],
 });
 
