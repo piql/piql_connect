@@ -63,7 +63,7 @@ echo 'Migrate database tables'
 docker-compose -p piqlConnect exec app php artisan migrate:fresh || exit $?
 
 echo 'Set passport keys'
-docker-compose -p piqlConnect exec app php artisan passport:keys
+docker-compose -p piqlConnect exec app php artisan passport:keys --force || exit $?
 
 echo 'Seed database'
 docker-compose -p piqlConnect exec app php artisan db:seed || exit $?
