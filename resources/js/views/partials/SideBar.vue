@@ -12,90 +12,84 @@
             <ul class="list-group overflow-none d-block">
                 <span :class="collapseInactiveComponent('home')">
 
-                    <a href="/">
+                    <router-link :to="{ name: 'home.dashboard' }">
                         <li class="list-group-item" :class="currentRouteActiveClass('home.dashboard')" >
                             <i class="fas fa-tachometer-alt"></i><i class="leftMenuItem">{{$t('sidebar.dashboard')}}</i>
                         </li>
-                    </a>
-
-                    <a href="/" class="collapse">
-                        <li class="list-group-item" :class="currentRouteActiveClass('home.reports')" >
-                            <i class="fas fa-char-bar"></i><i class="leftMenuItem">{{$t('sidebar.reports')}}</i>
-                        </li>
-                    </a>
+                    </router-link>
 
                 </span>
 
                 <span :class="collapseInactiveComponent('ingest')">
 
-                    <a href="/ingest/upload">
+                    <router-link :to="{ name: 'ingest.upload' }">
                         <li class="list-group-item" :class="currentRouteActiveClass('ingest.upload')" >
                             <i class="fas fa-upload"></i><i class="leftMenuItem">{{$t('sidebar.upload')}}</i>
                         </li>
-                    </a>
+                    </router-link>
 
-                    <a href="/ingest/process">
+                    <router-link :to="{ name: 'ingest.process' }">
                         <li class="list-group-item" :class="currentRouteActiveClass('ingest.process')" >
                             <i class="fas fa-hourglass-half"></i><i class="leftMenuItem">{{$t('sidebar.processing')}}</i>
                         </li>
-                    </a>
+                    </router-link>
 
-                    <a href="/ingest/offline_storage">
+                    <router-link :to="{ name: 'ingest.offline_storage'}">
                         <li class="list-group-item" :class="currentRouteActiveClass('ingest.offline_storage')" >
                             <i class="fas fa-clock"></i><i class="leftMenuItem">{{$t('sidebar.taskList')}}</i>
                         </li>
-                    </a>
+                    </router-link>
 
-                    <a href="/ingest/status">
+                    <router-link :to="{ name: 'ingest.status' }">
                         <li class="list-group-item" :class="currentRouteActiveClass('ingest.status')" >
                             <i class="fas fa-clipboard-check"></i><i class="leftMenuItem">{{$t('sidebar.status')}}</i>
                         </li>
-                    </a>
+                    </router-link>
 
                 </span>
 
                 <span :class="collapseInactiveComponent('access')">
 
-                    <a href="/access/browse">
+                    <router-link :to="{ name: 'access.browse' }">
                         <li class="list-group-item" :class="currentRouteActiveClass('access.browse')" >
                             <i class="fas fa-hdd"></i><i class="leftMenuItem">{{$t('sidebar.browse')}}</i>
                         </li>
-                    </a>
+                    </router-link>
 
                     <span :class="collapseInactiveSubComponent('access.browse')">
-                        <a href="/access/retrieve/ready">
+                        <router-link :to="{ name: 'access.retrieve.ready' }">
                             <li class="list-group-item" :class="currentRouteActiveClass('access.retrieve.ready')" >
                                 <i class="fas fa-file-export"></i><i class="leftMenuItem">{{$t('sidebar.retrieve')}}</i>
                             </li>
-                        </a>
+                        </router-link>
                     </span>
 
 
                     <span :class="collapseInactiveSubComponent('access.retrieve')">
 
-                        <a href="/access/retrieve/ready">
+                        <router-link :to="{ name: 'access.retrieve.ready' }">
                             <li class="list-group-item" :class="currentRouteActiveClass('access.retrieve.ready')" >
                                 <i class="fas fa-file-export"></i><i class="leftMenuItem">{{$t('sidebar.retrieve.readyToRetrieve')}}</i>
                             </li>
-                        </a>
+                        </router-link>
 
-                        <a href="/access/retrieve/retrieving">
+                        <router-link :to="{ name: 'access.retrieve.retrieving' }">
                             <li class="list-group-item" :class="currentRouteActiveClass('access.retrieve.retrieving')" >
                                 <i class="fas fa-spinner"></i><i class="leftMenuItem">{{$t('sidebar.retrieve.retrieving')}}</i>
                             </li>
-                        </a>
+                        </router-link>
 
-                        <a href="/access/retrieve/download">
+                        <router-link :to="{ name: 'access.retrieve.download' }">
                             <li class="list-group-item" :class="currentRouteActiveClass('access.retrieve.download')" >
                                 <i class="fas fa-file-download"></i><i class="leftMenuItem">{{$t('sidebar.retrieve.downloadable')}}</i>
                             </li>
-                        </a>
+                        </router-link>
 
-                        <a href="/access/retrieve/history">
+                        <router-link :to="{ name: 'access.retrieve.history' }">
                             <li class="list-group-item" :class="currentRouteActiveClass('access.retrieve.history')" >
                                 <i class="fas fa-history"></i><i class="leftMenuItem">{{$t('sidebar.retrieve.history')}}</i>
                             </li>
-                        </a>
+                        </router-link>
 
                     </span>
 
