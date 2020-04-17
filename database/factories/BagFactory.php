@@ -5,9 +5,10 @@
 use App\User;
 use App\Bag;
 use Faker\Generator as Faker;
+use Webpatser\Uuid\Uuid;
 
 $factory->define(Bag::class, function (Faker $faker) {
- 
+
     if( User::count() == 0 ) {
         throw new Exception( 'Bag factory failed: Cannot create Bags without users. Seed one or more users first. ');
     }
