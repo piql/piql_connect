@@ -95,6 +95,7 @@ import TopBar from './views/partials/TopBar.vue';
 import SideBar from './views/partials/SideBar.vue';
 
 import Upload from './views/ingest/Upload.vue';
+import DublinCore from './views/ingest/DublinCore.vue';
 import Processing from './views/ingest/Processing.vue';
 import TaskList from './views/ingest/TaskList.vue';
 import IngestStatus from './views/ingest/IngestStatus.vue';
@@ -121,6 +122,11 @@ const router = new VueRouter({
             path: "/ingest/upload",
             name: "ingest.upload",
             component: Upload
+        },
+        {
+            path: "/ingest/metadata/bags/:bagId/file/:fileId",
+            name: "ingest.metadata.edit",
+            component: DublinCore
         },
         {
             path: "/ingest/process",

@@ -36,7 +36,7 @@ mix.sass('resources/sass/app.scss', 'public/css')
 
 mix.styles([
             'resources/css/bootstrap.min.css',
-			'node_modules/bootstrap-vue/dist/bootstrap-vue.css',
+			'node_modules/bootstrap-vue/dist/bootstrap-vue.min.css',
             'node_modules/bootstrap-datepicker/dist/css/bootstrap-datepicker3.min.css',
             'node_modules/bootstrap-select/dist/css/bootstrap-select.min.css',
             'resources/fa/css/all.css',

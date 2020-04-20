@@ -9,7 +9,7 @@
                 <label for="password">Password</label><br>
                 <input type="password" id="password" name="password" value="secret"><br>
                 <input type="submit" value="Log in"><br>
-                <span class="forgot"><a href="forgot_password.html">Forgot your password?</a></span>
+                <!--span class="forgot"><a href="forgot_password.html">Forgot your password?</a></span-->
             </form>
     </div>
 </div>

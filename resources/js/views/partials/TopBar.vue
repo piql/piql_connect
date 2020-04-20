@@ -3,9 +3,9 @@
         <nav class="mb-2 mt-0 navbar-expand-xl navbar-expand-sm navbar-light">
             <div class="row pt-3">
                 <div class="col-md-3 ">
-                    <a class="navbar-brand" href="/">
+                    <router-link class="navbar-brand" :to="{ name: 'home.dashboard' }">
                         <img class="" style="position: fixed; left: 3rem; width: 15rem;" src="/images/piql-connect.png">
-                    </a>
+                    </router-link>
                 </div>
 
                 <div class="col-md-1">
@@ -20,13 +20,13 @@
                 <div class="col-md-7 navLinks w-100">
                     <ul class="navbar-nav m-auto signal">
                         <li class="navbar" :class="currentRouteActiveClass('home')">
-                            <a href="/">{{$t('Home')}}</a>
+                            <router-link :to="{ name: 'home.dashboard'}">{{$t('Home')}}</router-link>
                         </li>
                         <li class="navbar" :class="currentRouteActiveClass('ingest')">
-                            <a href="/ingest/upload">{{$t('Ingest')}}</a>
+                            <router-link :to="{ name: 'ingest.upload' }">{{$t('Ingest')}}</router-link>
                         </li>
                         <li class="navbar" :class="currentRouteActiveClass('access')">
-                            <a href="/access/browse">{{$t('Access')}}</a>
+                            <router-link :to="{ name: 'access.browse' }">{{$t('Access')}}</router-link>
                         </li>
                         <li class="pl-3 pr-3 plistIcon navbar">
                             <settings-dropdown/>
