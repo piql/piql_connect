@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\Stats;
 
 use App\FileObject;
 use App\Aip;
+use App\File;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
@@ -172,8 +173,7 @@ class DashboardChartController extends Controller
     {
         return $this->arrayRearrangeCurrentMonthLast(
             collect(range(0,11))->map(function($obj) {
-                return FileObject::where("storable_type", 'App\Aip')
-                    ->whereBetween("created_at", [
+                return Aip::whereBetween("created_at", [
                         (new \DateTime(date("Y-m")))->modify((-$obj)." month"),
                         (new \DateTime(date("Y-m")))->modify((1-$obj)." month")
                     ])->count();
@@ -185,14 +185,10 @@ class DashboardChartController extends Controller
     {
         return $this->arrayRearrangeCurrentMonthLast(
             collect(range(0,11))->map(function($obj) {
-                return FileObject::where("storable_type", 'App\Aip')
-                    ->where('path','NOT LIKE','%/data/objects/metadata/%')
-                    ->where('path','NOT LIKE','%/data/objects/submissionDocumentation/%')
-                    ->where('path','LIKE','%/data/objects%')
-                    ->whereBetween("created_at", [
+                return File::whereBetween("created_at", [
                         (new \DateTime(date("Y-m")))->modify((-$obj)." month"),
                         (new \DateTime(date("Y-m")))->modify((1-$obj)." month")
-                    ])->sum("size") / 1000000000; // In GB
+                    ])->sum("filesize") / 1000000000; // In GB
             })->toArray()
         );
     }
