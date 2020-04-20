@@ -67,7 +67,7 @@ class CommitFilesToBagListener implements ShouldQueue
             else
                 $this->bagIt->addFile($file->storagePathCompleted(), $file->filename);
 
-            if( $bag->owner()->settings->getIngestMetadataAsFileAttribute() !== true ) {
+            if( $bag->owner()->first()->settings->getIngestMetadataAsFileAttribute() !== true ) {
                 if ($file->metadata->count() > 0) {
                     // append metadata to file
                     $retval = $metadataWriter->write([
@@ -83,7 +83,7 @@ class CommitFilesToBagListener implements ShouldQueue
         }
 
         // add metadata file to bagit tool
-        if( Storage::exists($metadataFileName) && ( $bag->owner()->settings->getIngestMetadataAsFileAttribute() !== true ) ) {
+        if( Storage::exists($metadataFileName) && ( $bag->owner()->first()->settings->getIngestMetadataAsFileAttribute() !== true ) ) {
             $this->bagIt->addMetadataFile(Storage::path($metadataFileName), "metadata.csv");
         }
 

@@ -19,7 +19,7 @@ class TransferController extends Controller
     public function index( Request $request, \App\Interfaces\ArchivalStorageInterface $storage )
     {
         $location = StorageLocation::find( $request->id );
-        $result = $storage->ls( $location, "", $recursive = true );
+        $result = $storage->ls( $location, "", $recursive = false);
         return json_encode(["data" => [ "files" => $result ]]);
     }
 

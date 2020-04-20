@@ -25,8 +25,8 @@ class FMUIngestService implements PreProcessBagInterface, IngestValidationInterf
     public function process( \App\Bag $bag) : array {
 
         $bags = [];
-        $owner = $bag->fresh()->owner;
-        $bag->files->map(function($file) use(&$bags, $owner) {
+        $inputBag = $bag;
+        $bag->files->map(function($file) use(&$bags, $inputBag) {
             preg_match( $this->fileNamePattern, $file->filename, $matches, PREG_OFFSET_CAPTURE);
             $archiveName = $matches[1][0];
             $holdingNr = $matches[2][0];
@@ -34,7 +34,7 @@ class FMUIngestService implements PreProcessBagInterface, IngestValidationInterf
             $key = "$archiveName.$holdingNr"."$holdingSubNr";
             if(!isset($bags[$key])) {
 
-                Archive::where('title','LIKE', "%$archiveName%")->get()->first(function($archive) use(&$bags, $key, $holdingNr, $owner) {
+                Archive::where('title','LIKE', "%$archiveName%")->get()->first(function($archive) use(&$bags, $key, $holdingNr, $inputBag) {
                     // figure out holding
                     $holding = $archive->holdings->first(function($holding) use ($holdingNr) {
                         preg_match( $this->holdingPattern, $holding->title, $matches, PREG_OFFSET_CAPTURE);
@@ -45,14 +45,11 @@ class FMUIngestService implements PreProcessBagInterface, IngestValidationInterf
                     if(!$holding) {
                         return false;
                     }
+
+                    \Log::debug("fmu->> owner: ".$inputBag);
                     // create a new bag
-                    $bag = new Bag([
-                        'name' => $key,
-                    ]);
-                    $bag->owner = $owner;
-                    $bag->status = 'closed';
-                    $bag->uuid = (string)Uuid::generate(); // why to I have to do this ????
-                    $bag->save();
+                    $bag = $inputBag->replicate();
+                    $bag->push();
 
                     $bag = $bag->fresh();
                     $bag->storage_properties()->update([

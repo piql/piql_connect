@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Traits\Uuids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -13,9 +14,10 @@ class BagTransitionException extends \Exception {};
 
 class Bag extends Model
 {
+    use Uuids;
     protected $table = 'bags';
     protected $fillable = [
-        'name', 'status' // todo: remove 'status'
+        'name', 'status', 'owner' // todo: remove 'status'
     ];
 
     protected const smConfig = [
@@ -101,7 +103,9 @@ class Bag extends Model
         self::creating( function( $model )
         {
             $model->uuid = (string)Uuid::generate();
-            $model->owner = Auth::id();
+            if(!isset($model->status) || $model->status == "") {
+                $model->owner = Auth::id();
+            }
 
             if(!isset($model->status) || $model->status == "") {
                 $model->status = "open";
@@ -123,9 +127,19 @@ class Bag extends Model
         });
     }
 
+    public function setOwnerIdAttribute($value)
+    {
+        return $this->attributes['owner'] = $this->bin2Uuid($value);
+    }
+
+    public function getOwnerIdAttribute()
+    {
+        return $this->uuid2Bin($this->attributes['owner']);
+    }
+
     public function owner()
     {
-        return User::find($this->owner);
+        return $this->hasOne('App\User', 'id', 'owner_id');
     }
 
     public function files()

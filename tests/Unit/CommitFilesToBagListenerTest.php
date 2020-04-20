@@ -10,6 +10,7 @@ use App\Listeners\CommitFilesToBagListener;
 use App\User;
 use App\UserSetting;
 use BagitUtil;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Facades\Event;
 use Mockery;
 use Tests\TestCase;
@@ -31,12 +32,16 @@ class CommitFilesToBagListenerTest extends TestCase
         $user->shouldReceive('getAttribute' )
             ->with('settings')->andReturn($userSetting);
 
+        $hasOne = Mockery::mock(HasOne::class);
+        $hasOne->shouldReceive('first' )->andReturn($user);
+
+
         $this->bag = Mockery::mock(Bag::class);
         $this->bag->shouldReceive('canTransition')->once()->andReturn(true);
         $this->bag->shouldReceive('applyTransition')->once()->andReturnSelf();
         $this->bag->shouldReceive('save')->once()->andReturnSelf();
         $this->bag->shouldReceive( 'owner' )
-            ->andReturn( $user );
+            ->andReturn( $hasOne );
 
 
     }
