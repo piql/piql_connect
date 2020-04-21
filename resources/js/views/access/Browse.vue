@@ -66,17 +66,15 @@
         <span v-if="fileMode === false">
             <browser-list v-if="holdingSelected" @openObject="openObject" :location="selectedLocation" :dataObjects="currentObjects"
                           @addObjectToRetrieval="addObjectToRetrieval" :selectedArchive="selectedArchiveUuid" :selectedHolding="selectedHolding"/>
-            <div class="row thumbnailList invisible" v-for="pad in padPackageItems"></div>
             <div class="row text-center pagerRow">
                 <div class="col">
-                    <Pager :meta='packagePageMeta' @updatePage='packageUpdatePage' />
+                    <Pager :meta='packagePageMeta' />
                 </div>
             </div>
         </span>
         <span v-if="fileMode">
             <browser-file-list :dataObjects="currentOpenObjectFiles" :location="selectedLocation" :dipId="currentOpenDipId"
                                @close="closeFileList" @addFileToRetrieval="addFileToRetrieval" />
-            <div class="row plist thumbnailList invisible" v-for="pad in padFileItems"></div>
             <div class="row text-center pagerRow">
                 <div class="col">
                     <Pager :meta='filesPageMeta' @updatePage='filesUpdatePage' />
@@ -119,8 +117,6 @@
                 fileMode: false,
                 packagePageMeta: null,
                 filesPageMeta: null,
-                pageSize: 4,
-                currentPage: 1,
                 currentFilesPage: 1,
                 useArchives: true,
             }
@@ -129,7 +125,6 @@
             useHoldings: function() {
               return this.holdings.length > 0;
             },
-
             archiveSelected: function() {
                 return this.selectedArchiveUuid.length > 0;
             },
@@ -142,36 +137,7 @@
             offline: function() {
                 return this.selectedLocation == "offline";
             },
-            packageLastPage: function() {
-                return this.packagePageMeta ? this.packagePageMeta.last_page : 1;
-            },
-            filesLastPage: function() {
-                return this.filesPageMeta ? this.filesPageMeta.last_page : 1;
-            },
-            packageItemsPerPage() {
-                return this.packagePageMeta ? this.packagePageMeta.per_page : 4;
-            },
-            padPackageItems() {
-                let entriesOnLastPage = this.dataObjects.length % this.packageItemsPerPage;
-                let padEntries = entriesOnLastPage > 0 ? ( this.packageItemsPerPage - entriesOnLastPage ) : 0;
-                return this.currentPage != this.packageLastPage ? 0 : padEntries;
-            },
-            fileItemsPerPage() {
-                return this.filesPageMeta ? this.filesPageMeta.per_page : 4;
-            },
-            padFileItems() {
-                let entriesOnLastPage = this.currentOpenObjectFiles.length % this.fileItemsPerPage;
-                let padEntries = entriesOnLastPage > 0 ? ( this.fileItemsPerPage - entriesOnLastPage ) : 0;
-                let pad = this.currentFilesPage != this.filesLastPage ? 0 : padEntries;
-                return pad;
-            },
-            pageNumber() {
-                return this.packagePageMeta ? this.packagePageMeta.current_page : 1;
-            },
-            filesPageNumber() {
-                return this.filesPageMeta ? this.filesPageMeta.current_page : 1;
-            },
-            queryString: function() {
+            apiQueryString: function() {
                 let filter = "?location=" + encodeURI(this.selectedLocation);
                 if(this.archiveSelected && this.archiveSelected !== "All") {
                     filter += "&archive=" + encodeURI(this.selectedArchiveUuid);
@@ -190,13 +156,9 @@
                 if(this.searchField){
                     filter += "&search=" + encodeURI(this.searchField);
                 }
-                if( this.currentPage ) {
-                    filter += "&page=" + this.currentPage;
+                if( parseInt( this.$route.query.page ) ) {
+                    filter += "&page=" + this.$route.query.page;
                 }
-                return filter;
-            },
-            pageQueryString: function() {
-                let filter = "?page=" + this.currentFilesPage;
                 return filter;
             },
             currentObjects: function() {
@@ -207,18 +169,11 @@
             },
         },
         watch: {
-            queryString: function() {
-                this.refreshObjects(this.queryString);
-            },
-            pageQueryString: function() {
-                this.refreshFileObjects(this.pageQueryString);
-            },
-            selectedArchive: function() {
-            },
+            '$route': 'dispatchRouting'
         },
         async mounted() {
             axios.get("/api/v1/planning/archives").then( (response) => {
-              this.archives = response.data.data;
+                this.archives = response.data.data;
                 if( this.archives.length === 1 ) {
                     this.selectedArchiveUuid = this.archives[0].uuid;
                     this.singleArchiveTitle = this.archives[0].title;
@@ -227,23 +182,41 @@
                 else {
                     this.useArchives = true;
                 }
-                this.refreshObjects("");
             });
+
+            let initialQuery = "";
+            let page = this.$route.query.page;
+            if( isNaN( page ) || parseInt( page ) < 1 ) {
+                const query = Object.assign( {}, this.$route.query );
+                query.page = 1;
+                this.$router.replace( { query } );
+            }
+
+            initialQuery += "?page="+page;
+            this.refreshObjects(initialQuery);
+
         },
         methods: {
-            refreshObjects(queryString){
-                axios.get("/api/v1/access/dips"+queryString).then( (dips ) => {
+            /**
+             * dispatchRouting is called whenever the route changes
+             *
+             * Use it to update pagination, filters etc.
+             */
+            dispatchRouting() {
+                this.refreshObjects( this.apiQueryString );
+            },
+            refreshObjects( apiQueryString ){
+                axios.get("/api/v1/access/dips"+apiQueryString).then( (dips ) => {
                     this.dataObjects = dips.data.data;
                     this.packagePageMeta = dips.data.meta;
                 });
             },
-            packageUpdatePage( pageWrapper ) {
-                this.currentPage = pageWrapper.page;
-            },
-            filesUpdatePage( pageWrapper ) {
-                this.currentFilesPage = pageWrapper.page;
+            filesUpdatePage( ) {
+                //TODO: Use routing
+                this.$router.push({ name: 'access.browse', params: { 'page' : pageWrapper.page } });
             },
             openObject: async function( dipId ) {
+                //TODO: Use routing
                 axios.get("/api/v1/access/dips/"+dipId+"/files").then( async ( dipFilesResponse ) =>  {
                     this.currentOpenObjectFiles = dipFilesResponse.data.data;
                     this.filesPageMeta = dipFilesResponse.data.meta;
@@ -253,6 +226,7 @@
                 });
             },
             refreshFileObjects(filesQueryString){
+                //TODO: Use routing
                 let dipId = this.currentOpenDipId;
                 axios.get("/api/v1/access/dips/"+dipId+"/files"+filesQueryString)
                     .then( async (dipFilesResponse ) => {

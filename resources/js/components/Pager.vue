@@ -11,8 +11,8 @@
                     <i class="fas fa-angle-left"></i> 
                 </a>
             </li>
-            <li v-for="page in pages" class="page-item" v-bind:class="{ active: page.active}">
-                <a @click="goToPage (page) " class="page-link">{{page.page}}</a>
+            <li v-for="page in pages" class="page-item" v-bind:class="{ active: page.isActive}">
+                <a @click="goToPage (page.pageNumber) " class="page-link">{{page.pageNumber}}</a>
             </li>
             <li class="page-item" v-bind:class="{ disabled: onLastPage }">
                 <a @click="nextPage" class="page-link">
@@ -36,6 +36,16 @@
             return {
             }
         },
+        mounted() {
+            let page = parseInt( this.$route.query.page );
+            if( page ) {
+                if( page < 1 ) {
+                    const query = Object.assign( {}, this.$route.query );
+                    query.page = 1;
+                    this.$router.replace( { query } );
+                }
+            }
+        },
         props: {
             meta: null,
             visiblePageSelectors: {
@@ -43,7 +53,6 @@
                 default: 20
             }
         },
-
         computed: {
             next: function() {
                 return this.meta && this.meta.current_page < this.meta.last_page ? this.meta.current_page + 1 : null;
@@ -74,9 +83,6 @@
                 let d = this.currentPage - this.splitVisible;
                 return d < 1 ? 1 : d;
             },
-            path: function() {
-                return this.meta ? this.meta.path : null;
-            },
             currentPage: function() {
                 return this.meta ? this.meta.current_page : null;
             },
@@ -95,32 +101,33 @@
 
                 let self = this;
                 return Array.from( { length: len }, ( _ , n ) => {
-                    let page = first + n;
-                    return self.buildPageUrlWrapper( page );
+                    let pageNumber = first + n;
+                    return { pageNumber: pageNumber, isActive: pageNumber === self.currentPage };
                 } );
             },
         },
         methods: {
-            buildPageUrlWrapper(page) {
-                let query = 'page='+page;
-                let path = this.path;
-                let currentPage = this.currentPage;
-                return ({ 'page': page, 'active' : page === currentPage,  'url': path + '?' + query, 'query': query });
+            updateQueryParam( page ) {
+                const query = Object.assign( {}, this.$route.query );
+                if( page != query.page ) {
+                    query.page = page;
+                    this.$router.push({ query });
+                }
             },
             nextPage() {
-                this.$emit('updatePage', this.buildPageUrlWrapper(this.next));
+                this.updateQueryParam( this.next );
             },
             prevPage() {
-                this.$emit('updatePage', this.buildPageUrlWrapper(this.prev));
+                this.updateQueryParam( this.prev );
             },
             firstPage() {
-                this.$emit('updatePage', this.buildPageUrlWrapper(1));
+                this.updateQueryParam( 1 );
             },
             lastPage() {
-                this.$emit('updatePage', this.buildPageUrlWrapper(this.numberOfPages) );
+                this.updateQueryParam( this.numberOfPages );
             },
-            goToPage( pageWrapper ) {
-                this.$emit('updatePage', pageWrapper );
+            goToPage( page ) {
+                this.updateQueryParam( page );
             }
         }
     }
