@@ -1,0 +1,84 @@
+{
+    "data": [{
+        "type": "Users",
+        "id": "1",
+        "attributes": {
+            "collection": [
+                {
+                    "username":  "piqlbrazil",
+                    "password":  "piqlbrazil",
+                    "full_name": "Piql Brazil",
+                    "email":     "No-Real-Email@piql.com"
+                },
+                {
+                    "username":  "piqlitaly",
+                    "password":  "piqlitaly",
+                    "full_name": "Piql Italy",
+                    "email":     "No-Real-Email@piql.com"
+                },
+                {
+                    "username":  "piqlspain",
+                    "password":  "piqlspain",
+                    "full_name": "Piql Spain",
+                    "email":     "No-Real-Email@piql.com"
+                },
+                {
+                    "username":  "piqlswiss",
+                    "password":  "piqlswiss",
+                    "full_name": "Piql Switzerland",
+                    "email":     "No-Real-Email@piql.com"
+                },
+                {
+                    "username":  "piqlnorway",
+                    "password":  "piqlnorway",
+                    "full_name": "Piql Norway",
+                    "email":     "No-Real-Email@piql.com"
+                },
+                {
+                    "username":  "piqlindia",
+                    "password":  "piqlindia",
+                    "full_name": "Piql India",
+                    "email":     "No-Real-Email@piql.com"
+                },
+                {
+                    "username":  "piqlpoland",
+                    "password":  "piqlpoland",
+                    "full_name": "Piql Poland",
+                    "email":     "No-Real-Email@piql.com"
+                },
+                {
+                    "username":  "piqlslovakia",
+                    "password":  "piqlslovakia",
+                    "full_name": "Piql Slovakia",
+                    "email":     "No-Real-Email@piql.com"
+                },
+                {
+                    "username":  "piqlgermany",
+                    "password":  "piqlgermany",
+                    "full_name": "Piql Germany",
+                    "email":     "No-Real-Email@piql.com"
+                },
+                {
+                    "username":  "piqlindonesia",
+                    "password":  "piqlindonesia",
+                    "full_name": "Piql Indonesia",
+                    "email":     "No-Real-Email@piql.com"
+                },
+                {
+                    "username":  "piqlthailand",
+                    "password":  "piqlthailand",
+                    "full_name": "Piql Thailand",
+                    "email":     "No-Real-Email@piql.com"
+                },
+                {
+                    "username":  "piqlmexico",
+                    "password":  "piqlmexico",
+                    "full_name": "Piql Mexico",
+                    "email":     "No-Real-Email@piql.com"
+                }
+            ]
+        }
+    }]
+}
+
+
