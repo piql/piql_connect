@@ -25,7 +25,8 @@
         "optimus/fineuploader-server-thumbnail-creator": "^0.1.1",
         "predis/predis": "^1.1",
         "scholarslab/bagit": "^0.3.0",
-        "webpatser/laravel-uuid": "^3.0"
+        "webpatser/laravel-uuid": "^3.0",
+        "zachleigh/laravel-vue-generators": "^0.3.0"
     },
     "require-dev": {
         "beyondcode/laravel-dump-server": "^1.0",
