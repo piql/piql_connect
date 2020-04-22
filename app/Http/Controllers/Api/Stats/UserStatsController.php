@@ -34,13 +34,13 @@ class UserStatsController extends Controller
         $onlineDataIngested = $this->onlineDataIngested( $currentUser );
 
         $infoArray['onlineDataIngested'] = $this->byteToMetricbyte($onlineDataIngested);
-        $infoArray['offlineDataIngested'] = $this->byteToMetricbyte(23 * 110000000000);
+        $infoArray['offlineDataIngested'] = $this->byteToMetricbyte(115*3*1000*1000*1000); // FMU DUMMY NUMBERS
         $infoArray['onlineAIPsIngested'] = $this->onlineAIPsIngested(auth()->user());
-        $infoArray['offlineAIPsIngested'] = '' . (23 * 8);
-        $infoArray['offlineReelsCount'] = '23';
-        $infoArray['offlinePagesCount'] = (23 * 3 * 4654);
-        $infoArray['AIPsRetrievedCount'] = 8;
-        $infoArray['DataRetrieved'] = $this->byteToMetricbyte(8 * 14000000);
+        $infoArray['offlineAIPsIngested'] = 12100; // FMU DUMMY NUMBERS
+        $infoArray['offlineReelsCount'] = '3'; // FMU DUMMY NUMBERS
+        $infoArray['offlinePagesCount'] = 0; // FMU DUMMY NUMBERS
+        $infoArray['AIPsRetrievedCount'] = 0; // FMU DUMMY NUMBERS
+        $infoArray['DataRetrieved'] = 0; // FMU DUMMY NUMBERS
 
         return new UserStatsResource( $infoArray );
     }
