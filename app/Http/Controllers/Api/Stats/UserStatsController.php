@@ -106,32 +106,27 @@ class UserStatsController extends Controller
 
     private function monthlyOnlineAIPsIngested($user)
     {
-        return $this->arrayRearrangeCurrentMonthLast(
-            collect([0,1,2,3,4,5,6,7,8,9,10,11])->map(function($obj) {
-                return FileObject::where("storable_type", 'App\Aip')
-                    ->whereBetween("created_at", [
-                    (new \DateTime(date("Y-m")))->modify((-$obj)." month"),
-                    (new \DateTime(date("Y-m")))->modify((1-$obj)." month")
-                ])->count();
-            })
-        );
-
+        return collect([0,1,2,3,4,5,6,7,8,9,10,11])->map(function($obj) {
+            return FileObject::where("storable_type", 'App\Aip')
+                ->whereBetween("created_at", [
+                (new \DateTime(date("Y-m")))->modify((-$obj)." month"),
+                (new \DateTime(date("Y-m")))->modify((1-$obj)." month")
+            ])->count();
+        });
     }
 
     private function monthlyOnlineDataIngested($user)
     {
-        return $this->arrayRearrangeCurrentMonthLast(
-            collect([0,1,2,3,4,5,6,7,8,9,10,11])->map(function($obj) {
-                return FileObject::where("storable_type", 'App\Aip')
-                    ->where('path','NOT LIKE','%/data/objects/metadata/%')
-                    ->where('path','NOT LIKE','%/data/objects/submissionDocumentation/%')
-                    ->where('path','LIKE','%/data/objects%')
-                    ->whereBetween("created_at", [
-                    (new \DateTime(date("Y-m")))->modify((-$obj)." month"),
-                    (new \DateTime(date("Y-m")))->modify((1-$obj)." month")
-                ])->sum("size");
-            })
-        );
+        return collect([0,1,2,3,4,5,6,7,8,9,10,11])->map(function($obj) {
+            return FileObject::where("storable_type", 'App\Aip')
+                ->where('path','NOT LIKE','%/data/objects/metadata/%')
+                ->where('path','NOT LIKE','%/data/objects/submissionDocumentation/%')
+                ->where('path','LIKE','%/data/objects%')
+                ->whereBetween("created_at", [
+                (new \DateTime(date("Y-m")))->modify((-$obj)." month"),
+                (new \DateTime(date("Y-m")))->modify((1-$obj)." month")
+            ])->sum("size");
+        });
     }
 
     private function fileFormatsIngested($user)
