@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\Ingest;
 
+use App\Interfaces\IngestValidationInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
@@ -123,5 +124,10 @@ class FileUploadController extends Controller
             return response()->json( "Could not delete temporary files; reason unknown", 500 );
         }
         return response()->json( "Deleted temporary upload folder for {$request}", 200 );
+    }
+
+    public function validateFileName(Request $request) {
+        $service = app()->make( IngestValidationInterface::class );
+        return response()->json( $service->validateFileName($request->fileName), 200 );
     }
 }

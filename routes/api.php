@@ -40,6 +40,7 @@ Route::group(['prefix' => 'v1' , 'middleware' => ['auth:api', 'activity']], func
     Route::group(['prefix' => 'ingest'], function() {
         Route::post('upload', '\Optimus\FineuploaderServer\Controller\LaravelController@upload');
         Route::delete('file/{upload_path}', 'Api\Ingest\FileUploadController@deleteUploadedTemp');
+        Route::post('validateFileName', 'Api\Ingest\FileUploadController@validateFileName');
         Route::post('fileUploaded', 'Api\Ingest\FileUploadController@store');
         Route::get('uploaded/', 'Api\Ingest\FileUploadController@all');
         Route::get('uploaded/{id}', 'Api\Ingest\FileUploadController@show');

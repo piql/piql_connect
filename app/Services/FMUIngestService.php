@@ -28,6 +28,9 @@ class FMUIngestService implements PreProcessBagInterface, IngestValidationInterf
         $inputBag = $bag;
         $bag->files->map(function($file) use(&$bags, $inputBag) {
             preg_match( $this->fileNamePattern, $file->filename, $matches, PREG_OFFSET_CAPTURE);
+            if(count($matches) < 2) {
+                return;
+            }
             $archiveName = $matches[1][0];
             $holdingNr = $matches[2][0];
             $holdingSubNr = (count($matches) > 3) ? $matches[3][0] : "";
@@ -43,12 +46,12 @@ class FMUIngestService implements PreProcessBagInterface, IngestValidationInterf
                         return !(($startRange+0 > $holdingNr) || ($endRange+0 < $holdingNr));
                     });
                     if(!$holding) {
-                        return false;
+                        return;
                     }
 
-                    \Log::debug("fmu->> owner: ".$inputBag);
                     // create a new bag
                     $bag = $inputBag->replicate();
+                    $bag->name = $key;
                     $bag->push();
 
                     $bag = $bag->fresh();
@@ -63,8 +66,12 @@ class FMUIngestService implements PreProcessBagInterface, IngestValidationInterf
             $file->save();
         });
         if($bag->refresh()->files()->count() > 0) {
-            Log::error("Bag still contains files");
+            $bags[$bag->name] =$bag;
+        } else {
+            $bag->status = "complete";
+            $bag->save();
         }
+        // push bag back to the open pool
         return collect($bags)->flatten()->all();
     }
 
