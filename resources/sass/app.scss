@@ -102,13 +102,6 @@ $image_piql-logo-white_url: url('/images/piql_logo_white.png');
     left: 24px;
 }
 
-//original selectors
-//#sideMenuCollapsed ul .fas, #.ideMenuCollapsed ul .far
-%extend_4 {
-    font-size: 1.8rem;
-    position: absolute;
-    left: 24px;
-}
 
 //original selectors
 //.listFilter input, .listFilter select, .listFilter option
@@ -485,12 +478,6 @@ a {
             padding: 10px 40px 0;
         }
     }
-    #multipleOptions i {
-        padding-right: 20px;
-        &:last-child {
-            padding-right: 0;
-        }
-    }
 }
 .table-scroll {
     height: 400px;
@@ -842,11 +829,13 @@ button {
 .piqlTop {
     width: 100%;
     background-color: $white;
-    padding-bottom: 0.7rem;
-    padding-left: 0;
-    padding-right: 0;
-    margin-left: 0;
-    margin-right: 0;
+    margin: 0;
+    padding: 0;
+    height: 8rem;
+    vertical-align: top;
+}
+.piqlTopPad {
+    height: 8rem;
 }
 .piqlLogoOuter {
     box-shadow: 3px 0 0 0 $color_main_brand;
@@ -907,47 +896,6 @@ button {
     left: 380px;
     top: 20px;
     height: 50px;
-}
-#piqlOptions {
-    max-height: 110px;
-    position: absolute;
-    top: 0;
-    right: 0;
-    background-color: $white;
-    //font-size: 24px;
-    padding-top: 55px;
-    padding-right: 50px;
-    text-align: right;
-    color: $color_signal;
-    i {
-        margin-right: 20px;
-        &:hover {
-            color: $color_fill;
-        }
-    }
-    a {
-        color: $color_signal;
-    }
-}
-#noti {
-    position: relative;
-    &:after {
-        content: attr(data-count);
-        position: absolute;
-        top: -10px;
-        left: -8px;
-        background: $color_fill_dark;
-        font-family: $font_open_sans_bold;
-        color: $white;
-        //Instead of the line below you could use @include border-radius($radius, $vertical-radius)
-        border-radius: 50%;
-        width: 20px;
-        height: 20px;
-        line-height: 22px;
-        text-align: center;
-        //font-size: 10px;
-        display: block;
-    }
 }
 .dropdownList{
     width: 15em;
@@ -1016,9 +964,10 @@ button {
     background-color: $color_background_1;
     font-size: 1rem;
     height: 100vh;
-    width: 320px;
-    padding: 0;
-    padding-left: 1rem;
+    width: 100%;
+    max-width: 320px;
+    margin-top: -3rem;
+    padding-left: 0;
     color: $white;
     //Instead of the line below you could use @include transition($transition-1, $transition-2, $transition-3, $transition-4, $transition-5, $transition-6, $transition-7, $transition-8, $transition-9, $transition-10)
     overflow: hidden;
@@ -1040,7 +989,7 @@ button {
         background-color: $color_background_dark;
         border-color: $color_background;
         color: white;
-        height: 25px;
+        height: 40px;
         padding: 15px;
         margin-bottom: 2px;
         text-transform: uppercase;
@@ -1061,7 +1010,7 @@ button {
     }
 }
 
-#welcomeText {
+.welcomeText {
     margin: 25px 25px 60px 25px;
     text-transform: uppercase;
     width: 200px;
@@ -1071,34 +1020,6 @@ button {
     //Instead of the line below you could use @include transition($transition-1, $transition-2, $transition-3, $transition-4, $transition-5, $transition-6, $transition-7, $transition-8, $transition-9, $transition-10)
     //Instead of the line below you could use @include transition-delay($delay-1, $delay-2, $delay-3, $delay-4, $delay-5, $delay-6, $delay-7, $delay-8, $delay-9, $delay-10)
     transition-delay: 0.3s;
-}
-#collapseSideMenu {
-    width: 45px;
-    margin-top: 25px;
-    position: absolute;
-    left: 250px;
-    visibility: visible;
-    opacity: 1;
-    //Instead of the line below you could use @include transition($transition-1, $transition-2, $transition-3, $transition-4, $transition-5, $transition-6, $transition-7, $transition-8, $transition-9, $transition-10)
-    transition: visibility 1s, opacity 1s linear;
-    cursor: pointer;
-    //Instead of the line below you could use @include transition($transition-1, $transition-2, $transition-3, $transition-4, $transition-5, $transition-6, $transition-7, $transition-8, $transition-9, $transition-10)
-    transition: left 1s;
-    img {
-        //vendor-prefix found
-        //-webkit-transform: rotate(0)
-        //vendor-prefix found
-        //-moz-transform: rotate(0)
-        //vendor-prefix found
-        //-o-transform: rotate(0)
-        //vendor-prefix found
-        //-ms-transform: rotate(0)
-        //Instead of the line below you could use @include transform($scale, $rotate, $transx, $transy, $skewx, $skewy, $originx, $originy)
-        transform: rotate(0);
-        //Instead of the line below you could use @include transition($transition-1, $transition-2, $transition-3, $transition-4, $transition-5, $transition-6, $transition-7, $transition-8, $transition-9, $transition-10)
-        transition: transform 0.5s;
-        width: 50px;
-    }
 }
 .poweredBy {
     display: inline-flex;
@@ -1133,10 +1054,10 @@ button {
     display: inline-table;
 }
 
-#sideMenuCollapsed {
-    width: 6rem;
-    position: relative;
-    float: left;
+.sideMenuCollapsed {
+    padding: 0;
+    margin-top: -3rem;
+    height: 100vh;
     background-color: $color_background_1;
     height: 100vh;
     color: $white;
@@ -1147,10 +1068,10 @@ button {
         padding: 0;
         color: $white;
         .fas {
-            @extend %extend_4;
+            font-size: 2rem;
         }
         .far {
-            @extend %extend_4;
+            font-size: 2rem;
         }
     }
     li {
@@ -1159,9 +1080,9 @@ button {
         background-color: $color_background_dark;
         border-color: $color_background;
         color: white;
-        height: 25px;
-        padding: 15px;
+        width: 2rem;
         text-transform: uppercase;
+        text-align: center !important;
         &:hover {
             background-color: $color_main_brand;
         }
@@ -1169,42 +1090,15 @@ button {
     .leftMenuItem {
         position: absolute;
         left: 60px;
-//        visibility: hidden;
+        visibility: hidden;
         font-style: normal;
         opacity: 0;
     }
-    #welcomeText {
+    .welcomeText {
         visibility: hidden;
         opacity: 0;
     }
-    #collapseSideMenu {
-        position: absolute;
-        left: 8px;
-        img {
-            //vendor-prefix found
-            //-webkit-transform: rotate(180deg)
-            //vendor-prefix found
-            //-moz-transform: rotate(180deg)
-            //vendor-prefix found
-            //-o-transform: rotate(180deg)
-            //vendor-prefix found
-            //-ms-transform: rotate(180deg)
-            //Instead of the line below you could use @include transform($scale, $rotate, $transx, $transy, $skewx, $skewy, $originx, $originy)
-            transform: rotate(180deg);
-            //Instead of the line below you could use @include transition($transition-1, $transition-2, $transition-3, $transition-4, $transition-5, $transition-6, $transition-7, $transition-8, $transition-9, $transition-10)
-        }
-    }
-    #poweredBy {
-        //Instead of the line below you could use @include transition($transition-1, $transition-2, $transition-3, $transition-4, $transition-5, $transition-6, $transition-7, $transition-8, $transition-9, $transition-10)
-        transition: opacity 0ms;
-        opacity: 0;
-    }
-    #poweredByImg {
-        left: 15px;
-        bottom: 24px;
-        margin: 0;
-    }
-}
+ }
 
 .bg-red {
     background-color: red !important;
@@ -1397,117 +1291,6 @@ th {
     width: 300px;
     display: inline-block;
 }
-#browseContainer {
-    border-top: 1px solid $color_main_brand;
-    width: 100%;
-    height: 100%;
-}
-#browseLeftNav {
-    float: left;
-    width: 18%;
-    padding-right: 2%;
-    padding-top: 2%;
-    height: 98%;
-    color: $color_signal;
-    a {
-        color: inherit;
-        &:hover {
-            color: $color_main_brand;
-        }
-    }
-}
-#browseCenter {
-    float: left;
-    width: 55%;
-    background-color: $white;
-    margin-top: 1px;
-    height: 98%;
-    overflow-y: scroll;
-    padding: 2% 2% 0 2%;
-    padding-top: 2%;
-    h2 {
-        //font-size: inherit;
-        color: $color_main_brand;
-        margin-top: 0;
-        padding-top: 0;
-    }
-    .informationTable {
-        width: 100%;
-        margin-bottom: 30px;
-        td {
-            &:nth-child(even) {
-                padding-left: 20px;
-                vertical-align: top;
-            }
-            &:nth-child(odd) {
-                text-align: right;
-                vertical-align: top;
-                font-family: $font_open_sans_bold;
-                width: 40%;
-            }
-        }
-    }
-    .fileTable {
-        width: 100%;
-        border-collapse: collapse;
-        tr {
-            border-bottom: 1px solid $color_fill_2;
-            &:first-child {
-                border-bottom: 1px solid $color_main_brand;
-            }
-        }
-        strong {
-            font-weight: normal;
-            color: $color_signal;
-        }
-        .title {
-            //font-size: 16px;
-            position: relative;
-            top: -3px;
-            color: $black;
-        }
-        td {
-            padding-bottom: 20px;
-            padding-top: 20px;
-            //font-size: 12px;
-            &:first-child {
-                width: 40%;
-            }
-        }
-        i {
-            //font-size: 46px;
-            color: $color_signal;
-            float: left;
-            padding-right: 15px;
-        }
-    }
-    .grey {
-        color: $gray !important;
-    }
-    table td ul {
-        margin: 0 0 0 10px;
-        padding: 0 0 0 5px;
-    }
-}
-#browseRightNav {
-    float: left;
-    width: 18%;
-    padding-left: 2%;
-    padding-top: 2%;
-    height: 98%;
-}
-.browseNavTitle {
-    padding-left: 10px;
-    padding-bottom: 5px;
-    margin-bottom: 5px;
-    border-bottom: 1px solid $color_fill;
-    .add {
-        float: right;
-        //font-size: 32px;
-        color: $color_main_brand;
-        line-height: 25px;
-    }
-}
 .holding {
     padding-top: 5px;
     margin-bottom: 5px;
@@ -1654,41 +1437,6 @@ th {
         @extend %extend_8;
     }
 }
-#mobileMenu {
-    opacity: 0;
-    visibility: hidden;
-    right: -100vw;
-    height: 96.5vh;
-    padding-top: 3.5vh;
-    padding-left: 5vw;
-    width: 95vw;
-    background-color: $color_fill_3;
-    z-index: 9999;
-    position: absolute;
-    top: 0;
-    //font-size: 30px;
-    text-transform: uppercase;
-    font-family: $font_open_sans_bold;
-    color: $color_main_brand;
-    //Instead of the line below you could use @include transition($transition-1, $transition-2, $transition-3, $transition-4, $transition-5, $transition-6, $transition-7, $transition-8, $transition-9, $transition-10)
-    ul {
-        list-style-type: none;
-        margin: 0;
-        margin-bottom: 30px;
-        margin-top: 15px;
-        padding: 0;
-        font-weight: normal;
-        color: $black;
-        li i {
-            color: $color_main_brand !important;
-            text-align: center;
-            width: 50px;
-        }
-    }
-    a {
-        color: $black;
-    }
-}
 .mobileMenuVisible {
     opacity: 1 !important;
     visibility: visible !important;
@@ -1705,303 +1453,6 @@ th {
         background-origin: content-box;
         padding-right: 30px;
         width: 350px;
-    }
-}
-@media screen and(min-width: 0px) and(max-width: 1400px) {
-    .piqlLogoOuter {
-        box-shadow: 3px 0 0 0 $color_main_brand;
-        width: 246px;
-        padding-right: 275px;
-        margin-right: 100px;
-        margin-top: 40px;
-        margin-left: 25px;
-        float: left;
-        position: absolute;
-
-    }
-    .piqlLogo {
-        .img {
-            text-align: center;
-        }
-        img {
-            padding-top: 7px;
-            width: 160px;
-            left: 100px;
-        }
-    }
-
-    .customerLogo {
-        height: 40px;
-        position: absolute;
-        left: 380px;
-        top: 10px;
-    }
-
-   .piqlNav {
-       top: 50px;
-       padding-top: 50px;
-       position: absolute;
-       left: 20px;
-    }
-
-}
-/*
-@media screen and(max-width: 1210px) {
-    hr {
-    }
-    #piqlLogo {
-        float: none;
-        margin: 0;
-        width: 75%;
-        border-right: 0;
-        .img {
-            padding-top: 33px;
-            text-align: left;
-            padding-left: 30px;
-        }
-    }
-    #piqlNav {
-        margin: 0;
-        max-height: 110px;
-        top: -75%;
-        li {
-        }
-        a {
-            color: black !important;
-        }
-    }
-    #customerLogo {
-        top: 20px;
-        left: 300px;
-        height: 80px;
-        display: block;
-    }
-    #piqlOptions {
-        top: -7px;
-        right: 90px;
-        height: 110px;
-        width: auto;
-        padding-right: 0;
-        background-color: transparent;
-        height: 35px;
-        text-align: center;
-        .fa-info-circle {
-            margin-right: 0;
-        }
-    }
-    .burgerMenu {
-        display: block;
-        position: absolute;
-        right: 15px;
-        top: 40px;
-        padding: 10px;
-        //font-size: 30px;
-        color: $color_main_brand;
-        z-index: 999;
-    }
-    .closeNotifications {
-        //font-size: 34px;
-        position: absolute;
-        top: 0;
-        right: 0;
-        padding: 10px;
-        color: $color_signal;
-    }
-    .accountSettings {
-        width: 90vw;
-        margin-left: 3vw;
-        input {
-            width: calc(100vw - 60px);
-        }
-        textarea {
-            width: calc(100vw - 60px);
-        }
-        select {
-            width: calc(100vw - 60px);
-        }
-        input[type="radio"] {
-            width: auto;
-        }
-    }
-    .sideMenu {
-        display: block;
-        top: 0;
-        width: 100vh;
-        //Instead of the line below you could use @include transition($transition-1, $transition-2, $transition-3, $transition-4, $transition-5, $transition-6, $transition-7, $transition-8, $transition-9, $transition-10)
-        padding: 0;
-        margin: 0;
-        ul {
-            margin-top: 100px;
-            li i {
-                font-size: 2rem;
-            }
-        }
-        .leftMenuItem {
-            line-height: 20px;
-        }
-        #welcomeText {
-            visibility: hidden;
-            opacity: 0;
-            position: absolute;
-            top: -999px;
-        }
-        #collapseSideMenu {
-            visibility: hidden;
-            img {
-                visibility: hidden;
-            }
-        }
-        #poweredBy {
-            display: none;
-        }
-        #poweredByImg {
-            left: 20px;
-            bottom: 10px;
-            margin: 0;
-        }
-    }
-    .white {
-        color: $white;
-    }
-    .black {
-        color: $black;
-    }
-    .container {
-        height: calc(100vh - 130px);
-        width: calc(100vw - 40px);
-    }
-    .contentContainer {
-        background-color: $color_fill_3;
-        width: calc(100vw - 30px);
-        float: left;
-        height: calc(90%);
-        padding: 30px 15px 0;
-    }
-    .content {
-        width: 100%;
-        height: 100%;
-        overflow-y: auto;
-        overflow-x: hidden;
-    }
-    table {
-        font-size: 1rem;
-        width: calc(100vw - 60px);
-    }
-    .listFilter {
-        label {
-            display: none;
-        }
-        input {
-            display: none;
-        }
-        select {
-            display: none;
-        }
-        input[type="search"] {
-            display: block;
-            width: calc(100vw);
-            margin-left: 0;
-            background-size: 20px;
-            background-repeat: no-repeat;
-            background-position: calc(100vw - 70px) 10px;
-            //Instead of the line below you could use @include background-origin($origin)
-            background-origin: content-box;
-            padding-right: 70px;
-            margin-right: 0;
-        }
-    }
-    em {
-        //font-size: 12px;
-    }
-    .chart {
-        position: relative;
-        height: 20vh;
-        width: 95%;
-        float: left;
-        margin: 0 0 50px 0;
-    }
-    .listPagination ul li {
-        //font-size: 10px;
-        margin-right: 40px;
-        text-align: center;
-    }
-}
-*/
-@media screen and(max-width: 630px) {
-    #loginForm {
-        margin-top: 0;
-        height: 100vh;
-        width: 100vw;
-        background-color: $color_fill_3;
-    }
-    h1 {
-        font-size: 2.5px;
-    }
-    .titleIcon {
-        font-size: 2rem;
-    }
-    #notificationsList {
-        left: 0;
-        top: 0;
-        right: 0;
-        width: calc(100vw - 4px);
-        height: calc(100vh - 17px);
-        border: 0;
-        overflow-y: scroll;
-        strong {
-            text-align: center;
-            display: block;
-        }
-    }
-    #piqlLogo {
-        width: 75%;
-        margin-top: 0;
-        padding: 0;
-        border-right: 2px solid $color_main_brand;
-        float: none;
-        position: relative;
-        .img {
-            text-align: left;
-            padding-left: 10px;
-            padding-top: 10px;
-        }
-        img {
-            width: 246px;
-        }
-    }
-    #customerLogo {
-        position: absolute;
-        right: 10px;
-        left: auto;
-        top: 20px;
-        height: 80px;
-    }
-    #piqlOptions {
-        float: none;
-        position: relative;
-        top: 0;
-        left: 0;
-        right: 0;
-        padding-top: 15px;
-        width: 200px;
-        margin: 0;
-    }
-    .burgerMenu {
-        top: 72px;
-    }
-    #piqlOptions i {
-        margin-right: 0;
-    }
-}
-@media screen and(max-width: 60px) {
-    #customerLogo {
-        top: 20px;
-        height: 80px;
-        margin-right: 20px;
-        margin-top: 100px;
-    }
-    #piqlLogo img {
-        width: 50%;
     }
 }
 .filelabel i {
@@ -2141,6 +1592,15 @@ input[type=text] {
     color: $color_background_dark;
     font-size: 2.5rem;
 }
+
+.titleText {
+    color: $color_background_dark;
+    font-size: 2rem;
+    vertical-align: middle;
+    margin: 0.5rem;
+}
+
+
 
 .actionIcon {
     color: $color_signal;
@@ -2359,4 +1819,13 @@ input[type=text] {
     font-size: 2rem;
     text-align: center;
     margin: 0 auto;
+}
+
+.componentHeader {
+    margin: 3rem;
+    height: 10rem;
+}
+
+.componentBody {
+    margin: 3rem;
 }

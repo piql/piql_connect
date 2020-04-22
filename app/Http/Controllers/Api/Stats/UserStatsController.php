@@ -1,20 +1,37 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api\Stats;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
+use App\Http\Resources\UserStatsResource;
 use App\Aip;
 use App\FileObject;
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Log;
-use App\Charts\TestChartJS;
+use App\User;
 
-class DashboardController extends Controller
+class UserStatsController extends Controller
 {
-    public function showDashboard()
+
+    /**
+     * Display stats for a user. If userId is the string "current", fetch for the currently authenticated user;
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function userStats( $userId, Request $request )
     {
-        $fileFormatCount = $this->fileFormatsIngested(auth()->user());
-        $onlineDataIngested = $this->onlineDataIngested(auth()->user());
+        $currentUser = Auth::user();
+        if( $currentUser == null ) {
+            return response()->json([ 'error' => 401, 'message' => 'Must authenticate to access per-user statistics' ], 401);
+        }
+        if( $userId !== "current" && $currentUser->id != $userId ) {
+            return response()->json([ 'error' => 401, 'message' => 'Access to user statistics is restricted' ], 401);
+        }
+
+        $fileFormatCount = $this->fileFormatsIngested( $currentUser );
+        $onlineDataIngested = $this->onlineDataIngested( $currentUser );
 
         $infoArray['onlineDataIngested'] = $this->byteToMetricbyte($onlineDataIngested);
         $infoArray['offlineDataIngested'] = $this->byteToMetricbyte(23 * 110000000000);
@@ -25,74 +42,52 @@ class DashboardController extends Controller
         $infoArray['AIPsRetrievedCount'] = 8;
         $infoArray['DataRetrieved'] = $this->byteToMetricbyte(8 * 14000000);
 
-        $monthlyOnlineAIPsIngested = new TestChartJS;
-        $monthlyOnlineAIPsAccessed = new TestChartJS;
-        $monthlyOnlineDataIngested = new TestChartJS;
-        $monthlyOnlineDataAccessed = new TestChartJS;
-        $fileFormatsIngested = new TestChartJS;
+        return new UserStatsResource( $infoArray );
+    }
 
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
+        //
+    }
 
-        $monthlyOnlineAIPsIngested->load(url('api/v1/stats/monthlyOnlineAIPsIngested'));
-        $monthlyOnlineAIPsIngested->options([
-            'title' => [
-                 'text' => 'AIPs Ingested (monthly)'
-            ],
-        ]);
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id)
+    {
+        //
+    }
 
-        $monthlyOnlineAIPsAccessed->load(url('api/v1/stats/monthlyOnlineAIPsAccessed'));
-        $monthlyOnlineAIPsAccessed->options([
-            'title' => [
-                 'text' => 'AIPs Accessed (monthly)'
-            ],
-        ]);
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, $id)
+    {
+        //
+    }
 
-        $monthlyOnlineDataIngested->load(url('api/v1/stats/monthlyOnlineDataIngested'));
-        $monthlyOnlineDataIngested->options([
-            'title' => [
-                 'text' => 'Data Ingested (monthly)'
-            ],
-        ]);
-
-        $monthlyOnlineDataAccessed->load(url('api/v1/stats/monthlyOnlineDataAccessed'));
-        $monthlyOnlineDataAccessed->options([
-            'title' => [
-                 'text' => 'Data Accessed (monthly)'
-            ],
-        ]);
-
-
-        $fileFormatsIngested->labels(array_keys($fileFormatCount))->load(url('api/v1/stats/fileFormatsIngested'));
-        $fileFormatsIngested->options([
-            'title' => [
-                 'text' => 'File formats Ingested'
-            ],
-            'legend' => [
-                'display' => true,
-                'position' => 'right',
-                // 'onHover' =>
-            ],
-            'tooltips' => [
-                'mode' => 'point',
-            ],
-            'animation' => [
-                'animateRotate' => true,
-                'animateScale' => true
-            ],
-            'scales' => [
-                'yAxes'=> [
-                    'display' => false
-                ]
-            ]
-        ]);
-
-        return view('dashboard', compact(
-            'monthlyOnlineAIPsIngested',
-            'monthlyOnlineAIPsAccessed',
-            'monthlyOnlineDataIngested',
-            'monthlyOnlineDataAccessed',
-            'fileFormatsIngested',
-            'infoArray'
-        ));
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy($id)
+    {
+        //
     }
 
     private function onlineDataIngested($user)
@@ -205,4 +200,5 @@ class DashboardController extends Controller
 
         return $last30days;
     }
+
 }

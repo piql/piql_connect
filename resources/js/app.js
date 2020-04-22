@@ -3,63 +3,20 @@
  * includes Vue and other libraries. It is a great starting point when
  * building robust, powerful web applications using Vue and Laravel.
  */
-require('jquery');
 require('bootstrap');
 require('bootstrap-select');
-require('bootstrap-vue');
+require('filesize');
+
 window.Vue = require('vue');
-import VueInternationalization from 'vue-i18n';
+import VueRouter from 'vue-router';
+window.Vue.use(VueRouter);
 import {BootstrapVue} from 'bootstrap-vue';
 window.Vue.use(BootstrapVue);
+import VueInternationalization from 'vue-i18n';
+import VueResize from 'vue-resize';
+window.Vue.use(VueResize);
 import toast from './mixins/toast.js';
 window.Vue.mixin(toast);
-
-/** Function to collapse/expand sidemenu
-Affects the sideMenu and contentContainer. Reduces size of sideMenu
-whilst expanding the size of contentContainer (and vice versa)
-*/
-
-window.collapseMenu = function() {
-    if (document.getElementById("sideMenu")) {
-        document.getElementById("sideMenu").setAttribute("id", "sideMenuCollapsed");
-        document.getElementById("sidebarWrapper").setAttribute("class", "col-1 pl-0 sidebarWrapper");
-        document.getElementById("mainContent").setAttribute("class", "col-10 ml-2 mr-1");
-        document.getElementById("poweredBy").setAttribute("style", "display: inline-flex;");
-    }
-    else if( document.getElementById("sideMenuCollapsed") ) {
-        document.getElementById("sideMenuCollapsed").setAttribute("id", "sideMenu");
-        document.getElementById("sidebarWrapper").setAttribute("class", "col-3 pl-0 sidebarWrapper");
-        document.getElementById("mainContent").setAttribute("class", "col-8 ml-3 mr-0");
-        document.getElementById("poweredBy").setAttribute("style", "display: none;");
-    }
-}
-
-window.isAutoCollapsed = false;
-window.autoCollapseMenu = function() {
-    if(!window.isAutoCollapsed){
-        window.collapseMenu();
-        window.isAutoCollapsed = true;
-    }
-}
-
-window.onload = function() {
-    window.onresize();
-}
-
-window.onresize = function() {
-    let wide = document.getElementById("sideMenu");
-    let bodyWidth = document.body.getClientRects()[0].width;
-    if( wide ) {
-        if( bodyWidth < 1200 ) {
-            window.collapseMenu();
-        }
-    } else {
-        if( bodyWidth > 1200 ) {
-            window.collapseMenu();
-        }
-    }
-}
-
 import Echo from "laravel-echo";
 window.io = require('socket.io-client');
 if (typeof io !== 'undefined') {
@@ -112,13 +69,6 @@ const i18n = new VueInternationalization({
 const files = require.context('./', true, /\.vue$/i);
 files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default));
 
-/**
- * The filesize es6 module - giving us human readable file sizes -
- * must be required by full path according to the documentation at
- * https://www.npmjs.com/package/filesize
- */
-require('../../node_modules/filesize/lib/filesize.es6.js');
-
 let refreshSessionActivity = Vue.mixin({
         beforeUpdate: function() {
             if( this.noRefresh !== true ){
@@ -136,6 +86,101 @@ let refreshSessionActivity = Vue.mixin({
 		},
 });
 
+/** Set up vue router.
+ * TODO: Move this to a separate file ASAP
+ */
+
+import Dashboard from './views/stats/dashboard.vue';
+import TopBar from './views/partials/TopBar.vue';
+import SideBar from './views/partials/SideBar.vue';
+
+import Upload from './views/ingest/Upload.vue';
+import DublinCore from './views/ingest/DublinCore.vue';
+import Processing from './views/ingest/Processing.vue';
+import TaskList from './views/ingest/TaskList.vue';
+import IngestStatus from './views/ingest/IngestStatus.vue';
+
+import Browse from './views/access/Browse.vue';
+import ReadyToRetrieve from './views/access/ReadyToRetrieve.vue';
+import ReadyForDownload from './views/access/ReadyForDownload.vue';
+import RetrievalHistory from './views/access/RetrievalHistory.vue';
+import NowRetrieving from './views/access/NowRetrieving.vue';
+
+import Settings from './views/settings/Settings.vue';
+import PageNotFound from './views/PageNotFound.vue';
+
+
+const router = new VueRouter({
+    mode: 'history',
+    routes: [
+        {
+            path: "/",
+            name: "home.dashboard",
+            component: Dashboard
+        },
+        {
+            path: "/ingest/upload",
+            name: "ingest.upload",
+            component: Upload
+        },
+        {
+            path: "/ingest/metadata/bags/:bagId/file/:fileId",
+            name: "ingest.metadata.edit",
+            component: DublinCore
+        },
+        {
+            path: "/ingest/process",
+            name: "ingest.process",
+            component: Processing
+        },
+        {
+            path: "/ingest/offline_storage",
+            name: "ingest.offline_storage",
+            component: TaskList
+        },
+        {
+            path: "/ingest/status",
+            name: "ingest.status",
+            component: IngestStatus
+        },
+        {
+            path: "/access/browse",
+            name: "access.browse",
+            component: Browse
+        },
+        {
+            path: "/access/retrieve/ready",
+            name: "access.retrieve.ready",
+            component: ReadyToRetrieve
+        },
+        {
+            path: "/access/retrieve/retrieving",
+            name: "access.retrieve.retrieving",
+            component: NowRetrieving
+        },
+        {
+            path: "/access/retrieve/download",
+            name: "access.retrieve.download",
+            component: ReadyForDownload
+        },
+        {
+            path: "/access/retrieve/history",
+            name: "access.retrieve.history",
+            component: RetrievalHistory
+        },
+        {
+            path: "/settings",
+            name: "settings",
+            redirect: "/static/settings"
+        },
+        {
+            path: "*",
+            name: "PageNotFound",
+            component: PageNotFound
+        }
+    ],
+});
+
 /**
  * Finally, create the Vue application instance
  */
@@ -143,9 +188,6 @@ let refreshSessionActivity = Vue.mixin({
 const app = new Vue({
     el: '#app',
     i18n,
+    router,
     mixins: [refreshSessionActivity],
-    data: {
-    },
-    methods: {
-    }
 });

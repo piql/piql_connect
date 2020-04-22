@@ -101,7 +101,6 @@ import axios from 'axios';
 import JQuery from 'jquery';
 import moment from 'moment';
 let $ = JQuery;
-import selectpicker from 'bootstrap-select';
 import filesize from 'filesize';
 
 export default {
@@ -357,14 +356,11 @@ export default {
     },
 
     methods: {
-        onClick(url) {
-            window.location = url;
-        },
         metadataClicked( e ) {
             let fileId = e.uploadedFileId;
             let bagId = e.uploadedToBagId;
             if( fileId && bagId ){
-                window.location = '/ingest/tasks/'+bagId+'/metadata/'+fileId+'/edit_ingest';
+                this.$router.push({ name:'ingest.metadata.edit', params: { bagId: bagId, fileId: fileId } });
             }
         },
         async removeClicked( e ) {

@@ -92,7 +92,6 @@
     import axios from 'axios';
     import JQuery from 'jquery';
     let $ = JQuery;
-    import selectpicker from 'bootstrap-select';
 
     export default {
         data() {
