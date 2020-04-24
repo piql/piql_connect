@@ -56,6 +56,9 @@ class EventServiceProvider extends ServiceProvider
         \App\Events\InformationPackageUploaded::class => [
             \App\Listeners\AddAipToBucketListener::class
         ],
+        \App\Events\PreProcessBagEvent::class => [
+            \App\Listeners\PreProcessBagListener::class
+        ]
     ];
 
     /**

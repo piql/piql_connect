@@ -57,16 +57,16 @@ echo 'Run docker containers'
 ./localdev-up.sh || exit $?
 
 echo 'Generate application key'
-docker-compose -p piqlConnect exec app php artisan key:generate || exit $?
+docker-compose -p piqlConnect exec -T app php artisan key:generate || exit $?
 
 echo 'Migrate database tables'
-docker-compose -p piqlConnect exec app php artisan migrate:fresh || exit $?
+docker-compose -p piqlConnect exec -T app php artisan migrate:fresh || exit $?
 
 echo 'Set passport keys'
-docker-compose -p piqlConnect exec app php artisan passport:keys --force || exit $?
+docker-compose -p piqlConnect exec -T app php artisan passport:keys --force || exit $?
 
 echo 'Seed database'
-docker-compose -p piqlConnect exec app php artisan db:seed || exit $?
+docker-compose -p piqlConnect exec -T app php artisan db:seed || exit $?
 
 echo 'Set file permissions for docker volumes'
 sudo chown 333:root /var/lib/docker/volumes/ss-location-data/_data || exit $?

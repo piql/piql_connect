@@ -18,7 +18,7 @@ use App\Http\Resources\BagResource;
 use App\Http\Resources\BagCollection;
 use App\Http\Resources\FileCollection;
 use Response;
-use App\Events\BagFilesEvent;
+use App\Events\PreProcessBagEvent;
 use App\Events\FileUploadedEvent;
 use Carbon\Carbon;
 use Log;
@@ -391,7 +391,7 @@ class BagController extends Controller
             $bag->applyTransition('close');
             $bag->save();
             Log::debug("emitting ProcessFilesEvent for bag with id " . $id);
-            event(new BagFilesEvent($bag));
+            event(new PreProcessBagEvent($bag));
         } catch (BagTransitionException $e) {
             abort(501, "Caught an exception closing bag with id " . $id . ". Exception: {$e}");
             Log::debug("Caught an exception closing bag with id " . $id . ". Exception: {$e}");
@@ -417,7 +417,7 @@ class BagController extends Controller
             $bag->applyTransition('close');
             $bag->save();
             Log::debug("emitting ProcessFilesEvent for bag with id " . $bag->id);
-            event(new BagFilesEvent($bag));
+            event(new PreProcessBagEvent($bag));
         } catch (BagTransitionException $e) {
             abort(501, "Caught an exception closing bag with id " . $bag->id . ". Exception: {$e}");
             Log::debug("Caught an exception closing bag with id " . $bag->id . ". Exception: {$e}");
