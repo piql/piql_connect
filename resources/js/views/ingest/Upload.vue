@@ -151,7 +151,8 @@ export default {
                             this.errorToast(
                                 this.$t('upload.toasts.uploadDuplicate.title'),
                                 this.$t('upload.toasts.uploadDuplicate.message'),
-                                { 'FILENAME': name }
+                                { 'FILENAME': name },
+                                0
                             );
                             cancel(id);
                         }
