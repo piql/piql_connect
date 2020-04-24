@@ -146,6 +146,16 @@ export default {
                     onValidate: (id, name) => {
                     },
                     onSubmit: (id, name) => {
+                        let isDuplicate = this.filesUploading.findIndex( (file) => file.filename == name ) != -1;
+                        if( isDuplicate ){
+                            this.errorToast(
+                                this.$t('upload.toasts.uploadDuplicate.title'),
+                                this.$t('upload.toasts.uploadDuplicate.message'),
+                                { 'FILENAME': name }
+                            );
+                            cancel(id);
+                        }
+
                         this.filesUploading.unshift({
                             'id': id,
                             'filename': name,

@@ -39,6 +39,8 @@
     "upload.toasts.uploadComplete.message": "Upload of %FILENAME% complete.",
     "upload.toasts.uploadFailed.title": "Upload failed",
     "upload.toasts.uploadFailed.message": "Upload of %FILENAME% failed!",
+    "upload.toasts.uploadDuplicate.title": "Upload failed",
+    "upload.toasts.uploadDuplicate.message": "File %FILENAME% has already been uploaded",
     "upload.fileNameFilter": "Filter",
 
     "sidebar.dashboard": "Dashboard",
