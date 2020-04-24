@@ -29,106 +29,106 @@
 </template>
 
 <script>
-    import axios from 'axios';
 
-    export default {
-        data() {
-            return {
-            }
-        },
-        mounted() {
-            let page = parseInt( this.$route.query.page );
-            if( page ) {
-                if( page < 1 ) {
-                    const query = Object.assign( {}, this.$route.query );
-                    query.page = 1;
-                    this.$router.replace( { query } );
-                }
-            }
-        },
-        props: {
-            meta: null,
-            visiblePageSelectors: {
-                type: Number,
-                default: 20
-            }
-        },
-        computed: {
-            next: function() {
-                return this.meta && this.meta.current_page < this.meta.last_page ? this.meta.current_page + 1 : null;
-            },
-            prev: function() {
-                return this.meta && this.meta.current_page > 1 ? this.meta.current_page - 1 : null;
-            },
-            onFirstPage: function() {
-                return this.meta && this.prev === null;
-            },
-            onLastPage: function() {
-                return this.meta && this.next === null;
-            },
-            numberOfPages: function() {
-                return this.meta ? this.meta.last_page : null;
-            },
-            splitVisible: function() {
-                let m = this.visiblePageSelectors > this.numberOfPages ? this.numberOfPages : this.visiblePageSelectors;
-                return Math.floor( m / 2 );
-            },
-            firstVisible: function() {
-                let vis = this.visiblePageSelectors > this.numberOfPages ? this.numberOfPages : this.visiblePageSelectors;
-                let no = this.numberOfPages;
-                if( vis >= no ) {
-                    return 1;
-                }
+import RouterTools from '../mixins/RouterTools.js';
+import axios from 'axios';
 
-                let d = this.currentPage - this.splitVisible;
-                return d < 1 ? 1 : d;
-            },
-            currentPage: function() {
-                return this.meta ? this.meta.current_page : null;
-            },
-            pages: function() {
-                let first = this.firstVisible;
-                let split = this.splitVisible;
-                let current = this.currentPage;
-                let len = this.visiblePageSelectors > this.numberOfPages ? this.numberOfPages : this.visiblePageSelectors;
-                let last = this.numberOfPages;
+export default {
+    mixins: [ RouterTools ],
 
-                if(current + split > last) {
-                    first = last-len+1;
-                    if(first < 1)
-                        first = 1;
-                }
-
-                let self = this;
-                return Array.from( { length: len }, ( _ , n ) => {
-                    let pageNumber = first + n;
-                    return { pageNumber: pageNumber, isActive: pageNumber === self.currentPage };
-                } );
-            },
-        },
-        methods: {
-            updateQueryParam( page ) {
+    data() {
+        return {
+        }
+    },
+    mounted() {
+        let page = parseInt( this.$route.query.page );
+        if( page ) {
+            if( page < 2 ) {
                 const query = Object.assign( {}, this.$route.query );
-                if( page != query.page ) {
-                    query.page = page;
-                    this.$router.push({ query });
-                }
-            },
-            nextPage() {
-                this.updateQueryParam( this.next );
-            },
-            prevPage() {
-                this.updateQueryParam( this.prev );
-            },
-            firstPage() {
-                this.updateQueryParam( 1 );
-            },
-            lastPage() {
-                this.updateQueryParam( this.numberOfPages );
-            },
-            goToPage( page ) {
-                this.updateQueryParam( page );
+                delete query.page;
+                this.$router.push( { query } );
             }
         }
+    },
+    props: {
+        meta: null,
+        visiblePageSelectors: {
+            type: Number,
+            default: 20
+        }
+    },
+    computed: {
+        next: function() {
+            return this.meta && this.meta.current_page < this.meta.last_page ? this.meta.current_page + 1 : null;
+        },
+        prev: function() {
+            return this.meta && this.meta.current_page > 1 ? this.meta.current_page - 1 : null;
+        },
+        onFirstPage: function() {
+            return this.meta && this.prev === null;
+        },
+        onLastPage: function() {
+            return this.meta && this.next === null;
+        },
+        numberOfPages: function() {
+            return this.meta ? this.meta.last_page : null;
+        },
+        splitVisible: function() {
+            let m = this.visiblePageSelectors > this.numberOfPages ? this.numberOfPages : this.visiblePageSelectors;
+            return Math.floor( m / 2 );
+        },
+        firstVisible: function() {
+            let vis = this.visiblePageSelectors > this.numberOfPages ? this.numberOfPages : this.visiblePageSelectors;
+            let no = this.numberOfPages;
+            if( vis >= no ) {
+                return 1;
+            }
+
+            let d = this.currentPage - this.splitVisible;
+            return d < 1 ? 1 : d;
+        },
+        currentPage: function() {
+            return this.meta ? this.meta.current_page : null;
+        },
+        pages: function() {
+            let first = this.firstVisible;
+            let split = this.splitVisible;
+            let current = this.currentPage;
+            let len = this.visiblePageSelectors > this.numberOfPages ? this.numberOfPages : this.visiblePageSelectors;
+            let last = this.numberOfPages;
+
+            if(current + split > last) {
+                first = last-len+1;
+                if(first < 1)
+                    first = 1;
+            }
+
+            let self = this;
+            return Array.from( { length: len }, ( _ , n ) => {
+                let pageNumber = first + n;
+                return { pageNumber: pageNumber, isActive: pageNumber === self.currentPage };
+            } );
+        },
+    },
+    methods: {
+        nextPage() {
+            let page = this.next > 1 ? this.next : null;
+            this.updateQueryParams({ page });
+        },
+        prevPage() {
+            let page = this.prev > 1 ? this.prev : null;
+            this.updateQueryParams({ page });
+        },
+        firstPage() {
+            this.updateQueryParams({ page: null });
+        },
+        lastPage() {
+            this.updateQueryParams({ page: this.numberOfPages });
+        },
+        goToPage( page ) {
+            if( page == 1) page = null;
+            this.updateQueryParams({ page });
+        }
     }
+}
 </script>
