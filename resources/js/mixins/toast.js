@@ -8,10 +8,12 @@ export default {
             let _title = title.replace(/%\w+%/g, r => {
                 return `"${replacements[ r.replace(/%+/g,"") ] || r }"`;
             });
+            let autoHide = hideAfter > 0;
 
             this.$bvToast.toast( _msg, {
                 title: _title,
                 autoHideDelay: 1000 * hideAfter,
+                noAutoHide: !autoHide,
                 toaster: toaster
             });
         },
@@ -23,10 +25,12 @@ export default {
             let _title = title.replace(/%\w+%/g, r => {
                 return `"${replacements[ r.replace(/%+/g,"") ] || r }"`;
             });
+            let autoHide = hideAfter > 0;
 
             this.$bvToast.toast( _msg, {
                 title: _title,
                 autoHideDelay: 1000 * hideAfter,
+                noAutoHide: !autoHide,
                 toaster: toaster,
                 variant: "danger"
             });
