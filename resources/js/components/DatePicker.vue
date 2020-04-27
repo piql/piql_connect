@@ -1,18 +1,18 @@
 <template>
     <div class="form-group" >
         <label :for="uid" class="col-form-label-sm">{{label}}</label>
-        <b-form-datepicker class="form-fontrol btn-sel" :id="uid"
+        <b-form-datepicker class="btn-sel" :id="uid"
             v-model="dateValue"
+            :max="maxDate" :min="minDate"
             :date-format-options="{ year: '2-digit', month: '2-digit', day: '2-digit'}"
             :placeholder="placeHolder" :hideHeader="hideHeader"
             :locale="locale" :labelHelp="$t('datepicker.help')"
         >
-        </b-form-datepicker> 
+        </b-form-datepicker>
     </div>
 </template>
 
 <script>
-//<input v-model="dateValue" :id="uid" type="date" class="form-control w-auto" :min="min" :max="max">
 import JQuery from 'jquery';
 let $ = JQuery;
 import RouterTools from '../mixins/RouterTools.js';
@@ -37,17 +37,20 @@ export default {
             type: String,
             default: null
         },
-        min: {
+        minDate: {
             type: String,
-            default: "01-01-2020"
+            default: "1970-1-1"
         },
-        max: {
+        maxDate: {
             type: String,
-            default: () => { return new Date().toLocaleDateString("en-US").split("/").join("-"); }
+            default: function() {
+                let today = new Date();
+                return `${today.getFullYear()}-${(today.getMonth() + 1)}-${today.getDate()}`;
+            },
         },
         locale: {
             type: String,
-            default: function() { return  this.$t('locale'); }
+            default: function() { return this.$t('locale'); }
         },
         hideHeader: {
             type: Boolean,
@@ -59,16 +62,14 @@ export default {
         },
         labelHelp: {
             type: String,
-            default: "Mye moro"
+            default: "Select a date"
         }
     },
 
     computed: {
-        //
     },
 
     created () {
-        //
     },
 
     mounted () {
@@ -81,7 +82,9 @@ export default {
         dispatchRouting: function() {
             let query = this.$route.query[this.query];
             if( query ) {
-                this.dateValue = query;
+                Vue.nextTick( () => {
+                    this.dateValue = query;
+                });
             }
         },
     },
@@ -92,7 +95,7 @@ export default {
                 this.updateQueryParams({ [this.query]: null });
                 return;
             }
-            this.updateQueryParams({ [this.query]: this.dateValue, page: null, holding: null });
+            this.updateQueryParams({ [this.query]: this.dateValue, page: null });
         }
     }
 };
