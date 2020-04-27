@@ -23,7 +23,10 @@ $color_secondary_2_transparent: #c2748440;
 $color_secondary_3: #deb3b9;
 $color_secondary_3_transparent: #deb3b940;
 $color_signal: #ff194d;
+$color_signal_transparent: #ff194d60;
+$color_signal_light_transparent: #ff194d20;
 $color_fill: #808080;
+$color_fill_transparent: #80808040;
 $color_fill_0: #f0f0f0;
 $color_fill_1: #ababab;
 $color_fill_2: #c7c7c7;
@@ -648,11 +651,11 @@ label {
     }
 
     &:focus {
-        outline-color: $color_background_3 !important;
+        outline: none;
         color: black;
         background-clip: padding-box;
         border: 1px solid $color_background_2_transparent !important;
-        box-shadow: 0 0 0 0.2rem $color_background_3_transparent !important;
+        box-shadow: 0 0 0 0.2rem $color_signal_light_transparent !important;
         border-radius: 0.25rem;
         transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
     }
@@ -662,11 +665,13 @@ label {
 .rounded-circle {
     &.btn {
         &-sel span {
+            box-shadow: none;
             background-color: $color_fill !important;
         }
     }
     &.btn.active {
         &-sel span {
+            box-shadow: none;
             background-color: $color_signal !important;
         }
     }
@@ -1050,7 +1055,6 @@ button {
     margin-top: -3rem;
     height: 100vh;
     background-color: $color_background_1;
-    height: 100vh;
     color: $white;
     overflow: hidden;
     ul {
@@ -1068,10 +1072,11 @@ button {
     li {
         display: block;
         width: calc(100% - 30px);
+        padding-right: 0.25rem;
         background-color: $color_background_dark;
         border-color: $color_background;
         color: white;
-        width: 2rem;
+        width: auto;
         text-transform: uppercase;
         text-align: center !important;
         &:hover {
@@ -1425,18 +1430,7 @@ th {
     right: 0 !important;
     //Instead of the line below you could use @include transition($transition-1, $transition-2, $transition-3, $transition-4, $transition-5, $transition-6, $transition-7, $transition-8, $transition-9, $transition-10)
 }
-@media screen and(min-width: 1405px) {
-    .listFilter input[type=search] {
-        background-image: $image_searchicon_url;
-        background-size: 20px;
-        background-repeat: no-repeat;
-        background-position: 310px 10px;
-        //Instead of the line below you could use @include background-origin($origin)
-        background-origin: content-box;
-        padding-right: 30px;
-        width: 350px;
-    }
-}
+
 .filelabel i {
     color: $white !important;
 }
@@ -1481,6 +1475,7 @@ th {
 
 
 .form-control {
+    color: black;
     &:focus {
         background-clip: padding-box;
         border: 1px solid $color_fill_2_transparent !important;
@@ -1752,7 +1747,9 @@ th {
 }
 
 .col-form-label-sm {
-    font-size: 0.7rem;
+    font-size: 0.9rem;
+    color: $color_fill;
+    padding-bottom: calc(.20rem + 1px);
 }
 
 .stats {
@@ -1802,6 +1799,66 @@ th {
     margin: 3rem;
 }
 
-.form-control {
+.form-group{
     color: $black;
+    border: none;
+    outline: 0;
+    &:focus {
+        outline: 0;
+        box-shadow: 0 0 0 0.2rem $color_signal_transparent !important;
+    }
+}
+
+.form-control.focus {
+  color: #495057;
+  background-color: #fff;
+  border: none;
+  outline: 0;
+  box-shadow: none;
+}
+
+.form-control.focus.is-valid {
+    box-shadow: 0 0 0 0.2rem $color_fill_transparent !important;
+    outline: 0;
+}
+
+.form-control.focus.is-invalid {
+    box-shadow: 0 0 0 0.2rem $color_fill_transparent !important;
+    outline: 0;
+}
+
+.b-form-btn-label-control {
+  background-image: none;
+}
+
+.btn:focus {
+    box-shadow: 0 0 0 0.2rem $color_fill_transparent !important;
+    outline: none !important;
+}
+
+.bootstrap-select .dropdown-toggle:focus {
+    outline: none !important;
+    outline-offset: none;
+    box-shadow: 0 0 0 0.2rem $color_fill_transparent !important;
+}
+
+.bootstrap-select .dropdown-toggle:focus-within {
+    outline: none !important;
+    outline-offset: none;
+    box-shadow: 0 0 0 0.2rem $color_fill_transparent !important;
+}
+
+
+.b-form-btn-label-control > .btn {
+    border: none !important;
+    box-shadow: none !important;
+}
+
+.b-form-btn-label-control:focus-within  {
+    outline: none !important;
+    box-shadow: 0 0 0 0.2rem $color_fill_transparent !important;
+}
+
+.dropdown-item.active, .dropdown-item:active{
+    background-color: $color_fill_1;
 }

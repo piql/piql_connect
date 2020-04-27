@@ -1,9 +1,9 @@
 <template>
-    <div class="form-group">
-        <label v-if="showLabel" for="archivePicker" class="col-form-label-sm">
+    <div class="form-group w-100">
+        <label v-if="showLabel" for="archivePicker" class="col-form-label">
             {{label}}
         </label>
-        <select v-model="selection" id="archivePicker" class="w-100 form-control" v-bind:disabled="selectionDisabled" data-live-search="true">
+        <select v-model="selection" id="archivePicker" class="form-control w-100" v-bind:disabled="selectionDisabled" data-live-search="true">
             <option v-for="archive in archivesWithWildcard" v-bind:value="archive.uuid">
                 {{archive.title}}
             </option>

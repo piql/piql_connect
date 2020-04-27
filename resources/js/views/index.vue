@@ -5,11 +5,11 @@
                 <top-bar></top-bar>
             </div>
         </div>
-        <div class="d-flex flex-row row-no-gutters">
-            <div class="d-inline-block pl-0 pr-0" :class="responsiveSidebarColumns">
+        <div class="row row-no-gutters">
+            <div class="d-inline-block pl-1 pr-1 mr-5" :class="responsiveSidebarColumns">
                 <side-bar :width="currentWidth" :fullname="fullname" ></side-bar>
             </div>
-            <div class="col d-inline-flex mr-4 ml-4">
+            <div class="col-sm-9 pl-2 pr-1">
                 <router-view></router-view>
             </div>
         </div>

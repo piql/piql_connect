@@ -216,5 +216,7 @@
     "timeout.continue": "Fortsett",
 
     "datepicker.noDateSelected": "Ingen dato valgt",
-    "datepicker.help": "Bruk piltastene og enter til å velge en dato"
+    "datepicker.help": "Bruk piltastene og enter til å velge en dato",
+    "datepicker.toasts.illegalRangeTitle": "Ugyldig datoområde",
+    "datepicker.toasts.illegalRangeMessage": "Du har valgt en ugyldig rekkevidde for arkivert fra-til. Oppdaterer."
 }
