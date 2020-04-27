@@ -3,7 +3,7 @@
         <label v-if="showLabel" for="archivePicker" class="col-form-label-sm">
             {{label}}
         </label>
-        <select v-model="selection" id="archivePicker" class="w-100" v-bind:disabled="selectionDisabled" data-live-search="true">
+        <select v-model="selection" id="archivePicker" class="w-100 form-control" v-bind:disabled="selectionDisabled" data-live-search="true">
             <option v-for="archive in archivesWithWildcard" v-bind:value="archive.uuid">
                 {{archive.title}}
             </option>
@@ -12,8 +12,6 @@
 </template>
 
 <script>
-import JQuery from 'jquery';
-let $ = JQuery;
 import RouterTools from '../mixins/RouterTools.js';
 
 export default {
@@ -48,7 +46,7 @@ export default {
     },
     props: {
         selectionDisabled: false,
-        useWildCard: false,
+        useWildCard: true,
         wildCardLabel: {
             type: String,
             default: "All"

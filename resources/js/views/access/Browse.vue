@@ -15,7 +15,7 @@
             </div>
         </div>
 
-        <access-browser-filters></access-browser-filters>
+        <access-browser-filters :singleArchiveTitle="$t('Your archive')"></access-browser-filters>
 
         <span v-if="fileMode === false">
             <browser-list @openObject="openObject" :location="selectedLocation" :dataObjects="currentObjects"
@@ -84,11 +84,11 @@ export default {
             if( query.holding ){
                     filter += "&holding=" + encodeURI( query.holding );
             }
-            if(this.fromDateFilter){
-                filter += "&from=" + encodeURI(this.fromDateFilter);
+            if( query.archived_from ){
+                filter += "&archived_from=" + query.archived_from;
             }
-            if(this.toDateFilter){
-                filter += "&to=" + encodeURI(this.toDateFilter);
+            if( query.archived_to ){
+                filter += "&archived_to=" + query.archived_to;
             }
             if(this.searchField){
                 filter += "&search=" + encodeURI(this.searchField);

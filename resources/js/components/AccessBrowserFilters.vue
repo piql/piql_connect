@@ -8,44 +8,44 @@
                 />
             </div>
             <div v-else="useArchives" class="col-md-2 col-lg-2 pl-0 pr-0">
-                <label class="col-form-label-sm">{{$t('Archive')}}</label>
-                <div class="pl-0 pr-0 form-control align-middle text-center">{{singleArchiveTitle}}</div>
+                <label class="col-form-label-sm" for="singleArchive">{{$t('Archive')}}</label>
+                <select class="form-control text-center" id="singleArchive" disabled>
+                    <option selected>
+                        {{singleArchiveTitle}}
+                    </option>
+                </select>
             </div>
 
-            <div v-if="useHoldings" class="col-md-2 col-lg-2">
-                <holding-picker
+            <div  class="col-md-2 col-lg-2">
+                <holding-picker v-if="useHoldings"
                     :label='$t("Holding")'
                     :wildCardLabel='$t("All")'
-                    :useHoldings="true"
+                    :useHoldings="false"
                 />
             </div>
             <div class="col-md-2 col-lg-2">
-                <label for="fromDate" class="col-form-label-sm">{{$t('access.browse.archivedFrom')}}</label>
-                <input v-model="fromDateFilter" id="fromDate" type="date" class="form-control w-auto">
+                <DatePicker :label="$t('access.browse.archivedFrom')" query="archived_from"/>
             </div>
 
             <div class="col-md-2 col-lg-2">
-                <label for="toDate" class="col-form-label-sm">{{$t('access.browse.archivedTo')}}</label>
-                <input v-model="toDateFilter" id="toDate" type="date" class="form-control w-auto">
+                <DatePicker :label="$t('access.browse.archivedTo')" query="archived_to"/>
             </div>
 
-            <div class="col-md-2 col-lg-2">
-                <div class="form-group">
-                    <label for="searchContents" class="col-form-label-sm">{{$t('access.browse.withContents')}}</label>
-                    <div class="input-group">
-                        <div class="input-group addon">
-                            <input v-model="searchField" id="searchContents" type="text" class="form-control" style="border-radius: 3px">
-                            <span class="input-group-addon">
-                                <i class="fas fa-search search-icon-inline mt-2 mr-2"></i>
-                            </span>
-                        </div>
+            <div class="col">
+                <label for="searchContents" class="col-form-label-sm">{{$t('access.browse.withContents')}}</label>
+                <div class="input-group">
+                    <div class="input-group addon">
+                        <input v-model="searchField" id="searchContents" type="text" class="form-control fg-black" >
+                        <span class="input-group-addon">
+                            <i class="fas fa-search search-icon-inline mt-2 mr-2"></i>
+                        </span>
                     </div>
                 </div>
             </div>
 
-            <div class="col-md-2 pr-0 text-align-right">
+            <!--div class="col-md-2 pr-0 text-align-right">
                 <location-picker :initialSelectedLocation="selectedLocation" :locations="locations" @locationSelectionChanged="locationSelectionChanged"></location-picker>
-            </div>
+            </div-->
         </div>
     </form>
 
@@ -81,6 +81,10 @@ export default {
         useHoldings: {
             type: Boolean,
             default: true
+        },
+        singleArchiveTitle: {
+            type: String,
+            default: "Your archive"
         }
     },
     watch: {
