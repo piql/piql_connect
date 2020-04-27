@@ -22,7 +22,8 @@ class DipResource extends JsonResource
             'aip_external_uuid' => $this->aip_external_uuid,
             'storage_location_id' => $this->storage_location_id,
             'storage_path' => $this->storage_path,
-            'storage_properties' => new StoragePropertiesResource( $this->storage_properties )
+            'storage_properties' => new StoragePropertiesResource( $this->storage_properties ),
+            'archived_at' => $this->created_at
         ]; 
     }
 }

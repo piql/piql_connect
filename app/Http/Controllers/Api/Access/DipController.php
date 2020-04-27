@@ -27,6 +27,31 @@ class DipController extends Controller
         $terms = collect(explode(" ", $request->query('search')));
         $archiveUuid = $request->query('archive');
         $holdingTitle = $request->query('holding');
+        $fromDate = $request->query('archived_from');
+        $toDate = $request->query('archived_to');
+
+        if( $fromDate ) {
+            try {
+                $cq = new \Carbon\Carbon( $fromDate );
+            } catch ( \Exception $ex ) {
+                Log::warn( "failed to parse archived_from date ".$ex->getMessage() );
+            }
+            if( $cq ) {
+                $q->whereDate('created_at', '>=', $cq->toDateString() );
+            }
+        }
+        if( $toDate ) {
+            try {
+                $cq = new \Carbon\Carbon( $toDate );
+            } catch ( \Exception $ex ) {
+                Log::warn( "failed to parse archived_to date ".$ex->getMessage() );
+            }
+            if( $cq ) {
+                $q->whereDate('created_at', '<=', $cq->toDateString() );
+            }
+        }
+
+
 
         if($archiveUuid) {
             $q->whereHas('storage_properties',
