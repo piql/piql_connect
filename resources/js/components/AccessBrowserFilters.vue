@@ -36,15 +36,7 @@
                 </div>
 
                 <div class="col pr-3">
-                    <label for="searchContents" class="col-form-label-sm">{{$t('access.browse.withContents')}}</label>
-                    <div class="input-group">
-                        <div class="input-group addon">
-                            <input v-model="searchField" id="searchContents" type="text" class="form-control fg-black" >
-                            <span class="input-group-addon">
-                                <i class="fas fa-search search-icon-inline mt-2 mr-2"></i>
-                            </span>
-                        </div>
-                    </div>
+                    <SearchField :label="$t('access.browse.withContents')" />
                 </div>
 
             </div>

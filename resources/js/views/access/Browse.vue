@@ -90,8 +90,8 @@ export default {
             if( query.archived_to ){
                 filter += "&archived_to=" + query.archived_to;
             }
-            if(this.searchField){
-                filter += "&search=" + encodeURI(this.searchField);
+            if(query.search){
+                filter += "&search=" + query.search;
             }
             if( parseInt( query.page ) ) {
                 filter += "&page=" + query.page;

@@ -1,6 +1,6 @@
 <template>
     <div class="form-group w-100">
-        <label v-if="showLabel" for="archivePicker" class="col-form-label">
+        <label v-if="showLabel" for="archivePicker" class="col-form-label-sm">
             {{label}}
         </label>
         <select v-model="selection" id="archivePicker" class="form-control w-100" v-bind:disabled="selectionDisabled" data-live-search="true">
