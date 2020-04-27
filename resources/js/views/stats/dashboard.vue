@@ -98,8 +98,12 @@
 <script>
 export default {
     mounted() {
-        axios.get("/api/v1/stats/user/current").then( (response) => {
+        this.get(
+            "/api/v1/stats/user/current"
+        ).then( (response) => {
             this.userStats = response.data.data;
+        }).catch(error => {
+            this.userStats = [];
         });
     },
     data() {

@@ -146,6 +146,7 @@ export default {
                     onValidate: (id, name) => {
                     },
                     onSubmit: (id, name) => {
+
                         this.filesUploading.unshift({
                             'id': id,
                             'filename': name,

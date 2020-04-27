@@ -1,0 +1,54 @@
+export default {
+    methods: {
+        get: async function(url, def = { retry : 5}) {
+            return this.doServiceRequest(function() {
+                return axios.get(url);
+            }, def);
+        },
+
+        // do the same for post
+        post: async function(url, payload, def = { retry : 1} ) {
+            return this.doServiceRequest(function() {
+                return axios.post(url, payload);
+            }, def);
+        },
+
+        doServiceRequest : async function(createServiceRequest, def = { retry : 5}) {
+
+            let retry = 1;
+            if(def.retry !== undefined) {
+                retry = def.retry;
+            }
+
+            while(retry--) {
+                try {
+                    return await createServiceRequest();
+                } catch(error) {
+                    if (error.response) {
+                        // The request was made and the server responded with a status code
+                        // that falls out of the range of 2xx
+                        if(error.response.status == 401) {
+                            Vue.nextTick( () => { window.location = "/logout"; } );
+                        } else if(error.response.status >= 500) {
+                            continue;
+                        }
+                        console.log(error.response.data);
+                        console.log(error.response.status);
+                        console.log(error.response.headers);
+                    } else if (error.request) {
+                        // The request was made but no response was received
+                        // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+                        // http.ClientRequest in node.js
+                        console.log(error.request);
+                    } else {
+                        // Something happened in setting up the request that triggered an Error
+                        console.log('Error', error.message);
+                    }
+                    console.log(error.config);
+                    break;
+                }
+            }
+            return Promise.reject("Request failed or timed out");
+        }
+    }
+}

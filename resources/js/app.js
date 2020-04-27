@@ -17,6 +17,8 @@ import VueResize from 'vue-resize';
 window.Vue.use(VueResize);
 import toast from './mixins/toast.js';
 window.Vue.mixin(toast);
+import serviceCall from './mixins/serviceCall.js';
+window.Vue.mixin(serviceCall);
 import Echo from "laravel-echo";
 window.io = require('socket.io-client');
 if (typeof io !== 'undefined') {
