@@ -101,6 +101,10 @@ class BagitUtil
         {
             $inputFileSource = $this->m_InputFilesSource[$i];
             $inputFileDestination = $this->m_InputFilesDestination[$i];
+            if (!file_exists($inputFileSource)) {
+                $this->m_ErrorMessage = "Failed to add file to bag. Source file don't exist: " . $inputFileSource;
+                return false;
+            }
             $bag->addFile($inputFileSource, 'data/' . $inputFileDestination);
             if (!file_exists($bag->getDataDirectory() . '/' . $inputFileDestination))
             {

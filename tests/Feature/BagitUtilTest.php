@@ -38,7 +38,8 @@ class BagitUtilTest extends TestCase
     public function tearDown() : void
     {
         array_map( function ($filePath) { unlink($filePath); }, $this->generatedImageFilePaths );
-        unlink($this->outputFilePath);
+        if(file_exists($this->outputFilePath))
+            unlink($this->outputFilePath);
         parent::tearDown();
     }
 
@@ -51,6 +52,17 @@ class BagitUtilTest extends TestCase
         $createdBag = $bagIt->createBag($this->outputFilePath);
 
         $this->assertTrue( $createdBag, "BagIt failed to create a bag" );
+    }
+
+    public function test_creating_a_bag_with_a_missing_file()
+    {
+        $bagIt = new BagitUtil();
+        array_map( function ($filePath) use (&$bagIt ) {
+            $bagIt->addFile($filePath, basename($filePath));
+        }, [Faker::create()->uuid().".zip"] );
+        $createdBag = $bagIt->createBag($this->outputFilePath);
+
+        $this->assertFalse( $createdBag, "BagIt failed to create a bag" );
     }
 
     public function test_the_created_bag_is_a_valid_zip_archive()
