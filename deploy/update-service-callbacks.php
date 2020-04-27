@@ -3,7 +3,7 @@
 <?php
 $username = 'test';
 $password = 'test';
-$logFilePath = '../storage/logs/laravel-' . date('Y-m-d') . '.log';
+$logDir = '../storage/logs/';
 $commandFileTempPath = '/tmp/lynx_scr.txt';
 
 function logInfo($text)
@@ -18,31 +18,61 @@ function exitWithError($text)
 }
 
 // Parse log
-logInfo('Parsing log: ' . $logFilePath);
 $callbackUrl = '';
 $callbackAuthorizationKey = '';
-$handle = fopen($logFilePath, "r");
-if ($handle)
+if (is_dir($logDir))
 {
-    while (($line = fgets($handle)) !== false)
+    $logFiles = scandir($logDir, SCANDIR_SORT_DESCENDING);
+    foreach ($logFiles as $logFile)
     {
-        if (strpos($line, '<package_uuid>') !== false)
+        $logFile = $logDir . $logFile;
+        logInfo('Found file: ' . $logFile);
+        if (strpos($logFile, 'laravel-') !== false && substr($logFile, strlen($logFile) - 4) == '.log')
         {
-            $callbackUrl = trim($line);
-        }
+            logInfo('Parsing log: ' . $logFile);
+            $handle = fopen($logFile, "r");
+            if ($handle)
+            {
+                while (($line = fgets($handle)) !== false)
+                {
+                    if (strpos($line, '<package_uuid>') !== false)
+                    {
+                        $callbackUrl = trim($line);
+                    }
 
-        if (strpos($line, 'Authorization: ') !== false)
-        {
-            $callbackAuthorizationKey = trim(substr($line, strlen('Authorization: ')));
+                    if (strpos($line, 'Authorization: ') !== false)
+                    {
+                        $callbackAuthorizationKey = trim(substr($line, strlen('Authorization: ')));
+                    }
+                }
+
+                fclose($handle);
+
+                if (strlen($callbackUrl) != 0 || strlen($callbackAuthorizationKey) != 0)
+                {
+                    if (strlen($callbackUrl) == 0 || strlen($callbackAuthorizationKey) == 0)
+                    {
+                        exitWithError('Could not find both url and key: ' . $callbackUrl . ' ' . $callbackAuthorizationKey);
+                    }
+
+                    break;
+                }
+            }
+            else
+            {
+                exitWithError('Failed to read file: ' . $logFile);
+            }
         }
     }
-
-    fclose($handle);
 }
 else
 {
-    exitWithError('Failed to read log file');
-} 
+    exitWithError('Failed to read log directory: ' . $logDir);
+}
+if (strlen($callbackUrl) == 0 || strlen($callbackAuthorizationKey) == 0)
+{
+    exitWithError('Failed to read service callback info from logs');
+}
 logInfo('Found URL: ' . $callbackUrl);
 logInfo('Found key: ' . $callbackAuthorizationKey);
 
