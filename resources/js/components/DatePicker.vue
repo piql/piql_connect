@@ -16,6 +16,8 @@
 import JQuery from 'jquery';
 let $ = JQuery;
 import RouterTools from '../mixins/RouterTools.js';
+import { isValid as isValidDate } from 'date-fns';
+
 export default {
     components: {},
 
@@ -24,7 +26,8 @@ export default {
     data () {
         return {
             dateValue: null,
-            uid: "0"
+            uid: "0",
+            isValidDate,
         }
     },
 
@@ -74,8 +77,8 @@ export default {
 
     mounted () {
         this.uid = encodeURI(`${this.query}_${Math.floor( 100000 * Math.random())}`);
-        let query = this.$route.query[this.query] ?? null;
-        this.dateValue = query;
+        let dateQuery = this.$route.query[this.query] ?? null;
+        this.dateValue = ( this.isValidDateString( dateQuery) ) ? dateQuery : '';
     },
 
     methods: {
@@ -87,15 +90,19 @@ export default {
                 });
             }
         },
+        isValidDateString: function( dateString ) {
+            let dvDate = new Date( dateString );
+            return this.isValidDate( dvDate );
+        }
     },
     watch: {
         '$route': 'dispatchRouting',
         dateValue: function( dateValue ) {
-            if( !this.dateValue ) {
+            if( this.isValidDateString( dateValue ) ){
+                this.updateQueryParams({ [this.query]: dateValue, page: null });
+            } else {
                 this.updateQueryParams({ [this.query]: null });
-                return;
             }
-            this.updateQueryParams({ [this.query]: this.dateValue, page: null });
         }
     }
 };
