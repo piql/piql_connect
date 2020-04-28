@@ -6,9 +6,10 @@ namespace App\Services;
 use Illuminate\Support\Facades\Storage;
 use App\Interfaces\MetadataWriterInterface;
 
-class DublinCoreMetadataWriter implements MetadataWriterInterface
+class DublinCoreJsonMetadataWriter implements MetadataWriterInterface
 {
     private $filename;
+    private $isOpen;
 
     private $header = [
         "dc:title"       => "dc.title",
@@ -30,15 +31,19 @@ class DublinCoreMetadataWriter implements MetadataWriterInterface
 
     public function __construct( array $params )
     {
+        $this->isOpen = true;
         $this->filename = $params['filename'];
 
         // append header
         Storage::append(
-            $this->filename,
-            'filename,'.collect($this->header)->map(function($col) {
-                return $col;
-            })->implode(',')
+            $this->filename, "["
         );
+    }
+
+    public function __destruct()
+    {
+
+        $this->close();
     }
 
     public function write(array $parameter): bool
@@ -46,12 +51,22 @@ class DublinCoreMetadataWriter implements MetadataWriterInterface
         $metadata = $parameter['metadata'];
 
         // serialize metadata
-        Storage::append(
-            $this->filename,
-            'data/'.$parameter['object'].','.collect($this->header)->map(function($col, $key) use ($metadata) {
-                return ($metadata[$key] ?? '');
-            })->implode(',')
-        );
+        return Storage::append( $this->filename, json_encode( array_merge(
+                ["fielname" => 'objects/'.$parameter['object']],
+                collect($this->header)->flatMap(function($col, $key) use ($metadata) {
+                    return [$col => $metadata[$key]];
+                })->toArray()
+        )));
+    }
+
+    public function close(): bool
+    {
+        if($this->isOpen) {
+            $this->isOpen = false;
+            return Storage::append(
+                $this->filename, "]"
+            );
+        }
         return true;
     }
 }

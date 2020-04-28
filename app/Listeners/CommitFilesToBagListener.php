@@ -55,9 +55,10 @@ class CommitFilesToBagListener implements ShouldQueue
             return;
         }
 
-        $metadataFileName = Str::random(40)."-metadata.csv";
+        $metadataFileName = Str::random(40)."-metadata.json";
         $metadataWriter = $this->metadataGenerator->createMetadataWriter([
             'filename' => $metadataFileName,
+            'type' => 'json',
         ]);
 
         foreach ($files as $file)
@@ -80,6 +81,10 @@ class CommitFilesToBagListener implements ShouldQueue
                     }
                 }
             }
+        }
+        if(!$metadataWriter->close()) {
+            Log::error("Generating metadata for Bag " . $bag->id . " failed!, Unable to close file");
+            event(new ErrorEvent($bag));
         }
 
         // add metadata file to bagit tool
