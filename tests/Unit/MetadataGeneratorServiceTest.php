@@ -7,8 +7,6 @@ use App\Services\DublinCoreCSVMetadataWriter;
 use App\Services\DublinCoreJsonMetadataWriter;
 use App\Services\MetadataGeneratorService;
 use Tests\TestCase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class MetadataGeneratorServiceTest extends TestCase
 {
