@@ -12,6 +12,7 @@ use Illuminate\Support\Str;
 use App\Interfaces\ArchivalStorageInterface;
 use App\FileObject;
 use App\Bag;
+use Log;
 
 class DipController extends Controller
 {
