@@ -1,23 +1,35 @@
 <template>
     <div class="form-group w-100">
-        <label v-if="showLabel" for="archivePicker" class="col-form-label-sm">
+        <span v-if="!singleArchive">
+            <label v-if="showLabel" for="archivePicker" class="col-form-label-sm">
             {{label}}
         </label>
-        <select v-model="selection" id="archivePicker" class="form-control w-100" v-bind:disabled="selectionDisabled" data-live-search="true">
+        <select v-model="selection" :id="elementId" class="form-control w-100" v-bind:disabled="selectionDisabled" data-live-search="true">
             <option v-for="archive in archivesWithWildcard" v-bind:value="archive.uuid">
                 {{archive.title}}
             </option>
         </select>
+    </span>
+    <span v-else="!singleArchive">
+        <label class="col-form-label-sm" for="singleArchive">{{$t('Archive')}}</label>
+        <select class="form-control text-center" disabled>
+            <option selected>
+                {{singleArchiveTitle}}
+            </option>
+        </select>
+    </span>
     </div>
 </template>
 
 <script>
 import RouterTools from '../mixins/RouterTools.js';
+import DeferUpdate from '../mixins/DeferUpdate.js';
 
 export default {
-    mixins: [ RouterTools ],
+    mixins: [ RouterTools, DeferUpdate ],
 
     mounted() {
+        this.deferUpdates();
         axios.get("/api/v1/planning/archives").then( (response) => {
             this.archives = response.data.data;
         });
@@ -45,8 +57,22 @@ export default {
         };
     },
     props: {
-        selectionDisabled: false,
-        useWildCard: true,
+        singleArchive: {
+            type: Boolean,
+            default: false
+        },
+        singleArchiveTitle: {
+            type: String,
+            default: "Your Archive"
+        },
+        selectionDisabled: {
+            type: Boolean,
+            default: false
+        },
+        useWildCard: {
+            type: Boolean,
+            default: true
+        },
         wildCardLabel: {
             type: String,
             default: "All"
@@ -64,12 +90,7 @@ export default {
         '$route': 'dispatchRouting',
 
         selection: function ( archive ){
-            if( !this.initComplete ) {
-                /* don't change query params when setting selection from page load */
-                this.initComplete = true;
-                return;
-            }
-
+            if( this.updatesDeferred() ) return;
             if( archive === '0' ){
                 this.updateQueryParams({ archive : null, page: null, holding: null });
             } else {
@@ -79,12 +100,10 @@ export default {
         archives: function( archives ){
             if( !! archives ) {
                 let archiveQuery = this.$route.query.archive ?? '0';
-                Vue.nextTick( () => {
-                    this.updatePicker( archiveQuery );
+                    this.refreshPicker();
                     Vue.nextTick( () => {
-                        this.refreshPicker();
+                        this.updatePicker( archiveQuery );
                     });
-                });
             }
         },
 

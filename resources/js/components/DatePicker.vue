@@ -7,6 +7,9 @@
             :date-format-options="{ year: '2-digit', month: '2-digit', day: '2-digit'}"
             :placeholder="placeHolder" :hideHeader="hideHeader"
             :locale="locale" :labelHelp="$t('datepicker.help')"
+            today-button
+            reset-button
+            close-button
         >
         </b-form-datepicker>
     </div>
@@ -16,12 +19,13 @@
 import JQuery from 'jquery';
 let $ = JQuery;
 import RouterTools from '../mixins/RouterTools.js';
+import DeferUpdate from '../mixins/DeferUpdate.js';
 import { isValid as isValidDate } from 'date-fns';
 
 export default {
     components: {},
 
-    mixins: [ RouterTools ],
+    mixins: [ RouterTools, DeferUpdate ],
 
     data () {
         return {
@@ -76,6 +80,7 @@ export default {
     },
 
     mounted () {
+        this.deferUpdates();
         this.uid = encodeURI(`${this.query}_${Math.floor( 100000 * Math.random())}`);
         let dateQuery = this.$route.query[this.query] ?? null;
         this.dateValue = ( this.isValidDateString( dateQuery) ) ? dateQuery : '';
@@ -83,6 +88,7 @@ export default {
 
     methods: {
         dispatchRouting: function() {
+            if( this.updatesDeferred() ) return;
             let query = this.$route.query[this.query];
             if( query ) {
                 Vue.nextTick( () => {
@@ -98,11 +104,14 @@ export default {
     watch: {
         '$route': 'dispatchRouting',
         dateValue: function( dateValue ) {
-            if( this.isValidDateString( dateValue ) ){
-                this.updateQueryParams({ [this.query]: dateValue, page: null });
-            } else {
-                this.updateQueryParams({ [this.query]: null });
-            }
+            if( this.updatesDeferred() ) return;
+            Vue.nextTick( () => {
+                if( this.isValidDateString( dateValue ) ){
+                    this.updateQueryParams({ [this.query]: dateValue, page: null });
+                } else {
+                    this.updateQueryParams({ [this.query]: null });
+                }
+            });
         }
     }
 };

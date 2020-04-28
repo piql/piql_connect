@@ -1,25 +1,16 @@
 <template>
     <div>
         <form class="form" v-on:submit.prevent>
-            <div class="row">
+            <div class="row mb-5">
 
-                <div v-if="useArchives" class="col-md-2">
+                <div v-if="filters.archives && useArchives" class="col-lg-3 col-md-3 col-sm">
                     <archive-picker
                         :wildCardLabel='$t("All")'
                         :label='$t("Archive")'
                     />
                 </div>
 
-                <div v-else="useArchives" class="col-md-2">
-                    <label class="col-form-label-sm" for="singleArchive">{{$t('Archive')}}</label>
-                    <select class="form-control text-center" id="singleArchive" disabled>
-                        <option selected>
-                            {{singleArchiveTitle}}
-                        </option>
-                    </select>
-                </div>
-
-                <div class="col-md-2">
+                <div v-if="filters.holdings" class="col-lg-2 col-md-3 col-sm">
                     <holding-picker v-if="useHoldings"
                         :label='$t("Holding")'
                         :wildCardLabel='$t("All")'
@@ -27,15 +18,15 @@
                     />
                 </div>
 
-                <div class="col-md-2">
+                <div v-if="filters.archivedFrom" class="col-lg-2 col-md-3 col-sm">
                     <DatePicker class="" :label="$t('access.browse.archivedFrom')" query="archived_from"/>
                 </div>
 
-                <div class="col-md-2">
+                <div v-if="filters.archivedTo" class="col-lg-2 col-md-3 col-sm">
                     <DatePicker class="" :label="$t('access.browse.archivedTo')" query="archived_to" />
                 </div>
 
-                <div class="col pr-3">
+                <div v-if="filters.search" class="col-lg-3 col-md col-sm-12">
                     <SearchField :label="$t('access.browse.withContents')" />
                 </div>
 
@@ -68,6 +59,18 @@ export default {
     },
 
     props: {
+        filters: {
+            type: Object,
+            default: function() {
+                return {
+                    archives: true,
+                    holdings: true,
+                    archivedFrom: true,
+                    archivedTo: true,
+                    search: true
+                };
+            }
+        },
         useArchives: {
             type: Boolean,
             default: true

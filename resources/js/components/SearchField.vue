@@ -14,14 +14,15 @@
 
 <script>
 import RouterTools from '../mixins/RouterTools.js';
+import DeferUpdate from '../mixins/DeferUpdate.js';
 export default {
     components: {},
 
-    mixins: [ RouterTools ],
+    mixins: [ RouterTools, DeferUpdate ],
 
     data () {
         return {
-            searchTerms: ""
+            searchTerms: "",
         }
     },
 
@@ -39,11 +40,8 @@ export default {
     watch: {
         '$route': 'dispatchRouting',
         searchTerms: function( searchTerms ) {
-            if( !this.searchTerms ) {
-                this.updateQueryParams({ [this.query]: null });
-                return;
-            }
-            this.updateQueryParams({ [this.query]: this.searchTerms, page: null });
+            if( this.updatesDeferred() ) return;
+            this.replaceQueryParams({ [this.query]: this.searchTerms, page: null });
         },
     },
     computed: {
@@ -53,12 +51,17 @@ export default {
     },
 
     mounted () {
+        this.deferUpdates();
         let query = this.$route.query[this.query] ?? null;
         this.searchTerms = query;
     },
 
     methods: {
         dispatchRouting() {
+            let query = this.$route.query[this.query] ?? null;
+            if( this.searchTerms && query && query != this.searchTerms ) {
+                this.replaceQueryParams({ [this.query]: this.searchTerms, page: null });
+            }
         }
     }
 };

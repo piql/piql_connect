@@ -120,7 +120,7 @@ export default {
         /**
          * dispatchRouting is called whenever the route changes
          *
-         * Use it to update pagination, filters etc.
+         * Use it to update API queries with pagination, filters etc.
          */
         dispatchRouting() {
             this.refreshObjects( this.apiQueryString );

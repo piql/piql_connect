@@ -35,20 +35,11 @@ import axios from 'axios';
 
 export default {
     mixins: [ RouterTools ],
-
-    data() {
-        return {
-        }
-    },
     mounted() {
-        let page = parseInt( this.$route.query.page );
-        if( page ) {
-            if( page < 2 ) {
-                const query = Object.assign( {}, this.$route.query );
-                delete query.page;
-                this.$router.push( { query } );
-            }
-        }
+        /*
+        Paging is driven by the metadata block returned from the REST API,
+        and unlike the other filters needs to special mount handling
+         */
     },
     props: {
         meta: null,
@@ -126,7 +117,7 @@ export default {
             this.updateQueryParams({ page: this.numberOfPages });
         },
         goToPage( page ) {
-            if( page == 1) page = null;
+            if( isNaN(page) || page < 2 ) page = null;
             this.updateQueryParams({ page });
         }
     }
