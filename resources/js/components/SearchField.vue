@@ -41,7 +41,11 @@ export default {
         '$route': 'dispatchRouting',
         searchTerms: function( searchTerms ) {
             if( this.updatesDeferred() ) return;
-            this.replaceQueryParams({ [this.query]: this.searchTerms, page: null });
+            if( this.$route.query[this.query] ) {
+                this.replaceQueryParams({ [this.query]: this.searchTerms, page: null });
+            } else {
+                this.updateQueryParams({ [this.query]: this.searchTerms, page: null });
+            }
         },
     },
     computed: {
@@ -61,6 +65,8 @@ export default {
             let query = this.$route.query[this.query] ?? null;
             if( this.searchTerms && query && query != this.searchTerms ) {
                 this.replaceQueryParams({ [this.query]: this.searchTerms, page: null });
+            } else {
+                this.searchTerms = query;
             }
         }
     }
