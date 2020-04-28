@@ -7,7 +7,7 @@
                 {{item.storage_properties.bag.name}}
             </div>
             <div class="col-sm-1 p-0 text-truncate align-self-center text-center">
-                {{dateFormat(item.storage_properties.ingest_time)}}
+                {{dateFormat(item.archived_at)}}
             </div>
             <div class="col-sm-2 text-truncate align-self-center text-center">
                 {{item.storage_properties.holding_name}}

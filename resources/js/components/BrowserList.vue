@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="d-inline-block pl-3 pr-3 w-100">
         <div class="row plistHeader text-truncate mt-2">
             <div class="col-sm-2 text-center">{{$t("access.browse.header.preview")}}</div>
             <div class="col-sm-3 text-center">{{$t("access.browse.header.name")}}</div>

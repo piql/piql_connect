@@ -1,4 +1,5 @@
 {
+    "locale": "no",
     "Upload" : "Opplasting",
     "Welcome": "Velkommen",
     "Add files" : "Legg til filer",
@@ -214,6 +215,10 @@
     "timeout.text1": "Du har nå vært inaktiv i snart",
     "timeout.minutes": "minutter",
     "timeout.text2": "Trykk Fortsett om du ønsker å forbli innlogget, ellers vil du automatisk logges ut av piqlConnect.",
-    "timeout.continue": "Fortsett"
+    "timeout.continue": "Fortsett",
 
+    "datepicker.noDateSelected": "Ingen dato valgt",
+    "datepicker.help": "Bruk piltastene og enter til å velge en dato",
+    "datepicker.toasts.illegalRangeTitle": "Ugyldig datoområde",
+    "datepicker.toasts.illegalRangeMessage": "Du har valgt en ugyldig rekkevidde for arkivert fra-til. Oppdaterer."
 }

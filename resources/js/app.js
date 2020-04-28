@@ -111,7 +111,6 @@ import NowRetrieving from './views/access/NowRetrieving.vue';
 import Settings from './views/settings/Settings.vue';
 import PageNotFound from './views/PageNotFound.vue';
 
-
 const router = new VueRouter({
     mode: 'history',
     routes: [
