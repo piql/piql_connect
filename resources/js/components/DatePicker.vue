@@ -84,21 +84,30 @@ export default {
         this.uid = encodeURI(`${this.query}_${Math.floor( 100000 * Math.random())}`);
         let dateQuery = this.$route.query[this.query] ?? null;
         this.dateValue = ( this.isValidDateString( dateQuery) ) ? dateQuery : '';
+        if( !this.dateValue ) {
+            this.updatesDeferred();
+            this.dateValue = "";
+        }
     },
 
     methods: {
         dispatchRouting: function() {
             if( this.updatesDeferred() ) return;
             let query = this.$route.query[this.query];
-            if( query ) {
-                Vue.nextTick( () => {
-                    this.dateValue = query;
-                });
-            }
+            Vue.nextTick( () => {
+                this.dateValue = query;
+            });
         },
         isValidDateString: function( dateString ) {
             let dvDate = new Date( dateString );
-            return this.isValidDate( dvDate );
+            let valid = this.isValidDate( dvDate );
+            let query = this.$route.query[this.query];
+            if( query && !valid ) {
+                //TODO: Side effect free version of this validation
+                this.dateValue = "";
+                this.updatesDeferred();
+            }
+            return valid;
         }
     },
     watch: {
