@@ -89,7 +89,7 @@ class CommitFilesToBagListener implements ShouldQueue
 
         // add metadata file to bagit tool
         if( Storage::exists($metadataFileName) && ( $bag->owner()->first()->settings->getIngestMetadataAsFileAttribute() !== true ) ) {
-            $this->bagIt->addMetadataFile(Storage::path($metadataFileName), "metadata.csv");
+            $this->bagIt->addMetadataFile(Storage::path($metadataFileName), "metadata.json");
         }
 
         $result = $this->bagIt->createBag($bag->storagePathCreated());
