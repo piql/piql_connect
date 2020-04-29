@@ -15,7 +15,10 @@
                     <div v-for="schemeItem in scheme" class="row mb-2">
                         <div class="col-sm-7 form-group mb-2">
                             <label class="small" >{{schemeItem.label}}</label>
-                            <input class="form-control input-sm" type="text" v-bind:id="schemeItem.name" v-bind:value="getValue(schemeItem.name)" @input="setValue(schemeItem.name, $event.target.value)">
+                            <input class="form-control input-sm" type="text"
+                                   v-bind:id="schemeItem.name"
+                                   v-bind:value="getValue(schemeItem.name)"
+                                   @input="setValue(schemeItem.name, $event.target.value)">
                         </div>
                     </div>
                 </div>
@@ -59,11 +62,10 @@ export default {
                     {"name" : "dc:rights",      "label" : "Rights",      "type": "text"},
                 ]
             ],
-            metadataObject: {}
+            metadataObject: {
+                metadata: []
+            }
         }
-    },
-    props: {
-        fileid: '',
     },
     methods: {
         getValue(key) {
@@ -76,10 +78,29 @@ export default {
             this.metadataObject.metadata[key] = value;
         },
         async save() {
+            // save errorToast handler just in case there is an error
+            // because this object may not be present when the error occur
+            let errorToast = this.errorToast;
+            this.patch(
+                '/api/v1/ingest/files/' + this.$route.params.fileId + '/metadata/' + this.metadataObject.id,
+                this.metadataObject,
+            ).catch(function(error) {
+                // todo: proper error handling and field input validation
+                let title = "Metadata error";
+                let message = (error.errors === undefined) ? "Saving matadata failed" : JSON.stringify(error.errors);
+                errorToast( title, message );
+            });
+
             this.$router.push({ name: 'ingest.upload' });
         }
     },
     async mounted() {
+        let response = (await this.get('/api/v1/ingest/files/' + this.$route.params.fileId + '/metadata')).data.data;
+        if(response.length > 0) {
+            this.metadataObject = response[0];
+        } else {
+            this.metadataObject = (await this.post('/api/v1/ingest/files/' + this.$route.params.fileId + '/metadata')).data.data[0];
+        }
     }
 }
 </script>

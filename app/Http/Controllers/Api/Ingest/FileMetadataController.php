@@ -14,21 +14,21 @@ class FileMetadataController extends Controller
 {
     private function validateRequest(Request $request) {
         return $request->validate([
-            "metadata.dc:title" => "string",
-            "metadata.dc:creator" => "string",
-            "metadata.dc:subject" => "string",
-            "metadata.dc:description" => "string",
-            "metadata.dc:publisher" => "string",
-            "metadata.dc:contributor" => "string",
-            "metadata.dc:date" => "string",
-            "metadata.dc:type" => "string",
-            "metadata.dc:format" => "string",
-            "metadata.dc:identifier" => "string",
-            "metadata.dc:source" => "string",
-            "metadata.dc:language" => "string",
-            "metadata.dc:relation" => "string",
-            "metadata.dc:coverage" => "string",
-            "metadata.dc:rights" => "string",
+            "metadata.dc:title" => "string|nullable",
+            "metadata.dc:creator" => "string|nullable",
+            "metadata.dc:subject" => "string|nullable",
+            "metadata.dc:description" => "string|nullable",
+            "metadata.dc:publisher" => "string|nullable",
+            "metadata.dc:contributor" => "string|nullable",
+            "metadata.dc:date" => "string|nullable",
+            "metadata.dc:type" => "string|nullable",
+            "metadata.dc:format" => "string|nullable",
+            "metadata.dc:identifier" => "string|nullable",
+            "metadata.dc:source" => "string|nullable",
+            "metadata.dc:language" => "string|nullable",
+            "metadata.dc:relation" => "string|nullable",
+            "metadata.dc:coverage" => "string|nullable",
+            "metadata.dc:rights" => "string|nullable",
         ]);
     }
     /**

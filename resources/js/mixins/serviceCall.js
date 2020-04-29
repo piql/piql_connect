@@ -13,6 +13,13 @@ export default {
             }, def);
         },
 
+        // do the same for post
+        patch: async function(url, payload, def = { retry : 5} ) {
+            return this.doServiceRequest(function() {
+                return axios.patch(url, payload);
+            }, def);
+        },
+
         doServiceRequest : async function(createServiceRequest, def = { retry : 5}) {
 
             let retry = 1;
@@ -20,6 +27,7 @@ export default {
                 retry = def.retry;
             }
 
+            let response = ""
             while(retry--) {
                 try {
                     return await createServiceRequest();
@@ -32,6 +40,7 @@ export default {
                         } else if(error.response.status >= 500) {
                             continue;
                         }
+                        response = error.response.data;
                         console.log(error.response.data);
                         console.log(error.response.status);
                         console.log(error.response.headers);
@@ -40,6 +49,7 @@ export default {
                         // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
                         // http.ClientRequest in node.js
                         console.log(error.request);
+                        continue;
                     } else {
                         // Something happened in setting up the request that triggered an Error
                         console.log('Error', error.message);
@@ -48,7 +58,10 @@ export default {
                     break;
                 }
             }
-            return Promise.reject("Request failed or timed out");
+            if(response === "")
+                response = {"message" : "Request failed or timed out"};
+
+            return Promise.reject(response);
         }
     }
 }
