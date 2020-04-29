@@ -38,11 +38,11 @@ class DublinCoreJsonMetadataWriterTest extends TestCase
 
     }
 
-    public function test_creating_a_json_metadata_file_with_header_and_one_row_of_data()
+    public function test_creating_a_json_metadata_file_one_entry_of_data_containing_fields()
     {
         $expectedData = '[
             {
-                "fielname":"objects/test.txt",
+                "filename":"objects/test.txt",
                 "dc.title":"title",
                 "dc.creator":"creator",
                 "dc.subject":"subject",
@@ -88,6 +88,27 @@ class DublinCoreJsonMetadataWriterTest extends TestCase
         $this->assertJsonStringEqualsJsonString($expectedData, $data);
     }
 
+    public function test_creating_a_json_metadata_file_one_entry_of_data_containing_two_fields()
+    {
+        $expectedData = json_encode([[
+            "filename" => "objects/".$this->filename,
+            "dc.title"       => "title",
+            "dc.creator"     => "creator",
+        ]]);
+
+        $this->writer->write([
+            "object" => $this->filename,
+            'metadata' => [
+                "dc:title"       => "title",
+                "dc:creator"     => "creator",
+            ]
+        ]);
+        $this->writer->close();
+
+        $this->assertFileExists( Storage::path($this->filename) );
+        $data = Storage::disk()->get($this->filename);
+        $this->assertJsonStringEqualsJsonString($expectedData, $data);
+    }
 
 
 }

@@ -52,10 +52,10 @@ class DublinCoreJsonMetadataWriter implements MetadataWriterInterface
 
         // serialize metadata
         return Storage::append( $this->filename, json_encode( array_merge(
-                ["fielname" => 'objects/'.$parameter['object']],
+                ["filename" => 'objects/'.$parameter['object']],
                 collect($this->header)->flatMap(function($col, $key) use ($metadata) {
-                    return [$col => $metadata[$key]];
-                })->toArray()
+                    return isset($metadata[$key]) ? [$col => $metadata[$key]] : null;
+                })->except(null)->toArray()
         )));
     }
 
