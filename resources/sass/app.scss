@@ -7,9 +7,10 @@ $black: black;
 $red:  red;
 $gray: grey;
 
-$color_main_brand: #cc3b0d;
-$color_background: #4d324d;
-$color_background_dark: #30242c;
+$color_main_brand: #cc5d33;
+$color_main_brand_light: #ff6633;
+$color_background: #4b3440;
+$color_background_dark: #3a2c35;
 $color_background_1: #6a4b5b;
 $color_background_1_transparent: #6a4b5b40;
 $color_background_2: #b092a2;
@@ -31,7 +32,7 @@ $color_fill_0: #f0f0f0;
 $color_fill_1: #ababab;
 $color_fill_2: #c7c7c7;
 $color_fill_2_transparent: #c7c7c740;
-$color_fill_3: #e3e3e3;
+$color_fill_3: #e8e8e8;
 $color_fill_3_transparent: #e3e3e340;
 $color_fill_dark: #605f5f;
 $color_fill_verydark: #403f3f;
@@ -86,7 +87,6 @@ $image_piql-logo-white_url: url('/images/piql_logo_white.png');
     position: relative;
     overflow-x: hidden;
     color: $color_fill;
-    //font-size: 16px;
 }
 
 //original selectors
@@ -114,15 +114,8 @@ $image_piql-logo-white_url: url('/images/piql_logo_white.png');
     vertical-align: top;
     padding-left: 3px;
     color: $color_fill_verydark;
-    //font-size: 12px;
     margin-right: 15px;
     line-height: 40px;
-    //Instead of the line below you could use @include box-sizing($bs)
-//    box-sizing: content-box;
-    //vendor-prefix found
-    //-moz-box-sizing: content-box
-    //vendor-prefix found
-    //-webkit-box-sizing: content-box
 }
 
 //original selectors
@@ -132,7 +125,6 @@ $image_piql-logo-white_url: url('/images/piql_logo_white.png');
     border: 0;
     padding: 20px;
     background-color: $color_fill_3;
-    //font-size: 12px;
 }
 
 //original selectors
@@ -212,12 +204,17 @@ body {
     @extend %extend_1;
     font-family: 'OpenSans';
     -webkit-text-size-adjust: none;
-    overflow-y: hidden;
+    overflow-x: scroll;
 }
 
 @media (min-height: 900px) {
     body {
         overflow-y: hidden;
+    }
+}
+@media (min-width: 900px) {
+    body {
+        overflow-x: hidden;
     }
 }
 .burgerMenu {
@@ -288,7 +285,7 @@ h1 {
     font-family: 'Agenda' !important;
     font-weight: 800;
     text-transform: uppercase;
-    font-size: 1.5rem;
+    font-size: 2rem;
 }
 
 
@@ -302,11 +299,6 @@ h1 {
     text-transform: uppercase;
     font-size: 2rem;
 
-}
-
-.ingressText {
-    font-size: 0.75em;
-    margin-bottom: 1rem;
 }
 
 
@@ -333,7 +325,6 @@ em {
     margin: 0;
     padding: 0;
     font-style: normal;
-    //font-size: 12px;
     color: $color_fill_dark;
 }
 a {
@@ -348,19 +339,21 @@ a {
 }
 
 .plist {
-    padding: 0.5rem;
-    min-height: 4.2rem;
-    max-height: 4.2rem;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    height: 5rem;
     font-size: 1.0rem;
     border-bottom: 1px solid lightgray;
     background: white;
 }
 
 .thumbnailList {
-    height: 4.5rem;
+    height: 5rem;
     font-size: 1.0rem;
     border-bottom: 1px solid lightgray;
     background: white;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
 }
 
 .thumbnailImage {
@@ -386,96 +379,20 @@ a {
 
 .plistHeader {
     background-color: $color_fill_0;
-    padding: 0.7rem 0px;
+    padding: 0.25rem 0px;
     border-bottom: 1px solid $color_background_dark;
-    font-family: $font_open_sans_bold;
+    font-family: $font_open_sans;
     font-size: 0.8rem;
     text-align: left;
     color: black;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
 }
 
 .listActionItems {
     color: $color_signal;
-    justify-content: space-evenly;
-    //font-size: 28px;
 }
-.list {
-    position: relative;
-    overflow-y: auto;
-    width: 100%;
-    table {
-        width: 100%;
-        text-align: left;
-        color: $black;
-        border: 0;
-        margin: 0;
-        padding: 0;
-        border-collapse: collapse;
-        thead {
-            @extend %extend_6;
-            tr {
-                position: sticky;
-                top: 0;
-                width: 100%;
-                padding: 0;
-                margin: 0 0 150px 0;
-                border-bottom: 1px solid $red;
-                th {
-                    min-width: auto;
-                }
-            }
-            th .text {
-                z-index: 2;
-                height: 20px;
-                min-width: 50px;
-                padding-bottom: 20px;
-                text-align: left;
-            }
-        }
-        tr {
-            background-color: $white;
-            border-bottom: 1px solid $color_fill_2;
-        }
-        .greyedOut {
-            color: $gray;
-            a {
-                color: $gray;
-                border-bottom: 1px dashed $gray;
-            }
-        }
-        td:last-child {
-            text-align: right;
-        }
-        th:last-child {
-            text-align: right;
-        }
-        .linked a {
-            border-bottom: 1px dashed $black;
-            color: $black;
-        }
-    }
-    i {
-        color: $color_signal;
-        //font-size: 20px;
-        &:hover {
-            color: $color_fill_dark;
-        }
-    }
-    td {
-        padding: 20px;
-    }
-    td[colspan="4"] {
-        text-align: left !important;
-    }
-    .contentOptionsRow {
-        background-color: transparent;
-        border-bottom: 0;
-        td {
-            text-align: left !important;
-            padding: 10px 40px 0;
-        }
-    }
-}
+
 .table-scroll {
     height: 400px;
     overflow: auto;
@@ -541,9 +458,6 @@ textarea {
     background-color: $white;
     border: 0;
     height: 30px;
-    //Instead of the line below you could use @include border-radius($radius, $vertical-radius)
-    border-radius: 2px;
-    padding: 4px;
     top: 0;
 }
 .inputSubmitSave {
@@ -555,7 +469,6 @@ textarea {
     text-transform: uppercase;
     color: $white;
     padding: 3px 5px 5px;
-    //font-size: 12px;
     height: 25px;
     margin-bottom: 4px;
 }
@@ -569,7 +482,6 @@ textarea {
     text-transform: uppercase;
     color: $white;
     padding: 3px 5px 5px;
-    //font-size: 12px;
     height: 25px;
     margin-bottom: 4px;
     margin-right: 10px;
@@ -582,18 +494,12 @@ label {
 
 .inputfile {
     + .filelabel {
-        margin-top: 2px;
         background: $color_main_brand;
-        //Instead of the line below you could use @include border-radius($radius, $vertical-radius)
-        border-radius: 3px;
-        border: 2px solid $color_main_brand;
         width: auto;
         display: inline-block;
         text-transform: uppercase;
         color: $white;
         cursor: pointer;
-        padding: 3px;
-        //font-size: 11px;
         &:hover {
             background-color: $color_fill_dark;
             border: 2px solid $color_fill_dark;
@@ -620,7 +526,6 @@ label {
 .btn {
     color: $white;
     text-align: center;
-    border-radius: 10px;
     background-color: $color_main_brand;
     outline: 0 !important;
     border: 0;
@@ -647,7 +552,8 @@ label {
     }
 
     &:hover {
-        background-color: white;
+        background-color: $color_main_brand_light;
+        color: white;
     }
 
     &:focus {
@@ -655,11 +561,10 @@ label {
         color: black;
         background-clip: padding-box;
         border: 1px solid $color_background_2_transparent !important;
-        box-shadow: 0 0 0 0.2rem $color_signal_light_transparent !important;
+        box-shadow: 0 0 0 0.2rem $color_fill_transparent !important;
         border-radius: 0.25rem;
         transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
     }
-
 }
 
 .rounded-circle {
@@ -825,12 +730,8 @@ button {
     @extend %extend_2;
 }
 .piqlTop {
-    width: 100%;
     background-color: $white;
-    margin: 0;
-    padding: 0;
     height: 8rem;
-    vertical-align: top;
 }
 .piqlTopPad {
     height: 8rem;
@@ -899,7 +800,6 @@ button {
     width: 15em;
     background-color: $white;
     border: 2px solid $color_fill_dark;
-    padding: 2px;
     padding-top: 15px;
     position: absolute;
     top: 100px;
@@ -955,56 +855,21 @@ button {
     left: 0px;
     height: calc(100vh - 180px);
 }
+.sideMenuOuter {
+    max-width: 20rem;
+}
 
-.sideMenu {
-    background-color: $color_background_1;
-    font-size: 1rem;
-    height: 100vh;
-    width: 100%;
-    max-width: 320px;
-    margin-top: -3rem;
-    padding-left: 0;
-    color: $white;
-    //Instead of the line below you could use @include transition($transition-1, $transition-2, $transition-3, $transition-4, $transition-5, $transition-6, $transition-7, $transition-8, $transition-9, $transition-10)
-    overflow: hidden;
-    ul {
-        list-style-type: none;
-        margin: 0;
-        padding: 0;
-        color: $white;
-        .fas {
-            @extend %extend_3;
-        }
-        .far {
-            @extend %extend_3;
-        }
-    }
-    li {
-        display: block;
-        //width: calc(100% - 30px);
-        background-color: $color_background_dark;
-        border-color: $color_background;
-        color: white;
-        height: 40px;
-        padding: 15px;
-        margin-bottom: 2px;
-        text-transform: uppercase;
-        &:hover {
-            background-color: $color_main_brand;
-        }
-    }
-    .leftSub {
-        background-color: $color_background;
-    }
-    .leftMenuItem {
-        font-style: normal;
-        position: absolute;
-        left: 5rem;
-        margin-top: 3px;
-        visibility: visible;
-        opacity: 1;
+.sideMenuCollapsed {
+    width: 5em;
+}
+
+
+.col-3 {
+    .sideMenu {
+        max-width: 20rem;
     }
 }
+
 
 .welcomeText {
     margin: 25px 25px 60px 25px;
@@ -1015,7 +880,6 @@ button {
     opacity: 1;
     //Instead of the line below you could use @include transition($transition-1, $transition-2, $transition-3, $transition-4, $transition-5, $transition-6, $transition-7, $transition-8, $transition-9, $transition-10)
     //Instead of the line below you could use @include transition-delay($delay-1, $delay-2, $delay-3, $delay-4, $delay-5, $delay-6, $delay-7, $delay-8, $delay-9, $delay-10)
-    transition-delay: 0.3s;
 }
 .poweredBy {
     display: inline-flex;
@@ -1049,52 +913,6 @@ button {
 .sidebarWrapper {
     display: inline-table;
 }
-
-.sideMenuCollapsed {
-    padding: 0;
-    margin-top: -3rem;
-    height: 100vh;
-    background-color: $color_background_1;
-    color: $white;
-    overflow: hidden;
-    ul {
-        list-style-type: none;
-        margin: 0;
-        padding: 0;
-        color: $white;
-        .fas {
-            font-size: 2rem;
-        }
-        .far {
-            font-size: 2rem;
-        }
-    }
-    li {
-        display: block;
-        width: calc(100% - 30px);
-        padding-right: 0.25rem;
-        background-color: $color_background_dark;
-        border-color: $color_background;
-        color: white;
-        width: auto;
-        text-transform: uppercase;
-        text-align: center !important;
-        &:hover {
-            background-color: $color_main_brand;
-        }
-    }
-    .leftMenuItem {
-        position: absolute;
-        left: 60px;
-        visibility: hidden;
-        font-style: normal;
-        opacity: 0;
-    }
-    .welcomeText {
-        visibility: hidden;
-        opacity: 0;
-    }
- }
 
 .bg-red {
     background-color: red !important;
@@ -1178,7 +996,6 @@ div.breadcrumbs{
     margin: 10px 10px 10px 0px;
     display: block;
     padding: 0;
-    //font-size: 12px;
     font-style: normal;
     color: $color_main_brand;
 }
@@ -1196,7 +1013,6 @@ div.breadcrumbs{
     width: auto;
     label {
         width: auto;
-        //font-size: 12px;
         margin-right: 5px;
         height: 40px;
         line-height: 40px;
@@ -1294,7 +1110,6 @@ th {
     background-color: $color_fill_3;
     padding-left: 10%;
     padding-top: 5px;
-    padding-bottom: 2px;
     a {
         padding-left: 0;
     }
@@ -1435,18 +1250,67 @@ th {
     color: $white !important;
 }
 
-.list-group-item {
-    box-sizing: content-box;
-    background-color: $color_signal;
-    border-color: $white;
-    color: $black;
-    &.active {
-        background-color: $color_main_brand !important;
-        border: 1px solid rgba(0, 0, 0, 0.125) !important;
+.sideMenu {
+    background-color: $color_background_1;
+    font-size: 0.9rem;
+    height: 90vh;
+    min-width: 17rem;
+    color: $white;
+    overflow: hidden;
+
+    ul {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
     }
-    &:hover{
-        background-color: $color_main_brand !important;
-        border: 1px solid rgba(0, 0, 0, 0.125) !important;
+    li {
+        display: block;
+        background-color: $color_background_dark;
+        border-color: $color_background;
+        text-transform: uppercase;
+        &:hover {
+            background-color: $color_main_brand;
+        }
+    }
+    a:hover {
+        text-decoration: none;
+    }
+
+    .list-group-item {
+        padding-right: 1rem;
+        border: none !important;
+        border-radius: 0 !important;
+        box-sizing: content-box;
+        background-color: $color_background_dark;
+        color: white;
+        &.active {
+            background-color: $color_main_brand !important;
+        }
+        &:hover{
+            background-color: $color_main_brand_light;
+        }
+        & .fas {
+            width: 2rem;
+            font-size: 2rem;
+        }
+        .leftMenuItem {
+            margin-left: 1rem;
+            display: inline-block;
+            vertical-align: super;
+            text-decoration: none;
+        }
+    }
+    &-collapsed {
+        @extend .sideMenu;
+        min-width: 5rem;
+        width: 5rem;
+        .leftMenuItem {
+            visibility: hidden;
+        }
+        .welcomeText {
+            visibility: hidden;
+        }
+
     }
 }
 
@@ -1477,8 +1341,8 @@ th {
 .form-control {
     color: black;
     &:focus {
-        background-clip: padding-box;
         border: 1px solid $color_fill_2_transparent !important;
+        background-clip: padding-box;
         border-radius: 0.25rem;
         box-shadow: 0 0 0 0.2rem $color_fill_transparent !important;
         outline: 0;
@@ -1556,28 +1420,46 @@ th {
     padding-left: 1em;
 }
 
-.titleIcon {
-    color: $color_background_dark;
-    font-size: 2.5rem;
-}
-
-.titleText {
-    color: $color_background_dark;
-    font-size: 2rem;
-    vertical-align: middle;
-    margin: 0.5rem;
+.pageHeader {
+    margin-top: 1.5rem;
+    margin-bottom: 1.5rem;
+    .titleText {
+        color: $color_fill_verydark;
+        font-size: 2rem;
+        font-weight: 600;
+        text-transform: uppercase;
+    }
+    .titleRow {
+        border-bottom: 1px solid $color_fill;
+        margin: 0;
+        padding: 0;
+    }
+    .titleIcon {
+        color: $color_fill_verydark;
+        font-size: 2.5rem;
+        margin-right: 2rem;
+    }
+    .ingressText {
+        font-size: 1rem;
+        margin-left: 6rem;
+        margin-top: 1rem;
+        margin-bottom: 1rem;
+        padding: 0;
+    }
 }
 
 
 
 .actionIcon {
     color: $color_signal;
-    font-size: 1.75rem;
+    font-size: 1.5rem;
 }
 
 .topIcon {
     color: white;
-    font-size: 1.75rem;
+    font-size: 1.2rem;
+    margin-left: 0.25rem;
+    margin-top: 0.4rem;
 }
 
 
@@ -1724,18 +1606,18 @@ th {
     color: $color_background_dark !important;
 }
 .pagerRow {
-    position: absolute;
-    bottom: 7.5rem;
-    margin-bottom: 0rem;
     margin-left: auto;
     margin-right: auto;
     left: 0;
     right: 0;
 }
+.pagerBottom {
+    left: 25vw;
+}
 
 .plistIcon {
     color: $color_signal !important;
-    font-size: 1.1rem;
+    font-size: 1rem;
     margin: 0;
     padding: 0;
 }
@@ -1806,25 +1688,47 @@ th {
     outline: 0;
     &:focus {
         outline: 0;
-        box-shadow: 0 0 0 0.2rem $color_signal_transparent !important;
+        box-shadow: 0 0 0 0.2rem $color_fill_transparent !important;
+        border: 1px solid $color_signal_transparent !important;
+        transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
     }
 }
 
 .form-control.focus {
   color: #495057;
   background-color: #fff;
-  border: none;
   box-shadow: 0 0 0 0.2rem $color_fill_transparent !important;
+  border: 1px solid $color_fill_2_transparent !important;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
   outline: 0;
 }
 
 .form-control.focus.is-valid {
+    border: 1px solid $color_fill_2_transparent !important;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
     box-shadow: 0 0 0 0.2rem $color_fill_transparent !important;
     outline: 0;
 }
 
+.input-invalid {
+    box-shadow: 0 0 0 0.2rem $color_signal_transparent !important;
+    border: 1px solid $color_signal_transparent !important;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    outline: 0;
+}
+
+input:invalid {
+    @extend .input-invalid;
+
+    &:focus {
+        @extend .input-invalid;
+    }
+}
+
 .form-control.focus.is-invalid {
-    box-shadow: 0 0 0 0.2rem $color_fill_transparent !important;
+    box-shadow: 0 0 0 0.2rem $color_signal !important;
+    border: 1px solid $color_signal_transparent !important;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
     outline: 0;
 }
 
@@ -1841,6 +1745,7 @@ th {
     outline: none !important;
     outline-offset: none;
     box-shadow: 0 0 0 0.2rem $color_fill_transparent !important;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 }
 
 .bootstrap-select .dropdown-toggle:focus-within {
@@ -1862,4 +1767,15 @@ th {
 
 .dropdown-item.active, .dropdown-item:active{
     background-color: $color_fill_1;
+}
+
+.sideMenuCollapsed .list-group-item {
+}
+
+.vue-fine-uploader-file-input {
+    display: inline-block;
+}
+.form-control-btn {
+    height: 38px;
+    margin-top: 0 !important;
 }
