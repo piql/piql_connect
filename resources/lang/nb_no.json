@@ -67,7 +67,7 @@
     "dashboard.ingress": "Om din informasjon i piqlConnect",
     "dashboard.month.abbrev.array": "['Jan','Feb', 'Mar', 'Apr', 'Mai', 'Jun', 'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Des']",
 
-    "ingest.processing.header" : "Prosessering",
+    "ingest.processing.title" : "Prosessering",
     "ingest.processing.ingress" : "Overvåk status for arkivering.",
     "ingest.processing.from": "Fra",
     "ingest.processing.to" : "Til",
@@ -82,6 +82,8 @@
     "ingest.processing.creatingStatus": "Oppretter AIP",
     "ingest.processing.noItems": "Alle SIPer er ferdig prosessert.",
 
+    "ingest.taskList.title": "Fjernlager",
+    "ingest.taskList.ingress": "Informasjon lagret på piqlFilm",
     "ingest.taskList.from" : "Fra",
     "ingest.taskList.to" : "Til",
     "ingest.taskList.statusFilter": "Status",
@@ -93,8 +95,8 @@
     "ingest.taskList.ingestDate": "Ingest-dato",
     "ingest.taskList.size": "Størrelse",
 
+    "ingest.offlineStorage.status.title": "Status",
     "ingest.offlineStorage.ingress": "Send arkivpakker til piqlFilm for langtidslagring",
-    "ingest.offlineStorage.status.header": "Status",
     "ingest.offlineStorage.status.ingress": "Vis status for arbeidsflyt for lagring på piqlFilm.",
     "ingest.offlineStorage.aipList.header": "Archival package list",
     "ingest.offlineStorage.header": "Offline-lagring",
@@ -185,9 +187,12 @@
 
     "access.retrieve": "Gjenopprett",
     "access.retrieve.readyToRetrieve": "Filer klare for gjenoppretting",
-    "access.retrieve.isRetrieving": "Under gjenopprettelse",
+    "access.retrieve.nowRetrieving": "Under gjenopprettelse",
+    "access.retrieve.nowRetrieving.ingress": "Informasjon i kø for gjenopphenting fra piqlFilm",
     "access.retrieve.downloadable": "Filer klare til nedlasting",
+    "access.retrieve.downloadable.ingress": "Last ned dine gjenopphentede filer",
     "access.retrieve.history": "Gjenopprettelseshistorikk",
+    "access.retrieve.history.ingress": "Tidligere gjenopprettet informasjon",
 
     "access.ready.ingress": "Filer klargjorte for gjenopphenting fra langtidslagring",
     "access.ready.aipName" : "Arkivnavn",

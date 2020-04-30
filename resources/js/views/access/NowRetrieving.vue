@@ -1,5 +1,8 @@
 <template>
-    <div class="container-fluid">
+    <div class="w-100">
+
+        <page-heading icon="fa-spinner" :title="$t('access.retrieve.nowRetrieving')"
+            :ingress="$t('access.retrieve.nowRetrieving.ingress')" />
 
         <div class="row plistHeader" v-show="hasFiles" v-if="done === false">
             <div class="col-sm-6">{{$t('access.ready.aipName')}}</div>

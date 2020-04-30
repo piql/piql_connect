@@ -1,5 +1,8 @@
 <template>
-    <div class="container-fluid">
+    <div class="w-100">
+
+        <page-heading icon="fa-file-download" :title="$t('access.retrieve.downloadable')"
+            :ingress="$t('access.retrieve.downloadable.ingress')" />
 
         <div class="row plistHeader" v-show="hasFiles" v-if="done === false">
             <div class="col-sm-8">{{$t('access.ready.aipName')}}</div>
@@ -9,8 +12,8 @@
 
             <ReadyForDownloadFile v-for="file in files" v-bind:item="file" v-bind:key="file.id" @takeOffline="takeOffline"/>
 
-        <div v-if="idle" class="mt-5"><h3>{{$t('access.retrieved.idle')}}</h3></div>
-        <div v-if="done" class="mt-5"><h3>{{$t('access.retrieved.noItems')}}</h3></div>
+        <div v-if="idle" class="mt-5 text-center"><h3>{{$t('access.retrieved.idle')}}</h3></div>
+        <div v-if="done" class="mt-5 text-center"><h3>{{$t('access.retrieved.noItems')}}</h3></div>
 
     </div>
 </template>

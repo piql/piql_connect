@@ -1,20 +1,7 @@
 <template>
-    <div class="mb-2 mt-2">
-        <div class="row">
-            <div class="col-sm-1 text-left">
-              <i class="fas fa-hourglass-half titleIcon"></i>
-            </div>
-            <div class="col-sm-6 text-left">
-                <h1>{{ $t('ingest.processing.header') }}</h1>
-            </div>
-        </div>
-        <div class="row mt-0 pt-0">
-            <div class="col-sm-1"></div>
-            <div class="col-sm-6 text-left ingressText">
-                {{$t("ingest.processing.ingress")}}
-            </div>
-        </div>
+    <div class="w-100">
 
+        <page-heading icon="fa-hourglass-half" :title="$t('ingest.processing.title')" :ingress="$t('ingest.processing.ingress')" />
 
         <ingest-filter-search v-bind:filters="['ingest.processing.processingFilter','ingest.processing.uploadingFilter']"></ingest-filter-search>
         <div class="row plistHeader" v-show="currentlyIdle === false">

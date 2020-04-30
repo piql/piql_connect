@@ -1,9 +1,6 @@
 <template>
-    <div>
-        <div>
-            <i class="fas fa-list-ul titleIcon"></i>
-            {{$t("ingest.fileList.header")}}
-        </div>
+    <div class="w-100">
+        <page-heading icon="fa-list-ul" :title="$t('ingest.taskList.title')" :ingress="$t('ingest.taskList.ingress')" />
 
         <form>
             <div class="row listFilter">
