@@ -1331,13 +1331,10 @@ th {
     }
 }
 
-.dashboard-halfStatsRow {
-    padding-bottom: 3rem;
-    margin-bottom: 1rem;
-}
+
 
 .dashboard-card {
-    border-radius: 0.8rem;
+    border-radius: 0.25rem;
     background: $color_background;
     background: $color_secondary_1;
 }
@@ -1654,32 +1651,33 @@ th {
     padding-bottom: calc(.20rem + 1px);
 }
 
-.stats {
-    height: 12vw;
+.graphs {
+    height: 25vh;
 }
 
+.pieChart {
+    width: 50vh;
+}
 .halfStats {
     text-align: center;
+    min-width: 6vw;
+    min-height: 6vw;
     margin: 0.1rem;
-    padding: 0.3rem;
 
     .value {
         font-family: $font_open_sans_bold;
-        margin: 0.6rem;
-        font-size: 1.6rem;
+        margin-top: 0.6rem;
+        font-size: 0.8rem;
         color: white;
     }
 
     .legend {
         font-family: $font_open_sans;
-        font-size: 0.8rem;
+        font-size: 0.6rem;
         color: white;
         margin-bottom: 0rem;
         text-overflow: ellipsis;
     }
-}
-.halfStatsRow {
-    justify-content: space-evenly;
 }
 
 .modal-title {

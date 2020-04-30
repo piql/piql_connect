@@ -15,7 +15,7 @@
     "Archive": "Archive",
     "Holdings": "Holdings",
     "Holding": "Holding",
-    "upload.header": "Upload",
+    "upload.title": "Upload",
     "upload.ingress" : "Upload files to your archives here by clicking the 'Add file' button.",
     "upload.addFileButton" : "Add file",
     "upload.addFileButtonToolTip": "Add a new file to the upload",
@@ -58,7 +58,8 @@
     "sidebar.retrieve.downloadable": "Ready for download",
     "sidebar.retrieve.history": "History",
 
-    "dashboard.ingress": "Short descriptive text of dashboard.",
+    "dashboard.title": "Dashboard",
+    "dashboard.ingress": "Your stored information",
     "dashboard.content": "Other type of content goes here.",
     "dashboard.month.abbrev.array": "['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']",
 

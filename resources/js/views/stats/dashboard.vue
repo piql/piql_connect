@@ -1,47 +1,43 @@
 <template>
-    <div>
-        <page-heading icon="fa-tachometer-alt" :title="$t('Dashboard')" :ingress="$t('dashboard.ingress')" />
+    <div class="w-100">
+        <page-heading icon="fa-tachometer-alt" :title="$t('dashboard.title')" :ingress="$t('dashboard.ingress')" />
 
-        <div class="row componentBody">
-            <div class="col-sm-6">
-                <div>
-                    <div class="row">
-                        <div class="col-sm-6">
-                            <line-chart class="stats" :title="$t('Archival Packages Ingested (monthly)')"
-                                url="/api/v1/stats/charts/monthlyOnlineAIPsIngested"
-                                :labels="monthNames" />
-                        </div>
-                        <div class="col-sm-6">
-                            <line-chart class="stats" :title="$t('Data Ingested (monthly)')"
-                                url="/api/v1/stats/charts/monthlyOnlineDataIngested"
-                                :labels="monthNames" />
-                        </div>
-                    </div>
-                    <div class="row mt-3">
-                        <div class="col-sm-12">
-                            <pie-chart class="stats" :title="$t('File formats Ingested')"
-                                url="/api/v1/stats/charts/fileFormatsIngested" />
-                        </div>
-                    </div>
-                </div>
+        <div class="row">
+            <div class="col-sm-3">
+                <line-chart class="graphs" :title="$t('Archival packages ingested (monthly)')"
+                    url="/api/v1/stats/charts/monthlyOnlineAIPsIngested"
+                    :labels="monthNames" />
             </div>
-            <div class="col-sm-6">
-                <div class="row">
-                    <div class="col-sm-6">
-                        <line-chart class="stats" :title="$t('Archival Packages Accessed (monthly)')"
-                            url="/api/v1/stats/charts/monthlyOnlineAIPsAccessed"
-                            :labels="monthNames" />
-                    </div>
-                    <div class="col-sm-6">
-                        <line-chart class="stats" :title="$t('Data Accessed (monthly)')"
-                            url="/api/v1/stats/charts/monthlyOnlineDataAccessed"
-                            :labels="monthNames"/>
-                    </div>
-                </div>
-                <div class="row pt-sm-3 pb-sm mt-4">
+
+            <div class="col-sm-3">
+                <line-chart class="graphs" :title="$t('Data ingested (monthly)')"
+                    url="/api/v1/stats/charts/monthlyOnlineDataIngested"
+                    :labels="monthNames" />
+            </div>
+
+            <div class="col-sm-3">
+                <line-chart class="graphs" :title="$t('Archival packages accessed (monthly)')"
+                    url="/api/v1/stats/charts/monthlyOnlineAIPsAccessed"
+                    :labels="monthNames" />
+            </div>
+            <div class="col-sm-3">
+                <line-chart class="graphs" :title="$t('Data accessed (monthly)')"
+                    url="/api/v1/stats/charts/monthlyOnlineDataAccessed"
+                    :labels="monthNames"/>
+            </div>
+        </div>
+
+        <div class="row p-3 m-3">
+
+            <div class="d-inline-flex">
+                <pie-chart class="pieChart" :title="$t('File formats ingested')"
+                    url="/api/v1/stats/charts/fileFormatsIngested" />
+            </div>
+
+            <div class="col d-inline-flex flex-wrap">
                     <div class="card dashboard-card col-sm halfStats">
                         <div class="value">{{onlineAIPsIngested}}</div>
-                        <div class="legend">{{$t('Archival Packages stored online')}}</div>
+                        <div class="legend">{{$t('Archival packages online')}}</div>
                     </div>
                     <div class="card dashboard-card col-sm halfStats">
                         <div class="value">{{onlineDataIngested}}</div>
@@ -49,20 +45,18 @@
                     </div>
                     <div class="card dashboard-card col-sm halfStats">
                         <div class="value">{{AIPsRetrievedCount}}</div>
-                        <div class="legend">{{$t('Archival Packages retrieved')}}</div>
+                        <div class="legend">{{$t('Archival packages retrieved')}}</div>
                     </div>
                     <div class="card dashboard-card col-sm halfStats">
                         <div class="value">{{DataRetrieved}}</div>
-                        <div class="legend">{{$t('Retrieved')}}</div>
+                        <div class="legend">{{$t('Files retrieved')}}</div>
                     </div>
-                </div>
-                <div class="row pt-1 mt-1 halfStatsRow dashboard-halfStatsRow">
                     <div class="card dashboard-card col-sm halfStats">
                         <div class="value">
                             {{offlineAIPsIngested}}
                         </div>
                         <div class="legend">
-                            {{$t('Archival Packages stored on film')}}
+                            {{$t('Archival packages on film')}}
                         </div>
                     </div>
                     <div class="card dashboard-card col-sm halfStats">
@@ -83,7 +77,7 @@
                     </div>
                     <div class="dashboard-card halfStats col-sm">
                         <div class="value">{{offlinePagesCount}}</div>
-                        <div class="legend">{{$t('Pages stored on film')}}</div>
+                        <div class="legend">{{$t('Pages on film')}}</div>
                     </div>
                 </div>
             </div>
@@ -136,7 +130,7 @@ export default {
             return this.userStats['DataRetrieved'];
         },
         monthNames: function() {
-			// TODO: Rethink how we represent months in the translation file
+            // TODO: Rethink how we represent months in the translation file
             let translated = this.$t('dashboard.month.abbrev.array');
             return translated.split("'").filter( t => t != "[" && t != "]" && t != ", ");
         },
