@@ -103,6 +103,7 @@ import TaskList from './views/ingest/TaskList.vue';
 import IngestStatus from './views/ingest/IngestStatus.vue';
 
 import Browse from './views/access/Browse.vue';
+import DipBrowser from './views/access/DipBrowser.vue';
 import ReadyToRetrieve from './views/access/ReadyToRetrieve.vue';
 import ReadyForDownload from './views/access/ReadyForDownload.vue';
 import RetrievalHistory from './views/access/RetrievalHistory.vue';
@@ -110,7 +111,6 @@ import NowRetrieving from './views/access/NowRetrieving.vue';
 
 import Settings from './views/settings/Settings.vue';
 import PageNotFound from './views/PageNotFound.vue';
-
 
 const router = new VueRouter({
     mode: 'history',
@@ -149,6 +149,11 @@ const router = new VueRouter({
             path: "/access/browse",
             name: "access.browse",
             component: Browse
+        },
+        {
+            path: "/access/browse/dip/:dipId",
+            name: "access.browse.dip",
+            component: DipBrowser
         },
         {
             path: "/access/retrieve/ready",

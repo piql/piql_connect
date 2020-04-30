@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div :class="responsiveSidebarColumns">
         <div :class="adaptToScreenWidth">
             <div class="welcomeText" :class="invisibleIfNarrow">
                 <p class="mb-1">{{$t("Welcome")}}</p>
@@ -9,12 +9,15 @@
             <div class="clearboth">
             </div>
 
-            <ul class="list-group overflow-none d-block">
+            <ul class="list-inline">
                 <span :class="collapseInactiveComponent('home')">
 
                     <router-link :to="{ name: 'home.dashboard' }">
                         <li class="list-group-item" :class="currentRouteActiveClass('home.dashboard')" >
-                            <i class="fas fa-tachometer-alt"></i><i class="leftMenuItem">{{$t('sidebar.dashboard')}}</i>
+                            <i class="fas fa-tachometer-alt"></i>
+                            <div class="leftMenuItem">
+                                {{$t('sidebar.dashboard')}}
+                            </div>
                         </li>
                     </router-link>
 
@@ -24,25 +27,26 @@
 
                     <router-link :to="{ name: 'ingest.upload' }">
                         <li class="list-group-item" :class="currentRouteActiveClass('ingest.upload')" >
-                            <i class="fas fa-upload"></i><i class="leftMenuItem">{{$t('sidebar.upload')}}</i>
+                            <i class="fas fa-upload"></i>
+                            <div class="leftMenuItem">{{$t('sidebar.upload')}}</div>
                         </li>
                     </router-link>
 
                     <router-link :to="{ name: 'ingest.process' }">
                         <li class="list-group-item" :class="currentRouteActiveClass('ingest.process')" >
-                            <i class="fas fa-hourglass-half"></i><i class="leftMenuItem">{{$t('sidebar.processing')}}</i>
+                            <i class="fas fa-hourglass-half"></i><div class="leftMenuItem">{{$t('sidebar.processing')}}</div>
                         </li>
                     </router-link>
 
                     <router-link :to="{ name: 'ingest.offline_storage'}">
                         <li class="list-group-item" :class="currentRouteActiveClass('ingest.offline_storage')" >
-                            <i class="fas fa-clock"></i><i class="leftMenuItem">{{$t('sidebar.taskList')}}</i>
+                            <i class="fas fa-clock"></i><div class="leftMenuItem">{{$t('sidebar.taskList')}}</div>
                         </li>
                     </router-link>
 
                     <router-link :to="{ name: 'ingest.status' }">
                         <li class="list-group-item" :class="currentRouteActiveClass('ingest.status')" >
-                            <i class="fas fa-clipboard-check"></i><i class="leftMenuItem">{{$t('sidebar.status')}}</i>
+                            <i class="fas fa-clipboard-check"></i><div class="leftMenuItem">{{$t('sidebar.status')}}</div>
                         </li>
                     </router-link>
 
@@ -52,14 +56,14 @@
 
                     <router-link :to="{ name: 'access.browse' }">
                         <li class="list-group-item" :class="currentRouteActiveClass('access.browse')" >
-                            <i class="fas fa-hdd"></i><i class="leftMenuItem">{{$t('sidebar.browse')}}</i>
+                            <i class="fas fa-hdd"></i><div class="leftMenuItem">{{$t('sidebar.browse')}}</div>
                         </li>
                     </router-link>
 
                     <span :class="collapseInactiveSubComponent('access.browse')">
                         <router-link :to="{ name: 'access.retrieve.ready' }">
                             <li class="list-group-item" :class="currentRouteActiveClass('access.retrieve.ready')" >
-                                <i class="fas fa-file-export"></i><i class="leftMenuItem">{{$t('sidebar.retrieve')}}</i>
+                                <i class="fas fa-file-export"></i><div class="leftMenuItem">{{$t('sidebar.retrieve')}}</div>
                             </li>
                         </router-link>
                     </span>
@@ -69,25 +73,25 @@
 
                         <router-link :to="{ name: 'access.retrieve.ready' }">
                             <li class="list-group-item" :class="currentRouteActiveClass('access.retrieve.ready')" >
-                                <i class="fas fa-file-export"></i><i class="leftMenuItem">{{$t('sidebar.retrieve.readyToRetrieve')}}</i>
+                                <i class="fas fa-file-export"></i><div class="leftMenuItem">{{$t('sidebar.retrieve.readyToRetrieve')}}</div>
                             </li>
                         </router-link>
 
                         <router-link :to="{ name: 'access.retrieve.retrieving' }">
                             <li class="list-group-item" :class="currentRouteActiveClass('access.retrieve.retrieving')" >
-                                <i class="fas fa-spinner"></i><i class="leftMenuItem">{{$t('sidebar.retrieve.retrieving')}}</i>
+                                <i class="fas fa-spinner"></i><div class="leftMenuItem">{{$t('sidebar.retrieve.retrieving')}}</div>
                             </li>
                         </router-link>
 
                         <router-link :to="{ name: 'access.retrieve.download' }">
                             <li class="list-group-item" :class="currentRouteActiveClass('access.retrieve.download')" >
-                                <i class="fas fa-file-download"></i><i class="leftMenuItem">{{$t('sidebar.retrieve.downloadable')}}</i>
+                                <i class="fas fa-file-download"></i><div class="leftMenuItem">{{$t('sidebar.retrieve.downloadable')}}</div>
                             </li>
                         </router-link>
 
                         <router-link :to="{ name: 'access.retrieve.history' }">
                             <li class="list-group-item" :class="currentRouteActiveClass('access.retrieve.history')" >
-                                <i class="fas fa-history"></i><i class="leftMenuItem">{{$t('sidebar.retrieve.history')}}</i>
+                                <i class="fas fa-history"></i><div class="leftMenuItem">{{$t('sidebar.retrieve.history')}}</div>
                             </li>
                         </router-link>
 
@@ -125,14 +129,20 @@ export default {
         }
     },
     computed: {
+        responsiveSidebarColumns() {
+            return this.width > 1100 ? "sideMenuOuter" : "sideMenuOuterCollapsed";
+        },
         currentActiveRoute() {
             return this.$route.name;
         },
         adaptToScreenWidth() {
-            return this.width > 1100 ? "sideMenu" : "sideMenuCollapsed";
+            return this.width > 1100 ? "sideMenu" : "sideMenu-collapsed";
+        },
+        adaptOuterToScreenWidth() {
+            return this.width > 1000 ? "sideMenuOuter" : "";
         },
         invisibleIfNarrow() {
-            return this.width > 1100 ? "" : "invisible";
+            return this.width > 1000 ? "" : "invisible";
         },
     },
     methods: {

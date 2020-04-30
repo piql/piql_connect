@@ -2,7 +2,7 @@
     <div>
         <div class="row plistHeader text-truncate mt-2">
             <div class="col-sm-2 text-center">{{$t("access.browse.header.preview")}}</div>
-            <div class="col-sm-3 text-center">{{$t("access.browse.header.name")}}</div>
+            <div class="col-sm-3 text-left">{{$t("access.browse.header.name")}}</div>
             <div class="col-sm-1 text-center">{{$t("access.browse.header.ingestDate")}}</div>
             <div class="col-sm-2 text-center">{{$t("access.browse.header.holding")}}</div>
             <div class="col-sm-1 text-center">{{$t("access.browse.header.files")}}</div>
@@ -10,7 +10,7 @@
         </div>
 
         <span v-if="fileLocation === 'online'">
-            <browser-item  v-for="item in dataObjects" :archive="selectedArchive" :holding="selectedHolding" v-bind:item="item" v-bind:key="item.id" @openObject="openObject" @showPreview="showPreview"/>
+            <browser-item  v-for="item in dataObjects" :item="item" :key="item.id" @showPreview="showPreview"/>
         </span>
         <span v-if="fileLocation === 'offline'">
             <browser-item-offline  v-for="item in dataObjects" @addFileToRetrieval="addFileToRetrieval" @addObjectToRetrieval="addObjectToRetrieval" :archive="selectedArchive" :holding="selectedHolding" v-bind:item="item" v-bind:key="item.id" @openObject="openObject"/>

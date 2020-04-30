@@ -5,7 +5,7 @@
     :disabled="disabled"
     >
 
-    <span class='btn vue-fine-uploader-gallery-file-input-content' v-bind:class='[{ disabled: disabled }]'>
+    <span class='btn vue-fine-uploader-gallery-file-input-content form-control-btn' v-bind:class='[{ disabled: disabled }]'>
       <slot>
         <UploadIcon class='vue-fine-uploader-gallery-file-input-upload-icon' />
         Select Files

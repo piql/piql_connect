@@ -1,4 +1,5 @@
 {
+    "locale": "en",
     "Upload" : "Upload",
     "Welcome": "Welcome",
     "Add files" : "Add files",
@@ -14,14 +15,14 @@
     "Archive": "Archive",
     "Holdings": "Holdings",
     "Holding": "Holding",
-    "upload.header": "Upload",
+    "upload.title": "Upload",
     "upload.ingress" : "Upload files to your archives here by clicking the 'Add file' button.",
     "upload.addFileButton" : "Add file",
     "upload.addFileButtonToolTip": "Add a new file to the upload",
     "upload.optionalName": "Upload name (optional)",
     "upload.requiredName": "Please enter a valid SIP name: 3 characters or more, letters and numbers only",
     "upload.processButton": "Process",
-    "upload.sipName": "Submission package name",
+    "upload.sipName": "Package name",
     "upload.archive": "Archive",
     "upload.holding": "Holding",
     "upload.files": "Number of files",
@@ -57,7 +58,8 @@
     "sidebar.retrieve.downloadable": "Ready for download",
     "sidebar.retrieve.history": "History",
 
-    "dashboard.ingress": "Short descriptive text of dashboard.",
+    "dashboard.title": "Dashboard",
+    "dashboard.ingress": "Your stored information",
     "dashboard.content": "Other type of content goes here.",
     "dashboard.month.abbrev.array": "['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']",
 
@@ -69,7 +71,7 @@
     "ingest.processing.uploadingFilter": "Uploading",
     "ingest.processing.processingFilter": "Processing",
     "ingest.processing.bag": "Bag",
-    "ingest.processing.sip": "Submission package name",
+    "ingest.processing.sip": "Package name",
     "ingest.processing.content": "Content",
     "ingest.processing.ingestDate": "Ingest Date",
     "ingest.processing.status": "Status",
@@ -90,7 +92,7 @@
     "ingest.taskList.statusFilter": "Status",
     "ingest.taskList.uploadingFilter": "Uploading",
     "ingest.taskList.processingFilter": "Processing",
-    "ingest.taskList.sip": "Submission package name",
+    "ingest.taskList.sip": "Package name",
     "ingest.taskList.aip": "Archival package name",
     "ingest.taskList.content": "Content",
     "ingest.taskList.ingestDate": "Ingest Date",
@@ -166,7 +168,7 @@
     "access.browse.metadata.editFile": "File metadata",
 
     "access.browse.header.preview": "Preview",
-    "access.browse.header.name": "Name",
+    "access.browse.header.name": "Package name",
     "access.browse.header.ingestDate": "Ingest date",
     "access.browse.header.holding": "Holding",
     "access.browse.header.files": "Files",
@@ -198,8 +200,10 @@
     "timeout.text1": "You have been inactive for",
     "timeout.minutes": "minutes",
     "timeout.text2": "Click the Continue button if you wish to stay logged in. If you take no action, you will automatically be logged out of piqlConnect",
-    "timeout.continue": "Continue"
+    "timeout.continue": "Continue",
 
-
-
+    "datepicker.noDateSelected": "No date selected",
+    "datepicker.help": "Cursor keys and enter to select a date",
+    "datepicker.toasts.illegalRangeTitle": "Invalid date range",
+    "datepicker.toasts.illegalRangeMessage": "The selected archived from-to date range is invalid. Updating."
 }

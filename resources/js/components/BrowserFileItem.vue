@@ -1,14 +1,13 @@
 <template>
     <div>
         <div class="row plist thumbnailList">
-            <div class="col-sm-2 text-center">
+            <div class="col-2 text-center">
                 <img class="thumbnailImage" v-bind:src="thumbnailImage">
             </div>
-            <div class="col-sm-1"></div>
-            <div class="col text-center align-self-center text-truncate">
+            <div class="col-7 text-left align-self-center text-truncate">
                 {{fileName}}
             </div>
-            <div class="col-sm-2 d-inline-flex align-self-center">
+            <div class="col-2 d-inline text-center align-self-center">
                 <a class="m-auto" @click.once="showMetadata" href="#" data-toggle="tooltip" title="Edit metadata"><i class="fas fa-tags actionIcon text-center"></i></a>
                 <a v-if="isPreparingDownload" class="m-auto" href="#" data-toggle="tooltip" title="Download file"><i class="fa fa-spinner fa-spin actionIcon text-center"></i></a>
                 <a v-else="isPreparingDownload" class="m-auto" @click.once="download" href="#" data-toggle="tooltip" title="Download file"><i class="fas fa-file-download actionIcon text-center"></i></a>
