@@ -52,9 +52,13 @@ export default {
         };
     },
     props: {
+        useWildCard: {
+            type: Boolean,
+            default: true
+        },
         wildCardLabel: {
             type: String,
-            default: "All"
+            default: null
         },
         label: {
             type: String,
@@ -91,7 +95,7 @@ export default {
         },
         holdings: function( holdings ) {
             if( !! holdings ) {
-                let holdingQuery = this.$route.query.holding ?? this.wildCardLabel;
+                let holdingQuery = this.$route.query.holding ?? this.wildCardLabel ?? this.holdings[0].title;;
                 Vue.nextTick( () => {
                     this.updatePicker( holdingQuery );
                     this.refreshPicker();
@@ -108,9 +112,12 @@ export default {
         },
         holdingsWithWildcard: function() {
             /* If it has elements, push a wildcard element ("All") at the start of the list */
+            if( this.useWildCard ) {
             return this.holdings
                 ? [{'id' : 0, 'title': this.wildCardLabel}, ...this.holdings ]
-                : null;
+                    : null;
+            }
+            return this.holdings;
         }
     }
 }

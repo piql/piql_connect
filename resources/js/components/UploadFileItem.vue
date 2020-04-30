@@ -1,21 +1,23 @@
 <template> 
     <div class="row plist mb-0 pb-0">
-        <div class="pl-3 col-md-7 col-sm-5 col-xs-3 text-left text-truncate align-self-center">
+        <div class="col-7 text-left text-truncate align-self-center">
             <div v-if="isUploading" class="progress upload-progress bg-fill">
                 <div class="progress-bar bg-brand text-left" role="progressbar" v-bind:style="progressBarStyle" v-bind:aria-valuenow="progressPercentage" aria-valuemin="0" aria-valuemax="100">
-                    <span class="upload-text pl-2">{{file.filename}}</span>
+                    <span class="upload-text">{{file.filename}}</span>
                 </div>
             </div>
             <div v-else>
-              <div class="pl-2 text-left">
-                {{file.filename}}
-              </div>
+                <span class="d-inline" tabindex="0" data-toggle="tooltip" :title="file.filename">
+                    <div class="text-left">
+                        {{file.filename}}
+                    </div>
+                </span>
             </div>
         </div>
-        <div class="col-xs-2 col-sm-2 text-center text-truncate align-self-center">
+        <div class="col-2 text-right text-truncate align-self-center">
             {{humanReadableFileSize}}
         </div>
-        <div class="col-xs-2 col-sm-3 text-center align-self-center">
+        <div class="col-3 text-center align-self-center">
             <span v-if="file.isComplete">
                 <a @click="metadataClicked (file)" href="#" data-toggle="tooltip" title="Edit metadata"><i class="fas fa-tags actionIcon text-center mr-2"></i></a>
                 <a @click="removeClicked (file)" href="#" data-toggle="tooltip" :title="$t('upload.remove')"><i class="fas fa-trash-alt actionIcon text-center ml-2"></i></a>
@@ -29,7 +31,6 @@
 </template>
 
 <script>
-    import moment from 'moment';
     import axios from 'axios';
     import filesize from 'filesize';
     export default {
@@ -62,8 +63,8 @@
         },
         computed: {
             humanReadableFileSize(){
-                return this.isUploading ? filesize(this.file.uploadedFileSize) + " / " + filesize(this.file.fileSize)
-                    : filesize(this.file.fileSize);
+                return this.isUploading ? filesize(this.file.uploadedFileSize, {round: 0}) + " / " + filesize(this.file.fileSize, {round: 0})
+                    : filesize(this.file.fileSize, {round: 0});
             },
             progressBarStyle() {
                 return this.file.progressBarStyle;

@@ -1,81 +1,64 @@
 <template>
-    <div class="mb-2 mt-2">
-        <div class="row">
-            <div class="col-sm-1 text-left">
-                <i class="fas fa-upload mr-3 titleIcon"></i>
-            </div>
-            <div class="col-sm-6 text-left">
-                <h1>{{$t("upload.header")}}</h1>
-            </div>
-        </div>
-        <div class="row mt-0 pt-0">
-            <div class="col-sm-1"></div>
-            <div class="col-sm-6 text-left ingressText">
-                {{$t("upload.ingress")}}
-            </div>
-        </div>
+    <div class="w-100">
+        <page-heading icon="fa-tachometer-alt" :title="$t('upload.title')" :ingress="$t('upload.ingress')" />
 
+        <form>
         <div class="row form-group mt-2 mb-2">
-            <div class="col-md-2 pl-0 ml-0" :title="$t('upload.addFileButtonToolTip')">
+            <div class="col-2" :title="$t('upload.addFileButtonToolTip')">
                 <label for="uploadbutton" class="col-form-label-sm">&nbsp;</label>
                 <FileInputComponent
                     id="uploadbutton"
                     :multiple="compoundModeEnabled"
                     :uploader="uploader"
                     :disabled="fileInputDisabled">
-                    <slot name="inputbuttontext" ><span class="pl-3 pr-3"><i class="fas fa-plus mr-3"></i>{{$t("upload.addFileButton")}}</span></slot>
+                    <div>
+                        <i class="fas fa-plus mr-2"></i>{{$t("upload.addFileButton")}}
+                    </div>
                 </FileInputComponent>
             </div>
 
-            <div v-show="compoundModeEnabled" class="col-md-2 text-left" >
+            <div v-show="compoundModeEnabled" class="col-2 text-left" >
                 <label for="bagname" class="col-form-label-sm">{{$t("upload.sipName")}}</label>
                 <input id="bagName" v-model="bagName" ref="bagName"
                     type="text" class="pl-3 noTextTransform form-control"
                     :title="$t('upload.requiredName')"
-                    style="border-radius: 0.5rem" @input="setBagName" onclick="select()"
-                    required="true" pattern='^((?![:\\<>"/?*|]).){3,}$'>
+                    @input="setBagName"
+                    required pattern='^((?![:\\<>"/?*|]).){3,}$'>
             </div>
 
-            <div v-if="customerSelectsArchives" class="col-md-2" :title="$t('upload.archiveToolTip')">
-                <archive-picker v-bind:label="$t('Archive')" :archives="archives" :initialSelection="selectedArchive" @selectionChanged="changedArchive"></archive-picker>
-            </div>
-            <div v-else="customerSelectsArchives" title="The archive you ingest to" class="col-md-2">
-                <label class="col-form-label-sm">{{$t('Archive')}}</label>
-                <div class="pl-0 pr-0 form-control align-middle text-center">{{singleArchiveTitle}}</div>
+            <div class="col-2" :title="$t('upload.archiveToolTip')">
+                <archive-picker v-bind:label="$t('Archive')"></archive-picker>
             </div>
 
-            <div v-if="customerSelectsHoldings" class="col-md-2" :title="$t('upload.holdingToolTip')">
-                <holding-picker v-bind:label="$t('Holdings')" :holdings="holdings" :initialSelection="selectedHoldingTitle" @selectionChanged="changedHolding"></holding-picker>
-            </div>
-            <div v-else="customerSelectsHoldings" class="col-md-2">
+            <div class="col-2" :title="$t('upload.holdingToolTip')">
+                <holding-picker v-bind:label="$t('Holdings')" :useWildCard="false" ></holding-picker>
             </div>
 
-            <div v-if="hasFailedUploads" class="col-md-2 pr-0">
+            <div v-if="hasFailedUploads" class="col-2 text-center">
                 <label for="processButton" class="col-form-label-sm">&nbsp;</label>
-                <button class="btn btn-sm btn-link" @click="retryAll" href="#" data-toggle="tooltip" :title="$t('upload.resumeAll')"><i class="fas fa-redo topIcon text-center mr-2"></i></button>
+                <button class="btn form-control-btn btn-link" @click="retryAll" href="#" data-toggle="tooltip" :title="$t('upload.resumeAll')"><i class="fas fa-redo topIcon text-center mr-2"></i></button>
             </div>
-            <div v-else="hasFailedUploads" class="col-md-2 text-left pr-0 align-middle form-group">
+            <div v-else="hasFailedUploads" class="col-2 text-left align-middle form-group">
                 <label for="fileNameFilter" class="col-form-label-sm">{{$t("upload.fileNameFilter")}}</label>
                 <input class="form-control" id="fileNameFilter" v-model="fileNameFilter">
             </div>
 
 
-            <div v-show="compoundModeEnabled" class="col-md-2 text-center pr-0">
+            <div v-show="compoundModeEnabled" class="col-2">
                 <label for="processButton" class="col-form-label-sm">&nbsp;</label>
-                <button v-if="processDisabled" disabled title="Start the ingest process" id="processButton" class="btn w-100 m-0 p-2">{{$t('upload.processButton')}}</button>
-                <button v-else="processDisabled" title="Start the ingest process" id="processButton" class="btn w-100 m-0 p-2"  v-on:click="commitBagToProcessing">{{$t('upload.processButton')}}</button>
+                <button v-if="processDisabled" disabled title="Start the ingest process" id="processButton" class="btn form-control-btn w-100">{{$t('upload.processButton')}}</button>
+                <button v-else="processDisabled" title="Start the ingest process" id="processButton" class="btn form-control-btn w-100"  v-on:click="commitBagToProcessing">{{$t('upload.processButton')}}</button>
             </div>
         </div>
 
-        <div class="row plistHeader"> <div class="col-sm-1 text-center">
-            </div>
-            <div class="col-md-6 col-sm-5 col-xs-3 text-left align-self-center">
+        <div class="row plistHeader">
+            <div class="col-7 text-left">
                 {{$t('upload.fileName')}}
             </div>
-            <div class="col-xs-2 col-sm-2 text-center align-self-center">
+            <div class="col-2 text-right">
                 {{$t('upload.fileSize')}}
             </div>
-            <div class="col-xs-2 col-sm-3 text-center align-self-center">
+            <div class="col-3 text-center">
                 {{$t('upload.fileActions')}}
             </div>
         </div>
@@ -83,18 +66,21 @@
         <UploadFileItem v-for="(file,index) in sortedFilesUploading" v-bind:file="file" :key="file.id"
             @metadataClicked="metadataClicked" @removeClicked="removeClicked"
             @retryClicked="retryClicked" @removeFailedClicked="removeFailedClicked"
-            v-if="index >= pageFrom-1 && index <= pageTo-1 " />
-        <div class="row thumbnailList invisible" v-for="pad in pagerPad"></div>
+            v-if="index >= pageFrom-1 && index <= pageTo-1 "
+            class="mr-1 ml-1"/>
+        <div class="row plist invisible" v-for="pad in pagerPad"></div>
         <div class="row text-center pagerRow">
             <div class="col">
-                <Pager :meta="filesUploadingMeta" @updatePage="updatePage" v-if="totalFilesUploading > 0" />
+                <Pager :meta="filesUploadingMeta" :height="height" v-if="totalFilesUploading > 0" />
             </div>
         </div>
+    </form>
     </div>
 </template>
 
 <script>
-
+import RouterTools from '../../mixins/RouterTools.js';
+import DeferUpdate from '../../mixins/DeferUpdate.js';
 import FineUploader from 'vue-fineuploader';
 import FineUploaderTraditional from 'fine-uploader-wrappers'
 import axios from 'axios';
@@ -104,6 +90,7 @@ let $ = JQuery;
 import filesize from 'filesize';
 
 export default {
+    mixins: [ RouterTools, DeferUpdate ],
     data() {
         const uploader = new FineUploaderTraditional({
             options: {
@@ -267,11 +254,9 @@ export default {
                 }
             },
             fileInputDisabled: false,
-            archives: [],
-            selectedArchive: {},
             singleArchiveTitle: "",
-            holdings: [],
-            selectedHoldingTitle: "",
+            selectedArchive: "",
+            selectedHolding: "",
             currentPage: 1,
             pageSize: 4,
             pageFrom: 1,
@@ -322,7 +307,8 @@ export default {
             return this.sortedFilesUploading.length;
         },
         pageLast: function() {
-            return Math.ceil( this.totalFilesSorted / this.pageSize );
+            let pageLast = Math.ceil( this.totalFilesSorted / this.pageSize );
+            return pageLast;
         },
         pagePrev: function() {
             return this.currentPage < 2 ? null : this.currentPage - 1;
@@ -347,16 +333,17 @@ export default {
             }
         },
         customerSelectsHoldings: function() {
-            return this.holdings.length !== 0;
+            return !!this.holdings;
         },
         customerSelectsArchives: function() {
-            return this.archives.length > 1;
+            return !!this.archives;
         },
-
     },
 
     watch: {
+        '$route': 'dispatchRouting',
         fileNameFilter: function(filter) {
+            this.updateQueryParams({ page: null });
             let pattern = '('+filter.split(' ').join('|').concat(')'); /* Simple fuzzy matching */
             let matcher = new RegExp(pattern, "i");
             this.filesUploading = this.filesUploading.map( (file) => {
@@ -409,9 +396,15 @@ export default {
         humanReadableFileSize( fileSizeInBytes ){
             return isNaN( fileSizeInBytes )  ? "" : filesize( fileSizeInBytes );
         },
-        updatePage( page ) {
+        dispatchRouting() {
+            let query = this.$route.query;
+            let queryArchive = query.archive;
+            let queryHolding = query.holding;
+            if( queryArchive != this.selectedArchive || queryHolding != this.selectedHolding  ) {
+                this.changedArchive( queryArchive, queryHolding );
+            }
             let prevCurrentPage = this.currentPage;
-            this.currentPage = page.page;
+            this.currentPage = parseInt(query.page ?? "1");
             this.pageFrom = 1 + (this.currentPage-1) * this.pageSize;
             this.pageTo = this.pageFrom+this.pageSize-1;
         },
@@ -460,44 +453,19 @@ export default {
             this.filesUploading = [];
             return createdBag;
         },
-        async setupHoldings(archiveId, initialHolding) {
-            await axios.get('/api/v1/planning/archives/'+archiveId+'/holdings').then( (response) => {
-                this.holdings = response.data.data;
-                if( !this.customerSelectsHoldings ) {
-                    return;
-                }
-                let defaultHolding = this.holdings.length ? this.holdings[0].title : "";
-                Vue.nextTick( () => {
-                    $('#holdingPicker').selectpicker('refresh');
-                });
-                Vue.nextTick( () => {
-                    $('#holdingPicker').selectpicker('val', initialHolding || defaultHolding);
-                });
-
-            });
-        },
-        async changedArchive(archiveId) {
+        async changedArchive(archiveId, holdingTitle) {
+            if( !archiveId || !holdingTitle )
+                return;
             this.selectedArchive = archiveId;
-            if( this.compoundModeEnabled) {
-                await this.setupHoldings(archiveId);
+            this.selectedHolding = holdingTitle;
+            if( this.bag && this.bag.id && this.compoundModeEnabled) {
+                console.log("changed archive to",archiveId);
+                console.log("holding is: ",holdingTitle);
                 axios.patch("/api/v1/ingest/bags/"+this.bag.id, {
                     archive_uuid: archiveId,
-                    holding_name: this.selectedHoldingTitle
+                    holding_name: holdingTitle
                 }).then( (response) => {
                     this.bag = response.data.data;
-                });
-            }
-        },
-        async changedHolding(holdingTitle) {
-            let selectedArchive  = this.selectedArchive;
-            this.selectedHoldingTitle = holdingTitle;
-            if( this.compoundModeEnabled ) {
-                let bag = this.bag;
-                Vue.nextTick( async () => {
-                    bag = await axios.patch("/api/v1/ingest/bags/"+bag.id, {
-                        archive_uuid: selectedArchive,
-                        holding_name: holdingTitle
-                    }).data;
                 });
             }
         },
@@ -511,17 +479,17 @@ export default {
             type: Number,
             default: 5
         },
+        height: {
+            type: Number,
+            default: 0
+        }
     },
     async mounted() {
-        this.currentPage = 1;
+        let queryPage = parseInt(this.$route.query.page ?? "1");
+        this.currentPage = queryPage;
         this.pageFrom = 1;
         this.pageTo = this.pageSize;
-        await axios.get("/api/v1/planning/archives").then( (response) => {
-            this.archives = response.data.data;
-            this.selectedArchive = this.archives[0].uuid;
-            this.singleArchiveTitle = this.archives[0].title;
-        });
-
+        this.dispatchRouting();
         this.userId = (await axios.get("/api/v1/system/currentUser")).data;
         this.userSettings  = (await axios.get("/api/v1/system/currentUserSettings")).data;
 
@@ -529,12 +497,11 @@ export default {
 
             this.bag = (await axios.get("/api/v1/ingest/bags/latest")).data.data;
             this.bagName = this.bag.name;
+            let archive = this.bag.archive_uuid;
+            let holding = this.bag.holding_name;
+            this.updateQueryParams({ archive, holding });
 
-            if( this.customerSelectsArchives ) {
-                Vue.nextTick( () => { $('#archivePicker').selectpicker('val', this.selectedArchive);});
-            }
-
-            if(this.bag !== undefined && this.bag.status === "open") {
+            if(!!this.bag & this.bag.status === "open") {
                 this.files = (await axios.get('/api/v1/ingest/bags/' + this.bag.id + '/files')).data.data;
                 this.filesUploading = this.files.map( (file, index) => ({
                     id: index+100000,  /*A large enough number to avoid collisions with id's provided by FineUploader */
@@ -552,11 +519,6 @@ export default {
             else {
                 this.bag = (await this.createBag( "", this.userId, this.selectedArchive, this.selectedHoldingTitle ));
             }
-        } else if (this.customerSelectsArchive ) {
-            Vue.nextTick( () => {
-                $('#archivePicker').selectpicker('val', this.selectedArchive);
-                this.setupHoldings( this.selectedArchive );
-            });
         }
     }
 }
