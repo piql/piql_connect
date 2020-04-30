@@ -1,41 +1,16 @@
 <template>
-    <div class="mt-2 mb-2">
-        <div class="row">
-            <div class="col-sm-1 text-left">
-                <i class="fas fa-hdd mr-3 titleIcon"></i>
-            </div>
-            <div class="col-sm-6 text-left">
-                <h1>{{$t('access.browse')}}</h1>
-            </div>
-        </div>
-        <div class="row mt-0 pt-0">
-            <div class="col-sm-1"></div>
-            <div class="col-sm-6 text-left ingressText">
-                {{$t('access.browse.ingress')}}
-            </div>
-        </div>
+    <div class="w-100">
+        <page-heading icon="fa-hdd" :title="$t('access.browse')" :ingress="$t('access.browse.ingress')" />
 
         <access-browser-filters :singleArchiveTitle="$t('Your archive')"></access-browser-filters>
 
-        <span v-if="fileMode === false">
-            <browser-list @openObject="openObject" :location="selectedLocation" :dataObjects="currentObjects"
-                @addObjectToRetrieval="addObjectToRetrieval" :selectedArchive="selectedArchiveUuid" :selectedHolding="selectedHolding"/>
-            <div class="row text-center pagerRow">
-                <div class="col">
-                    <Pager :meta='packagePageMeta' />
-                </div>
+        <browser-list @openObject="openObject" :location="selectedLocation" :dataObjects="currentObjects"
+            @addObjectToRetrieval="addObjectToRetrieval" :selectedArchive="selectedArchiveUuid" :selectedHolding="selectedHolding"/>
+        <div class="row text-center pagerRow">
+            <div class="col">
+                <Pager :meta='packagePageMeta' :height='height' />
             </div>
-        </span>
-        <span v-if="fileMode">
-            <browser-file-list :dataObjects="currentOpenObjectFiles" :location="selectedLocation" :dipId="currentOpenDipId"
-                @close="closeFileList" @addFileToRetrieval="addFileToRetrieval" />
-            <div class="row text-center pagerRow">
-                <div class="col">
-                    <Pager :meta='filesPageMeta' @updatePage='filesUpdatePage' />
-                </div>
-            </div>
-        </span>
-
+        </div>
     </div>
 </template>
 
@@ -57,7 +32,6 @@ export default {
             dataObjects: [],
             currentOpenObjectFiles: [],
             currentOpenDipId: null,
-            fileMode: false,
             packagePageMeta: null,
             filesPageMeta: null,
             currentFilesPage: 1,
@@ -66,7 +40,16 @@ export default {
             selectedArchiveUuid: null
         }
     },
+    props: {
+        height: {
+            type: Number,
+            default: 0
+        }
+    },
     computed: {
+        fileMode: function() {
+
+        },
         online: function() {
             return this.selectedLocation == "online";
         },
@@ -131,19 +114,8 @@ export default {
                 this.packagePageMeta = dips.data.meta;
             });
         },
-        filesUpdatePage( ) {
-            //TODO: Use routing
-            //            this.$router.push({ name: 'access.browse', params: { 'page' : pageWrapper.page } });
-        },
-        openObject: async function( dipId ) {
-            //TODO: Use routing
-            axios.get("/api/v1/access/dips/"+dipId+"/files").then( async ( dipFilesResponse ) =>  {
-                this.currentOpenObjectFiles = dipFilesResponse.data.data;
-                this.filesPageMeta = dipFilesResponse.data.meta;
-                this.currentPage = 1;
-                this.currentOpenDipId = dipId;
-                this.fileMode = true;
-            });
+        openObject: function( dipId ) {
+            this.$router.push({ name: 'access.browse.dip', params: { dipId }, query: {} });
         },
         refreshFileObjects(filesQueryString){
             //TODO: Use routing
@@ -156,7 +128,6 @@ export default {
         },
 
         closeFileList: function() {
-            this.fileMode = false;
             this.currentFilesPage = 1;
             this.currentOpenDipId = null;
         },

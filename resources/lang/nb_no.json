@@ -171,7 +171,7 @@
     "access.browse.metadata.editFile": "Fil metadata",
 
     "access.browse.header.preview": "Forhåndsvisning",
-    "access.browse.header.name": "Navn",
+    "access.browse.header.name": "Pakkenavn",
     "access.browse.header.ingestDate": "Mottaksdato",
     "access.browse.header.holding": "Samling",
     "access.browse.header.files": "Filer",

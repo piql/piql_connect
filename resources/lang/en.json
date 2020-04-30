@@ -167,7 +167,7 @@
     "access.browse.metadata.editFile": "File metadata",
 
     "access.browse.header.preview": "Preview",
-    "access.browse.header.name": "Name",
+    "access.browse.header.name": "Package name",
     "access.browse.header.ingestDate": "Ingest date",
     "access.browse.header.holding": "Holding",
     "access.browse.header.files": "Files",

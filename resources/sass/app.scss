@@ -348,12 +348,13 @@ a {
 }
 
 .thumbnailList {
-    height: 5rem;
+    height: 4.5rem;
     font-size: 1.0rem;
     border-bottom: 1px solid lightgray;
     background: white;
     margin-left: 0 !important;
     margin-right: 0 !important;
+    align-content: center;
 }
 
 .thumbnailImage {
@@ -598,6 +599,22 @@ button {
 }
 .btn-auto {
     width: auto !important;
+}
+.btn-tiny {
+    @extend .btn;
+    background-color: transparent;
+    font-size: 1rem;
+    color: $color_signal;
+    &:active {
+        @extend .btn-tiny;
+    }
+    &:focus {
+        @extend .btn-tiny;
+    }
+    &:hover {
+        @extend .btn-tiny;
+    }
+
 }
 :focus {
     outline: none !important;
@@ -1453,6 +1470,8 @@ th {
 .actionIcon {
     color: $color_signal;
     font-size: 1.5rem;
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
 }
 
 .topIcon {

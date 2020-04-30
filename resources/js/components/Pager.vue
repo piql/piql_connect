@@ -1,5 +1,5 @@
 <template>
-    <div :class="pagerBottom">
+    <div :class="pagerBottom" v-show="hasPages">
         <nav aria-label="pages" class="d-inline-flex">
             <ul class="pagination justify-content-center">
                 <li class="page-item" v-bind:class="{ disabled: onFirstPage }">
@@ -58,6 +58,9 @@ export default {
         }
     },
     computed: {
+        hasPages: function() {
+            return this.numberOfPages > 1;
+        },
         currentHeight: function() {
             return this.height;
         },

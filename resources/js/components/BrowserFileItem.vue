@@ -5,7 +5,7 @@
                 <img class="thumbnailImage" v-bind:src="thumbnailImage">
             </div>
             <div class="col-sm-1"></div>
-            <div class="col text-center align-self-center text-truncate">
+            <div class="col text-left align-self-center text-truncate">
                 {{fileName}}
             </div>
             <div class="col-sm-2 d-inline-flex align-self-center">
