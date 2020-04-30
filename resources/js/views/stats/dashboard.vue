@@ -1,11 +1,6 @@
 <template>
     <div>
-        <div class="row componentHeader">
-                <i class="fas fa-tachometer-alt color-main-brand titleIcon"></i>
-			<div class="align-center">
-				<h1 class="ml-1 titleText">{{$t('Dashboard')}}</h1>
-			</div>
-        </div>
+        <page-heading icon="fa-tachometer-alt" :title="$t('Dashboard')" :ingress="$t('dashboard.ingress')" />
 
         <div class="row componentBody">
             <div class="col-sm-6">
