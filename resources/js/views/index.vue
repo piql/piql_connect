@@ -1,19 +1,17 @@
 <template>
-    <div class="mt-0 pt-0 screensize">
-        <div class="row row-no-gutters mb-5">
-            <div class="col-sm-12">
-                <top-bar></top-bar>
+    <div class="screensize">
+        <div class="container-fluid p-0">
+            <top-bar />
+            <div class="d-flex flex-row">
+                <div class="d-flex">
+                    <side-bar :width="currentWidth" :fullname="fullname" />
+                </div>
+                <div class="d-flex flex-nowrap mr-auto ml-auto pr-4 pl-4 w-100 justify-content-center">
+                    <router-view :height="currentHeight" :width="currentWidth"></router-view>
+                </div>
             </div>
+            <resize-observer @notify="handleResize"></resize-observer>
         </div>
-        <div class="row row-no-gutters">
-            <div class="d-inline-block pl-1 pr-1 mr-5" :class="responsiveSidebarColumns">
-                <side-bar :width="currentWidth" :fullname="fullname" ></side-bar>
-            </div>
-            <div class="col-sm-9 pl-2 pr-1">
-                <router-view></router-view>
-            </div>
-        </div>
-        <resize-observer @notify="handleResize"></resize-observer>
     </div>
 </template>
 <script>
@@ -43,8 +41,8 @@ export default {
         currentWidth() {
             return this.width;
         },
-        responsiveSidebarColumns() {
-            return this.width > 1100 ? "col-sm-2" : "col-sm-1 pr-2";
+        currentHeight() {
+            return this.height;
         }
     },
 }
