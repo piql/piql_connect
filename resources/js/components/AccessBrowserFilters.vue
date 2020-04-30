@@ -1,7 +1,7 @@
 <template>
     <div>
-        <form class="form" v-on:submit.prevent>
-            <div class="row mb-5">
+        <form v-on:submit.prevent>
+            <div class="row mb-2">
 
                 <div v-if="filters.archives && useArchives" class="col-lg-3 col-md-3 col-sm">
                     <archive-picker

@@ -1,6 +1,6 @@
 <template>
     <div class="piqlTop">
-        <nav class="mb-2 mt-0 navbar-expand-xl navbar-expand-sm navbar-light">
+        <nav class="navbar-expand navbar-light">
             <div class="row pt-3">
                 <div class="col-md-3 ">
                     <router-link class="navbar-brand" :to="{ name: 'home.dashboard' }">

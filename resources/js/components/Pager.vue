@@ -1,31 +1,33 @@
 <template>
-    <nav aria-label="pages" class="mt-2 mb-1 d-inline-flex ">
-        <ul class="pagination pagination-sm justify-content-center">
-            <li class="page-item" v-bind:class="{ disabled: onFirstPage }">
-                <a @click="firstPage" class="page-link">
-                    <i class="fas fa-angle-double-left"></i>
-                </a>
-            </li>
-            <li class="page-item" v-bind:class="{ disabled: onFirstPage }">
-                <a @click="prevPage" class="page-link">
-                    <i class="fas fa-angle-left"></i> 
-                </a>
-            </li>
-            <li v-for="page in pages" class="page-item" v-bind:class="{ active: page.isActive}">
-                <a @click="goToPage (page.pageNumber) " class="page-link">{{page.pageNumber}}</a>
-            </li>
-            <li class="page-item" v-bind:class="{ disabled: onLastPage }">
-                <a @click="nextPage" class="page-link">
-                    <i class="fas fa-angle-right"></i>
-                </a>
-            </li>
-            <li class="page-item" v-bind:class="{ disabled: onLastPage }">
-                <a @click="lastPage" class="page-link">
-                    <i class="fas fa-angle-double-right"></i>
-                </a>
-            </li>
-        </ul>
-    </nav>
+    <div :class="pagerBottom">
+        <nav aria-label="pages" class="d-inline-flex">
+            <ul class="pagination justify-content-center">
+                <li class="page-item" v-bind:class="{ disabled: onFirstPage }">
+                    <a @click="firstPage" class="page-link">
+                        <i class="fas fa-angle-double-left"></i>
+                    </a>
+                </li>
+                <li class="page-item" v-bind:class="{ disabled: onFirstPage }">
+                    <a @click="prevPage" class="page-link">
+                        <i class="fas fa-angle-left"></i>
+                    </a>
+                </li>
+                <li v-for="page in pages" class="page-item" v-bind:class="{ active: isActivePage(page.pageNumber) }">
+                    <a @click="goToPage (page.pageNumber) " class="page-link">{{page.pageNumber}}</a>
+                </li>
+                <li class="page-item" v-bind:class="{ disabled: onLastPage }">
+                    <a @click="nextPage" class="page-link">
+                        <i class="fas fa-angle-right"></i>
+                    </a>
+                </li>
+                <li class="page-item" v-bind:class="{ disabled: onLastPage }">
+                    <a @click="lastPage" class="page-link">
+                        <i class="fas fa-angle-double-right"></i>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
 </template>
 
 <script>
@@ -42,13 +44,23 @@ export default {
          */
     },
     props: {
-        meta: null,
+        meta: {
+            type: Object,
+            default: {}
+        },
         visiblePageSelectors: {
             type: Number,
             default: 20
+        },
+        height: {
+            type: Number,
+            default: 0
         }
     },
     computed: {
+        currentHeight: function() {
+            return this.height;
+        },
         next: function() {
             return this.meta && this.meta.current_page < this.meta.last_page ? this.meta.current_page + 1 : null;
         },
@@ -100,8 +112,15 @@ export default {
                 return { pageNumber: pageNumber, isActive: pageNumber === self.currentPage };
             } );
         },
+        pagerBottom: function() {
+            return this.height > 1000 ? "fixed-bottom pagerBottom" : "mt-4 pt-4";
+        }
     },
     methods: {
+        isActivePage( pageNumber ) {
+            let qp = this.$route.query.page ?? 1;
+            return qp == pageNumber;
+        },
         nextPage() {
             let page = this.next > 1 ? this.next : null;
             this.updateQueryParams({ page });
