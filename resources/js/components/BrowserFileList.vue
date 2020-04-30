@@ -1,11 +1,9 @@
 <template>
     <div class="w-100">
         <div class="row plistHeader text-truncate text-center mt-2">
-          <div class="col-sm-2">{{$t("access.browse.header.preview")}}</div>
-            <div class="col-sm-1"></div>
-            <div class="col-sm-7">{{$t('access.browse.header.files')}}</div>
-            <div class="col-sm-1 text-left">{{$t('access.browse.header.actions')}}</div>
-            <div class="col-sm-1"><a href="#" :title="$t('access.browse.archive.closeButtonTitle')" @click.once="close"><i class="fas fa-backspace plistIcon"></i></a></div>
+          <div class="col-sm-1">{{$t("access.browse.header.preview")}}</div>
+            <div class="col text-left">{{$t('access.browse.header.files')}}</div>
+            <div class="col-sm-2">{{$t('access.browse.header.actions')}}</div>
         </div>
 
         <browser-file-item v-for="item in dataObjects" :item="item" v-bind:key="item.id" />

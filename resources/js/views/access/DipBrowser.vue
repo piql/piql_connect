@@ -3,9 +3,8 @@
         <page-heading icon="fa-hdd" :title="$t('access.browse')" :ingress="$t('access.browse.ingress')" />
         <div class="row plistHeader text-truncate text-center mt-2">
           <div class="col-sm-2">{{$t("access.browse.header.preview")}}</div>
-            <div class="col-sm-1"></div>
-            <div class="col-sm-7">{{$t('access.browse.header.files')}}</div>
-            <div class="col-sm-1 text-left">{{$t('access.browse.header.actions')}}</div>
+            <div class="col-sm-7 text-left">{{$t('access.browse.header.files')}}</div>
+            <div class="col-sm-2 text-center">{{$t('access.browse.header.actions')}}</div>
             <div class="col-sm-1">
                 <button class="btn btn-tiny" :title="$t('access.browse.archive.closeButtonTitle')"
                     @click="close"><i class="fas fa-backspace"></i>
