@@ -16,6 +16,7 @@
                         <div class="col-sm-7 form-group mb-2">
                             <label class="small" >{{schemeItem.label}}</label>
                             <input class="form-control input-sm" type="text"
+                                   v-bind:readonly=readonly
                                    v-bind:id="schemeItem.name"
                                    v-bind:value="getValue(schemeItem.name)"
                                    @input="setValue(schemeItem.name, $event.target.value)">
@@ -27,8 +28,8 @@
         <div class="row mt-5">
             <div class="col-sm-4"></div>
             <div class="col-sm-8">
-                <button class="btn btn p-3 mr-5 w-300" @click="$router.push({ name: 'ingest.upload' })">Cancel</button>
-                <button class="btn btn-ln btn-default w-300 p-3" @click="save()">Ok</button>
+                <button v-if="!readonly" class="btn btn p-3 mr-5 w-300" @click="$router.push({ name: 'ingest.upload' })">Cancel</button>
+                <button v-if="!readonly" class="btn btn-ln btn-default w-300 p-3" @click="save()">Ok</button>
             </div>
         </div>
     </div>
@@ -78,28 +79,40 @@ export default {
             this.metadataObject.metadata[key] = value;
         },
         async save() {
-            // save errorToast handler just in case there is an error
-            // because this object may not be present when the error occur
-            let errorToast = this.errorToast;
-            this.patch(
-                '/api/v1/ingest/files/' + this.$route.params.fileId + '/metadata/' + this.metadataObject.id,
-                this.metadataObject,
-            ).catch(function(error) {
-                // todo: proper error handling and field input validation
-                let title = "Metadata error";
-                let message = (error.errors === undefined) ? "Saving matadata failed" : JSON.stringify(error.errors);
-                errorToast( title, message );
-            });
+            if(!this.readonly) {
+                // save errorToast handler just in case there is an error
+                // because this object may not be present when the error occur
+                let errorToast = this.errorToast;
+                this.patch(
+                    this.baseUrl + '/' + this.metadataObject.id,
+                    this.metadataObject,
+                ).catch(function (error) {
+                    // todo: proper error handling and field input validation
+                    let title = "Metadata error";
+                    let message = (error.errors === undefined) ? "Saving matadata failed" : JSON.stringify(error.errors);
+                    errorToast(title, message);
+                });
 
-            this.$router.push({ name: 'ingest.upload' });
+                this.$router.push({name: 'ingest.upload'});
+            }
+        },
+    },
+    computed: {
+        readonly: function() {
+            return (this.$attrs.readOnly === undefined) ? false : this.$attrs.readOnly;
+        },
+        baseUrl: function() {
+            return ((this.$attrs.url === undefined) ? '' : this.$attrs.url) + '/' + this.$route.params.fileId + '/metadata';
         }
     },
     async mounted() {
-        let response = (await this.get('/api/v1/ingest/files/' + this.$route.params.fileId + '/metadata')).data.data;
+        let response = (await this.get(this.baseUrl)).data.data;
         if(response.length > 0) {
             this.metadataObject = response[0];
         } else {
-            this.metadataObject = (await this.post('/api/v1/ingest/files/' + this.$route.params.fileId + '/metadata')).data.data[0];
+            if(!this.readonly) {
+                this.metadataObject = (await this.post(this.baseUrl)).data.data[0];
+            }
         }
     }
 }
