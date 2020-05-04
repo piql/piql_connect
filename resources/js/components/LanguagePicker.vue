@@ -1,10 +1,10 @@
 <template>
-    <div class="form-group">
-        <label v-if="showLabel" for="languagePicker" class="col-form-label-sm">
+    <div class="form-group row">
+        <label v-if="showLabel" for="languagePicker" class="col-2 col-form-label-sm">
             {{label}}
         </label>
-        <select v-model="selection" id="languagePicker" class="w-100" data-live-search="true" @change="selectionChanged($event.target.value)">
-          <option v-for="language in allLanguages" v-bind:value="language.code">
+        <select v-model="selection" id="languagePicker" class="col-4" data-live-search="true" @change="selectionChanged">
+          <option v-for="language in languages" v-bind:value="language.code">
             {{language.title}}
           </option>
        </select>
@@ -14,43 +14,43 @@
 <script>
 import JQuery from 'jquery';
 let $ = JQuery;
-import selectpicker from 'bootstrap-select';
 
 export default {
-    mounted() {
-        this.selection = this.initialSelection;
+    async mounted() {
     },
     methods: {
-        selectionChanged: function (value) {
-          this.$emit('selectionChanged', value);
+        selectionChanged: function () {
+            if (this.selection) {
+                this.$emit('selectionChanged', this.selection);
+            }
         }
     },
     data() {
         return {
-            selection: '' 
+            selection: '',
+            languages: []
         };
     },
     props: {
         initialSelection: '',
-        languages: Array,
         label: {
             type: String,
             default: ""
         }
     },
     watch: {
-        languages: function(val) {
+        async initialSelection(value) {
+            this.languages = (await axios.get("/api/v1/system/languages")).data;
+            this.selection = this.initialSelection;
             Vue.nextTick( () => {
                 $('#languagePicker').selectpicker('refresh');
+                $('#languagePicker').selectpicker('val', this.selection);
             });
-        },
+        }
     },
     computed: {
         showLabel: function() {
             return this.label.length > 0;
-        },
-        allLanguages: function() {
-            return this.languages;
         }
     }
 }

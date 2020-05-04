@@ -10,7 +10,6 @@ class SystemController extends Controller
 {
     public function languages( Request $request )
     {
-        return response()->json([
-            '0' => [ 'title' => 'English', 'code' => 'en' ], '1' => [ 'title' => 'Norsk Bokmål', 'code' => 'nb_no' ] ], 200);
+        return collect([ ['id' => '0', 'title' => 'English', 'code' => 'en'], ['id' => '1', 'title' => 'Norsk Bokmål', 'code' => 'nb_no'] ]);
     }
 }
