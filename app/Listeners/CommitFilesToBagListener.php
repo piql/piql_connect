@@ -55,10 +55,11 @@ class CommitFilesToBagListener implements ShouldQueue
             return;
         }
 
-        $metadataFileName = Str::random(40)."-metadata.json";
+        $metadataType = env( 'APP_AM_INGEST_METADATA_FILE_FORMAT', "csv");
+        $metadataFileName = Str::random(40)."-metadata.".$metadataType;
         $metadataWriter = $this->metadataGenerator->createMetadataWriter([
             'filename' => $metadataFileName,
-            'type' => 'json',
+            'type' => $metadataType,
         ]);
 
         foreach ($files as $file)
@@ -89,7 +90,7 @@ class CommitFilesToBagListener implements ShouldQueue
 
         // add metadata file to bagit tool
         if( Storage::exists($metadataFileName) && ( $bag->owner()->first()->settings->getIngestMetadataAsFileAttribute() !== true ) ) {
-            $this->bagIt->addMetadataFile(Storage::path($metadataFileName), "metadata.json");
+            $this->bagIt->addMetadataFile(Storage::path($metadataFileName), "metadata.".$metadataType);
         }
 
         $result = $this->bagIt->createBag($bag->storagePathCreated());
@@ -107,6 +108,9 @@ class CommitFilesToBagListener implements ShouldQueue
         {
             Log::error("Bag ".$bag->id." failed!");
             event( new ErrorEvent($bag) );
+        }
+        if(file_exists($metadataFileName)) {
+            unlink($metadataFileName);
         }
     }
 }
