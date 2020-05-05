@@ -47,6 +47,12 @@
                     "email":     "bendik.bryde@piql.com"
                 },
                 {
+                    "username":  "matti",
+                    "password":  "matti",
+                    "full_name": "Matti Wennberg",
+                    "email":     "matti.wennberg@piql.com"
+                },
+                {
                     "username":  "alfredo",
                     "password":  "alfredo",
                     "full_name": "Alfredo Trujillo",

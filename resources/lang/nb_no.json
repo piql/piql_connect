@@ -215,6 +215,10 @@
     "The dashboard gives you a breakdown of relevant information about on your data." : "Denne siden gir deg en oversikt med relevant informasjon om dine data.",
     "File formats ingested": "Opplastede filformater",
 
+    "settings.settings.header": "Brukerinstillinger",
+    "settings.settings.ingress": "Konfigurer brukerinstillinger",
+    "settings.settings.interfacelanguagelabel": "Språk",
+
     "timeout.warning": "Advarsel om inaktivitet. Automatisk utlogging om",
     "timeout.seconds": "sekunder",
     "timeout.text1": "Du har nå vært inaktiv i snart",

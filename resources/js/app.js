@@ -191,7 +191,7 @@ const router = new VueRouter({
         {
             path: "/settings",
             name: "settings",
-            redirect: "/static/settings"
+            component: Settings
         },
         {
             path: "*",
