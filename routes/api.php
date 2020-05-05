@@ -120,6 +120,8 @@ Route::group(['prefix' => 'v1' , 'middleware' => ['auth:api', 'activity']], func
         Route::get('dips/{dipId}/downloads/files/{fileId}', 'Api\Access\DipController@file_download');
         Route::get('aips/{dipId}/downloads/files/{fileId}', 'Api\Access\AipController@download');
         Route::get('aips/{aipId}/file/{fileId}/download', 'Api\Access\AipController@fileDownload');
+
+        Route::get('files/{file}/metadata', 'Api\Access\FileObjectMetadataController@index')->name('api.access.files.metadata.index');
     });
 
 

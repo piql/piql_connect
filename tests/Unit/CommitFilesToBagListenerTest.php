@@ -6,6 +6,7 @@ use App\Bag;
 use App\Events\BagCompleteEvent;
 use App\Events\BagFilesEvent;
 use App\Events\ErrorEvent;
+use App\Interfaces\MetadataWriterInterface;
 use App\Listeners\CommitFilesToBagListener;
 use App\User;
 use App\UserSetting;
@@ -64,7 +65,11 @@ class CommitFilesToBagListenerTest extends TestCase
             ->andReturn( collect([new \App\File, new \App\File] ));
 
         $metadataGenerator = Mockery::mock( MetadataGeneratorInterface::class, function( $mock ) {
-            $mock->shouldReceive('createMetadataWriter')->once();
+            $mock->shouldReceive('createMetadataWriter')
+                ->once()
+                ->andReturn( Mockery::mock( MetadataWriterInterface::class, function( $mock ) {
+                    $mock->shouldReceive('close')->once()->andReturn(true);
+                }));
         });
 
         $event = new BagFilesEvent( $bag );
@@ -113,7 +118,11 @@ class CommitFilesToBagListenerTest extends TestCase
         $bag->shouldReceive('getAttribute')->with('id')->once();
 
         $metadataGenerator = Mockery::mock( MetadataGeneratorInterface::class, function( $mock ) {
-            $mock->shouldReceive('createMetadataWriter')->once();
+            $mock->shouldReceive('createMetadataWriter')
+                ->once()
+                ->andReturn( Mockery::mock( MetadataWriterInterface::class, function( $mock ) {
+                    $mock->shouldReceive('close')->once()->andReturn(true);
+                }));
         });
 
         $event = new BagFilesEvent( $bag );

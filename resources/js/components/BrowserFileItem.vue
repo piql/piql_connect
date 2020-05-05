@@ -63,7 +63,8 @@
                 fileLink.click();
             },
             showMetadata() {
-                window.location = "/access/browse/files/"+this.aipItem.id+"/metadata";
+                this.$router.push({ name:'access.browse.metadata', params: { fileId: this.aipItem.id } });
+                //window.location = "/access/browse/metadata/file/"+this.aipItem.id;
             }
         },
         computed: {

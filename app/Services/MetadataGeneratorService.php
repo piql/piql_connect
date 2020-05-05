@@ -9,6 +9,9 @@ class MetadataGeneratorService implements MetadataGeneratorInterface
 {
     public function createMetadataWriter(array $parameter)
     {
-        return new DublinCoreMetadataWriter($parameter);
+        if($parameter['type'] == 'json')
+            return new DublinCoreJsonMetadataWriter($parameter);
+        else
+            return new DublinCoreCSVMetadataWriter($parameter);
     }
 }
