@@ -1,0 +1,66 @@
+{
+    "data": [{
+        "type": "Users",
+        "id": "1",
+        "attributes": {
+            "collection": [
+                {
+                    "username":  "simen",
+                    "password":  "simen",
+                    "full_name": "Simen Fjeld-Olsen",
+                    "email":     "simen.fjeldolsen@piql.com"
+                },
+                {
+                    "username":  "kare",
+                    "password":  "kare",
+                    "full_name": "Kåre Andersen",
+                    "email":     "kare.andersen@piql.com"
+                },
+                {
+                    "username":  "swhl",
+                    "password":  "swhl",
+                    "full_name": "Håkon Larsson",
+                    "email":     "hakon.larsson@piql.com"
+                },
+                {
+                    "username":  "simon",
+                    "password":  "simon",
+                    "full_name": "Simon Bruce-Cassidy",
+                    "email":     "simon.brucecassidy@piql.com"
+                },
+                {
+                    "username":  "rune",
+                    "password":  "rune",
+                    "full_name": "Rune Bjerkestrand",
+                    "email":     "rune.bjerkestrand@piql.com"
+                },
+                {
+                    "username":  "hilde",
+                    "password":  "hilde",
+                    "full_name": "Hilde Byrmo",
+                    "email":     "hilde.byrmo@piql.com"
+                },
+                {
+                    "username":  "bendik",
+                    "password":  "bendik",
+                    "full_name": "Bendik Bryde",
+                    "email":     "bendik.bryde@piql.com"
+                },
+                {
+                    "username":  "matti",
+                    "password":  "matti",
+                    "full_name": "Matti Wennberg",
+                    "email":     "matti.wennberg@piql.com"
+                },
+                {
+                    "username":  "alfredo",
+                    "password":  "alfredo",
+                    "full_name": "Alfredo Trujillo",
+                    "email":     "alfredo.trujillo@piql.com"
+                }
+            ]
+        }
+    }]
+}
+
+

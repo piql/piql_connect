@@ -1,0 +1,40 @@
+{
+    "data": [{
+        "type": "Holdings",
+        "id": "1",
+        "attributes": {
+            "collection": [
+                {
+                    "title": "Documents",
+                    "description": "Documents",
+                    "owner_archive_uuid": "9ccd7b00-8ebd-11ea-867a-c9bcd3d2b62d"
+                },
+                {
+                    "title": "Photographs",
+                    "description": "Photographs",
+                    "owner_archive_uuid": "9ccd7b00-8ebd-11ea-867a-c9bcd3d2b62d"
+                },
+                {
+                    "title": "Landscapes",
+                    "description": "Landscapes",
+                    "owner_archive_uuid": "9ccd7b00-8ebd-11ea-867a-c9bcd3d2b62d"
+                },
+                {
+                    "title": "Documents",
+                    "description": "Documents",
+                    "owner_archive_uuid": "ec1ae3f0-8ebd-11ea-b377-7bb297e803a2"
+                },
+                {
+                    "title": "Photographs",
+                    "description": "Photographs",
+                    "owner_archive_uuid": "ec1ae3f0-8ebd-11ea-b377-7bb297e803a2"
+                },
+                {
+                    "title": "Landscapes",
+                    "description": "Landscapes",
+                    "owner_archive_uuid": "ec1ae3f0-8ebd-11ea-b377-7bb297e803a2"
+                }
+            ]
+        }
+    }]
+}
