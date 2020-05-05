@@ -17,12 +17,7 @@ class FileObjectMetadataController extends Controller
     {
         //
         return response()->json([ "data" => $file->metadata->map(function($element) {
-            // todo: remove this when ingest and access are aligned
-            if(isset($element->metadata["mets"]['dc'])) {
-                $element->metadata = collect($element->metadata["mets"]['dc'])->flatMap(function ($value, $key) {
-                    return ['dc:' . $key => $value];
-                })->toArray();
-            }
+            $element->metadata = $element->metadata["mets"];
             return new MetadataResource($element);
         })]);
     }

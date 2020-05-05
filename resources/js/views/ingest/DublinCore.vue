@@ -44,39 +44,40 @@ export default {
         return {
             schemes: [
                 [
-                    {"name" : "dc:title",       "label" : "Title",       "type": "text"},
-                    {"name" : "dc:creator",     "label" : "Creator",     "type": "text"},
-                    {"name" : "dc:subject",     "label" : "Subject",     "type": "text"},
-                    {"name" : "dc:description", "label" : "Description", "type": "text"},
-                    {"name" : "dc:publisher",   "label" : "Publisher",   "type": "text"},
+                    {"name" : "title",       "label" : "Title",       "type": "text"},
+                    {"name" : "creator",     "label" : "Creator",     "type": "text"},
+                    {"name" : "subject",     "label" : "Subject",     "type": "text"},
+                    {"name" : "description", "label" : "Description", "type": "text"},
+                    {"name" : "publisher",   "label" : "Publisher",   "type": "text"},
                 ], [
-                    {"name" : "dc:contributor", "label" : "Contributor", "type": "text"},
-                    {"name" : "dc:date",        "label" : "Date",        "type": "text"},
-                    {"name" : "dc:type",        "label" : "Type",        "type": "text"},
-                    {"name" : "dc:format",      "label" : "Format",      "type": "text"},
-                    {"name" : "dc:identifier",  "label" : "Identifier",  "type": "text"},
+                    {"name" : "contributor", "label" : "Contributor", "type": "text"},
+                    {"name" : "date",        "label" : "Date",        "type": "text"},
+                    {"name" : "type",        "label" : "Type",        "type": "text"},
+                    {"name" : "format",      "label" : "Format",      "type": "text"},
+                    {"name" : "identifier",  "label" : "Identifier",  "type": "text"},
                 ], [
-                    {"name" : "dc:source",      "label" : "Source",      "type": "text"},
-                    {"name" : "dc:language",    "label" : "Language",    "type": "text"},
-                    {"name" : "dc:relation",    "label" : "Relation",    "type": "text"},
-                    {"name" : "dc:coverage",    "label" : "Coverage",    "type": "text"},
-                    {"name" : "dc:rights",      "label" : "Rights",      "type": "text"},
+                    {"name" : "source",      "label" : "Source",      "type": "text"},
+                    {"name" : "language",    "label" : "Language",    "type": "text"},
+                    {"name" : "relation",    "label" : "Relation",    "type": "text"},
+                    {"name" : "coverage",    "label" : "Coverage",    "type": "text"},
+                    {"name" : "rights",      "label" : "Rights",      "type": "text"},
                 ]
             ],
             metadataObject: {
-                metadata: []
+                metadata: [{ dc : {} }]
             }
         }
     },
     methods: {
         getValue(key) {
-            if(('metadata' in this.metadataObject) && (key in this.metadataObject.metadata))
-                return this.metadataObject.metadata[key];
+            if((this.metadataObject.metadata.dc !== undefined) &&
+                (key in this.metadataObject.metadata.dc))
+                return this.metadataObject.metadata.dc[key];
             else
                 return "";
         },
         setValue(key, value) {
-            this.metadataObject.metadata[key] = value;
+            this.metadataObject.metadata.dc[key] = value;
         },
         async save() {
             if(!this.readonly) {
@@ -113,6 +114,12 @@ export default {
             if(!this.readonly) {
                 this.metadataObject = (await this.post(this.baseUrl)).data.data[0];
             }
+        }
+        // fixing the corner case where the controller returns an empty
+        // array instead of an empty object
+        // this should have been resoled in the controller
+        if(Array.isArray(this.metadataObject.metadata.dc)) {
+            this.metadataObject.metadata.dc = {};
         }
     }
 }

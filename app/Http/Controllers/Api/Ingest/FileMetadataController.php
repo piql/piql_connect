@@ -14,21 +14,21 @@ class FileMetadataController extends Controller
 {
     private function validateRequest(Request $request) {
         return $request->validate([
-            "metadata.dc:title" => "string|nullable",
-            "metadata.dc:creator" => "string|nullable",
-            "metadata.dc:subject" => "string|nullable",
-            "metadata.dc:description" => "string|nullable",
-            "metadata.dc:publisher" => "string|nullable",
-            "metadata.dc:contributor" => "string|nullable",
-            "metadata.dc:date" => "string|nullable",
-            "metadata.dc:type" => "string|nullable",
-            "metadata.dc:format" => "string|nullable",
-            "metadata.dc:identifier" => "string|nullable",
-            "metadata.dc:source" => "string|nullable",
-            "metadata.dc:language" => "string|nullable",
-            "metadata.dc:relation" => "string|nullable",
-            "metadata.dc:coverage" => "string|nullable",
-            "metadata.dc:rights" => "string|nullable",
+            "metadata.dc.title" => "string|nullable",
+            "metadata.dc.creator" => "string|nullable",
+            "metadata.dc.subject" => "string|nullable",
+            "metadata.dc.description" => "string|nullable",
+            "metadata.dc.publisher" => "string|nullable",
+            "metadata.dc.contributor" => "string|nullable",
+            "metadata.dc.date" => "string|nullable",
+            "metadata.dc.type" => "string|nullable",
+            "metadata.dc.format" => "string|nullable",
+            "metadata.dc.identifier" => "string|nullable",
+            "metadata.dc.source" => "string|nullable",
+            "metadata.dc.language" => "string|nullable",
+            "metadata.dc.relation" => "string|nullable",
+            "metadata.dc.coverage" => "string|nullable",
+            "metadata.dc.rights" => "string|nullable",
         ]);
     }
     /**
@@ -58,6 +58,11 @@ class FileMetadataController extends Controller
         }
 
         $requestData = $this->validateRequest($request);
+
+        if(!isset($requestData->dc))
+        {
+            $requestData =["dc" => (object)null];
+        }
 
         $metadata = new Metadata([
             "uuid" => Uuid::generate()->string,
@@ -95,9 +100,13 @@ class FileMetadataController extends Controller
         if($file->bag->status != "open") {
             abort( response()->json([ 'error' => 400, 'message' => 'Metadata is read only' ], 400 ) );
         }
+        \Log::debug($request);
         $requestData = $this->validateRequest($request);
-        $metadata->metadata = $requestData['metadata'] + $metadata->metadata;
-        $metadata->save();
+        \Log::debug($requestData);
+        if(isset($requestData['metadata'])) {
+            $metadata->metadata = $requestData['metadata'] + $metadata->metadata;
+            $metadata->save();
+        }
 
         return response()->json([ "data" => $file->refresh()->metadata->map(function($element) {
             return new MetadataResource($element);
