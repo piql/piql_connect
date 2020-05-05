@@ -217,7 +217,7 @@
 
     "settings.settings.header": "Brukerinstillinger",
     "settings.settings.ingress": "Konfigurer brukerinstillinger",
-    "settings.settings.interfacelanguagelabel": "Språk",
+    "settings.settings.languagelabel": "Språk",
 
     "timeout.warning": "Advarsel om inaktivitet. Automatisk utlogging om",
     "timeout.seconds": "sekunder",

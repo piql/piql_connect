@@ -203,7 +203,7 @@
 
     "settings.settings.header": "User settings",
     "settings.settings.ingress": "Configure user settings",
-    "settings.settings.interfacelanguagelabel": "Interface language",
+    "settings.settings.languagelabel": "Language",
 
     "timeout.warning": "Inactivity warning. Automatic log out in",
     "timeout.seconds": "seconds",
