@@ -1,0 +1,23 @@
+{
+    "data": [{
+        "type": "App\\Archive",
+        "id": "1",
+        "attributes": {
+            "collection": [
+                {
+                    "title": "Cultural",
+                    "description": "Cultural",
+                    "uuid": "9ccd7b00-8ebd-11ea-867a-c9bcd3d2b62d"
+                },
+                {
+                    "title": "Museum",
+                    "description": "Museum",
+                    "uuid": "ec1ae3f0-8ebd-11ea-b377-7bb297e803a2"
+                }
+
+            ]
+        }
+    }]
+}
+
+

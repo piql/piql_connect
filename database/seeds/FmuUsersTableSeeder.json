@@ -1,0 +1,22 @@
+{
+    "data": [{
+        "type": "Users",
+        "id": "1",
+        "attributes": {
+            "collection": [
+                {
+                    "username":  "fmu",
+                    "password":  "eB63764N",
+                    "full_name": "Forsvarets Museer",
+                    "email":     "no-reply@piql.com"
+                },
+                {
+                    "username":  "piql-admin",
+                    "password":  "6eQQh4bd",
+                    "full_name": "Piql Admin",
+                    "email":     "simon.brucecassidy@piql.com"
+                }
+            ]
+        }
+    }]
+}
