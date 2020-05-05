@@ -1,9 +1,8 @@
 <template>
-    <div class="container-fluid">
-        <div class="mb-5">
-            <h1>{{$t('access.retrieve.readyToRetrieve')}}</h1>
-            <em>{{$t('access.ready.ingress')}}</em>
-        </div>
+    <div class="w-100">
+
+        <page-heading icon="fa-file-export" :title="$t('access.retrieve.readyToRetrieve')"
+            :ingress="$t('access.ready.ingress')" />
 
         <div class="row plistHeader" v-show="hasFiles">
             <div class="col-sm-6">{{$t('access.ready.aipName')}}</div>
