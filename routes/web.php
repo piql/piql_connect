@@ -4,13 +4,6 @@ Route::get('/login', array('uses' => 'Auth\LoginController@showLogin'))->name('l
 Route::get('/logout', array('uses' => 'Auth\LoginController@logout'))->name('logout');
 
 Route::middleware(['auth', 'locale', 'activity'])->group( function () {
-    Route::group(['prefix' => 'static'], function () {
-        Route::get('settings', 'SettingsController@showSettings')->name('web.showSettings');
-        Route::post('settings', 'SettingsController@updateSettings')->name('web.updateSettings');
-    });
-});
-
-Route::middleware(['auth', 'locale', 'activity'])->group( function () {
     Route::get('/{any}', function() {
         return view('index');
     })->where('any', '.*')->name('/'); /* Catch all and pass to the Vue router */

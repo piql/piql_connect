@@ -128,7 +128,11 @@ const router = new VueRouter({
         {
             path: "/ingest/metadata/bags/:bagId/file/:fileId",
             name: "ingest.metadata.edit",
-            component: DublinCore
+            component: DublinCore,
+            props: {
+                url: "/api/v1/ingest/files",
+                readOnly: false
+            },
         },
         {
             path: "/ingest/process",
@@ -149,6 +153,15 @@ const router = new VueRouter({
             path: "/access/browse",
             name: "access.browse",
             component: Browse
+        },
+        {
+            path: "/access/browse/metadata/file/:fileId",
+            name: "access.browse.metadata",
+            component: DublinCore,
+            props: {
+                url: "/api/v1/access/files",
+                readOnly: true
+            },
         },
         {
             path: "/access/browse/dip/:dipId",
@@ -178,7 +191,7 @@ const router = new VueRouter({
         {
             path: "/settings",
             name: "settings",
-            redirect: "/static/settings"
+            component: Settings
         },
         {
             path: "*",

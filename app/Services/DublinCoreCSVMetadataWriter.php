@@ -6,26 +6,26 @@ namespace App\Services;
 use Illuminate\Support\Facades\Storage;
 use App\Interfaces\MetadataWriterInterface;
 
-class DublinCoreMetadataWriter implements MetadataWriterInterface
+class DublinCoreCSVMetadataWriter implements MetadataWriterInterface
 {
     private $filename;
 
     private $header = [
-        "dc:title"       => "dc.title",
-        "dc:creator"     => "dc.creator",
-        "dc:subject"     => "dc.subject",
-        "dc:description" => "dc.description",
-        "dc:publisher"   => "dc.publisher",
-        "dc:contributor" => "dc.contributor",
-        "dc:date"        => "dc.date",
-        "dc:type"        => "dc.type",
-        "dc:format"      => "dc.format",
-        "dc:identifier"  => "dc.identifier",
-        "dc:source"      => "dc.source",
-        "dc:language"    => "dc.language",
-        "dc:relation"    => "dc.relation",
-        "dc:coverage"    => "dc.coverage",
-        "dc:rights"      => "dc.rights"
+        "title"       => "dc.title",
+        "creator"     => "dc.creator",
+        "subject"     => "dc.subject",
+        "description" => "dc.description",
+        "publisher"   => "dc.publisher",
+        "contributor" => "dc.contributor",
+        "date"        => "dc.date",
+        "type"        => "dc.type",
+        "format"      => "dc.format",
+        "identifier"  => "dc.identifier",
+        "source"      => "dc.source",
+        "language"    => "dc.language",
+        "relation"    => "dc.relation",
+        "coverage"    => "dc.coverage",
+        "rights"      => "dc.rights"
     ];
 
     public function __construct( array $params )
@@ -41,9 +41,14 @@ class DublinCoreMetadataWriter implements MetadataWriterInterface
         );
     }
 
+    public function __destruct()
+    {
+        // TODO: Implement __destruct() method.
+    }
+
     public function write(array $parameter): bool
     {
-        $metadata = $parameter['metadata'];
+        $metadata = $parameter['metadata']['dc'];
 
         // serialize metadata
         Storage::append(
@@ -52,6 +57,10 @@ class DublinCoreMetadataWriter implements MetadataWriterInterface
                 return ($metadata[$key] ?? '');
             })->implode(',')
         );
+        return true;
+    }
+
+    public function close() : bool {
         return true;
     }
 }

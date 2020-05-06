@@ -55,9 +55,11 @@ class CommitFilesToBagListener implements ShouldQueue
             return;
         }
 
-        $metadataFileName = Str::random(40)."-metadata.csv";
+        $metadataType = env( 'APP_AM_INGEST_METADATA_FILE_FORMAT', "csv");
+        $metadataFileName = Str::random(40)."-metadata.".$metadataType;
         $metadataWriter = $this->metadataGenerator->createMetadataWriter([
             'filename' => $metadataFileName,
+            'type' => $metadataType,
         ]);
 
         foreach ($files as $file)
@@ -81,10 +83,14 @@ class CommitFilesToBagListener implements ShouldQueue
                 }
             }
         }
+        if(!$metadataWriter->close()) {
+            Log::error("Generating metadata for Bag " . $bag->id . " failed!, Unable to close file");
+            event(new ErrorEvent($bag));
+        }
 
         // add metadata file to bagit tool
         if( Storage::exists($metadataFileName) && ( $bag->owner()->first()->settings->getIngestMetadataAsFileAttribute() !== true ) ) {
-            $this->bagIt->addMetadataFile(Storage::path($metadataFileName), "metadata.csv");
+            $this->bagIt->addMetadataFile(Storage::path($metadataFileName), "metadata.".$metadataType);
         }
 
         $result = $this->bagIt->createBag($bag->storagePathCreated());
@@ -102,6 +108,9 @@ class CommitFilesToBagListener implements ShouldQueue
         {
             Log::error("Bag ".$bag->id." failed!");
             event( new ErrorEvent($bag) );
+        }
+        if(file_exists($metadataFileName)) {
+            unlink($metadataFileName);
         }
     }
 }

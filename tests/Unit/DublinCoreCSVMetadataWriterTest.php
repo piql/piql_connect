@@ -2,7 +2,7 @@
 
 namespace Tests\Unit;
 
-use App\Services\DublinCoreMetadataWriter;
+use App\Services\DublinCoreCSVMetadataWriter;
 use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -17,7 +17,7 @@ use App\StorageLocation;
 use App\StorageProperties;
 use App\S3Configuration;
 
-class DublinCoreMetadataWriterTest extends TestCase
+class DublinCoreCSVMetadataWriterTest extends TestCase
 {
     use DatabaseTransactions;
 
@@ -32,7 +32,7 @@ class DublinCoreMetadataWriterTest extends TestCase
         $this->testUser = factory( \App\User::class )->create();
         Passport::actingAs( $this->testUser );
         $this->filename = 'test.txt';
-        $this->writer = new DublinCoreMetadataWriter([
+        $this->writer = new DublinCoreCSVMetadataWriter([
             'filename' => $this->filename
         ]);
 
@@ -43,23 +43,26 @@ class DublinCoreMetadataWriterTest extends TestCase
         $this->writer->write([
            "object" => $this->filename,
            'metadata' => [
-               "dc:title"       => "title",
-               "dc:creator"     => "creator",
-               "dc:subject"     => "subject",
-               "dc:description" => "description",
-               "dc:publisher"   => "publisher",
-               "dc:contributor" => "contributor",
-               "dc:date"        => "date",
-               "dc:type"        => "type",
-               "dc:format"      => "format",
-               "dc:identifier"  => "identifier",
-               "dc:source"      => "source",
-               "dc:language"    => "language",
-               "dc:relation"    => "relation",
-               "dc:coverage"    => "coverage",
-               "dc:rights"      => "rights"
+               'dc' => [
+                   "title"       => "title",
+                   "creator"     => "creator",
+                   "subject"     => "subject",
+                   "description" => "description",
+                   "publisher"   => "publisher",
+                   "contributor" => "contributor",
+                   "date"        => "date",
+                   "type"        => "type",
+                   "format"      => "format",
+                   "identifier"  => "identifier",
+                   "source"      => "source",
+                   "language"    => "language",
+                   "relation"    => "relation",
+                   "coverage"    => "coverage",
+                   "rights"      => "rights"
+               ]
            ]
         ]);
+        $this->writer->close();
 
         $this->assertFileExists( Storage::path($this->filename) );
         $data = explode("\n", Storage::disk()->get($this->filename));

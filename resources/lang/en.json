@@ -205,6 +205,10 @@
     "access.download.download": "Download",
     "access.download.takeOffline": "Take offline",
 
+    "settings.settings.header": "User settings",
+    "settings.settings.ingress": "Configure user settings",
+    "settings.settings.languagelabel": "Language",
+
     "timeout.warning": "Inactivity warning. Automatic log out in",
     "timeout.seconds": "seconds",
     "timeout.text1": "You have been inactive for",
