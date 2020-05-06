@@ -85,7 +85,6 @@ import FineUploader from 'vue-fineuploader';
 import FineUploaderTraditional from 'fine-uploader-wrappers'
 import axios from 'axios';
 import JQuery from 'jquery';
-import moment from 'moment';
 let $ = JQuery;
 import filesize from 'filesize';
 

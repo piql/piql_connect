@@ -21,10 +21,8 @@
 </template>
 
 <script>
-import moment from 'moment';
 export default {
     async mounted() {
-        console.log('Service component mounted.');
     },
     props: {
         item: Object,
@@ -35,9 +33,6 @@ export default {
         };
     },
     methods: {
-        shortDate: function(date){
-            return moment(date).format("YYYY-MM-DD");
-        },
         async pingService(url) {
             this.status = "Pending...";
 

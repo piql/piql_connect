@@ -45,9 +45,6 @@
            };
         },
         methods: {
-            dateFormat: function(item){
-                return moment(item.created_at).format('L');
-            },
             removeClicked: function( file ) {
                 this.$emit("removeClicked", file );
             },

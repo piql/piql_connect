@@ -13,7 +13,7 @@
                 {{fileName}}
             </div>
             <div class="col">
-                {{item.created_at}}
+                {{ formatShortDate( item.created_at ) }}
             </div>
             <div class="col listActionItems">
                 <i class="fas fa-cog hover-hand"></i>&nbsp;
@@ -29,7 +29,6 @@ import axios from 'axios';
 
 export default {
     async mounted() {
-        console.log('Task component mounted.')
         let bagId = this.item.id;
         this.url = "tasks/"+bagId;
         axios.get("/api/v1/ingest/bags/"+bagId+"/files").then( bag => {

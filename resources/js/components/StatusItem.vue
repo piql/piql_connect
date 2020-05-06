@@ -8,7 +8,7 @@
                 {{fileSize}}
             </div>
             <div class="col-3 text-center">
-                {{creationDate}}
+                {{ formatShortDate( item.created_at ) }}
             </div>
             <div class="col-3 text-center">
                 {{ $t('ingest.status.preparing') }}
@@ -44,9 +44,6 @@ export default {
                 return this.getFileSizeSI(this.item.size);
             else
                 return "---";
-        },
-        creationDate: function() {
-            return format( new Date(this.item.created_at), this.$t('shortDateFormat') );
         },
     },
     data() {

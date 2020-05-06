@@ -7,7 +7,7 @@
                 {{item.storage_properties.bag.name}}
             </div>
             <div class="col-sm-1 p-0 text-truncate align-self-center text-center">
-                {{dateFormat(item.storage_properties.ingest_time)}}
+                {{ formatShortDate( item.storage_properties.ingest_time ) }}
             </div>
             <div class="col-sm-2 text-truncate align-self-center text-center">
                 {{item.storage_properties.holding_name}}
@@ -24,7 +24,6 @@
 
 <script>
     import axios from 'axios';
-    import moment from 'moment';
     export default {
         async mounted() {
           axios.get('/api/v1/access/dips/'+this.item.id+'/thumbnails', { responseType: 'blob' }).then ( async (thumbnail) => {
@@ -51,9 +50,6 @@
             },
             open: function() {
                 this.$emit('openObject', this.item.id);
-            },
-            dateFormat: function(timestamp) {
-                return moment(timestamp).format('L');
             },
 
         },

@@ -16,7 +16,6 @@
 </template>
 
 <script>
-import moment from 'moment';
 export default {
     async mounted() {
     },
@@ -28,14 +27,8 @@ export default {
         item: Object
     },
     computed: {
-        bag: function() {
-            return item.bag;
-        },
         rc: function() {
             return item.rc;
-        },
-        friendlyDate: function(){
-            return moment(this.item.created_at).format('L');
         },
         downloadUrl: function(){
             return "/api/v1/storage/retrievals/"+this.item.id+"/download";

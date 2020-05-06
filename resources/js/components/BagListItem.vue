@@ -6,7 +6,7 @@
                 {{item.name}}
             </div>
             <div class="col-sm-3 pt-sm-3">
-                {{item.created_at}}
+                {{ formatShortDate( item.created_at ) }}
             </div>
             <div class="col-sm-2 pt-sm-3">
                 {{fileSize}}

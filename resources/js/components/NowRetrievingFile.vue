@@ -5,7 +5,7 @@
                 {{item.filename}}
             </div>
             <div class="col-sm-2 text-center">
-                {{friendlyDate}}
+                {{ formatShortDate( item.created_at ) }}
             </div>
             <div class="col-sm-2 text-right">
                 {{item.filesize}}
@@ -21,23 +21,13 @@
 </template>
 
 <script>
-import moment from 'moment';
 export default {
-    async mounted() {
-        let bagId = this.item.id;
-    },
     data() {
         return {
-            bag: {},
         };
     },
     props: {
         item: Object
-    },
-    computed: {
-        friendlyDate: function(){
-            return moment(this.item.created_at).format('L');
-        }
     },
 }
 </script>

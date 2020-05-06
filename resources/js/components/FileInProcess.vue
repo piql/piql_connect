@@ -5,7 +5,7 @@
                 {{item.name}}
             </div>
             <div class="col-sm-3">
-                {{shortDate}}
+                {{formatShortDate( item.created_at )}}
             </div>
             <div class="col-sm-3 text-truncate">
                 {{item.status}}
@@ -20,23 +20,13 @@
 </template>
 
 <script>
-import moment from 'moment';
 export default {
-    async mounted() {
-        let bagId = this.item.id;
-    },
     data() {
         return {
-            bag: {},
         };
     },
     props: {
         item: Object
     },
-    computed: {
-        shortDate: function() {
-                return moment(this.item.created_at).format('L');
-        }
-    }
 }
 </script>

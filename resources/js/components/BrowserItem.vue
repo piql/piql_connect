@@ -7,7 +7,7 @@
             {{item.storage_properties.bag.name}}
         </div>
         <div class="col-sm-1 p-0 text-truncate align-self-center text-center">
-            {{dateFormat(item.archived_at)}}
+            {{formatShortDate(item.archived_at)}}
         </div>
         <div class="col-sm-2 text-truncate align-self-center text-center">
             {{item.storage_properties.holding_name}}
@@ -27,7 +27,6 @@
 </template>
 
 <script>
-import moment from 'moment';
 import axios from 'axios';
 export default {
     async mounted() {
@@ -52,9 +51,6 @@ export default {
         }
     },
     methods: {
-        dateFormat: function(timestamp) {
-            return moment(timestamp).format('L');
-        },
         open: function(){
             this.$emit('openObject', this.item.id);
         },
