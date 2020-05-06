@@ -64,21 +64,23 @@ class DublinCoreJsonMetadataWriterTest extends TestCase
         $this->writer->write([
            "object" => $this->filename,
            'metadata' => [
-               "dc:title"       => "title",
-               "dc:creator"     => "creator",
-               "dc:subject"     => "subject",
-               "dc:description" => "description",
-               "dc:publisher"   => "publisher",
-               "dc:contributor" => "contributor",
-               "dc:date"        => "date",
-               "dc:type"        => "type",
-               "dc:format"      => "format",
-               "dc:identifier"  => "identifier",
-               "dc:source"      => "source",
-               "dc:language"    => "language",
-               "dc:relation"    => "relation",
-               "dc:coverage"    => "coverage",
-               "dc:rights"      => "rights"
+               'dc' => [
+                   "title"       => "title",
+                   "creator"     => "creator",
+                   "subject"     => "subject",
+                   "description" => "description",
+                   "publisher"   => "publisher",
+                   "contributor" => "contributor",
+                   "date"        => "date",
+                   "type"        => "type",
+                   "format"      => "format",
+                   "identifier"  => "identifier",
+                   "source"      => "source",
+                   "language"    => "language",
+                   "relation"    => "relation",
+                   "coverage"    => "coverage",
+                   "rights"      => "rights"
+               ]
            ]
         ]);
         $this->writer->close();
@@ -99,8 +101,10 @@ class DublinCoreJsonMetadataWriterTest extends TestCase
         $this->writer->write([
             "object" => $this->filename,
             'metadata' => [
-                "dc:title"       => "title",
-                "dc:creator"     => "creator",
+                'dc' => [
+                    "title"       => "title",
+                    "creator"     => "creator",
+                ]
             ]
         ]);
         $this->writer->close();
