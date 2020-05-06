@@ -17,6 +17,7 @@
 </template>
 
 <script>
+
     export default {
         data() {
             return {
@@ -34,6 +35,18 @@
 
                 // todo: remove this when toasts are implemented
                 window.Echo.private('User.' + userId + '.Events').listen('.Info', (event) => {
+
+
+                    if( event.properties.type == "App\\Events\\IngestCompleteEvent" )
+                    {
+                        this.infoToast(
+                            this.$t('upload.toasts.ingestComplete.title'),
+                            this.$t('upload.toasts.ingestComplete.message'),
+                            {'BAGNAME': event.properties.bag.name }
+                        );
+                    }
+
+
                     console.log(
                         "%cInfo (bag: %s) : %s%c - %s",
                         "color: Blue", event.properties.bag.id, event.properties.type,
@@ -41,6 +54,18 @@
                     );
                 });
                 window.Echo.private('User.' + userId + '.Events').listen('.Error', (event) => {
+
+                    if( event.properties.type == "App\\Events\\ArchivematicaIngestError"
+                        || event.properties.type == "App\\Events\\ArchivematicaTransferError")
+                    {
+                        this.errorToast(
+                            this.$t('upload.toasts.ingestFailed.title'),
+                            this.$t('upload.toasts.ingestFailed.message'),
+                            {'BAGNAME': event.properties.bag.name }
+                        );
+                    }
+
+
                     console.log(
                         "%cError (bag: %s) : %s%c - %s",
                         "color: Red", event.properties.bag.id, event.properties.type,
