@@ -11,6 +11,7 @@ use App\Services\ArchivematicaConnectionService;
 use App\StorageLocation;
 use App\Aip;
 use App\Dip;
+use App\Bag;
 use App\FileObject;
 use Faker\Factory as faker;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
@@ -58,17 +59,25 @@ class TransferPackageToStorageTest extends TestCase
             $this->testUser->id, $this->s3Configuration->id, "App\Aip" );
         $this->storageLocation = StorageLocation::create( $this->storageLocationData );
 
+        $this->bag = Bag::create(['owner' => $this->testUser->id, 'name' => "testEventBag"]);
+
         $this->dip = Dip::create([
-            'bag_uuid' => Uuid::generate(),
+            'bag_uuid' => $this->bag->uuid,
             'external_uuid' => Uuid::generate(),
             'owner' => $this->testUser->id
         ]);
 
         $this->aip = Aip::create([
-            'bag_uuid' => Uuid::generate(),
+            'bag_uuid' => $this->bag->uuid,
             'external_uuid' => Uuid::generate(),
             'owner' => $this->testUser->id
         ]);
+
+        $this->bag->storage_properties->update([
+            'aip_uuid' => $this->aip->external_uuid,
+            'dip_uuid' => $this->dip->external_uuid
+        ]);
+
 
     }
 

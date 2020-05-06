@@ -3,6 +3,7 @@
 namespace App\Listeners;
 
 use App\Bag;
+use App\Aip;
 use App\EventLogEntry;
 use App\Events\ArchivematicaApproveTransferError;
 use App\Events\ArchivematicaGetFileDetailsError;
@@ -65,6 +66,18 @@ class NotificationDispatcher
         ]));
     }
 
+    public function dispatchInformationPackageUploadedEvent( $event ) {
+        $vars = get_object_vars($event);
+        $aip = Aip::where( 'external_uuid', $event->informationPackage->external_uuid )->first();
+        if( $aip ) {
+            $bag = $aip->storage_properties->bag;
+            event( new NotificationEvent("Info", $event->informationPackage->owner, [
+                'type' => "InformationPackageUploaded",
+                'name' => $bag->name
+            ]));
+        }
+    }
+
 
 
 
@@ -112,6 +125,13 @@ class NotificationDispatcher
         ],
             'App\Listeners\NotificationDispatcher@dispatchFileUploadedEvent'
         );
+
+        $events->listen([
+            'App\Events\InformationPackageUploaded',
+        ],
+            'App\Listeners\NotificationDispatcher@dispatchInformationPackageUploadedEvent'
+        );
+
 
     }
 }

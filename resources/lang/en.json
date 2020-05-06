@@ -46,7 +46,7 @@
     "upload.toasts.uploadDuplicate.message": "File %FILENAME% has already been uploaded",
     "upload.fileNameFilter": "Filter",
     "upload.toasts.ingestComplete.title": "Ingest %BAGNAME% complete",
-    "upload.toasts.ingestComplete.message": "Ingest %BAGNAME% will shortly be available in the browser.",
+    "upload.toasts.ingestComplete.message": "Ingest %BAGNAME% is now available in the browser.",
     "upload.toasts.ingestFailed.title": "Ingest %BAGNAME% failed",
     "upload.toasts.ingestFailed.message": "Ingest of %BAGNAME% has failed. Please contact your piqlConnect administrator.",
 
