@@ -1,14 +1,11 @@
 <template>
-    <div class="container-fluid">
+    <div class="w-100">
 
-        <ingest-filter-search v-bind:filters="['ingest.status.preparing','ingest.status.writing']"/>
-
-
-        <div class="row plistHeader">
-            <div class="col">{{ $t('ingest.status.jobName') }}</div>
-            <div class="col-2">{{ $t('ingest.status.size') }}</div>
-            <div class="col-3">{{ $t('ingest.status.date') }}</div>
-            <div class="col-3">{{ $t('ingest.status.status') }}</div>
+        <div class="row plistHeader mt-5">
+            <div class="col text-left">{{ $t('ingest.status.jobName') }}</div>
+            <div class="col-2 text-center">{{ $t('ingest.status.size') }}</div>
+            <div class="col-3 text-center">{{ $t('ingest.status.date') }}</div>
+            <div class="col-3 text-center">{{ $t('ingest.status.status') }}</div>
         </div>
 
         <status-item v-for="item in items" v-bind:item="item" v-bind:key="item.id" :jobListUrl="jobListUrl" @piqlIt="piqlIt"/>

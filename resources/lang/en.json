@@ -1,5 +1,7 @@
 {
     "locale": "en",
+    "localePrefix": "us",
+    "shortDateFormat": "MM/dd/yyyy",
     "Upload" : "Upload",
     "Welcome": "Welcome",
     "Add files" : "Add files",
@@ -104,7 +106,7 @@
     "ingest.taskList.ingestDate": "Ingest Date",
     "ingest.taskList.size": "Size",
 
-    "ingest.offlineStorage.status.title": "Status",
+    "ingest.offlineStorage.status.title": "Status for offline storage",
     "ingest.offlineStorage.ingress": "Send packages to piqlFilm for cold storage.",
     "ingest.offlineStorage.status.ingress": "Display the status of the archival workflow on piqlFilm",
     "ingest.offlineStorage.aipList.header": "Archival package list",
