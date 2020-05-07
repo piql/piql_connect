@@ -26,5 +26,11 @@
 	"subscribers": {
 		"http": true,
 		"redis": true
-	}
+	},
+    "apiOriginAllow": {
+        "allowCors": true,
+        "allowOrigin": "*",
+        "allowMethods": "OPTIONS, GET, POST, PUT",
+        "allowHeaders": "Origin, Content-Type, X-Auth-Token, X-Requested-With, Accept, Authorization, X-CSRF-TOKEN, X-Socket-Id"
+    }
 }
