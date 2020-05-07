@@ -1,5 +1,6 @@
 {
-	"authHost": "http://app_authentication_server",
+    "bootstrap": "^4.4.1",
+	"authHost": "https://app_authentication_server",
 	"authEndpoint": "/broadcasting/auth",
 	"clients": [],
 	"database": "redis",
@@ -15,7 +16,7 @@
 	"devMode": true,
 	"host": null,
 	"port": "6001",
-	"protocol": "http",
+	"protocol": "https",
 	"socketio": {},
 	"secureOptions": 67108864,
 	"sslCertPath": "/ssl/fullchain.pem",
@@ -25,11 +26,5 @@
 	"subscribers": {
 		"http": true,
 		"redis": true
-	},
-	"apiOriginAllow": {
-		"allowCors": true,
-		"allowOrigin": "connect.local:*",
-		"allowMethods": "OPTIONS, GET, POST, PUT",
-		"allowHeaders": "Origin, Content-Type, X-Auth-Token, X-Requested-With, Accept, Authorization, X-CSRF-TOKEN, X-Socket-Id"
 	}
 }
