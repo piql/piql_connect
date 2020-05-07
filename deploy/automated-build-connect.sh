@@ -50,9 +50,9 @@ docker network connect --link piqlconnect_nginx_1:piqlconnect-dev.piql.com piqlc
 
 echo 'Run docker containers'
 if [ ! -v "$LOCALDEV" ] ; then
-    ./localdev-up.sh || exit $?
-else
     ./up.sh || exit $?
+else
+    ./localdev-up.sh || exit $?
 fi
 
 echo 'Generate application key'
