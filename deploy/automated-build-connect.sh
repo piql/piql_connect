@@ -18,16 +18,11 @@ composer install || exit $?
 echo 'npm install'
 npm install || exit $?
 npm install cross-env || exit $?
-#npm install vue || exit $?
 
 echo 'Install vue'
-npm install vue-loader || exit $?
-composer require martinlindhe/laravel-vue-i18n-generator || exit $?
 php artisan vue-i18n:generate || exit $?
-#npm i --save vuex-i18n
 
 echo 'npm run'
-npm install bootstrap || exit $?
 npm run prod || exit $? # has warnings
 
 echo 'Set execute permissions to deploy scripts'
