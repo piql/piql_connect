@@ -49,7 +49,11 @@ sudo chown 333:$USER -R ../.config || exit $? # Only for Tinker
 docker network connect --link piqlconnect_nginx_1:piqlconnect-dev.piql.com piqlconnect_piqlConnect-net compose_archivematica-storage-service_1
 
 echo 'Run docker containers'
-./localdev-up.sh || exit $?
+if [ ! -v "$LOCALDEV" ] ; then
+    ./localdev-up.sh || exit $?
+else
+    ./up.sh || exit $?
+fi
 
 echo 'Generate application key'
 docker-compose -p piqlConnect exec -T app php artisan key:generate || exit $?
