@@ -15,21 +15,22 @@
                 </select>
                 <input type="search" :placeholder="$t('Search')">
             </div>
+
             <div class="row plistHeader mt-5">
-                <div class="col-1"><input type="checkbox" class="checkbox" id="allSips"></div>
-                <div class="col-2">{{$t('ingest.taskList.sip')}}</div>
-                <div class="col-3">{{$t('ingest.taskList.content')}}</div>
-                <div class="col">{{$t('ingest.taskList.ingestDate')}}</div>
-                <div class="col listActionItems">&nbsp;</div>
-                <div class="col piqlIt">&nbsp;</div>
+                <div class="col-sm-3">{{$t('ingest.offlineStorage.jobName')}}</div>
+                <div class="col-sm-1">{{$t('ingest.offlineStorage.numberOfAips')}}</div>
+                <div class="col-sm-2">{{$t('ingest.offlineStorage.size')}}</div>
+                <div class="col-sm-2">{{$t('ingest.offlineStorage.filled')}}</div>
+                <div class="col listActionItems">{{$t('ingest.offlineStorage.actions')}}</div>
             </div>
 
-            <Task v-for="item in jobs" v-bind:item="item" v-bind:key="item.id" @piqlIt="piqlIt"/>
+            <Task v-for="item in items" v-bind:item="item" v-bind:key="item.id"
+                           :jobListUrl="jobListUrl" :actionIcons="actionIcons" @piqlIt="piqlIt"/>
         </form>
 
         <div class="row">
             <div class="col">
-                <Pager :meta="meta" @updatePage="updatePage" />
+                <Pager :meta="pageMeta" @updatePage="updatePage" />
             </div>
         </div>
     </div>
@@ -41,35 +42,54 @@
     export default {
         data() {
             return {
-                pageQuery: "",
-                result: null,
+                pageQuery: null,
+                result: null
             }
         },
         props: {
+            actionIcons: {
+                type: Object,
+                default: function () { return { 'list': true, 'config': true, 'delete': true, 'defaultAction': true}; }
+            },
             baseUrl: {
                 type: String,
                 default: "/api/v1/ingest/offline_storage/pending/jobs"
+            },
+            jobListUrl: {
+                type: String,
+                default: "/api/v1/ingest/offline_storage/pending"
             }
         },
         computed: {
-            url() { return this.baseUrl },
-            success() { return this.result ? ( this.result.status == 200 ) : false; },
-            jobs() { return this.success ? this.result.data.data : null; },
-            meta() { return this.success ? this.result.data.meta : null; }
+            url() { return this.pageQuery ? this.baseUrl + "?" + this.pageQuery : this.baseUrl; },
+            success() { return this.result ? ( this.result.status === 200 ) : false; },
+            items() { return this.success ? this.result.data.data : null; },
+            pageMeta() { return this.success ? this.result.data.meta : null; },
+            showPager() { return this.success && this.pageMeta.total > 1; }
         },
         async mounted() {
             this.update();
         },
         methods: {
-            async piqlIt( id ) {
-                await axios.post("/api/v1/ingest/bags/"+id+"/piql");
+            async piqlIt( job ) {
+                let result = (await axios.patch(this.jobListUrl+"/jobs/"+job.id, {
+                    'status': 'ingesting'
+                }));
+                if(result.data.status == 'ingesting') {
+                    this.modal = false; //????
+                }
+                this.infoToast(
+                    this.$t('ingest.offlineStorage.toasts.piqled.title'),
+                    this.$t('ingest.offlineStorage.toasts.piqled.message'),
+                    {'PACKAGENAME': job.name }
+                );
                 this.update();
             },
             async update() {
-                this.items = await axios.get( this.url );
+                this.result = await axios.get( this.url );
             },
             updatePage( page ) {
-                this.pageQuery = page.Query;
+                this.pageQuery = page.query;
                 this.update();
             }
         },
