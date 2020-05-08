@@ -34,8 +34,8 @@
                 <div v-if="actionIcons.delete" class="pl-1 actionIcon" title="Delete files">
                     <i class="fas fa-trash-alt mr-2 hover-hand"></i>
                 </div>
-                <div v-if="actionIcons.defaultAction" class="pl-1" title="Store on piqlFilm" >
-                    <button class="btn piqlIt" v-on:click="piqlIt">&nbsp;</button>
+                <div v-if="actionIcons.defaultAction" class="pl-3 pr-3" title="Store on piqlFilm" >
+                    <button class="btn w-100 piqlIt" v-on:click="piqlIt">&nbsp;</button>
                 </div>
             </div>
 
@@ -67,13 +67,13 @@
 
         methods: {
             onCogClick() {
-                window.location = "/ingest/offline_storage/"+this.item.id+"/configuration";
+                this.$router.push({ name:'ingest.offline_storage.bucket_config', params: { bucketId: this.item.id } });
             },
             onTagsClick() {
-                window.location = "/ingest/offline_storage/"+this.item.id+"/metadata";
+                this.$router.push({ name:'ingest.offline_storage.bucket_metadata', params: { bucketId: this.item.id } });
             },
             onListClick(){
-                window.location = '/ingest/offline_storage/'+this.item.id;
+                this.$router.push({ name:'ingest.offline_storage.bucket_content', params: { bucketId: this.item.id } });
             },
             async piqlIt(e) {
                 this.$emit('piqlIt', this.item );

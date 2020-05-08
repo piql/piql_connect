@@ -3,6 +3,7 @@
  * includes Vue and other libraries. It is a great starting point when
  * building robust, powerful web applications using Vue and Laravel.
  */
+
 require('bootstrap');
 require('bootstrap-select');
 require('filesize');
@@ -101,6 +102,9 @@ import DublinCore from './views/ingest/DublinCore.vue';
 import Processing from './views/ingest/Processing.vue';
 import TaskList from './views/ingest/TaskList.vue';
 import IngestStatus from './views/ingest/IngestStatus.vue';
+import BucketContent from "./views/ingest/BucketContent";
+import BucketConfig from "./views/ingest/BucketConfig";
+
 
 import Browse from './views/access/Browse.vue';
 import DipBrowser from './views/access/DipBrowser.vue';
@@ -144,6 +148,23 @@ const router = new VueRouter({
             name: "ingest.offline_storage",
             component: TaskList
         },
+        {
+            path: "/ingest/offline_storage/:bucketId",
+            name: "ingest.offline_storage.bucket_content",
+            component: BucketContent
+        },
+        {
+            path: "/ingest/offline_storage/:bucketId/configuration",
+            name: "ingest.offline_storage.bucket_config",
+            component: BucketConfig
+        },
+        /*
+        {
+            path: "/ingest/offline_storage/:bucketId/metadata",
+            name: "ingest.offline_storage.bucket_metadata",
+            component: BucketMetadata
+        },
+        */
         {
             path: "/ingest/status",
             name: "ingest.status",

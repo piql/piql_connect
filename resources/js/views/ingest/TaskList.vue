@@ -2,31 +2,16 @@
     <div class="w-100">
         <page-heading icon="fa-list-ul" :title="$t('ingest.taskList.title')" :ingress="$t('ingest.taskList.ingress')" />
 
-        <form>
-            <div class="row listFilter">
-                <label for="fromDate">{{$t('ingest.taskList.from')}}</label>
-                <input type="date" name="fromDate" placeholder="DDMMYY">
-                <label for="toDate">{{$t('ingest.taskList.to')}}</label>
-                <input type="date" name="toDate" placeholder="DDMMYY">
-                <select name="status">
-                    <option style="display: none;" disabled="" selected="">{{$t('ingest.taskList.statusFilter')}}</option>
-                    <option>{{$t('ingest.taskList.uploadingFilter')}}</option>
-                    <option>{{$t('ingest.taskList.processingFilter')}}</option>
-                </select>
-                <input type="search" :placeholder="$t('Search')">
-            </div>
+        <div class="row plistHeader mt-5">
+            <div class="col-sm-3">{{$t('ingest.offlineStorage.jobName')}}</div>
+            <div class="col-sm-1">{{$t('ingest.offlineStorage.numberOfAips')}}</div>
+            <div class="col-sm-2">{{$t('ingest.offlineStorage.size')}}</div>
+            <div class="col-sm-2">{{$t('ingest.offlineStorage.filled')}}</div>
+            <div class="col">{{$t('ingest.offlineStorage.actions')}}</div>
+        </div>
 
-            <div class="row plistHeader mt-5">
-                <div class="col-sm-3">{{$t('ingest.offlineStorage.jobName')}}</div>
-                <div class="col-sm-1">{{$t('ingest.offlineStorage.numberOfAips')}}</div>
-                <div class="col-sm-2">{{$t('ingest.offlineStorage.size')}}</div>
-                <div class="col-sm-2">{{$t('ingest.offlineStorage.filled')}}</div>
-                <div class="col listActionItems">{{$t('ingest.offlineStorage.actions')}}</div>
-            </div>
-
-            <Task v-for="item in items" v-bind:item="item" v-bind:key="item.id"
+        <Task v-for="item in items" v-bind:item="item" v-bind:key="item.id"
                            :jobListUrl="jobListUrl" :actionIcons="actionIcons" @piqlIt="piqlIt"/>
-        </form>
 
         <div class="row">
             <div class="col">
