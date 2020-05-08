@@ -5,7 +5,7 @@
                 {{item.filename}}
             </div>
             <div class="col-sm-2">
-                {{item.created_at}}
+                {{ formatShortDate( item.created_at ) }}
             </div>
             <div class="col-sm-2 text-right">
                 {{item.filesize}}

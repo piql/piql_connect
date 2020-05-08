@@ -17,6 +17,7 @@ let $ = JQuery;
 
 export default {
     async mounted() {
+        this.languages = (await axios.get("/api/v1/system/languages")).data; // Populate language when user settings are empty, should not be needed
     },
     methods: {
         selectionChanged: function () {

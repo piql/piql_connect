@@ -13,6 +13,7 @@
             <div class="col-sm-2 text-nowrap" title="Total file size of all archival packages in this piqlFilm">
                 {{ fileSize }}
             </div>
+
             <div class="col-sm-2">
                 <div v-if="fileSize !== '---'" class="progress bucket-progress bg-fill">
                     <div class="progress-bar bg-brand" role="progressbar" aria-valuenow="usage" aria-valuemin="0" aria-valuemax="100" :style="usagePercentage">

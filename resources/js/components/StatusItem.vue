@@ -1,48 +1,42 @@
 <template>
     <div v-if="modal">
         <div class="row plist">
-            <div class="col">
+            <div class="col text-left">
                 {{item.name}}
             </div>
-            <div class="col-2">
+            <div class="col-2 text-center">
                 {{fileSize}}
             </div>
-            <div class="col-3">
-                {{item.updated_at}}
+            <div class="col-3 text-center">
+                {{ formatShortDate( item.created_at ) }}
             </div>
-            <div class="col-3">
+            <div class="col-3 text-center">
                 {{ $t('ingest.status.preparing') }}
             </div>
-       </div>
+        </div>
     </div>
 </template>
 
 <script>
-import axios from 'axios';
+import { format } from 'date-fns';
 
 export default {
-    async mounted() {
-    },
-    props: {
-        item: Object,
-        jobListUrl: {
-            type: String,
-            default: ""
-        },
-    },
     methods: {
-        onClick(url){
-            window.location = url;
-        },
         getFileSizeSI(bytes) {
             let value = 0;
             let exp = 0;
             if (bytes) {
                 exp = Math.floor(Math.log(bytes) / Math.log(1000));
-                value = (bytes / Math.pow(1000, exp)).toFixed(2);
+                value = (bytes / Math.pow(1000, exp))
             }
-            return value + " " + (exp ? 'KMGTPEZY'[exp - 1] + 'B' : 'Bytes')
+            return Math.ceil(value) + " " + (exp ? 'KMGTPEZY'[exp - 1] + 'B' : 'Bytes')
         },
+    },
+    props: {
+        item: {
+            type: Object,
+            default: {}
+        }
     },
     computed: {
         fileSize: function() {

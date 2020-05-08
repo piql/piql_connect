@@ -16,7 +16,6 @@
 </template>
 
 <script>
-    import moment from 'moment';
     import axios from 'axios';
     export default {
         async mounted() {
@@ -44,9 +43,6 @@
             };
         },
         methods: {
-            dateFormat: function(item){
-                return moment(item.created_at).format('L');
-            },
           addFileToRetrieval: function(){
             this.$emit('addFileToRetrieval', this.aipItem);
           }

@@ -345,6 +345,7 @@ a {
     font-size: 1.0rem;
     border-bottom: 1px solid lightgray;
     background: white;
+    align-items: center;
 }
 
 .thumbnailList {
@@ -380,7 +381,7 @@ a {
 
 .plistHeader {
     background-color: $color_fill_0;
-    padding: 0.25rem 0px;
+    padding: 0.5rem 0px;
     border-bottom: 1px solid $color_background_dark;
     font-family: $font_open_sans;
     font-size: 0.8rem;

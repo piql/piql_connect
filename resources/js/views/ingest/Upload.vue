@@ -2,7 +2,7 @@
     <div class="w-100">
         <page-heading icon="fa-tachometer-alt" :title="$t('upload.title')" :ingress="$t('upload.ingress')" />
 
-        <form>
+        <form v-on:submit.prevent>
         <div class="row form-group mt-2 mb-2">
             <div class="col-2" :title="$t('upload.addFileButtonToolTip')">
                 <label for="uploadbutton" class="col-form-label-sm">&nbsp;</label>
@@ -85,7 +85,6 @@ import FineUploader from 'vue-fineuploader';
 import FineUploaderTraditional from 'fine-uploader-wrappers'
 import axios from 'axios';
 import JQuery from 'jquery';
-import moment from 'moment';
 let $ = JQuery;
 import filesize from 'filesize';
 
@@ -459,8 +458,6 @@ export default {
             this.selectedArchive = archiveId;
             this.selectedHolding = holdingTitle;
             if( this.bag && this.bag.id && this.compoundModeEnabled) {
-                console.log("changed archive to",archiveId);
-                console.log("holding is: ",holdingTitle);
                 axios.patch("/api/v1/ingest/bags/"+this.bag.id, {
                     archive_uuid: archiveId,
                     holding_name: holdingTitle

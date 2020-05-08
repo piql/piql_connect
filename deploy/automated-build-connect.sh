@@ -18,16 +18,11 @@ composer install || exit $?
 echo 'npm install'
 npm install || exit $?
 npm install cross-env || exit $?
-#npm install vue || exit $?
 
 echo 'Install vue'
-npm install vue-loader || exit $?
-composer require martinlindhe/laravel-vue-i18n-generator || exit $?
 php artisan vue-i18n:generate || exit $?
-#npm i --save vuex-i18n
 
 echo 'npm run'
-npm install bootstrap || exit $?
 npm run prod || exit $? # has warnings
 
 echo 'Set execute permissions to deploy scripts'
@@ -54,7 +49,11 @@ sudo chown 333:$USER -R ../.config || exit $? # Only for Tinker
 docker network connect --link piqlconnect_nginx_1:piqlconnect-dev.piql.com piqlconnect_piqlConnect-net compose_archivematica-storage-service_1
 
 echo 'Run docker containers'
-./localdev-up.sh || exit $?
+if [ ! -v "$LOCALDEV" ] ; then
+    ./up.sh || exit $?
+else
+    ./localdev-up.sh || exit $?
+fi
 
 echo 'Generate application key'
 docker-compose -p piqlConnect exec -T app php artisan key:generate || exit $?

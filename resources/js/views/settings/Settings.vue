@@ -5,7 +5,7 @@
         <form>
             <div class="row">
                 <div class="col-10">
-                    <language-picker v-bind:label="$t('Language')" :initialSelection="selectedLanguage" @selectionChanged="changedLanguage"></language-picker>
+                    <language-picker v-bind:label="$t('settings.settings.languagelabel')" :initialSelection="selectedLanguage" @selectionChanged="changedLanguage"></language-picker>
                 </div>
             </div>
         </form>

@@ -20,6 +20,8 @@ import toast from './mixins/toast.js';
 window.Vue.mixin(toast);
 import serviceCall from './mixins/serviceCall.js';
 window.Vue.mixin(serviceCall);
+import DateTime from './mixins/DateTime.js';
+window.Vue.mixin(DateTime);
 import Echo from "laravel-echo";
 window.io = require('socket.io-client');
 if (typeof io !== 'undefined') {

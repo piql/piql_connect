@@ -60,7 +60,7 @@ class UserSetting extends Model
     public function set( string $property, $value ) : void
     {
         list( $group, $prop ) = $this->parsePropertyPath( $property );
-        $this{$group} = [ $prop => $value ] + $this{$group};
+        $this[$group] = [ $prop => $value ] + $this[$group];
     }
 
     /* Get property from a group
@@ -72,8 +72,8 @@ class UserSetting extends Model
     public function get( string $property, $default = null )
     {
         list( $group, $prop ) = $this->parsePropertyPath( $property );
-        return array_key_exists( $prop, $this{$group} )
-            ? $this{$group}[$prop]
+        return array_key_exists( $prop, $this[$group] )
+            ? $this[$group][$prop]
             : $default ?? $this->propertyNameToDefaultEnv( $property );
     }
 

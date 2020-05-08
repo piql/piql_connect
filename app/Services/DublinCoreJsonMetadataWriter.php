@@ -12,21 +12,21 @@ class DublinCoreJsonMetadataWriter implements MetadataWriterInterface
     private $isOpen;
 
     private $header = [
-        "dc:title"       => "dc.title",
-        "dc:creator"     => "dc.creator",
-        "dc:subject"     => "dc.subject",
-        "dc:description" => "dc.description",
-        "dc:publisher"   => "dc.publisher",
-        "dc:contributor" => "dc.contributor",
-        "dc:date"        => "dc.date",
-        "dc:type"        => "dc.type",
-        "dc:format"      => "dc.format",
-        "dc:identifier"  => "dc.identifier",
-        "dc:source"      => "dc.source",
-        "dc:language"    => "dc.language",
-        "dc:relation"    => "dc.relation",
-        "dc:coverage"    => "dc.coverage",
-        "dc:rights"      => "dc.rights"
+        "title"       => "dc.title",
+        "creator"     => "dc.creator",
+        "subject"     => "dc.subject",
+        "description" => "dc.description",
+        "publisher"   => "dc.publisher",
+        "contributor" => "dc.contributor",
+        "date"        => "dc.date",
+        "type"        => "dc.type",
+        "format"      => "dc.format",
+        "identifier"  => "dc.identifier",
+        "source"      => "dc.source",
+        "language"    => "dc.language",
+        "relation"    => "dc.relation",
+        "coverage"    => "dc.coverage",
+        "rights"      => "dc.rights"
     ];
 
     public function __construct( array $params )
@@ -48,7 +48,7 @@ class DublinCoreJsonMetadataWriter implements MetadataWriterInterface
 
     public function write(array $parameter): bool
     {
-        $metadata = $parameter['metadata'];
+        $metadata = $parameter['metadata']['dc'];
 
         // serialize metadata
         return Storage::append( $this->filename, json_encode( array_merge(

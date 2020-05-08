@@ -3,15 +3,14 @@
 
         <page-heading icon="fa-hourglass-half" :title="$t('ingest.processing.title')" :ingress="$t('ingest.processing.ingress')" />
 
-        <ingest-filter-search v-bind:filters="['ingest.processing.processingFilter','ingest.processing.uploadingFilter']"></ingest-filter-search>
-        <div class="row plistHeader" v-show="currentlyIdle === false">
+        <div class="row plistHeader">
             <div class="col-sm-5">{{$t('ingest.processing.sip')}}</div>
-            <div class="col-sm-3">{{$t('ingest.processing.ingestDate')}}</div>
-            <div class="col-sm-3">{{$t('ingest.processing.status')}}</div>
+            <div class="col-sm-3 text-center">{{$t('ingest.processing.ingestDate')}}</div>
+            <div class="col-sm-3 text-center">{{$t('ingest.processing.status')}}</div>
             <div class="col-sm-1">&nbsp;</div>
         </div>
 
-        <div v-if="currentlyIdle" class="mt-5"><h2>{{$t('ingest.processing.noItems')}}</h2></div>
+        <div v-if="currentlyIdle" class="mt-5 text-center"><h2 class="pt-5">{{$t('ingest.processing.noItems')}}</h2></div>
         <FileInProcess v-for="item in items" v-bind:item="item" v-bind:key="item.id"/>
         <div v-for="x in padItems"><div class="row plist invisible"><div class="col">&nbsp;</div></div></div>
         <div v-if="showPager" class="row">
@@ -51,7 +50,7 @@
             pageMeta() { return this.success ? this.result.data.meta : null; },
             showPager() { return this.success && this.pageMeta.total > 1; },
             padItems() { return this.success ? this.pageMeta.per_page - this.items.length : 0; },
-            currentlyIdle() { return !this.success || !this.items.length; },
+            currentlyIdle() { return this.result && (  !this.success || !this.items.length ); },
         },
         methods: {
             startPollProcessing () {
