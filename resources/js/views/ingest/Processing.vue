@@ -14,7 +14,7 @@
         <FileInProcess v-for="item in items" v-bind:item="item" v-bind:key="item.id"/>
         <div v-for="x in padItems"><div class="row plist invisible"><div class="col">&nbsp;</div></div></div>
         <div v-if="showPager" class="row">
-            <div class="col">
+            <div class="col text-center pagerRow">
                 <Pager :meta='pageMeta' @updatePage='updatePage' />
             </div>
         </div>
@@ -24,8 +24,10 @@
 
 <script>
     import axios from 'axios';
+    import RouterTools from '../../mixins/RouterTools.js';
 
-    export default {
+export default {
+        mixins: [ RouterTools ],
         data() {
             return {
                 result: null,
@@ -44,7 +46,7 @@
             }
         },
         computed: {
-            url() { return this.pageQuery ? this.baseUrl + "?" + this.pageQuery : this.baseUrl; },
+            url() { return this.pageQuery ? this.baseUrl + "?page=" + this.pageQuery : this.baseUrl; },
             success() { return this.result ? ( this.result.status === 200 ) : false; },
             items() { return this.success ? this.result.data.data : null; },
             pageMeta() { return this.success ? this.result.data.meta : null; },
@@ -58,12 +60,13 @@
                     this.getData();
                 }, this.pollInterval );
             },
-            updatePage( pageWrapper ) {
-                this.pageQuery = pageWrapper.query;
-                this.getData();
-            },
             async getData() {
                 this.result = await axios.get( this.url );
+            },
+            dispatchRouting() {
+                let query = this.$route.query;
+                this.pageQuery = query.page ?? "";
+                this.getData();
             }
         },
         created() {
@@ -77,6 +80,9 @@
         async mounted() {
             this.currentPollUrl = this.baseUrl;
             this.getData();
+        },
+        watch: {
+            '$route': 'dispatchRouting'
         },
     }
 </script>
