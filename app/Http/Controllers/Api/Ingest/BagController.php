@@ -212,10 +212,6 @@ class BagController extends Controller
             ->orWhere('status', '=', 'ingesting')
             ->where( 'owner', Auth::id() )
             ->paginate(env("DEFAULT_ENTRIES_PER_PAGE"));
-        foreach($bags as $bag) {
-            $bag->status = __('ingest.processing.status.'.$bag->status);
-        }
-
         $bags->setPath("/".$request->path() );
         return new BagCollection($bags);
     }
