@@ -81,6 +81,12 @@
                         "email":     "patricia.alfheim@piql.com"
                     },
                     {
+                        "username":  "chris",
+                        "password":  "chris",
+                        "full_name": "Chris Brasøygård",
+                        "email":     "chris.brasoygard@piql.com"
+                    },
+                    {
                         "username" : "piqlbrazil",
                         "password" : "piqlbrazil",
                         "full_name" : "piqlbrazil",
