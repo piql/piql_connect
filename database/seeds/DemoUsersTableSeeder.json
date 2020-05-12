@@ -75,6 +75,12 @@
                         "email":     "daniel.stromsnes@piql.com"
                     },
                     {
+                        "username":  "patricia",
+                        "password":  "patricia",
+                        "full_name": "Patricia Alfheim",
+                        "email":     "patricia.alfheim@piql.com"
+                    },
+                    {
                         "username" : "piqlbrazil",
                         "password" : "piqlbrazil",
                         "full_name" : "piqlbrazil",
