@@ -4,24 +4,24 @@
 
         <div class="row">
             <div class="col-sm-3">
-                <line-chart class="graphs" :title="$t('Archival packages ingested (monthly)')"
+                <line-chart class="graphs" :title="$t('dashboard.graphs.monthlyOnlineAIPsIngested')"
                     url="/api/v1/stats/charts/monthlyOnlineAIPsIngested"
                     :labels="monthNames" />
             </div>
 
             <div class="col-sm-3">
-                <line-chart class="graphs" :title="$t('Data ingested (monthly)')"
+                <line-chart class="graphs" :title="$t('dashboard.graphs.monthlyOnlineDataIngested')"
                     url="/api/v1/stats/charts/monthlyOnlineDataIngested"
                     :labels="monthNames" />
             </div>
 
             <div class="col-sm-3">
-                <line-chart class="graphs" :title="$t('Archival packages accessed (monthly)')"
+                <line-chart class="graphs" :title="$t('dashboard.graphs.monthlyOnlineAIPsAccessed')"
                     url="/api/v1/stats/charts/monthlyOnlineAIPsAccessed"
                     :labels="monthNames" />
             </div>
             <div class="col-sm-3">
-                <line-chart class="graphs" :title="$t('Data accessed (monthly)')"
+                <line-chart class="graphs" :title="$t('dashboard.graphs.monthlyOnlineDataAccessed')"
                     url="/api/v1/stats/charts/monthlyOnlineDataAccessed"
                     :labels="monthNames"/>
             </div>
@@ -30,33 +30,33 @@
         <div class="row p-3 m-3">
 
             <div class="d-inline-flex">
-                <pie-chart class="pieChart" :title="$t('File formats ingested')"
+                <pie-chart class="pieChart" :title="$t('dashboard.fileTypes')"
                     url="/api/v1/stats/charts/fileFormatsIngested" />
             </div>
 
             <div class="col d-inline-flex flex-wrap">
                     <div class="card dashboard-card col-sm halfStats">
                         <div class="value">{{onlineAIPsIngested}}</div>
-                        <div class="legend">{{$t('Archival packages online')}}</div>
+                        <div class="legend">{{$t('dashboard.cards.onlineAIPsIngested')}}</div>
                     </div>
                     <div class="card dashboard-card col-sm halfStats">
                         <div class="value">{{onlineDataIngested}}</div>
-                        <div class="legend">{{$t('Stored online')}}</div>
+                        <div class="legend">{{$t('dashboard.cards.onlineDataIngested')}}</div>
                     </div>
                     <div class="card dashboard-card col-sm halfStats">
                         <div class="value">{{AIPsRetrievedCount}}</div>
-                        <div class="legend">{{$t('Archival packages retrieved')}}</div>
+                        <div class="legend">{{$t('dashboard.cards.AIPsRetrieved')}}</div>
                     </div>
                     <div class="card dashboard-card col-sm halfStats">
                         <div class="value">{{DataRetrieved}}</div>
-                        <div class="legend">{{$t('Files retrieved')}}</div>
+                        <div class="legend">{{$t('dashboard.cards.filesRetrieved')}}</div>
                     </div>
                     <div class="card dashboard-card col-sm halfStats">
                         <div class="value">
                             {{offlineAIPsIngested}}
                         </div>
                         <div class="legend">
-                            {{$t('Archival packages on film')}}
+                            {{$t('dashboard.cards.AIPsStoredOnFilm')}}
                         </div>
                     </div>
                     <div class="card dashboard-card col-sm halfStats">
@@ -64,7 +64,7 @@
                             {{offlineDataIngested}}
                         </div>
                         <div class="legend">
-                            {{$t('Stored on film')}}
+                            {{$t('dashboard.cards.dataStoredOnFilm')}}
                         </div>
                     </div>
                     <div class="card dashboard-card halfStats col-sm">
@@ -72,12 +72,12 @@
                             {{offlineReelsCount}}
                         </div>
                         <div class="legend">
-                            {{$t('Reels')}}
+                            {{$t('dashboard.cards.reels')}}
                         </div>
                     </div>
                     <div class="dashboard-card halfStats col-sm">
                         <div class="value">{{offlinePagesCount}}</div>
-                        <div class="legend">{{$t('Pages on film')}}</div>
+                        <div class="legend">{{$t('dashboard.cards.offlinePagesCount')}}</div>
                     </div>
                 </div>
             </div>

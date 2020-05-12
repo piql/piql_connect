@@ -69,6 +69,21 @@
     "dashboard.content": "Other type of content goes here.",
     "dashboard.month.abbrev.array": "['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']",
 
+    "dashboard.graphs.monthlyOnlineAIPsIngested": "Archival packages ingested (monthly)",
+    "dashboard.graphs.monthlyOnlineDataIngested": "Data ingested (monthly)",
+    "dashboard.graphs.monthlyOnlineAIPsAccessed": "Archival packages accessed (monthly)",
+    "dashboard.graphs.monthlyOnlineDataAccessed": "Data accessed (monthly)",
+
+    "dashboard.cards.onlineAIPsIngested": "Archival packages online",
+    "dashboard.cards.onlineDataIngested": "Data stored online",
+    "dashboard.cards.AIPsRetrieved": "Archival packages retrieved",
+    "dashboard.cards.filesRetrieved": "Files retrieved",
+    "dashboard.cards.AIPsStoredOnFilm": "Archival packages stored on film",
+    "dashboard.cards.dataStoredOnFilm": "Data stored on film",
+    "dashboard.cards.reels": "Reels",
+    "dashboard.cards.offlinePagesCount": "Pages stored on film",
+    "dashboard.fileTypes": "File formats ingested",
+
     "ingest.processing.title" : "Processing",
     "ingest.processing.ingress" : "Monitor the steps of the archival workflow.",
     "ingest.processing.from" : "From",
