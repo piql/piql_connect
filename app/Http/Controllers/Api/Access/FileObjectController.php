@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\Access;
 
+use App\Http\Controllers\Controller;
 use App\FileObject;
 use Illuminate\Http\Request;
 
