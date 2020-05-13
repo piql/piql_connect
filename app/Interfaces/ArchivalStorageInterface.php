@@ -8,4 +8,5 @@ interface ArchivalStorageInterface
     public function upload( \App\StorageLocation $storage, string $storagePath, string $localPath ); /* Upload a file to the storage location */
     public function download( \App\StorageLocation $storage, string $storagePath, string $destinationPath ); /* Download a file from the storage location */
     public function delete( \App\StorageLocation $storage, string $storagePath ); /* Delete a file from the storage location */
+    public function stream( \App\StorageLocation $storage, string $storagePath );
 }

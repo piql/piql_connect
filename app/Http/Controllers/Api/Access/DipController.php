@@ -8,6 +8,7 @@ use App\Http\Resources\FileObjectResource;
 use App\Dip;
 use http\Env\Response;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
 use App\Interfaces\ArchivalStorageInterface;
 use App\FileObject;
@@ -118,15 +119,41 @@ class DipController extends Controller
 
     public function aipFile( Request $request )
     {
+        // todo: The METS paring to figure out the relationship between AIP and DIP files
+        //       ought to be moved to the ingest workflow
         $dipFileObject = FileObject::find( $request->fileId );
         $dip = Dip::find( $request->dipId );
-
-        if(!preg_match('/(\/objects\/.*)(\w{8}-\w{4}-\w{4}-\w{4}-\w{12}-(.*)?(\..*))$/', $dipFileObject->fullpath, $matches, PREG_OFFSET_CAPTURE)){
-            return response( "File not found - no match in dip {$request->dipId} for {$dipFileObject->fullpath}", 404 );
-        }
-        $aipFileObjectPath = $matches[1][0].$matches[3][0];
         $aip = $dip->storage_properties->aip;
-        $files = $aip->fileObjects()->where('fullpath', 'LIKE', "%".$aipFileObjectPath."%")->get();
+
+        $metsFileName = "METS.{$aip->external_uuid}.xml";
+        $metsFile = Cache::get($metsFileName);
+        if($metsFile === null) {
+            $metsFileObject = $dip->fileObjects->first(function ($fileObject) use ($metsFileName) {
+                return Str::endsWith($fileObject->filename, $metsFileName);
+            });
+            if($metsFileObject === null) {
+                return response( "Mets file not found in dip {$request->dipId} for {$dipFileObject->fullpath}", 404 );
+            }
+
+            $storage = \App::make(\App\Interfaces\ArchivalStorageInterface::class );
+            $metsFile =  $storage->stream( $dip->storage_location, $metsFileObject->fullpath );
+
+            Cache::put($metsFileName, $metsFile, 60);
+        }
+
+        $aipFileObjectPath = Cache::get($dipFileObject->filename);
+        if($aipFileObjectPath === null) {
+            if (!preg_match('/^(\w{8}-\w{4}-\w{4}-\w{4}-\w{12})/', $dipFileObject->filename, $matches, PREG_OFFSET_CAPTURE)) {
+                return response("File not found - no match in dip {$request->dipId} for {$dipFileObject->fullpath}", 404);
+            }
+
+            $metsParser = \App::make(\App\Interfaces\MetsParserInterface::class);
+            $metsFileId = "file-{$matches[1][0]}";
+            $aipFileObjectPath = $metsParser->findOriginalFileName($metsFile, $metsFileId);
+            Cache::put($dipFileObject->filename, $aipFileObjectPath, 60);
+        }
+
+        $files = $aip->fileObjects()->where('fullpath', 'LIKE', "%".$aipFileObjectPath)->get();
         if(count($files))
             return FileObjectResource::collection( $files );
 

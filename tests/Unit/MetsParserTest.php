@@ -133,4 +133,19 @@ class MetsParserTest extends TestCase
         ];
         $this->assertEquals( $expected, $actual );
     }
+
+
+    public function test_given_mets_file_id_and_search_for_original_file()
+    {
+        $service = $this->app->make( MetsParserInterface::class );
+        $actual = $service->findOriginalFileName( self::$singleMetsContents, "file-9cc3eac1-8e23-462c-984d-2d3ed078f803" );
+        $this->assertEquals( "objects/FMU.420001.tif", $actual );
+    }
+
+    public function test_given_mets_file_id_and_search_for_original_file_no_match_found()
+    {
+        $service = $this->app->make( MetsParserInterface::class );
+        $actual = $service->findOriginalFileName( self::$noDublinCoreMetsContents, "file-9cc3eac1-8e23-462c-984d-2d3ed078f803" );
+        $this->assertEquals( null, $actual );
+    }
 }
