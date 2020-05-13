@@ -423,6 +423,8 @@ export default {
             );
 
             this.bag = await this.createBag("", this.userId, this.selectedArchive, this.selectedHoldingTitle );
+
+            this.fileInputDisabled = false;
         },
         async doProcessing( bagId ) {
             let committed = (await axios.post("/api/v1/ingest/bags/"+bagId+"/commit")).data.data;
