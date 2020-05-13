@@ -80,6 +80,22 @@ class MetsParserService implements \App\Interfaces\MetsParserInterface
         return $files->toArray();
     }
 
+    public function findOriginalFileName( string $mets, $fileId )
+    {
+        $xml = simplexml_load_string($mets);
+        $node = collect( $xml->xpath(
+            "//mets:mets/mets:fileSec".
+            "/mets:fileGrp[@USE='original']".
+            "/mets:file[@ID='{$fileId}']".
+            "/mets:FLocat"
+        ))->first();
+
+        if(!$node) {
+            return null;
+        }
+        return (string)$node->attributes("xlink", true)['href'] ?? null;
+    }
+
     public function mapDublinCoreFields( \SimpleXMLElement $xml, string $dmdId ) : array
     {
         $xml->registerXPathNamespace("dc", "http://purl.org/dc/elements/1.1/");
