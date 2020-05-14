@@ -7,7 +7,9 @@
                         <img class="" style="position: fixed; left: 3rem; width: 15rem;" src="/images/piql-connect.png">
                     </router-link>
                 </div>
-
+                <div class="col-md-1 ml-0 mr-0 pr-0">
+                    <img style="position: fixed; top: 1.5rem; left: 22rem; width: 10rem;" src="/images/customer_top_logo.png">
+                </div>
                 <div class="col-md-1">
                     <session-timeout-monitor
                         :navigation-activity-time="7000000"
