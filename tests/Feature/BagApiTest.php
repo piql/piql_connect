@@ -135,6 +135,19 @@ class BagApiTest extends TestCase
         $response->assertJson(['data' => ['archive_uuid' => '', 'archive_name' => '']]);
     }
 
+    public function test_when_creating_a_bag_with_invalid_it_returns_424()
+    {
+        $response = $this->json( 'POST', route( 'api.ingest.bags.store' ), [
+                'name' => $this->testBagName1."?",
+                'owner' => $this->testUser->id
+            ]);
+        $response->assertStatus(424);
+
+        //dd($response);
+        $response->assertJson(['error' => 424]);
+    }
+
+
     public function test_when_creating_a_bag_given_storage_properties_are_set_the_response_includes_those_storage_properties()
     {
         $response = $this->json( 'POST', route( 'api.ingest.bags.store' ), $this->bagTestDataWithArchiveAndHolding );
@@ -159,6 +172,41 @@ class BagApiTest extends TestCase
             'holding_name' => $this->testHolding2->title
         ] ]);
     }
+
+    public function test_when_updating_a_bag_with_a_valid_name_it_returns_that_name_and_200()
+    {
+        $createdBagResponse = $this->json( 'POST', route( 'api.ingest.bags.store' ), $this->bagTestDataWithArchiveAndHolding);
+
+        $bagData = $createdBagResponse->getData()->data;
+
+        $response = $this->json( 'PATCH', route( 'api.ingest.bags.update', $bagData->id ), [
+            'name' => "test_bag_name",
+        ]);
+
+        $response->assertJson(['data' => [
+            'name' => "test_bag_name",
+        ] ]);
+
+        $response->assertStatus( 200 );
+    }
+
+    public function test_when_updating_a_bag_with_a_invalid_name_it_returns_that_name_and_424()
+    {
+        $createdBagResponse = $this->json( 'POST', route( 'api.ingest.bags.store' ), $this->bagTestDataWithArchiveAndHolding);
+
+        $bagData = $createdBagResponse->getData()->data;
+
+        $response = $this->json( 'PATCH', route( 'api.ingest.bags.update', $bagData->id ), [
+            'name' => "test_bag_name?",
+        ]);
+
+        $response->assertJsonMissingExact(['data' => [
+            'name' => "test_bag_name!",
+        ] ]);
+
+        $response->assertStatus( 424 );
+    }
+
 
     public function test_when_requesting_the_latest_bag_it_responds_with_200()
     {

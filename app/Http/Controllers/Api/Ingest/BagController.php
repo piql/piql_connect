@@ -26,7 +26,7 @@ use Log;
 class BagController extends Controller
 {
 
-    private $nameValidationRule = '/^([^:\\<>"\/?!*|]*){3,}$/';
+    private $nameValidationRule = '/^([^:\\<>"\/?*|]*){3,}$/';
 
     /**
      * Display a listing of the resource.
@@ -107,6 +107,9 @@ class BagController extends Controller
         $settings = $settingsProvider->forAuthUser();
 
         $bagName = trim( $request->name );
+        if($this->validateFailes($bagName)) {
+            abort(response()->json(["error" => 424, "message" => "Bag doesn't have a valid name: {$bagName}"], 424));
+        }
         $bag = Bag::create(['name' => $bagName]);
         if( $bag )
         {
@@ -341,6 +344,9 @@ class BagController extends Controller
 
         if( $request->filled( "name" ) )
         {
+            if($this->validateFailes($request->name)) {
+                abort(response()->json(["error" => 424, "message" => "Bag doesn't have a valid name: {$request->name}"], 424));
+            }
             $bag->update([ 'name' => $request->name ]);
         }
 
@@ -388,7 +394,7 @@ class BagController extends Controller
         $bag = Bag::find($id);
 
         if($this->validateFailes($bag->name)) {
-            abort(424, "Bag doesn't have a valid name: {$bag->name}");
+            abort(response()->json(["error" => 424, "message" => "Bag doesn't have a valid name: {$bag->name}"], 424));
         }
 
         try {
