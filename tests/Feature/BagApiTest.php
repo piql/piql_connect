@@ -2,6 +2,9 @@
 
 namespace Tests\Feature;
 
+use App\Events\FileUploadedEvent;
+use App\Events\PreProcessBagEvent;
+use Illuminate\Support\Facades\Event;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
@@ -33,7 +36,7 @@ class BagApiTest extends TestCase
         $this->createdBagIds = collect([]);
         $this->testBagName1 = "TestBagName1";
         $this->testUser = User::create([
-            'username' => 'BagApiTestUser', 
+            'username' => 'BagApiTestUser',
             'password' => 'notinuse',
             'full_name' => 'BagApi TestUser',
             'email' => 'bagapitestuser@localhost'
@@ -41,7 +44,7 @@ class BagApiTest extends TestCase
 
         Passport::actingAs($this->testUser);
 
-        $this->bagTestData = [ 
+        $this->bagTestData = [
             'name' => $this->testBagName1,
             'owner' => $this->testUser->id
         ];
@@ -150,9 +153,9 @@ class BagApiTest extends TestCase
             'archive_uuid' => $this->testArchive2->uuid,
             'holding_name' => $this->testHolding2->title
         ]);
-        
+
         $response->assertJson(['data' => [
-            'archive_uuid' => $this->testArchive2->uuid, 
+            'archive_uuid' => $this->testArchive2->uuid,
             'holding_name' => $this->testHolding2->title
         ] ]);
     }
@@ -233,6 +236,33 @@ class BagApiTest extends TestCase
 
         $response->assertStatus( 401 );
         $response->assertJson([ 'error' => 401, 'message' => 'The current user is not authorized to update bag with id '.$this->otherBag->id ]);
+    }
+
+    public function test_commit_bag_and_it_returns_200()
+    {
+        $createdBag = $this->createOneBag();
+        Event::fake();
+        $response = $this->post( route( 'api.ingest.bags.commit', $createdBag->id ) );
+        $response->assertStatus( 200 );
+        Event::assertDispatched( PreProcessBagEvent::class );
+    }
+
+    public function test_commit_bag_without_a_valid_name_and_it_returns_424()
+    {
+        $createdBag = $this->createOneBag(["name" => "abc?"]);
+        Event::fake();
+        $response = $this->post( route( 'api.ingest.bags.commit', $createdBag->id ) );
+        $response->assertStatus( 424 );
+        Event::assertNotDispatched( PreProcessBagEvent::class );
+    }
+
+    public function test_commit_bag_with_empty_name_and_it_returns_424()
+    {
+        $createdBag = $this->createOneBag(["name" => ""]);
+        Event::fake();
+        $response = $this->post( route( 'api.ingest.bags.commit', $createdBag->id ) );
+        $response->assertStatus( 424 );
+        Event::assertNotDispatched( PreProcessBagEvent::class );
     }
 
 }

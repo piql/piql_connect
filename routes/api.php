@@ -62,7 +62,7 @@ Route::group(['prefix' => 'v1' , 'middleware' => ['auth:api', 'activity']], func
         Route::get('bags/{id}', 'Api\Ingest\BagController@show')->name('api.ingest.bags.show');
         Route::get('bags/{id}/files', 'Api\Ingest\BagController@showFiles');
         Route::delete('bags/{bagId}/files/{fileId}', 'Api\Ingest\BagController@deleteFile');
-        Route::post('bags/{id}/commit', 'Api\Ingest\BagController@commit');
+        Route::post('bags/{id}/commit', 'Api\Ingest\BagController@commit')->name('api.ingest.bags.commit');
         Route::post('files/bag', 'Api\Ingest\BagController@bagSingleFile');
         Route::post('bags/{id}/piql', 'Api\Ingest\BagController@piqlIt');
         Route::get('bags/{id}/download', 'Api\Ingest\BagController@download');

@@ -25,6 +25,9 @@ use Log;
 
 class BagController extends Controller
 {
+
+    private $nameValidationRule = '/^([^:\\<>"\/?!*|]*){3,}$/';
+
     /**
      * Display a listing of the resource.
      *
@@ -373,6 +376,7 @@ class BagController extends Controller
         //
     }
 
+
     /**
      * Commit the bag to archivematica
      *
@@ -382,6 +386,10 @@ class BagController extends Controller
     public function commit($id)
     {
         $bag = Bag::find($id);
+
+        if($this->validateFailes($bag->name)) {
+            abort(424, "Bag doesn't have a valid name: {$bag->name}");
+        }
 
         try {
             $bag->applyTransition('close');
@@ -446,5 +454,15 @@ class BagController extends Controller
         return response()->download($path);
     }
 
-
+    private function validateFailes($name) : bool {
+        return Validator::make(['name' => $name], [
+            'name' => [
+                'required',
+                function ($attribute, $value, $fail) {
+                    if(!preg_match($this->nameValidationRule, $value, $matches, PREG_OFFSET_CAPTURE)) {
+                        $fail($attribute.' is invalid.');
+                    }
+                }],
+        ])->fails();
+    }
 }
