@@ -100,7 +100,7 @@ import TopBar from './views/partials/TopBar.vue';
 import SideBar from './views/partials/SideBar.vue';
 
 import Upload from './views/ingest/Upload.vue';
-import DublinCore from './views/ingest/DublinCore.vue';
+import IngestMetadata from './views/ingest/IngestMetadata.vue';
 import Processing from './views/ingest/Processing.vue';
 import TaskList from './views/ingest/TaskList.vue';
 import IngestStatus from './views/ingest/IngestStatus.vue';
@@ -111,6 +111,7 @@ import BucketConfig from "./views/ingest/BucketConfig";
 import Browse from './views/access/Browse.vue';
 import DipBrowser from './views/access/DipBrowser.vue';
 import AipBrowser from './views/ingest/AipBrowser.vue';
+import AccessMetadata from './views/access/AccessMetadata.vue';
 import ReadyToRetrieve from './views/access/ReadyToRetrieve.vue';
 import ReadyForDownload from './views/access/ReadyForDownload.vue';
 import RetrievalHistory from './views/access/RetrievalHistory.vue';
@@ -135,11 +136,7 @@ const router = new VueRouter({
         {
             path: "/ingest/metadata/bags/:bagId/file/:fileId",
             name: "ingest.metadata.edit",
-            component: DublinCore,
-            props: {
-                url: "/api/v1/ingest/files",
-                readOnly: false
-            },
+            component: IngestMetadata,
         },
         {
             path: "/ingest/process",
@@ -179,7 +176,7 @@ const router = new VueRouter({
         {
             path: "/access/browse/metadata/file/:fileId",
             name: "access.browse.metadata",
-            component: DublinCore,
+            component: AccessMetadata,
             props: {
                 url: "/api/v1/access/files",
                 readOnly: true

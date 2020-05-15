@@ -16,6 +16,10 @@
     "Archive": "Arkiv",
     "Holdings": "Samlinger",
     "Holding": "Samling",
+	"OK": "OK",
+	"Cancel": "Avbryt",
+	"Back": "Tilbake",
+
     "upload.title": "Opplasting",
     "upload.ingress" : "Last opp en eller flere filer til forhåndsmottak her.",
     "upload.addFileButton" : "Legg til fil",
@@ -164,9 +168,9 @@
     "ingest.status.preparing": "Forbereder skriving",
     "ingest.status.writing": "Skriver til piqlFilm",
 
-    "ingest.metadata.editJob": "Job metadata",
-    "ingest.metadata.editFile": "Fil metadata",
-    "ingest.metadata.editFile.ingress": "Her kan du redigere metadata per fil.",
+    "ingest.metadata.editJob": "Jobbmetadata",
+    "ingest.metadata.file.title": "Filmetadata (Dublin Core)",
+    "ingest.metadata.file.ingress": "Rediger beskrivende metadata for denne filen",
     "ingest.metadata.showFile.ingress": "This page displays file's descriptive metadata",
     "ingest.metadata.editFile.fileName": "Filnavn",
 
@@ -203,6 +207,8 @@
     "access.browse.archive.closeButtonTitle": "Lukk arkivpakken",
     "access.browse.archive.downloadButtonTitle": "Last ned normalisert fil",
 
+    "access.metadata.file.title": "Filmetadata (Dublin Core)",
+    "access.metadata.file.ingress": "Vis beskrivende metadata for denne filen",
 
 
     "access.retrieve": "Gjenopprett",
