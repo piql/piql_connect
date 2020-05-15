@@ -1,35 +1,40 @@
 <template>
     <div class="w-100">
+
         <page-heading icon="fa-hdd" :title="$t('access.browse')" :ingress="$t('access.browse.ingress')" />
-        <div class="row plistHeader text-truncate text-center mt-2">
-          <div class="col-sm-2">{{$t("access.browse.header.preview")}}</div>
-            <div class="col-sm-7 text-left">{{$t('access.browse.header.files')}}</div>
-            <div class="col-sm-2 text-center">{{$t('access.browse.header.actions')}}</div>
-            <div class="col-sm-1">
-                <button class="btn btn-tiny" :title="$t('access.browse.archive.closeButtonTitle')"
-                    @click="close"><i class="fas fa-backspace"></i>
-                </button>
-            </div>
-        </div>
+
+        <list-header
+            :colA="previewCol"
+            :colB="filenameCol"
+            :colC="actionsCol"
+            :colD="closeBtnCol"
+            @btnDClicked="close"
+        />
 
         <browser-file-item v-for="item in dipFiles" :item="item" :key="item.id"/>
 
-        <Pager :meta='meta' :height='height' />
+				<div class="row text-center pagerRow">
+						<div class="col">
+								<Pager :meta='meta' :height='height' />
+						</div>
+				</div>
 
     </div>
 </template>
 
 <script>
 export default {
-    components: {},
 
-    mixins: [],
+    watch: {
+        '$route': 'dispatchRouting'
+    },
 
     data () {
         return {
             dipFiles: [],
             dipId: 0,
-            meta: null
+            meta: null,
+            prevRoute: null
         }
     },
 
@@ -41,29 +46,69 @@ export default {
     },
 
     computed: {
-        //
-    },
+        previewCol: function() {
+            return {
+                css: "col-sm-2",
+                slot: this.$t('access.browse.header.preview')
+            };
+        },
+        filenameCol: function() {
+            return {
+                css: "col-sm-7 text-left",
+                slot: this.$t('access.browse.header.files')
+            };
+        },
+        actionsCol: function() {
+            return {
+                css: "col-sm-2",
+                slot: this.$t('access.browse.header.actions')
+            };
+        },
+        closeBtnCol: function() {
+            return {
+                css: "col-sm-1",
+                slot: "<button class='btn btn-tiny' :title=${this.$t('access.browse.archive.closeButtonTitle')}\"><i class='fas fa-backspace'></i></button>"
+            }
+        },
+        apiQueryString: function() {
+            let query = this.$route.query;
+            let page = parseInt(query.page);
+            return page && page > 0 ? `?page=${page}` : "";
+        },
 
-    created () {
-        //
     },
 
     mounted () {
         let params = this.$route.params;
-        let dipId = params.dipId;
-        this.openDip( dipId );
+        this.dipId = params.dipId;
+        this.refreshFiles( this.dipId, this.apiQueryString );
+    },
+    beforeRouteEnter: function( to, from, next ) {
+        /* Store the originating route, so that a close returns to
+         * the page that was open before we entered the Dip.
+				 * If the link was opened directly, return to 'access.browse'.
+         */
+
+        next( self => {
+            self.prevRoute = from.name ? from : { name: 'access.browse' };
+        });
     },
 
     methods: {
-        openDip( dipId ) {
-            axios.get("/api/v1/access/dips/"+dipId+"/files").then( async ( dipFilesResponse ) =>  {
+        dispatchRouting() {
+            this.refreshFiles( this.dipId, this.apiQueryString );
+        },
+        refreshFiles() {
+            let dipId = this.dipId;
+            let apiQueryString = this.apiQueryString;
+            console.log(apiQueryString);
+            axios.get(`/api/v1/access/dips/${dipId}/files${apiQueryString}`).then( async ( dipFilesResponse ) =>  {
                 this.dipFiles = dipFilesResponse.data.data;
                 this.meta = dipFilesResponse.data.meta;
-                this.dipId = dipId;
             });
         },
         close() {
-            this.$router.go(-1);
+            this.$router.push(this.prevRoute);
         }
     }
 };
