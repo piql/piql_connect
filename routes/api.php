@@ -76,6 +76,7 @@ Route::group(['prefix' => 'v1' , 'middleware' => ['auth:api', 'activity']], func
 
         Route::get('offline_storage/pending/jobs/{id}/bags', 'Api\Ingest\OfflineStorageController@bags');
         Route::get('offline_storage/pending/jobs/{id}', 'Api\Ingest\OfflineStorageController@job');
+        Route::get('offline_storage/pending/jobs/{id}/dips', 'Api\Ingest\OfflineStorageController@dips');
         Route::patch('offline_storage/pending/jobs/{id}', 'Api\Ingest\OfflineStorageController@archiveJob');
         Route::get('offline_storage/pending/jobs', 'Api\Ingest\OfflineStorageController@jobs');
         Route::get('offline_storage/archive/jobs', 'Api\Ingest\OfflineStorageController@archiveJobs');

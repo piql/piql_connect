@@ -24,10 +24,6 @@ class BypassMiddleware implements LayerInterface
     public function peel($object, Closure $next)
     {
 
-        //if ($object->getType() !== 'image') {
-        //    return $next($object);
-        //}
-
         $edition = new Edition(self::editionKey, $object->getUploaderPath(), $object->getUploaderPath(), [
             'type' => 'file',
         ], true);

@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Api\Ingest;
 
+use App\Http\Resources\AipCollection;
+use App\Http\Resources\AipToDipResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -54,6 +56,12 @@ class OfflineStorageController extends Controller
         return new JobCollection( $jobs->paginate( env('DEFAULT_ENTRIES_PER_PAGE') ) );
     }
 
+
+    public function dips($jobId)
+    {
+        $job = Job::findOrFail($jobId);
+        return AipToDipResource::collection( $job->aips()->paginate( env('DEFAULT_ENTRIES_PER_PAGE') ) );
+    }
 
     public function archiveJob($jobId)
     {

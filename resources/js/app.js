@@ -104,12 +104,13 @@ import DublinCore from './views/ingest/DublinCore.vue';
 import Processing from './views/ingest/Processing.vue';
 import TaskList from './views/ingest/TaskList.vue';
 import IngestStatus from './views/ingest/IngestStatus.vue';
-import BucketContent from "./views/ingest/BucketContent";
+import BucketContent from "./views/ingest/BucketContent.vue";
 import BucketConfig from "./views/ingest/BucketConfig";
 
 
 import Browse from './views/access/Browse.vue';
 import DipBrowser from './views/access/DipBrowser.vue';
+import AipBrowser from './views/ingest/AipBrowser.vue';
 import ReadyToRetrieve from './views/access/ReadyToRetrieve.vue';
 import ReadyForDownload from './views/access/ReadyForDownload.vue';
 import RetrievalHistory from './views/access/RetrievalHistory.vue';
@@ -156,17 +157,15 @@ const router = new VueRouter({
             component: BucketContent
         },
         {
+            path: "/ingest/offline_storage/dip/:dipId",
+            name: "ingest.browse.aip",
+            component: AipBrowser
+        },
+        {
             path: "/ingest/offline_storage/:bucketId/configuration",
             name: "ingest.offline_storage.bucket_config",
             component: BucketConfig
         },
-        /*
-        {
-            path: "/ingest/offline_storage/:bucketId/metadata",
-            name: "ingest.offline_storage.bucket_metadata",
-            component: BucketMetadata
-        },
-        */
         {
             path: "/ingest/status",
             name: "ingest.status",

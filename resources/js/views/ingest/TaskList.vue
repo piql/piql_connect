@@ -34,7 +34,7 @@
         props: {
             actionIcons: {
                 type: Object,
-                default: function () { return { 'list': true, 'config': true, 'delete': true, 'defaultAction': true}; }
+                default: function () { return { 'metadata': true, 'list': true, 'config': true, 'delete': true, 'defaultAction': true}; }
             },
             baseUrl: {
                 type: String,

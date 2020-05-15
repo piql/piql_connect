@@ -1,88 +1,106 @@
 <template>
     <div class="w-100">
-        <page-heading icon="fa-list-ul" :title="$t('ingest.offlineStorage.aipList.header')" :ingress="$t('ingest.offlineStorage.aipList.ingress')" />
+        <page-heading icon="fa-hdd" :title="$t('ingest.offlineStorage.aipList.header')" :ingress="$t('ingest.offlineStorage.aipList.ingress')" />
 
-        <form>
-            <div class="row listFilter">
-                <label for="fromDate">{{$t('ingest.taskList.from')}}</label>
-                <input type="date" name="fromDate" placeholder="DDMMYY">
-                <label for="toDate">{{$t('ingest.taskList.to')}}</label>
-                <input type="date" name="toDate" placeholder="DDMMYY">
-                <select name="status">
-                    <option style="display: none;" disabled="" selected="">{{$t('ingest.taskList.statusFilter')}}</option>
-                    <option>{{$t('ingest.taskList.uploadingFilter')}}</option>
-                    <option>{{$t('ingest.taskList.processingFilter')}}</option>
-                </select>
-                <input type="search" :placeholder="$t('Search')">
-            </div>
+        <access-browser-filters :singleArchiveTitle="$t('Your archive')"></access-browser-filters>
 
-            <div class="row plistHeader mt-5">
-                <div class="col-1"><input type="checkbox" class="checkbox" id="allSips"></div>
-                <div class="col">{{$t('ingest.taskList.aip')}}</div>
-                <div class="col-3">{{$t('ingest.taskList.ingestDate')}}</div>
-                <div class="col-2">{{$t('ingest.taskList.size')}}</div>
-                <div class="col-2">&nbsp;{{$t("ingest.taskList.actions")}}</div>
-            </div>
-
-            <!--<Task v-for="item in items" v-bind:item="item" v-bind:key="item.id"
-                           :jobListUrl="jobListUrl" :actionIcons="actionIcons" @piqlIt="piqlIt"/>-->
-
-            <bag-list-item v-for="item in items" v-bind:item="item" v-bind:key="item.id" @piqlIt="piqlIt"/>
-
-        </form>
-
-        <div class="row">
+        <bucket-content-list @openObject="openObject" :location="selectedLocation" :dataObjects="currentObjects"
+            :selectedArchive="selectedArchiveUuid" :selectedHolding="selectedHolding"/>
+        <div class="row text-center pagerRow">
             <div class="col">
-                <Pager :meta="pageMeta" @updatePage="updatePage" />
+                <Pager :meta='packagePageMeta' :height='height' />
             </div>
         </div>
     </div>
 </template>
 
 <script>
-    import axios from 'axios';
 
-    export default {
-        data() {
-            return {
-                result: null,
-                pageQuery: null
+import RouterTools from '../../mixins/RouterTools.js';
+
+import axios from 'axios';
+import JQuery from 'jquery';
+import BucketContentList from "../../components/BucketContentList";
+let $ = JQuery;
+
+export default {
+    components: {BucketContentList},
+    mixins: [ RouterTools ],
+
+    data() {
+        return {
+            dataObjects: [],
+            packagePageMeta: null,
+            selectedLocation: null,
+            selectedHolding: null,
+            selectedArchiveUuid: null
+        }
+    },
+    props: {
+        height: {
+            type: Number,
+            default: 0
+        }
+    },
+    computed: {
+        apiQueryString: function() {
+            let query = this.$route.query;
+
+            let filter = "?location=Online"
+
+            if( query.archive ) {
+                filter += "&archive=" + encodeURI( query.archive );
             }
-        },
-        props: {
-            baseUrl: {
-                type: String,
-                default: "/api/v1/ingest/offline_storage/pending/jobs/"
-            },
-            jobId: {
-                type: String,
-                default: ""
-            },
-        },
-        computed: {
-            url() { return this.pageQuery ? this.itemUrl + "?" + this.pageQuery : this.itemUrl; },
-            success() { return this.result ? ( this.result.status === 200 ) : false; },
-            items() { return this.success ? this.result.data.data : null; },
-            pageMeta() { return this.success ? this.result.data.meta : null; },
-            showPager() { return this.success && this.pageMeta.total > 1; },
-            padItems() { return this.success ? this.pageMeta.per_page - this.items.length : 0; },
-            itemUrl() { return this.baseUrl + this.$route.params.bucketId + "/bags"; }
-        },
-        async mounted() {
-            this.getData();
-        },
-        methods: {
-            async piqlIt(id) {
-                await this.post("/api/v1/ingest/bags/"+id+"/piql");
-                this.getData();
-            },
-            updatePage( pageWrapper ) {
-                this.pageQuery = pageWrapper.query;
-                this.getData();
-            },
-            async getData() {
-                this.result = await this.get( this.url );
+            if( query.holding ){
+                    filter += "&holding=" + encodeURI( query.holding );
             }
+            if( query.archived_from ){
+                filter += "&archived_from=" + query.archived_from;
+            }
+            if( query.archived_to ){
+                filter += "&archived_to=" + query.archived_to;
+            }
+            if(query.search){
+                filter += "&search=" + query.search;
+            }
+            if( parseInt( query.page ) ) {
+                filter += "&page=" + query.page;
+            }
+            return filter;
         },
-    }
+        currentObjects: function() {
+            return this.dataObjects;
+        },
+    },
+    watch: {
+        '$route': 'dispatchRouting'
+    },
+    async mounted() {
+        let page = this.$route.query.page;
+        if( isNaN( page ) || parseInt( page ) < 2 ) {
+            this.updateQueryParams({ page: null })
+        }
+        this.refreshObjects( this.apiQueryString );
+
+    },
+    methods: {
+        /**
+         * dispatchRouting is called whenever the route changes
+         *
+         * Use it to update API queries with pagination, filters etc.
+         */
+        dispatchRouting() {
+            this.refreshObjects( this.apiQueryString );
+        },
+        refreshObjects( apiQueryString ){
+            axios.get("/api/v1/ingest/offline_storage/pending/jobs/"+this.$route.params.bucketId+"/dips"+apiQueryString).then( (aips ) => {
+                this.dataObjects = aips.data.data;
+                this.packagePageMeta = aips.data.meta;
+            });
+        },
+        openObject: function( dipId ) {
+            this.$router.push({ name: 'access.browse.dip', params: { dipId }, query: {} });
+        },
+    },
+}
 </script>
