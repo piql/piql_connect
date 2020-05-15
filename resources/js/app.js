@@ -101,6 +101,7 @@ import SideBar from './views/partials/SideBar.vue';
 
 import Upload from './views/ingest/Upload.vue';
 import IngestMetadata from './views/ingest/IngestMetadata.vue';
+import AipContentMetadata from './views/ingest/AipContentMetadata.vue';
 import Processing from './views/ingest/Processing.vue';
 import TaskList from './views/ingest/TaskList.vue';
 import IngestStatus from './views/ingest/IngestStatus.vue';
@@ -157,6 +158,11 @@ const router = new VueRouter({
             path: "/ingest/offline_storage/dip/:dipId",
             name: "ingest.browse.aip",
             component: AipBrowser
+        },
+        {
+            path: "/ingest/offline_storage/dip/:dipId/file/:fileId",
+            name: "ingest.dip.metadata.view",
+            component: AipContentMetadata,
         },
         {
             path: "/ingest/offline_storage/:bucketId/configuration",

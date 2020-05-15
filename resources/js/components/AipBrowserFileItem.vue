@@ -43,7 +43,7 @@
         },
         methods: {
             showMetadata() {
-                this.$router.push({ name:'access.browse.metadata', params: { fileId: this.aipItem.id } });
+                this.$router.push({ name:'ingest.dip.metadata.view', params: { dipId: this.dipId, fileId: this.aipItem.id } });
             }
         },
         computed: {
