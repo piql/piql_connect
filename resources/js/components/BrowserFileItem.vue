@@ -8,9 +8,9 @@
                 {{fileName}}
             </div>
             <div class="col-2 d-inline text-center align-self-center">
-                <a class="m-auto" @click.once="showMetadata" href="#" data-toggle="tooltip" title="Edit metadata"><i class="fas fa-tags actionIcon text-center"></i></a>
-                <a v-if="isPreparingDownload" class="m-auto" href="#" data-toggle="tooltip" title="Download file"><i class="fa fa-spinner fa-spin actionIcon text-center"></i></a>
-                <a v-else="isPreparingDownload" class="m-auto" @click.once="download" href="#" data-toggle="tooltip" title="Download file"><i class="fas fa-file-download actionIcon text-center"></i></a>
+                <a class="m-auto" @click.once="showMetadata" data-toggle="tooltip" title="Edit metadata"><i class="fas fa-tags actionIcon text-center"></i></a>
+                <a v-if="isPreparingDownload" class="m-auto" data-toggle="tooltip" title="Download file"><i class="fa fa-spinner fa-spin actionIcon text-center"></i></a>
+                <a v-else="isPreparingDownload" class="m-auto" @click.once="download" data-toggle="tooltip" title="Download file"><i class="fas fa-file-download actionIcon text-center"></i></a>
             </div>
             <div class="col-sm-1"></div>
         </div>
@@ -60,7 +60,6 @@
             },
             showMetadata() {
                 this.$router.push({ name:'access.browse.metadata', params: { fileId: this.aipItem.id } });
-                //window.location = "/access/browse/metadata/file/"+this.aipItem.id;
             }
         },
         computed: {
