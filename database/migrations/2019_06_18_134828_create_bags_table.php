@@ -15,8 +15,8 @@ class CreateBagsTable extends Migration
     {
         Schema::create('bags', function (Blueprint $table) {
             $table->bigIncrements('id');
-	    $table->string('uuid');
-	    $table->string('name');
+            $table->string('uuid');
+            $table->string('name');
             $table->string('status');
             $table->string('owner');
             $table->timestamps();

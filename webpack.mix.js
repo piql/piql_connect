@@ -36,8 +36,8 @@ mix.sass('resources/sass/app.scss', 'public/css')
 
 mix.styles([
             'resources/css/bootstrap.min.css',
-			'node_modules/bootstrap-vue/dist/bootstrap-vue.min.css',
-			'node_modules/bootstrap-vue/dist/bootstrap-vue-icons.min.css',
+            'node_modules/bootstrap-vue/dist/bootstrap-vue.min.css',
+            'node_modules/bootstrap-vue/dist/bootstrap-vue-icons.min.css',
             'node_modules/bootstrap-datepicker/dist/css/bootstrap-datepicker3.min.css',
             'node_modules/bootstrap-select/dist/css/bootstrap-select.min.css',
             'resources/fa/css/all.css',
@@ -47,12 +47,12 @@ mix.styles([
 ], 'public/css/vendor.css').sourceMaps();
 
 mix.autoload({
-	'jquery': ['$', 'window.jQuery', 'jQuery'],
-	'vue': ['Vue','window.Vue'],
+        'jquery': ['$', 'window.jQuery', 'jQuery'],
+        'vue': ['Vue','window.Vue'],
 });
 
 mix.browserSync({
-	proxy: '127.0.0.1',
-	files: ['resources/**/*.*']
+        proxy: '127.0.0.1',
+        files: ['resources/**/*.*']
 });
 

@@ -40,7 +40,7 @@ class LoginController extends Controller
 
     public function showLogin(Request $request)
     {
-		$request->session()->put('sessionLifetimeMs', env('SESSION_LIFETIME', 120 ) * 60000 );
+        $request->session()->put('sessionLifetimeMs', env('SESSION_LIFETIME', 120 ) * 60000 );
         return view('auth/login');
     }
 
