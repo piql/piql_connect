@@ -9,9 +9,9 @@ trait BagOperations
      *
      * Send an ErrorEvent if the transition could not be applied.
      *
-	 * @param  string  $url
-	 * @return $this
-	 */
+     * @param  string  $url
+     * @return $this
+     */
 
     private function tryBagTransition( $bag, $transitionTo ) : bool
     {
