@@ -106,6 +106,7 @@ import Processing from './views/ingest/Processing.vue';
 import TaskList from './views/ingest/TaskList.vue';
 import IngestStatus from './views/ingest/IngestStatus.vue';
 import BucketContent from "./views/ingest/BucketContent.vue";
+import BucketMetadata from './views/ingest/BucketMetadata.vue';
 import BucketConfig from "./views/ingest/BucketConfig";
 
 
@@ -153,6 +154,11 @@ const router = new VueRouter({
             path: "/ingest/offline_storage/:bucketId",
             name: "ingest.offline_storage.bucket_content",
             component: BucketContent
+        },
+        {
+            path: "/api/v1/ingest/offline_storage/pending/jobs/:fileId",
+            name: "ingest.offline_storage.bucket_metadata",
+            component: BucketMetadata,
         },
         {
             path: "/ingest/offline_storage/dip/:dipId",
