@@ -12,4 +12,9 @@ class SystemController extends Controller
     {
         return collect([ ['id' => '0', 'title' => 'English', 'code' => 'en'], ['id' => '1', 'title' => 'Norsk Bokmål', 'code' => 'nb_no'] ]);
     }
+
+    public function sessionLifetime( Request $request )
+    {
+        return env('SESSION_LIFETIME', 120);
+    }
 }

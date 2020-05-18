@@ -19,9 +19,6 @@
 <script>
 import { BModal } from 'bootstrap-vue';
 export default {
-    created() {
-        this.setupCountDown();
-    },
     beforeDestroy() {
         clearInterval( this.checkForSessionTimeout );
     },
@@ -37,17 +34,13 @@ export default {
         }
     },
     props: {
-        interval: {
+        intervalMs: {
             type: Number,
             default: 2000
         },
-        navigationActivityTime: {
-            type: Number,
-            default: -1
-        },
         sessionLifetimeMs: {
             type: Number,
-            default: 0
+            default: 7200000    /* 2 hours */
         },
         graceTimeMs: {
             type: Number,
@@ -70,7 +63,7 @@ export default {
             return Math.ceil( this.countDownMs / 1000.0 );
         },
         showCountDownModal() {
-            return this.countDownMs < ( this.modalTimeMs + this.graceTimeMs );	/* Show modal if a minute plus grace remains */
+            return this.countDownMs < ( this.modalTimeMs + this.graceTimeMs ); /* Show modal if a minute plus grace remains */
         },
         visibleCountDownSeconds() {
             let time = ( this.countDownMs - this.graceTimeMs ) / 1000.0 ;
@@ -87,6 +80,11 @@ export default {
             if( this.countDownMs < this.graceTimeMs ) {
                 this.logOutNow();
             }
+        },
+        sessionLifetimeMs( ) {
+            if ( this.sessionLifetimeMs ) {
+                this.setupCountDown();
+            }
         }
     },
     methods: {
@@ -98,9 +96,9 @@ export default {
                     this.lastActivityTime = lastActivityTime;
                     this.countDownMs = this.sessionLifetimeMs;
                 } else {
-                    this.countDownMs -= this.interval;
+                    this.countDownMs -= this.intervalMs;
                 }
-            }, this.interval );
+            }, this.intervalMs );
         },
         setupVisibleCountDown() {
             clearInterval( this.checkForSessionTimeout );

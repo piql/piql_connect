@@ -36,6 +36,7 @@ Route::group(['prefix' => 'v1' , 'middleware' => ['auth:api', 'activity']], func
         Route::get('currentUserSettings', 'Api\System\StatusController@currentUserSettings');
         Route::get('currentBag', 'Api\System\StatusController@currentBag');
         Route::get('languages', 'Api\System\SystemController@languages');
+        Route::get('sessionLifetime', 'Api\System\SystemController@sessionLifetime');
         Route::post('settings', 'Api\System\UserSettingsController@updateSettings');
     });
 

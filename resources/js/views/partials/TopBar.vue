@@ -12,10 +12,10 @@
                 </div>
                 <div class="col-md-1">
                     <session-timeout-monitor
-                        :navigation-activity-time="7000000"
-                        :session-lifetime-ms="7200000"
-                        :interval="10000"
-                        :no-refresh.boolean="true"
+                        :session-lifetime-ms=sessionLifetimeMs
+                        :modal-time-ms=modalTimeMs
+                        :interval-ms=updateIntervalMs
+                        :no-refresh.boolean=true
                     />
                 </div>
 
@@ -48,8 +48,14 @@
 
 <script>
 export default {
+    async mounted() {
+        this.sessionLifetimeMs = (await axios.get("/api/v1/system/sessionLifetime")).data*60*1000;
+    },
     data() {
         return {
+            sessionLifetimeMs: null,
+            modalTimeMs: 300000,     /* 5 minutes */
+            updateIntervalMs: 1000   /* 1 second */
         };
     },
     computed: {
