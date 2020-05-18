@@ -136,6 +136,8 @@
     "ingest.offlineStorage.header": "Offline-lagring",
     "ingest.offlineStorage.ingress": "Vis arkivpakker som kan sendes til lagring på piqlFilm.",
     "ingest.offlineStorage.jobName": "Pakkenavn",
+    "ingest.offlineStorage.package.metadata.title": "Metadata for offline-lagrings pakke",
+    "ingest.offlineStorage.package.metadata.ingress": "Legg til beskrivende metadata for denne offline-lagrings pakken",
     "ingest.offlineStorage.numberOfAips": "Pakker",
     "ingest.offlineStorage.creationDate": "Opprettelsesdato",
     "ingest.offlineStorage.size": "Størrelse",

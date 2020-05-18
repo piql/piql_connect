@@ -133,6 +133,8 @@
     "ingest.offlineStorage.header": "Offline storage",
     "ingest.offlineStorage.ingress": "Display the packages sent to offline storage in piqlFilm.\nAdd a name to your offline package; this name will identify your piqlFilm and allow to track that data until storage\nOptionally, you can add metadata to provide context and describe the offline package. At the end click the “Piql” button to start the archival process on piqlFilm. \n",
     "ingest.offlineStorage.jobName": "Offline package",
+    "ingest.offlineStorage.package.metadata.title": "Offline package metadata",
+    "ingest.offlineStorage.package.metadata.ingress": "Enter descriptive metadata for this package",
     "ingest.offlineStorage.numberOfAips": "Packages",
     "ingest.offlineStorage.creationDate": "Creation date",
     "ingest.offlineStorage.size": "Size",

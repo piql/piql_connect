@@ -71,7 +71,7 @@
                 this.$router.push({ name:'ingest.offline_storage.bucket_config', params: { bucketId: this.item.id } });
             },
             onTagsClick() {
-                this.$router.push({ name:'ingest.offline_storage.bucket_metadata', params: { bucketId: this.item.id } });
+                this.$router.push({ name:'ingest.offline_storage.bucket_metadata', params: { fileId: this.item.id } });
             },
             onListClick(){
                 this.$router.push({ name:'ingest.offline_storage.bucket_content', params: { bucketId: this.item.id } });

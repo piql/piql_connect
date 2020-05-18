@@ -68,4 +68,9 @@ class Job extends Model
         return env('APP_INGEST_BUCKET_SIZE', 150*1000*1000);
     }
 
+    public function metadata()
+    {
+        return $this->morphMany('App\Metadata', 'parent');
+    }
+
 }
