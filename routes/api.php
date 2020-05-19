@@ -79,12 +79,10 @@ Route::group(['prefix' => 'v1' , 'middleware' => ['auth:api', 'activity']], func
         Route::post('offline_storage/pending/jobs/{job}/metadata', 'Api\Ingest\BucketMetadataController@store')->name('api.ingest.bucket.metadata.store');
         Route::patch('offline_storage/pending/jobs/{job}/metadata/{metadata}', 'Api\Ingest\BucketMetadataController@update')->name('api.ingest.bucket.metadata.update');
 
-        Route::get('offline_storage/pending/jobs/{id}/bags', 'Api\Ingest\OfflineStorageController@bags');
-        Route::get('offline_storage/pending/jobs/{id}', 'Api\Ingest\OfflineStorageController@job');
-        Route::get('offline_storage/pending/jobs/{id}/dips', 'Api\Ingest\OfflineStorageController@dips');
-        Route::patch('offline_storage/pending/jobs/{id}', 'Api\Ingest\OfflineStorageController@archiveJob');
-        Route::get('offline_storage/pending/jobs', 'Api\Ingest\OfflineStorageController@jobs');
-        Route::get('offline_storage/archive/jobs', 'Api\Ingest\OfflineStorageController@archiveJobs');
+        Route::get('offline_storage/pending/jobs/{id}/dips', 'Api\Ingest\OfflineStorageController@dips')->name('api.ingest.bucket.dips');
+        Route::patch('offline_storage/pending/jobs/{id}', 'Api\Ingest\OfflineStorageController@update')->name('api.ingest.bucket.update');
+        Route::get('offline_storage/pending/jobs', 'Api\Ingest\OfflineStorageController@jobs')->name('api.ingest.buckets.pending');
+        Route::get('offline_storage/archive/jobs', 'Api\Ingest\OfflineStorageController@archiveJobs')->name('api.ingest.buckets.archiving');
 
         Route::group(['prefix' => 'triggers'], function() {
             // todo: add middleware

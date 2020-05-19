@@ -1,9 +1,18 @@
 <template>
     <div>
         <div class="row plist d-flex bg-white pt-3 pb-3 align-items-center bucket-text text-center">
+            <!--
             <div class="col-sm-3" title="Title of your piqlFilm">
                 <input value="" :placeholder="item.name" v-model="item.name" type="text" maxlength="40"
                        class="noTextTransform form-control pl-3 bucket-text fg-black" @input="setJobName" onclick="select()">
+            </div>
+            -->
+            <div class="col-2 text-left" >
+                <input id="bucketName" v-model="item.name" ref="bucketName"
+                       type="text" class="pl-3 noTextTransform form-control"
+                       :title="$t('upload.requiredName')"
+                       @input="setBucketName"
+                       required pattern='^((?![:\\<>"/?*|]).){3,}$'>
             </div>
 
             <div class="col-sm-1 text-center" title="Number of archival packages in this piqlFilm">
@@ -36,7 +45,11 @@
                     <i class="fas fa-trash-alt mr-2 hover-hand"></i>
                 </div>
                 <div v-if="actionIcons.defaultAction" class="pl-3 pr-3" title="Store on piqlFilm" >
-                    <button class="btn w-100 piqlIt" v-on:click="piqlIt">&nbsp;</button>
+
+                    <button v-if="processDisabled" disabled title="Start the ingest process" id="processButton" class="btn form-control-btn w-100">{{$t('upload.processButton')}}</button>
+                    <button v-else="processDisabled" title="Start the ingest process" id="processButton" class="btn form-control-btn w-100"  v-on:click="piqlIt">{{$t('upload.processButton')}}</button>
+
+                    <!--<button class="btn w-100 piqlIt" v-on:click="piqlIt">&nbsp;</button>-->
                 </div>
             </div>
 
@@ -79,7 +92,7 @@
             async piqlIt(e) {
                 this.$emit('piqlIt', this.item );
             },
-            async setJobName() {
+            async setBucketName() {
                 let currentId = this.item.id;
                 let jobName = this.item.name;
                 let job = null;
@@ -125,10 +138,21 @@
             },
             usagePercentage: function() {
                 return {'width': `${this.usage}%` };
-            }
+            },
+            processDisabled: function() {
+                return this.invalidBucketName | this.numberOfFiles === 0;
+            },
+            invalidBucketName: function() {
+                let valid = /^((?![:\\<>"/?*|]).){3,}$/g;
+                return !this.item.name.match(valid);
+            },
+            numberOfFiles: function() {
+                return this.item.aips_count;
+            },
         },
         data() {
             return {
+                bucketName: "",
             };
         },
 

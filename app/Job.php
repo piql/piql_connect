@@ -51,7 +51,7 @@ class Job extends Model
 
         if($job == null) {
             $job = new Job();
-            $job->name = Carbon::now()->format("YmdHis");
+            $job->name = "";
             $job->owner = $owner;
             $job->save();
         }

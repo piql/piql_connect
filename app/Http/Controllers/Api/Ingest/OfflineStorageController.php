@@ -41,12 +41,6 @@ class OfflineStorageController extends Controller
         return new JobCollection( $jobs );
     }
 
-    public function job($jobId)
-    {
-        $job = Job::findOrFail($jobId);
-        return  response()->json( ["data" => $job] );
-    }
-
     public function archiveJobs()
     {
         // This is a bit nasty because there is no owner validation here
@@ -63,18 +57,18 @@ class OfflineStorageController extends Controller
         return AipToDipResource::collection( $job->aips()->paginate( env('DEFAULT_ENTRIES_PER_PAGE') ) );
     }
 
-    public function archiveJob($jobId)
+    public function update($jobId)
     {
         $job = Job::findOrFail($jobId);
         // This is a bit nasty because there is no owner validation here
         // Should be safe when used internally e.i when owner is valid
         $data = request()->validate([
-            'name' => 'string',
+            'name' => 'string|nullable',
             'status' => 'string',
         ]);
 
-        if(isset($data['name'])) {
-            $job->name = $data['name'];
+        if(array_key_exists('name', $data)) {
+            $job->name = $data['name'] ?? "";
         }
 
         if(isset($data['status']) && ($data['status'] == 'ingesting' )) {
@@ -83,16 +77,5 @@ class OfflineStorageController extends Controller
         $job->save();
         return new JobResource( $job );
     }
-
-    public function bags( $jobId )
-    {
-        $job = Job::with(['bags'])->find($jobId);
-        if( $job->owner !== Auth::id() ){
-            abort( response()->json([ 'error' => 401, 'message' => 'The current user is not authorized to view job with id '.$jobId ], 401 ) );
-        }
-
-        return new BagCollection( $job->bags()->paginate( env('DEFAULT_ENTRIES_PER_PAGE') ) );
-    }
-
 
 }
