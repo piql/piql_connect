@@ -53,10 +53,18 @@ class OfflineStorageControllerTest extends TestCase
 
     }
 
+    public function test_given_an_authenticated_user_when_getting_a_jobs_it_responds_200()
+    {
+        $response = $this->actingAs( $this->user )
+            ->json( 'GET', route('api.ingest.bucket', $this->job->id) );
+        $response->assertStatus( 200 )
+            ->assertJson(['data' => ['id' => $this->job->id, 'archive_objects' => 2]]);
+    }
+
     public function test_given_an_authenticated_user_when_getting_all_pending_jobs_it_responds_200()
     {
         $response = $this->actingAs( $this->user )
-            ->json( 'GET', route('api.ingest.buckets.pending', $this->job->id) );
+            ->json( 'GET', route('api.ingest.buckets.pending') );
         $response->assertStatus( 200 )
             ->assertJson(['data' => [['id' => $this->job->id, 'aips_count' => 2]]]);
     }

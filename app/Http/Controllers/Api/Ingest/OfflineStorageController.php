@@ -41,6 +41,12 @@ class OfflineStorageController extends Controller
         return new JobCollection( $jobs );
     }
 
+    public function job($jobId)
+    {
+        $job = Job::findOrFail($jobId);
+        return  response()->json( ["data" => $job] );
+    }
+
     public function archiveJobs()
     {
         // This is a bit nasty because there is no owner validation here

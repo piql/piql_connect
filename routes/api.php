@@ -78,6 +78,7 @@ Route::group(['prefix' => 'v1' , 'middleware' => ['auth:api', 'activity']], func
         Route::post('offline_storage/pending/jobs/{job}/metadata', 'Api\Ingest\BucketMetadataController@store')->name('api.ingest.bucket.metadata.store');
         Route::patch('offline_storage/pending/jobs/{job}/metadata/{metadata}', 'Api\Ingest\BucketMetadataController@update')->name('api.ingest.bucket.metadata.update');
 
+        Route::get('offline_storage/pending/jobs/{id}', 'Api\Ingest\OfflineStorageController@job')->name('api.ingest.bucket');
         Route::get('offline_storage/pending/jobs/{id}/dips', 'Api\Ingest\OfflineStorageController@dips')->name('api.ingest.bucket.dips');
         Route::patch('offline_storage/pending/jobs/{id}', 'Api\Ingest\OfflineStorageController@update')->name('api.ingest.bucket.update');
         Route::get('offline_storage/pending/jobs', 'Api\Ingest\OfflineStorageController@jobs')->name('api.ingest.buckets.pending');
