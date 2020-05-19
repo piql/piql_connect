@@ -15,7 +15,9 @@ class AipToDipResource extends JsonResource
      */
     public function toArray( $request )
     {
+        if(!$this->storage_properties) return [];
         $dip = $this->storage_properties->dip;
+        if(!$dip) return [];
         return [
             'id' => $dip->id,
             'external_uuid' => $dip->external_uuid,
