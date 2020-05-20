@@ -468,6 +468,9 @@ export default {
                 });
             }
         },
+        activeUploads() {
+            return this.filesUploading.filter( (file) => file.isUploading ).length > 0;
+        }
     },
     props: {
         retryGracetimeMs: {
@@ -519,6 +522,15 @@ export default {
                 this.bag = (await this.createBag( "", this.userId, this.selectedArchive, this.selectedHoldingTitle ));
             }
         }
+    },
+
+    async beforeRouteLeave (to, from, next) {
+        if (this.activeUploads()) {
+            alert(this.$t('upload.interruptDialogTitle'));
+            next(false);
+            return;
+        }
+        next();
     }
 }
 
