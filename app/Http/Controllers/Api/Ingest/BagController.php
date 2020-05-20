@@ -26,7 +26,8 @@ use Log;
 class BagController extends Controller
 {
 
-    private $nameValidationRule = '/^([^:\\<>"\/?*|]*){3,}$/';
+    private $nameValidationRule = '/(^[^:\\<>"\/?*|]{3,64}$)/';
+    private $newBagNameValidationRule = '/(^[^:\\<>"\/?*|]{0,64}$)/';
 
     /**
      * Display a listing of the resource.
@@ -107,7 +108,7 @@ class BagController extends Controller
         $settings = $settingsProvider->forAuthUser();
 
         $bagName = trim( $request->name );
-        if($this->validateFailes($bagName)) {
+        if($this->validateFailes($bagName, $this->newBagNameValidationRule)) {
             abort(response()->json(["error" => 424, "message" => "Bag doesn't have a valid name: {$bagName}"], 424));
         }
         $bag = Bag::create(['name' => $bagName]);
@@ -460,15 +461,10 @@ class BagController extends Controller
         return response()->download($path);
     }
 
-    private function validateFailes($name) : bool {
-        return Validator::make(['name' => $name], [
-            'name' => [
-                'required',
-                function ($attribute, $value, $fail) {
-                    if(!preg_match($this->nameValidationRule, $value, $matches, PREG_OFFSET_CAPTURE)) {
-                        $fail($attribute.' is invalid.');
-                    }
-                }],
-        ])->fails();
+    private function validateFailes($name, $rule = null) : bool {
+        if(!preg_match($rule ?? $this->nameValidationRule, $name, $matches, PREG_OFFSET_CAPTURE)) {
+            return true;
+        }
+        return false;
     }
 }
