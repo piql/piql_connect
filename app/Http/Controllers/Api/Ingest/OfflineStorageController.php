@@ -69,7 +69,7 @@ class OfflineStorageController extends Controller
         // This is a bit nasty because there is no owner validation here
         // Should be safe when used internally e.i when owner is valid
         $data = request()->validate([
-            'name' => 'string|nullable',
+            'name' => 'string|nullable|max:64',
             'status' => 'string',
         ]);
 

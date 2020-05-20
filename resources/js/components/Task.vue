@@ -12,7 +12,7 @@
                        type="text" class="pl-3 noTextTransform form-control"
                        :title="$t('upload.requiredName')"
                        @input="setBucketName"
-                       required pattern='^((?![:\\<>"/?*|]).){3,}$'>
+                       required pattern='^((?![:\\<>"/?*|]).){3,64}$'>
             </div>
 
             <div class="col-sm-1 text-center" title="Number of archival packages in this piqlFilm">
@@ -143,7 +143,7 @@
                 return this.invalidBucketName | this.numberOfFiles === 0;
             },
             invalidBucketName: function() {
-                let valid = /^((?![:\\<>"/?*|]).){3,}$/g;
+                let valid = /^((?![:\\<>"/?*|]).){3,64}$/g;
                 return !this.item.name.match(valid);
             },
             numberOfFiles: function() {

@@ -23,7 +23,7 @@
                     type="text" class="pl-3 noTextTransform form-control"
                     :title="$t('upload.requiredName')"
                     @input="setBagName"
-                    required pattern='^((?![:\\<>"/?*|]).){3,}$'>
+                    required pattern='^((?![:\\<>"/?*|]).){3,64}$'>
             </div>
 
             <div class="col-2" :title="$t('upload.archiveToolTip')">
@@ -279,7 +279,7 @@ export default {
             return this.invalidBagName | this.numberOfFiles === 0 | this.hasIncompleteFiles;
         },
         invalidBagName: function() {
-            let valid = /^((?![:\\<>"/?*|]).){3,}$/g;
+            let valid = /^((?![:\\<>"/?*|]).){3,64}$/g;
             return !this.bagName.match(valid);
         },
         numberOfFiles: function() {
