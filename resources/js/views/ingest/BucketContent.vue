@@ -1,6 +1,6 @@
 <template>
     <div class="w-100">
-        <page-heading icon="fa-hdd" :title="$t('ingest.offlineStorage.aipList.header')" :ingress="$t('ingest.offlineStorage.aipList.ingress')" />
+        <page-heading icon="fa-hdd" :title="$t('ingest.offlineStorage.package.header')" :ingress="$t('ingest.offlineStorage.package.ingress')" />
 
         <access-browser-filters :singleArchiveTitle="$t('Your archive')"></access-browser-filters>
 
