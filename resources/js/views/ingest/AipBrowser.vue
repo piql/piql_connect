@@ -1,6 +1,6 @@
 <template>
     <div class="w-100">
-        <page-heading icon="fa-hdd" :title="$t('ingest.browse')" :ingress="$t('ingest.browse.ingress')" />
+        <page-heading icon="fa-hdd" :title="$t('ingest.offlineStorage.package.list.title')" :ingress="$t('ingest.offlineStorage.package.list.ingress')" />
         <div class="row plistHeader text-truncate text-center mt-2">
           <div class="col-sm-2">{{$t("access.browse.header.preview")}}</div>
             <div class="col-sm-7 text-left">{{$t('access.browse.header.files')}}</div>
