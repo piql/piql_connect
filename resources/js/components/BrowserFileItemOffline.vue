@@ -8,7 +8,7 @@
                 {{fileName}}
             </div>
             <div class="col-sm-1 d-inline-flex align-self-center">
-                <a href="#" @click="addFileToRetrieval"><i class="fas fa-file-export actionIcon"></i></a>
+                <a @click="addFileToRetrieval"><i class="fas fa-file-export actionIcon"></i></a>
             </div>
             <div class="col-sm-1">
             </div>

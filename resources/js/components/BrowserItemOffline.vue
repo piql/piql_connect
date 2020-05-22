@@ -16,8 +16,8 @@
                 {{fileCount}}
             </div>
             <div class="col-sm-3 d-inline-flex align-self-center">
-                <a class="ml-5 mr-2" @click="addObjectToRetrieval"><i class="fas fa-file-export actionIcon" href="#"></i></a>
-                <a class="ml-4" @click="open" href="#"><i class="fas fa-folder actionIcon"></i></a>
+                <a class="ml-5 mr-2" @click="addObjectToRetrieval"><i class="fas fa-file-export actionIcon"></i></a>
+                <a class="ml-4" @click="open"><i class="fas fa-folder actionIcon"></i></a>
             </div>
         </div>
 </template>
