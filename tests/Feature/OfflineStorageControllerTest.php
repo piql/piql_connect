@@ -75,7 +75,7 @@ class OfflineStorageControllerTest extends TestCase
         $response = $this->actingAs( $this->user )
             ->json( 'GET', route('api.ingest.buckets.archiving', $this->job->id) );
         $response->assertStatus( 200 )
-            ->assertJsonFragment(['id' => $this->job->id, 'status' => 'ingesting', 'archive_objects' => 2]);
+            ->assertJsonFragment(['status' => 'ingesting', 'archive_objects' => 2]);
     }
 
     public function test_given_an_authenticated_user_when_getting_all_content_from_a_given_jobs_it_responds_200()
