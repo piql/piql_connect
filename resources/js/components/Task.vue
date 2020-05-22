@@ -36,7 +36,7 @@
                     <i class="fas fa-list cursor-pointer hover-hand"  @click="onListClick()"></i>
                 </div>
                 <div v-if="actionIcons.metadata" class="pl-1 actionIcon" title="Edit metadata">
-                    <i class="fas fa-tags hover-hand" style="font-size: 21px;" @click="onTagsClick()"></i>
+                    <i class="fas fa-tags hover-hand" @click="onTagsClick()"></i>
                 </div>
                 <div v-if="actionIcons.config" class="pl-1 actionIcon" title="Content options">
                     <i class="fas fa-cog hover-hand" @click="onCogClick()"></i>
