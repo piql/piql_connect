@@ -8,7 +8,7 @@
               <a v-bind:href="downloadUrl"><i class="fas fa-file-download actionIcon"></i></a>
             </div>
             <div class="col-sm-2 text-center">
-              <a href="#" @click="takeOffline"><i class="fas fa-unlink actionIcon"></i></a>
+              <a @click="takeOffline"><i class="fas fa-unlink actionIcon"></i></a>
             </div>
         </div>
         </div>

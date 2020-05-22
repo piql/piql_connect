@@ -3,12 +3,12 @@
            <div class="col-md-8">
                 <div v-if="downloadCartEnabled" class="row">
                     <div class="col">
-                        <a style="color: black" href="#"><i class="fas fa-arrow-down browseActionItem mr-2"></i>Download</a></br>
+                        <a style="color: black"><i class="fas fa-arrow-down browseActionItem mr-2"></i>Download</a></br>
                     </div>
                 </div>
                 <div v-if="exportEnabled" class="row mb-5">
                     <div class="col"> 
-                        <a style="color: black" href="#">Export metadata</a><br>
+                        <a style="color: black">Export metadata</a><br>
                     </div>
                 </div>
             </div>

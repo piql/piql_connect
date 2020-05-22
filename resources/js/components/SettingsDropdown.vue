@@ -1,6 +1,6 @@
 <template>
     <span>
-        <a href="#" @click="showSettingsPage"><i class="fas fa-cogs signal" ></i></a>
+        <a @click="showSettingsPage"><i class="fas fa-cogs signal" ></i></a>
         <div class="dropdownList" v-if="showSettingsAsDropdown">
             <i @click="showSettingsPage" class="fas fa-times closeNotifications clickable" ></i>
             <strong>Configuration settings</strong>

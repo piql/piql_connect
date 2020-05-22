@@ -8,7 +8,7 @@
                 {{fileName}}
             </div>
             <div class="col-2 d-inline text-center align-self-center">
-                <a class="m-auto" @click.once="showMetadata" href="#" data-toggle="tooltip" title="Edit metadata"><i class="fas fa-tags actionIcon text-center"></i></a>
+                <a class="m-auto" @click.once="showMetadata" data-toggle="tooltip" title="Edit metadata"><i class="fas fa-tags actionIcon text-center"></i></a>
             </div>
             <div class="col-sm-1"></div>
         </div>
