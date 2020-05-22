@@ -36,7 +36,7 @@
 
             <div v-if="hasFailedUploads" class="col-2 text-center">
                 <label for="processButton" class="col-form-label-sm">&nbsp;</label>
-                <button class="btn form-control-btn btn-link" @click="retryAll" href="#" data-toggle="tooltip" :title="$t('upload.resumeAll')"><i class="fas fa-redo topIcon text-center mr-2"></i></button>
+                <button class="btn form-control-btn btn-link" @click="retryAll" data-toggle="tooltip" :title="$t('upload.resumeAll')"><i class="fas fa-redo topIcon text-center mr-2"></i></button>
             </div>
             <div v-else="hasFailedUploads" class="col-2 text-left align-middle form-group">
                 <label for="fileNameFilter" class="col-form-label-sm">{{$t("upload.fileNameFilter")}}</label>

@@ -7,8 +7,8 @@
             <div class="col-7 text-left align-self-center text-truncate">
                 {{fileName}}
             </div>
-            <div class="col-2 d-inline text-center align-self-center actionIcon" title="Edit metadata">
-                <i class="fas fa-tags hover-hand" style="font-size: 21px;" @click="showMetadata()"></i>
+            <div class="col-2 d-inline text-center align-self-center">
+                <a class="m-auto" @click.once="showMetadata" data-toggle="tooltip" title="Edit metadata"><i class="fas fa-tags actionIcon text-center"></i></a>
             </div>
             <div class="col-sm-1"></div>
         </div>
