@@ -1,13 +1,13 @@
 <template>
     <div>
-        <div class="row plist d-flex bg-white pt-3 pb-3 align-items-center bucket-text text-center">
+        <div class="row plist thumbnailList">
             <!--
             <div class="col-sm-3" title="Title of your piqlFilm">
                 <input value="" :placeholder="item.name" v-model="item.name" type="text" maxlength="40"
                        class="noTextTransform form-control pl-3 bucket-text fg-black" @input="setJobName" onclick="select()">
             </div>
             -->
-            <div class="col-2 text-left" >
+            <div class="col-3 text-left" >
                 <input id="bucketName" v-model="item.name" ref="bucketName"
                        type="text" class="pl-3 noTextTransform form-control"
                        :title="$t('upload.requiredName')"
@@ -15,15 +15,15 @@
                        required pattern='^((?![:\\<>"/?*|]).){3,64}$'>
             </div>
 
-            <div class="col-sm-1 text-center" title="Number of archival packages in this piqlFilm">
+            <div class="col-sm-1 text-right" title="Number of archival packages in this piqlFilm">
                 {{item.archive_objects}}
             </div>
 
-            <div class="col-sm-2 text-nowrap" title="Total file size of all archival packages in this piqlFilm">
+            <div class="col-sm-2 text-nowrap text-right" title="Total file size of all archival packages in this piqlFilm">
                 {{ fileSize }}
             </div>
 
-            <div class="col-sm-2">
+            <div class="col-sm">
                 <div v-if="fileSize !== '---'" class="progress bucket-progress bg-fill">
                     <div class="progress-bar bg-brand" role="progressbar" aria-valuenow="usage" aria-valuemin="0" aria-valuemax="100" :style="usagePercentage">
                         <div class="fg-white bucket-text justify-content-center d-flex position-absolute w-50" >{{usage}}%</div>
@@ -31,26 +31,17 @@
                 </div>
             </div>
 
-            <div class="col listActionItems d-flex right">
-                <div v-if="actionIcons.list" class="pl-1 actionIcon" title="Show all files">
-                    <i class="fas fa-list cursor-pointer hover-hand"  @click="onListClick()"></i>
-                </div>
-                <div v-if="actionIcons.metadata" class="pl-1 actionIcon" title="Edit metadata">
-                    <i class="fas fa-tags hover-hand" style="font-size: 21px;" @click="onTagsClick()"></i>
-                </div>
-                <div v-if="actionIcons.config" class="pl-1 actionIcon" title="Content options">
-                    <i class="fas fa-cog hover-hand" @click="onCogClick()"></i>
-                </div>
-                <div v-if="actionIcons.delete" class="pl-1 actionIcon" title="Delete files">
-                    <i class="fas fa-trash-alt mr-2 hover-hand"></i>
-                </div>
-                <div v-if="actionIcons.defaultAction" class="pl-3 pr-3" title="Store on piqlFilm" >
-
-                    <button v-if="processDisabled" disabled title="Start the ingest process" id="processButton" class="btn form-control-btn w-100">{{$t('upload.processButton')}}</button>
-                    <button v-else="processDisabled" title="Start the ingest process" id="processButton" class="btn form-control-btn w-100"  v-on:click="piqlIt">{{$t('upload.processButton')}}</button>
-
-                    <!--<button class="btn w-100 piqlIt" v-on:click="piqlIt">&nbsp;</button>-->
-                </div>
+            <div class="col-2 d-inline text-right">
+                <a v-if="actionIcons.list" class="m-auto" @click.once="onListClick" data-toggle="tooltip" title="Show all files"><i class="fas fa-list actionIcon text-center hover-hand"></i></a>
+                <a v-if="actionIcons.metadata" class="m-auto" @click.once="onTagsClick" data-toggle="tooltip" title="Edit metadata"><i class="fas fa-tags actionIcon text-center hover-hand"></i></a>
+                <a v-if="actionIcons.config" class="m-auto" @click.once="onCogClick" data-toggle="tooltip" title="Content options"><i class="fas fa-cog actionIcon text-center hover-hand"></i></a>
+                <a v-if="actionIcons.delete" class="m-auto" @click.once="onDelete" data-toggle="tooltip" title="Delete files"><i class="fas fa-trash-alt actionIcon text-center hover-hand"></i></a>
+            </div>
+            <div class="col-2 d-inline text-left">
+                <span v-if="actionIcons.defaultAction">
+                    <button v-if="processDisabled" disabled title="Store on piqlFilm" id="processButton" class="btn form-control-btn w-10">{{$t('upload.processButton')}}</button>
+                    <button v-else="processDisabled" title="Store on piqlFilm" id="processButton" class="btn form-control-btn w-10"  v-on:click="piqlIt">{{$t('upload.processButton')}}</button>
+                </span>
             </div>
 
         </div>
@@ -88,6 +79,8 @@
             },
             onListClick(){
                 this.$router.push({ name:'ingest.offline_storage.bucket_content', params: { bucketId: this.item.id } });
+            },
+            onDelete(){
             },
             async piqlIt(e) {
                 this.$emit('piqlIt', this.item );
