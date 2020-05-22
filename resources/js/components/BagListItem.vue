@@ -13,10 +13,10 @@
             </div>
             <div class="col-sm-2 listActionItems d-flex flex-row justify-content-end pt-sm-1">
                 <div class="mx-sm-1">
-                    <i class="fas fa-list-ul cursor-pointer hover-hand"  style="font-size: 21px;" @click="onListClick()"></i>
+                    <i class="fas fa-list-ul cursor-pointer hover-hand" @click="onListClick()"></i>
                 </div>
                 <div class="mx-sm-1">
-                    <i class="fas fa-trash-alt hover-hand" style="font-size: 21px;"></i>
+                    <i class="fas fa-trash-alt hover-hand"></i>
                 </div>
             </div>
         </div>
