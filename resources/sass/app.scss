@@ -1110,8 +1110,12 @@ th {
     cursor: pointer;
 }
 .contentOptionsUploadTag {
-    width: 300px;
+    width: 130px;
     display: inline-block;
+}
+.contentOptionsTextinput {
+    width: 300px;
+    height: 80px;
 }
 .holding {
     padding-top: 5px;

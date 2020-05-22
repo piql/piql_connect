@@ -1,58 +1,61 @@
 <template>
     <div class="w-100">
+
         <page-heading icon="fa-list-ul" :title="$t('ingest.offlineStorage.contentOptions.header')" :ingress="$t('ingest.offlineStorage.contentOptions.ingress')" />
 
-        <div class="contentContainer">
-            <div class="container-fluid">
-                <div class="row plistHeader">
-                    <div class="col-sm-4">{{$t('ingest.offlineStorage.jobName')}}</div>
-                    <div class="col-sm-2 pr-3">{{$t('ingest.offlineStorage.numberOfAips')}}</div>
-                    <div class="col-sm-2 pr-3">{{$t('ingest.offlineStorage.size')}}</div>
-                    <div class="col-sm-4">{{$t("ingest.offlineStorage.actions")}}</div>
-                </div>
-                <Task v-if="item != null" :item="item" :jobListUrl="jobListUrl" :actionIcons="actionIcons" @piqlIt="piqlIt"/>
-            </div>
+        <div class="row plistHeader">
+            <div class="col-sm-4">{{$t('ingest.offlineStorage.jobName')}}</div>
+            <div class="col-sm-2 pr-3">{{$t('ingest.offlineStorage.numberOfAips')}}</div>
+            <div class="col-sm-2 pr-3">{{$t('ingest.offlineStorage.size')}}</div>
+            <div class="col-sm-4">{{$t("ingest.offlineStorage.actions")}}</div>
+        </div>
 
-            <div class="list">
-                <table>
-                    <tbody>
-                    <tr class="contentOptionsRow">
-                        <td colspan="5">
-                            <label for="outputMatching">Output matching</label>
-                            <textarea id="outputMatching"></textarea><br>
-                            <label for="layout">Layout</label>
-                            <textarea id="layout"></textarea><br>
-                            <label for="reelDef">Reel definition</label>
-                            <textarea id="reelDef"></textarea><br>
-                            <br>
-                            <span class="contentOptionsUploadTag">CLIENT LOGO START</span>
-                            <input type="file" name="file-1[]" id="file-1" class="inputfile inputfile-1" data-multiple-caption="{count} files selected" multiple="">
-                            <label class="filelabel" for="file-1">
-                                <span>CHOOSE FILE</span></label>
+        <Task v-if="item != null" :item="item" :jobListUrl="jobListUrl" :actionIcons="actionIcons" @piqlIt="piqlIt"/>
 
-                            <br>
-
-                            <span class="contentOptionsUploadTag">CLIENT REEL DESCRIPTION START</span>
-                            <input type="file" name="file-2[]" id="file-2" class="inputfile inputfile-2" data-multiple-caption="{count} files selected" multiple="">
-                            <label class="filelabel" for="file-2">
-                                <span>CHOOSE FILE</span></label>
-
-                            <br>
-
-                            <span class="contentOptionsUploadTag">JPG FORMAT</span>
-                            <input type="file" name="file-3[]" id="file-3" class="inputfile inputfile-3" data-multiple-caption="{count} files selected" multiple="">
-                            <label class="filelabel" for="file-3">
-                                <span>CHOOSE FILE</span></label>  <br>
-
-                            <div style="width: 100%; text-align: right;">
-                                <input type="submit" class="inputSubmitCancel" value="Cancel">
-                                <input type="submit" class="inputSubmitSave" value="Save">
-                            </div>
-                        </td>
-                    </tr>
-                    </tbody></table>
+        <div class="row mt-4">
+            <div class="col">
+                <label class="align-top" for="outputMatching">Output matching</label>
+                <textarea class="contentOptionsTextinput" id="outputMatching"></textarea>
             </div>
         </div>
+        <div class="row mt-3">
+            <div class="col">
+                <label class="align-top" for="layout">Layout</label>
+                <textarea class="contentOptionsTextinput" id="layout"></textarea>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col">
+                <label class="align-top" for="reelDef">Reel definition</label>
+                <textarea class="contentOptionsTextinput" id="reelDef"></textarea>
+            </div>
+        </div>
+
+        <div class="row mt-4">
+            <div class="col">
+                <span class="contentOptionsUploadTag">Client logo</span>
+                <input type="file" name="file-1[]" id="file-1" class="inputfile inputfile-1" data-multiple-caption="{count} files selected" multiple="">
+                <label for="file-1">
+                    <button title="Choose file" id="chooseFileButton1" class="btn form-control-btn w-70">Choose file</button>
+                </label>
+            </div>
+        </div>
+
+        <div class="row mt-1">
+            <div class="col">
+                <span class="contentOptionsUploadTag">Reel description</span>
+                <input type="file" name="file-1[]" id="file-1" class="inputfile inputfile-1" data-multiple-caption="{count} files selected" multiple="">
+                <label for="file-1">
+                    <button title="Choose file" id="chooseFileButton2" class="btn form-control-btn w-70">Choose file</button>
+                </label>
+            </div>
+        </div>
+
+        <div class="row mt-3 d-flex flex-row-reverse">
+            <button class="btn btn-ln btn-default pr-5 pl-5 col-2">{{$t('OK')}}</button>
+            <button class="btn btn pr-5 pl-5 col-2 mr-2">{{$t('Cancel')}}</button>
+        </div>
+
     </div>
 </template>
 
