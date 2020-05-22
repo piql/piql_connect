@@ -148,8 +148,8 @@
     "ingest.offlineStorage.filled": "Prosent fylt",
     "ingest.offlineStorage.actions": "Valg",
     "ingest.offlineStorage.metadata.ingress": "This page displays file's descriptive metadata",
-    "ingest.offlineStorage.contentOption.header" : "Content options",
-    "ingest.offlineStorage.contentOption.ingress" : "Add metadata (representation information) and define the writing parameters on the offline package",
+    "ingest.offlineStorage.contentOptions.header" : "Content options",
+    "ingest.offlineStorage.contentOptions.ingress" : "Add metadata (representation information) and define the writing parameters on the offline package",
     "ingest.offlineStorage.toasts.piqled.title" :"Klargjør for skriving til piqlFilm",
     "ingest.offlineStorage.toasts.piqled.message" :"Pakken %PACKAGENAME% klargjøres nå for skriving til piqlFilm",
 

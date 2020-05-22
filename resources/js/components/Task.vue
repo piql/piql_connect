@@ -39,8 +39,8 @@
             </div>
             <div class="col-2 d-inline text-left">
                 <span v-if="actionIcons.defaultAction">
-                    <button v-if="processDisabled" disabled title="Store on piqlFilm" id="processButton" class="btn form-control-btn w-10">{{$t('upload.processButton')}}</button>
-                    <button v-else="processDisabled" title="Store on piqlFilm" id="processButton" class="btn form-control-btn w-10"  v-on:click="piqlIt">{{$t('upload.processButton')}}</button>
+                    <button v-if="processDisabled" disabled title="Store on piqlFilm" id="processButton" class="btn form-control-btn piqlIt w-10">&nbsp;</button>
+                    <button v-else="processDisabled" title="Store on piqlFilm" id="processButton" class="btn form-control-btn piqlIt w-10"  v-on:click="piqlIt">&nbsp;</button>
                 </span>
             </div>
 
