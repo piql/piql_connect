@@ -2,8 +2,6 @@
     <div class="w-100">
         <page-heading icon="fa-hdd" :title="$t('ingest.offlineStorage.package.header')" :ingress="$t('ingest.offlineStorage.package.ingress')" />
 
-        <access-browser-filters :singleArchiveTitle="$t('Your archive')"></access-browser-filters>
-
         <bucket-content-list @openObject="openObject" :location="selectedLocation" :dataObjects="currentObjects"
             :selectedArchive="selectedArchiveUuid" :selectedHolding="selectedHolding"/>
         <div class="row text-center pagerRow">
