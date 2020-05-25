@@ -14,39 +14,39 @@
 
         <div class="row mt-4">
             <div class="col">
-                <label class="align-top" for="outputMatching">Output matching</label>
+                <label class="align-top" for="outputMatching">{{$t('ingest.offlineStorage.contentOptions.outputMatching.label')}}</label>
                 <textarea class="contentOptionsTextinput" id="outputMatching"></textarea>
             </div>
         </div>
         <div class="row mt-3">
             <div class="col">
-                <label class="align-top" for="layout">Layout</label>
+                <label class="align-top" for="layout">{{$t('ingest.offlineStorage.contentOptions.layout.label')}}</label>
                 <textarea class="contentOptionsTextinput" id="layout"></textarea>
             </div>
         </div>
         <div class="row mt-3">
             <div class="col">
-                <label class="align-top" for="reelDef">Reel definition</label>
+                <label class="align-top" for="reelDef">{{$t('ingest.offlineStorage.contentOptions.reelDefinition.label')}}</label>
                 <textarea class="contentOptionsTextinput" id="reelDef"></textarea>
             </div>
         </div>
 
         <div class="row mt-4">
             <div class="col">
-                <span class="contentOptionsUploadTag">Client logo</span>
+                <span class="contentOptionsUploadTag">{{$t('ingest.offlineStorage.contentOptions.clientLogo.title')}}</span>
                 <input type="file" name="file-1[]" id="file-1" class="inputfile inputfile-1" data-multiple-caption="{count} files selected" multiple="">
                 <label for="file-1">
-                    <button title="Choose file" id="chooseFileButton1" class="btn form-control-btn w-70">Choose file</button>
+                    <button title="Choose file" id="chooseFileButton1" class="btn form-control-btn w-70">{{$t('ingest.offlineStorage.contentOptions.clientLogo.buttonText')}}</button>
                 </label>
             </div>
         </div>
 
         <div class="row mt-1">
             <div class="col">
-                <span class="contentOptionsUploadTag">Reel description</span>
+                <span class="contentOptionsUploadTag">{{$t('ingest.offlineStorage.contentOptions.reelDescription.title')}}</span>
                 <input type="file" name="file-1[]" id="file-1" class="inputfile inputfile-1" data-multiple-caption="{count} files selected" multiple="">
                 <label for="file-1">
-                    <button title="Choose file" id="chooseFileButton2" class="btn form-control-btn w-70">Choose file</button>
+                    <button title="Choose file" id="chooseFileButton2" class="btn form-control-btn w-70">{{$t('ingest.offlineStorage.contentOptions.reelDescription.buttonText')}}</button>
                 </label>
             </div>
         </div>
