@@ -16,9 +16,11 @@
     "Archive": "Arkiv",
     "Holdings": "Samlinger",
     "Holding": "Samling",
-	"OK": "OK",
-	"Cancel": "Avbryt",
-	"Back": "Tilbake",
+    "OK": "OK",
+    "Cancel": "Avbryt",
+    "Back": "Tilbake",
+    "All": "Alle",
+    "Your archive": "Ditt arkiv",
 
     "upload.title": "Opplasting",
     "upload.ingress" : "Last opp en eller flere filer til forhåndsmottak her.",
@@ -226,11 +228,18 @@
     "access.retrieve.history": "Gjenopprettelseshistorikk",
     "access.retrieve.history.ingress": "Tidligere gjenopprettet informasjon",
 
+    "access.retrieved.noItems": "Filene dine er klare til nedlasting!",
+    "access.retrieved.idle": "Ingen filer ligger til gjenoppretting.",
+    "access.download.download": "Download",
+    "access.download.takeOffline": "Take offline",
+
+
     "access.ready.ingress": "Filer klargjorte for gjenopphenting fra langtidslagring",
     "access.ready.aipName" : "Arkivnavn",
     "access.ready.ingestDate": "Arkiveringsdato",
     "access.ready.filesize": "Filstørrelse",
     "access.ready.remove": "Fjern",
+    "access.ready.noItems": "Ingen filer til nedlasting.",
 
     "settings.settings.header": "Brukerinstillinger",
     "settings.settings.ingress": "Konfigurer brukerinstillinger",

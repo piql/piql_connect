@@ -101,7 +101,6 @@ export default {
         refreshFiles() {
             let dipId = this.dipId;
             let apiQueryString = this.apiQueryString;
-            console.log(apiQueryString);
             axios.get(`/api/v1/access/dips/${dipId}/files${apiQueryString}`).then( async ( dipFilesResponse ) =>  {
                 this.dipFiles = dipFilesResponse.data.data;
                 this.meta = dipFilesResponse.data.meta;

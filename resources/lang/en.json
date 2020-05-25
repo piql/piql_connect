@@ -20,6 +20,8 @@
 	"OK": "OK",
 	"Cancel": "Cancel",
 	"Back": "Back",
+    "All": "All",
+    "Your archive": "Your archive",
 
     "upload.title": "Upload",
     "upload.ingress" : "Upload files to your archives here by clicking the 'Add file' button.",
