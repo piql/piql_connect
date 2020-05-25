@@ -52,8 +52,8 @@
         </div>
 
         <div class="row mt-3 d-flex flex-row-reverse">
-            <button class="btn btn-ln btn-default pr-5 pl-5 col-2">{{$t('OK')}}</button>
-            <button class="btn btn pr-5 pl-5 col-2 mr-2">{{$t('Cancel')}}</button>
+            <button class="btn btn-ln btn-default pr-5 pl-5 col-2" @click="$router.go(-1)">{{$t('OK')}}</button>
+            <button class="btn btn pr-5 pl-5 col-2 mr-2" @click="$router.go(-1)">{{$t('Cancel')}}</button>
         </div>
 
     </div>
