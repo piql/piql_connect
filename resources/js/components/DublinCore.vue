@@ -18,7 +18,7 @@
             </form>
             <div v-if="!readOnly" class="row mt-5">
                 <div class="col-6 mr-4"></div>
-                <button class="btn btn mr-2 pr-5 pl-5 col-2" @click="$router.push({ name: 'ingest.upload' })">{{$t('Cancel')}}</button>
+                <button class="btn btn mr-2 pr-5 pl-5 col-2" @click="$router.go(-1)">{{$t('Cancel')}}</button>
                 <button class="btn btn-ln btn-default pr-5 pl-5 col-2" @click="save()">{{$t('OK')}}</button>
             </div>
             <div v-if="readOnly" class="row mt-5">
@@ -123,7 +123,7 @@ export default {
                     errorToast(title, message);
                 });
 
-                this.$router.push({name: 'ingest.upload'});
+                this.$router.go(-1);
             }
         },
 
