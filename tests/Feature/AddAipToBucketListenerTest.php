@@ -46,15 +46,20 @@ class AddAipToBucketListenerTest extends TestCase
     {
         $listener = new AddAipToBucketListener();
         $listener->handle( new InformationPackageUploaded($this->aips[1]));
-        $this->assertEquals(1, Job::where('owner', $this->testUser->id)->count());
+        $this->job = $this->job->refresh();
+        $this->assertEquals(1, $this->job->count());
+        $this->assertEquals($this->aips[1]->fileObjects->sum("size"), $this->job->size);
     }
 
     public function test_add_aip_to_full_bucket()
     {
         $this->job->aips()->save($this->aips[0]);
+        $this->job->size += $this->aips[0]->size;
+        $this->job->save();
         $listener = new AddAipToBucketListener();
         $listener->handle( new InformationPackageUploaded($this->aips[1]));
-        $this->assertEquals(1, Job::where('owner', $this->testUser->id)->count());
+        $this->job = $this->job->refresh();
+        $this->assertEquals(2, Job::where('owner', $this->testUser->id)->count());
     }
 
 }
