@@ -19,8 +19,8 @@
 
 Ubuntu 18.04 or similar operating system. Run the following to get prerequisites installed:
 ```
-sudo apt-get install php7.2-cli php7.2-xml php7.2-mbstring php7.2-bcmath php7.2-mysql php7.2-zip
-composer npm docker.io docker-compose
+$ sudo apt-get install php7.2-cli php7.2-xml php7.2-mbstring php7.2-bcmath php7.2-mysql php7.2-zip \
+  composer npm docker.io docker-compose
 ```
 An installation of Archivematica ( https://github.com/artefactual/archivematica ) set up using docker-compose (See Archivematica Documentation)
 
@@ -38,7 +38,7 @@ An installation of Archivematica ( https://github.com/artefactual/archivematica 
 First of all, make sure your user is member of the docker group, by for example issuing:
 
 ```
-sudo usermod -aG docker $USER
+$ sudo usermod -aG docker $USER
 ```
 
 This allows you to work with dockers as a normal user.
@@ -46,22 +46,22 @@ This allows you to work with dockers as a normal user.
 To enable feedback from Archivematica you will need to export some variables for the build script.
 The storage location identifier you will find by logging in to the Archivematica Storage Service via your browser. Navigate to the **Locations** tab and copy the UUID for **Transfer Source**. Export the variables to your shell:
 ```
-export STORAGE_LOCATION_ID=[UUID]
-export UPDATE_AM_SERVICE_CALLBACKS=true
+$ export STORAGE_LOCATION_ID=[UUID]
+$ export UPDATE_AM_SERVICE_CALLBACKS=true
 ```
 
 Now, go to the deploy/ folder, and run the build script:
 
 ```
-cd deploy/
-./automated-build-connect.sh
+$ cd deploy/
+$ ./automated-build-connect.sh
 ```
 
 If all goes well, you should now after the build process, have a working development environment for piqlConnect, and should be able to type:
 
 
 ```
-npm run dev
+$ npm run dev
 
 ```
 
