@@ -6,6 +6,14 @@ echo 'Copy env file'
 cd .. || exit $?
 cp .env.example .env || exit $?
 
+if [[ ! -z $UPDATE_AM_SERVICE_CALLBACKS ]] ; then
+  which lynx >& /dev/null
+  if [ $? -ne 0 ] ; then
+    echo "ERROR: Please install lynx"
+    exit 1
+  fi
+fi
+
 echo 'Update storage location id'
 if [[ ! -z $STORAGE_LOCATION_ID ]] ; then
   replaceString=$(cat .env | grep STORAGE_LOCATION_ID)
