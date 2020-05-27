@@ -26,7 +26,7 @@ class DipController extends Controller
     public function index( Request $request )
     {
         $q = Dip::query();
-        $terms = collect(explode(" ", $request->query('search')));
+        $terms = collect(explode(" ", $request->query('search')))->reject("");
         $archiveUuid = $request->query('archive');
         $holdingTitle = $request->query('holding');
         $fromDate = $request->query('archived_from');
@@ -66,23 +66,22 @@ class DipController extends Controller
         }
 
         if($terms->count() == 1) {
-            return DipResource::collection(
-                $q->whereHas('storage_properties.bag',
+            $q->whereHas('storage_properties.bag',
                 function( $bag ) use( $terms ) {
                     $bag->where('name', 'LIKE', "%{$terms->first()}%");
-                })->paginate( env('DEFAULT_ENTRIES_PER_PAGE') )
-            );
-        } elseif( $terms->count() > 1) {
-                $terms->each( function ($term, $key) use ($q) {
-                        $q->whereHas('storage_properties.bag',
-                            function( $bag ) use ($term) {
-                                $bag->where('name','LIKE',"%{$term}%");
-                            });
                 });
-                return DipResource::collection(
-                    $q->paginate( env('DEFAULT_ENTRIES_PER_PAGE') )
-                );
+        } elseif( $terms->count() > 1) {
+            $terms->each( function ($term, $key) use ($q) {
+                $q->whereHas('storage_properties.bag',
+                    function( $bag ) use ($term) {
+                        $bag->where('name','LIKE',"%{$term}%");
+                    });
+            });
         }
+
+        return DipResource::collection(
+            $q->paginate( env('DEFAULT_ENTRIES_PER_PAGE') )
+        );
     }
 
     public function package_thumbnail( Request $request, ArchivalStorageInterface $storage )
