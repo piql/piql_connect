@@ -57,8 +57,8 @@ You also need to add two callbacks to the **Archivematica Storage Service** (not
 Event: Post-store AIP / Post-store DIP
 URI: -
 Method: POST
-Headers 1:
-Headers 2:
+Headers 1 <key> / <value>: Authorization / -
+Headers 2 <key> / <value>: Accept / application/json
 Body:
 Expected status: 200
 ```
