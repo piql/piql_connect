@@ -43,6 +43,13 @@ sudo usermod -aG docker $USER
 
 This allows you to work with dockers as a normal user.
 
+To enable feedback from Archivematica you will need to export some variables for the build script.
+The storage location identifier you will find by logging in to the Archivematica Storage Service via your browser. Navigate to the **Locations** tab and copy the UUID for **Transfer Source**. Export the variables to your shell:
+```
+export STORAGE_LOCATION_ID=[UUID]
+export UPDATE_AM_SERVICE_CALLBACKS=true
+```
+
 Now, go to the deploy/ folder, and run the build script:
 
 ```
