@@ -1,13 +1,13 @@
 <template>
-    <div class="screensize">
-        <div class="container-fluid p-0">
+    <div class="screensize" style="height:100%">
+        <div class="container-fluid p-0" style="height:inherit;">
             <top-bar />
-            <div class="d-flex flex-row">
-                <div class="d-flex">
+            <div class="d-flex flex-row overflow-auto" style="height:inherit;">
+                <div class="d-flex" style="min-height:inherit; max-height:5000px; height:inherit; margin-top:130px;">
                     <side-bar :width="currentWidth" :fullname="fullname" />
                 </div>
                 <div class="d-flex flex-nowrap mr-auto ml-auto pr-4 pl-4 w-100 justify-content-center">
-                    <router-view :height="currentHeight" :width="currentWidth"></router-view>
+                    <router-view :height="currentHeight" :width="currentWidth"></router-view> 
                 </div>
             </div>
             <resize-observer @notify="handleResize"></resize-observer>

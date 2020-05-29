@@ -1,6 +1,8 @@
 <template>
     <div class="w-100">
+        
         <page-heading icon="fa-tachometer-alt" :title="$t('upload.title')" :ingress="$t('upload.ingress')" />
+       
 
         <form v-on:submit.prevent>
         <div class="row form-group mt-2 mb-2">
@@ -16,6 +18,7 @@
                     </div>
                 </FileInputComponent>
             </div>
+             
 
             <div v-show="compoundModeEnabled" class="col-2 text-left" >
                 <label for="bagname" class="col-form-label-sm">{{$t("upload.sipName")}}</label>
@@ -51,29 +54,58 @@
             </div>
         </div>
 
-        <div class="row plistHeader">
-            <div class="col-7 text-left">
-                {{$t('upload.fileName')}}
-            </div>
-            <div class="col-2 text-right">
-                {{$t('upload.fileSize')}}
-            </div>
-            <div class="col-3 text-center">
-                {{$t('upload.fileActions')}}
-            </div>
-        </div>
+        <div class="table-responsive-sm">
+            <table class="table table-stripped table-md" style="background-color:#fff;">
+            <thead class="thead-light">
+                <tr>
+                    <th>{{$t('upload.fileName')}}</th>
+                    <th>{{$t('upload.fileSize')}}</th>
+                    <th>{{$t('upload.fileActions')}}</th>
+                
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="(file,index) in sortedFilesUploading" :key="file.id" v-if="index >= pageFrom-1 && index <= pageTo-1 ">
+                    <td>
+                        <div @load="singleFile(file)" v-if="isUploading" class="progress upload-progress bg-fill">
+                            <div class="progress-bar bg-brand text-left" role="progressbar" v-bind:style="progressBarStyle" v-bind:aria-valuenow="progressPercentage" aria-valuemin="0" aria-valuemax="100">
+                                <span class="upload-text">{{file.filename}}</span>
+                            </div>
+                        </div>
+                        <div v-else>
+                            <span class="d-inline" tabindex="0" data-toggle="tooltip" :title="file.filename">
+                                <div class="text-left">
+                                    {{file.filename}}
+                                </div>
+                            </span>
+                        </div>
+                    </td>
+                    <td> {{file.readableSize}}</td>
+                    <td>
+                        <span v-if="file.isComplete">
+                            <a @click="metadataClicked (file)" class="btn btn-md btn-info" style="color:white;" data-toggle="tooltip" title="Edit metadata"><i class="fa fa-tags"></i></a>
+                            <a @click="removeClicked (file)" class="btn btn-md btn-danger" style="color:white;" data-toggle="tooltip" :title="$t('upload.remove')"><i class="fa fa-trash"></i></a>
+                        </span>
+                        <span v-if="file.isFailed">
+                            <a @click="retryClicked (file)" data-toggle="tooltip" :title="$t('upload.resumeOne')"><i class="fa fa-redo-alt"></i></a>
+                            <a @click="removeFailedClicked (file)" data-toggle="tooltip" :title="$t('upload.remove')"><i class="fa fa-trash"></i></a>
+                        </span>
+                    </td>
+                </tr>
 
-        <UploadFileItem v-for="(file,index) in sortedFilesUploading" v-bind:file="file" :key="file.id"
-            @metadataClicked="metadataClicked" @removeClicked="removeClicked"
-            @retryClicked="retryClicked" @removeFailedClicked="removeFailedClicked"
-            v-if="index >= pageFrom-1 && index <= pageTo-1 "
-            class="mr-1 ml-1"/>
-        <div class="row plist invisible" v-for="pad in pagerPad"></div>
-        <div class="row text-center pagerRow">
-            <div class="col">
-                <Pager :meta="filesUploadingMeta" :height="height" v-if="totalFilesUploading > 0" />
-            </div>
+            </tbody>
+        </table>
+        
+        <div class="text-center">
+            <Pager :meta="filesUploadingMeta" :height="height" v-if="totalFilesUploading > 0" />
+                
         </div>
+        
+    
+            
+        </div>
+        
+        
     </form>
     </div>
 </template>
@@ -247,6 +279,7 @@ export default {
             bagName: "",
             files: {},
             filesUploading: [],
+            file:{},
             userId: '',
             userSettings: {
                 workflow: {
@@ -257,9 +290,9 @@ export default {
             selectedArchive: "",
             selectedHolding: "",
             currentPage: 1,
-            pageSize: 4,
+            pageSize: 10,
             pageFrom: 1,
-            pageTo: 4,
+            pageTo: 10,
             fileNameFilter: ""
         };
     },
@@ -269,7 +302,23 @@ export default {
     },
 
     computed: {
+        
+            progressBarStyle() {
+                return this.file.progressBarStyle;
+            },
+            progressPercentage() {
+                return this.file.progressPercentage;
+            },
+            isUploading() {
+                return this.file.isUploading;
+            },
         sortedFilesUploading() {
+            this.filesUploading.forEach(file => {
+                file.readableSize = this.isUploading ? filesize(file.uploadedFileSize, {round: 0}) + " / " + filesize(file.fileSize, {round: 0})
+                    : filesize(file.fileSize, {round: 0});
+                
+            });
+
             return this.filesUploading
                 .filter( f => !f.isHidden )
                 .sort( (a,b)  => Number( b.isFailed ) - Number( a.isFailed ) )

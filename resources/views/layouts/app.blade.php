@@ -28,8 +28,8 @@
             @yield('content')
         </div>
 @else
-    <body>
-        <div id="app">
+    <body style="height:100%">
+        <div id="app" style="height:100%">
             <index fullname="{{ Auth::user()->full_name }}"></index>
         </div>
 @endif

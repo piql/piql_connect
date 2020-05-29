@@ -50,7 +50,7 @@ sudo chown 333:$USER -R ../vendor || exit $?
 sudo chown 333:$USER -R ../config || exit $?
 sudo chown 333:$USER -R ../public || exit $?
 sudo chown 333:$USER -R ../resources/js || exit $?
-mkdir ../.config || exit $? # Only for Tinker
+mkdir -p ../.config || exit $? # Only for Tinker
 sudo chown 333:$USER -R ../.config || exit $? # Only for Tinker
 
 # Tell docker about the server

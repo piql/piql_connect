@@ -1,6 +1,6 @@
 <template>
-    <div :class="responsiveSidebarColumns">
-        <div :class="adaptToScreenWidth">
+    <div :class="responsiveSidebarColumns" style="height:100%">
+        <div :class="adaptToScreenWidth" style="height:100%" >
             <div class="welcomeText" :class="invisibleIfNarrow">
                 <p class="mb-1">{{$t("Welcome")}}</p>
                 <p><i class="fas fa-user"></i> {{ fullname }}</p>
@@ -103,9 +103,8 @@
 
             <div class="poweredBy" :class="invisibleIfNarrow">
                 <div class="poweredByText">Powered by </div>
-                <span class="poweredByImg"><img src="/images/piql_logo_white.png">
+                    <span class="poweredByImg"><img src="/images/piql_logo_white.png">
                     </span>
-                </div>
             </div>
         </div>
     </div>

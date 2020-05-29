@@ -1,5 +1,5 @@
 <template>
-    <div class="piqlTop">
+    <div class="piqlTop fixed-top">
         <nav class="navbar-expand navbar-light">
             <div class="row pt-3">
                 <div class="col-md-3 ">
