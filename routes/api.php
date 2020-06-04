@@ -17,6 +17,17 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+Route::group(['prefix' => 'v1/admin'], function () {
+   Route::get('', 'Api\Admin\PermissionsController@index');
+   Route::get('{id}', 'Api\Admin\PermissionsController@show')->where('id', '[0-9]+');
+   Route::put('{id}', 'Api\Admin\PermissionsController@update')->where('id', '[0-9]+');
+   Route::get('groups', 'Api\Admin\PermissionsController@listGroups');
+   Route::post('group', 'Api\Admin\PermissionsController@createGroup');
+   Route::get('group/{id}', 'Api\Admin\PermissionsController@getGroup')->where('id', '[0-9]+');
+   Route::get('group/{id}/actions', 'Api\Admin\PermissionsController@listGroupActions')->where('id', '[0-9]+');
+   Route::post('group/{id}/action', 'Api\Admin\PermissionsController@createAction')->where('id', '[0-9]+');
+});
+
 
 Route::get('test/getThumbnail', 'Api\Access\ThumbnailController@testThumbnail')->name('testThumbnail');;
 Route::get('test/getPreview', 'Api\Access\ThumbnailController@testPreview');
