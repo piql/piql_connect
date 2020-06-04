@@ -14,7 +14,7 @@ class Job extends Model
     protected $fillable = [
         'name', 'status', 'owner'
     ];
-    protected $appends = ['archive_objects', 'bucket_size'];
+    protected $appends = ['archive_objects', 'bucket_size', 'size'];
 
     public static function boot()
     {
@@ -61,6 +61,10 @@ class Job extends Model
 
     public function getArchiveObjectsAttribute() {
         return $this->aips()->count();
+    }
+
+    public function getSizeAttribute() {
+        return $this->aips()->sum("size");
     }
 
     public function getBucketSizeAttribute()

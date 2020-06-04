@@ -48,6 +48,7 @@ class OfflineStorageControllerTest extends TestCase
                 "size" => $this->job->bucketSize,
             ]);
             $aip->fileObjects()->save($file);
+            $aip->update(["size" => $aip->fileObjects()->sum("size")]);
             $this->job->aips()->save($aip);
         });
 
@@ -125,6 +126,62 @@ class OfflineStorageControllerTest extends TestCase
                 ['status' => "closed"]);
         $response->assertStatus( 200 )
             ->assertJsonFragment(['status' => "created"]);
+    }
+
+    public function test_given_an_authenticated_user_and_deleting_a_valid_bucket_it_responds_204()
+    {
+        $response = $this->actingAs( $this->user )
+            ->json('DELETE',
+                route('api.ingest.bucket.delete', [$this->job->id]));
+        $response->assertStatus( 204 );
+        $this->assertEquals( 0, \DB::table("archivables")->where("archive_id", $this->job->id)->count());
+    }
+
+    public function test_given_an_authenticated_user_and_deleting_an_invalid_bucket_it_responds_404()
+    {
+        $response = $this->actingAs( $this->user )
+            ->json('DELETE',
+                route('api.ingest.bucket.delete', [$this->job->id]));
+        $response->assertStatus( 204 );
+
+        $response = $this->actingAs( $this->user )
+            ->json('DELETE',
+                route('api.ingest.bucket.delete', [$this->job->id]));
+        $response->assertStatus( 404 )
+            ->assertJsonFragment(['error' => 404]);
+    }
+
+    public function test_given_an_authenticated_user_and_detaching_a_dip_from_a_valid_bucket_it_responds_204()
+    {
+        $aipCount = $this->job->aips()->count();
+        $response = $this->actingAs( $this->user )
+            ->json('DELETE',
+                route('api.ingest.bucket.detach.dip', [$this->job->id, $this->aips[0]->storage_properties->dip->id]));
+        $response->assertStatus( 204 );
+        $this->assertEquals( $aipCount-1, \DB::table("archivables")->where("archive_id", $this->job->id)->count());
+    }
+
+    public function test_given_an_authenticated_user_and_detaching_a_dip_from_an_invalid_bucket_it_responds_404()
+    {
+        $aipCount = $this->job->aips()->count();
+        $response = $this->actingAs( $this->user )
+            ->json('DELETE',
+                route('api.ingest.bucket.detach.dip', [Uuid::generate()->string, $this->aips[0]->storage_properties->dip->id]));
+        $response->assertStatus( 404 )
+            ->assertJsonFragment(['error' => 404]);
+        $this->assertEquals( $aipCount, \DB::table("archivables")->where("archive_id", $this->job->id)->count());
+    }
+
+
+    public function test_given_an_authenticated_user_and_detaching_an_invalid_dip_from_a_bucket_it_responds_404()
+    {
+        $aipCount = $this->job->aips()->count();
+        $response = $this->actingAs( $this->user )
+            ->json('DELETE',
+                route('api.ingest.bucket.detach.dip', [$this->job->id, Uuid::generate()->string]));
+        $response->assertStatus( 404 )
+            ->assertJsonFragment(['error' => 404]);
+        $this->assertEquals( $aipCount, \DB::table("archivables")->where("archive_id", $this->job->id)->count());
     }
 
 }

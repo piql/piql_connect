@@ -37,6 +37,7 @@ class AddAipToBucketListenerTest extends TestCase
                "size" => $this->job->bucketSize,
             ]);
             $aip->fileObjects()->save($file);
+            $aip->size = $aip->fileObjects()->sum("size");
         });
 
 
@@ -54,8 +55,6 @@ class AddAipToBucketListenerTest extends TestCase
     public function test_add_aip_to_full_bucket()
     {
         $this->job->aips()->save($this->aips[0]);
-        $this->job->size += $this->aips[0]->size;
-        $this->job->save();
         $listener = new AddAipToBucketListener();
         $listener->handle( new InformationPackageUploaded($this->aips[1]));
         $this->job = $this->job->refresh();

@@ -41,8 +41,6 @@ class AddAipToBucketListener implements ShouldQueue
                 $job->save();
                 $job = Job::currentJob($event->informationPackage->owner);
             }
-            $job->size += $aipSize;
-            $job->save();
             $job->aips()->save($aip);
         }
     }

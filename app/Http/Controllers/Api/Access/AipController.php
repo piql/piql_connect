@@ -102,7 +102,7 @@ class AipController extends Controller
         $dip = \App\Dip::find( $request->dipId );
         $aip = $dip->storage_properties->aip;
         $result = $fileArchiveService->buildTarFromAipIncrementally( $aip );
-        return response()->download( $result )->deleteFileAfterSend(); 
+        return response()->download( $result )->deleteFileAfterSend();
     }
 
 
