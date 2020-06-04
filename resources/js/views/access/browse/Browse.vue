@@ -16,7 +16,7 @@
 
 <script>
 
-import RouterTools from '../../mixins/RouterTools.js';
+import RouterTools from '@mixins/RouterTools.js';
 
 import axios from 'axios';
 import JQuery from 'jquery';

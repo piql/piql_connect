@@ -44,6 +44,10 @@ export default {
             type: String,
             default: "/api/v1/ingest/files",
         },
+        urlParam: {
+            type: String,
+            default: "fileId"
+        },
         schemes: {
             type: Array,
             default : () => [
@@ -75,8 +79,11 @@ export default {
     },
 
     computed: {
+        idParam: function() {
+            return this.$route.params[this.urlParam];
+        },
         url: function() {
-            return `${this.baseUrl}/${this.$route.params.fileId}/metadata`;
+            return `${this.baseUrl}/${this.idParam}/metadata`;
         }
     },
     async mounted () {

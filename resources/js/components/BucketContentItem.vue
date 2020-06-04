@@ -16,7 +16,7 @@
             {{fileCount}}
         </div>
         <div class="col-sm-3 d-inline-block align-self-center text-center">
-            <router-link :to="{ name: 'ingest.browse.aip', params: { dipId: item.id } }" data-toggle="tooltip" title="Access contents" ><i class="fas fa-folder-open actionIcon"></i></router-link>
+            <button class="btn-tiny m-auto" @click="openObject" data-toggle="tooltip" title="Access contents"> <i class="fas fa-folder-open actionIcon"></i> </button>
             <button class="btn-tiny m-auto" @click="preview" href="" data-toggle="tooltip" title="Preview image"><i class="fas fa-eye actionIcon"></i></button>
             <button class="btn-tiny m-auto" @click="removeAip" href="" data-toggle="tooltip" title="Remove AIP from bucket"><i class="fas fas fa-trash-alt actionIcon"></i></button>
         </div>
@@ -64,6 +64,9 @@ export default {
                 );
             });
         },
+        openObject: function() {
+            this.$emit('openObject', this.item.id);
+        }
     },
     computed: {
         fileCount: function(){

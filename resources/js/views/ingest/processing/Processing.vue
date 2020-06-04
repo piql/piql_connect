@@ -24,7 +24,7 @@
 
 <script>
     import axios from 'axios';
-    import RouterTools from '../../mixins/RouterTools.js';
+    import RouterTools from '@mixins/RouterTools.js';
 
 export default {
         mixins: [ RouterTools ],

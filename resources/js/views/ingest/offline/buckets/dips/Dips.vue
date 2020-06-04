@@ -14,11 +14,11 @@
 
 <script>
 
-import RouterTools from '../../mixins/RouterTools.js';
+import RouterTools from '@mixins/RouterTools.js';
 
 import axios from 'axios';
 import JQuery from 'jquery';
-import BucketContentList from "../../components/BucketContentList";
+import BucketContentList from "@components/BucketContentList";
 let $ = JQuery;
 
 export default {
@@ -69,6 +69,9 @@ export default {
         currentObjects: function() {
             return this.dataObjects;
         },
+        bucketId: function() {
+            return this.$route.params.bucketId;
+        },
     },
     watch: {
         '$route': 'dispatchRouting'
@@ -91,7 +94,7 @@ export default {
             this.refreshObjects( this.apiQueryString );
         },
         refreshObjects( apiQueryString ){
-            axios.get("/api/v1/ingest/offline_storage/pending/jobs/"+this.$route.params.bucketId+"/dips"+apiQueryString).then( (aips ) => {
+            axios.get("/api/v1/ingest/offline_storage/pending/jobs/"+this.bucketId+"/dips"+apiQueryString).then( (aips ) => {
                 this.dataObjects = aips.data.data;
                 this.packagePageMeta = aips.data.meta;
                 if(this.packagePageMeta.last_page < this.$route.query.page) {
@@ -100,7 +103,7 @@ export default {
             });
         },
         openObject: function( dipId ) {
-            this.$router.push({ name: 'access.browse.dip', params: { dipId }, query: {} });
+            this.$router.push({ name: 'ingest.offline.buckets.dips.files', params: { bucketId: this.bucketId, dipId }, query: {} });
         },
         onDelete: function( dipId ) {
             this.refreshObjects( this.apiQueryString );

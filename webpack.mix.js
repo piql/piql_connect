@@ -1,26 +1,24 @@
 const mix = require('laravel-mix');
 
-mix.js('resources/js/app.js', 'public/js');
+mix.webpackConfig({
+    resolve: {
+        alias: {
+            '@js': path.resolve(__dirname, 'resources/js/'),
+            '@views': path.resolve(__dirname, 'resources/js/views/'),
+            '@components': path.resolve(__dirname, 'resources/js/components/'),
+            '@mixins': path.resolve(__dirname, 'resources/js/mixins/'),
+        }
+    }
+});
 
-mix.js([
-        'node_modules/fine-uploader-wrappers/base-wrapper.js',
-        'node_modules/fine-uploader-wrappers/callback-names.js',
-        'node_modules/fine-uploader-wrappers/callback-proxy.js',
-        'node_modules/fine-uploader-wrappers/traditional.js',
-        'node_modules/fine-uploader/fine-uploader/fine-uploader.js',
-        'node_modules/vue-chartjs/dist/vue-chartjs.js',
-        'node_modules/bootstrap-vue/dist/bootstrap-vue.min.js',
-        'node_modules/vue-cookie/src/vue-cookie.js',
-        'node_modules/chart.js/dist/Chart.js'
-        ],'public/js/vendor.js').sourceMaps();
-
-
+mix.js('resources/js/app.js', 'public/js')
+    .extract()
+    .sourceMaps();
 
 mix.copyDirectory('resources/images/', 'public/images')
     .copyDirectory('resources/fa/webfonts/', 'public/webfonts')
     .copy('resources/fonts/Agenda/*', 'public/fonts')
-    .copy('resources/fonts/Open_Sans/*', 'public/fonts')
-    .copy('resources/css/bootstrap.min.css.map', 'public/css');
+    .copy('resources/fonts/Open_Sans/*', 'public/fonts');
 
 mix.sass('resources/sass/app.scss', 'public/css')
       .options({
@@ -44,7 +42,7 @@ mix.styles([
             'node_modules/fine-uploader/fine-uploader/fine-uploader.css',
             'node_modules/fine-uploader/fine-uploader/fine-uploader-gallery.css',
             'node_modules/vue-resize/dist/vue-resize.css',
-], 'public/css/vendor.css').sourceMaps();
+], 'public/css/vendor.css');
 
 mix.autoload({
         'jquery': ['$', 'window.jQuery', 'jQuery'],
