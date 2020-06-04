@@ -1,13 +1,15 @@
 <template>
-    <div class="form-group row">
-        <label v-if="showLabel" for="languagePicker" class="col-2 col-form-label-sm">
-            {{label}}
-        </label>
-        <select v-model="selection" id="languagePicker" class="col-4" data-live-search="true" @change="selectionChanged">
-          <option v-for="language in languages" v-bind:value="language.code">
-            {{language.title}}
-          </option>
-       </select>
+    <div class="ml-3">
+        <div class="form-group row">
+            <label v-if="showLabel" for="languagePicker" class="col-form-label-sm">
+                {{label}}
+            </label>
+            <select v-model="selection" id="languagePicker" class="col-3 form-control" data-live-search="true" @change="selectionChanged">
+                <option v-for="language in languages" v-bind:value="language.code">
+                    {{language.title}}
+                </option>
+            </select>
+        </div>
     </div>
 </template>
 

@@ -38,6 +38,7 @@ Route::group(['prefix' => 'v1' , 'middleware' => ['auth:api', 'activity']], func
         Route::get('languages', 'Api\System\SystemController@languages');
         Route::get('sessionLifetime', 'Api\System\SystemController@sessionLifetime');
         Route::post('settings', 'Api\System\UserSettingsController@updateSettings');
+        Route::post('currentUserPassword', 'Api\System\UserSettingsController@updateCurrentUserPassword');
     });
 
     Route::group(['prefix' => 'ingest'], function() {
