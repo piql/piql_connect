@@ -10,10 +10,10 @@
             </div>
 
             <ul class="list-inline">
-                <span :class="collapseInactiveComponent('stats')">
+                <span :class="{ collapse: !routeBelongsTo('stats') }">
 
                     <router-link :to="{ name: 'stats.dashboard' }">
-                        <li class="list-group-item" :class="currentRouteActiveClass('stats.dashboard')" >
+                        <li class="list-group-item" :class="{ active: routeBelongsTo('stats.dashboard') }" >
                             <i class="fas fa-tachometer-alt"></i>
                             <div class="leftMenuItem">
                                 {{$t('sidebar.dashboard')}}
@@ -23,74 +23,74 @@
 
                 </span>
 
-                <span :class="collapseInactiveComponent('ingest')">
+                <span :class="{ collapse: !routeBelongsTo('ingest') }">
 
                     <router-link :to="{ name: 'ingest.uploader' }">
-                        <li class="list-group-item" :class="currentRouteActiveClass('ingest.uploader')" >
+                        <li class="list-group-item" :class="{ active: routeBelongsTo('ingest.uploader') }" >
                             <i class="fas fa-upload"></i>
                             <div class="leftMenuItem">{{$t('sidebar.upload')}}</div>
                         </li>
                     </router-link>
 
                     <router-link :to="{ name: 'ingest.processing' }">
-                        <li class="list-group-item" :class="currentRouteActiveClass('ingest.processing')" >
+                        <li class="list-group-item" :class="{ active: routeBelongsTo('ingest.processing') }" >
                             <i class="fas fa-hourglass-half"></i><div class="leftMenuItem">{{$t('sidebar.processing')}}</div>
                         </li>
                     </router-link>
 
                     <router-link :to="{ name: 'ingest.offline'}">
-                        <li class="list-group-item" :class="currentRouteActiveClass('ingest.offline')" >
+                        <li class="list-group-item" :class="{ active: routeBelongsTo('ingest.offline') }" >
                             <i class="fas fa-clock"></i><div class="leftMenuItem">{{$t('sidebar.taskList')}}</div>
                         </li>
                     </router-link>
 
                     <router-link :to="{ name: 'ingest.status' }">
-                        <li class="list-group-item" :class="currentRouteActiveClass('ingest.status')" >
+                        <li class="list-group-item" :class="{ active: routeBelongsTo('ingest.status') }" >
                             <i class="fas fa-clipboard-check"></i><div class="leftMenuItem">{{$t('sidebar.status')}}</div>
                         </li>
                     </router-link>
 
                 </span>
 
-                <span :class="collapseInactiveComponent('access')">
+                <span :class="{ collapse: !routeBelongsTo('access') }">
 
                     <router-link :to="{ name: 'access.browse' }">
-                        <li class="list-group-item" :class="currentRouteActiveClass('access.browse')" >
+                        <li class="list-group-item" :class="{ active: routeBelongsTo('access.browse') }" >
                             <i class="fas fa-hdd"></i><div class="leftMenuItem">{{$t('sidebar.browse')}}</div>
                         </li>
                     </router-link>
 
-                    <span :class="collapseInactiveSubComponent('access.browse')">
+                    <span :class="{ collapse: !routeBelongsTo('access.browse') }">
                         <router-link :to="{ name: 'access.retrieve.ready' }">
-                            <li class="list-group-item" :class="currentRouteActiveClass('access.retrieve.ready')" >
+                            <li class="list-group-item" :class="{ active: routeBelongsTo ('access.retrieve.ready') }" >
                                 <i class="fas fa-file-export"></i><div class="leftMenuItem">{{$t('sidebar.retrieve')}}</div>
                             </li>
                         </router-link>
                     </span>
 
 
-                    <span :class="collapseInactiveSubComponent('access.retrieve')">
+                    <span :class="{ collapse: !routeBelongsTo('access.retrieve') }">
 
                         <router-link :to="{ name: 'access.retrieve.ready' }">
-                            <li class="list-group-item" :class="currentRouteActiveClass('access.retrieve.ready')" >
+                            <li class="list-group-item" :class="{ active: routeBelongsTo('access.retrieve.ready') }" >
                                 <i class="fas fa-file-export"></i><div class="leftMenuItem">{{$t('sidebar.retrieve.readyToRetrieve')}}</div>
                             </li>
                         </router-link>
 
                         <router-link :to="{ name: 'access.retrieve.now' }">
-                            <li class="list-group-item" :class="currentRouteActiveClass('access.retrieve.now')" >
+                            <li class="list-group-item" :class="{ active: routeBelongsTo('access.retrieve.now') }" >
                                 <i class="fas fa-spinner"></i><div class="leftMenuItem">{{$t('sidebar.retrieve.retrieving')}}</div>
                             </li>
                         </router-link>
 
                         <router-link :to="{ name: 'access.retrieve.download' }">
-                            <li class="list-group-item" :class="currentRouteActiveClass('access.retrieve.download')" >
+                            <li class="list-group-item" :class="{ active: routeBelongsTo('access.retrieve.download') }" >
                                 <i class="fas fa-file-download"></i><div class="leftMenuItem">{{$t('sidebar.retrieve.downloadable')}}</div>
                             </li>
                         </router-link>
 
                         <router-link :to="{ name: 'access.retrieve.history' }">
-                            <li class="list-group-item" :class="currentRouteActiveClass('access.retrieve.history')" >
+                            <li class="list-group-item" :class="{ active: routeBelongsTo('access.retrieve.history') }" >
                                 <i class="fas fa-history"></i><div class="leftMenuItem">{{$t('sidebar.retrieve.history')}}</div>
                             </li>
                         </router-link>
@@ -146,32 +146,8 @@ export default {
         },
     },
     methods: {
-        isCurrentRoute( checkRoute ) {
-            return this.$route.name === checkRoute;
-        },
-        isCurrentComponentRoute( checkRoute ) {
-            let base = this.$route.name.split(".")[0];
-            return base === checkRoute;
-        },
-        isCurrentSubComponentRoute( checkRoute ) {
-            let base = this.$route.name.split(".").slice(0,2).join(".");
-            return base === checkRoute;
-        },
-        currentRouteActiveClass( route ) {
-            if( this.isCurrentRoute( route ) ) return "active";
-            return "";
-        },
-        collapseInactiveComponent( route ) {
-            if( ! this.isCurrentComponentRoute( route ) ) {
-                return "collapse";
-            }
-            return "";
-        },
-        collapseInactiveSubComponent( route ) {
-            if( ! this.isCurrentSubComponentRoute( route ) ) {
-                return "collapse";
-            }
-            return "";
+        routeBelongsTo( checkRoute ) {
+            return this.$route.name.startsWith( checkRoute );
         },
     }
 }

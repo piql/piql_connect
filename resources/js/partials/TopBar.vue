@@ -21,17 +21,17 @@
 
                 <div class="col-md-7 navLinks w-100">
                     <ul class="navbar-nav m-auto signal">
-                        <li class="navbar" :class="currentRouteActiveClass('home')">
+                        <li class="navbar" :class="[ routeBelongsTo('stats') ? 'top-active' : 'top-inactive' ]">
                             <router-link :to="{ name: 'stats.dashboard'}">{{$t('Home')}}</router-link>
                         </li>
-                        <li class="navbar" :class="currentRouteActiveClass('ingest')">
+                        <li class="navbar" :class="[ routeBelongsTo('ingest') ? 'top-active' : 'top-inactive' ]">
                             <router-link :to="{ name: 'ingest.uploader' }">{{$t('Ingest')}}</router-link>
                         </li>
-                        <li class="navbar" :class="currentRouteActiveClass('access')">
+                        <li class="navbar" :class="[ routeBelongsTo('access') ? 'top-active' : 'top-inactive' ]">
                             <router-link :to="{ name: 'access.browse' }">{{$t('Access')}}</router-link>
                         </li>
 
-                        <li class="navbar" :class="currentRouteActiveClass('settings')" data-toggle="tooltip" :title="$t('sidebar.settings')" >
+                        <li class="navbar" :class="[ routeBelongsTo('settings') ? 'top-active' : '']" data-toggle="tooltip" :title="$t('sidebar.settings')" >
                             <router-link :to="{ name: 'settings.user' }">
                                 <i class="fas fa-cogs plistIcon navbar" ></i>
                             </router-link>
@@ -68,18 +68,9 @@ export default {
         },
     },
     methods: {
-        isCurrentRoute( checkRoute ) {
-            return this.$route.name === checkRoute;
+        routeBelongsTo( checkRoute ) {
+            return this.$route.name.startsWith( checkRoute );
         },
-        isCurrentComponentRoute( checkRoute ) {
-            let base = this.$route.name.split(".");
-            return base[0] && base[0] === checkRoute;
-        },
-        currentRouteActiveClass( route ) {
-            if( this.isCurrentComponentRoute( route ) ) return  "top-active";
-            return "top-inactive";
-        }
-
     }
 
 }
