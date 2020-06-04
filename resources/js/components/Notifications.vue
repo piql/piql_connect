@@ -26,7 +26,6 @@
         },
         methods: {
           toggleShowNotifications: function(){
-              return;
                 this.showNotifications = !this.showNotifications;
             },
             async listen() {

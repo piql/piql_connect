@@ -9,7 +9,7 @@
             <div class="col-sm-3 text-center">{{$t("access.browse.header.actions")}}</div>
         </div>
 
-        <bucket-content-item  v-for="item in dataObjects" :item="item" :key="item.id" @showPreview="showPreview"/>
+        <bucket-content-item  v-for="item in dataObjects" :item="item" :key="item.id" @openObject="openObject"  @showPreview="showPreview"/>
         <VueEasyLightbox
             :visible="lbVisible"
             :imgs="previewImages"
@@ -45,8 +45,8 @@ import VueEasyLightbox from 'vue-easy-lightbox';
         }
     },
     methods: {
-        openObject: function(item) {
-            this.$emit('openObject', item);
+        openObject: function(itemId) {
+            this.$emit('openObject', itemId);
         },
         async showPreview ( dip ) {
             /* Grab all previews from a dip and convert to b64, then push to the lightbox.

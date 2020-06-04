@@ -12,7 +12,7 @@
             </div>
         </div>
 
-        <aip-browser-file-item v-for="item in dipFiles" :item="item" :key="item.id"/>
+        <aip-browser-file-item v-for="item in dipFiles" :item="item" :key="item.id" @showMetadata="showMetadata" />
 
         <Pager :meta='meta' :height='height' />
 
@@ -24,7 +24,6 @@ export default {
     data () {
         return {
             dipFiles: [],
-            dipId: 0,
             meta: null
         }
     },
@@ -37,17 +36,29 @@ export default {
     },
 
     mounted () {
-        let params = this.$route.params;
-        let dipId = params.dipId;
-        this.openDip( dipId );
+        this.openDip( this.dipId );
+    },
+
+    computed: {
+        bucketId: function() {
+            return this.$route.params.bucketId;
+        },
+        dipId: function() {
+            return this.$route.params.dipId;
+        },
+
     },
 
     methods: {
+        showMetadata( fileId ) {
+            this.$router.push({ name:'ingest.offline.buckets.dips.files.metadata',
+                params: { bucketId: this.bucketId, dipId: this.dipId, fileId }
+            });
+        },
         openDip( dipId ) {
             axios.get("/api/v1/access/dips/"+dipId+"/files").then( async ( dipFilesResponse ) =>  {
                 this.dipFiles = dipFilesResponse.data.data;
                 this.meta = dipFilesResponse.data.meta;
-                this.dipId = dipId;
             });
         },
         close() {

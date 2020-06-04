@@ -10,10 +10,10 @@
             </div>
 
             <ul class="list-inline">
-                <span :class="collapseInactiveComponent('home')">
+                <span :class="collapseInactiveComponent('stats')">
 
-                    <router-link :to="{ name: 'home.dashboard' }">
-                        <li class="list-group-item" :class="currentRouteActiveClass('home.dashboard')" >
+                    <router-link :to="{ name: 'stats.dashboard' }">
+                        <li class="list-group-item" :class="currentRouteActiveClass('stats.dashboard')" >
                             <i class="fas fa-tachometer-alt"></i>
                             <div class="leftMenuItem">
                                 {{$t('sidebar.dashboard')}}
@@ -25,21 +25,21 @@
 
                 <span :class="collapseInactiveComponent('ingest')">
 
-                    <router-link :to="{ name: 'ingest.upload' }">
-                        <li class="list-group-item" :class="currentRouteActiveClass('ingest.upload')" >
+                    <router-link :to="{ name: 'ingest.uploader' }">
+                        <li class="list-group-item" :class="currentRouteActiveClass('ingest.uploader')" >
                             <i class="fas fa-upload"></i>
                             <div class="leftMenuItem">{{$t('sidebar.upload')}}</div>
                         </li>
                     </router-link>
 
-                    <router-link :to="{ name: 'ingest.process' }">
-                        <li class="list-group-item" :class="currentRouteActiveClass('ingest.process')" >
+                    <router-link :to="{ name: 'ingest.processing' }">
+                        <li class="list-group-item" :class="currentRouteActiveClass('ingest.processing')" >
                             <i class="fas fa-hourglass-half"></i><div class="leftMenuItem">{{$t('sidebar.processing')}}</div>
                         </li>
                     </router-link>
 
-                    <router-link :to="{ name: 'ingest.offline_storage'}">
-                        <li class="list-group-item" :class="currentRouteActiveClass('ingest.offline_storage')" >
+                    <router-link :to="{ name: 'ingest.offline'}">
+                        <li class="list-group-item" :class="currentRouteActiveClass('ingest.offline')" >
                             <i class="fas fa-clock"></i><div class="leftMenuItem">{{$t('sidebar.taskList')}}</div>
                         </li>
                     </router-link>
@@ -77,8 +77,8 @@
                             </li>
                         </router-link>
 
-                        <router-link :to="{ name: 'access.retrieve.retrieving' }">
-                            <li class="list-group-item" :class="currentRouteActiveClass('access.retrieve.retrieving')" >
+                        <router-link :to="{ name: 'access.retrieve.now' }">
+                            <li class="list-group-item" :class="currentRouteActiveClass('access.retrieve.now')" >
                                 <i class="fas fa-spinner"></i><div class="leftMenuItem">{{$t('sidebar.retrieve.retrieving')}}</div>
                             </li>
                         </router-link>

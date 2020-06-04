@@ -79,8 +79,8 @@
 </template>
 
 <script>
-import RouterTools from '../../mixins/RouterTools.js';
-import DeferUpdate from '../../mixins/DeferUpdate.js';
+import RouterTools from '@mixins/RouterTools.js';
+import DeferUpdate from '@mixins/DeferUpdate.js';
 import FineUploader from 'vue-fineuploader';
 import FineUploaderTraditional from 'fine-uploader-wrappers'
 import axios from 'axios';
@@ -357,7 +357,7 @@ export default {
             let fileId = e.uploadedFileId;
             let bagId = e.uploadedToBagId;
             if( fileId && bagId ){
-                this.$router.push({ name:'ingest.metadata.edit', params: { bagId: bagId, fileId: fileId } });
+                this.$router.push({ name:'ingest.uploader.metadata', params: { bagId: bagId, fileId: fileId } });
             }
         },
         async removeClicked( e ) {

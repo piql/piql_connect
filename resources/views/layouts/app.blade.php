@@ -17,6 +17,7 @@
         </script>
 @else
         <script type="text/javascript">Window.locale = '{{\App::getLocale()}}';</script>
+        <script type="text/javascript" src="{{ mix('js/manifest.js') }}" defer></script>
         <script type="text/javascript" src="{{ mix('js/vendor.js') }}" defer></script>
         <script type="text/javascript" src="{{ mix('js/app.js') }}" defer></script>
 @endif
@@ -30,7 +31,7 @@
 @else
     <body>
         <div id="app">
-            <index fullname="{{ Auth::user()->full_name }}"></index>
+            <layout fullname="{{ Auth::user()->full_name }}"></layout>
         </div>
 @endif
     </body>

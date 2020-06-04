@@ -9,8 +9,6 @@ require('bootstrap-select');
 require('filesize');
 
 window.Vue = require('vue');
-import VueRouter from 'vue-router';
-window.Vue.use(VueRouter);
 import {BootstrapVue} from 'bootstrap-vue';
 window.Vue.use(BootstrapVue);
 import VueInternationalization from 'vue-i18n';
@@ -91,150 +89,11 @@ let refreshSessionActivity = Vue.mixin({
 		},
 });
 
-/** Set up vue router.
- * TODO: Move this to a separate file ASAP
- */
-
-import Dashboard from './views/stats/dashboard.vue';
-import TopBar from './views/partials/TopBar.vue';
-import SideBar from './views/partials/SideBar.vue';
-
-import Upload from './views/ingest/Upload.vue';
-import IngestMetadata from './views/ingest/IngestMetadata.vue';
-import AipContentMetadata from './views/ingest/AipContentMetadata.vue';
-import Processing from './views/ingest/Processing.vue';
-import TaskList from './views/ingest/TaskList.vue';
-import IngestStatus from './views/ingest/IngestStatus.vue';
-import BucketContent from "./views/ingest/BucketContent.vue";
-import BucketMetadata from './views/ingest/BucketMetadata.vue';
-import BucketConfig from "./views/ingest/BucketConfig";
-
-
-import Browse from './views/access/Browse.vue';
-import DipBrowser from './views/access/DipBrowser.vue';
-import AipBrowser from './views/ingest/AipBrowser.vue';
-import AccessMetadata from './views/access/AccessMetadata.vue';
-import ReadyToRetrieve from './views/access/ReadyToRetrieve.vue';
-import ReadyForDownload from './views/access/ReadyForDownload.vue';
-import RetrievalHistory from './views/access/RetrievalHistory.vue';
-import NowRetrieving from './views/access/NowRetrieving.vue';
-
-import Settings from './views/settings/Settings.vue';
-import PageNotFound from './views/PageNotFound.vue';
-
-const router = new VueRouter({
-    mode: 'history',
-    routes: [
-        {
-            path: "/",
-            name: "home.dashboard",
-            component: Dashboard
-        },
-        {
-            path: "/ingest/upload",
-            name: "ingest.upload",
-            component: Upload
-        },
-        {
-            path: "/ingest/metadata/bags/:bagId/file/:fileId",
-            name: "ingest.metadata.edit",
-            component: IngestMetadata,
-        },
-        {
-            path: "/ingest/process",
-            name: "ingest.process",
-            component: Processing
-        },
-        {
-            path: "/ingest/offline_storage",
-            name: "ingest.offline_storage",
-            component: TaskList
-        },
-        {
-            path: "/ingest/offline_storage/:bucketId",
-            name: "ingest.offline_storage.bucket_content",
-            component: BucketContent
-        },
-        {
-            path: "/api/v1/ingest/offline_storage/pending/jobs/:fileId",
-            name: "ingest.offline_storage.bucket_metadata",
-            component: BucketMetadata,
-        },
-        {
-            path: "/ingest/offline_storage/dip/:dipId",
-            name: "ingest.browse.aip",
-            component: AipBrowser
-        },
-        {
-            path: "/ingest/offline_storage/dip/:dipId/file/:fileId",
-            name: "ingest.dip.metadata.view",
-            component: AipContentMetadata,
-        },
-        {
-            path: "/ingest/offline_storage/:bucketId/configuration",
-            name: "ingest.offline_storage.bucket_config",
-            component: BucketConfig
-        },
-        {
-            path: "/ingest/status",
-            name: "ingest.status",
-            component: IngestStatus
-        },
-        {
-            path: "/access/browse",
-            name: "access.browse",
-            component: Browse
-        },
-        {
-            path: "/access/browse/metadata/file/:fileId",
-            name: "access.browse.metadata",
-            component: AccessMetadata,
-            props: {
-                url: "/api/v1/access/files",
-                readOnly: true
-            },
-        },
-        {
-            path: "/access/browse/dip/:dipId",
-            name: "access.browse.dip",
-            component: DipBrowser
-        },
-        {
-            path: "/access/retrieve/ready",
-            name: "access.retrieve.ready",
-            component: ReadyToRetrieve
-        },
-        {
-            path: "/access/retrieve/retrieving",
-            name: "access.retrieve.retrieving",
-            component: NowRetrieving
-        },
-        {
-            path: "/access/retrieve/download",
-            name: "access.retrieve.download",
-            component: ReadyForDownload
-        },
-        {
-            path: "/access/retrieve/history",
-            name: "access.retrieve.history",
-            component: RetrievalHistory
-        },
-        {
-            path: "/settings",
-            name: "settings",
-            component: Settings
-        },
-        {
-            path: "*",
-            name: "PageNotFound",
-            component: PageNotFound
-        }
-    ],
-});
-
 /**
  * Finally, create the Vue application instance
  */
+
+import { router } from "./router.js";
 
 const app = new Vue({
     el: '#app',

@@ -3,7 +3,7 @@
         <nav class="navbar-expand navbar-light">
             <div class="row pt-3">
                 <div class="col-md-3 ">
-                    <router-link class="navbar-brand" :to="{ name: 'home.dashboard' }">
+                    <router-link class="navbar-brand" :to="{ name: 'stats.dashboard' }">
                         <img class="" style="position: fixed; left: 3rem; width: 15rem;" src="/images/piql-connect.png">
                     </router-link>
                 </div>
@@ -22,17 +22,21 @@
                 <div class="col-md-7 navLinks w-100">
                     <ul class="navbar-nav m-auto signal">
                         <li class="navbar" :class="currentRouteActiveClass('home')">
-                            <router-link :to="{ name: 'home.dashboard'}">{{$t('Home')}}</router-link>
+                            <router-link :to="{ name: 'stats.dashboard'}">{{$t('Home')}}</router-link>
                         </li>
                         <li class="navbar" :class="currentRouteActiveClass('ingest')">
-                            <router-link :to="{ name: 'ingest.upload' }">{{$t('Ingest')}}</router-link>
+                            <router-link :to="{ name: 'ingest.uploader' }">{{$t('Ingest')}}</router-link>
                         </li>
                         <li class="navbar" :class="currentRouteActiveClass('access')">
                             <router-link :to="{ name: 'access.browse' }">{{$t('Access')}}</router-link>
                         </li>
-                        <li class="pl-3 pr-3 plistIcon navbar">
-                            <settings-dropdown/>
+
+                        <li class="navbar" :class="currentRouteActiveClass('settings')" data-toggle="tooltip" :title="$t('sidebar.settings')" >
+                            <router-link :to="{ name: 'settings.user' }">
+                                <i class="fas fa-cogs plistIcon navbar" ></i>
+                            </router-link>
                         </li>
+
                         <li class="pr-3 plistIcon navbar"><notifications/>
                         </li>
                         <li class="pr-3 plistIcon navbar">
@@ -68,8 +72,8 @@ export default {
             return this.$route.name === checkRoute;
         },
         isCurrentComponentRoute( checkRoute ) {
-            let base = this.$route.name.split(".")[0];
-            return base === checkRoute;
+            let base = this.$route.name.split(".");
+            return base[0] && base[0] === checkRoute;
         },
         currentRouteActiveClass( route ) {
             if( this.isCurrentComponentRoute( route ) ) return  "top-active";
