@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\Ingest;
 
+use App\Dip;
 use App\Http\Resources\AipCollection;
 use App\Http\Resources\AipToDipResource;
 use Illuminate\Http\Request;
@@ -63,6 +64,23 @@ class OfflineStorageController extends Controller
         return AipToDipResource::collection( $job->aips()->paginate( env('DEFAULT_ENTRIES_PER_PAGE') ) );
     }
 
+    public function detachDip($jobId, $dipId)
+    {
+        $job = Job::find($jobId);
+        if(!isset($job) ) {
+            abort( response()->json(['error' => 404, 'message' => 'No Job with id '.$jobId.' was found.'], 404) );
+        }
+
+        $dip = Dip::find($dipId);
+        if(!isset($dip) ) {
+            abort( response()->json(['error' => 404, 'message' => 'No Dip with id '.$dipId.' was found.'], 404) );
+        }
+
+        $job->aips()->detach($dip->storage_properties->aip);
+        return response()->json([], 204 );
+    }
+
+
     public function update($jobId)
     {
         $job = Job::findOrFail($jobId);
@@ -82,6 +100,17 @@ class OfflineStorageController extends Controller
         }
         $job->save();
         return new JobResource( $job );
+    }
+
+    public function delete($jobId)
+    {
+        $job = Job::find($jobId);
+        if(!isset($job) ) {
+            abort( response()->json(['error' => 404, 'message' => 'No Job with id '.$jobId.' was found.'], 404) );
+        }
+        $job->aips()->detach();
+        $job->delete();
+        return response()->json([], 204 );
     }
 
 }

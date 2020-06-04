@@ -2,7 +2,7 @@
     <div class="w-100">
         <page-heading icon="fa-hdd" :title="$t('ingest.offlineStorage.package.header')" :ingress="$t('ingest.offlineStorage.package.ingress')" />
 
-        <bucket-content-list @openObject="openObject" :location="selectedLocation" :dataObjects="currentObjects"
+        <bucket-content-list @openObject="openObject" @onDelete="onDelete" :location="selectedLocation" :dataObjects="currentObjects"
             :selectedArchive="selectedArchiveUuid" :selectedHolding="selectedHolding"/>
         <div class="row text-center pagerRow">
             <div class="col">
@@ -94,10 +94,16 @@ export default {
             axios.get("/api/v1/ingest/offline_storage/pending/jobs/"+this.$route.params.bucketId+"/dips"+apiQueryString).then( (aips ) => {
                 this.dataObjects = aips.data.data;
                 this.packagePageMeta = aips.data.meta;
+                if(this.packagePageMeta.last_page < this.$route.query.page) {
+                    this.replaceQueryParams({page: this.packagePageMeta.last_page})
+                }
             });
         },
         openObject: function( dipId ) {
             this.$router.push({ name: 'access.browse.dip', params: { dipId }, query: {} });
+        },
+        onDelete: function( dipId ) {
+            this.refreshObjects( this.apiQueryString );
         },
     },
 }

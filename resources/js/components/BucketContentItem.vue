@@ -51,6 +51,18 @@ export default {
             this.$emit('showPreview', this.item);
         },
         removeAip: function() {
+            let name = this.item.storage_properties.bag.name;
+            this.delete(
+                '/api/v1/ingest/offline_storage/pending/jobs/'+this.$route.params.bucketId+"/dips/"+this.item.id
+            ).then( (response) => {
+                this.$emit('onDelete', this.item );
+            }).catch( (exception) => {
+                this.errorToast(
+                    this.$t('ingest.offlineStorage.package.list.toast.delete.failed.title'),
+                    this.$t('ingest.offlineStorage.package.list.toast.delete.failed.message'),
+                    { 'FILENAME': name }
+                );
+            });
         },
     },
     computed: {

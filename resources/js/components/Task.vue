@@ -8,7 +8,7 @@
             </div>
             -->
             <div class="col-3 text-left" >
-                <input id="bucketName" v-model="item.name" ref="bucketName"
+                <input v-model="item.name" ref="bucketName"
                        type="text" class="pl-3 noTextTransform form-control"
                        :title="$t('upload.requiredName')"
                        @input="setBucketName"
@@ -80,7 +80,19 @@
             onListClick(){
                 this.$router.push({ name:'ingest.offline_storage.bucket_content', params: { bucketId: this.item.id } });
             },
-            onDelete(){
+            onDelete() {
+                let name = this.item.name;
+                this.delete(
+                    this.jobListUrl+"/jobs/"+this.item.id
+                ).then( (response) => {
+                    this.$emit('onDelete', this.item );
+                }).catch( (exception) => {
+                        this.errorToast(
+                            this.$t('ingest.offlineStorage.package.toast.delete.failed.title'),
+                            this.$t('ingest.offlineStorage.package.toast.delete.failed.message'),
+                            { 'FILENAME': name }
+                        );
+                });
             },
             async piqlIt(e) {
                 this.$emit('piqlIt', this.item );

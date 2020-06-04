@@ -116,6 +116,11 @@ class TransferPackageToStorage implements ShouldQueue
             }
 
         }
+        if( $this->storable_type == "App\Aip" ) {
+            $aip = \App\Aip::find( $this->storable_id );
+            $aip->update(["size" => $aip->fileObjects()->sum("size")]);
+        }
+
         if($this->localStorage->deleteDirectory($this->uploadFileAtPath) === false)
         {
             Log::error("Failed to delete source files {$this->uploadFileAtPath} after the upload");

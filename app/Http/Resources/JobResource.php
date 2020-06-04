@@ -14,6 +14,11 @@ class JobResource extends JsonResource
      */
     public function toArray($request)
     {
+
+        if (is_null($this->resource)) {
+            return [];
+        }
+
         return [
             'uuid' => $this->uuid,
             'name' => $this->name,

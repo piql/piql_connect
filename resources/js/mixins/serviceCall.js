@@ -13,6 +13,13 @@ export default {
             }, def);
         },
 
+        // do the same for delete
+        delete: async function(url, def = { retry : 1} ) {
+            return this.doServiceRequest(function() {
+                return axios.delete(url);
+            }, def);
+        },
+
         // do the same for post
         patch: async function(url, payload, def = { retry : 5} ) {
             return this.doServiceRequest(function() {

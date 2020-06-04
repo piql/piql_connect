@@ -11,7 +11,7 @@
         </div>
 
         <Task v-for="item in items" v-bind:item="item" v-bind:key="item.id"
-                           :jobListUrl="jobListUrl" :actionIcons="actionIcons" @piqlIt="piqlIt"/>
+                           :jobListUrl="jobListUrl" :actionIcons="actionIcons" @piqlIt="piqlIt" @onDelete="update"/>
 
         <div class="row">
             <div class="col">
