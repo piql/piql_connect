@@ -12,7 +12,7 @@
             </div>
         </div>
 
-        <aip-browser-file-item v-for="item in dipFiles" :item="item" :key="item.id" @onDelete="update"/>
+        <aip-browser-file-item v-for="item in dipFiles" :item="item" :key="item.id"/>
 
         <Pager :meta='meta' :height='height' />
 
@@ -52,10 +52,7 @@ export default {
         },
         close() {
             this.$router.go(-1);
-        },
-        async update() {
-            this.result = await axios.get( this.$route.location );
-        },
+        }
     }
 };
 </script>

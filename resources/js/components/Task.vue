@@ -8,7 +8,7 @@
             </div>
             -->
             <div class="col-3 text-left" >
-                <input id="bucketName" v-model="item.name" ref="bucketName"
+                <input v-model="item.name" ref="bucketName"
                        type="text" class="pl-3 noTextTransform form-control"
                        :title="$t('upload.requiredName')"
                        @input="setBucketName"
