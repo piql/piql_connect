@@ -56,33 +56,18 @@ class PermissionsController extends Controller
     {
         $action = PermissionManager::createAction($id, $request->input('name'), $request->input('description'));
         if ($action->save()) return new PermissionResource($action);
+    } 
+    
+    public function assignUsers(Request $request)
+    {
+        return PermissionManager::assignPermissionsToUsers($request->permissions, $request->users);
+    }   
+    
+    
+    public function unAssignUsers(Request $request)
+    {
+        return PermissionManager::removePermissionsFromUsers($request->permissions, $request->users);
     }
-
-    // /**
-    //  * Show the form for creating a new resource.
-    //  *
-    //  * @return \Illuminate\Http\Response
-    //  */
-    // public function create()
-    // {
-    //     //
-    // }
-
-    // /**
-    //  * Store a newly created resource in storage.
-    //  *
-    //  * @param  \Illuminate\Http\Request  $request
-    //  * @return \Illuminate\Http\Response
-    //  */
-    // public function store(Request $request)
-    // {
-    //     $permission = $request->isMethod('put') ? Permission::findOrFail($request->id) : new Permission;
-    //     $permission->type = $request->input('type');
-    //     $permission->name = $request->input('name');
-    //     $permission->description = $request->input('description');
-    //     $permission->parent_id = $request->input('parent_id');
-    //     if ($permission->save()) return new PermissionResource($permission);
-    // }
 
     /**
      * Display the specified resource.
@@ -94,16 +79,6 @@ class PermissionsController extends Controller
     {
         $permission = Permission::findOrFail($id);
         return new PermissionResource($permission);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
     }
 
     /**
@@ -129,7 +104,7 @@ class PermissionsController extends Controller
      */
     public function destroy($id)
     {
-        $permission = Permission::findOrFail($id);
-        if ($permission->delete()) return new PermissionResource($permission);
+        $permission = PermissionManager::delete($id);
+        return new PermissionResource($permission);
     }
 }
