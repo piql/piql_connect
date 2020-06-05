@@ -8,9 +8,12 @@ use App\Services\PermissionManager;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class PermissionManagerTest extends TestCase
 {
+    use DatabaseTransactions;
+    
     /**
      * A basic unit test example.
      *
@@ -92,7 +95,7 @@ class PermissionManagerTest extends TestCase
         $g->save();
         $a = PermissionManager::createAction($g->id, 'Drive', 'Use land locomotive');
         $a->save();
-        
+
         PermissionManager::assignPermissionsToUsers([$a->id], [95]);
         $p1 = PermissionManager::userHasPermission(95, $a->id);
         $this->assertTrue(count($p1) > 0);
