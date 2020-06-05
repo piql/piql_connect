@@ -38,9 +38,8 @@ class PermissionsController extends Controller
 
     public function getGroup($id)
     {
-        $group = Permission::where('type', PermissionType::Group)
-            ->where('id', $id)->first();
-        if($group == null) response(['message' => 'Group Not Found!'], 404);
+        $group = Permission::where('type', PermissionType::Group)->where('id', $id)->first();
+        if($group == null) return response(['message' => 'Group Not Found!'], 404);
         $group->actions = Permission::select('id', 'name')->where('parent_id', $id)->get();
         return new PermissionResource($group);
     }
@@ -48,7 +47,7 @@ class PermissionsController extends Controller
     public function listGroupActions(Request $request, $id)
     {
         $limit = $request->limit ? $request->limit : 10;
-        $actions = Permission::where('type', PermissionType::Action)->where('parent_id', $id)->paginate($limit, ['*'], 'page');
+        $actions = Permission::where(['type' => PermissionType::Action, 'parent_id' =>$id])->paginate($limit, ['*'], 'page');
         return PermissionResource::collection($actions);
     } 
     
@@ -66,13 +65,17 @@ class PermissionsController extends Controller
     
     public function assignUsers(Request $request)
     {
-        return PermissionManager::assignPermissionsToUsers($request->permissions, $request->users);
+        $data = PermissionManager::assignPermissionsToUsers($request->permissions, $request->users);
+        if(array_key_exists("error", $data)) return response($data, 400);
+        return $data;
     }   
     
     
     public function unAssignUsers(Request $request)
     {
-        return PermissionManager::removePermissionsFromUsers($request->permissions, $request->users);
+        $data = PermissionManager::removePermissionsFromUsers($request->permissions, $request->users);
+        if(array_key_exists("error", $data)) return response($data, 400);
+        return $data;
     }
 
     public function userHasPermission(Request $request)

@@ -39,31 +39,51 @@ class PermissionManager
 
     public static function assignPermissionsToUsers(array $permissions, array $users) {
         $perms = Permission::select('id')->whereIn('id', $permissions)->get();
-        $data = [];
+        $data = ["assigned"=>false];
+        if(count($perms) == 0) return array_merge([
+            "error"=> "Invalid or empty permissions",
+        ], $data);
+        if(count($users) == 0) return array_merge([
+            "error"=> "Invalid or empty users",
+        ], $data);
         $timestamps = [
             'created_at' => \Carbon\Carbon::now()->toDateTimeString(),
             'updated_at' => \Carbon\Carbon::now()->toDateTimeString(),
         ];
+        $data = [];
+        $results = ['users' => $users, 'permissions'=>[]];
         foreach($perms as $p) foreach($users as $u) {
-            $data[] = array_merge(['user_id'=> $u, 'permission_id'=>$p->id], $timestamps);
+            $pm = ['user_id'=> $u, 'permission_id'=>$p->id];
+            if(DB::table('user_permissions')->where($pm)->exists()) continue;
+            $data[] = array_merge($pm, $timestamps);
+            $results['permissions'][] = $p->id;
         }
-        if(!DB::table('user_permissions')->insert($data)) return null;
-        return [
-            'users' => $users, 'permissions' => $perms, 'operation'=>'assigned',
+        if(!DB::table('user_permissions')->insert($data)) return [
+            'error' => "failed to create permissions"
         ];
+        $results["assigned"] = count($data) > 0;
+        return $results;
     }
 
 
     public static function removePermissionsFromUsers(array $permissions, array $users) {
         $perms = Permission::select('id')->whereIn('id', $permissions)->get();
+        $data = ["unassigned"=>false];
+        if(count($perms) == 0) return array_merge([
+            "error"=> "Invalid or empty permissions",
+        ], $data);
+        if(count($users) == 0) return array_merge([
+            "error"=> "Invalid or empty users",
+        ], $data);
+        $results = array_merge(['users' => $users, 'permissions'=>[]], $data);
         foreach($perms as $p) foreach($users as $u) {
             DB::table('user_permissions')->where([
                 'user_id'=> $u, 'permission_id'=>$p->id
             ])->delete();
+            $results['permissions'][] = $p->id;
         }
-        return [
-            'users' => $users, 'permissions' => $perms, 'operation'=>'unAssigned',
-        ];
+        $results["unassigned"] = true;
+        return $results;
     }
 
     public static function userHasPermission($userId, $permissionId) {
