@@ -30,8 +30,18 @@ class PermissionManager
     public static function delete($id) {
         $permission = Permission::findOrFail($id);
         if ($permission->delete()) {
-            if($permission->type == PermissionType::Group) 
+            DB::table('user_permissions')->where('permission_id', $id)->delete();
+            if($permission->type == PermissionType::Group) {
+                DB::table('user_permissions')->where('permission_id', $id)->delete();
+                $actions = Permission::select('id')->where('parent_id', $id)->get();
+                if(count($actions) > 0) {
+                    $ids = collect($actions)->map(function($a){
+                        return $a->id;
+                    });
+                    DB::table('user_permissions')->whereIn('permission_id', $ids)->delete();
+                }
                 Permission::where('parent_id', $id)->delete();
+            }
             return $permission;
         }
         return null;
