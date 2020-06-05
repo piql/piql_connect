@@ -168,6 +168,7 @@ return [
         Optimus\FineuploaderServer\Provider\LaravelServiceProvider::class,
         MartinLindhe\VueInternationalizationGenerator\GeneratorProvider::class,
         VueGenerators\ServiceProvider::class,
+        \BenSampo\Enum\EnumServiceProvider::class,
 
 
         /*
