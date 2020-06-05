@@ -50,9 +50,15 @@ class PermissionsController extends Controller
         $limit = $request->limit ? $request->limit : 10;
         $actions = Permission::where('type', PermissionType::Action)->where('parent_id', $id)->paginate($limit, ['*'], 'page');
         return PermissionResource::collection($actions);
-    }
+    } 
+    
+    public function createAction(Request $request)
+    {
+        $action = PermissionManager::createAction(null, $request->input('name'), $request->input('description'));
+        if ($action->save()) return new PermissionResource($action);
+    } 
 
-    public function createAction(Request $request, $id)
+    public function createGroupAction(Request $request, $id)
     {
         $action = PermissionManager::createAction($id, $request->input('name'), $request->input('description'));
         if ($action->save()) return new PermissionResource($action);
@@ -67,6 +73,13 @@ class PermissionsController extends Controller
     public function unAssignUsers(Request $request)
     {
         return PermissionManager::removePermissionsFromUsers($request->permissions, $request->users);
+    }
+
+    public function userHasPermission(Request $request)
+    {
+        return PermissionManager::userHasPermission(
+            $request->user, $request->permission
+        );
     }
 
     /**

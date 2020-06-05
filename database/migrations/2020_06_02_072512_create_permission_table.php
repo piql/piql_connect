@@ -26,6 +26,7 @@ class CreatePermissionTable extends Migration
             $table->bigIncrements('id');
             $table->bigInteger('user_id');
             $table->bigInteger('permission_id');
+            $table->unique(['user_id', 'permission_id']);
             $table->timestamps();
         });
     }

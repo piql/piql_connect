@@ -40,8 +40,12 @@ class PermissionManager
     public static function assignPermissionsToUsers(array $permissions, array $users) {
         $perms = Permission::select('id')->whereIn('id', $permissions)->get();
         $data = [];
+        $timestamps = [
+            'created_at' => \Carbon\Carbon::now()->toDateTimeString(),
+            'updated_at' => \Carbon\Carbon::now()->toDateTimeString(),
+        ];
         foreach($perms as $p) foreach($users as $u) {
-            $data[] = ['user_id'=> $u, 'permission_id'=>$p->id];
+            $data[] = array_merge(['user_id'=> $u, 'permission_id'=>$p->id], $timestamps);
         }
         if(!DB::table('user_permissions')->insert($data)) return null;
         return [
@@ -60,5 +64,25 @@ class PermissionManager
         return [
             'users' => $users, 'permissions' => $perms, 'operation'=>'unAssigned',
         ];
+    }
+
+    public static function userHasPermission($userId, $permissionId) {
+        $actionPermissionEnum = PermissionType::Action;
+        $groupPermissionEnum = PermissionType::Group;
+        
+        $permissionsQuery = 
+            "select actions.id action_id, `groups`.id group_id " .
+            "from (select id, parent_id from permissions where type=$actionPermissionEnum) actions " .
+            "  left join (select id from permissions where type=$groupPermissionEnum) `groups` " .
+            "    on actions.parent_id=`groups`.id " .
+            "where $permissionId in (actions.id, `groups`.id)";
+        $userQuery = "select user_id from user_permissions where user_id=$userId and permission_id in (action_id, group_id)";
+        
+        $permission = DB::table(DB::raw("($permissionsQuery) p"))
+            ->select(DB::raw(
+                "p.action_id, p.group_id, ($userQuery) user_id"
+            ))->get();
+
+        return $permission;
     }
 }
