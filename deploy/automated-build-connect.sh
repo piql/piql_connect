@@ -14,7 +14,7 @@ fi
 # Select hostname
 currHostname=$CONNECT_HOSTNAME
 echo "Hostname to be used: $currHostname"
-ping $hostname
+ping $currHostname
 if [ $? -ne 0 ] ; then
   echo "ERROR: Hostname is not reachable"
   exit 1
