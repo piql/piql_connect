@@ -93,10 +93,10 @@ docker network disconnect piqlconnect_piqlConnect-net compose_archivematica-stor
 docker network connect --link piqlconnect_nginx_1:$currHostname piqlconnect_piqlConnect-net compose_archivematica-storage-service_1
 
 echo "Run docker containers"
-if [ ! -v "$LOCALDEV" ] ; then
-    ./up.sh || exit $?
-else
+if [[ ! -z $LOCALDEV ]] ; then
     ./localdev-up.sh || exit $?
+else
+    ./up.sh || exit $?
 fi
 
 echo "Generate application key"
