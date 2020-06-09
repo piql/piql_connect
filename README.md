@@ -66,6 +66,8 @@ Expected status: 200
 Now, go to the deploy/ folder, and run the build script:
 
 ```
+$ export LOCALDEV=true
+$ export CONNECT_HOSTNAME=$HOSTNAME # Could be anything but must be reachable
 $ cd deploy/
 $ ./automated-build-connect.sh
 ```
