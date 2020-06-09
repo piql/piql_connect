@@ -42,3 +42,6 @@ install.sh
 laravel-echo-server.lock
 deploy/nginx/ssl/fullchain.key
 deploy/nginx/ssl/fullchain.pem
+
+package-lock.json
+*.js.snap
