@@ -26,7 +26,7 @@ if [ $? -ne 0 ] ; then
   echo "No instance of connect is currently running, continuing..."
 else
   echo "An instance of connect is currently running, shutting down"
-  ./down
+  ./down.sh
   if [ $? -ne 0 ] ; then
     echo "Failed to shut down connect"
     exit 1  
@@ -57,11 +57,13 @@ echo "Install vue"
 php artisan vue-i18n:generate || exit $?
 
 echo "npm run"
-npm run prod || exit $? # has warnings
+if [[ ! -z $LOCALDEV ]] ; then
+  npm run dev || exit $?
+else
+  npm run prod || exit $?
+fi
 
-echo "Set execute permissions to deploy scripts"
 cd deploy || exit $?
-chmod u+x localdev-up.sh || exit $?
 
 echo "Create docker volumes"
 docker volume ls | grep am-pipeline-data
@@ -80,7 +82,6 @@ fi
 echo "Set file permissions"
 sudo chown 333:$USER -R ../storage || exit $?
 sudo chown 333:$USER -R ../bootstrap/cache || exit $?
-sudo chown 333:$USER ../.env || exit $? # Is it needed? - Probably no
 sudo chown 333:$USER -R ../vendor || exit $?
 sudo chown 333:$USER -R ../config || exit $?
 sudo chown 333:$USER -R ../public || exit $?
@@ -100,16 +101,22 @@ else
 fi
 
 echo "Generate application key"
-docker-compose -p piqlConnect exec -T app php artisan key:generate || exit $?
+pushd ..
+php artisan key:generate || exit $?
+popd
 
 echo "Migrate database tables"
-docker-compose -p piqlConnect exec -T app php artisan migrate:fresh || exit $?
+pushd ..
+php artisan migrate:fresh || exit $?
+popd
 
 echo "Set passport keys"
 docker-compose -p piqlConnect exec -T app php artisan passport:keys --force || exit $?
 
 echo "Seed database"
-docker-compose -p piqlConnect exec -T app php artisan db:seed || exit $?
+pushd ..
+php artisan db:seed || exit $?
+popd
 
 echo "Set file permissions for docker volumes"
 sudo chown 333:root /var/lib/docker/volumes/ss-location-data/_data || exit $?
