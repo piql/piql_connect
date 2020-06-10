@@ -94,7 +94,9 @@ docker network disconnect piqlconnect_piqlConnect-net compose_archivematica-stor
 docker network connect --link piqlconnect_nginx_1:$currHostname piqlconnect_piqlConnect-net compose_archivematica-storage-service_1
 
 echo "Run docker containers"
+cp ../laravel-echo-server.json.example ../laravel-echo-server.json || exit $?
 if [[ ! -z $LOCALDEV ]] ; then
+    sed -i 's/https/http/g' ../laravel-echo-server.json || exit $?
     ./localdev-up.sh || exit $?
 else
     ./up.sh || exit $?
