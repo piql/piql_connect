@@ -1,3 +1,4 @@
+import axios from 'axios';
 export default {
     methods: {
         get: async function(url, def = { retry : 5}) {
