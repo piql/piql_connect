@@ -64,7 +64,7 @@
       "vue"
     ],
     "transform": {
-      "resources/js/components/.*\\.(vue)$": "vue-jest",
+      "resources/js/.*\\.(vue)$": "vue-jest",
       "^.+\\.js$": "<rootDir>/node_modules/babel-jest"
     },
     "moduleNameMapper": {

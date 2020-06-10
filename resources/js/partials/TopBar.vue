@@ -21,17 +21,17 @@
 
                 <div class="col-md-7 navLinks w-100">
                     <ul class="navbar-nav m-auto signal">
-                        <li class="navbar" :class="[ routeBelongsTo('stats') ? 'top-active' : 'top-inactive' ]">
+                        <li class="navbar" ref='nav-home' :class="[ routeBelongsTo('stats') ? 'top-active' : 'top-inactive' ]">
                             <router-link :to="{ name: 'stats.dashboard'}">{{$t('Home')}}</router-link>
                         </li>
-                        <li class="navbar" :class="[ routeBelongsTo('ingest') ? 'top-active' : 'top-inactive' ]">
+                        <li class="navbar" ref='nav-ingest' :class="[ routeBelongsTo('ingest') ? 'top-active' : 'top-inactive' ]">
                             <router-link :to="{ name: 'ingest.uploader' }">{{$t('Ingest')}}</router-link>
                         </li>
-                        <li class="navbar" :class="[ routeBelongsTo('access') ? 'top-active' : 'top-inactive' ]">
+                        <li class="navbar" ref='nav-access' :class="[ routeBelongsTo('access') ? 'top-active' : 'top-inactive' ]">
                             <router-link :to="{ name: 'access.browse' }">{{$t('Access')}}</router-link>
                         </li>
 
-                        <li class="navbar" :class="[ routeBelongsTo('settings') ? 'top-active' : '']" data-toggle="tooltip" :title="$t('sidebar.settings')" >
+                        <li class="navbar" ref='nav-settings' :class="[ routeBelongsTo('settings') ? 'top-active' : '']" data-toggle="tooltip" :title="$t('sidebar.settings')" >
                             <router-link :to="{ name: 'settings.user' }">
                                 <i class="fas fa-cogs plistIcon navbar" ></i>
                             </router-link>
@@ -51,9 +51,13 @@
 </template>
 
 <script>
+import serviceCall from '../mixins/serviceCall';
 export default {
+    mixins: [
+        serviceCall
+    ],
     async mounted() {
-        this.sessionLifetimeMs = (await axios.get("/api/v1/system/sessionLifetime")).data*60*1000;
+        this.get("/api/v1/system/sessionLifetime").then( (data) => this.sessionLifetimeMs = data*60*1000 );
     },
     data() {
         return {
