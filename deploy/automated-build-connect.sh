@@ -108,17 +108,13 @@ php artisan key:generate || exit $?
 popd
 
 echo "Migrate database tables"
-pushd ..
-php artisan migrate:fresh || exit $?
-popd
+docker-compose -p piqlConnect exec -T app php artisan migrate:fresh || exit $?
 
 echo "Set passport keys"
 docker-compose -p piqlConnect exec -T app php artisan passport:keys --force || exit $?
 
 echo "Seed database"
-pushd ..
-php artisan db:seed || exit $?
-popd
+docker-compose -p piqlConnect exec -T app php artisan db:seed || exit $?
 
 echo "Set file permissions for docker volumes"
 sudo chown 333:root /var/lib/docker/volumes/ss-location-data/_data || exit $?
