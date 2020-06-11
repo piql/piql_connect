@@ -29,7 +29,6 @@ else
   ./down.sh
   if [ $? -ne 0 ] ; then
     echo "Failed to shut down connect"
-    exit 1  
   fi
 fi
 
