@@ -59,6 +59,10 @@
 
     "sidebar.dashboard": "Dashboard",
     "sidebar.settings": "Settings",
+    "sidebar.userProfile": "User Settings",
+    "sidebar.roles": "User Roles",
+    "sidebar.userGroups": "User Groups",
+    "sidebar.users": "Users",
     "sidebar.upload": "Upload",
     "sidebar.processing": "Processing",
     "sidebar.taskList": "Offline Storage",
@@ -249,6 +253,8 @@
 
     "settings.settings.header": "User settings",
     "settings.settings.ingress": "Configure user settings",
+    "settings.settings.users": "Users",
+    "settings.settings.listing": "User management",
     "settings.settings.languagelabel": "Language",
     "settings.settings.userInterfaceHeader": "User interface",
     "settings.settings.setPasswordHeader": "Change password",
