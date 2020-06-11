@@ -157,6 +157,24 @@
                         "password" : "piqlmexico",
                         "full_name" : "piqlmexico",
                         "email" : "piqlmexico@piql.com"
+                    },
+                    {
+                        "username" : "piqlfinland",
+                        "password" : "piqlfinland",
+                        "full_name" : "piqlfinland",
+                        "email" : "piqlfinland@piql.com"
+                    },
+                    {
+                        "username" : "piqlrussia",
+                        "password" : "piqlrussia",
+                        "full_name" : "piqlrussia",
+                        "email" : "piqlrussia@piql.com"
+                    },
+                    {
+                        "username" : "piqlmalaysia",
+                        "password" : "piqlmalaysia",
+                        "full_name" : "piqlmalaysia",
+                        "email" : "piqlmalaysia@piql.com"
                     }
                 ]
             }
