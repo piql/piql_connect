@@ -195,4 +195,8 @@ Route::group(['prefix' => 'v1/admin/permissions'], function () {
     Route::post('users/assign', 'Api\Admin\PermissionsController@assignUsers');
     Route::post('users/unassign', 'Api\Admin\PermissionsController@unAssignUsers');
     Route::post('users/hasPermission', 'Api\Admin\PermissionsController@userHasPermission');
- });
+});
+
+Route::resource('v1/admin/users', 'Api\Admin\UserController')->only([
+    'index', 'show'
+]);
