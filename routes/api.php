@@ -200,3 +200,8 @@ Route::group(['prefix' => 'v1/admin/permissions'], function () {
 Route::resource('v1/admin/users', 'Api\Admin\UserController')->only([
     'index', 'show'
 ]);
+
+Route::group(['prefix' => 'v1/registration'], function () {
+    Route::post('register', 'App\Http\Controllers\Api\Registration\UserRegistrationController@register');
+    Route::post('confirm', 'App\Http\Controllers\Api\Registration\UserRegistrationController@confirm');
+});
