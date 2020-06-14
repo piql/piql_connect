@@ -21,7 +21,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::get('test/getThumbnail', 'Api\Access\ThumbnailController@testThumbnail')->name('testThumbnail');;
 Route::get('test/getPreview', 'Api\Access\ThumbnailController@testPreview');
 Route::group(['prefix' => 'v1'], function () {
-    Route::post('login', 'Auth\ApiLoginController@login');
+    Route::post('login', 'Auth\ApiLoginController@login')->middleware('user.checkDisabled');
 });
 
 // todo: mode to whitelist middleware or add token to headers in callback
@@ -198,7 +198,7 @@ Route::group(['prefix' => 'v1/admin/permissions'], function () {
 });
 
 Route::resource('v1/admin/users', 'Api\Admin\UserController')->only([
-    'index', 'show'
+    'index', 'show', 'disable', 'enable'
 ]);
 
 Route::group(['prefix' => 'v1/registration'], function () {
