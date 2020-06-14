@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddUserRegistrationConfirmation extends Migration
+class ChangeUserPermissionFieldToString extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,8 @@ class AddUserRegistrationConfirmation extends Migration
      */
     public function up()
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->string('confirmation_token')->nullable();
+        Schema::table('user_permissions', function (Blueprint $table) {
+            $table->string('user_id')->change();
         });
     }
 
@@ -25,8 +25,8 @@ class AddUserRegistrationConfirmation extends Migration
      */
     public function down()
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn(['confirmation_token']);
+        Schema::table('user_permissions', function (Blueprint $table) {
+            $table->bigInteger('user_id')->change();
         });
     }
 }

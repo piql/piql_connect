@@ -12,5 +12,5 @@ use BenSampo\Enum\Enum;
 final class PermissionType extends Enum
 {
     const Group  = 0;
-    const Action = 1;
+    const Role   = 1;
 }
