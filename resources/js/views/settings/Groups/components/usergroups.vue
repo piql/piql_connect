@@ -11,9 +11,9 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>Group</td>
-                            <td>Description</td>
+                        <tr v-for="group in groups" :key="group.id">
+                            <td>{{group.name}}</td>
+                            <td>{{group.description}}</td>
                             <td>
                                 <a class="btn btn-xs btn-primary" title="Assign Action" style="color:white">
                                     <i class="fa fa-cog"></i>
@@ -84,10 +84,12 @@ export default {
                 data:null,
                 group:null,
                 description:null,
+                groups:null
             };
     },
     async mounted() {
         this.data = (await axios.get("/api/v1/admin/permissions/groups")).data;
+        this.groups = this.data.data;
         
         
     },

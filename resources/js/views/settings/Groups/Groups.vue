@@ -67,6 +67,10 @@ import usergroups from "./components/usergroups";
                  this.response = (await axios.post("/api/v1/admin/permissions/groups", {
                     name: this.group,
                     description: this.description
+                },{
+                    headers:{
+                        'content-type': 'application/json'
+                    }
                 })).data;
             }
         }
