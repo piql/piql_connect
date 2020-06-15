@@ -17,9 +17,6 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-
-Route::get('test/getThumbnail', 'Api\Access\ThumbnailController@testThumbnail')->name('testThumbnail');;
-Route::get('test/getPreview', 'Api\Access\ThumbnailController@testPreview');
 Route::group(['prefix' => 'v1'], function () {
     Route::post('login', 'Auth\ApiLoginController@login');
 });
@@ -32,22 +29,22 @@ Route::group(['prefix' => 'v1' , 'middleware' => ['auth:api', 'activity']], func
     Route::post('logout', 'Auth\ApiLoginController@logout');
 
     Route::group(['prefix' => 'system'], function () {
-        Route::get('currentUser', 'Api\System\StatusController@currentUser');
-        Route::get('currentUserSettings', 'Api\System\StatusController@currentUserSettings');
-        Route::get('currentBag', 'Api\System\StatusController@currentBag');
-        Route::get('languages', 'Api\System\SystemController@languages');
-        Route::get('sessionLifetime', 'Api\System\SystemController@sessionLifetime');
-        Route::post('settings', 'Api\System\UserSettingsController@updateSettings');
-        Route::post('currentUserPassword', 'Api\System\UserSettingsController@updateCurrentUserPassword');
+        Route::get('statuses/current-user', 'Api\System\StatusController@currentUser');
+        Route::get('statuses/current-user/settings', 'Api\System\StatusController@currentUserSettings');
+        Route::get('statuses/current-bag', 'Api\System\StatusController@currentBag');
+        Route::get('locale/languages', 'Api\System\SystemController@languages');
+        Route::get('system/session-lifetime', 'Api\System\SystemController@sessionLifetime');
+        Route::post('statuses/settings/users', 'Api\System\UserSettingsController@updateSettings');
+        Route::post('settings/users/update-password', 'Api\System\UserSettingsController@updateCurrentUserPassword');
     });
 
     Route::group(['prefix' => 'ingest'], function() {
-        Route::post('upload', '\Optimus\FineuploaderServer\Controller\LaravelController@upload');
-        Route::delete('file/{upload_path}', 'Api\Ingest\FileUploadController@deleteUploadedTemp');
-        Route::post('validateFileName', 'Api\Ingest\FileUploadController@validateFileName');
-        Route::post('fileUploaded', 'Api\Ingest\FileUploadController@store');
-        Route::get('uploaded/', 'Api\Ingest\FileUploadController@all');
-        Route::get('uploaded/{id}', 'Api\Ingest\FileUploadController@show');
+        Route::post('files/upload', '\Optimus\FineuploaderServer\Controller\LaravelController@upload');
+        Route::delete('files/{upload_path}', 'Api\Ingest\FileUploadController@deleteUploadedTemp');
+        Route::post('files/filename/validate', 'Api\Ingest\FileUploadController@validateFileName');
+        Route::post('files/process-uploaded', 'Api\Ingest\FileUploadController@store');
+        Route::get('files/uploaded', 'Api\Ingest\FileUploadController@all');
+        Route::get('files/uploaded/{id}', 'Api\Ingest\FileUploadController@show');
 
         // todo: getNewBag
         // todo: getOpenBags
@@ -76,18 +73,18 @@ Route::group(['prefix' => 'v1' , 'middleware' => ['auth:api', 'activity']], func
         Route::patch('files/{file}/metadata/{metadata}', 'Api\Ingest\FileMetadataController@update')->name('api.ingest.files.metadata.update');
         Route::delete('files/{file}/metadata/{metadata}', 'Api\Ingest\FileMetadataController@destroy')->name('api.ingest.files.metadata.destroy');
 
-        Route::get('offline_storage/pending/jobs/{job}/metadata', 'Api\Ingest\BucketMetadataController@index')->name('api.ingest.bucket.metadata.index');
-        Route::post('offline_storage/pending/jobs/{job}/metadata', 'Api\Ingest\BucketMetadataController@store')->name('api.ingest.bucket.metadata.store');
-        Route::patch('offline_storage/pending/jobs/{job}/metadata/{metadata}', 'Api\Ingest\BucketMetadataController@update')->name('api.ingest.bucket.metadata.update');
+        Route::get('storage/offline/pending/buckets/{bucket}/metadata', 'Api\Ingest\BucketMetadataController@index')->name('api.ingest.bucket.metadata.index');
+        Route::post('storage/offline/pending/buckets/{bucket}/metadata', 'Api\Ingest\BucketMetadataController@store')->name('api.ingest.bucket.metadata.store');
+        Route::patch('storage/offline/pending/buckets/{bucket}/metadata/{metadata}', 'Api\Ingest\BucketMetadataController@update')->name('api.ingest.bucket.metadata.update');
 
 
-        Route::get('offline_storage/pending/jobs/{id}', 'Api\Ingest\OfflineStorageController@job')->name('api.ingest.bucket');
-        Route::get('offline_storage/pending/jobs/{id}/dips', 'Api\Ingest\OfflineStorageController@dips')->name('api.ingest.bucket.dips');
-        Route::patch('offline_storage/pending/jobs/{id}', 'Api\Ingest\OfflineStorageController@update')->name('api.ingest.bucket.update');
-        Route::delete('offline_storage/pending/jobs/{id}', 'Api\Ingest\OfflineStorageController@delete')->name('api.ingest.bucket.delete');
-        Route::delete('offline_storage/pending/jobs/{id}/dips/{dipId}', 'Api\Ingest\OfflineStorageController@detachDip')->name('api.ingest.bucket.detach.dip');
-        Route::get('offline_storage/pending/jobs', 'Api\Ingest\OfflineStorageController@jobs')->name('api.ingest.buckets.pending');
-        Route::get('offline_storage/archive/jobs', 'Api\Ingest\OfflineStorageController@archiveJobs')->name('api.ingest.buckets.archiving');
+        Route::get('storage/offline/pending/buckets/{id}', 'Api\Ingest\OfflineStorageController@job')->name('api.ingest.bucket');
+        Route::get('storage/offline/pending/buckets/{id}/dips', 'Api\Ingest\OfflineStorageController@dips')->name('api.ingest.bucket.dips');
+        Route::patch('storage/offline/pending/buckets/{id}', 'Api\Ingest\OfflineStorageController@update')->name('api.ingest.bucket.update');
+        Route::delete('storage/offline/pending/buckets/{id}', 'Api\Ingest\OfflineStorageController@delete')->name('api.ingest.bucket.delete');
+        Route::delete('storage/offline/pending/buckets/{id}/dips/{dipId}', 'Api\Ingest\OfflineStorageController@detachDip')->name('api.ingest.bucket.detach.dip');
+        Route::get('storage/offline/pending/buckets', 'Api\Ingest\OfflineStorageController@jobs')->name('api.ingest.buckets.pending');
+        Route::get('storage/offline/archive/buckets', 'Api\Ingest\OfflineStorageController@archiveJobs')->name('api.ingest.buckets.archiving');
 
         Route::group(['prefix' => 'triggers'], function() {
             // todo: add middleware
@@ -118,7 +115,7 @@ Route::group(['prefix' => 'v1' , 'middleware' => ['auth:api', 'activity']], func
         Route::get('aips/dips/{dipId}/filename', 'Api\Access\AipController@filenameFromDipId');
         Route::get('aips/{aipId}/download', 'Api\Access\AipController@download');
         Route::get('aips/dips/{dipId}/download', 'Api\Access\AipController@downloadFromDipId');
-        Route::get('dips/', 'Api\Access\DipController@index');
+        Route::get('dips', 'Api\Access\DipController@index');
         Route::get('dips/{dipId}', 'Api\Access\DipController@show');
         Route::get('dips/{dipId}/files', 'Api\Access\DipController@files');
         Route::get('dips/{dipId}/thumbnails', 'Api\Access\DipController@package_thumbnail');
@@ -153,7 +150,7 @@ Route::group(['prefix' => 'v1' , 'middleware' => ['auth:api', 'activity']], func
         Route::get('retrievals/retrieving', 'Api\Storage\RetrievalCollectionController@retrieving');
         Route::get('retrievals/toready', 'Api\Storage\RetrievalCollectionController@toReady');
         Route::get('retrievals/ready', 'Api\Storage\RetrievalCollectionController@ready');
-        Route::post('retrievals/{id}/take_offline', 'Api\Storage\RetrievalCollectionController@takeOffline');
+        Route::post('retrievals/{id}/take-offline', 'Api\Storage\RetrievalCollectionController@takeOffline');
         Route::post('retrievals/add', 'Api\Storage\RetrievalCollectionController@addToLatest');
         Route::get('retrievals/{id}/files', 'Api\Storage\RetrievalCollectionController@files');
         Route::post('retrievals/{id}/close', 'Api\Storage\RetrievalCollectionController@close');
@@ -164,15 +161,15 @@ Route::group(['prefix' => 'v1' , 'middleware' => ['auth:api', 'activity']], func
 
     Route::group(['prefix' => 'stats', 'middleware' => 'auth:api'], function () {
         Route::group(['prefix' => 'charts'], function () {
-            Route::get('monthlyOnlineAIPsIngested', 'Api\Stats\DashboardChartController@monthlyOnlineAIPsIngestedEndpoint')->name('monthlyOnlineAIPsIngested');
-            Route::get('monthlyOnlineDataIngested', 'Api\Stats\DashboardChartController@monthlyOnlineDataIngestedEndpoint')->name('monthlyOnlineDataIngested');
-            Route::get('monthlyOnlineAIPsAccessed', 'Api\Stats\DashboardChartController@monthlyOnlineAIPsAccessedEndpoint')->name('monthlyOnlineAIPsAccessed');
-            Route::get('monthlyOnlineDataAccessed', 'Api\Stats\DashboardChartController@monthlyOnlineDataAccessedEndpoint')->name('monthlyOnlineDataAccessed');
-            Route::get('dailyOnlineAIPsIngested', 'Api\Stats\DashboardChartController@dailyOnlineAIPsIngestedEndpoint')->name('dailyOnlineAIPsIngested');
-            Route::get('dailyOnlineDataIngested', 'Api\Stats\DashboardChartController@dailyOnlineDataIngestedEndpoint')->name('dailyOnlineDataIngested');
-            Route::get('dailyOnlineAIPsAccessed', 'Api\Stats\DashboardChartController@dailyOnlineAIPsAccessedEndpoint')->name('dailyOnlineAIPsAccessed');
-            Route::get('dailyOnlineDataAccessed', 'Api\Stats\DashboardChartController@dailyOnlineDataAccessedEndpoint')->name('dailyOnlineDataAccessed');
-            Route::get('fileFormatsIngested', 'Api\Stats\DashboardChartController@fileFormatsIngestedEndpoint')->name('fileFormatsIngested');
+            Route::get('aips/online/ingested/monthly', 'Api\Stats\DashboardChartController@monthlyOnlineAIPsIngestedEndpoint')->name('monthlyOnlineAIPsIngested');
+            Route::get('data/online/ingested/monthly', 'Api\Stats\DashboardChartController@monthlyOnlineDataIngestedEndpoint')->name('monthlyOnlineDataIngested');
+            Route::get('aips/online/accessed/monthly', 'Api\Stats\DashboardChartController@monthlyOnlineAIPsAccessedEndpoint')->name('monthlyOnlineAIPsAccessed');
+            Route::get('data/online/accessed/monthly', 'Api\Stats\DashboardChartController@monthlyOnlineDataAccessedEndpoint')->name('monthlyOnlineDataAccessed');
+            Route::get('aips/online/ingested/daily', 'Api\Stats\DashboardChartController@dailyOnlineAIPsIngestedEndpoint')->name('dailyOnlineAIPsIngested');
+            Route::get('data/online/ingested/daily', 'Api\Stats\DashboardChartController@dailyOnlineDataIngestedEndpoint')->name('dailyOnlineDataIngested');
+            Route::get('aips/online/accessed/daily', 'Api\Stats\DashboardChartController@dailyOnlineAIPsAccessedEndpoint')->name('dailyOnlineAIPsAccessed');
+            Route::get('data/online/accessed/daily', 'Api\Stats\DashboardChartController@dailyOnlineDataAccessedEndpoint')->name('dailyOnlineDataAccessed');
+            Route::get('file-formats/ingested', 'Api\Stats\DashboardChartController@fileFormatsIngestedEndpoint')->name('fileFormatsIngested');
         });
         Route::get('user/{userId}', 'Api\Stats\UserStatsController@userStats')->name('userstats');
     });
@@ -187,12 +184,12 @@ Route::group(['prefix' => 'v1/admin/permissions'], function () {
     
     Route::get('groups', 'Api\Admin\PermissionsController@listGroups');
     Route::post('groups', 'Api\Admin\PermissionsController@createGroup');
-    Route::post('actions', 'Api\Admin\PermissionsController@createAction');
+    Route::post('roles', 'Api\Admin\PermissionsController@createAction');
     Route::get('groups/{id}', 'Api\Admin\PermissionsController@getGroup')->where('id', '[0-9]+');
-    Route::get('groups/{id}/actions', 'Api\Admin\PermissionsController@listGroupActions')->where('id', '[0-9]+');
-    Route::post('groups/{id}/action', 'Api\Admin\PermissionsController@createGroupAction')->where('id', '[0-9]+');
+    Route::get('groups/{id}/roles', 'Api\Admin\PermissionsController@listGroupActions')->where('id', '[0-9]+');
+    Route::post('groups/{id}/role', 'Api\Admin\PermissionsController@createGroupAction')->where('id', '[0-9]+');
     
     Route::post('users/assign', 'Api\Admin\PermissionsController@assignUsers');
     Route::post('users/unassign', 'Api\Admin\PermissionsController@unAssignUsers');
-    Route::post('users/hasPermission', 'Api\Admin\PermissionsController@userHasPermission');
+    Route::post('users/has-permission', 'Api\Admin\PermissionsController@userHasPermission');
  });
