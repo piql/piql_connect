@@ -125,8 +125,6 @@ export default {
             this.$router.push(this.prevRoute);
         },
         async showPreview ( dip, fileId ) {
-            console.log("dip: " +dip);
-            console.log("fileId: " +fileId);
             this.lbVisible = true;
             let image = (await axios.get('/api/v1/access/dips/'+dip+'/previews/files/'+fileId, { responseType: 'blob' }));
             let reader = new FileReader();
