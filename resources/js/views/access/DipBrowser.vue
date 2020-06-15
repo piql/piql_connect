@@ -11,7 +11,7 @@
             @btnDClicked="close"
         />
 
-        <browser-file-item v-for="item in dipFiles" :item="item" :key="item.id"/>
+        <browser-file-item v-for="item in dipFiles" :item="item" :key="item.id" @showPreview="showPreview"/>
 
 				<div class="row text-center pagerRow">
 						<div class="col">
@@ -19,11 +19,23 @@
 						</div>
 				</div>
 
+        <VueEasyLightbox
+            :visible="lbVisible"
+            :imgs="previewImages"
+            :index="index"
+            @hide="hideLightBox"
+        />
+
     </div>
 </template>
 
 <script>
+import axios from 'axios';
+import VueEasyLightbox from 'vue-easy-lightbox';
 export default {
+    components: {
+        VueEasyLightbox
+    },
 
     watch: {
         '$route': 'dispatchRouting'
@@ -34,7 +46,10 @@ export default {
             dipFiles: [],
             dipId: 0,
             meta: null,
-            prevRoute: null
+            prevRoute: null,
+            lbVisible: false,
+            index: 0,
+            previewImages: []
         }
     },
 
@@ -108,6 +123,19 @@ export default {
         },
         close() {
             this.$router.push(this.prevRoute);
+        },
+        async showPreview ( dip, fileId ) {
+            console.log("dip: " +dip);
+            console.log("fileId: " +fileId);
+            this.lbVisible = true;
+            let image = (await axios.get('/api/v1/access/dips/'+dip+'/previews/files/'+fileId, { responseType: 'blob' }));
+            let reader = new FileReader();
+            reader.onload = e => this.previewImages.push( reader.result );
+            reader.readAsDataURL( image.data );
+        },
+        hideLightBox: function( e ) {
+            this.lbVisible = false;
+            this.previewImages = [];
         }
     }
 };
