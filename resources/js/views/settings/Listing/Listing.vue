@@ -1,6 +1,6 @@
 <template>
     <div class="w-100">
-        <page-heading icon="fa-users" :title="$t('settings.settings.users')" :ingress="$t('settings.settings.listing')" />
+        <page-heading icon="fa-user" :title="$t('settings.settings.users')" :ingress="$t('settings.settings.listing')" />
         <div class="card">
             <div class="card-header">
         
