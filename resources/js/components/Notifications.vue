@@ -17,8 +17,10 @@
 </template>
 
 <script>
+import serviceCall from '../mixins/serviceCall';
 
-    export default {
+export default {
+        mixins: [ serviceCall ],
         data() {
             return {
                 showNotifications: false
@@ -30,10 +32,10 @@
             },
             async listen() {
                 // get user ID
-                let userId = (await axios.get("/api/v1/system/currentUser")).data;
+                let userId = (await this.get("/api/v1/system/currentUser")).data;
 
                 // todo: remove this when toasts are implemented
-                window.Echo.private('User.' + userId + '.Events').listen('.Info', (event) => {
+                this.echo.private('User.' + userId + '.Events').listen('.Info', (event) => {
 
 
                     if( event.properties.type == "InformationPackageUploaded" )
@@ -54,7 +56,7 @@
                         );
                     }
                 });
-                window.Echo.private('User.' + userId + '.Events').listen('.Error', (event) => {
+                this.echo.private('User.' + userId + '.Events').listen('.Error', (event) => {
 
                     if( event.properties.type == "App\\Events\\ArchivematicaIngestError"
                         || event.properties.type == "App\\Events\\ArchivematicaTransferError")
@@ -79,6 +81,9 @@
         },
         async mounted() {
             this.listen();
+        },
+        computed: {
+            echo() { return window.Echo; }
         }
     }
 </script>

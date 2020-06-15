@@ -18,7 +18,9 @@
 
 <script>
 import { BModal } from 'bootstrap-vue';
+import serviceCall from '../mixins/serviceCall.js';
 export default {
+    mixins: [ serviceCall ],
     beforeDestroy() {
         clearInterval( this.checkForSessionTimeout );
     },
@@ -103,7 +105,7 @@ export default {
         setupVisibleCountDown() {
             clearInterval( this.checkForSessionTimeout );
             this.checkForSessionTimeout = setInterval( async () => {
-                await (axios.get("/api/v1/system/currentUser")).data;
+                await (this.get("/api/v1/system/currentUser")).data;
                 this.countDownMs -= 1000;
             }, 1000 );
         },
