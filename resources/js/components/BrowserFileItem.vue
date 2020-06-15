@@ -60,7 +60,7 @@
                 fileLink.click();
             },
             showMetadata() {
-                this.$router.push({ name:'access.browse.metadata', params: { fileId: this.aipItem.id } });
+                this.$router.push({ name:'access.browse.dips.files.metadata', params: { dipId: this.dipId, fileId: this.aipItem.id } });
             },
 	        preview: function(){
                 this.$emit('showPreview', this.item.storable_id, this.item.id);
