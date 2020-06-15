@@ -28,13 +28,13 @@
         },
 
         async mounted() {
-            this.userSettings = (await axios.get("/api/v1/system/currentUserSettings")).data;
+            this.userSettings = (await axios.get("/api/v1/system/users/current-user/preferences")).data;
         },
 
         methods: {
             async changedLanguage(language) {
                 if (language && language != this.selectedLanguage) {
-                    await axios.post("/api/v1/system/settings", {"interface": { "language": language }});
+                    await axios.post("/api/v1/system/users/current-user/preferences", {"interface": { "language": language }});
                     this.$router.go(0);
                 }
             },
@@ -47,7 +47,7 @@
                     return;
                 }
 
-                let setPasswordData = (await axios.post("/api/v1/system/currentUserPassword/", {
+                let setPasswordData = (await axios.post("/api/v1/system/users/current-user/password", {
                     oldPassword: oldPassword,
                     newPassword: newPassword1
                 })).data;

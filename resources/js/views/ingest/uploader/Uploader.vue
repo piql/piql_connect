@@ -94,7 +94,7 @@ export default {
         const uploader = new FineUploaderTraditional({
             options: {
                 request: {
-                    endpoint: '/api/v1/ingest/upload',
+                    endpoint: '/api/v1/ingest/files/upload',
                     params: {
                         base_directory: 'completed',
                         sub_directory: null,
@@ -188,10 +188,9 @@ export default {
 
                         if( this.compoundModeEnabled ) {
                             let uploadToBagId = this.bag.id;
-                            axios.post('/api/v1/ingest/fileUploaded', {
+                            axios.post(`/api/v1/ingest/bags/${uploadToBagId}/files`, {
                                 'fileName' : name,
                                 'result' : response,
-                                'bagId' : uploadToBagId,
                                 'fileSize': fileSize
                             }).then( async ( file ) => {
                                 this.filesUploading[filesIndex].uploadedFileId = file.data.data.id;
@@ -492,8 +491,8 @@ export default {
         this.pageFrom = 1;
         this.pageTo = this.pageSize;
         this.dispatchRouting();
-        this.userId = (await axios.get("/api/v1/system/currentUser")).data;
-        this.userSettings  = (await axios.get("/api/v1/system/currentUserSettings")).data;
+        this.userId = (await axios.get("/api/v1/system/statuses/current-user")).data;
+        this.userSettings  = (await axios.get("/api/v1/system/users/current-user/preferences")).data;
 
         if( this.compoundModeEnabled ) {
 

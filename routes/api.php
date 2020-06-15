@@ -30,22 +30,18 @@ Route::group(['prefix' => 'v1' , 'middleware' => ['auth:api', 'activity']], func
 
     Route::group(['prefix' => 'system'], function () {
         Route::get('statuses/current-user', 'Api\System\StatusController@currentUser');
-        Route::get('statuses/current-user/settings', 'Api\System\StatusController@currentUserSettings');
-        Route::get('statuses/current-bag', 'Api\System\StatusController@currentBag');
-        Route::get('locale/languages', 'Api\System\SystemController@languages');
+
+        Route::get('users/{user_id}/preferences', 'Api\Users\PreferencesController@preferences');
+        Route::post('users/{user_id}/preferences', 'Api\Users\PreferencesController@updatePreferences');
+
+        Route::post('users/{user_id}/password', 'Api\Users\SelfServiceController@updatePassword');
+
+//FIXME:        Route::get('statuses/current-bag', 'Api\System\StatusController@currentBag');
+        Route::get('languages', 'Api\System\SystemController@languages');
         Route::get('system/session-lifetime', 'Api\System\SystemController@sessionLifetime');
-        Route::post('statuses/settings/users', 'Api\System\UserSettingsController@updateSettings');
-        Route::post('settings/users/update-password', 'Api\System\UserSettingsController@updateCurrentUserPassword');
     });
 
     Route::group(['prefix' => 'ingest'], function() {
-        Route::post('files/upload', '\Optimus\FineuploaderServer\Controller\LaravelController@upload');
-        Route::delete('files/{upload_path}', 'Api\Ingest\FileUploadController@deleteUploadedTemp');
-        Route::post('files/filename/validate', 'Api\Ingest\FileUploadController@validateFileName');
-        Route::post('files/process-uploaded', 'Api\Ingest\FileUploadController@store');
-        Route::get('files/uploaded', 'Api\Ingest\FileUploadController@all');
-        Route::get('files/uploaded/{id}', 'Api\Ingest\FileUploadController@show');
-
         // todo: getNewBag
         // todo: getOpenBags
 
@@ -57,16 +53,24 @@ Route::group(['prefix' => 'v1' , 'middleware' => ['auth:api', 'activity']], func
         Route::get('bags/complete', 'Api\Ingest\BagController@complete')->name('api.ingest.bags.complete');
         Route::get('bags/offline', 'Api\Ingest\BagController@offline')->name('api.ingest.bags.offline');
         Route::get('bags/online', 'Api\Ingest\BagController@online')->name('api.ingest.bags.online');
-        Route::get('bags/latest', 'Api\Ingest\BagController@latest')->name('api.ingest.bags.latest');
+        Route::get('bags/latest', 'Api\Ingest\BagController@latest')->name('api.ingest.bags.latest'); //FIXME per user
         Route::get('bags/{id}', 'Api\Ingest\BagController@show')->name('api.ingest.bags.show');
+
         Route::get('bags/{id}/files', 'Api\Ingest\BagController@showFiles');
+        Route::post('bags/{bagId}/files', 'Api\Ingest\FileUploadController@store'); //Create a file model in the db, push an event
         Route::delete('bags/{bagId}/files/{fileId}', 'Api\Ingest\BagController@deleteFile');
+
         Route::post('bags/{id}/commit', 'Api\Ingest\BagController@commit')->name('api.ingest.bags.commit');
-        Route::post('files/bag', 'Api\Ingest\BagController@bagSingleFile');
         Route::post('bags/{id}/piql', 'Api\Ingest\BagController@piqlIt');
         Route::get('bags/{id}/download', 'Api\Ingest\BagController@download');
-        Route::get('files/{id}/download', 'Api\Ingest\BagController@downloadFile');
 
+        Route::post('files/upload', '\Optimus\FineuploaderServer\Controller\LaravelController@upload');
+        Route::delete('files/{upload_path}', 'Api\Ingest\FileUploadController@deleteUploadedTemp');
+        Route::post('files/filename/validate', 'Api\Ingest\FileUploadController@validateFileName');
+        Route::get('files/uploaded', 'Api\Ingest\FileUploadController@all');
+        Route::get('files/uploaded/{id}', 'Api\Ingest\FileUploadController@show');
+        Route::post('files/bag', 'Api\Ingest\BagController@bagSingleFile');
+        Route::get('files/{id}/download', 'Api\Ingest\BagController@downloadFile');
         Route::get('files/{file}/metadata', 'Api\Ingest\FileMetadataController@index')->name('api.ingest.files.metadata.index');
         Route::get('files/{file}/metadata/{metadata}', 'Api\Ingest\FileMetadataController@show')->name('api.ingest.files.metadata.show');
         Route::post('files/{file}/metadata', 'Api\Ingest\FileMetadataController@store')->name('api.ingest.files.metadata.store');

@@ -6,7 +6,7 @@ Route::get('/logout', array('uses' => 'Auth\LoginController@logout'))->name('log
 Route::middleware(['auth', 'locale', 'activity'])->group( function () {
     Route::get('/{any}', function() {
         return view('index');
-    })->where('any', '.*')->name('/'); /* Catch all and pass to the Vue router */
+    })->where('any', "^(?!api').*$")->name('/'); /* Catch all and pass to the Vue router */
 
 });
 

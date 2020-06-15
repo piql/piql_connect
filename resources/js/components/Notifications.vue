@@ -32,7 +32,7 @@ export default {
             },
             async listen() {
                 // get user ID
-                let userId = (await this.get("/api/v1/system/current-user")).data;
+                let userId = (await this.get("/api/v1/system/statuses/current-user")).data;
 
                 // todo: remove this when toasts are implemented
                 this.echo.private('User.' + userId + '.Events').listen('.Info', (event) => {

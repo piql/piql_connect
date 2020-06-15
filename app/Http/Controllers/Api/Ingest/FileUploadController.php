@@ -39,7 +39,7 @@ class FileUploadController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Persist a file's path and associate it with a bag id.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
