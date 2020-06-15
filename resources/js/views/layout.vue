@@ -2,7 +2,7 @@
     <div class="screensize">
         <div class="container-fluid p-0">
             <top-bar />
-            <div class="d-flex flex-row">
+            <div class="d-flex flex-row overflow-auto layout">
                 <div class="d-flex">
                     <side-bar :width="currentWidth" :fullname="fullname" />
                 </div>

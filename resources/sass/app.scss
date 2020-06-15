@@ -217,6 +217,11 @@ body {
         overflow-x: hidden;
     }
 }
+
+.layout{
+    margin-top: 14vh;
+    max-height: 95vh;
+}
 .burgerMenu {
     display: none;
 }
@@ -1276,7 +1281,8 @@ th {
 .sideMenu {
     background-color: $color_background_1;
     font-size: 0.9rem;
-    height: 90vh;
+    //margin-top: 13vh;
+    height: 100vh;
     min-width: 17rem;
     color: $white;
     overflow: hidden;
@@ -1463,7 +1469,7 @@ th {
         font-size: 1rem;
         margin-left: 6rem;
         margin-top: 1rem;
-        margin-bottom: 1rem;
+        //margin-bottom: 1rem;
         padding: 0;
     }
 }

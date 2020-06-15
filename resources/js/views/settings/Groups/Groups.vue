@@ -9,6 +9,7 @@
                 </button>
             </div>
             <div class="card-body">
+                <usergroups />
                <div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="addModal" aria-hidden="true">
                     <div class="modal-dialog">
                         <div class="modal-content">
@@ -45,8 +46,13 @@
 </template>
 
 <script>
+import usergroups from "./components/usergroups";
 
     export default {
+        components:{
+            usergroups
+
+        },
        
         data() {
             return {

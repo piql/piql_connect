@@ -20,15 +20,15 @@
                                     <legend>Add User </legend>
                                     <div class="form-group">
                                         <label>Fullname</label>
-                                        <input type="text" class="form-control" v-model="fullname" >
+                                        <input type="text" class="form-control" v-model="fullnamei" >
                                     </div>
                                     <div class="form-group">
                                         <label>Username</label>
-                                        <input type="text" class="form-control" v-model="username" >
+                                        <input type="text" class="form-control" v-model="usernamei" >
                                     </div>
                                     <div class="form-group">
                                         <label>Email</label>
-                                        <input type="email" class="form-control" v-model="email" >
+                                        <input type="email" class="form-control" v-model="emaili" >
                                     </div>
                                 
                                 </div>
@@ -59,9 +59,9 @@ import users from './components/users';
         },
         data() {
             return {
-                fullname:null,
-                email:null,
-                username:null
+                fullnamei:null,
+                emaili:null,
+                usernamei:null
             };
         },
 
