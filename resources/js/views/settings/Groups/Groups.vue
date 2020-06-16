@@ -14,7 +14,7 @@
                     <div class="modal-dialog">
                         <div class="modal-content">
                         
-                        <form role="form" method="post">
+                        <div role="form">
                             <fieldset>
                                 <div class="modal-body">
                                     <legend>Add Group </legend>
@@ -30,11 +30,11 @@
                                 
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="submit" @submit="addGroup" class="btn btn-primary"><i class="fa fa-plus"></i>Add Group</button>
+                                    <button @click="addGroup" @keydown.enter="addGroup" class="btn btn-primary"><i class="fa fa-plus"></i>Add Group</button>
                                 </div>
                             </fieldset>
 
-                        </form>
+                        </div>
                         </div>
                     </div>
                 </div>
@@ -51,7 +51,6 @@ import usergroups from "./components/usergroups";
     export default {
         components:{
             usergroups
-
         },
        
         data() {
