@@ -5,6 +5,7 @@ namespace Tests\Unit;
 use App\Enums\PermissionType;
 use App\Permission;
 use App\Services\PermissionManager;
+use App\User;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -36,25 +37,25 @@ class PermissionManagerTest extends TestCase
         $g = PermissionManager::createGroup('Author', 'People that write stuff');
         $g->save();
         $this->assertNotNull($g);
-        $a = PermissionManager::createAction($g->id, 'Create Article', 'Write a new article');
-        $a->save();
-        $action = Permission::where('id', $a->id)->first();
-        $this->assertNotNull($action);
-        $this->assertEquals($action->type, PermissionType::Action);
-        $this->assertEquals($action->id, $a->id);
-        $this->assertEquals($action->parent_id, $g->id);
-        $this->assertEquals($action->name, 'Create Article');
+        $r = PermissionManager::createAction($g->id, 'Create Article', 'Write r new article');
+        $r->save();
+        $role = Permission::where('id', $r->id)->first();
+        $this->assertNotNull($role);
+        $this->assertEquals($role->type, PermissionType::Role);
+        $this->assertEquals($role->id, $r->id);
+        $this->assertEquals($role->parent_id, $g->id);
+        $this->assertEquals($role->name, 'Create Article');
     }
 
     public function testCanDeletePermission()
     {
-        $a = PermissionManager::createAction(null, 'Soome Action', 'I do stuff');
-        $a->save();
-        $this->assertNotNull($a);
-        $action = Permission::where('id', $a->id)->first();
-        $this->assertNotNull($action);
-        PermissionManager::delete($action->id);
-        $this->assertNull(Permission::where('id', $a->id)->first());
+        $r = PermissionManager::createAction(null, 'Some Role', 'I do stuff');
+        $r->save();
+        $this->assertNotNull($r);
+        $role = Permission::where('id', $r->id)->first();
+        $this->assertNotNull($role);
+        PermissionManager::delete($role->id);
+        $this->assertNull(Permission::where('id', $r->id)->first());
     } 
     
     public function testGroupDeletionAlsoDeletesActions()
@@ -78,14 +79,15 @@ class PermissionManagerTest extends TestCase
     {
         $g = PermissionManager::createGroup('Virus', 'Program destroyer');
         $g->save();
-        $a = PermissionManager::createAction($g->id, 'Kill Software', 'Corrupts software');
-        $a->save();
-        PermissionManager::assignPermissionsToUsers([$a->id], [90]);
-        $pm = PermissionManager::userHasPermission(90, $a->id);
+        $r = PermissionManager::createAction($g->id, 'Kill Software', 'Corrupts software');
+        $r->save();
+        $u = factory(User::class)->create();
+        PermissionManager::assignPermissionsToUsers([$r->id], [$u->id]);
+        $pm = PermissionManager::userHasPermission($u->id, $r->id);
         $this->assertTrue(count($pm) > 0);
         $pm = $pm[0];
-        $this->assertEquals(90, $pm->user_id);
-        $this->assertEquals($a->id, $pm->action_id);
+        $this->assertEquals($u->id, $pm->user_id);
+        $this->assertEquals($r->id, $pm->role_id);
         $this->assertEquals($g->id, $pm->group_id);
     }    
     
@@ -93,16 +95,17 @@ class PermissionManagerTest extends TestCase
     {
         $g = PermissionManager::createGroup('Transporter', 'Move things');
         $g->save();
-        $a = PermissionManager::createAction($g->id, 'Drive', 'Use land locomotive');
-        $a->save();
-
-        PermissionManager::assignPermissionsToUsers([$a->id], [95]);
-        $p1 = PermissionManager::userHasPermission(95, $a->id);
+        $r = PermissionManager::createAction($g->id, 'Drive', 'Use land locomotive');
+        $r->save();
+        
+        $u = factory(User::class)->create();
+        PermissionManager::assignPermissionsToUsers([$r->id], [$u->id]);
+        $p1 = PermissionManager::userHasPermission($u->id, $r->id);
         $this->assertTrue(count($p1) > 0);
-        $this->assertEquals($p1[0]->user_id, 95);
-        PermissionManager::removePermissionsFromUsers([$a->id], [95]);
+        $this->assertEquals($p1[0]->user_id, $u->id);
+        PermissionManager::removePermissionsFromUsers([$r->id], [$u->id]);
 
-        $p2 = PermissionManager::userHasPermission(95, $a->id);
+        $p2 = PermissionManager::userHasPermission($u->id, $r->id);
         $this->assertTrue(count($p2) > 0);
         $this->assertFalse(isset($p2[0]->user_id));
     }
