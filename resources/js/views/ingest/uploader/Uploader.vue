@@ -4,19 +4,6 @@
 
         <form v-on:submit.prevent>
         <div class="row form-group mt-2 mb-2">
-            <div class="col-2" :title="$t('upload.addFileButtonToolTip')">
-                <label for="uploadbutton" class="col-form-label-sm">&nbsp;</label>
-                <FileInputComponent
-                    id="uploadbutton"
-                    :multiple="compoundModeEnabled"
-                    :uploader="uploader"
-                    :disabled="fileInputDisabled">
-                    <div>
-                        <i class="fas fa-plus mr-2"></i>{{$t("upload.addFileButton")}}
-                    </div>
-                </FileInputComponent>
-            </div>
-
             <div v-show="compoundModeEnabled" class="col-2 text-left" >
                 <label for="bagname" class="col-form-label-sm">{{$t("upload.sipName")}}</label>
                 <input id="bagName" v-model="bagName" ref="bagName"
@@ -48,6 +35,20 @@
                 <label for="processButton" class="col-form-label-sm">&nbsp;</label>
                 <button v-if="processDisabled" disabled title="Start the ingest process" id="processButton" class="btn form-control-btn w-100">{{$t('upload.processButton')}}</button>
                 <button v-else="processDisabled" title="Start the ingest process" id="processButton" class="btn form-control-btn w-100"  v-on:click="commitBagToProcessing">{{$t('upload.processButton')}}</button>
+            </div>
+        </div>
+
+        <div class="card" :title="$t('upload.addFileButtonToolTip')">
+            <div class="card-body">
+                <Dropzone
+                    class="dropzone is-6 has-text-centered"
+                    :uploader="uploader" style="margin-right: 0px;">
+                        <file-input multiple
+                            accept='image/*'
+                            :uploader="uploader">
+                            <p class="dz-text"><i class="fas fa-cloud-upload-alt"></i> {{$t("upload.addFileButton")}}</p>
+                        </file-input>
+                </Dropzone>
             </div>
         </div>
 
@@ -83,6 +84,7 @@ import RouterTools from '@mixins/RouterTools.js';
 import DeferUpdate from '@mixins/DeferUpdate.js';
 import FineUploader from 'vue-fineuploader';
 import FineUploaderTraditional from 'fine-uploader-wrappers'
+import Dropzone from 'vue-fineuploader/dropzone';
 import axios from 'axios';
 import JQuery from 'jquery';
 let $ = JQuery;
@@ -265,7 +267,8 @@ export default {
     },
 
     components: {
-        FineUploader
+        FineUploader,
+        Dropzone
     },
 
     computed: {
