@@ -5,24 +5,24 @@
         <div class="row">
             <div class="col-sm-3">
                 <line-chart class="graphs" :title="$t('dashboard.graphs.monthlyOnlineAIPsIngested')"
-                    url="/api/v1/stats/charts/monthlyOnlineAIPsIngested"
+                    url="/api/v1/stats/charts/aips/online/ingested/monthly"
                     :labels="monthNames" />
             </div>
 
             <div class="col-sm-3">
                 <line-chart class="graphs" :title="$t('dashboard.graphs.monthlyOnlineDataIngested')"
-                    url="/api/v1/stats/charts/monthlyOnlineDataIngested"
+                    url="/api/v1/stats/charts/data/online/ingested/monthly"
                     :labels="monthNames" />
             </div>
 
             <div class="col-sm-3">
                 <line-chart class="graphs" :title="$t('dashboard.graphs.monthlyOnlineAIPsAccessed')"
-                    url="/api/v1/stats/charts/monthlyOnlineAIPsAccessed"
+                    url="/api/v1/stats/charts/aips/online/accessed/monthly"
                     :labels="monthNames" />
             </div>
             <div class="col-sm-3">
                 <line-chart class="graphs" :title="$t('dashboard.graphs.monthlyOnlineDataAccessed')"
-                    url="/api/v1/stats/charts/monthlyOnlineDataAccessed"
+                    url="/api/v1/stats/charts/data/online/accessed/monthly"
                     :labels="monthNames"/>
             </div>
         </div>
@@ -31,7 +31,7 @@
 
             <div class="d-inline-flex">
                 <pie-chart class="pieChart" :title="$t('dashboard.fileTypes')"
-                    url="/api/v1/stats/charts/fileFormatsIngested" />
+                    url="/api/v1/stats/charts/file-formats/ingested" />
             </div>
 
             <div class="col d-inline-flex flex-wrap">
