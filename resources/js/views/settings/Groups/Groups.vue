@@ -4,65 +4,56 @@
         <div class="card">
             <div class="card-header">
         
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addModal">
+                <button type="button" class="btn btn-primary" @click="$bvModal.show('add-group')">
                     <i class="fa fa-plus"></i>  Add Group
                 </button>
+                <b-modal id="add-group" hide-footer>
+                    <template v-slot:modal-title>
+                    Add Group
+                    </template>
+                    <div class="d-block">
+                    <div class="form-group">
+                        <label>Group</label>
+                        <input type="text" class="form-control" v-model="group" >
+                    </div>
+                    <div class="form-group">
+                        <label>Description</label>
+                        <textarea v-model="description" class="form-control"></textarea>
+                    </div>
+                    </div>
+                    <b-button class="mt-3" block @click="addGroup" @keydown="addGroup"><i class="fa fa-group"></i> Add Group</b-button>
+                </b-modal>
             </div>
             <div class="card-body">
-                <usergroups />
-               <div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="addModal" aria-hidden="true">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                        
-                        <div role="form">
-                            <fieldset>
-                                <div class="modal-body">
-                                    <legend>Add Group </legend>
-                                    <div class="form-group">
-                                        <label>Group</label>
-                                        <input type="text" class="form-control" v-model="group" >
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Description</label>
-                                        <textarea v-model="description" class="form-control"></textarea>
-                                    </div>
-                                   
-                                
-                                </div>
-                                <div class="modal-footer">
-                                    <button @click="addGroup" @keydown.enter="addGroup" class="btn btn-primary"><i class="fa fa-plus"></i>Add Group</button>
-                                </div>
-                            </fieldset>
-
-                        </div>
-                        </div>
-                    </div>
-                </div>
+                <user-group-items :key="groupkey" @addAction="addAction" />
             </div>
         </div>
 
         
     </div>
-</template>
+</template> 
 
 <script>
-import usergroups from "./components/usergroups";
 
     export default {
-        components:{
-            usergroups
-        },
+     
        
         data() {
             return {
                 group:null,
                 description:null,
-                response: null
+                response: null,
+                groupkey: 0,
             };
         },
 
         methods: {
+            forceRerender(){
+                this.groupkey += 1;
+
+            },
             async addGroup(){
+                this.infoToast('Add Group','Adding '+ this.group + ' user group');
                  this.response = (await axios.post("/api/v1/admin/permissions/groups", {
                     name: this.group,
                     description: this.description
@@ -71,6 +62,25 @@ import usergroups from "./components/usergroups";
                         'content-type': 'application/json'
                     }
                 })).data;
+                
+                this.forceRerender();
+                this.$bvModal.hide('add-group')
+            },
+
+            async addAction(action){
+                this.infoToast('Add Group Action','Adding '+ action.name);
+                 this.response = (await axios.post("/api/v1/admin/permissions/groups/"+ action.groupId +"/action", {
+                    name: action.name,
+                    description: action.description
+                },{
+                    headers:{
+                        'content-type': 'application/json'
+                    }
+                })).data;
+                
+                this.forceRerender();
+                this.$bvModal.hide('add-action')
+                
             }
         }
     }
