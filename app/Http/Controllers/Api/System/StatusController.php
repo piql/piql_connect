@@ -21,9 +21,4 @@ class StatusController extends Controller
         return Bag::whereOwner( $userId )->latest()->first();
     }
 
-    public function currentUserSettings( Request $request )
-    {
-        $user = Auth::user();
-        return $user->settings;
-    }
 }
