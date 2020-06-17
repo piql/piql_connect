@@ -53,7 +53,7 @@ export default {
         removeAip: function() {
             let name = this.item.storage_properties.bag.name;
             this.delete(
-                '/api/v1/ingest/offline_storage/pending/jobs/'+this.$route.params.bucketId+"/dips/"+this.item.id
+                '/api/v1/ingest/storage/offline/pending/buckets/'+this.$route.params.bucketId+"/dips/"+this.item.id
             ).then( (response) => {
                 this.$emit('onDelete', this.item );
             }).catch( (exception) => {
