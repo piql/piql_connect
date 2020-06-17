@@ -1,18 +1,30 @@
 <template>
-  <div>
+  <div class="table-responsive">
       
-       <table class="table table-hover table-sm table-bordered">
+       <table class="table table-hover table-sm table-striped">
                     <thead>
                         <tr>
-                            <th>Action</th>
+                            <th>Role</th>
                             <th>Description</th>
+                            <th>Actions </th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="action in actions" :key="action.id">
-                            <td>{{action.name}}</td>
-                            <td>{{action.description}}</td>
-                            
+                        <tr v-for="role in roles" :key="role.id">
+                            <td>{{role.name}}</td>
+                            <td>{{role.description}}</td>
+                            <td>
+                                <a class="btn btn-xs btn-primary" title="Edit Role" style="color:white">
+                                    <i class="fa fa-edit"></i>
+                                    </a>
+                                <a class="btn btn-xs btn-primary" title="Delete Role" style="color:white">
+                                    <i class="fa fa-trash"></i>
+                                    </a>
+                                <a class="btn btn-xs btn-primary" title="Assign Users" style="color:white">
+                                    <i class="fa fa-users"></i>
+                                    </a>
+                            </td>
+                        
                         </tr>
                     
                        
@@ -20,34 +32,31 @@
                 </table>
                 <div class="row text-center pagerRow">
                     <div class="col">
-
-                      
                         <Pager :meta='pageMeta' :height='height' />
                     </div>
                 </div>
 
- 
+  
   </div>
-
 </template>
 
 <script>
 export default {
     data() {
-            return {
-                response:null,
-                actions:null,
-                pageMeta: null
-            };
+        return {
+            response:null,
+            roles: null,
+            pageMeta: null,
+        };
     },
 
     props: {
         height: {
             type: Number,
             default: 0
-        },
-        groupid: Number
+        }
     },
+
     computed:{
       apiQueryString: function() {
             let query = this.$route.query;
@@ -77,17 +86,15 @@ export default {
         },
 
         refreshObjects( apiQueryString ){
-            axios.get("/api/v1/admin/permissions/groups/"+ this.groupid +"/roles" + apiQueryString).then( (response ) => {
+            axios.get("/api/v1/admin/permissions/roles" + apiQueryString).then( (response ) => {
                this.response = response
-                this.actions = this.response.data.data;
+                this.roles = this.response.data.data;
+                
                 this.pageMeta = this.response.data.meta
             });
-        },
-
-        
+        }
         
     }
-
 
 }
 </script>

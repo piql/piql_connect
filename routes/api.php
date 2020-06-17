@@ -188,6 +188,7 @@ Route::group(['prefix' => 'v1/admin/permissions'], function () {
     
     Route::get('groups', 'Api\Admin\PermissionsController@listGroups');
     Route::post('groups', 'Api\Admin\PermissionsController@createGroup');
+    Route::get('roles', 'Api\Admin\PermissionsController@listRoles');
     Route::post('roles', 'Api\Admin\PermissionsController@createAction');
     Route::get('groups/{id}', 'Api\Admin\PermissionsController@getGroup')->where('id', '[0-9]+');
     Route::get('groups/{id}/roles', 'Api\Admin\PermissionsController@listGroupActions')->where('id', '[0-9]+');

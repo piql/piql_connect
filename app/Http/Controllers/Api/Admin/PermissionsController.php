@@ -36,6 +36,13 @@ class PermissionsController extends Controller
         return PermissionResource::collection($groups);
     }
 
+    public function listRoles(Request $request)
+    {
+        $limit = $request->limit ? $request->limit : 10;
+        $roles = Permission::where('type', PermissionType::Role)->paginate($limit, ['*'], 'page');
+        return PermissionResource::collection($roles);
+    }
+
     public function getGroup($id)
     {
         $group = Permission::where('type', PermissionType::Group)->where('id', $id)->first();
@@ -47,7 +54,7 @@ class PermissionsController extends Controller
     public function listGroupActions(Request $request, $id)
     {
         $limit = $request->limit ? $request->limit : 10;
-        $actions = Permission::where(['type' => PermissionType::Action, 'parent_id' =>$id])->paginate($limit, ['*'], 'page');
+        $actions = Permission::where(['type' => PermissionType::Role, 'parent_id' =>$id])->paginate($limit, ['*'], 'page');
         return PermissionResource::collection($actions);
     } 
     

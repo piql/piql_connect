@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="table-responsive">
       
        <table class="table table-hover table-sm table-bordered">
                     <thead>
@@ -18,8 +18,8 @@
                                 <a class="btn btn-xs btn-primary" @click="viewActions(group.id)" title="Actions" style="color:white">
                                     <i class="fa fa-eye"></i>
                                     </a>
-                                <a class="btn btn-xs btn-primary" title="Assign Action" style="color:white" @click="showAssignActionModal(group.id)">
-                                    <i class="fa fa-tag"></i>
+                                <a class="btn btn-xs btn-primary btn-piql" title="Add Role" @click="showAssignActionModal(group.id)">
+                                    <i class="fa fa-user-secret"></i>
                                     </a>
                             </td>
                         </tr>
@@ -37,19 +37,19 @@
 
                 <b-modal id="add-action" hide-footer>
                     <template v-slot:modal-title>
-                    Add Action
+                    Add Role
                     </template>
                     <div class="d-block">
                     <div class="form-group">
-                        <label>Action</label>
-                        <input type="text" class="form-control" v-model="action" >
+                        <label>Role</label>
+                        <input type="text" class="form-control" v-model="role" >
                     </div>
                     <div class="form-group">
                         <label>Description</label>
                         <textarea v-model="description" class="form-control"></textarea>
                     </div>
                     </div>
-                    <b-button class="mt-3" block @click="addActionClicked" @keydown="addActionClicked"><i class="fa fa-tag"></i> Add Action</b-button>
+                    <b-button class="mt-3" block @click="addRoleClicked" @keydown="addRoleClicked"><i class="fa fa-user-secret"></i> Add Role</b-button>
                 </b-modal>
                 
               
@@ -65,7 +65,7 @@ export default {
     data() {
             return {
                 response:null,
-                action:null,
+                role:null,
                 description: null,
                 groups:null,
                 pageMeta: null,
@@ -120,13 +120,13 @@ export default {
           this.$bvModal.show('add-action');
         },
 
-        addActionClicked(){
-          let action = {
-            name: this.action,
+        addRoleClicked(){
+          let role = {
+            name: this.role,
             description: this.description,
             groupId: this.groupId
           }
-          this.$emit('addAction', action);
+          this.$emit('addRole', role);
         },
         viewActions(groupId){
           this.$router.push({ name:'settings.actions', params:{groupId} });
