@@ -11,7 +11,6 @@
             <div class="col ingressText">{{ingress}}</div>
         </div>
     </div>
-</div>
 
 </template>
 

@@ -23,6 +23,45 @@
 
                 </span>
 
+                <span :class="{ collapse: !routeBelongsTo('settings') }">
+
+                    <router-link :to="{ name: 'settings.user' }">
+                        <li class="list-group-item" :class="{ active: routeBelongsTo('settings.user') }" >
+                            <i class="fas fa-cog"></i>
+                            <div class="leftMenuItem">
+                                {{$t('sidebar.userProfile')}}
+                            </div>
+                        </li>
+                    </router-link>
+
+                    <router-link :to="{ name: 'settings.listing' }">
+                        <li class="list-group-item" :class="{ active: routeBelongsTo('settings.listing') }" >
+                            <i class="fas fa-user"></i>
+                            <div class="leftMenuItem">
+                                {{$t('sidebar.users')}}
+                            </div>
+                        </li>
+                    </router-link>
+                    <router-link :to="{ name: 'settings.roles' }">
+                        <li class="list-group-item" :class="{ active: routeBelongsTo('settings.roles') }" >
+                            <i class="fas fa-user-secret"></i>
+                            <div class="leftMenuItem">
+                                {{$t('sidebar.roles')}}
+                            </div>
+                        </li>
+                    </router-link>
+
+                    <router-link :to="{ name: 'settings.groups' }">
+                        <li class="list-group-item" :class="{ active: routeBelongsTo('settings.groups') }" >
+                            <i class="fas fa-users"></i>
+                            <div class="leftMenuItem">
+                                {{$t('sidebar.userGroups')}}
+                            </div>
+                        </li>
+                    </router-link>
+
+                </span>
+
                 <span :class="{ collapse: !routeBelongsTo('ingest') }">
 
                     <router-link :to="{ name: 'ingest.uploader' }">
@@ -107,7 +146,6 @@
                     </span>
                 </div>
             </div>
-        </div>
     </div>
 </template>
 <script>

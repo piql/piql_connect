@@ -19,12 +19,12 @@ class PermissionManager
 
     public static function createAction($groupId, $name, $description) 
     {
-        $action = new Permission;
-        $action->name = $name;
-        $action->description = $description;
-        $action->parent_id = $groupId;
-        $action->type = PermissionType::Action;
-        return $action;
+        $role = new Permission;
+        $role->name = $name;
+        $role->description = $description;
+        $role->parent_id = $groupId;
+        $role->type = PermissionType::Role;
+        return $role;
     } 
 
     public static function delete($id) {
@@ -33,9 +33,9 @@ class PermissionManager
             DB::table('user_permissions')->where('permission_id', $id)->delete();
             if($permission->type == PermissionType::Group) {
                 DB::table('user_permissions')->where('permission_id', $id)->delete();
-                $actions = Permission::select('id')->where('parent_id', $id)->get();
-                if(count($actions) > 0) {
-                    $ids = collect($actions)->map(function($a){
+                $roles = Permission::select('id')->where('parent_id', $id)->get();
+                if(count($roles) > 0) {
+                    $ids = collect($roles)->map(function($a){
                         return $a->id;
                     });
                     DB::table('user_permissions')->whereIn('permission_id', $ids)->delete();
@@ -97,20 +97,20 @@ class PermissionManager
     }
 
     public static function userHasPermission($userId, $permissionId) {
-        $actionPermissionEnum = PermissionType::Action;
+        $rolePermissionEnum = PermissionType::Role;
         $groupPermissionEnum = PermissionType::Group;
         
         $permissionsQuery = 
-            "select actions.id action_id, `groups`.id group_id " .
-            "from (select id, parent_id from permissions where type=$actionPermissionEnum) actions " .
+            "select roles.id role_id, `groups`.id group_id " .
+            "from (select id, parent_id from permissions where type=$rolePermissionEnum) roles " .
             "  left join (select id from permissions where type=$groupPermissionEnum) `groups` " .
-            "    on actions.parent_id=`groups`.id " .
-            "where $permissionId in (actions.id, `groups`.id)";
-        $userQuery = "select user_id from user_permissions where user_id=$userId and permission_id in (action_id, group_id)";
+            "    on roles.parent_id=`groups`.id " .
+            "where $permissionId in (roles.id, `groups`.id)";
+        $userQuery = "select user_id from user_permissions where user_id='$userId' and permission_id in (role_id, group_id)";
         
         $permission = DB::table(DB::raw("($permissionsQuery) p"))
             ->select(DB::raw(
-                "p.action_id, p.group_id, ($userQuery) user_id"
+                "p.role_id, p.group_id, ($userQuery) user_id"
             ))->get();
 
         return $permission;

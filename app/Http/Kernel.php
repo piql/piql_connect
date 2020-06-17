@@ -65,6 +65,7 @@ class Kernel extends HttpKernel
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'locale' => \App\Http\Middleware\SetLocale::class,
         'activity' => \App\Http\Middleware\SessionLastActivity::class,
+        'user.checkDisabled' => \App\Http\Middleware\CheckUserDisabled::class,
     ];
 
     /**
