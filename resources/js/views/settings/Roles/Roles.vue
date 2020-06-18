@@ -25,7 +25,7 @@
                 </b-modal>
             </div>
             <div class="card-body">
-                <roles-listing :key="rolekey" />
+                <roles-listing :key="rolekey" @assignRoleToUsers="assignRoleToUsers" />
                
             </div>
         </div>
@@ -64,8 +64,19 @@
                 })).data;
                 
                 this.forceRerender();
-                this.$bvModal.hide('add-role')
+                this.$bvModal.hide('add-role');
                 
+            },
+            async assignRoleToUsers(data){
+                this.infoToast("Assigning role", "assigning role to a group of selected users");
+                this.response = (await axios.post("/api/v1/admin/permissions/users/assign",data,{
+                    headers:{
+                        'content-type': 'application/json'
+                    }
+                })).data;
+
+                this.forceRerender();
+                this.$bvModal.hide('assign-role');
             }
         }
     }
