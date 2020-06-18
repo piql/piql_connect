@@ -128,7 +128,6 @@ Route::group(['prefix' => 'v1' , 'middleware' => ['auth:api', 'activity']], func
         Route::get('dips/{dipId}/previews/files/{fileId}', 'Api\Access\DipController@file_preview');
         Route::get('dips/{dipId}/aipfile/{fileId}', 'Api\Access\DipController@aipFile');
         Route::get('dips/{dipId}/downloads/files/{fileId}', 'Api\Access\DipController@file_download');
-        Route::get('dips/{dipId}/downloads/files/{fileId}', 'Api\Access\DipController@file_download');
         Route::get('aips/{dipId}/downloads/files/{fileId}', 'Api\Access\AipController@download');
         Route::get('aips/{aipId}/file/{fileId}/download', 'Api\Access\AipController@fileDownload');
 
