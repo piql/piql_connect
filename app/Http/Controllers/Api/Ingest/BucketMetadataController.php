@@ -36,9 +36,9 @@ class BucketMetadataController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Job $job)
+    public function index(Job $bucket)
     {
-        return response()->json([ "data" => $job->metadata->map(function($element) {
+        return response()->json([ "data" => $bucket->metadata->map(function($element) {
             return new MetadataResource($element);
         })]);
     }
@@ -50,9 +50,9 @@ class BucketMetadataController extends Controller
      * @param File $file
      * @return void
      */
-    public function store(Request $request, Job $job)
+    public function store(Request $request, Job $bucket)
     {
-        if($job->status != "created") {
+        if($bucket->status != "created") {
             abort( response()->json([ 'error' => 400, 'message' => 'Metadata is read only' ], 400 ) );
         }
 
@@ -67,10 +67,10 @@ class BucketMetadataController extends Controller
             "modified_by" => Auth::user()->id,
             "metadata" => $requestData,
         ]);
-        $metadata->parent()->associate($job);
+        $metadata->parent()->associate($bucket);
         $metadata->save();
 
-        return response()->json([ "data" => $job->refresh()->metadata->map(function($element) {
+        return response()->json([ "data" => $bucket->refresh()->metadata->map(function($element) {
             return new MetadataResource($element);
         })]);
     }
@@ -82,9 +82,9 @@ class BucketMetadataController extends Controller
      * @param  \App\Metadata  $metadata
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Job $job, Metadata $metadata)
+    public function update(Request $request, Job $bucket, Metadata $metadata)
     {
-        if($job->status != "created") {
+        if($bucket->status != "created") {
             abort( response()->json([ 'error' => 400, 'message' => 'Metadata is read only' ], 400 ) );
         }
         \Log::debug($request);
@@ -95,7 +95,7 @@ class BucketMetadataController extends Controller
             $metadata->save();
         }
 
-        return response()->json([ "data" => $job->refresh()->metadata->map(function($element) {
+        return response()->json([ "data" => $bucket->refresh()->metadata->map(function($element) {
             return new MetadataResource($element);
         })]);
     }

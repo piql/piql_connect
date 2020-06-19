@@ -67,13 +67,13 @@ export default {
 
     methods: {
         onCogClick() {
-            window.location = "/ingest/offline_storage/"+this.item.id+"/configuration";
+            window.location = "/ingest/storage/offline/"+this.item.id+"/configuration";
         },
         onTagsClick() {
-            window.location = "/ingest/offline_storage/"+this.item.id+"/metadata";
+            window.location = "/ingest/storage/offline/"+this.item.id+"/metadata";
         },
         onListClick(){
-            window.location = '/ingest/offline_storage/'+this.item.id;
+            window.location = '/ingest/storage/offline/'+this.item.id;
         },
         async piqlIt(e) {
             this.$emit('piqlIt', this.item );
