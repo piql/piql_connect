@@ -35,16 +35,15 @@ class UserController extends Controller
      * @param  \App\User  $user
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($id, Request $request)
     {
-        $uid = hex2bin(str_replace('-', '', $id));	         
         try {
-            $user = User::where('id', $uid)->first();
+            $user = User::find($id);
             return ($user != null) ? new UserResource($user) : response([
                 'message' => 'User Not Found!'
             ], 404);
         } catch (Throwable $e) {
-            return response(['message' => $e->getMessage()], 500);
+            return response(['message' => $e->getMessage()], 400);
         }
     }
 
