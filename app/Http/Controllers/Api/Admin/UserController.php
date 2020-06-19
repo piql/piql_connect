@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 use Throwable;
 
 class UserController extends Controller
@@ -20,7 +21,7 @@ class UserController extends Controller
     public function index(Request $request)
     {
         try {
-            $limit = $request->limit ? $request->limit : 10;
+            $limit = $request->limit ? $request->limit : env('DEFAULT_ENTRIES_PER_PAGE', 10);
             $users = User::paginate($limit, ['*'], 'page');
             return UserResource::collection($users);
         } catch (Throwable $e) {
@@ -37,8 +38,7 @@ class UserController extends Controller
     public function show($id)
     {
         try {
-            $uid = hex2bin(str_replace('-', '', $id));
-            $user = User::where('id', $uid)->first();
+            $user = User::find($id);
             return ($user != null) ? new UserResource($user) : response([
                 'message' => 'User Not Found!'
             ], 404);
@@ -55,11 +55,15 @@ class UserController extends Controller
      */
     public function disable(Request $request)
     {
-        $params = $request->users;
-        if (!is_array($params) || count($params) == 0)
-            return response(['message' => 'An array of user ids is required'], 400);
+        $validator = Validator::make($request->all(), [
+            'users' => 'required|array|filled'
+        ]);
+        if ($validator->fails()) return response([
+            'message' => 'Validation failed',
+            'errors' => $validator->errors(),
+        ], 400);
         try {
-            $users = User::select('id')->whereIn('id', $params)->get();
+            $users = User::select('id')->whereIn('id', $request->users)->get();
             if (count($users) == 0)
                 return response(['message' => 'Parameters do not match any user'], 404);
             $data = [];
@@ -80,11 +84,15 @@ class UserController extends Controller
      */
     public function enable(Request $request)
     {
-        $params = $request->users;
-        if (!is_array($params) || count($params) == 0)
-            return response(['message' => 'An array of user ids is required'], 400);
+        $validator = Validator::make($request->all(), [
+            'users' => 'required|array|filled'
+        ]);
+        if ($validator->fails()) return response([
+            'message' => 'Validation failed',
+            'errors' => $validator->errors(),
+        ], 400);
         try {
-            $users = User::select('id')->whereIn('id', $params)->get();
+            $users = User::select('id')->whereIn('id', $request->users)->get();
             if (count($users) == 0)
                 return response(['message' => 'Parameters do not match any user'], 404);
             $data = [];

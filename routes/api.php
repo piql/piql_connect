@@ -128,7 +128,6 @@ Route::group(['prefix' => 'v1' , 'middleware' => ['auth:api', 'activity']], func
         Route::get('dips/{dipId}/previews/files/{fileId}', 'Api\Access\DipController@file_preview');
         Route::get('dips/{dipId}/aipfile/{fileId}', 'Api\Access\DipController@aipFile');
         Route::get('dips/{dipId}/downloads/files/{fileId}', 'Api\Access\DipController@file_download');
-        Route::get('dips/{dipId}/downloads/files/{fileId}', 'Api\Access\DipController@file_download');
         Route::get('aips/{dipId}/downloads/files/{fileId}', 'Api\Access\AipController@download');
         Route::get('aips/{aipId}/file/{fileId}/download', 'Api\Access\AipController@fileDownload');
 
@@ -183,6 +182,7 @@ Route::group(['prefix' => 'v1/admin/permissions'], function () {
     Route::get('', 'Api\Admin\PermissionsController@index');
     
     Route::get('{id}', 'Api\Admin\PermissionsController@show')->where('id', '[0-9]+');
+    Route::get('{id}/users', 'Api\Admin\PermissionsController@users')->where('id', '[0-9]+');
     Route::put('{id}', 'Api\Admin\PermissionsController@update')->where('id', '[0-9]+');
     Route::delete('{id}', 'Api\Admin\PermissionsController@delete')->where('id', '[0-9]+');
     
@@ -192,6 +192,7 @@ Route::group(['prefix' => 'v1/admin/permissions'], function () {
     Route::get('groups/{id}', 'Api\Admin\PermissionsController@getGroup')->where('id', '[0-9]+');
     Route::get('groups/{id}/roles', 'Api\Admin\PermissionsController@listGroupActions')->where('id', '[0-9]+');
     Route::post('groups/{id}/role', 'Api\Admin\PermissionsController@createGroupAction')->where('id', '[0-9]+');
+    Route::post('groups/{id}/roles', 'Api\Admin\PermissionsController@createGroupAction')->where('id', '[0-9]+');
     
     Route::post('users/assign', 'Api\Admin\PermissionsController@assignUsers');
     Route::post('users/unassign', 'Api\Admin\PermissionsController@unAssignUsers');

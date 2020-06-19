@@ -6,8 +6,10 @@ use App\Enums\PermissionType;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\PermissionResource;
+use App\Http\Resources\UserResource;
 use App\Permission;
 use App\Services\PermissionManager;
+use App\User;
 
 class PermissionsController extends Controller
 {
@@ -47,7 +49,7 @@ class PermissionsController extends Controller
     public function listGroupActions(Request $request, $id)
     {
         $limit = $request->limit ? $request->limit : 10;
-        $actions = Permission::where(['type' => PermissionType::Action, 'parent_id' =>$id])->paginate($limit, ['*'], 'page');
+        $actions = Permission::where(['type' => PermissionType::Role, 'parent_id' =>$id])->paginate($limit, ['*'], 'page');
         return PermissionResource::collection($actions);
     } 
     
@@ -95,6 +97,20 @@ class PermissionsController extends Controller
     {
         $permission = Permission::findOrFail($id);
         return new PermissionResource($permission);
+    }
+
+    /**
+     * Display a listing of users assigned the permission
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function users($id, Request $request)
+    {
+        $limit = $request->limit ? $request->limit : 10;
+        $users = User::rightJoin('user_permissions', 'users.id', '=', 'user_permissions.user_id')
+            ->where('user_permissions.permission_id', $id)
+            ->paginate($limit, ['*'], 'page');
+        return UserResource::collection($users);
     }
 
     /**

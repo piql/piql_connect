@@ -94,7 +94,7 @@ export default {
             this.refreshObjects( this.apiQueryString );
         },
         refreshObjects( apiQueryString ){
-            axios.get("/api/v1/ingest/offline_storage/pending/jobs/"+this.bucketId+"/dips"+apiQueryString).then( (aips ) => {
+            axios.get("/api/v1/ingest/storage/offline/pending/buckets/"+this.bucketId+"/dips"+apiQueryString).then( (aips ) => {
                 this.dataObjects = aips.data.data;
                 this.packagePageMeta = aips.data.meta;
                 if(this.packagePageMeta.last_page < this.$route.query.page) {

@@ -24,7 +24,7 @@
 
             <bag-list-item v-for="item in items" v-bind:item="item" v-bind:key="item.id" @piqlIt="piqlIt"/>
 
-            <div v-for="x in padItems"><div class="row plist invisible" style="min-height: 4.8rem"><div class="col">&nbsp;</div></div></div>
+            <div :key="x" v-for="x in padItems"><div class="row plist invisible" style="min-height: 4.8rem"><div class="col">&nbsp;</div></div></div>
             <div v-if="showPager" class="row">
                 <div class="col">
                     <Pager :meta='pageMeta' @updatePage='updatePage' />
@@ -48,7 +48,7 @@
         props: {
             baseUrl: {
                 type: String,
-                default: "/api/v1/ingest/offline_storage/pending/jobs/"
+                default: "/api/v1/ingest/storage/offline/pending/buckets/"
             },
             jobId: {
                 type: String,
