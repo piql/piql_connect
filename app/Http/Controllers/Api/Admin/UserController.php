@@ -37,8 +37,9 @@ class UserController extends Controller
      */
     public function show($id)
     {
+        $uid = hex2bin(str_replace('-', '', $id));	         
         try {
-            $user = User::find($id);
+            $user = User::where('id', $uid)->first();
             return ($user != null) ? new UserResource($user) : response([
                 'message' => 'User Not Found!'
             ], 404);
