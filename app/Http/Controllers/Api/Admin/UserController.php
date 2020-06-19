@@ -20,7 +20,7 @@ class UserController extends Controller
     public function index(Request $request)
     {
         try {
-            $limit = $request->limit ? $request->limit : 10;
+            $limit = $request->limit ? $request->limit : env('DEFAULT_ENTRIES_PER_PAGE', 10);
             $users = User::paginate($limit, ['*'], 'page');
             return UserResource::collection($users);
         } catch (Throwable $e) {
@@ -79,11 +79,15 @@ class UserController extends Controller
      */
     public function enable(Request $request)
     {
-        $params = $request->users;
-        if (!is_array($params) || count($params) == 0)
-            return response(['message' => 'An array of user ids is required'], 400);
+        $validator = Validator::make($request->all(), [
+            'users' => 'required|array|filled'
+        ]);
+        if ($validator->fails()) return response([
+            'message' => 'Validation failed',
+            'errors' => $validator->errors(),
+        ], 400);
         try {
-            $users = User::select('id')->whereIn('id', $params)->get();
+            $users = User::select('id')->whereIn('id', $request->users)->get();
             if (count($users) == 0)
                 return response(['message' => 'Parameters do not match any user'], 404);
             $data = [];
