@@ -20,7 +20,7 @@ class UserController extends Controller
     public function index(Request $request)
     {
         try {
-            $limit = $request->limit ? $request->limit : 10;
+            $limit = $request->limit ? $request->limit : env('DEFAULT_ENTRIES_PER_PAGE', 10);
             $users = User::paginate($limit, ['*'], 'page');
             return UserResource::collection($users);
         } catch (Throwable $e) {
