@@ -29,19 +29,20 @@ class UserControllerTest extends TestCase
     public function test_fetching_existing_user_by_id_returns_200()
     {
         $u = factory(User::class)->create();
-        $response = $this->get('/api/v1/admin/users'.$u->id);
+        $this->assertNotNull($u);
+        $response = $this->get('/api/v1/admin/users/'.$u->getIdAttribute());
         $response->assertOk();
         $user = $response->decodeResponseJson('data');
-        $this->assertEquals($u->id, $user->id);
+        $this->assertEquals($u->id, $user['id']);
 
     }  
     
     public function test_fetching_non_existing_user_by_id_returns_404()
     {
-        $response = $this->get('/api/v1/admin/users'.Str::uuid());
+        $response = $this->get('/api/v1/admin/users/'.Str::uuid());
         $response->assertNotFound();
         $response->assertHeader('Content-Type', 'application/json');
         $message = $response->decodeResponseJson('message');
-        $this->assertContains($message, 'Not Found');
+        $this->assertContains('Not Found', $message);
     }    
 }

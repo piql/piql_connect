@@ -43,7 +43,7 @@ class UserController extends Controller
                 'message' => 'User Not Found!'
             ], 404);
         } catch (Throwable $e) {
-            return response(['message' => $e->getMessage()], 500);
+            return response(['message' => $e->getMessage()], 400);
         }
     }
 

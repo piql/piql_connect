@@ -182,6 +182,7 @@ Route::group(['prefix' => 'v1/admin/permissions'], function () {
     Route::get('', 'Api\Admin\PermissionsController@index');
     
     Route::get('{id}', 'Api\Admin\PermissionsController@show')->where('id', '[0-9]+');
+    Route::get('{id}/users', 'Api\Admin\PermissionsController@users');
     Route::put('{id}', 'Api\Admin\PermissionsController@update')->where('id', '[0-9]+');
     Route::delete('{id}', 'Api\Admin\PermissionsController@delete')->where('id', '[0-9]+');
     
