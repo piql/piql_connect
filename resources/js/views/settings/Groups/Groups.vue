@@ -25,7 +25,7 @@
                 </b-modal>
             </div>
             <div class="card-body">
-                <user-group-items :key="groupkey" @addRole="addRole" />
+                <user-group-items :key="groupkey" @addRole="addRole" @assignGroupToUsers="assignGroupToUsers" />
             </div>
         </div>
 
@@ -50,6 +50,18 @@
         methods: {
             forceRerender(){
                 this.groupkey += 1;
+
+            },
+            async assignGroupToUsers(data){
+                this.infoToast("Assigning group", "assigning user group to a group of selected users");
+                this.response = (await axios.post("/api/v1/admin/permissions/users/assign",data,{
+                    headers:{
+                        'content-type': 'application/json'
+                    }
+                })).data;
+
+                this.forceRerender();
+                this.$bvModal.hide('assign-group');
 
             },
             async addGroup(){

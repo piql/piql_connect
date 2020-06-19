@@ -38,7 +38,7 @@
 
                 <b-modal id="assign-role" size="lg" hide-footer>
                     <template v-slot:modal-title>
-                   <h4> <b>ASSIGN USER ROLE [ {{ role[0].name.toUpperCase() }} ]</b></h4>
+                   <h4> <b>ASSIGN USERS TO ROLE [ {{ role[0].name.toUpperCase() }} ]</b></h4>
                     </template>
                     <div>
                         <vue-select-sides
@@ -48,7 +48,7 @@
                         ></vue-select-sides>
                     
                     </div>
-                    <b-button class="mt-3" @click="assignButtonClicked(role[0].id)" block><i class="fa fa-user-secret"></i> Assign Role</b-button>
+                    <b-button class="mt-3" @click="assignButtonClicked(role[0].id)" block><i class="fa fa-users"></i> Assign Users</b-button>
                 </b-modal>
 
 
