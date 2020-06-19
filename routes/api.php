@@ -192,7 +192,6 @@ Route::group(['prefix' => 'v1/admin/permissions'], function () {
     Route::get('groups/{id}', 'Api\Admin\PermissionsController@getGroup')->where('id', '[0-9]+');
     Route::get('groups/{id}/roles', 'Api\Admin\PermissionsController@listGroupActions')->where('id', '[0-9]+');
     Route::post('groups/{id}/role', 'Api\Admin\PermissionsController@createGroupAction')->where('id', '[0-9]+');
-    Route::post('groups/{id}/roles', 'Api\Admin\PermissionsController@createGroupAction')->where('id', '[0-9]+');
     
     Route::post('users/assign', 'Api\Admin\PermissionsController@assignUsers');
     Route::post('users/unassign', 'Api\Admin\PermissionsController@unAssignUsers');
