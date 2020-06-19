@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Enums\PermissionType;
 use App\Permission;
+use App\UserPermission;
 use Illuminate\Support\Facades\DB;
 
 class PermissionManager 
@@ -30,15 +31,15 @@ class PermissionManager
     public static function delete($id) {
         $permission = Permission::findOrFail($id);
         if ($permission->delete()) {
-            DB::table('user_permissions')->where('permission_id', $id)->delete();
+            UserPermission::where('permission_id', $id)->delete();
             if($permission->type == PermissionType::Group) {
-                DB::table('user_permissions')->where('permission_id', $id)->delete();
+                UserPermission::where('permission_id', $id)->delete();
                 $roles = Permission::select('id')->where('parent_id', $id)->get();
                 if(count($roles) > 0) {
                     $ids = collect($roles)->map(function($a){
                         return $a->id;
                     });
-                    DB::table('user_permissions')->whereIn('permission_id', $ids)->delete();
+                    UserPermission::whereIn('permission_id', $ids)->delete();
                 }
                 Permission::where('parent_id', $id)->delete();
             }
@@ -64,11 +65,11 @@ class PermissionManager
         $results = ['users' => $users, 'permissions'=>[]];
         foreach($perms as $p) foreach($users as $u) {
             $pm = ['user_id'=> $u, 'permission_id'=>$p->id];
-            if(DB::table('user_permissions')->where($pm)->exists()) continue;
+            if(UserPermission::where($pm)->exists()) continue;
             $data[] = array_merge($pm, $timestamps);
             $results['permissions'][] = $p->id;
         }
-        if(!DB::table('user_permissions')->insert($data)) return [
+        if(!UserPermission::insert($data)) return [
             'error' => "failed to create permissions"
         ];
         $results["assigned"] = count($data) > 0;
@@ -87,7 +88,7 @@ class PermissionManager
         ], $data);
         $results = array_merge(['users' => $users, 'permissions'=>[]], $data);
         foreach($perms as $p) foreach($users as $u) {
-            DB::table('user_permissions')->where([
+            UserPermission::where([
                 'user_id'=> $u, 'permission_id'=>$p->id
             ])->delete();
             $results['permissions'][] = $p->id;
@@ -99,14 +100,16 @@ class PermissionManager
     public static function userHasPermission($userId, $permissionId) {
         $rolePermissionEnum = PermissionType::Role;
         $groupPermissionEnum = PermissionType::Group;
+        $permissionTable = (new Permission)->getTable();
+        $userPermissionTable = (new UserPermission)->getTable();
         
         $permissionsQuery = 
             "select roles.id role_id, `groups`.id group_id " .
-            "from (select id, parent_id from permissions where type=$rolePermissionEnum) roles " .
-            "  left join (select id from permissions where type=$groupPermissionEnum) `groups` " .
+            "from (select id, parent_id from $permissionTable where type=$rolePermissionEnum) roles " .
+            "  left join (select id from $permissionTable where type=$groupPermissionEnum) `groups` " .
             "    on roles.parent_id=`groups`.id " .
             "where $permissionId in (roles.id, `groups`.id)";
-        $userQuery = "select user_id from user_permissions where user_id='$userId' and permission_id in (role_id, group_id)";
+        $userQuery = "select user_id from $userPermissionTable where user_id='$userId' and permission_id in (role_id, group_id)";
         
         $permission = DB::table(DB::raw("($permissionsQuery) p"))
             ->select(DB::raw(
