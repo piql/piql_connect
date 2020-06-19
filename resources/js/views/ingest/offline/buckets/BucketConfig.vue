@@ -75,11 +75,11 @@
             },
             baseUrl: {
                 type: String,
-                default: "/api/v1/ingest/offline_storage/pending/jobs"
+                default: "/api/v1/ingest/storage/offline/pending/buckets"
             },
             jobListUrl: {
                 type: String,
-                default: "/api/v1/ingest/offline_storage/pending"
+                default: "/api/v1/ingest/storage/offline/pending"
             }
         },
         computed: {
@@ -92,7 +92,7 @@
         },
         methods: {
             async piqlIt( job ) {
-                let result = (await axios.patch(this.jobListUrl+"/jobs/"+job.id, {
+                let result = (await axios.patch(this.jobListUrl+"/buckets/"+job.id, {
                     'status': 'ingesting'
                 }));
                 if(result.data.status == 'ingesting') {

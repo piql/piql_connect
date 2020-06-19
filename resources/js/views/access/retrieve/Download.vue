@@ -66,7 +66,7 @@ export default {
       },
       takeOffline: async function(id) {
         console.log("taking offline: "+id);
-        (await axios.post("/api/v1/storage/retrievals/"+id+"/take_offline")).data.data;
+        (await axios.post("/api/v1/storage/retrievals/"+id+"/take-offline")).data.data;
         this.allFiles = [];
       },
 
