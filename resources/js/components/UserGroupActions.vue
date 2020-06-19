@@ -77,7 +77,7 @@ export default {
         },
 
         refreshObjects( apiQueryString ){
-            axios.get("/api/v1/admin/permissions/groups/"+ this.groupid +"/action" + apiQueryString).then( (response ) => {
+            axios.get("/api/v1/admin/permissions/groups/"+ this.groupid +"/roles" + apiQueryString).then( (response ) => {
                this.response = response
                 this.actions = this.response.data.data;
                 this.pageMeta = this.response.data.meta

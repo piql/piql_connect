@@ -25,7 +25,7 @@
                 </b-modal>
             </div>
             <div class="card-body">
-                <user-group-items :key="groupkey" @addAction="addAction" />
+                <user-group-items :key="groupkey" @addRole="addRole" @assignGroupToUsers="assignGroupToUsers" />
             </div>
         </div>
 
@@ -52,6 +52,18 @@
                 this.groupkey += 1;
 
             },
+            async assignGroupToUsers(data){
+                this.infoToast("Assigning group", "assigning user group to a group of selected users");
+                this.response = (await axios.post("/api/v1/admin/permissions/users/assign",data,{
+                    headers:{
+                        'content-type': 'application/json'
+                    }
+                })).data;
+
+                this.forceRerender();
+                this.$bvModal.hide('assign-group');
+
+            },
             async addGroup(){
                 this.infoToast('Add Group','Adding '+ this.group + ' user group');
                  this.response = (await axios.post("/api/v1/admin/permissions/groups", {
@@ -67,11 +79,11 @@
                 this.$bvModal.hide('add-group')
             },
 
-            async addAction(action){
-                this.infoToast('Add Group Action','Adding '+ action.name);
-                 this.response = (await axios.post("/api/v1/admin/permissions/groups/"+ action.groupId +"/action", {
-                    name: action.name,
-                    description: action.description
+            async addRole(role){
+                this.infoToast('Add Group Role','Adding '+ role.name);
+                 this.response = (await axios.post("/api/v1/admin/permissions/groups/"+ role.groupId +"/role", {
+                    name: role.name,
+                    description: role.description
                 },{
                     headers:{
                         'content-type': 'application/json'

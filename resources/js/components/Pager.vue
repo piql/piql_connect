@@ -116,7 +116,7 @@ export default {
             } );
         },
         pagerBottom: function() {
-            return this.height > 1000 ? "fixed-bottom pagerBottom" : "";
+            return this.height > 1000 ? "fixed-bottom pagerBottom" : "mt-4 pt-4";
         }
     },
     methods: {
