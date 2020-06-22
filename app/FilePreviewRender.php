@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 use App\Interfaces\ArchivalStorageInterface;
 use App\Dip;
 use App\FileObject;
@@ -36,11 +37,11 @@ class FilePreviewRender extends Model
 	}
 	
 	private function getPdfContent() {
-		$file = sys_get_temp_dir().'/'.base64_encode($this->file->fullpath).'.pdf';
-		file_put_contents($file, $this->storage->stream( $this->dip->storage_location, $this->file->fullpath ));
-		$im = new \Imagick($file.'[0]');
+		$file = 'tmp/'.md5($this->file->fullpath).'.pdf';
+		Storage::disk('local')->put($file, $this->storage->stream( $this->dip->storage_location, $this->file->fullpath ));
+		$im = new \Imagick(Storage::path($file).'[0]');
 		$im->setImageFormat('jpg');
-		unlink($file);
+		Storage::delete($file);
 		return $im;
 	}
 	
