@@ -110,8 +110,7 @@ class DipController extends Controller
     {
         $dip = Dip::find( $request->dipId );
         $files = $dip->fileObjects()
-                     ->where( 'path', 'LIKE', "%/objects" )
-                     ->paginate( env('DEFAULT_ENTRIES_PER_PAGE') );
+        ->where( 'path', 'LIKE', "%/objects" )->get();
 
         return FileObjectResource::collection( $files );
     }
