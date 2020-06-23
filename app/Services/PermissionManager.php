@@ -115,7 +115,8 @@ class PermissionManager
             ->select(DB::raw(
                 "p.role_id, p.group_id, ($userQuery) user_id"
             ))->get();
-
-        return $permission;
+            
+        if(empty($permission)) return null;
+        return $permission[0];
     }
 }

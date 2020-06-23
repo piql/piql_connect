@@ -10,6 +10,7 @@ use App\Http\Resources\UserResource;
 use App\Permission;
 use App\Services\PermissionManager;
 use App\User;
+use Throwable;
 
 class PermissionsController extends Controller
 {
@@ -95,8 +96,14 @@ class PermissionsController extends Controller
      */
     public function show($id)
     {
-        $permission = Permission::findOrFail($id);
-        return new PermissionResource($permission);
+        try {
+            $permission = Permission::find($id);
+            return ($permission != null) ? new PermissionResource($permission) : response([
+                'message' => 'Permission Not Found!'
+            ], 404);
+        } catch (Throwable $e) {
+            return response(['message' => $e->getMessage()], 400);
+        }
     }
 
     /**
