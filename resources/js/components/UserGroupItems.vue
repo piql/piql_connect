@@ -176,7 +176,7 @@ export default {
           this.$emit('addRole', role);
         },
         viewActions(groupId){
-          this.$router.push({ name:'settings.roles', params:{groupId} });
+          this.$router.push({ path:'/settings/roles', query:{groupId} });
         }
         
     }

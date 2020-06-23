@@ -80,11 +80,23 @@ export default {
       apiQueryString: function() {
             let query = this.$route.query;
             let filter = '';
+
             if( parseInt( query.page ) ) {
                 filter += "?page=" + query.page;
             }
             return filter;
         },
+
+        apiEndPoint: function () {
+            let query = this.$route.query;
+
+            if( parseInt( query.groupId ) ) {
+                return '/api/v1/admin/permissions/groups/'+ query.groupId + '/roles';
+            } else{
+                return '/api/v1/admin/permissions/roles';
+            }
+            
+        }
 
     },
      watch: {
@@ -95,7 +107,7 @@ export default {
         if( isNaN( page ) || parseInt( page ) < 2 ) {
             this.$route.query.page = 1;
         }
-        this.refreshObjects( this.apiQueryString );
+        this.refreshObjects( this.apiQueryString, this.apiEndPoint );
 
         /**list users * i can only pull in 10 at a time, need help getting all at 
          * the same time unless allowed to tamper with the backend **/
@@ -127,11 +139,11 @@ export default {
         },
         
        dispatchRouting() {
-            this.refreshObjects( this.apiQueryString );
+            this.refreshObjects( this.apiQueryString, this.apiEndPoint );
         },
 
-        refreshObjects( apiQueryString ){
-            axios.get("/api/v1/admin/permissions/roles" + apiQueryString).then( (response ) => {
+        refreshObjects( apiQueryString, apiEndPoint ){
+            axios.get(apiEndPoint + apiQueryString).then( (response ) => {
                this.response = response
                 this.roles = this.response.data.data;
                 
