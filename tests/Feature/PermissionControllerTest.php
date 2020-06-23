@@ -7,8 +7,6 @@ use App\Services\PermissionManager;
 use App\User;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Laravel\Passport\Passport;
-use Illuminate\Support\Str;
 
 class PermissionControllerTest extends TestCase
 {
