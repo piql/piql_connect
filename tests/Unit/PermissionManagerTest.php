@@ -82,10 +82,10 @@ class PermissionManagerTest extends TestCase
         $r = PermissionManager::createAction($g->id, 'Kill Software', 'Corrupts software');
         $r->save();
         $u = factory(User::class)->create();
-        PermissionManager::assignPermissionsToUsers([$r->id], [$u->id]);
-        $pm = PermissionManager::userHasPermission($u->id, $r->id);
+        PermissionManager::assignPermissionsToUsers([$r->id], [$u->getIdAttribute()]);
+        $pm = PermissionManager::userHasPermission($u->getIdAttribute(), $r->id);
         $this->assertTrue(count($pm) > 0);
-        $this->assertEquals($u->id, $pm['user_id']);
+        $this->assertEquals($u->getIdAttribute(), $pm['user_id']);
         $this->assertEquals($r->id, $pm['role_id']);
         $this->assertEquals($g->id, $pm['group_id']);
     }    
@@ -98,13 +98,13 @@ class PermissionManagerTest extends TestCase
         $r->save();
         
         $u = factory(User::class)->create();
-        PermissionManager::assignPermissionsToUsers([$r->id], [$u->id]);
-        $p1 = PermissionManager::userHasPermission($u->id, $r->id);
+        PermissionManager::assignPermissionsToUsers([$r->id], [$u->getIdAttribute()]);
+        $p1 = PermissionManager::userHasPermission($u->getIdAttribute(), $r->id);
         $this->assertFalse(empty($p1));
-        $this->assertEquals($p1['user_id'], $u->id);
-        PermissionManager::removePermissionsFromUsers([$r->id], [$u->id]);
+        $this->assertEquals($p1['user_id'], $u->getIdAttribute());
+        PermissionManager::removePermissionsFromUsers([$r->id], [$u->getIdAttribute()]);
 
-        $p2 = PermissionManager::userHasPermission($u->id, $r->id);
+        $p2 = PermissionManager::userHasPermission($u->getIdAttribute(), $r->id);
         $this->assertEquals(null, $p2['user_id']);
     }
     
@@ -117,9 +117,9 @@ class PermissionManagerTest extends TestCase
         $a2 = PermissionManager::createAction($g->id, 'Kill Hardware', 'Corrupts hardware');
         $a2->save();
         $u = factory(User::class)->create();
-        PermissionManager::assignPermissionsToUsers([$a2->id], [$u->id]);
-        $this->assertTrue(count(PermissionManager::userHasPermission($u->id, $a2->id)) > 0);
+        PermissionManager::assignPermissionsToUsers([$a2->id], [$u->getIdAttribute()]);
+        $this->assertEquals($u->getIdAttribute(), PermissionManager::userHasPermission($u->getIdAttribute(), $a2->id)['user_id']);
         PermissionManager::delete($g->id);
-        $this->assertTrue(count(PermissionManager::userHasPermission($u->id, $a2->id)) == 0);
+        $this->assertEquals([], PermissionManager::userHasPermission($u->getIdAttribute(), $a2->id));
     }
 }
