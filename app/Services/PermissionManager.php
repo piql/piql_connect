@@ -6,9 +6,12 @@ use App\Enums\PermissionType;
 use App\Permission;
 use App\UserPermission;
 use Illuminate\Support\Facades\DB;
+use App\Traits\Uuids;
 
 class PermissionManager 
 {
+    use Uuids;
+
     public static function createGroup($name, $description) 
     {
         $group = new Permission;
@@ -64,7 +67,7 @@ class PermissionManager
         $data = [];
         $results = ['users' => $users, 'permissions'=>[]];
         foreach($perms as $p) foreach($users as $u) {
-            $pm = ['user_id'=> $u, 'permission_id'=>$p->id];
+            $pm = ['user_id'=> self::uuid2Bin($u), 'permission_id'=>$p->id];
             if(UserPermission::where($pm)->exists()) continue;
             $data[] = array_merge($pm, $timestamps);
             $results['permissions'][] = $p->id;
@@ -89,7 +92,7 @@ class PermissionManager
         $results = array_merge(['users' => $users, 'permissions'=>[]], $data);
         foreach($perms as $p) foreach($users as $u) {
             UserPermission::where([
-                'user_id'=> $u, 'permission_id'=>$p->id
+                'user_id'=> self::bin2Uuid($u), 'permission_id'=>$p->id
             ])->delete();
             $results['permissions'][] = $p->id;
         }
@@ -102,6 +105,14 @@ class PermissionManager
         $groupPermissionEnum = PermissionType::Group;
         $permissionTable = (new Permission)->getTable();
         $userPermissionTable = (new UserPermission)->getTable();
+        $userIdFormat = 
+            "LOWER(CONCAT(".
+                "SUBSTR(HEX(user_id), 1,  8), '-',".
+                "SUBSTR(HEX(user_id), 9,  4), '-',".
+                "SUBSTR(HEX(user_id), 13, 4), '-',".
+                "SUBSTR(HEX(user_id), 17, 4), '-',".
+                "SUBSTR(HEX(user_id), 21)".
+            "))";
         
         $permissionsQuery = 
             "select roles.id role_id, `groups`.id group_id " .
@@ -109,14 +120,16 @@ class PermissionManager
             "  left join (select id from $permissionTable where type=$groupPermissionEnum) `groups` " .
             "    on roles.parent_id=`groups`.id " .
             "where $permissionId in (roles.id, `groups`.id)";
-        $userQuery = "select user_id from $userPermissionTable where user_id='$userId' and permission_id in (role_id, group_id)";
+        $userQuery = 
+            "select ap.user_uuid from (".
+                "select $userIdFormat user_uuid, permission_id from $userPermissionTable".
+            ") ap where user_uuid='$userId' and permission_id in (role_id, group_id)";
         
         $permission = DB::table(DB::raw("($permissionsQuery) p"))
             ->select(DB::raw(
                 "p.role_id, p.group_id, ($userQuery) user_id"
             ))->get();
             
-        if(empty($permission)) return null;
-        return $permission[0];
+        return (empty($permission) || !isset($permission[0])) ? [] : (array)$permission[0];
     }
 }

@@ -71,8 +71,8 @@ class PermissionControllerTest extends TestCase
         ]);
         $response->assertOk();
         $hp = PermissionManager::userHasPermission($u1->id, $r->id);
-        $this->assertEquals($r->id, $hp->role_id);
-        $this->assertEquals($u1->getIdAttribute(), $hp->user_id);
+        $this->assertEquals($r->id, $hp['role_id']);
+        $this->assertEquals($u1->getIdAttribute(), $hp['user_id']);
     }    
     
     public function test_can_unassign_user_from_permission()
@@ -84,7 +84,20 @@ class PermissionControllerTest extends TestCase
         ]);
         $response->assertOk();
         $hp = PermissionManager::userHasPermission($u1->id, $r->id);
-        $this->assertEquals($r->id, $hp->role_id);
-        $this->assertEquals(null, $hp->user_id);
+        $this->assertEquals($r->id, $hp['role_id']);
+        $this->assertEquals(null, $hp['user_id']);
+    }
+    
+    public function test_can_list_users_with_permission()
+    {
+        $r = factory(Permission::class)->create();
+        $u1 = factory(User::class)->create();
+        $u2 = factory(User::class)->create();
+        $u3 = factory(User::class)->create();
+        PermissionManager::assignPermissionsToUsers([$r->id], [$u1->id, $u2->id, $u3->id]);
+        $response = $this->get('/api/v1/admin/permissions/'.$r->id.'/users');
+        $response->assertOk();
+        $this->assertEquals(3, count($response->decodeResponseJson("data")));
+        
     }
 }
