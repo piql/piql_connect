@@ -44,5 +44,30 @@ class UserControllerTest extends TestCase
         $response->assertHeader('Content-Type', 'application/json');
         $message = $response->decodeResponseJson('message');
         $this->assertContains('Not Found', $message);
+    }   
+    
+    public function test_disabling_user_sets_disabledOn_field()
+    {
+        $response = $this->json('post','/api/v1/admin/users/disable', [
+            'users' => [factory(User::class)->create()->getIdAttribute()]
+        ]);
+        $response->assertOk();
+        $id = $response->decodeResponseJson('users')[0]['id'];
+        $u = User::find($id);
+        $this->assertNotNull($u->disabled_on);
+    }    
+    
+    public function test_enabling_user_sets_disabledOn_field_to_null()
+    {
+        $response = $this->json('post','/api/v1/admin/users/disable', [
+            'users' => [factory(User::class)->create()->getIdAttribute()]
+        ]);
+        $response->assertOk();
+        $id = $response->decodeResponseJson('users')[0]['id'];
+        $response = $this->json('post','/api/v1/admin/users/enable', [
+            'users' => [$id]
+        ]);
+        $u = User::find($id);
+        $this->assertNull($u->disabled_on);
     }    
 }
