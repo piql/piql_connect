@@ -33,7 +33,7 @@ class ConfirmUserRegistration extends Mailable
      */
     public function build()
     {
-        return $this->view('users.emails.registration')
+        return $this->view('users.emails.registration.confirm')
             ->with([
                 'name' => $this->user->full_name,
                 'confirmation_url' => $this->host.'/registration/confirm/'.$this->user->confirmation_token,

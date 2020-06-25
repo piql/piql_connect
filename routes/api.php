@@ -207,6 +207,6 @@ Route::group(['prefix' => 'v1/admin/users'], function () {
 });
 
 Route::group(['prefix' => 'v1/registration'], function () {
-    Route::post('register', 'App\Http\Controllers\Api\Registration\UserRegistrationController@register');
-    Route::post('confirm', 'App\Http\Controllers\Api\Registration\UserRegistrationController@confirm');
+    Route::post('register', 'Api\Registration\UserRegistrationController@register');
+    Route::post('confirm', 'Api\Registration\UserRegistrationController@confirm');
 });
