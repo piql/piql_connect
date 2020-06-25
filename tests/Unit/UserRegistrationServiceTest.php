@@ -2,10 +2,12 @@
 
 namespace Tests\Unit;
 
+use App\Mail\ConfirmUserRegistration;
 use App\Services\UserRegistrationService;
 use App\User;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Illuminate\Support\Facades\Mail;
 
 class UserRegistrationServiceTest extends TestCase
 {
@@ -13,8 +15,14 @@ class UserRegistrationServiceTest extends TestCase
     
     public function test_can_initiate_user_regstration()
     {
-        UserRegistrationService::registerUser('John Doe Mukiibi', 'jdoem', 'jdmk123@org.com', 'http://org.com') ;
-        //todo: test that/if an email was sent
+        Mail::fake();
+        $usr = UserRegistrationService::registerUser('John Doe Mukiibi', 'jdoem', 'jdmk123@org.com', 'http://org.com') ;
+        Mail::assertSent(ConfirmUserRegistration::class, function ($mail) use ($usr) {
+            return $mail->user->id === $usr->id
+                    && $mail->host === 'http://org.com'
+                    && $mail->hasTo($usr->email);
+        });
+        Mail::assertSent(ConfirmUserRegistration::class, 1);
         $u = User::where('username', 'jdoem')->first();
         $this->assertNotNull($u->confirmation_token);
         $this->assertEquals('John Doe Mukiibi', $u->full_name);

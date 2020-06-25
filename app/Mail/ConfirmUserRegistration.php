@@ -12,8 +12,8 @@ class ConfirmUserRegistration extends Mailable
 {
     use Queueable, SerializesModels;
 
-    private $user;
-    private $host;
+    public $user;
+    public $host;
 
     /**
      * Create a new message instance.
