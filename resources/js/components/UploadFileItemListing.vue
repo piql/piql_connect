@@ -9,10 +9,10 @@
               </tr>
           </thead>
           <tbody>
-              <tr v-for="(file,index) in sortedFilesUploading" :key="file.id" v-if="index >= pageFrom-1 && index <= pageTo-1 ">
+              <tr v-for="file in sortedFilesUploading" :key="file.id">
                 <td>
-                    <div v-if="isUploading(file)" class="progress upload-progress bg-fill">
-                        <div class="progress-bar bg-brand text-left" role="progressbar" v-bind:style="progressBarStyle(file)" v-bind:aria-valuenow="progressPercentage(file)" aria-valuemin="0" aria-valuemax="100">
+                    <div v-if="file.isUploading" class="progress upload-progress bg-fill">
+                        <div class="progress-bar bg-brand text-left" role="progressbar" v-bind:style="file.progressBarStyle" v-bind:aria-valuenow="file.progressPercentage" aria-valuemin="0" aria-valuemax="100">
                             <span class="upload-text">{{file.filename}}</span>
                         </div>
                     </div>
@@ -25,7 +25,7 @@
                     </div>
                 </td>
                 <td>
-                    {{humanReadableFileSize(file)}}
+                    {{file.humanReadableFileSize}}
                 </td>
                 <td>
                     <span v-if="file.isComplete">
@@ -54,6 +54,26 @@ export default {
         pageTo: Number
 
     },
+    data(){
+        return {
+            file: null,
+
+        }
+
+    },
+    async mounted(){
+
+        this.sortedFilesUploading.forEach(file => {
+            this.file = file;
+            
+            file.humanSize = this.humanReadableFileSize;
+            file.progressBarStyle = this.progressBarStyle;
+            file.progressPercentage = this.progressPercentage;
+            file.isUploading = this.isUploading;
+            
+        });
+
+    },
     methods: {
             removeClicked: function( file ) {
                 this.$emit("removeClicked", file );
@@ -69,18 +89,18 @@ export default {
             }
         },
         computed: {
-            humanReadableFileSize(file){
-                return this.isUploading ? filesize(file.uploadedFileSize, {round: 0}) + " / " + filesize(file.fileSize, {round: 0})
-                    : filesize(file.fileSize, {round: 0});
+            humanReadableFileSize(){
+                return this.isUploading ? filesize(parseInt(this.file.uploadedFileSize), {round: 0}) + " / " + filesize(parseInt(this.file.fileSize), {round: 0})
+                    : filesize(parseInt(this.file.fileSize), {round: 0});
             },
-            progressBarStyle(file) {
-                return file.progressBarStyle;
+            progressBarStyle() {
+                return this.file.progressBarStyle;
             },
-            progressPercentage(file) {
-                return file.progressPercentage;
+            progressPercentage() {
+                return this.file.progressPercentage;
             },
-            isUploading(file) {
-                return file.isUploading;
+            isUploading() {
+                return this.file.isUploading;
             },
         }
     
