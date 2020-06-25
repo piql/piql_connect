@@ -12,8 +12,8 @@ class ConfirmUserRegistration extends Mailable
 {
     use Queueable, SerializesModels;
 
-    private $user;
-    private $host;
+    public $user;
+    public $host;
 
     /**
      * Create a new message instance.
@@ -33,7 +33,7 @@ class ConfirmUserRegistration extends Mailable
      */
     public function build()
     {
-        return $this->view('users.emails.registration')
+        return $this->view('users.emails.registration.confirm')
             ->with([
                 'name' => $this->user->full_name,
                 'confirmation_url' => $this->host.'/registration/confirm/'.$this->user->confirmation_token,

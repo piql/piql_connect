@@ -18,14 +18,21 @@ class UserRegistrationService
     }
 
     public static function registerUser($name, $username, $email, $host){
+        $user = User::where('email', $email)->orWhere('username', $username)->first();
+        if($user != null){
+            if($email == $user->email) throw new Exception('User with this email already exists');
+            if($username == $user->username) throw new Exception('User with this username already exists');
+        }            
         $user = new User;
         $user->full_name = $name;
         $user->username = $username;
         $user->email = $email;
         $user->confirmation_token = encrypt(time().$email);
+        $user->password = encrypt(time().$user->email);        
         if(!$user->save()) 
             throw new Exception('Failed to create user');
         Mail::to($user->email)->send(new ConfirmUserRegistration($user, $host));
+        return $user;
     }
     
     public static function confirmUser($token, $password){
