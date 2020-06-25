@@ -30,7 +30,7 @@ class UserRegistrationControllerTest extends TestCase
         $response->assertJsonStructure(['message']);
     }
 
-    public function test_initiating_duplicate_user_registration_returns_201() {
+    public function test_initiating_duplicate_user_registration_returns_400() {
         UserRegistrationService::registerUser('Maek Twein', 'mkwen', 'mt21@authors.org', '');
         $response = $this->postJson('/api/v1/registration/register', [
             'name'=>'Maek Twein', 'email'=>'mt21@authors.org', 'username'=>'mkwen'
