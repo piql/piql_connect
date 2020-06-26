@@ -1,15 +1,14 @@
 <?php
 
-namespace App;
+namespace App\Helpers;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
 use App\Interfaces\ArchivalStorageInterface;
 use App\Dip;
 use App\FileObject;
 use Log;
 
-class FilePreviewRender extends Model
+class FilePreviewRenderHelper
 {
 	private $dip;
 	private $file;

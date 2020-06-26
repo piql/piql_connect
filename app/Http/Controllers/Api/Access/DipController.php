@@ -13,7 +13,7 @@ use Illuminate\Support\Str;
 use App\Interfaces\ArchivalStorageInterface;
 use App\FileObject;
 use App\Bag;
-use App\FilePreviewRender;
+use App\Helpers\FilePreviewRenderHelper;
 use Log;
 
 class DipController extends Controller
@@ -165,10 +165,10 @@ class DipController extends Controller
         $dip = Dip::find( $request->dipId );
         $file = $dip->fileObjects->find( $request->fileId );
         
-		$filePreviewRender = new FilePreviewRender($storage, $dip, $file);
+        $filePreviewRenderHelper = new FilePreviewRenderHelper($storage, $dip, $file);
 		
-        return response($filePreviewRender->getContent())
-        ->header("Content-Type" , $filePreviewRender->getMimeType());
+        return response($filePreviewRenderHelper->getContent())
+        ->header("Content-Type" , $filePreviewRenderHelper->getMimeType());
     }
 
     public function file_download( ArchivalStorageInterface $storage, Request $request )
