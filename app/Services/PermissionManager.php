@@ -92,7 +92,7 @@ class PermissionManager
         $results = array_merge(['users' => $users, 'permissions'=>[]], $data);
         foreach($perms as $p) foreach($users as $u) {
             UserPermission::where([
-                'user_id'=> self::bin2Uuid($u), 'permission_id'=>$p->id
+                'user_id'=> self::uuid2Bin($u), 'permission_id'=>$p->id
             ])->delete();
             $results['permissions'][] = $p->id;
         }
