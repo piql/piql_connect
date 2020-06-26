@@ -81,7 +81,6 @@
                                 class="dropzone is-6 has-text-centered"
                                 :uploader="uploader" style="margin-right: 0px; width:99%; height:1s0vh;">
                                     <file-input multiple
-                                        accept='image/*'
                                         :uploader="uploader">
                                         <p class="dz-text"><i class="fas fa-cloud-upload-alt"></i> {{$t("upload.addFileButton")}}</p>
                                     </file-input>
