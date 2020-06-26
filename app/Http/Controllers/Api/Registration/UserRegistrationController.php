@@ -25,7 +25,7 @@ class UserRegistrationController extends Controller
             'name'     => 'required|min:5',
         ]);
         if ($validator->fails()) return response([
-            'message' => 'Validation failed',
+            'message' => 'Validation Failed',
             'errors' => $validator->errors(),
         ], 400);
         try {

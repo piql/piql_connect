@@ -188,6 +188,7 @@ Route::group(['prefix' => 'v1/admin/permissions'], function () {
     
     Route::get('groups', 'Api\Admin\PermissionsController@listGroups');
     Route::post('groups', 'Api\Admin\PermissionsController@createGroup');
+    Route::get('roles', 'Api\Admin\PermissionsController@listRoles');
     Route::post('roles', 'Api\Admin\PermissionsController@createAction');
     Route::get('groups/{id}', 'Api\Admin\PermissionsController@getGroup')->where('id', '[0-9]+');
     Route::get('groups/{id}/roles', 'Api\Admin\PermissionsController@listGroupActions')->where('id', '[0-9]+');
@@ -198,11 +199,14 @@ Route::group(['prefix' => 'v1/admin/permissions'], function () {
     Route::post('users/has-permission', 'Api\Admin\PermissionsController@userHasPermission');
  });
 
-Route::resource('v1/admin/users', 'Api\Admin\UserController')->only([
-    'index', 'show', 'disable', 'enable'
-]);
+Route::group(['prefix' => 'v1/admin/users'], function () {
+    Route::get('', 'Api\Admin\UserController@index');
+    Route::get('{id}', 'Api\Admin\UserController@show');
+    Route::post('disable', 'Api\Admin\UserController@disable');
+    Route::post('enable', 'Api\Admin\UserController@enable');
+});
 
 Route::group(['prefix' => 'v1/registration'], function () {
-    Route::post('register', 'App\Http\Controllers\Api\Registration\UserRegistrationController@register');
-    Route::post('confirm', 'App\Http\Controllers\Api\Registration\UserRegistrationController@confirm');
+    Route::post('register', 'Api\Registration\UserRegistrationController@register');
+    Route::post('confirm', 'Api\Registration\UserRegistrationController@confirm');
 });
