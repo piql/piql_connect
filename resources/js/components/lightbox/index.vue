@@ -156,7 +156,7 @@
   .overlay {
     height: 100%;
     position: fixed;
-    z-index: 9999;
+    z-index: 9990;
     left: 0;
     top: 0;
     background-color: rgb(0,0,0);
@@ -182,13 +182,15 @@
     transition: 0.3s;
   }
   .overlay a:hover, .overlay a:focus {
-    color: #ffffff;
+    color: #ff6633;
   }
   .overlay .closebtn {
     position: absolute;
     right: 45px;
     font-size: 60px;
-    color: #fff;
+    color: #000000;
+    z-index: 9999;
+
   }
   .overlayContentNavButtonOn {
     display: inline-block;
