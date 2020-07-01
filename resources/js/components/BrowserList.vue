@@ -15,21 +15,25 @@
         <span v-if="fileLocation === 'offline'">
             <browser-item-offline  v-for="item in dataObjects" @addFileToRetrieval="addFileToRetrieval" @addObjectToRetrieval="addObjectToRetrieval" :archive="selectedArchive" :holding="selectedHolding" v-bind:item="item" v-bind:key="item.id" @openObject="openObject"/>
         </span>
-        <VueEasyLightbox
+        <Lightbox
             :visible="lbVisible"
             :imgs="previewImages"
             :index="index"
-            @hide="hideLightBox"
+            :hide="hideLightBox"
+            :totalImgs="imgLength"
+            :perPage="perPage"
+            :page="page"
+            :pageNav="pageNav"
         />
     </div>
 </template>
 
 <script>
 import axios from 'axios';
-import VueEasyLightbox from 'vue-easy-lightbox';
+import Lightbox from './lightbox';
     export default {
         components: {
-            VueEasyLightbox
+            Lightbox
         },
     props: {
         filters: {
@@ -52,7 +56,11 @@ import VueEasyLightbox from 'vue-easy-lightbox';
         return {
             lbVisible: false,
             index: 0,
-            previewImages: []
+            previewImages: [],
+            imgLength: 0,
+            perPage: 5,
+            page: 1,
+            previewDip: {}
         }
     },
 
@@ -81,9 +89,10 @@ import VueEasyLightbox from 'vue-easy-lightbox';
             /* Grab all previews from a dip and convert to b64, then push to the lightbox.
              * Code could be tidier.
              */
-
+            this.previewDip = dip;
+            this.imgLength = dip.storage_properties.bag.fileCount;
             this.lbVisible = true;
-            let allFiles = ( await axios.get('/api/v1/access/dips/'+dip.id+'/files') ).data.data;
+            let allFiles = ( await axios.get('/api/v1/access/dips/'+dip.id+'/files?page=' + this.page) ).data.data;
             let fileIds = [];
             for ( var i in allFiles ) {
                 fileIds.push( allFiles[i].id );
@@ -98,6 +107,11 @@ import VueEasyLightbox from 'vue-easy-lightbox';
         hideLightBox: function( e ) {
             this.lbVisible = false;
             this.previewImages = [];
+        },
+        pageNav: function ( adj ) {
+            this.page += adj
+            this.previewImages = [];
+            this.showPreview(this.previewDip);
         }
     },
 }
