@@ -86,9 +86,7 @@ export default {
             },
             removeFailedClicked: function( file ) {
                 this.$emit("removeFailedClicked", file );
-            }
-        },
-        computed: {
+            },
             humanReadableFileSize(){
                 return this.isUploading ? filesize(parseInt(this.file.uploadedFileSize), {round: 0}) + " / " + filesize(parseInt(this.file.fileSize), {round: 0})
                     : filesize(parseInt(this.file.fileSize), {round: 0});
@@ -102,6 +100,9 @@ export default {
             isUploading() {
                 return this.file.isUploading;
             },
+        },
+        computed: {
+            
         }
     
 

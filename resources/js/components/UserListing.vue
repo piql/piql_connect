@@ -7,15 +7,18 @@
                             <th>Fullname</th>
                             <th>Username</th>
                             <th>Email</th>
+                            <th>Status</th>
                             <th>Created</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="staff in users" :key="staff.uid">
+                        <tr v-for="staff in users" :key="staff.id">
                             <td>{{staff.full_name}}</td>
                             <td>{{staff.username}}</td>
                             <td>{{staff.email}}</td>
+                            <td v-if="staff.disabled === true"> <b-badge variant="danger"> Disabled</b-badge></td>
+                            <td v-else > <b-badge variant="success"> Active</b-badge></td>
                             <td>{{staff.created_at}}</td>
                             <td>
                                 <a class="btn btn-xs btn-primary" title="Assign Group" style="color:white">
@@ -24,7 +27,7 @@
                                 <a class="btn btn-xs btn-primary" title="Edit" style="color:white" data-toggle="modal" data-target="#editModal">
                                     <i class="fa fa-edit"></i>
                                     </a>
-                                <a class="btn btn-xs btn-primary" title="Disable" style="color:white" @click="showDisableModal(staff.uid)">
+                                <a class="btn btn-xs btn-primary" title="Disable" style="color:white" @click="showDisableModal(staff.id)">
                                     <i class="fa fa-ban"></i>
                                     </a>
                             </td>
@@ -33,6 +36,7 @@
                        
                     </tbody>
                 </table>
+                
 
                 <b-modal id="disable-user" v-if="user" hide-footer>
                     <template v-slot:modal-title>
@@ -99,12 +103,12 @@ export default {
             };
     },
     props:{
-        users: Object,
-        pageMeta: Object
+        users: Object
     },
+    
     methods:{
-        showDisableModal(uid){
-            this.user = this.users.filter(user => user.uid === uid);
+        showDisableModal(id){
+            this.user = this.users.filter(user => user.id === id);
             this.$bvModal.show('disable-user');
         },
         disableButtonClicked(id){
