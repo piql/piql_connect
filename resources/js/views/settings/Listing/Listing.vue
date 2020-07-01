@@ -29,7 +29,12 @@
                 </b-modal>
             </div>
             <div class="card-body">
-               <user-listing :key="listingKey" @disableUser="disableUser" :users="users" :pageMeta="pageMeta"></user-listing>
+               <user-listing :key="listingKey" @disableUser="disableUser" :users="users"></user-listing>
+               <div class="row text-center pagerRow">
+                    <div class="col">
+                        <Pager :meta='pageMeta' :height='height' />
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -51,24 +56,63 @@
                 response: null
             };
         },
+        props: {
+            height: {
+                type: Number,
+                default: 0
+            }
+        },
+
+     watch: {
+        '$route': 'dispatchRouting'
+    },
 
         async mounted() {
-            this.response = (await axios.get("/api/v1/admin/users")).data;
-            let staffs = this.response.data;
-            let i = 1;
+            let page = this.$route.query.page;
+            if( isNaN( page ) || parseInt( page ) < 2 ) {
+                this.$route.query.page = 1;
+            }
+            this.refreshObjects( this.apiQueryString, this.apiEndPoint );
 
-            staffs.forEach(function(single) {
-                    
-                    //single.created = getFormatDate(single.created_at);
-                    single.uid = i;
-                    i++;
-                });
+        },
+
+        computed:  {
+            apiQueryString: function() {
+            let query = this.$route.query;
+            let filter = '';
+
+            if( parseInt( query.page ) ) {
+                filter += "?page=" + query.page;
+            }
+            return filter;
+        },
+
+        apiEndPoint: function () {
+            let query = this.$route.query;
+
+            if( parseInt( query.groupId ) ) {
+                return '/api/v1/admin/permissions/'+ query.groupId + '/users';
+            } else{
+                return '/api/v1/admin/users';
+            }
             
-            this.users = staffs;
-            this.pageMeta = this.response.meta;
+        }
+
         },
 
         methods: {
+            dispatchRouting() {
+                this.refreshObjects( this.apiQueryString, this.apiEndPoint );
+            },
+
+            refreshObjects( apiQueryString, apiEndPoint){
+                axios.get(apiEndPoint + apiQueryString).then( (response ) => {
+                this.response = response
+                    this.users = this.response.data.data;
+                    
+                    this.pageMeta = this.response.data.meta
+                });
+            },
             forceRerender(){
                 this.listingKey += 1;
 

@@ -18,11 +18,14 @@
                                 <a class="btn btn-xs btn-primary" @click="viewActions(group.id)" title="Actions" style="color:white">
                                     <i class="fa fa-eye"></i>
                                     </a>
+                                <a class="btn btn-xs btn-primary" @click="viewUsers(group.id)" title="Users" style="color:white">
+                                    <i class="fa fa-users"></i>
+                                    </a>
                                 <a class="btn btn-xs btn-primary" title="Add Role" style="color:white" @click="showAssignActionModal(group.id)">
                                     <i class="fa fa-user-secret"></i>
                                     </a>
                                 <a class="btn btn-xs btn-primary" @click="showAssignModal(group.id)" title="Assign Users" style="color:white">
-                                    <i class="fa fa-users"></i>
+                                    <i class="fa fa-user-plus"></i>
                                     </a>
                             </td>
                         </tr>
@@ -177,6 +180,10 @@ export default {
         },
         viewActions(groupId){
           this.$router.push({ path:'/settings/roles', query:{groupId} });
+        },
+
+        viewUsers(groupId){
+          this.$router.push({ path:'/settings/listing', query:{groupId} });
         }
         
     }

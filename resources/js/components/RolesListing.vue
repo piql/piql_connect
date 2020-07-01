@@ -17,11 +17,14 @@
                                 <a class="btn btn-xs btn-primary" title="Edit Role" style="color:white">
                                     <i class="fa fa-edit"></i>
                                     </a>
+                                <a class="btn btn-xs btn-primary" @click="viewUsers(role.id)" title="Users" style="color:white">
+                                    <i class="fa fa-users"></i>
+                                    </a>
                                 <a class="btn btn-xs btn-primary" title="Delete Role" style="color:white">
                                     <i class="fa fa-trash"></i>
                                     </a>
                                 <a class="btn btn-xs btn-primary" @click="showAssignModal(role.id)" title="Assign Users" style="color:white">
-                                    <i class="fa fa-users"></i>
+                                    <i class="fa fa-user-plus"></i>
                                     </a>
                             </td>
                         
@@ -149,6 +152,9 @@ export default {
                 
                 this.pageMeta = this.response.data.meta
             });
+        },
+        viewUsers(roleId){
+          this.$router.push({ path:'/settings/listing', query:{roleId} });
         }
         
     }
