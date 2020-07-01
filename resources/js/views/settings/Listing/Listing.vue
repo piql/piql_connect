@@ -106,7 +106,12 @@
             },
 
             refreshObjects( apiQueryString, apiEndPoint){
-                axios.get(apiEndPoint + apiQueryString).then( (response ) => {
+                let data = {
+                    limit: 10
+                }; 
+                axios.get(apiEndPoint + apiQueryString,{
+                    params: data
+                }).then( (response ) => {
                 this.response = response
                     this.users = this.response.data.data;
                     

@@ -127,7 +127,7 @@ export default {
         /**list users * i can only pull in 10 at a time, need help getting all at 
          * the same time unless allowed to tamper with the backend **/
 
-       let users = (await axios.get("/api/v1/admin/users")).data.data;
+       let users = (await axios.get("/api/v1/admin/users",{params: {limit: 100}})).data.data;
         users.forEach(single => {
             this.list.push({
                 label: single.full_name,
