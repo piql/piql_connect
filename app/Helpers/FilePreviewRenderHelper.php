@@ -40,6 +40,9 @@ class FilePreviewRenderHelper
 		Storage::disk('local')->put($file, $this->storage->stream( $this->dip->storage_location, $this->file->fullpath ));
 		$im = new \Imagick(Storage::path($file).'[0]');
 		$im->setImageFormat('jpg');
+		$im->setBackgroundColor('white');
+		$im->mergeImageLayers(\Imagick::LAYERMETHOD_FLATTEN);
+		$im->setImageAlphaChannel(\Imagick::ALPHACHANNEL_REMOVE);
 		Storage::delete($file);
 		return $im;
 	}
