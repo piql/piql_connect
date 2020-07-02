@@ -79,7 +79,7 @@
                          </div>
                          <Dropzone
                                 class="dropzone is-6 has-text-centered"
-                                multiple="true"
+                                :multiple="true"
                                 :uploader="uploader" style="margin-right: 0px; width:99%; height:1s0vh;">
                                     <file-input multiple
                                         :uploader="uploader">
@@ -107,9 +107,9 @@
                         <b><i class="fa fa-upload"></i> UPLOADED FILES</b>
                     </div>
                     <div class="card-body">
-                    <upload-file-item-listing :sortedFilesUploading="sortedFilesUploading" :pageFrom="pageFrom" :pageTo="pageTo" 
-                @metadataClicked="metadataClicked" @removeClicked="removeClicked"
-                    @retryClicked="retryClicked" @removeFailedClicked="removeFailedClicked" ></upload-file-item-listing>
+                        <upload-file-item-listing :sortedFilesUploading="sortedFilesUploading" :pageFrom="pageFrom" :pageTo="pageTo" 
+                        @metadataClicked="metadataClicked" @removeClicked="removeClicked"
+                        @retryClicked="retryClicked" @removeFailedClicked="removeFailedClicked" ></upload-file-item-listing>
 
                         <div class="row text-center pagerRow">
                             <div class="col">
@@ -330,7 +330,7 @@ export default {
             selectedArchive: "",
             selectedHolding: "",
             currentPage: 1,
-            pageSize: 4,
+            pageSize: 8,
             pageFrom: 1,
             pageTo: 4,
             fileNameFilter: ""
