@@ -3,7 +3,7 @@
         <page-heading icon="fa-tachometer-alt" :title="$t('upload.title')" :ingress="$t('upload.ingress')" />
 
         <form v-on:submit.prevent>
-        <div class="row form-group mt-2 mb-2">
+        <!-- <div class="row form-group mt-2 mb-2">
             <div v-show="compoundModeEnabled" class="col-2 text-left" >
                 <label for="bagname" class="col-form-label-sm">{{$t("upload.sipName")}}</label>
                 <input id="bagName" v-model="bagName" ref="bagName"
@@ -36,23 +36,99 @@
                 <button v-if="processDisabled" disabled title="Start the ingest process" id="processButton" class="btn form-control-btn w-100">{{$t('upload.processButton')}}</button>
                 <button v-else="processDisabled" title="Start the ingest process" id="processButton" class="btn form-control-btn w-100"  v-on:click="commitBagToProcessing">{{$t('upload.processButton')}}</button>
             </div>
-        </div>
+        </div> -->
 
-        <div class="card" :title="$t('upload.addFileButtonToolTip')">
-            <div class="card-body">
-                <Dropzone
-                    class="dropzone is-6 has-text-centered"
-                    :uploader="uploader" style="margin-right: 0px;">
-                        <file-input multiple
-                            accept='image/*'
-                            :uploader="uploader">
-                            <p class="dz-text"><i class="fas fa-cloud-upload-alt"></i> {{$t("upload.addFileButton")}}</p>
-                        </file-input>
-                </Dropzone>
+        <div class="row">
+            <div class="col-md-4">
+               
+                <div class="card" :title="$t('upload.addFileButtonToolTip')">
+                    <div class="card-header">
+                        <b><i class="fa fa-filter"></i> INGEST UPLOAD FORM</b>
+                    </div>
+                    <div class="card-body">
+                        
+                         <div class="form-group">
+                             <div v-show="compoundModeEnabled" class="text-left" >
+                                <label for="bagname" class="col-form-label-sm">{{$t("upload.sipName")}}</label>
+                                <input id="bagName" v-model="bagName" ref="bagName"
+                                    type="text" class="pl-3 noTextTransform form-control"
+                                    :title="$t('upload.requiredName')"
+                                    @input="setBagName"
+                                    required pattern='^((?![:\\<>"/?*|]).){3,64}$'>
+                            </div>
+                         </div>
+                         <div class="form-group">
+                             <div :title="$t('upload.archiveToolTip')">
+                                <archive-picker v-bind:label="$t('Archive')"></archive-picker>
+                            </div>
+                         </div>
+                         <div class="form-group">
+                             <div :title="$t('upload.holdingToolTip')">
+                                <holding-picker v-bind:label="$t('Holdings')" :useWildCard="false" ></holding-picker>
+                            </div>
+                         </div>
+                         <div class="form-group">
+                             <div v-if="hasFailedUploads" class="text-center">
+                                <label for="processButton" class="col-form-label-sm">&nbsp;</label>
+                                <button class="btn form-control-btn btn-link" @click="retryAll" data-toggle="tooltip" :title="$t('upload.resumeAll')"><i class="fas fa-redo topIcon text-center mr-2"></i></button>
+                            </div>
+                            <div v-else="hasFailedUploads" class="text-left align-middle form-group">
+                                <label for="fileNameFilter" class="col-form-label-sm">{{$t("upload.fileNameFilter")}}</label>
+                                <input class="form-control" id="fileNameFilter" v-model="fileNameFilter">
+                            </div>
+                         </div>
+                         <Dropzone
+                                class="dropzone is-6 has-text-centered"
+                                multiple="true"
+                                :uploader="uploader" style="margin-right: 0px; width:99%; height:1s0vh;">
+                                    <file-input multiple
+                                        :uploader="uploader">
+                                        <p class="dz-text"><i class="fas fa-cloud-upload-alt"></i> {{$t("upload.addFileButton")}}</p>
+                                    </file-input>
+                            </Dropzone>
+                         
+                         
+
+                         <div class="form-group">
+                             <div v-show="compoundModeEnabled">
+                                <label for="processButton" class="col-form-label-sm">&nbsp;</label>
+                                <button v-if="processDisabled" disabled title="Start the ingest process" id="processButton" class="btn form-control-btn w-100">{{$t('upload.processButton')}}</button>
+                                <button v-else="processDisabled" title="Start the ingest process" id="processButton" class="btn form-control-btn w-100"  v-on:click="commitBagToProcessing">{{$t('upload.processButton')}}</button>
+                            </div>
+
+                         </div>
+                        
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header">
+                        <b><i class="fa fa-upload"></i> UPLOADED FILES</b>
+                    </div>
+                    <div class="card-body">
+                    <upload-file-item-listing :sortedFilesUploading="sortedFilesUploading" :pageFrom="pageFrom" :pageTo="pageTo" 
+                @metadataClicked="metadataClicked" @removeClicked="removeClicked"
+                    @retryClicked="retryClicked" @removeFailedClicked="removeFailedClicked" ></upload-file-item-listing>
+
+                        <div class="row text-center pagerRow">
+                            <div class="col">
+                                <Pager :meta="filesUploadingMeta" :height="height" v-if="totalFilesUploading > 0" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
 
-        <div class="row plistHeader">
+        
+
+        
+
+        
+
+        <!-- <div class="row plistHeader">
             <div class="col-7 text-left">
                 {{$t('upload.fileName')}}
             </div>
@@ -62,19 +138,15 @@
             <div class="col-3 text-center">
                 {{$t('upload.fileActions')}}
             </div>
-        </div>
+        </div> -->
 
-        <UploadFileItem v-for="(file,index) in sortedFilesUploading" v-bind:file="file" :key="file.id"
+        <!-- <UploadFileItem v-for="(file,index) in sortedFilesUploading" v-bind:file="file" :key="file.id"
             @metadataClicked="metadataClicked" @removeClicked="removeClicked"
             @retryClicked="retryClicked" @removeFailedClicked="removeFailedClicked"
             v-if="index >= pageFrom-1 && index <= pageTo-1 "
-            class="mr-1 ml-1"/>
-        <div class="row plist invisible" v-for="pad in pagerPad"></div>
-        <div class="row text-center pagerRow">
-            <div class="col">
-                <Pager :meta="filesUploadingMeta" :height="height" v-if="totalFilesUploading > 0" />
-            </div>
-        </div>
+            class="mr-1 ml-1"/> -->
+        <!-- <div class="row plist invisible" v-for="pad in pagerPad"></div> -->
+        
     </form>
     </div>
 </template>
