@@ -79,6 +79,7 @@
                          </div>
                          <Dropzone
                                 class="dropzone is-6 has-text-centered"
+                                multiple="true"
                                 :uploader="uploader" style="margin-right: 0px; width:99%; height:1s0vh;">
                                     <file-input multiple
                                         :uploader="uploader">
