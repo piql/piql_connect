@@ -98,7 +98,7 @@
       },
       setImgSrc() {
         this.currentImgSrc = this.imgs != null && this.imgs.length > 0 ? this.imgs[this.index] : "";
-        this.toolBoxNavPanel = "toolBoxNavPanel" + (this.imgs.length > 1 ? "On" : "Off");
+        this.toolBoxNavPanel = "toolBoxNavPanel" + (this.imgs.length >= 1 ? "On" : "Off");
         this.toolBoxImgPanel = "toolBoxImgPanel" + (this.imgs.length > 0 ? "On" : "Off");
         this.overlayContentNavButtonPrev = "overlayContentNavButtonPrev overlayContentNavButton" + (this.index > 0 ? "On" : "Off");
         this.overlayContentNavButtonNext = "overlayContentNavButtonNext overlayContentNavButton" + (this.index < this.imgs.length - 1 ? "On" : "Off");
@@ -120,7 +120,6 @@
         }
       },
       rotate: function(adj) {
-        console.log(this.rotateIndex);
         this.rotateIndex += adj;
       },
     },
