@@ -9,7 +9,7 @@
               </tr>
           </thead>
           <tbody>
-              <tr v-for="file in sortedFilesUploading" :key="file.id">
+              <tr v-for="(file,index) in sortedFilesUploading" :key="file.id" v-if="index >= pageFrom-1 && index <= pageTo-1 ">
                 <td>
                     <div v-if="file.isUploading" class="progress upload-progress bg-fill">
                         <div class="progress-bar bg-brand text-left" role="progressbar" v-bind:style="file.progressBarStyle" v-bind:aria-valuenow="file.progressPercentage" aria-valuemin="0" aria-valuemax="100">
@@ -49,15 +49,13 @@
 import filesize from 'filesize';
 export default {
     props:{
-        sortedFilesUploading: Object,
+        sortedFilesUploading: Array,
         pageFrom: Number,
         pageTo: Number
-
     },
     data(){
         return {
             file: null,
-
         }
 
     },
