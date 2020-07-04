@@ -9,39 +9,47 @@
               </tr>
           </thead>
           <tbody>
-              <tr v-for="(file,index) in sortedFilesUploading" :key="file.id" v-if="index >= pageFrom-1 && index <= pageTo-1 ">
-                <td>
-                    <div v-if="file.isUploading" class="progress upload-progress bg-fill">
-                        <div class="progress-bar bg-brand text-left" role="progressbar" v-bind:style="file.progressBarStyle" v-bind:aria-valuenow="file.progressPercentage" aria-valuemin="0" aria-valuemax="100">
-                            <span class="upload-text">{{file.filename}}</span>
-                        </div>
-                    </div>
-                    <div v-else>
-                        <span class="d-inline" tabindex="0" data-toggle="tooltip" :title="file.filename">
-                            <div class="text-left">
-                                {{file.filename}}
+               <paginate name="sortedFilesUploading" :list="sortedFilesUploading" :per='6'>
+                   <tr v-for="file in paginated('sortedFilesUploading')" :key="file.id">
+                        <td>
+                            <div v-if="file.isUploading" class="progress upload-progress bg-fill">
+                                <div class="progress-bar bg-brand text-left" role="progressbar" v-bind:style="file.progressBarStyle" v-bind:aria-valuenow="file.progressPercentage" aria-valuemin="0" aria-valuemax="100">
+                                    <span class="upload-text">{{file.filename}}</span>
+                                </div>
                             </div>
-                        </span>
-                    </div>
-                </td>
-                <td>
-                    {{file.humanReadableFileSize}}
-                </td>
-                <td>
-                    <span v-if="file.isComplete">
-                        <a @click="metadataClicked (file)" data-toggle="tooltip" title="Edit metadata"><i class="fas fa-tags actionIcon text-center mr-2"></i></a>
-                        <a @click="removeClicked (file)" data-toggle="tooltip" :title="$t('upload.remove')"><i class="fas fa-trash-alt actionIcon text-center ml-2"></i></a>
-                    </span>
-                    <span v-if="file.isFailed">
-                        <a @click="retryClicked (file)" data-toggle="tooltip" :title="$t('upload.resumeOne')"><i class="fas fa-redo-alt actionIcon text-center mr-2"></i></a>
-                        <a @click="removeFailedClicked (file)" data-toggle="tooltip" :title="$t('upload.remove')"><i class="fas fa-trash-alt actionIcon text-center ml-2"></i></a>
-                    </span>
-                </td>
+                            <div v-else>
+                                <span class="d-inline" tabindex="0" data-toggle="tooltip" :title="file.filename">
+                                    <div class="text-left">
+                                        {{file.filename}}
+                                    </div>
+                                </span>
+                            </div>
+                        </td>
+                        <td>
+                            {{file.humanReadableFileSize}}
+                        </td>
+                        <td>
+                            <span v-if="file.isComplete">
+                                <a @click="metadataClicked (file)" data-toggle="tooltip" title="Edit metadata"><i class="fas fa-tags actionIcon text-center mr-2"></i></a>
+                                <a @click="removeClicked (file)" data-toggle="tooltip" :title="$t('upload.remove')"><i class="fas fa-trash-alt actionIcon text-center ml-2"></i></a>
+                            </span>
+                            <span v-if="file.isFailed">
+                                <a @click="retryClicked (file)" data-toggle="tooltip" :title="$t('upload.resumeOne')"><i class="fas fa-redo-alt actionIcon text-center mr-2"></i></a>
+                                <a @click="removeFailedClicked (file)" data-toggle="tooltip" :title="$t('upload.remove')"><i class="fas fa-trash-alt actionIcon text-center ml-2"></i></a>
+                            </span>
+                        </td>
 
-              </tr>
+                    </tr>
+
+               </paginate>
+              
 
           </tbody>
       </table>
+      <paginate-links for="sortedFilesUploading" :simple="{
+        next: 'Next »',
+        prev: '« Back'
+      }"></paginate-links>
   </div>
 </template>
 
@@ -56,6 +64,7 @@ export default {
     data(){
         return {
             file: null,
+            paginate: ['sortedFilesUploading']
         }
 
     },

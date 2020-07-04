@@ -111,41 +111,16 @@
                         @metadataClicked="metadataClicked" @removeClicked="removeClicked"
                         @retryClicked="retryClicked" @removeFailedClicked="removeFailedClicked" ></upload-file-item-listing>
 
-                        <div class="row text-center pagerRow">
+                        <!-- <div class="row text-center pagerRow">
                             <div class="col">
                                 <Pager :meta="filesUploadingMeta" :height="height" v-if="totalFilesUploading > 0" />
                             </div>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
 
             </div>
         </div>
-
-        
-
-        
-
-        
-
-        <!-- <div class="row plistHeader">
-            <div class="col-7 text-left">
-                {{$t('upload.fileName')}}
-            </div>
-            <div class="col-2 text-right">
-                {{$t('upload.fileSize')}}
-            </div>
-            <div class="col-3 text-center">
-                {{$t('upload.fileActions')}}
-            </div>
-        </div> -->
-
-        <!-- <UploadFileItem v-for="(file,index) in sortedFilesUploading" v-bind:file="file" :key="file.id"
-            @metadataClicked="metadataClicked" @removeClicked="removeClicked"
-            @retryClicked="retryClicked" @removeFailedClicked="removeFailedClicked"
-            v-if="index >= pageFrom-1 && index <= pageTo-1 "
-            class="mr-1 ml-1"/> -->
-        <!-- <div class="row plist invisible" v-for="pad in pagerPad"></div> -->
         
     </form>
     </div>
@@ -160,7 +135,7 @@ import Dropzone from 'vue-fineuploader/dropzone';
 import axios from 'axios';
 import JQuery from 'jquery';
 let $ = JQuery;
-import filesize from 'filesize';
+import filesize from 'filesize'; 
 
 export default {
     mixins: [ RouterTools, DeferUpdate ],

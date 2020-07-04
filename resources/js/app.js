@@ -26,6 +26,7 @@ if (typeof io !== 'undefined') {
     window.Echo = new Echo({    broadcaster: 'socket.io',    host: window.location.hostname + ':6001',  });
 }
 import vueSelectSides from "vue-select-sides";
+import VuePaginate from "vue-paginate";
 /**
  * We'll load the axios HTTP library which allows us to easily issue requests
  * to our Laravel back-end. This library automatically handles sending the
@@ -92,6 +93,10 @@ let refreshSessionActivity = Vue.mixin({
 //to handle all multiside select options
 Vue.use(vueSelectSides,{});
 Vue.component("vue-select-sides",vueSelectSides);
+
+//pagination compoment for onscreen pagination
+Vue.use(VuePaginate);
+//Vue.component("vue-paginate",VuePaginate);
 
 /**
  * Finally, create the Vue application instance
