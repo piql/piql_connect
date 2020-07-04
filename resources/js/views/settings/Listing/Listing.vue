@@ -4,7 +4,7 @@
         <div class="card">
             <div class="card-header">
         
-                <button type="button" class="btn btn-primary" @click="$bvModal.show('add-user')">
+                <button type="button" class="btn btn-primary btncheck" @click="$bvModal.show('add-user')">
                     <i class="fa fa-user-plus"></i>  Add User
                 </button>
                 <b-modal id="add-user" hide-footer>
@@ -14,22 +14,22 @@
                     <div class="d-block">
                         <div class="form-group">
                             <label>Fullname</label>
-                            <input type="text" class="form-control" v-model="fullname" >
+                            <input type="text" class="form-control" v-model="fullname" required>
                         </div>
                         <div class="form-group">
                             <label>Username</label>
-                            <input type="text" class="form-control" v-model="username" >
+                            <input type="text" class="form-control" v-model="username" required>
                         </div>
                         <div class="form-group">
                             <label>Email</label>
-                            <input type="email" class="form-control" v-model="email" >
+                            <input type="email" class="form-control" v-model="email" required>
                         </div>
                     </div>
-                    <b-button class="mt-3" block @click="addUser" @keydown="addUser"><i class="fa fa-user-plllus"></i> Add User</b-button>
+                    <b-button class="mt-3" block @click="addUser" @keydown="addUser"><i class="fa fa-user-plus"></i> Add User</b-button>
                 </b-modal>
             </div>
             <div class="card-body">
-               <user-listing :key="listingKey" @disableUser="disableUser" :users="users"></user-listing>
+               <user-listing :key="listingKey" @disableUser="disableUser" :users="users" @editUser="editUser" @enableUser="enableUser"></user-listing>
                <div class="row text-center pagerRow">
                     <div class="col">
                         <Pager :meta='pageMeta' :height='height' />
@@ -74,6 +74,13 @@
             }
             this.refreshObjects( this.apiQueryString, this.apiEndPoint );
 
+             let query = this.$route.query;
+
+            if( parseInt( query.groupId ) || parseInt(query.roleId) ) {
+                let btn = document.querySelector('.btncheck');
+                btn.style.display = 'none';
+            }
+
         },
 
         computed:  {
@@ -92,7 +99,9 @@
 
             if( parseInt( query.groupId ) ) {
                 return '/api/v1/admin/permissions/'+ query.groupId + '/users';
-            } else{
+            }else if( parseInt( query.roleId ) ) {
+                return '/api/v1/admin/permissions/'+ query.roleId + '/users';
+            }  else{
                 return '/api/v1/admin/users';
             }
             
@@ -122,16 +131,61 @@
                 this.listingKey += 1;
 
             },
+            async addUser(){
+                this.infoToast("Adding User", "creating new user in the system");
+
+                await axios.post("/api/v1/registration/register",{
+                    'name': this.fullname,
+                    'username': this.username,
+                    'email': this.email
+                }).then(response => {
+                    console.log(response);
+                    this.response = response;
+
+                }).catch(error => {
+                    console.log(error);
+                    this.errorToast(error.message, error.message);
+                });
+
+                this.forceRerender();
+                this.$bvModal.hide('add-user');
+
+            },
+            async editUser(){
+                this.infoToast("Editing User", "editing user in the system");
+                //logic to send data to endpoint goes here
+
+                this.forceRerender();
+                this.$bvModal.hide('edit-user');
+
+            },
             async disableUser(data){
-                 this.infoToast("Disable User", "disabling a user from listing");
+                this.infoToast("Disable User", "disabling a user from listing");
                 this.response = (await axios.post("/api/v1/admin/users/disable",data,{
                     headers:{
                         'content-type': 'application/json'
                     }
                 })).data;
 
-                this.forceRerender();
+                if(!this.forceRerender()){
+                    location.reload();
+                }
+
                 this.$bvModal.hide('disable-user');
+            },
+            async enableUser(data){
+                this.infoToast("Enable User", "enabling a user in listing");
+                this.response = (await axios.post("/api/v1/admin/users/enable",data,{
+                    headers:{
+                        'content-type': 'application/json'
+                    }
+                })).data;
+
+                if(!this.forceRerender()){
+                    location.reload();
+                }
+                this.$bvModal.hide('enable-user');
+
             }
         }
     }

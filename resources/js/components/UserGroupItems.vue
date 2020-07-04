@@ -7,7 +7,7 @@
                             <th>Group</th>
                             <th>Description</th>
                           
-                            <th>Actions</th>
+                            <th width="18%">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -158,7 +158,7 @@ export default {
         },
 
         refreshObjects( apiQueryString ){
-            axios.get("/api/v1/admin/permissions/groups" + apiQueryString).then( (response ) => {
+            axios.get("/api/v1/admin/permissions/groups" + apiQueryString,{ params: { limit: 10 } }).then( (response ) => {
                this.response = response
                 this.groups = this.response.data.data;
                 this.pageMeta = this.response.data.meta

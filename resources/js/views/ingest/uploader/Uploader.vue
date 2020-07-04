@@ -3,40 +3,7 @@
         <page-heading icon="fa-tachometer-alt" :title="$t('upload.title')" :ingress="$t('upload.ingress')" />
 
         <form v-on:submit.prevent>
-        <!-- <div class="row form-group mt-2 mb-2">
-            <div v-show="compoundModeEnabled" class="col-2 text-left" >
-                <label for="bagname" class="col-form-label-sm">{{$t("upload.sipName")}}</label>
-                <input id="bagName" v-model="bagName" ref="bagName"
-                    type="text" class="pl-3 noTextTransform form-control"
-                    :title="$t('upload.requiredName')"
-                    @input="setBagName"
-                    required pattern='^((?![:\\<>"/?*|]).){3,64}$'>
-            </div>
-
-            <div class="col-2" :title="$t('upload.archiveToolTip')">
-                <archive-picker v-bind:label="$t('Archive')"></archive-picker>
-            </div>
-
-            <div class="col-2" :title="$t('upload.holdingToolTip')">
-                <holding-picker v-bind:label="$t('Holdings')" :useWildCard="false" ></holding-picker>
-            </div>
-
-            <div v-if="hasFailedUploads" class="col-2 text-center">
-                <label for="processButton" class="col-form-label-sm">&nbsp;</label>
-                <button class="btn form-control-btn btn-link" @click="retryAll" data-toggle="tooltip" :title="$t('upload.resumeAll')"><i class="fas fa-redo topIcon text-center mr-2"></i></button>
-            </div>
-            <div v-else="hasFailedUploads" class="col-2 text-left align-middle form-group">
-                <label for="fileNameFilter" class="col-form-label-sm">{{$t("upload.fileNameFilter")}}</label>
-                <input class="form-control" id="fileNameFilter" v-model="fileNameFilter">
-            </div>
-
-
-            <div v-show="compoundModeEnabled" class="col-2">
-                <label for="processButton" class="col-form-label-sm">&nbsp;</label>
-                <button v-if="processDisabled" disabled title="Start the ingest process" id="processButton" class="btn form-control-btn w-100">{{$t('upload.processButton')}}</button>
-                <button v-else="processDisabled" title="Start the ingest process" id="processButton" class="btn form-control-btn w-100"  v-on:click="commitBagToProcessing">{{$t('upload.processButton')}}</button>
-            </div>
-        </div> -->
+       
 
         <div class="row">
             <div class="col-md-4">
@@ -107,7 +74,7 @@
                         <b><i class="fa fa-upload"></i> UPLOADED FILES</b>
                     </div>
                     <div class="card-body">
-                        <upload-file-item-listing :sortedFilesUploading="sortedFilesUploading" :pageFrom="pageFrom" :pageTo="pageTo" 
+                        <upload-file-item-listing :sortedFilesUploading="sortedFilesUploading"  
                         @metadataClicked="metadataClicked" @removeClicked="removeClicked"
                         @retryClicked="retryClicked" @removeFailedClicked="removeFailedClicked" ></upload-file-item-listing>
 

@@ -9,8 +9,7 @@
               </tr>
           </thead>
           <tbody>
-               <paginate name="sortedFilesUploading" :list="sortedFilesUploading" :per='6'>
-                   <tr v-for="file in paginated('sortedFilesUploading')" :key="file.id">
+               <tr v-for="file in displayedfiles" :key="file.id">
                         <td>
                             <div v-if="file.isUploading" class="progress upload-progress bg-fill">
                                 <div class="progress-bar bg-brand text-left" role="progressbar" v-bind:style="file.progressBarStyle" v-bind:aria-valuenow="file.progressPercentage" aria-valuemin="0" aria-valuemax="100">
@@ -26,7 +25,7 @@
                             </div>
                         </td>
                         <td>
-                            {{file.humanReadableFileSize}}
+                            {{Math.ceil(file.fileSize/1000)}} Kb
                         </td>
                         <td>
                             <span v-if="file.isComplete">
@@ -40,16 +39,30 @@
                         </td>
 
                     </tr>
-
-               </paginate>
               
 
           </tbody>
       </table>
-      <paginate-links for="sortedFilesUploading" :simple="{
-        next: 'Next »',
-        prev: '« Back'
-      }"></paginate-links>
+      <div class="row text-center pagerRow">
+          <div class="col">
+              <nav aria-label="pages" class="d-inline-flex">
+                <ul class="pagination justify-content-center">
+                    <li class="page-item">
+                        <a class="page-link" v-if="page != 1" @click="page--"> <i class="fas fa-angle-left"></i> </a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" v-for="pageNumber in pages.slice(page-1, page+5)" :key="pageNumber" @click="page = pageNumber"> {{pageNumber}} </a>
+                    </li>
+                    <li class="page-item">
+                        <a @click="page++" v-if="page < pages.length" class="page-link"> <i class="fas fa-angle-right"></i> </a>
+                    </li>
+                </ul>
+            </nav>
+              
+          </div>
+        </div>
+      
+      
   </div>
 </template>
 
@@ -57,14 +70,14 @@
 import filesize from 'filesize';
 export default {
     props:{
-        sortedFilesUploading: Array,
-        pageFrom: Number,
-        pageTo: Number
+        sortedFilesUploading: Array
     },
     data(){
         return {
             file: null,
-            paginate: ['sortedFilesUploading']
+            perPage: 8,
+            pages:[],
+            page: 1
         }
 
     },
@@ -95,8 +108,7 @@ export default {
                 this.$emit("removeFailedClicked", file );
             },
             humanReadableFileSize(){
-                return this.isUploading ? filesize(parseInt(this.file.uploadedFileSize), {round: 0}) + " / " + filesize(parseInt(this.file.fileSize), {round: 0})
-                    : filesize(parseInt(this.file.fileSize), {round: 0});
+                return Math.ceil(this.file.fileSize / 1000);
             },
             progressBarStyle() {
                 return this.file.progressBarStyle;
@@ -107,15 +119,46 @@ export default {
             isUploading() {
                 return this.file.isUploading;
             },
+            setPages () {
+                let numberOfPages = Math.ceil(this.sortedFilesUploading.length / this.perPage);
+                for (let index = 1; index <= numberOfPages; index++) {
+                    this.pages.push(index);
+                }
+            },
+            paginate (files) {
+                let page = this.page;
+                let perPage = this.perPage;
+                let from = (page * perPage) - perPage;
+                let to = (page * perPage);
+                return  files.slice(from, to);
+            }
         },
         computed: {
-            
+            displayedfiles () {
+                return this.paginate(this.sortedFilesUploading);
+            }
+        },
+        watch: {
+            sortedFilesUploading () {
+                this.setPages();
+            }
         }
     
 
 }
 </script>
 
-<style>
-
+<style scoped>
+    a.page-link {
+        display: inline-block;
+    }
+    a.page-link {
+        font-size: 20px;
+        color: #cc5d33;
+        font-weight: 500;
+    }
+    .offset{
+    width: 500px !important;
+    margin: 20px auto;  
+    }
 </style>
