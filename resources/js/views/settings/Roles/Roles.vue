@@ -14,11 +14,11 @@
                     <div class="d-block">
                     <div class="form-group">
                         <label>Role</label>
-                        <input type="text" class="form-control" v-model="role" >
+                        <input type="text" class="form-control" v-model="role" required>
                     </div>
                     <div class="form-group">
                         <label>Description</label>
-                        <textarea v-model="description" class="form-control"></textarea>
+                        <textarea v-model="description" class="form-control" required="required"></textarea>
                     </div>
                     </div>
                     <b-button class="mt-3" block @click="addRole"><i class="fa fa-user-secret"></i> Add Role</b-button>
@@ -43,7 +43,8 @@
                 role:null,
                 description:null,
                 response:null,
-                rolekey: 0
+                rolekey: 0,
+                msg:null
             };
         },
 
@@ -53,18 +54,24 @@
 
             },
             async addRole(){
-                this.infoToast('Add Role','Adding '+ this.role);
-                 this.response = (await axios.post("/api/v1/admin/permissions/roles", {
-                    name: this.role,
-                    description: this.description
-                },{
-                    headers:{
-                        'content-type': 'application/json'
-                    }
-                })).data;
-                
-                this.forceRerender();
-                this.$bvModal.hide('add-role');
+                if((this.role != null) && (this.description != null)){
+                    this.infoToast('Add Role','Adding '+ this.role);
+                    this.response = (await axios.post("/api/v1/admin/permissions/roles", {
+                        name: this.role,
+                        description: this.description
+                    },{
+                        headers:{
+                            'content-type': 'application/json'
+                        }
+                    })).data;
+                    
+                    this.forceRerender();
+                    this.$bvModal.hide('add-role');
+                }else{
+                    this.errorToast("Error","Fill in both fields");
+                    this.forceRerender();
+                    this.$bvModal.hide('add-role');
+                }
                 
             },
             async assignRoleToUsers(data){

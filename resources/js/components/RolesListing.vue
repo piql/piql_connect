@@ -1,12 +1,12 @@
 <template>
   <div class="table-responsive">
       
-       <table class="table table-hover table-sm table-striped">
+       <table class="table table-hover table-sm table-bordered">
                     <thead>
                         <tr>
                             <th>Role</th>
                             <th>Description</th>
-                            <th>Actions </th>
+                            <th width="18%">Actions </th>
                         </tr>
                     </thead>
                     <tbody>

@@ -26,6 +26,7 @@ if (typeof io !== 'undefined') {
     window.Echo = new Echo({    broadcaster: 'socket.io',    host: window.location.hostname + ':6001',  });
 }
 import vueSelectSides from "vue-select-sides";
+
 /**
  * We'll load the axios HTTP library which allows us to easily issue requests
  * to our Laravel back-end. This library automatically handles sending the
@@ -92,6 +93,7 @@ let refreshSessionActivity = Vue.mixin({
 //to handle all multiside select options
 Vue.use(vueSelectSides,{});
 Vue.component("vue-select-sides",vueSelectSides);
+
 
 /**
  * Finally, create the Vue application instance

@@ -24,10 +24,13 @@
                                 <a class="btn btn-xs btn-primary" title="Assign Group" style="color:white">
                                     <i class="fa fa-users"></i>
                                     </a>
-                                <a class="btn btn-xs btn-primary" title="Edit" style="color:white" data-toggle="modal" data-target="#editModal">
+                                <a class="btn btn-xs btn-primary" title="Edit" style="color:white" @keydown="showEditModal(staff.id)" @click="showEditModal(staff.id)">
                                     <i class="fa fa-edit"></i>
                                     </a>
-                                <a class="btn btn-xs btn-primary" title="Disable" style="color:white" @click="showDisableModal(staff.id)">
+                                <a v-if="staff.disabled === true" class="btn btn-xs btn-primary" title="Enable" style="color:white" @keydown="showEnableModal(staff.id)" @click="showEnableModal(staff.id)">
+                                    <i class="fa fa-plug"></i>
+                                    </a>
+                                <a v-else class="btn btn-xs btn-primary" title="Disable" style="color:white" @keydown="showDisableModal(staff.id)" @click="showDisableModal(staff.id)">
                                     <i class="fa fa-ban"></i>
                                     </a>
                             </td>
@@ -38,7 +41,7 @@
                 </table>
                 
 
-                <b-modal id="disable-user" v-if="user" hide-footer>
+                <b-modal id="disable-user" hide-footer>
                     <template v-slot:modal-title>
                     <h3><b> DISABLE USER : {{ user[0].full_name }} </b></h3>
                     </template>
@@ -49,42 +52,42 @@
                     </div>
                     <b-button class="mt-3" block @click="disableButtonClicked(user[0].id)" @keydown="disableButtonClicked(user[0].id)"><i class="fa fa-ban"></i> Disable </b-button>
                 </b-modal>
-                
-                
-                
-                
-                <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModal" aria-hidden="true">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                        
-                        <form role="form" method="post">
-                            <fieldset>
-                                <div class="modal-body">
-                                    <legend>Update User </legend>
-                                    <div class="form-group">
-                                        <label>Fullname</label>
-                                        <input type="text" class="form-control" v-model="fullname" >
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Username</label>
-                                        <input type="text" class="form-control" v-model="username" >
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Email</label>
-                                        <input type="email" class="form-control" v-model="email" >
-                                    </div>
-                                
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                    <button type="submit" class="btn btn-primary"><i class="fa fa-edit"></i>Update User</button>
-                                </div>
-                            </fieldset>
 
-                        </form>
+                <b-modal id="enable-user" hide-footer>
+                    <template v-slot:modal-title>
+                    <h3><b> ENABLE USER : {{ user[0].full_name }} </b></h3>
+                    </template>
+                    <div class="d-block">
+                        <div class="alert alert-info">
+                            This action will enable this user, do you want to proceed? If so, click to proceed
                         </div>
                     </div>
-                </div>
+                    <b-button class="mt-3" block @click="enableButtonClicked(user[0].id)" @keydown="enableButtonClicked(user[0].id)"><i class="fa fa-plug"></i> Enable </b-button>
+                </b-modal>
+                
+                
+                
+                
+                <b-modal id="edit-user" hide-footer>
+                    <template v-slot:modal-title>
+                   <h4>Edit User</h4>
+                    </template>
+                    <div class="d-block">
+                        <div class="form-group">
+                            <label>Fullname</label>
+                            <input type="text" class="form-control" v-model="fullname" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Username</label>
+                            <input type="text" class="form-control" v-model="username" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input type="email" class="form-control" v-model="email" required>
+                        </div>
+                    </div>
+                    <b-button class="mt-3" block @click="editButtonClicked" @keydown="editButtonClicked"><i class="fa fa-edit"></i> Edit User</b-button>
+                </b-modal>
   
   
   
@@ -103,7 +106,7 @@ export default {
             };
     },
     props:{
-        users: Object
+        users: Array
     },
     
     methods:{
@@ -111,12 +114,37 @@ export default {
             this.user = this.users.filter(user => user.id === id);
             this.$bvModal.show('disable-user');
         },
+        showEnableModal(id){
+            this.user = this.users.filter(user => user.id === id);
+            this.$bvModal.show('enable-user');
+        },
+        showEditModal(id){
+            this.user = this.users.filter(user => user.id === id);
+            this.fullname = this.user[0].full_name;
+            this.email = this.user[0].email;
+            this.username = this.user[0].username;
+
+            this.$bvModal.show('edit-user');
+
+        },
         disableButtonClicked(id){
             let data = {
                 users: [id]
             };
             this.$emit('disableUser', data);
+        },
+        enableButtonClicked(id){
+            let data = {
+                users: [id]
+            };
+            this.$emit('enableUser', data);
+        },
+        editButtonClicked(){
+            //some data will be passed here before emitting
+            this.$emit('editUser');
         }
+
+    
         
     }
 
