@@ -81,9 +81,9 @@
     "dashboard.month.abbrev.array": "['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']",
 
     "dashboard.graphs.monthlyOnlineAIPsIngested": "Archival packages ingested (monthly)",
-    "dashboard.graphs.monthlyOnlineDataIngested": "Data ingested (monthly)",
+    "dashboard.graphs.monthlyOnlineDataIngested": "Data ingested monthly (GBs)",
     "dashboard.graphs.monthlyOnlineAIPsAccessed": "Archival packages accessed (monthly)",
-    "dashboard.graphs.monthlyOnlineDataAccessed": "Data accessed (monthly)",
+    "dashboard.graphs.monthlyOnlineDataAccessed": "Data accessed monthly (GBs)",
 
     "dashboard.cards.onlineAIPsIngested": "Archival packages online",
     "dashboard.cards.onlineDataIngested": "Data stored online",

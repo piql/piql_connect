@@ -33,8 +33,8 @@ class UserStatsController extends Controller
         $fileFormatCount = $this->fileFormatsIngested( $currentUser );
         $onlineDataIngested = $this->onlineDataIngested( $currentUser );
 
-        $infoArray['onlineDataIngested'] = $this->byteToMetricbyte($onlineDataIngested);
-        $infoArray['offlineDataIngested'] = $this->byteToMetricbyte(115*3*1000*1000*1000); // FMU DUMMY NUMBERS
+        $infoArray['onlineDataIngested'] = $this->byteToGigabyte($onlineDataIngested);
+        $infoArray['offlineDataIngested'] = $this->byteToGigabyte(115*3*1000*1000*1000); // FMU DUMMY NUMBERS
         $infoArray['onlineAIPsIngested'] = $this->onlineAIPsIngested(auth()->user());
         $infoArray['offlineAIPsIngested'] = 12100; // FMU DUMMY NUMBERS
         $infoArray['offlineReelsCount'] = '3'; // FMU DUMMY NUMBERS
@@ -162,6 +162,12 @@ class UserStatsController extends Controller
         $keys = $fileFormats->toArray();
         arsort($keys);
         return $keys;
+    }
+
+    private function byteToGigabyte($bytes)
+    {
+        $number = round(($bytes/1000000000),2);
+        return number_format($number,1). ' GB';
     }
 
     private function byteToMetricbyte($bytes)
