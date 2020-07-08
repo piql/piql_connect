@@ -71,7 +71,7 @@
             <div class="col-md-8">
                 <div class="card">
                     <div class="card-header">
-                        <b><i class="fa fa-upload"></i> UPLOADED FILES</b>
+                        <b><i class="fa fa-upload"></i>  UPLOADED ( {{ sortedFilesUploading.length }} files)</b>
                     </div>
                     <div class="card-body">
                         <upload-file-item-listing :sortedFilesUploading="sortedFilesUploading"  
