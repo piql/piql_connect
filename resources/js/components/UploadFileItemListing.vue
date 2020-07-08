@@ -39,30 +39,11 @@
                         </td>
 
                     </tr>
-              
-
-          </tbody>
+              </tbody>
       </table>
-      <div class="row text-center pagerRow">
-          <div class="col">
-              <nav aria-label="pages" class="d-inline-flex">
-                <ul class="pagination justify-content-center">
-                    <li class="page-item">
-                        <a class="page-link" v-if="page != 1" @click="page--"> <i class="fas fa-angle-left"></i> </a>
-                    </li>
-                    <li class="page-item">
-                        <a class="page-link" v-for="pageNumber in pages.slice(page-1, page+5)" :key="pageNumber" @click="page = pageNumber"> {{pageNumber}} </a>
-                    </li>
-                    <li class="page-item">
-                        <a @click="page++" v-if="page < pages.length" class="page-link"> <i class="fas fa-angle-right"></i> </a>
-                    </li>
-                </ul>
-            </nav>
-              
-          </div>
+        <div class="col contentCenter">
+            <Pager :meta="meta" :height="20" v-if="totalFilesUploading > 0" />
         </div>
-      
-      
   </div>
 </template>
 
@@ -70,7 +51,8 @@
 import filesize from 'filesize';
 export default {
     props:{
-        sortedFilesUploading: Array
+        sortedFilesUploading: Array,
+        filesUploadingMeta: Object
     },
     data(){
         return {
@@ -126,7 +108,8 @@ export default {
                 }
             },
             paginate (files) {
-                let page = this.page;
+                let urlPage = this.$route.query.page;
+                let page = urlPage >= 1 ? urlPage : 1;
                 let perPage = this.perPage;
                 let from = (page * perPage) - perPage;
                 let to = (page * perPage);
@@ -136,6 +119,12 @@ export default {
         computed: {
             displayedfiles () {
                 return this.paginate(this.sortedFilesUploading);
+            },
+            totalFilesUploading: function() {
+                return this.sortedFilesUploading.length;
+            },
+            meta: function() {
+                return this.filesUploadingMeta;
             }
         },
         watch: {
@@ -160,5 +149,8 @@ export default {
     .offset{
     width: 500px !important;
     margin: 20px auto;  
+    }
+    .contentCenter {
+        text-align: center;
     }
 </style>
