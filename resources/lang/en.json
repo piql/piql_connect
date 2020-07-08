@@ -117,7 +117,7 @@
     "ingest.processing.status.complete":           "Package complete",
     "ingest.processing.status.error":              "Error",
     "ingest.processing.creatingStatus": "Creating packages",
-    "ingest.processing.noItems": "No packages are currently beeing processed.",
+    "ingest.processing.noItems": "No packages are currently being processed.",
 
     "ingest.taskList.title": "Offline storage",
     "ingest.taskList.ingress": "Information stored on piqlFilm",
@@ -234,7 +234,7 @@
     "access.retrieve.readyToRetrieve": "Ready to retrieve",
 
     "access.retrieve.nowRetrieving": "Now retrieving",
-    "access.retrieve.nowRetrieving.ingress": "Information queued for retrival from piqlFilm",
+    "access.retrieve.nowRetrieving.ingress": "Information queued for retrieval from piqlFilm",
     "access.retrieve.downloadable": "Ready for download",
     "access.retrieve.downloadable.ingress": "Download your retrieved information",
     "access.retrieve.history": "Retrieval history",
@@ -246,7 +246,7 @@
     "access.ready.remove": "Remove file",
     "access.ready.ingress": "Files staged for retrieval from offline storage.",
     "access.ready.noItems": "No files currently requested for retrieval.",
-    "access.retrieved.noItems": "Your files are now ready for dowload!",
+    "access.retrieved.noItems": "Your files are now ready for download!",
     "access.retrieved.idle": "No files are currently being retrieved.",
     "access.download.download": "Download",
     "access.download.takeOffline": "Take offline",
