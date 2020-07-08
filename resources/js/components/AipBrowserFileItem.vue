@@ -9,6 +9,7 @@
             </div>
             <div class="col-2 d-inline text-center align-self-center">
                 <a class="m-auto" @click.once="showMetadata" data-toggle="tooltip" title="Edit metadata"><i class="fas fa-tags actionIcon text-center"></i></a>
+                <button class="btn-tiny m-auto" @click="preview" href="" data-toggle="tooltip" title="Preview image"><i class="fas fa-eye actionIcon"></i></button>
             </div>
             <div class="col-sm-1"></div>
         </div>
@@ -42,6 +43,9 @@
             };
         },
         methods: {
+	    preview: function(){
+                this.$emit('showPreview', this.dipId, this.item.id);
+            },
             showMetadata() {
                 this.$emit('showMetadata', this.aipItem.id );
             }

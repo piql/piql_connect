@@ -19,11 +19,11 @@
 						</div>
 				</div>
 
-        <VueEasyLightbox
+        <Lightbox
             :visible="lbVisible"
             :imgs="previewImages"
             :index="index"
-            @hide="hideLightBox"
+            :hide="hideLightBox"
         />
 
     </div>
@@ -31,10 +31,10 @@
 
 <script>
 import axios from 'axios';
-import VueEasyLightbox from 'vue-easy-lightbox';
+import Lightbox from '../../../../../components/lightbox';
 export default {
     components: {
-        VueEasyLightbox
+        Lightbox
     },
 
     watch: {

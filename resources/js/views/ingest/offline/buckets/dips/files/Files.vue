@@ -12,19 +12,35 @@
             </div>
         </div>
 
-        <aip-browser-file-item v-for="item in dipFiles" :item="item" :key="item.id" @showMetadata="showMetadata" />
+        <aip-browser-file-item v-for="item in dipFiles" :item="item" :key="item.id" @showMetadata="showMetadata" @showPreview="showPreview" />
 
         <Pager :meta='meta' :height='height' />
+
+        <Lightbox
+            :visible="lbVisible"
+            :imgs="previewImages"
+            :index="index"
+            :hide="hideLightBox"
+        />
 
     </div>
 </template>
 
 <script>
+import Lightbox from '../../../../../../components/lightbox';
 export default {
+    components: {
+        Lightbox
+    },
     data () {
         return {
             dipFiles: [],
-            meta: null
+            meta: null,
+            lbVisible: false,
+            index: 0,
+            imgLength: 0,
+            previewDip: {},
+            previewImages: []
         }
     },
 
@@ -63,6 +79,17 @@ export default {
         },
         close() {
             this.$router.go(-1);
+        },
+        async showPreview ( dip, fileId ) {
+            this.lbVisible = true;
+            let image = (await axios.get('/api/v1/access/dips/'+dip+'/previews/files/'+fileId, { responseType: 'blob' }));
+            let reader = new FileReader();
+            reader.onload = e => this.previewImages.push( reader.result );
+            reader.readAsDataURL( image.data );
+        },
+        hideLightBox: function( e ) {
+            this.lbVisible = false;
+            this.previewImages = [];
         }
     }
 };
