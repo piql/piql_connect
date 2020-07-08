@@ -1280,6 +1280,7 @@ th {
 }
 
 .sideMenu {
+    position: fixed;
     background-color: $color_background_1;
     font-size: 0.9rem;
     //margin-top: 13vh;
@@ -1821,4 +1822,7 @@ input:invalid {
 .form-control-btn {
     height: 38px;
     margin-top: 0 !important;
+}
+.fullHeight {
+    height: 100%;
 }

@@ -30,7 +30,7 @@
         </div>
 @else
     <body>
-        <div id="app">
+        <div id="app" class="fullHeight">
             <layout fullname="{{ Auth::user()->full_name }}"></layout>
         </div>
 @endif
