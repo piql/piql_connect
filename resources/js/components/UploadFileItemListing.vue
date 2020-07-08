@@ -47,7 +47,11 @@
 </template>
 
 <script>
+import Vue from 'vue';
 import filesize from 'filesize';
+import VuejsDialog from 'vuejs-dialog';
+import 'vuejs-dialog/dist/vuejs-dialog.min.css';
+Vue.use(VuejsDialog);
 export default {
     props:{
         sortedFilesUploading: Array,
@@ -72,7 +76,15 @@ export default {
     },
     methods: {
         removeClicked: function( file ) {
-            this.$emit("removeClicked", file );
+            let options = {
+                okText: this.$t('OK'),
+                cancelText: this.$t('Cancel')
+            };
+            this.$dialog
+                .confirm(this.$t('upload.remove') + '?', options)
+                .then(remove => {
+                    this.$emit("removeClicked", file );
+                });
         },
         metadataClicked: function (file ) {
             this.$emit("metadataClicked", file );
@@ -81,7 +93,15 @@ export default {
             this.$emit("retryClicked", file );
         },
         removeFailedClicked: function( file ) {
-            this.$emit("removeFailedClicked", file );
+            let options = {
+                okText: this.$t('OK'),
+                cancelText: this.$t('Cancel')
+            };
+            this.$dialog
+                .confirm(this.$t('upload.remove') + '?', options)
+                .then(remove => {
+                    this.$emit("removeFailedClicked", file );
+                });
         },
         humanReadableFileSize(){
             return Math.ceil(this.file.fileSize / 1000);
