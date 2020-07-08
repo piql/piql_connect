@@ -1,28 +1,28 @@
 <template>
-    <div>
-        <table class="table table-sm table-hover table-striped table-bordered">
-            <thead>
-                <tr>
-                    <th>{{$t('upload.fileName')}}</th>
-                    <th>{{$t('upload.fileSize')}}</th>
-                    <th>{{$t('upload.fileActions')}}</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr v-for="file in displayedfiles" :key="file.id">
-                    <td>
-                        <div v-if="file.isUploading" class="progress upload-progress bg-fill">
-                            <div class="progress-bar bg-brand text-left" role="progressbar" v-bind:style="file.progressBarStyle" v-bind:aria-valuenow="file.progressPercentage" aria-valuemin="0" aria-valuemax="100">
-                                <span class="upload-text">{{file.filename}}</span>
-                            </div>
-                        </div>
-                        <div v-else>
-                            <span class="d-inline" tabindex="0" data-toggle="tooltip" :title="file.filename">
-                                <div class="text-left">
-                                    {{file.filename}}
+  <div>
+      <table class="table table-hover">
+          <thead>
+              <tr>
+                  <th>{{$t('upload.fileName')}}</th>
+                  <th>{{$t('upload.fileSize')}}</th>
+                  <th>{{$t('upload.fileActions')}}</th>
+              </tr>
+          </thead>
+          <tbody>
+               <tr v-for="file in displayedfiles" :key="file.id">
+                        <td>
+                            <div v-if="file.isUploading" class="progress upload-progress bg-fill">
+                                <div class="progress-bar bg-brand text-left" role="progressbar" v-bind:style="file.progressBarStyle" v-bind:aria-valuenow="file.progressPercentage" aria-valuemin="0" aria-valuemax="100">
+                                    <span class="upload-text">{{file.filename}}</span>
                                 </div>
-                            </span>
-                        </div>
+                            </div>
+                            <div v-else>
+                                <span class="d-inline" tabindex="0" data-toggle="tooltip" :title="file.filename">
+                                    <div class="text-left">
+                                        {{file.filename}}
+                                    </div>
+                                </span>
+                            </div>
                     </td>
                     <td>
                         {{Math.ceil(file.fileSize/1000)}} Kb
@@ -145,4 +145,8 @@ export default {
     .contentCenter {
         text-align: center;
     }
+
+    /* table tr{
+    height: 60px;
+    } */
 </style>

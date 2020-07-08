@@ -69,10 +69,10 @@ class DashboardChartController extends Controller
         $monthlyOnlineDataIngested = $this->monthlyOnlineDataIngested( $currentUser );
         $chart = new TestChartJS;
         $chart->labels(array_keys($monthlyOnlineDataIngested));
-        $dataset = $chart->dataset('Online Data Ingested', 'line', array_values($monthlyOnlineDataIngested));
+        $dataset = $chart->dataset('Online Data Ingested (GBs)', 'line', array_values($monthlyOnlineDataIngested));
         $dataset->backgroundColor($this->color_chart_line_outside_background);
         $dataset->color($this->color_chart_line_inside);
-        $dataset = $chart->dataset('Offline Data Ingested', 'line', array_map(function($val) { return round($val*(rand(1, 9)/10), 2); }, array_values($monthlyOnlineDataIngested)));
+        $dataset = $chart->dataset('Offline Data Ingested (GBs)', 'line', array_map(function($val) { return round($val*(rand(1, 9)/10), 2); }, array_values($monthlyOnlineDataIngested)));
         $dataset->backgroundColor($this->color_chart_line_inside_background);
         $dataset->color($this->color_chart_line_inside);
 
@@ -98,10 +98,10 @@ class DashboardChartController extends Controller
         $monthlyOnlineDataAccessed = [140, 89, 45, 15, 78, 143, 120, 110, 90, 20, 50, 74];
         $monthlyOfflineDataAccessed = [5, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 3];
         $chart = new TestChartJS;
-        $dataset = $chart->dataset('Online AIPs Accessed', 'line', $monthlyOnlineDataAccessed);
+        $dataset = $chart->dataset('Online Data Accessed (GBs)', 'line', $monthlyOnlineDataAccessed);
         $dataset->backgroundColor($this->color_chart_line_outside_background);
         $dataset->color($this->color_chart_line_inside);
-        $dataset = $chart->dataset('Offline AIPs Accessed', 'line', $monthlyOfflineDataAccessed);
+        $dataset = $chart->dataset('Offline Data Accessed (GBs)', 'line', $monthlyOfflineDataAccessed);
         $dataset->backgroundColor($this->color_chart_line_inside_background);
         $dataset->color($this->color_chart_line_inside);
 
@@ -185,10 +185,14 @@ class DashboardChartController extends Controller
     {
         return $this->arrayRearrangeCurrentMonthLast(
             collect(range(0,11))->map(function($obj) {
-                return File::whereBetween("created_at", [
+                $val = File::whereBetween("created_at", [
                         (new \DateTime(date("Y-m")))->modify((-$obj)." month"),
                         (new \DateTime(date("Y-m")))->modify((1-$obj)." month")
-                    ])->sum("filesize") / 1000000000; // In GB
+                    ])->sum("filesize"); 
+                
+                    return round(($val/1000000000),2); //in GB
+
+
             })->toArray()
         );
     }

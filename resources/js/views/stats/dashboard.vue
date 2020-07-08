@@ -3,64 +3,94 @@
         <page-heading icon="fa-tachometer-alt" :title="$t('dashboard.title')" :ingress="$t('dashboard.ingress')" />
         <div class="row">
             <div class="col-md-3">
-                        <div class="card dashboard-card col-md halfStats">
-                                <div class="value">{{offlineAIPsIngested}}</div>
-                                <div class="legend">{{$t('dashboard.cards.AIPsStoredOnFilm')}}</div>
+                        <div class="card dashboard-card col-md halfStats row">
+                               
+                                <div class="col-md-9">
+                                    <div class="value">{{offlineAIPsIngested}}</div>
+                                    <div class="legend">{{$t('dashboard.cards.AIPsStoredOnFilm')}}</div>
+
+                                </div>
+                                 <div class="icon col-md-3"><i class="fa fa-archive"></i></div>
+                                
                             </div>
                     </div>
                     <div class="col-md-3">
-                        <div class="card dashboard-card col-md halfStats">
-                                <div class="value">{{offlineDataIngested}}</div>
-                                <div class="legend">{{$t('dashboard.cards.dataStoredOnFilm')}}</div>
+                        <div class="card dashboard-card col-md halfStats row">
+                                <div class="col-md-9">
+                                    <div class="value">{{offlineDataIngested}}</div>
+                                    <div class="legend">{{$t('dashboard.cards.dataStoredOnFilm')}}</div>
+                                </div>
+                                <div class="icon col-md-3"><i class="fa fa-download"></i></div>
+                                
                             </div>
                     </div>
                     <div class="col-md-3">
-                        <div class="card dashboard-card halfStats col-md">
-                                <div class="value">{{offlineReelsCount}}</div>
-                                <div class="legend">{{$t('dashboard.cards.reels')}}</div>
+                        <div class="card dashboard-card halfStats col-md row">
+                                <div class="col-md-9">
+                                    <div class="value">{{offlineReelsCount}}</div>
+                                    <div class="legend">{{$t('dashboard.cards.reels')}}</div>
+                                </div>
+                                <div class="col-md-3 icon"><i class="fa fa-film"></i></div>
                             </div>
                     </div>
                     <div class="col-md-3">
-                        <div class="dashboard-card halfStats col-md">
+                        <div class="card dashboard-card halfStats col-md row">
+                            <div class="col-md-9">
                                 <div class="value">{{offlinePagesCount}}</div>
                                 <div class="legend">{{$t('dashboard.cards.offlinePagesCount')}}</div>
                             </div>
+                            <div class="icon col-md-3"><i class="fa fa-file-image"></i></div>
+                                
+                        </div>
                     </div>
             
         </div>
         <div class="row">
             <div class="col-md-3">
-                        <div class="card dashboard-card col-md halfStats">
+                        <div class="card dashboard-card col-md halfStats row">
+                            <div class="col-md-9">
                                 <div class="value">{{onlineAIPsIngested}}</div>
                                 <div class="legend">{{$t('dashboard.cards.onlineAIPsIngested')}}</div>
                             </div>
+                            <div class="icon col-md-3"><i class="fa fa-cloud"></i></div>
+                        </div>
                     </div>
 
                     <div class="col-md-3">
-                        <div class="card dashboard-card col-md halfStats">
+                        <div class="card dashboard-card col-md halfStats row">
+                            <div class="col-md-9">
                                 <div class="value">{{onlineDataIngested}}</div>
                                 <div class="legend">{{$t('dashboard.cards.onlineDataIngested')}}</div>
                             </div>
+                            <div class="icon col-md-3"><i class="fa fa-database"></i></div>
+                                
+                        </div>
                     </div>
                     <div class="col-md-3">
-                        <div class="card dashboard-card col-md halfStats">
+                        <div class="card dashboard-card col-md halfStats row">
+                            <div class="col-md-9">
                                 <div class="value">{{AIPsRetrievedCount}}</div>
                                 <div class="legend">{{$t('dashboard.cards.AIPsRetrieved')}}</div>
                             </div>
+                            <div class="icon col-md-3"><i class="fa fa-upload"></i></div>
+                        </div>
                     </div>
 
                     <div class="col-md-3">
-                        <div class="card dashboard-card col-md halfStats">
+                        <div class="card dashboard-card col-md halfStats row">
+                            <div class="col-md-9">
                                 <div class="value">{{DataRetrieved}}</div>
                                 <div class="legend">{{$t('dashboard.cards.filesRetrieved')}}</div>
                             </div>
+                            <div class="icon col-md-3"><i class="fa fa-folder-open"></i></div>
+                        </div>
                     </div>
 
         </div>
         <br />
         
         <div class="row">
-            <div class="col-md-8">
+            <div class="col-md-7">
                 <div class="card">
                     <div class="card-header card-background">
                         <ul class="nav nav-tabs card-header-tabs">
@@ -105,7 +135,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-5">
                 <pie-chart class="pieChart" :title="$t('dashboard.fileTypes')"
                     url="api/v1/stats/charts/file-formats/ingested" />
                 
