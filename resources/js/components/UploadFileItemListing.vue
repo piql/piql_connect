@@ -1,6 +1,6 @@
 <template>
   <div>
-      <table class="table table-sm table-hover table-striped table-bordered">
+      <table class="table table-hover">
           <thead>
               <tr>
                   <th>{{$t('upload.fileName')}}</th>
@@ -38,7 +38,7 @@
                             </span>
                         </td>
 
-                    </tr>
+                    </tr>                          
               
 
           </tbody>
@@ -161,4 +161,8 @@ export default {
     width: 500px !important;
     margin: 20px auto;  
     }
+
+    /* table tr{
+    height: 60px;
+    } */
 </style>
