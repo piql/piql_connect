@@ -1,10 +1,10 @@
 <template>
     <div class="row thumbnailList">
         <div class="col-sm-2 text-center align-self-center">
-            <img class="thumbnailImage" v-bind:src="thumbnailImage">
+            <img class="thumbnailImage fakeLink" v-bind:src="thumbnailImage" @click="preview">
         </div>
         <div class="col-sm-3 text-truncate align-self-center text-left">
-            {{item.storage_properties.bag.name}}
+            <router-link :to="{ name: 'access.browse.dips.files', params: { dipId: item.id } }" data-toggle="tooltip" title="Access contents" class="fakeLink">{{item.storage_properties.bag.name}}</router-link>
         </div>
         <div class="col-sm-1 p-0 text-truncate align-self-center text-center">
             {{formatShortDate(item.archived_at)}}
@@ -83,3 +83,9 @@ export default {
 
 }
 </script>
+<style scoped>
+    .fakeLink {
+        cursor: pointer;
+        color: #808080;
+    }
+</style>
