@@ -2,7 +2,7 @@
     <div>
         <div class="row plist thumbnailList">
             <div class="col-2 text-center">
-                <img class="thumbnailImage" v-bind:src="thumbnailImage">
+                <img class="thumbnailImage fakeLink" v-bind:src="thumbnailImage" @click="preview">
             </div>
             <div class="col-7 text-left align-self-center text-truncate">
                 {{fileName}}
@@ -74,3 +74,8 @@
 
     }
 </script>
+<style scoped>
+    .fakeLink {
+        cursor: pointer;
+    }
+</style>
