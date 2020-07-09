@@ -84,16 +84,26 @@ class DipController extends Controller
             $q->paginate( env('DEFAULT_ENTRIES_PER_PAGE') )
         );
     }
+    
+    private function filter_package_thumbnail($dip) {
+    	return $dip->fileObjects->filter( function ($file, $key) {
+    		$pathInfo = pathinfo($file->fullpath);
+    		switch (strtolower($pathInfo['extension'])) {
+    			case 'pdf':
+    				return $file;
+    			default:
+    				return Str::contains( $file->fullpath, '/thumbnails' );
+    		}
+    	})->first();
+    }
 
     public function package_thumbnail( Request $request, ArchivalStorageInterface $storage )
     {
         $dip = Dip::find( $request->dipId );
-        $file = $dip->fileObjects->filter( function ($file, $key) {
-            return Str::contains( $file->fullpath, '/thumbnails' );
-        })->first();
-
-        return response($storage->stream( $dip->storage_location, $file->fullpath ))
-                                ->header("Content-Type" , "image/jpeg");
+        $file = $this->filter_package_thumbnail($dip);
+        $filePreviewRenderHelper = new FilePreviewRenderHelper($storage, $dip, $file);
+        return response($filePreviewRenderHelper->getContent())
+        ->header("Content-Type" , $filePreviewRenderHelper->getMimeType());
     }
 
     public function package_preview( Request $request, ArchivalStorageInterface $storage )
@@ -183,20 +193,30 @@ class DipController extends Controller
             "Content-Disposition" => "attachment; { $file->filename }"
         ]);
     }
+    
+    private function filter_file_thumbnail($dip, $file)
+    {
+    	return $dip->fileObjects->filter( function ($thumb, $key) use( $file ) {
+    		$pathInfo = pathinfo($file->fullpath);
+    		switch (strtolower($pathInfo['extension'])) {
+    			case 'pdf':
+    				return $file;
+    			default:
+    				return Str::contains( $thumb->path, '/thumbnails' );;
+    		}
+    	})->filter( function ($thumb, $key) use ( $file ) {
+    		return Str::contains( $file->filename, pathinfo( $thumb->filename, PATHINFO_FILENAME ) );
+    	})->first();
+    }
 
     public function file_thumbnail( ArchivalStorageInterface $storage, Request $request )
     {
         $dip = Dip::find( $request->dipId );
         $file = $dip->fileObjects->find( $request->fileId );
-        $thumbnail = $dip->fileObjects->filter( function ($thumb, $key) use( $file ) {
-                return Str::contains( $thumb->path, '/thumbnails' );
-        })->filter( function ($thumb, $key) use ( $file ) {
-            return Str::contains( $file->filename, pathinfo( $thumb->filename, PATHINFO_FILENAME ) );
-        })->first();
-
-
-        return response($storage->stream( $dip->storage_location, $thumbnail->fullpath ))
-            ->header("Content-Type" , "image/jpeg");
+        $thumbnail = $this->filter_file_thumbnail($dip, $file);
+        $filePreviewRenderHelper = new FilePreviewRenderHelper($storage, $dip, $thumbnail);
+        return response($filePreviewRenderHelper->getContent())
+        ->header("Content-Type" , $filePreviewRenderHelper->getMimeType());
     }
 
 
