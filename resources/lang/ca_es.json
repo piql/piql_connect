@@ -42,6 +42,7 @@
     "upload.resumeOne": "Reprendre càrrega",
     "upload.resumeAll": "Reprendre totes les càrregues",
     "upload.remove": "Eliminar aquest fitxer de la ingesta",
+    "upload.remove.question": "Eliminar aquest fitxer de la ingesta?",
     "upload.interruptDialogTitle": "No és possible abandonar la pàgina mentre es carrega",
     "upload.toasts.sentToProcessing.title": "Llest per a processar-se",
     "upload.toasts.sentToProcessing.message": "Els fitxers en la càrrega %BAGNAME% s'han enfilat per al seu procés.",

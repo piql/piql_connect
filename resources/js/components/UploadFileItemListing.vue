@@ -29,12 +29,12 @@
                     </td>
                     <td>
                         <span v-if="file.isComplete">
-                            <a @click="metadataClicked (file)" data-toggle="tooltip" title="Edit metadata"><i class="fas fa-tags actionIcon text-center mr-2"></i></a>
-                            <a @click="removeClicked (file)" data-toggle="tooltip" :title="$t('upload.remove')"><i class="fas fa-trash-alt actionIcon text-center ml-2"></i></a>
+                            <a @click="metadataClicked (file)" data-toggle="tooltip" title="Edit metadata"><i class="fas fa-tags actionIcon text-center mr-2 cursorPointer"></i></a>
+                            <a @click="removeClicked (file)" data-toggle="tooltip" :title="$t('upload.remove')"><i class="fas fa-trash-alt actionIcon text-center ml-2 cursorPointer"></i></a>
                         </span>
                         <span v-if="file.isFailed">
-                            <a @click="retryClicked (file)" data-toggle="tooltip" :title="$t('upload.resumeOne')"><i class="fas fa-redo-alt actionIcon text-center mr-2"></i></a>
-                            <a @click="removeFailedClicked (file)" data-toggle="tooltip" :title="$t('upload.remove')"><i class="fas fa-trash-alt actionIcon text-center ml-2"></i></a>
+                            <a @click="retryClicked (file)" data-toggle="tooltip" :title="$t('upload.resumeOne')"><i class="fas fa-redo-alt actionIcon text-center mr-2 cursorPointer"></i></a>
+                            <a @click="removeFailedClicked (file)" data-toggle="tooltip" :title="$t('upload.remove')"><i class="fas fa-trash-alt actionIcon text-center ml-2 cursorPointer"></i></a>
                         </span>
                     </td>
                 </tr>
@@ -81,7 +81,7 @@ export default {
                 cancelText: this.$t('Cancel')
             };
             this.$dialog
-                .confirm(this.$t('upload.remove') + '?', options)
+                .confirm(this.$t('upload.remove.question'), options)
                 .then(remove => {
                     this.$emit("removeClicked", file );
                 });
