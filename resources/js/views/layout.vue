@@ -1,13 +1,13 @@
 <template>
-    <div class="screensize">
-        <div class="container-fluid p-0">
+    <div class="screensize fullHeight">
+        <div class="container-fluid p-0 fullHeight">
             <top-bar />
-            <div class="d-flex flex-row overflow-auto">
-                <div class="d-flex">
+            <div class="d-flex flex-row overflow-auto fullHeight">
+                <div class="d-flex fullHeight">
                     <side-bar :width="currentWidth" :fullname="fullname" />
                 </div>
                 <div class="d-flex flex-nowrap mr-auto ml-auto pr-4 pl-4 w-100 justify-content-center" style="margin-top: 140px">
-                    <div class="w-100">
+                    <div class="w-100" style="margin-left: 280px;">
                         <router-view :height="currentHeight" :width="currentWidth"></router-view>
                     </div>
                 </div>

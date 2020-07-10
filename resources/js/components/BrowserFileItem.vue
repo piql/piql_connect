@@ -74,3 +74,8 @@
 
     }
 </script>
+<style scoped>
+    .fakeLink {
+        cursor: pointer;
+    }
+</style>

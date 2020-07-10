@@ -71,12 +71,12 @@
             <div class="col-md-8">
                 <div class="card">
                     <div class="card-header">
-                        <b><i class="fa fa-upload"></i> UPLOADED FILES</b>
+                        <b><i class="fa fa-upload"></i>  UPLOADED ( {{ sortedFilesUploading.length }} files)</b>
                     </div>
                     <div class="card-body">
                         <upload-file-item-listing :sortedFilesUploading="sortedFilesUploading"  
                         @metadataClicked="metadataClicked" @removeClicked="removeClicked"
-                        @retryClicked="retryClicked" @removeFailedClicked="removeFailedClicked" ></upload-file-item-listing>
+                        @retryClicked="retryClicked" @removeFailedClicked="removeFailedClicked" :filesUploadingMeta="filesUploadingMeta"/>
 
                         <!-- <div class="row text-center pagerRow">
                             <div class="col">

@@ -1280,6 +1280,7 @@ th {
 }
 
 .sideMenu {
+    position: fixed;
     background-color: $color_background_1;
     font-size: 0.9rem;
     //margin-top: 13vh;
@@ -1688,6 +1689,7 @@ th {
         margin-top: 0.6rem;
         font-size: 1.0rem;
         color: white;
+        text-align: left;
     }
 
     .legend {
@@ -1697,8 +1699,18 @@ th {
         margin-bottom: 0rem;
         text-overflow: ellipsis;
         text-transform: uppercase;
-        white-space: nowrap;
+        white-space: normal;
         overflow: hidden;
+        text-align: left;
+        height: 70%;
+        padding-bottom: 30px;
+    }
+
+    .icon {
+        color:white;
+        font-size: 2.0rem;
+        text-align: right;
+
     }
 }
 
@@ -1821,6 +1833,9 @@ input:invalid {
 .form-control-btn {
     height: 38px;
     margin-top: 0 !important;
+}
+.fullHeight {
+    height: 100%;
 }
 .cursorPointer {
     cursor: pointer;
