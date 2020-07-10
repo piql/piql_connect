@@ -4,11 +4,11 @@
             <div class="row pt-3">
                 <div class="col-md-3 ">
                     <router-link class="navbar-brand" :to="{ name: 'stats.dashboard' }">
-                        <img class="" style="position: fixed; left: 3rem; width: 15rem;" src="/images/piql-connect.png">
+                        <img class="" style="position: fixed; left: 3rem; width: 14rem;" src="/images/piql-connect.png">
                     </router-link>
                 </div>
                 <div class="col-md-1 ml-0 mr-0 pr-0">
-                    <img style="position: fixed; top: 1.5rem; left: 22rem; width: 10rem;" src="/images/customer_top_logo.png">
+                    <img style="position: fixed; top: 1.5rem; left: 22rem; width: 9rem;" src="/images/customer_top_logo.png">
                 </div>
                 <div class="col-md-1">
                     <session-timeout-monitor
@@ -22,13 +22,13 @@
                 <div class="col-md-7 navLinks w-100">
                     <ul class="navbar-nav m-auto signal">
                         <li class="navbar" ref='nav-home' :class="[ routeBelongsTo('stats') ? 'top-active' : 'top-inactive' ]">
-                            <router-link :to="{ name: 'stats.dashboard'}">{{$t('Home')}}</router-link>
+                            <router-link :to="{ name: 'stats.dashboard'}"><b>{{$t('Home').toUpperCase()}}</b></router-link>
                         </li>
                         <li class="navbar" ref='nav-ingest' :class="[ routeBelongsTo('ingest') ? 'top-active' : 'top-inactive' ]">
-                            <router-link :to="{ name: 'ingest.uploader' }">{{$t('Ingest')}}</router-link>
+                            <router-link :to="{ name: 'ingest.uploader' }"><b>{{$t('Ingest').toUpperCase()}}</b></router-link>
                         </li>
                         <li class="navbar" ref='nav-access' :class="[ routeBelongsTo('access') ? 'top-active' : 'top-inactive' ]">
-                            <router-link :to="{ name: 'access.browse' }">{{$t('Access')}}</router-link>
+                            <router-link :to="{ name: 'access.browse' }"><b>{{$t('Access').toUpperCase()}}</b></router-link>
                         </li>
 
                         <li class="navbar" ref='nav-settings' :class="[ routeBelongsTo('settings') ? 'top-active' : '']" data-toggle="tooltip" :title="$t('sidebar.settings')" >
