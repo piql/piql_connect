@@ -57,7 +57,8 @@
     "vue-paginate": "^3.6.0",
     "vue-resize": "^0.5.0",
     "vue-router": "^3.3.2",
-    "vue-select-sides": "^1.1.2"
+    "vue-select-sides": "^1.1.2",
+    "vuejs-dialog": "^1.4.1"
   },
   "jest": {
     "moduleFileExtensions": [
