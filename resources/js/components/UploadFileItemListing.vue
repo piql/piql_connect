@@ -29,12 +29,12 @@
                     </td>
                     <td>
                         <span v-if="file.isComplete">
-                            <a @click="metadataClicked (file)" data-toggle="tooltip" title="Edit metadata"><i class="fas fa-tags actionIcon text-center mr-2"></i></a>
-                            <a @click="removeClicked (file)" data-toggle="tooltip" :title="$t('upload.remove')"><i class="fas fa-trash-alt actionIcon text-center ml-2"></i></a>
+                            <a @click="metadataClicked (file)" data-toggle="tooltip" title="Edit metadata"><i class="fas fa-tags actionIcon text-center mr-2 cursorPointer"></i></a>
+                            <a @click="removeClicked (file)" data-toggle="tooltip" :title="$t('upload.remove')"><i class="fas fa-trash-alt actionIcon text-center ml-2 cursorPointer"></i></a>
                         </span>
                         <span v-if="file.isFailed">
-                            <a @click="retryClicked (file)" data-toggle="tooltip" :title="$t('upload.resumeOne')"><i class="fas fa-redo-alt actionIcon text-center mr-2"></i></a>
-                            <a @click="removeFailedClicked (file)" data-toggle="tooltip" :title="$t('upload.remove')"><i class="fas fa-trash-alt actionIcon text-center ml-2"></i></a>
+                            <a @click="retryClicked (file)" data-toggle="tooltip" :title="$t('upload.resumeOne')"><i class="fas fa-redo-alt actionIcon text-center mr-2 cursorPointer"></i></a>
+                            <a @click="removeFailedClicked (file)" data-toggle="tooltip" :title="$t('upload.remove')"><i class="fas fa-trash-alt actionIcon text-center ml-2 cursorPointer"></i></a>
                         </span>
                     </td>
                 </tr>
@@ -47,7 +47,11 @@
 </template>
 
 <script>
+import Vue from 'vue';
 import filesize from 'filesize';
+import VuejsDialog from 'vuejs-dialog';
+import 'vuejs-dialog/dist/vuejs-dialog.min.css';
+Vue.use(VuejsDialog);
 export default {
     props:{
         sortedFilesUploading: Array,
@@ -72,7 +76,15 @@ export default {
     },
     methods: {
         removeClicked: function( file ) {
-            this.$emit("removeClicked", file );
+            let options = {
+                okText: this.$t('OK'),
+                cancelText: this.$t('Cancel')
+            };
+            this.$dialog
+                .confirm(this.$t('upload.remove.question'), options)
+                .then(remove => {
+                    this.$emit("removeClicked", file );
+                });
         },
         metadataClicked: function (file ) {
             this.$emit("metadataClicked", file );
@@ -81,7 +93,15 @@ export default {
             this.$emit("retryClicked", file );
         },
         removeFailedClicked: function( file ) {
-            this.$emit("removeFailedClicked", file );
+            let options = {
+                okText: this.$t('OK'),
+                cancelText: this.$t('Cancel')
+            };
+            this.$dialog
+                .confirm(this.$t('upload.remove') + '?', options)
+                .then(remove => {
+                    this.$emit("removeFailedClicked", file );
+                });
         },
         humanReadableFileSize(){
             return Math.ceil(this.file.fileSize / 1000);
