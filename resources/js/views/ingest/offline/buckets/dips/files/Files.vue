@@ -27,7 +27,7 @@
 </template>
 
 <script>
-import Lightbox from '../../../../../../components/lightbox';
+import Lightbox from '@components/lightbox';
 export default {
     components: {
         Lightbox
