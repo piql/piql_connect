@@ -43,6 +43,8 @@
     "upload.resumeAll": "Reanudar todas las cargas",
     "upload.remove": "Eliminar este fichero de la ingesta",
     "upload.remove.question": "Eliminar este fichero de la ingesta?",
+    "upload.remove.batch.question": "You are about to remove {fileCount} files. Do you want to continue?",
+    "upload.remove.batch.noFiles": "Please, select one or more files to remove",
     "upload.interruptDialogTitle": "No es posible abandonar la página mientras se carga",
     "upload.toasts.sentToProcessing.title": "Listo para procesarse",
     "upload.toasts.sentToProcessing.message": "Los ficheros en la carga %BAGNAME% se han enfilado para su proceso.",

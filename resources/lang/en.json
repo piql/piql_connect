@@ -43,6 +43,8 @@
     "upload.resumeAll": "Resume all uploads",
     "upload.remove": "Remove this file from the ingest",
     "upload.remove.question": "Remove this file from the ingest?",
+    "upload.remove.batch.question": "You are about to remove {fileCount} files. Do you want to continue?",
+    "upload.remove.batch.noFiles": "Please, select one or more files to remove.",
     "upload.interruptDialogTitle": "You cannot leave the page while uploading",
     "upload.toasts.sentToProcessing.title": "Ready for processing",
     "upload.toasts.sentToProcessing.message": "The files in upload %BAGNAME% have been queued for processing.",
