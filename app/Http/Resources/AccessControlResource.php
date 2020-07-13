@@ -2,10 +2,10 @@
 
 namespace App\Http\Resources;
 
-use App\Enums\PermissionType;
+use App\Enums\AccessControlType;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class PermissionResource extends JsonResource
+class AccessControlResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -17,14 +17,14 @@ class PermissionResource extends JsonResource
     {
         $data = [
             "id" => $this->id,
-            "type" => PermissionType::getDescription($this->type),
+            "type" => AccessControlType::getDescription($this->type),
             "name" => $this->name,
             "description" => $this->description,
             "updated_at" => $this->updated_at,
             "created_at" => $this->created_at,
         ];
         switch($this->type) {
-            case PermissionType::Group:
+            case AccessControlType::Group:
                 if($this->actions) $data['actions'] = $this->actions;
             break;
         }

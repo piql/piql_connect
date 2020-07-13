@@ -9,7 +9,7 @@ use BenSampo\Enum\Enum;
  * @method static static OptionTwo()
  * @method static static OptionThree()
  */
-final class PermissionType extends Enum
+final class AccessControlType extends Enum
 {
     const Group  = 0;
     const Role   = 1;
