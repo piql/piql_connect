@@ -8,7 +8,6 @@
             <div class="col-sm-3 text-center">{{$t('upload.files')}}</div>
             <div class="col-sm-3 text-center">{{$t('ingest.processing.ingestDate')}}</div>
             <div class="col-sm-3 text-center">{{$t('ingest.processing.status')}}</div>
-            <div class="col-sm-1">&nbsp;</div>
         </div>
 
         <div v-if="currentlyIdle" class="mt-5 text-center"><h2 class="pt-5">{{$t('ingest.processing.noItems')}}</h2></div>
