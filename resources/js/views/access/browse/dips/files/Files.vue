@@ -8,7 +8,8 @@
         <list-header
             :colA="previewCol"
             :colB="filenameCol"
-            :colC="actionsCol"
+            :colC="sizeCol"
+            :colD="actionsCol"
             @btnDClicked="close"
         />
 
@@ -71,8 +72,14 @@ export default {
         },
         filenameCol: function() {
             return {
-                css: "col-sm-7 text-left",
+                css: "col-sm-6 text-left",
                 slot: this.$t('access.browse.header.files')
+            };
+        },
+        sizeCol: function() {
+            return {
+                css: "col-sm-2 text-left",
+                slot: this.$t('access.browse.header.size')
             };
         },
         actionsCol: function() {
