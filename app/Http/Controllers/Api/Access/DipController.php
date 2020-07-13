@@ -120,10 +120,11 @@ class DipController extends Controller
     public function files( Request $request )
     {
         $dip = Dip::find( $request->dipId );
-        $files = $dip->fileObjects()
-                     ->where( 'path', 'LIKE', "%/objects" )
-                     ->paginate( env('DEFAULT_ENTRIES_PER_PAGE') );
-
+        $q = $dip->fileObjects()->where( 'path', 'LIKE', "%/objects" );
+        if ($search = $request->query('search')) {
+            $q->where('filename', 'LIKE', '%' . $search . '%');
+        }
+        $files = $q->paginate( env('DEFAULT_ENTRIES_PER_PAGE') );
         return FileObjectResource::collection( $files );
     }
 
@@ -250,6 +251,8 @@ class DipController extends Controller
      */
     public function show( Request $request, ArchivalStorageInterface $storage )
     {
+        $dip = Dip::find( $request->dipId );
+        return $dip->toArray();
     }
 
     /**
