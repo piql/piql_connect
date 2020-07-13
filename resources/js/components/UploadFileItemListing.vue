@@ -3,13 +3,13 @@
       <table class="table table-hover">
           <thead>
               <tr>
-                  <th>{{$t('upload.fileName')}}</th>
+                  <th><i class="fas fa-trash-alt actionIcon text-center ml-2 cursorPointer" @click="batchRemove"></i> {{$t('upload.fileName')}}</th>
                   <th>{{$t('upload.fileSize')}}</th>
                   <th>{{$t('upload.fileActions')}}</th>
               </tr>
           </thead>
           <tbody>
-               <tr v-for="file in displayedfiles" :key="file.id">
+               <tr v-for="(file,idx) in displayedfiles" :key="file.id">
                         <td>
                             <div v-if="file.isUploading" class="progress upload-progress bg-fill">
                                 <div class="progress-bar bg-brand text-left" role="progressbar" v-bind:style="file.progressBarStyle" v-bind:aria-valuenow="file.progressPercentage" aria-valuemin="0" aria-valuemax="100">
@@ -19,7 +19,7 @@
                             <div v-else>
                                 <span class="d-inline" tabindex="0" data-toggle="tooltip" :title="file.filename">
                                     <div class="text-left">
-                                        {{file.filename}}
+                                        <label><input type="checkbox" class="fileSel" :value="idx"/> {{file.filename}}</label>
                                     </div>
                                 </span>
                             </div>
@@ -75,6 +75,30 @@ export default {
         });
     },
     methods: {
+        batchRemove: function() {
+            let fileSelArr = this.$el.querySelectorAll('.fileSel');
+            let fileToRemoveArr = [];
+            for (let i=0;i<fileSelArr.length;i++) {
+                if (fileSelArr[i].checked) {
+                    fileToRemoveArr[fileToRemoveArr.length] = this.displayedfiles[i];
+                }
+            }
+            let options = {
+                okText: this.$t('OK'),
+                cancelText: this.$t('Cancel')
+            };
+            if (fileToRemoveArr.length > 0) {
+                this.$dialog
+                    .confirm(this.$t('upload.remove.batch.question', { fileCount: fileToRemoveArr.length}), options)
+                    .then(remove => {
+                        for (let i=0;i<fileToRemoveArr.length;i++) {
+                            this.$emit("removeClicked", fileToRemoveArr[i] );
+                        }
+                    });
+            } else {
+                this.$dialog.alert(this.$t('upload.remove.batch.noFiles'), options);
+            }
+        },
         removeClicked: function( file ) {
             let options = {
                 okText: this.$t('OK'),
