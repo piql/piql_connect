@@ -10,6 +10,6 @@ $factory->define(AccessControl::class, function (Faker $faker) {
     return [
         'name' => $faker->name,
         'description' => $faker->realText(200, 2),
-        'type' => AccessControlType::Role,
+        'type' => AccessControlType::Permission,
     ];
 });

@@ -12,12 +12,12 @@ class AccessControlManager
 {
     use Uuids;
 
-    public static function createGroup($name, $description) 
+    public static function createPermissionGroup($name, $description) 
     {
         $group = new AccessControl;
         $group->name = $name;
         $group->description = $description;
-        $group->type = AccessControlType::Group;
+        $group->type = AccessControlType::PermissionGroup;
         return $group;
     } 
 
@@ -27,7 +27,7 @@ class AccessControlManager
         $role->name = $name;
         $role->description = $description;
         $role->parent_id = $groupId;
-        $role->type = AccessControlType::Role;
+        $role->type = AccessControlType::Permission;
         return $role;
     } 
 
@@ -35,7 +35,7 @@ class AccessControlManager
         $accessControl = AccessControl::findOrFail($id);
         if ($accessControl->delete()) {
             UserAccessControl::where('access_control_id', $id)->delete();
-            if($accessControl->type == AccessControlType::Group) {
+            if($accessControl->type == AccessControlType::PermissionGroup) {
                 UserAccessControl::where('access_control_id', $id)->delete();
                 $roles = AccessControl::select('id')->where('parent_id', $id)->get();
                 if(count($roles) > 0) {
@@ -101,8 +101,8 @@ class AccessControlManager
     }
 
     public static function userHasAccessControl($userId, $accessControlId) {
-        $roleAccessControlEnum = AccessControlType::Role;
-        $groupAccessControlEnum = AccessControlType::Group;
+        $roleAccessControlEnum = AccessControlType::Permission;
+        $groupAccessControlEnum = AccessControlType::PermissionGroup;
         $accessControlTable = (new AccessControl)->getTable();
         $userAccessControlTable = (new UserAccessControl)->getTable();
         $userIdFormat = 
@@ -115,19 +115,19 @@ class AccessControlManager
             "))";
         
         $accessControlsQuery = 
-            "select roles.id role_id, `groups`.id group_id " .
-            "from (select id, parent_id from $accessControlTable where type=$roleAccessControlEnum) roles " .
+            "select permissions.id permission_id, `groups`.id group_id " .
+            "from (select id, parent_id from $accessControlTable where type=$roleAccessControlEnum) permissions " .
             "  left join (select id from $accessControlTable where type=$groupAccessControlEnum) `groups` " .
-            "    on roles.parent_id=`groups`.id " .
-            "where $accessControlId in (roles.id, `groups`.id)";
+            "    on permissions.parent_id=`groups`.id " .
+            "where $accessControlId in (`permissions`.id, `groups`.id)";
         $userQuery = 
             "select ap.user_uuid from (".
                 "select $userIdFormat user_uuid, access_control_id from $userAccessControlTable".
-            ") ap where user_uuid='$userId' and access_control_id in (role_id, group_id)";
+            ") ap where user_uuid='$userId' and access_control_id in (permission_id, group_id)";
         
         $accessControl = DB::table(DB::raw("($accessControlsQuery) p"))
             ->select(DB::raw(
-                "p.role_id, p.group_id, ($userQuery) user_id"
+                "p.permission_id, p.group_id, ($userQuery) user_id"
             ))->get();
             
         return (empty($accessControl) || !isset($accessControl[0])) ? [] : (array)$accessControl[0];

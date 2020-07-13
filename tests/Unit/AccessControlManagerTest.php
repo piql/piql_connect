@@ -20,13 +20,13 @@ class AccessControlManagerTest extends TestCase
      *
      * @return void
      */
-    public function testCanCreateGroup()
+    public function testCanCreatePermissionGroup()
     {
-        $g = AccessControlManager::createGroup('Group 1', 'A test group');
+        $g = AccessControlManager::createPermissionGroup('Group 1', 'A test group');
         $g->save();
         $group = AccessControl::where('id', $g->id)->first();
         $this->assertNotNull($group);
-        $this->assertEquals($group->type, AccessControlType::Group);
+        $this->assertEquals($group->type, AccessControlType::PermissionGroup);
         $this->assertEquals($group->id, $g->id);
         $this->assertEquals($group->name, 'Group 1');
     
@@ -34,14 +34,14 @@ class AccessControlManagerTest extends TestCase
     
     public function testCanCreateAction()
     {
-        $g = AccessControlManager::createGroup('Author', 'People that write stuff');
+        $g = AccessControlManager::createPermissionGroup('Author', 'People that write stuff');
         $g->save();
         $this->assertNotNull($g);
         $r = AccessControlManager::createAction($g->id, 'Create Article', 'Write r new article');
         $r->save();
         $role = AccessControl::where('id', $r->id)->first();
         $this->assertNotNull($role);
-        $this->assertEquals($role->type, AccessControlType::Role);
+        $this->assertEquals($role->type, AccessControlType::Permission);
         $this->assertEquals($role->id, $r->id);
         $this->assertEquals($role->parent_id, $g->id);
         $this->assertEquals($role->name, 'Create Article');
@@ -60,7 +60,7 @@ class AccessControlManagerTest extends TestCase
     
     public function testGroupDeletionAlsoDeletesActions()
     {
-        $g = AccessControlManager::createGroup('Teacher', 'People that educate');
+        $g = AccessControlManager::createPermissionGroup('Teacher', 'People that educate');
         $g->save();
         $a1 = AccessControlManager::createAction($g->id, 'Teach', 'Pass on Knowledge');
         $a1->save();
@@ -77,7 +77,7 @@ class AccessControlManagerTest extends TestCase
     
     public function testCanAssignAccessControlsToUser()
     {
-        $g = AccessControlManager::createGroup('Virus', 'Program destroyer');
+        $g = AccessControlManager::createPermissionGroup('Virus', 'Program destroyer');
         $g->save();
         $r = AccessControlManager::createAction($g->id, 'Kill Software', 'Corrupts software');
         $r->save();
@@ -86,13 +86,13 @@ class AccessControlManagerTest extends TestCase
         $pm = AccessControlManager::userHasAccessControl($u->getIdAttribute(), $r->id);
         $this->assertTrue(count($pm) > 0);
         $this->assertEquals($u->getIdAttribute(), $pm['user_id']);
-        $this->assertEquals($r->id, $pm['role_id']);
+        $this->assertEquals($r->id, $pm['permission_id']);
         $this->assertEquals($g->id, $pm['group_id']);
     }    
     
     public function testCanUnassignAccessControlsFromUser()
     {
-        $g = AccessControlManager::createGroup('Transporter', 'Move things');
+        $g = AccessControlManager::createPermissionGroup('Transporter', 'Move things');
         $g->save();
         $r = AccessControlManager::createAction($g->id, 'Drive', 'Use land locomotive');
         $r->save();
@@ -110,7 +110,7 @@ class AccessControlManagerTest extends TestCase
     
     public function testAccessControlDeletionAlsoDeletesUserAssignment()
     {
-        $g = AccessControlManager::createGroup('Virus', 'Program destroyer');
+        $g = AccessControlManager::createPermissionGroup('Virus', 'Program destroyer');
         $g->save();
         $a1 = AccessControlManager::createAction($g->id, 'Kill Software', 'Corrupts software');
         $a1->save();

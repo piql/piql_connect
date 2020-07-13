@@ -186,13 +186,13 @@ Route::group(['prefix' => 'v1/admin/access-control'], function () {
     Route::put('{id}', 'Api\Admin\AccessControlController@update')->where('id', '[0-9]+');
     Route::delete('{id}', 'Api\Admin\AccessControlController@delete')->where('id', '[0-9]+');
     
-    Route::get('groups', 'Api\Admin\AccessControlController@listGroups');
-    Route::post('groups', 'Api\Admin\AccessControlController@createGroup');
-    Route::get('roles', 'Api\Admin\AccessControlController@listRoles');
-    Route::post('roles', 'Api\Admin\AccessControlController@createAction');
-    Route::get('groups/{id}', 'Api\Admin\AccessControlController@getGroup')->where('id', '[0-9]+');
-    Route::get('groups/{id}/roles', 'Api\Admin\AccessControlController@listGroupActions')->where('id', '[0-9]+');
-    Route::post('groups/{id}/role', 'Api\Admin\AccessControlController@createGroupAction')->where('id', '[0-9]+');
+    Route::get('permission-groups', 'Api\Admin\AccessControlController@listPermissionGroups');
+    Route::post('permission-groups', 'Api\Admin\AccessControlController@createPermissionGroup');
+    Route::get('permissions', 'Api\Admin\AccessControlController@listPermissions');
+    Route::post('permissions', 'Api\Admin\AccessControlController@createPermission');
+    Route::get('permission-groups/{id}', 'Api\Admin\AccessControlController@getPermissionGroup')->where('id', '[0-9]+');
+    Route::get('permission-groups/{id}/permissions', 'Api\Admin\AccessControlController@listPermissionGroupPermissions')->where('id', '[0-9]+');
+    Route::post('permission-groups/{id}/permission', 'Api\Admin\AccessControlController@createPermissionGroupPermission')->where('id', '[0-9]+');
     
     Route::post('users/assign', 'Api\Admin\AccessControlController@assignUsers');
     Route::post('users/unassign', 'Api\Admin\AccessControlController@unAssignUsers');

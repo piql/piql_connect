@@ -22,52 +22,52 @@ class AccessControlController extends Controller
     public function index(Request $request)
     {
         $limit = $request->limit ? $request->limit : env('DEFAULT_ENTRIES_PER_PAGE', 10);
-        $AccessControls = AccessControl::paginate($limit, ['*'], 'page');
-        return AccessControlResource::collection($AccessControls);
+        $accessControls = AccessControl::paginate($limit, ['*'], 'page');
+        return AccessControlResource::collection($accessControls);
     }
 
-    public function createGroup(Request $request)
+    public function createPermissionGroup(Request $request)
     {
-        $group = AccessControlManager::createGroup($request->input('name'), $request->input('description'));
+        $group = AccessControlManager::createPermissionGroup($request->input('name'), $request->input('description'));
         if ($group->save()) return new AccessControlResource($group);
     }
 
     public function listGroups(Request $request)
     {
         $limit = $request->limit ? $request->limit : env('DEFAULT_ENTRIES_PER_PAGE', 10);
-        $groups = AccessControl::where('type', AccessControlType::Group)->paginate($limit, ['*'], 'page');
+        $groups = AccessControl::where('type', AccessControlType::PermissionGroup)->paginate($limit, ['*'], 'page');
         return AccessControlResource::collection($groups);
     }
 
-    public function listRoles(Request $request)
+    public function listPermissions(Request $request)
     {
         $limit = $request->limit ? $request->limit : 10;
-        $roles = AccessControl::where('type', AccessControlType::Role)->paginate($limit, ['*'], 'page');
+        $roles = AccessControl::where('type', AccessControlType::Permission)->paginate($limit, ['*'], 'page');
         return AccessControlResource::collection($roles);
     }
 
-    public function getGroup($id)
+    public function getPermissionGroup($id)
     {
-        $group = AccessControl::where('type', AccessControlType::Group)->where('id', $id)->first();
+        $group = AccessControl::where('type', AccessControlType::PermissionGroup)->where('id', $id)->first();
         if($group == null) return response(['message' => 'Group Not Found!'], 404);
         $group->actions = AccessControl::select('id', 'name')->where('parent_id', $id)->get();
         return new AccessControlResource($group);
     }
     
-    public function listGroupActions(Request $request, $id)
+    public function listPermissionGroupPermissions(Request $request, $id)
     {
         $limit = $request->limit ? $request->limit : env('DEFAULT_ENTRIES_PER_PAGE', 10);
-        $actions = AccessControl::where(['type' => AccessControlType::Role, 'parent_id' =>$id])->paginate($limit, ['*'], 'page');
+        $actions = AccessControl::where(['type' => AccessControlType::Permission, 'parent_id' =>$id])->paginate($limit, ['*'], 'page');
         return AccessControlResource::collection($actions);
     } 
     
-    public function createAction(Request $request)
+    public function createPermission(Request $request)
     {
         $action = AccessControlManager::createAction(null, $request->input('name'), $request->input('description'));
         if ($action->save()) return new AccessControlResource($action);
     } 
 
-    public function createGroupAction(Request $request, $id)
+    public function createPermissionGroupPermission(Request $request, $id)
     {
         $action = AccessControlManager::createAction($id, $request->input('name'), $request->input('description'));
         if ($action->save()) return new AccessControlResource($action);

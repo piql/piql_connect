@@ -30,16 +30,16 @@ class AccessControlControllerTest extends TestCase
 
     public function test_fetching_non_existing_access_control_by_id_returns_404()
     {
-        $response = $this->get('/api/v1/admin/access-control/054321');
+        $response = $this->get('/api/v1/admin/access-control/54321');
         $response->assertNotFound();
         $response->assertHeader('Content-Type', 'application/json');
         $message = $response->decodeResponseJson('message');
         $this->assertContains('Not Found', $message);
     }
 
-    public function test_can_create_group()
+    public function test_can_create_permission_group()
     {
-        $response = $this->json('post', '/api/v1/admin/access-control/groups', [
+        $response = $this->json('post', '/api/v1/admin/access-control/permission-groups', [
             'name' => 'Presidents', 'description' => 'Chaps that lead countries'
         ]);
         $response->assertStatus(201);
@@ -48,11 +48,11 @@ class AccessControlControllerTest extends TestCase
         $this->assertEquals($g['name'], 'Presidents');
     }
 
-    public function test_can_add_role_to_group()
+    public function test_can_add_permission_to_permission_group()
     {
-        $g = AccessControlManager::createGroup('Ministers', 'Guys that eat national money');
+        $g = AccessControlManager::createPermissionGroup('Ministers', 'Guys that eat national money');
         $this->assertTrue(true, $g->save());
-        $response = $this->json('post', '/api/v1/admin/access-control/groups/'.$g->id.'/role', [
+        $response = $this->json('post', '/api/v1/admin/access-control/permission-groups/'.$g->id.'/permission', [
             'name' => 'MOH', 'description' => 'Ministry of Health'
         ]);
         $response->assertStatus(201);
@@ -71,7 +71,7 @@ class AccessControlControllerTest extends TestCase
         ]);
         $response->assertOk();
         $hp = AccessControlManager::userHasAccessControl($u1->id, $r->id);
-        $this->assertEquals($r->id, $hp['role_id']);
+        $this->assertEquals($r->id, $hp['permission_id']);
         $this->assertEquals($u1->getIdAttribute(), $hp['user_id']);
     }    
     
@@ -84,7 +84,7 @@ class AccessControlControllerTest extends TestCase
         ]);
         $response->assertOk();
         $hp = AccessControlManager::userHasAccessControl($u1->id, $r->id);
-        $this->assertEquals($r->id, $hp['role_id']);
+        $this->assertEquals($r->id, $hp['permission_id']);
         $this->assertEquals(null, $hp['user_id']);
     }
     

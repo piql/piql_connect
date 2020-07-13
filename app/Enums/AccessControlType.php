@@ -11,6 +11,7 @@ use BenSampo\Enum\Enum;
  */
 final class AccessControlType extends Enum
 {
-    const Group  = 0;
-    const Role   = 1;
+    const PermissionGroup  = 0;
+    const Permission       = 1;
+    const Role             = 2;
 }

@@ -24,7 +24,7 @@ class AccessControlResource extends JsonResource
             "created_at" => $this->created_at,
         ];
         switch($this->type) {
-            case AccessControlType::Group:
+            case AccessControlType::PermissionGroup:
                 if($this->actions) $data['actions'] = $this->actions;
             break;
         }
