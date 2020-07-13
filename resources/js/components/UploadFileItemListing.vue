@@ -149,7 +149,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
     a.page-link {
         display: inline-block;
     }
@@ -165,8 +165,13 @@ export default {
     .contentCenter {
         text-align: center;
     }
-
-    /* table tr{
-    height: 60px;
-    } */
+    .dg-btn--ok {
+        border-color: #cc5d33;
+        color: #cc5d33;
+    }
+    .dg-btn--cancel {
+        border-color: #cc5d33;
+        color: #ffffff;
+        background-color: #cc5d33;
+    }
 </style>
