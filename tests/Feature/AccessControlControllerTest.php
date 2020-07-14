@@ -99,35 +99,35 @@ class AccessControlControllerTest extends TestCase
         $this->assertEquals($u1->getIdAttribute(), $hp['user_id']);
     }  
     
-    // public function test_can_assign_role_to_user()
-    // {
-    //     $acm = new AccessControlManager();
-    //     $text = $this->text;
-    //     $g = $acm->createPermissionGroup($text->realText(10), $text->realText(40));
-    //     $this->assertTrue($g->save());
-    //     $p1 = $acm->createPermission($g->id, $text->realText(10), $text->realText(40)); 
-    //     $p2 = $acm->createPermission($g->id, $text->realText(10), $text->realText(40)); 
-    //     $r1 = $acm->createRole($text->realText(10), $text->realText(40)); 
-    //     $r2 = $acm->createRole($text->realText(10), $text->realText(40));
-    //     if($p1->save() && $p2->save() && $r1->save() && $r2->save())
-    //         $acm->addPermissionsToRole($r1->id, [$g->id]);
-    //     $u1 = factory(User::class)->create();
-    //     $u2 = factory(User::class)->create();
-    //     $response = $this->json('post', '/api/v1/admin/access-control/users/assign', [
-    //         'users' => [$u1->id, $u2->id], 'access_controls'=>[$r1->id]
-    //     ]);
-    //     $response->assertOk();        
-    //     $uhac = function($userId, $acId) use($acm) {
-    //         return $acm->userHasAccessControl($userId, $acId);
-    //     };
-    //     var_dump($uhac($u1->id, $r1->id));
-    //     $this->assertEquals($p1->id, $uhac($u1->id, $p1->id)['permission_id']);
-    //     $this->assertEquals($p2->id, $uhac($u1->id, $p2->id)['permission_id']);
-    //     $this->assertEquals($r1->id, $uhac($u1->id, $r1->id)['permission_id']);
-    //     // $hp = AccessControlManager::userHasAccessControl($u1->id, $p->id);
-    //     // $this->assertEquals($p->id, $hp['permission_id']);
-    //     // $this->assertEquals($u1->getIdAttribute(), $hp['user_id']);
-    // } 
+    public function test_can_assign_role_to_user()
+    {
+        $acm = new AccessControlManager();
+        $text = $this->text;
+        $g = $acm->createPermissionGroup($text->realText(10), $text->realText(40));
+        $this->assertTrue($g->save());
+        $p1 = $acm->createPermission($g->id, $text->realText(10), $text->realText(40)); 
+        $p2 = $acm->createPermission($g->id, $text->realText(10), $text->realText(40)); 
+        $r1 = $acm->createRole($text->realText(10), $text->realText(40)); 
+        $r2 = $acm->createRole($text->realText(10), $text->realText(40));
+        if($p1->save() && $p2->save() && $r1->save() && $r2->save())
+            $acm->addPermissionsToRole($r1->id, [$g->id]);
+        $u1 = factory(User::class)->create();
+        $u2 = factory(User::class)->create();
+        $response = $this->json('post', '/api/v1/admin/access-control/users/assign', [
+            'users' => [$u1->id, $u2->id], 'access_controls'=>[$r1->id]
+        ]);
+        $response->assertOk();        
+        $uhac = function($userId, $acId) use($acm) {
+            return $acm->userHasAccessControl($userId, $acId);
+        };
+        $this->assertEquals($p1->id, $uhac($u1->id, $p1->id)['permission_id']);
+        $this->assertEquals($p2->id, $uhac($u1->id, $p2->id)['permission_id']);
+        // var_dump($uhac($u1->id, $r1->id));
+        // $this->assertEquals($r1->id, $uhac($u1->id, $r1->id)['permission_id']);
+        // $hp = AccessControlManager::userHasAccessControl($u1->id, $p->id);
+        // $this->assertEquals($p->id, $hp['permission_id']);
+        // $this->assertEquals($u1->getIdAttribute(), $hp['user_id']);
+    } 
     
     public function test_can_unassign_permission_from_user()
     {
