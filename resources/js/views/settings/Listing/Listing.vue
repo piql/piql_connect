@@ -29,7 +29,7 @@
                 </b-modal>
             </div>
             <div class="card-body">
-               <user-listing :key="listingKey" @disableUser="disableUser" :users="users" @editUser="editUser" @enableUser="enableUser"></user-listing>
+               <user-listing :key="listingKey" @deleteUser='deleteUser'  @disableUser="disableUser" :users="users" @editUser="editUser" @enableUser="enableUser"></user-listing>
                <div class="row text-center pagerRow">
                     <div class="col">
                         <Pager :meta='pageMeta' :height='height' />
@@ -159,7 +159,7 @@
                 this.$bvModal.hide('edit-user');
 
             },
-            async disableUser(data){
+           async disableUser(data){
                 this.infoToast("Disable User", "disabling a user from listing");
                 this.response = (await axios.post("/api/v1/admin/users/disable",data,{
                     headers:{
@@ -170,8 +170,24 @@
                 if(!this.forceRerender()){
                     location.reload();
                 }
+                //this.forceRerender();
 
                 this.$bvModal.hide('disable-user');
+            },
+            deleteUser(data){
+                this.infoToast("Delete User", "deleting a user from listing");
+                // this.response = (await axios.post("/api/v1/admin/users/disable",data,{
+                //     headers:{
+                //         'content-type': 'application/json'
+                //     }
+                // })).data;
+
+                if(!this.forceRerender()){
+                    location.reload();
+                }
+                //this.forceRerender();
+
+                this.$bvModal.hide('delete-user');
             },
             async enableUser(data){
                 this.infoToast("Enable User", "enabling a user in listing");
@@ -184,6 +200,7 @@
                 if(!this.forceRerender()){
                     location.reload();
                 }
+                //this.forceRerender()
                 this.$bvModal.hide('enable-user');
 
             }

@@ -21,8 +21,8 @@
                             <td v-else > <b-badge variant="success"> Active</b-badge></td>
                             <td>{{staff.created_at}}</td>
                             <td>
-                                <a class="btn btn-xs btn-primary" title="Assign Group" style="color:white">
-                                    <i class="fa fa-users"></i>
+                                <a class="btn btn-xs btn-primary" title="Assign Role" style="color:white">
+                                    <i class="fa fa-user-secret"></i>
                                     </a>
                                 <a class="btn btn-xs btn-primary" title="Edit" style="color:white" @keydown="showEditModal(staff.id)" @click="showEditModal(staff.id)">
                                     <i class="fa fa-edit"></i>
@@ -33,12 +33,27 @@
                                 <a v-else class="btn btn-xs btn-primary" title="Disable" style="color:white" @keydown="showDisableModal(staff.id)" @click="showDisableModal(staff.id)">
                                     <i class="fa fa-ban"></i>
                                     </a>
+                                <a class="btn btn-xs btn-primary" title="Delete User" style="color:white" @keydown="showDeleteModal(staff.id)" @click="showDeleteModal(staff.id)">
+                                    <i class="fa fa-trash"></i>
+                                    </a>
                             </td>
                         </tr>
                     
                        
                     </tbody>
                 </table>
+
+                <b-modal id="delete-user" hide-footer>
+                    <template v-slot:modal-title>
+                    <h3><b> DELETE USER : {{ user[0].full_name }} </b></h3>
+                    </template>
+                    <div class="d-block">
+                        <div class="alert alert-warning">
+                            Are you sure you want to delete this user? If so, proceed to delete
+                        </div>
+                    </div>
+                    <b-button class="mt-3" block @click="deleteButtonClicked(user[0].id)" @keydown="deleteButtonClicked(user[0].id)"><i class="fa fa-trash"></i> Disable </b-button>
+                </b-modal>
                 
 
                 <b-modal id="disable-user" hide-footer>
@@ -114,6 +129,10 @@ export default {
             this.user = this.users.filter(user => user.id === id);
             this.$bvModal.show('disable-user');
         },
+        showDeleteModal(id){
+            this.user = this.users.filter(user => user.id === id);
+            this.$bvModal.show('delete-user');
+        },
         showEnableModal(id){
             this.user = this.users.filter(user => user.id === id);
             this.$bvModal.show('enable-user');
@@ -138,6 +157,12 @@ export default {
                 users: [id]
             };
             this.$emit('enableUser', data);
+        },
+        deleteButtonClicked(id){
+            let data = {
+                users: [id]
+            };
+            this.$emit('deleteUser', data);
         },
         editButtonClicked(){
             //some data will be passed here before emitting
