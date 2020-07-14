@@ -43,6 +43,8 @@
     "upload.resumeAll": "Reprendre totes les càrregues",
     "upload.remove": "Eliminar aquest fitxer de la ingesta",
     "upload.remove.question": "Eliminar aquest fitxer de la ingesta?",
+    "upload.remove.batch.question": "You are about to remove {fileCount} files. Do you want to continue?",
+    "upload.remove.batch.noFiles": "Please, select one or more files to remove",
     "upload.interruptDialogTitle": "No és possible abandonar la pàgina mentre es carrega",
     "upload.toasts.sentToProcessing.title": "Llest per a processar-se",
     "upload.toasts.sentToProcessing.message": "Els fitxers en la càrrega %BAGNAME% s'han enfilat per al seu procés.",

@@ -1,14 +1,17 @@
 <template>
     <div>
         <div class="row plist">
-            <div class="col-5">
+            <div class="col-3">
                 {{item.name}}
+            </div>
+            <div class="col-3 text-center">
+                {{item.fileCount}}
             </div>
             <div class="col-3 text-center">
                 {{formatShortDate( item.created_at )}}
             </div>
 
-            <div class="col-4">
+            <div class="col-3">
                 <div class="text-truncate progress upload-progress bg-fill">
                     <div class="progress-bar progress-bar-striped progress-bar-animated bg-brand text-left" role="progressbar" v-bind:style="progressBarStyle"
                         v-bind:aria-valuenow="progressPercentage" aria-valuemin="0" aria-valuemax="100">
