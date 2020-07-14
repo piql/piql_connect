@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Enums\AccessControlType;
 use App\AccessControl;
+use App\RolePermission;
 use App\UserAccessControl;
 use Illuminate\Support\Facades\DB;
 use App\Traits\Uuids;
@@ -22,13 +23,32 @@ class AccessControlManager
         return $group;
     } 
 
-    public static function createAction($groupId, $name, $description) 
+    private static function validatePermissionGroup($groupId) {
+        if($groupId == null) return;
+        $group = AccessControl::find($groupId);
+        if($group == null) throw new Exception("Permission Group with id '$groupId' does not exist");
+        else if ($group->type != AccessControlType::PermissionGroup)
+            throw new Exception("$group->name is not a Permission Group");
+        return $group;
+    }
+
+    public static function createPermission($groupId, $name, $description) 
+    {
+        self::validatePermissionGroup($groupId);
+        $permission = new AccessControl;
+        $permission->name = $name;
+        $permission->description = $description;
+        $permission->parent_id = $groupId;
+        $permission->type = AccessControlType::Permission;
+        return $permission;
+    } 
+
+    public static function createRole($name, $description) 
     {
         $role = new AccessControl;
         $role->name = $name;
         $role->description = $description;
-        $role->parent_id = $groupId;
-        $role->type = AccessControlType::Permission;
+        $role->type = AccessControlType::Role;
         return $role;
     } 
 
@@ -36,20 +56,28 @@ class AccessControlManager
         $accessControl = AccessControl::findOrFail($id);
         if ($accessControl->delete()) {
             UserAccessControl::where('access_control_id', $id)->delete();
-            if($accessControl->type == AccessControlType::PermissionGroup) {
+            if(in_array($accessControl->type, [AccessControlType::PermissionGroup, AccessControlType::Role])) {
                 UserAccessControl::where('access_control_id', $id)->delete();
-                $roles = AccessControl::select('id')->where('parent_id', $id)->get();
-                if(count($roles) > 0) {
-                    $ids = collect($roles)->map(function($a){
+                $permissions = AccessControl::select('id')->where('parent_id', $id)->get();
+                if(count($permissions) > 0) {
+                    $ids = collect($permissions)->map(function($a){
                         return $a->id;
                     });
                     UserAccessControl::whereIn('access_control_id', $ids)->delete();
                 }
-                AccessControl::where('parent_id', $id)->delete();
+                AccessControl::where('parent_id', $id)->update(['parent_id' => null]);
             }
             return $accessControl;
         }
         return null;
+    }
+
+    public static function assignPermissionToPermissionGroup($permissionId, $groupId) {
+        if(self::validatePermissionGroup($groupId)->type != AccessControlType::PermissionGroup) return null;
+        AccessControl::where([
+            'type' => AccessControlType::Permission, 'id' => $permissionId
+        ])->update(['parent_id' => $groupId]);
+        return AccessControl::find($permissionId);
     }
 
     public static function assignAccessControlsToUsers(array $accessControls, array $users) {
@@ -101,12 +129,30 @@ class AccessControlManager
         return $results;
     }
 
+    public static function addPermissionsToRole($roleId, $permissions) {
+        $role = AccessControl::where(['id'=>$roleId, 'type'=>AccessControlType::Role])->get();
+        if($role == null) throw new Exception("Role with id '$roleId' does not exist");
+        $perms = AccessControl::select('id')->where('id', $permissions)->get();
+        if(count($perms) == 0) throw new Exception('permissions supplied are invalid or empty');
+        $permIds = collect($perms)->map(function($p){return $p->id;})->all();
+        $existing = RolePermission::select('permission_id')->where('role_id', $roleId)->whereIn('permission_id', $permIds)->get();
+        if(count($existing) > 0) {
+            $ids = []; //remove existing from insert
+            foreach($existing as $p) if(!in_array($p->permission_id, $permIds)) $ids[] = $p->$p->permission_id;
+            $permIds = $ids;
+        }
+        RolePermission::insert(collect($permIds)->map(function($p) use($roleId) {
+            return ['role_id' => $roleId, 'permission_id'=>$p];
+        })->all());
+        return AccessControl::whereIn('id', $permIds)->get();
+    }
+
     public static function userHasAccessControl($userId, $accessControlId) {
         if(!is_numeric($accessControlId)) 
             throw new Exception("Access control ID supplied is not numeric");
         
-        $roleAccessControlEnum = AccessControlType::Permission;
-        $groupAccessControlEnum = AccessControlType::PermissionGroup;
+        $permissionEnum = AccessControlType::Permission;
+        $groupEnum = AccessControlType::PermissionGroup;
         $accessControlTable = (new AccessControl)->getTable();
         $userAccessControlTable = (new UserAccessControl)->getTable();
         $userIdFormat = 
@@ -120,8 +166,8 @@ class AccessControlManager
 
         $accessControlsQuery = 
             "select permissions.id permission_id, `groups`.id group_id " .
-            "from (select id, parent_id from $accessControlTable where type=$roleAccessControlEnum) permissions " .
-            "  left join (select id from $accessControlTable where type=$groupAccessControlEnum) `groups` " .
+            "from (select id, parent_id from $accessControlTable where type=$permissionEnum) permissions " .
+            "  left join (select id from $accessControlTable where type=$groupEnum) `groups` " .
             "    on permissions.parent_id=`groups`.id " .
             "where $accessControlId in (`permissions`.id, `groups`.id)";
         $userQuery = 

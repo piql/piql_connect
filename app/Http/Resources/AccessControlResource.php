@@ -25,7 +25,8 @@ class AccessControlResource extends JsonResource
         ];
         switch($this->type) {
             case AccessControlType::PermissionGroup:
-                if($this->actions) $data['actions'] = $this->actions;
+            case AccessControlType::Role:
+                if($this->actions) $data['permissions'] = $this->permissions;
             break;
         }
         return $data;
