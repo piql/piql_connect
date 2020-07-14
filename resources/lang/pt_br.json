@@ -43,6 +43,8 @@
     "upload.resumeAll": "Continuar todos os uploads",
     "upload.remove": "Remova este arquivo da submissão",
     "upload.remove.question": "Remover este arquivo da submissão?",
+    "upload.remove.batch.question": "Voc� est� removendo {fileCount} arquivos. Deseja continuar?",
+    "upload.remove.batch.noFiles": "Por favor, selecione um ou mais arquivos para remover.",
     "upload.interruptDialogTitle": "Você não pode sair da página durante o upload",
     "upload.toasts.sentToProcessing.title": "Pronto para processamento",
     "upload.toasts.sentToProcessing.message": "Os arquivos no upload %BAGNAME% foram colocados na fila para processamento.",

@@ -42,6 +42,8 @@
     "upload.resumeAll": "Gjentoppta opplasting for alle filer",
     "upload.remove": "Fjern filen fra opplastingen",
     "upload.remove.question": "Vil du fjerne filen fra opplastingen?",
+    "upload.remove.batch.question": "You are about to remove {fileCount} files. Do you want to continue?",
+    "upload.remove.batch.noFiles": "Please, select one or more files to remove",
     "upload.interruptDialogTitle": "Du kan ikke forlate siden mens du laster opp",
     "upload.toasts.sentToProcessing.title": "Klar til prosessering",
     "upload.toasts.sentToProcessing.message": "Filene i opplastingen %BAGNAME% sendes nå til prosessering.",
