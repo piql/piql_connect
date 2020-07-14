@@ -223,6 +223,7 @@
 
     "access.browse.header.preview": "Preview",
     "access.browse.header.name": "Package name",
+    "access.browse.header.size": "Size",
     "access.browse.header.ingestDate": "Ingest date",
     "access.browse.header.holding": "Holding",
     "access.browse.header.files": "Files",
