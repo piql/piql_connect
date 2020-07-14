@@ -14,11 +14,7 @@
 <script>
 export default {
      methods: {
-        selectionChanged: function () {
-            if (this.selection) {
-                this.$emit('selectionChanged', this.selection);
-            }
-        }
+        
     },
     data() {
         return {

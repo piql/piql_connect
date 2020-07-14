@@ -10,6 +10,7 @@
                                 <b-card-text>
                                     <language-picker v-bind:label="$t('settings.settings.languagelabel')" :initialSelection="selectedLanguage" @selectionChanged="changedLanguage"></language-picker>
                                     <row-selector :rowlabel="$t('settings.settings.rowslabel')"></row-selector>
+                                    <upload-logo v-bind:logolabel="$t('settings.settings.logolabel')"></upload-logo>
                                 </b-card-text>
                             </b-tab>
                             <b-tab :title="$t('settings.settings.setPasswordHeader')">
