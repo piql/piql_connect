@@ -7,6 +7,7 @@ use App\AccessControl;
 use App\UserAccessControl;
 use Illuminate\Support\Facades\DB;
 use App\Traits\Uuids;
+use Exception;
 
 class AccessControlManager 
 {
@@ -101,6 +102,9 @@ class AccessControlManager
     }
 
     public static function userHasAccessControl($userId, $accessControlId) {
+        if(!is_numeric($accessControlId)) 
+            throw new Exception("Access control ID supplied is not numeric");
+        
         $roleAccessControlEnum = AccessControlType::Permission;
         $groupAccessControlEnum = AccessControlType::PermissionGroup;
         $accessControlTable = (new AccessControl)->getTable();
@@ -113,7 +117,7 @@ class AccessControlManager
                 "SUBSTR(HEX(user_id), 17, 4), '-',".
                 "SUBSTR(HEX(user_id), 21)".
             "))";
-        
+
         $accessControlsQuery = 
             "select permissions.id permission_id, `groups`.id group_id " .
             "from (select id, parent_id from $accessControlTable where type=$roleAccessControlEnum) permissions " .

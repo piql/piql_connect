@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\AccessControlResource;
 use App\Http\Resources\UserResource;
-use App\AccessControl;
+use App\accessControl;
 use App\Services\AccessControlManager;
 use App\User;
 use Throwable;
@@ -21,78 +21,122 @@ class AccessControlController extends Controller
      */
     public function index(Request $request)
     {
-        $limit = $request->limit ? $request->limit : env('DEFAULT_ENTRIES_PER_PAGE', 10);
-        $accessControls = AccessControl::paginate($limit, ['*'], 'page');
-        return AccessControlResource::collection($accessControls);
+        
+        try {
+            $limit = $request->limit ? $request->limit : env('DEFAULT_ENTRIES_PER_PAGE', 10);
+            $accessControls = accessControl::paginate($limit, ['*'], 'page');
+            return AccessControlResource::collection($accessControls);
+        } catch (Throwable $e) {
+            return response(['message' => $e->getMessage()], 400);
+        }
     }
 
     public function createPermissionGroup(Request $request)
     {
-        $group = AccessControlManager::createPermissionGroup($request->input('name'), $request->input('description'));
+       try { $group = AccessControlManager::createPermissionGroup($request->input('name'), $request->input('description'));
         if ($group->save()) return new AccessControlResource($group);
+        } catch (Throwable $e) {
+            return response(['message' => $e->getMessage()], 400);
+        }
     }
 
-    public function listGroups(Request $request)
+    public function listPermissionGroups(Request $request)
     {
-        $limit = $request->limit ? $request->limit : env('DEFAULT_ENTRIES_PER_PAGE', 10);
-        $groups = AccessControl::where('type', AccessControlType::PermissionGroup)->paginate($limit, ['*'], 'page');
+        try {$limit = $request->limit ? $request->limit : env('DEFAULT_ENTRIES_PER_PAGE', 10);
+        $groups = accessControl::where('type', AccessControlType::PermissionGroup)->paginate($limit, ['*'], 'page');
         return AccessControlResource::collection($groups);
+        } catch (Throwable $e) {
+            return response(['message' => $e->getMessage()], 400);
+        }
     }
 
     public function listPermissions(Request $request)
     {
-        $limit = $request->limit ? $request->limit : 10;
-        $roles = AccessControl::where('type', AccessControlType::Permission)->paginate($limit, ['*'], 'page');
-        return AccessControlResource::collection($roles);
+        try {
+            $limit = $request->limit ? $request->limit : 10;
+            $roles = accessControl::where('type', AccessControlType::Permission)->paginate($limit, ['*'], 'page');
+            return AccessControlResource::collection($roles);
+        } catch (Throwable $e) {
+            return response(['message' => $e->getMessage()], 400);
+        }
     }
 
     public function getPermissionGroup($id)
     {
-        $group = AccessControl::where('type', AccessControlType::PermissionGroup)->where('id', $id)->first();
-        if($group == null) return response(['message' => 'Group Not Found!'], 404);
-        $group->actions = AccessControl::select('id', 'name')->where('parent_id', $id)->get();
-        return new AccessControlResource($group);
+        try {
+            $group = accessControl::where('type', AccessControlType::PermissionGroup)->where('id', $id)->first();
+            if ($group == null) return response(['message' => 'Group Not Found!'], 404);
+            $group->actions = accessControl::select('id', 'name')->where('parent_id', $id)->get();
+            return new AccessControlResource($group);
+        } catch (Throwable $e) {
+            return response(['message' => $e->getMessage()], 400);
+        }
     }
-    
+
     public function listPermissionGroupPermissions(Request $request, $id)
     {
-        $limit = $request->limit ? $request->limit : env('DEFAULT_ENTRIES_PER_PAGE', 10);
-        $actions = AccessControl::where(['type' => AccessControlType::Permission, 'parent_id' =>$id])->paginate($limit, ['*'], 'page');
-        return AccessControlResource::collection($actions);
-    } 
-    
+        try {
+            $limit = $request->limit ? $request->limit : env('DEFAULT_ENTRIES_PER_PAGE', 10);
+            $actions = accessControl::where(['type' => AccessControlType::Permission, 'parent_id' => $id])->paginate($limit, ['*'], 'page');
+            return AccessControlResource::collection($actions);
+        } catch (Throwable $e) {
+            return response(['message' => $e->getMessage()], 400);
+        }
+    }
+
     public function createPermission(Request $request)
     {
-        $action = AccessControlManager::createAction(null, $request->input('name'), $request->input('description'));
-        if ($action->save()) return new AccessControlResource($action);
-    } 
+        try {
+            $action = AccessControlManager::createAction(null, $request->input('name'), $request->input('description'));
+            if ($action->save()) return new AccessControlResource($action);
+        } catch (Throwable $e) {
+            return response(['message' => $e->getMessage()], 400);
+        }
+    }
 
     public function createPermissionGroupPermission(Request $request, $id)
     {
-        $action = AccessControlManager::createAction($id, $request->input('name'), $request->input('description'));
-        if ($action->save()) return new AccessControlResource($action);
-    } 
-    
+        try {
+            $action = AccessControlManager::createAction($id, $request->input('name'), $request->input('description'));
+            if ($action->save()) return new AccessControlResource($action);
+        } catch (Throwable $e) {
+            return response(['message' => $e->getMessage()], 400);
+        }
+    }
+
     public function assignUsers(Request $request)
     {
-        $data = AccessControlManager::assignAccessControlsToUsers($request->access_controls, $request->users);
-        if(array_key_exists("error", $data)) return response($data, 400);
-        return $data;
-    }   
-    
-    
+        try {
+            $data = AccessControlManager::assignAccessControlsToUsers($request->access_controls, $request->users);
+            if (array_key_exists("error", $data)) return response($data, 400);
+            return $data;
+        } catch (Throwable $e) {
+            return response(['message' => $e->getMessage()], 400);
+        }
+    }
+
+
     public function unAssignUsers(Request $request)
     {
-        $data = AccessControlManager::removeAccessControlsFromUsers($request->access_controls, $request->users);
-        if(array_key_exists("error", $data)) return response($data, 400);
-        return $data;
+        try {
+            $data = AccessControlManager::removeAccessControlsFromUsers($request->access_controls, $request->users);
+            if (array_key_exists("error", $data)) return response($data, 400);
+            return $data;
+        } catch (Throwable $e) {
+            return response(['message' => $e->getMessage()], 400);
+        }
     }
 
     public function userHasAccessControl(Request $request)
     {
-        return AccessControlManager::userHasAccessControl(
-            $request->user, $request->AccessControl
-        );
+        try {
+            return AccessControlManager::userHasAccessControl(
+                $request->user,
+                $request->access_control
+            );
+        } catch (Throwable $e) {
+            return response(['message' => $e->getMessage()], 400);
+        }
     }
 
     /**
@@ -104,9 +148,9 @@ class AccessControlController extends Controller
     public function show($id)
     {
         try {
-            $AccessControl = AccessControl::find($id);
-            return ($AccessControl != null) ? new AccessControlResource($AccessControl) : response([
-                'message' => 'AccessControl Not Found!'
+            $accessControl = accessControl::find($id);
+            return ($accessControl != null) ? new AccessControlResource($accessControl) : response([
+                'message' => 'accessControl Not Found!'
             ], 404);
         } catch (Throwable $e) {
             return response(['message' => $e->getMessage()], 400);
@@ -122,10 +166,10 @@ class AccessControlController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $AccessControl =  AccessControl::findOrFail($id);
-        $AccessControl->name = $request->input('name');
-        $AccessControl->description = $request->input('description');
-        if ($AccessControl->save()) return new AccessControlResource($AccessControl);
+        $accessControl =  accessControl::findOrFail($id);
+        $accessControl->name = $request->input('name');
+        $accessControl->description = $request->input('description');
+        if ($accessControl->save()) return new AccessControlResource($accessControl);
     }
 
     /**
@@ -136,12 +180,12 @@ class AccessControlController extends Controller
      */
     public function destroy($id)
     {
-        $AccessControl = AccessControlManager::delete($id);
-        return new AccessControlResource($AccessControl);
+        $accessControl = AccessControlManager::delete($id);
+        return new AccessControlResource($accessControl);
     }
 
     /**
-     * Display a listing of users assigned the AccessControl
+     * Display a listing of users assigned the accessControl
      *
      * @return \Illuminate\Http\Response
      */

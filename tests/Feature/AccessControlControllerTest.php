@@ -14,7 +14,7 @@ class AccessControlControllerTest extends TestCase
 
     public function test_listing_access_control_returns_200()
     {
-        $response = $this->get('/api/v1/admin/access-control');
+        $response = $this->get('/api/v1/admin/access-control/permissions');
         $response->assertOk();
     }
 
@@ -22,15 +22,15 @@ class AccessControlControllerTest extends TestCase
     {
         $g = factory(AccessControl::class)->create();
         $this->assertNotNull($g);
-        $response = $this->get('/api/v1/admin/access-control/' . $g->id);
+        $response = $this->get('/api/v1/admin/access-control/permissions/' . $g->id);
         $response->assertOk();
         $AccessControl = $response->decodeResponseJson('data');
         $this->assertEquals($g->id, $AccessControl['id']);
     }
 
-    public function test_fetching_non_existing_access_control_by_id_returns_404()
+    public function test_fetching_non_existing_permission_by_id_returns_404()
     {
-        $response = $this->get('/api/v1/admin/access-control/54321');
+        $response = $this->get('/api/v1/admin/access-control/permissions/8854321');
         $response->assertNotFound();
         $response->assertHeader('Content-Type', 'application/json');
         $message = $response->decodeResponseJson('message');
@@ -88,14 +88,14 @@ class AccessControlControllerTest extends TestCase
         $this->assertEquals(null, $hp['user_id']);
     }
     
-    public function test_can_list_users_with_access_control()
+    public function test_can_list_users_with_permissions()
     {
         $r = factory(AccessControl::class)->create();
         $u1 = factory(User::class)->create();
         $u2 = factory(User::class)->create();
         $u3 = factory(User::class)->create();
         AccessControlManager::assignAccessControlsToUsers([$r->id], [$u1->id, $u2->id, $u3->id]);
-        $response = $this->get('/api/v1/admin/access-control/'.$r->id.'/users');
+        $response = $this->get('/api/v1/admin/access-control/permissions/'.$r->id.'/users');
         $response->assertOk();
         $this->assertEquals(3, count($response->decodeResponseJson("data")));
         
