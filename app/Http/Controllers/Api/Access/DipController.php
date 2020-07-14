@@ -87,14 +87,14 @@ class DipController extends Controller
     
     private function filter_package_thumbnail($dip) {
     	return $dip->fileObjects->filter( function ($file, $key) {
-    		$pathInfo = pathinfo($file->fullpath);
-    		switch (strtolower($pathInfo['extension'])) {
-    			case 'pdf':
-    				return $file;
-    			default:
-    				return Str::contains( $file->fullpath, '/thumbnails' );
-    		}
-    	})->first();
+            $pathInfo = pathinfo($file->fullpath);
+            $ext = strtolower($pathInfo['extension']);
+            if ($ext != 'xml' && !FilePreviewRenderHelper::isPreviwableFile($file->fullpath)) {
+                return $file;
+            } else {
+                return Str::contains( $file->fullpath, '/thumbnails' );
+            }
+        })->first();
     }
 
     public function package_thumbnail( Request $request, ArchivalStorageInterface $storage )
@@ -197,17 +197,15 @@ class DipController extends Controller
     
     private function filter_file_thumbnail($dip, $file)
     {
-    	return $dip->fileObjects->filter( function ($thumb, $key) use( $file ) {
-    		$pathInfo = pathinfo($file->fullpath);
-    		switch (strtolower($pathInfo['extension'])) {
-    			case 'pdf':
-    				return $file;
-    			default:
-    				return Str::contains( $thumb->path, '/thumbnails' );;
-    		}
-    	})->filter( function ($thumb, $key) use ( $file ) {
-    		return Str::contains( $file->filename, pathinfo( $thumb->filename, PATHINFO_FILENAME ) );
-    	})->first();
+        return $dip->fileObjects->filter( function ($thumb, $key) use( $file ) {
+                if (!FilePreviewRenderHelper::isPreviwableFile($file->fullpath)) {
+                    return $file;
+                } else {
+                    return Str::contains( $thumb->path, '/thumbnails' );;
+                }
+            })->filter( function ($thumb, $key) use ( $file ) {
+                return Str::contains( $file->filename, pathinfo( $thumb->filename, PATHINFO_FILENAME ) );
+            })->first();
     }
 
     public function file_thumbnail( ArchivalStorageInterface $storage, Request $request )
