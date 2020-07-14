@@ -1,13 +1,15 @@
 <template>
     <div class="w-100">
 
-        <page-heading icon="fa-hdd" :title="$t('access.browse')" :ingress="$t('access.browse.ingress')" />
+        <page-heading icon="fa-hdd" :title="$t('access.browse.content')" :ingress="$t('access.browse.content.ingress')" />
+
+        <browser-file-filters :singleArchiveTitle="$t('Your archive')" :subTitle="dipName"/>
 
         <list-header
             :colA="previewCol"
             :colB="filenameCol"
-            :colC="actionsCol"
-            :colD="closeBtnCol"
+            :colC="sizeCol"
+            :colD="actionsCol"
             @btnDClicked="close"
         />
 
@@ -49,6 +51,7 @@ export default {
             prevRoute: null,
             lbVisible: false,
             index: 0,
+            dip: null,
             previewImages: []
         }
     },
@@ -69,8 +72,14 @@ export default {
         },
         filenameCol: function() {
             return {
-                css: "col-sm-7 text-left",
+                css: "col-sm-6 text-left",
                 slot: this.$t('access.browse.header.files')
+            };
+        },
+        sizeCol: function() {
+            return {
+                css: "col-sm-2 text-left",
+                slot: this.$t('access.browse.header.size')
             };
         },
         actionsCol: function() {
@@ -79,18 +88,25 @@ export default {
                 slot: this.$t('access.browse.header.actions')
             };
         },
-        closeBtnCol: function() {
-            return {
-                css: "col-sm-1",
-                slot: "<button class='btn btn-tiny' :title=${this.$t('access.browse.archive.closeButtonTitle')}\"><i class='fas fa-backspace'></i></button>"
-            }
-        },
         apiQueryString: function() {
             let query = this.$route.query;
             let page = parseInt(query.page);
-            return page && page > 0 ? `?page=${page}` : "";
+            let filter = query.search ? "&search=" + query.search : "";
+            return (page && page > 0 ? `?page=${page}` : "") + (page && page > 0 ? "" : "?") + filter;
         },
-
+        dipName: function () {
+            if (!this.dip && this.dipId > 0) {
+                axios.get(`/api/v1/access/dips/${this.dipId}`).then( async ( dipResponse ) =>  {
+                    this.dip = dipResponse.data;
+                });
+            }
+            if (this.dip) {
+                let nameArr = this.dip.storage_path.split('/');
+                nameArr = nameArr[nameArr.length-1].split('-');
+                return nameArr[0];
+            }
+            return "";
+        }
     },
 
     mounted () {
@@ -134,7 +150,7 @@ export default {
         hideLightBox: function( e ) {
             this.lbVisible = false;
             this.previewImages = [];
-        }
-    }
+        },
+    },
 };
 </script>
