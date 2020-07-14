@@ -218,6 +218,8 @@
     "access.browse.contactArea": "Contact area",
     "access.browse.contactArea.address": "Address",
     "access.browse.metadata.editFile": "File metadata",
+    "access.browse.content": "Package contents",
+    "access.browse.content.ingress": "Access your files",
 
     "access.browse.header.preview": "Preview",
     "access.browse.header.name": "Package name",
