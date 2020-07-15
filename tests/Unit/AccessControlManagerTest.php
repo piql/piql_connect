@@ -41,7 +41,7 @@ class AccessControlManagerTest extends TestCase
         $this->assertNotNull($role);
         $this->assertEquals($role->type, AccessControlType::Permission);
         $this->assertEquals($role->id, $r->id);
-        $this->assertEquals($role->parent_id, $g->id);
+        $this->assertEquals($role->group_id, $g->id);
         $this->assertEquals($role->name, 'Create Article');
     }
 

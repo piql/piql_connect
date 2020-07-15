@@ -38,7 +38,7 @@ class AccessControlManager
         $permission = new AccessControl;
         $permission->name = $name;
         $permission->description = $description;
-        $permission->parent_id = $groupId;
+        $permission->group_id = $groupId;
         $permission->type = AccessControlType::Permission;
         return $permission;
     } 
@@ -58,14 +58,14 @@ class AccessControlManager
             UserAccessControl::where('access_control_id', $id)->delete();
             if(in_array($accessControl->type, [AccessControlType::PermissionGroup, AccessControlType::Role])) {
                 UserAccessControl::where('access_control_id', $id)->delete();
-                $permissions = AccessControl::select('id')->where('parent_id', $id)->get();
+                $permissions = AccessControl::select('id')->where('group_id', $id)->get();
                 if(count($permissions) > 0) {
                     $ids = collect($permissions)->map(function($a){
                         return $a->id;
                     });
                     UserAccessControl::whereIn('access_control_id', $ids)->delete();
                 }
-                AccessControl::where('parent_id', $id)->update(['parent_id' => null]);
+                AccessControl::where('group_id', $id)->update(['group_id' => null]);
             }
             return $accessControl;
         }
@@ -76,7 +76,7 @@ class AccessControlManager
         if(self::validatePermissionGroup($groupId)->type != AccessControlType::PermissionGroup) return null;
         AccessControl::where([
             'type' => AccessControlType::Permission, 'id' => $permissionId
-        ])->update(['parent_id' => $groupId]);
+        ])->update(['group_id' => $groupId]);
         return AccessControl::find($permissionId);
     }
 
@@ -148,6 +148,13 @@ class AccessControlManager
     }
 
     public static function userHasAccessControl($userId, $accessControlId) {
+        $group = self::userHasGroupOrPermission($userId, $accessControlId);
+        if($group == null || empty($group) || !isset($group['permission_id'])|| !isset($group['user_id']))
+            return self::userHasGroupOrPermission($userId, $accessControlId);
+        return $group;
+    }
+
+    private static function userHasGroupOrPermission($userId, $accessControlId) {
         if(!is_numeric($accessControlId)) 
             throw new Exception("Access control ID supplied is not numeric");
         
@@ -166,9 +173,9 @@ class AccessControlManager
 
         $accessControlsQuery = 
             "select permissions.id permission_id, `groups`.id group_id " .
-            "from (select id, parent_id from $accessControlTable where type=$permissionEnum) permissions " .
+            "from (select id, group_id from $accessControlTable where type=$permissionEnum) permissions " .
             "  left join (select id from $accessControlTable where type=$groupEnum) `groups` " .
-            "    on permissions.parent_id=`groups`.id " .
+            "    on permissions.group_id=`groups`.id " .
             "where $accessControlId in (`permissions`.id, `groups`.id)";
         $userQuery = 
             "select ap.user_uuid from (".
@@ -182,4 +189,36 @@ class AccessControlManager
             
         return (empty($accessControl) || !isset($accessControl[0])) ? [] : (array)$accessControl[0];
     }
+
+
+    private static function userHasRoleOrPermission($userId, $accessControlId) {
+        if(!is_numeric($accessControlId)) 
+            throw new Exception("Access control ID supplied is not numeric");
+        
+        $userAccessControlTable = (new UserAccessControl)->getTable();
+        $userIdFormat = 
+            "LOWER(CONCAT(".
+                "SUBSTR(HEX(user_id), 1,  8), '-',".
+                "SUBSTR(HEX(user_id), 9,  4), '-',".
+                "SUBSTR(HEX(user_id), 13, 4), '-',".
+                "SUBSTR(HEX(user_id), 17, 4), '-',".
+                "SUBSTR(HEX(user_id), 21)".
+            "))";
+
+        $accessControlsQuery = "select permission_id, role_id " .
+            "from role_permissions where $accessControlId in (permission_id, role_id)";
+        $userQuery = 
+            "select ap.user_uuid from (".
+                "select $userIdFormat user_uuid, access_control_id from $userAccessControlTable".
+            ") ap where user_uuid='$userId' and access_control_id in (permission_id, role_id)";
+        
+        $accessControl = DB::table(DB::raw("($accessControlsQuery) p"))
+            ->select(DB::raw(
+                "p.permission_id, p.role_id group_id, ($userQuery) user_id"
+            ))->get();
+            
+        return (empty($accessControl) || !isset($accessControl[0])) ? [] : (array)$accessControl[0];
+    }
+
+    
 }
