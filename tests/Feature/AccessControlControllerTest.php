@@ -15,7 +15,7 @@ class AccessControlControllerTest extends TestCase
 {
     use DatabaseTransactions;
 
-    protected TextFaker $text;
+    protected $text;
 
     protected function setUp() :void {
         parent::setUp();
