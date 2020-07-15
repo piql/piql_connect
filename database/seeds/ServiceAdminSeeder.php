@@ -1,9 +1,10 @@
 <?php
 
-use App\Enums\PermissionType;
-use App\Permission;
+use App\Enums\AccessControlType;
+use App\Acc
+usAccessControle App\AccessControl;
 use App\User;
-use App\UserPermission;
+use App\UserAccessControl;
 use Webpatser\Uuid\Uuid;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
@@ -29,16 +30,16 @@ class ServiceAdminSeeder extends Seeder
             DB::rollBack();
             exit("Failed to seed admin user");
         }
-        $adminGroup = new Permission([
+        $adminGroup = new AccessControl([
             'name' => 'Admin', 
-            'type' => PermissionType::Group, 
+            'type' => AccessControlType::Role, 
             'description' => 'Service administrator'
         ]);
         if (!$adminGroup->save()) {
             DB::rollBack();
             exit("Failed to seed admin user group");
         }
-        (new UserPermission([
+        (new UserAccessControl([
             'user_id'=> $admin->id, 
             'permission_id'=>$adminGroup->id
         ]))->save();
