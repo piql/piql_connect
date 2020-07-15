@@ -17,14 +17,15 @@
                                 <a class="btn btn-xs btn-primary" title="Edit Role" style="color:white">
                                     <i class="fa fa-edit"></i>
                                     </a>
-                                <a class="btn btn-xs btn-primary" @click="viewUsers(role.id)" title="Users" style="color:white">
+                                <a class="btn btn-xs btn-primary" @click="viewUsers(role.id)" title="List Users" style="color:white">
                                     <i class="fa fa-users"></i>
+                                    </a>
+                                
+                                <a class="btn btn-xs btn-primary" @click="showAssignModal(role.id)" title="Assign Permissions" style="color:white">
+                                    <i class="fa fa-key"></i>
                                     </a>
                                 <a class="btn btn-xs btn-primary" title="Delete Role" style="color:white">
                                     <i class="fa fa-trash"></i>
-                                    </a>
-                                <a class="btn btn-xs btn-primary" @click="showAssignModal(role.id)" title="Assign Users" style="color:white">
-                                    <i class="fa fa-user-plus"></i>
                                     </a>
                             </td>
                         
@@ -38,6 +39,18 @@
                         <Pager :meta='pageMeta' :height='height' />
                     </div>
                 </div>
+                <b-modal id="role-users" hide-footer>
+                    <template v-slot:modal-title>
+                   <h4> <b>ROLE [ {{ role[0].name.toUpperCase() }} ] USERS</b></h4>
+                    </template>
+                    <div>
+                        <ul>
+                            <li>list</li>
+                        </ul>
+                    
+                    </div>
+                    <b-button class="mt-3" @click="assignButtonClicked(role[0].id)" block><i class="fa fa-users"></i> Assign Users</b-button>
+                </b-modal>
 
                 <b-modal id="assign-role" size="lg" hide-footer>
                     <template v-slot:modal-title>
@@ -68,7 +81,8 @@ export default {
             pageMeta: null,
             role: null,
             list: [],
-            selectedUsers: []
+            selectedUsers: [],
+            users: []
         };
     },
 
@@ -90,16 +104,6 @@ export default {
             return filter;
         },
 
-        apiEndPoint: function () {
-            let query = this.$route.query;
-
-            if( parseInt( query.groupId ) ) {
-                return '/api/v1/admin/permissions/groups/'+ query.groupId + '/roles';
-            } else{
-                return '/api/v1/admin/permissions/roles';
-            }
-            
-        }
 
     },
      watch: {
@@ -110,7 +114,7 @@ export default {
         if( isNaN( page ) || parseInt( page ) < 2 ) {
             this.$route.query.page = 1;
         }
-        this.refreshObjects( this.apiQueryString, this.apiEndPoint );
+        this.refreshObjects( this.apiQueryString);
 
         /**list users * i can only pull in 10 at a time, need help getting all at 
          * the same time unless allowed to tamper with the backend **/
@@ -142,19 +146,27 @@ export default {
         },
         
        dispatchRouting() {
-            this.refreshObjects( this.apiQueryString, this.apiEndPoint );
+            this.refreshObjects( this.apiQueryString);
         },
 
-        refreshObjects( apiQueryString, apiEndPoint ){
-            axios.get(apiEndPoint + apiQueryString).then( (response ) => {
+        refreshObjects( apiQueryString){
+            axios.get('/api/v1/admin/access-control/roles' + apiQueryString).then( (response ) => {
                this.response = response
                 this.roles = this.response.data.data;
                 
                 this.pageMeta = this.response.data.meta
             });
         },
-        viewUsers(roleId){
-          this.$router.push({ path:'/settings/listing', query:{roleId} });
+        async viewUsers(roleId){
+            this.role = this.roles.filter(role => role.id === roleId);
+            await axios.get('/api/v1/admin/access-control/roles/' + roleId +'/users',{ params: { limit: 100 } }).then( response => {
+                this.response = response;
+                this.users = this.response.data.data;
+            }).catch(error => {
+                console.log(error);
+            });
+
+            this.$bvModal.show('role-users');
         }
         
     }

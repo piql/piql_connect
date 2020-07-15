@@ -56,7 +56,7 @@
             async addRole(){
                 if((this.role != null) && (this.description != null)){
                     this.infoToast('Add Role','Adding '+ this.role);
-                    this.response = (await axios.post("/api/v1/admin/permissions/roles", {
+                    this.response = (await axios.post('/api/v1/admin/access-control/roles', {
                         name: this.role,
                         description: this.description
                     },{
