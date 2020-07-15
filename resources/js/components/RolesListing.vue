@@ -39,22 +39,22 @@
                         <Pager :meta='pageMeta' :height='height' />
                     </div>
                 </div>
+
                 <b-modal id="role-users" hide-footer>
                     <template v-slot:modal-title>
                    <h4> <b>ROLE [ {{ role[0].name.toUpperCase() }} ] USERS</b></h4>
                     </template>
                     <div>
                         <ul>
-                            <li>list</li>
+                            <li>list of users in this role</li>
                         </ul>
                     
                     </div>
-                    <b-button class="mt-3" @click="assignButtonClicked(role[0].id)" block><i class="fa fa-users"></i> Assign Users</b-button>
                 </b-modal>
 
                 <b-modal id="assign-role" size="lg" hide-footer>
                     <template v-slot:modal-title>
-                   <h4> <b>ASSIGN USERS TO ROLE [ {{ role[0].name.toUpperCase() }} ]</b></h4>
+                   <h4> <b>ASSIGN PERMISSIONS TO ROLE [ {{ role[0].name.toUpperCase() }} ]</b></h4>
                     </template>
                     <div>
                         <vue-select-sides

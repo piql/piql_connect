@@ -208,7 +208,7 @@ Route::group(['prefix' => 'v1/admin/access-control'], function () {
     Route::post('permission-groups', 'Api\Admin\AccessControlController@createPermissionGroup');
     Route::get('permission-groups/{id}', 'Api\Admin\AccessControlController@getPermissionGroup')->where('id', '[0-9]+');
     Route::put('permission-groups/{id}', 'Api\Admin\AccessControlController@update')->where('id', '[0-9]+');
-    Route::delete('permission-groups/{id}', 'Api\Admin\AccessControlController@delete')->where('id', '[0-9]+');
+    Route::delete('permission-groups/{id}', 'Api\Admin\AccessControlController@destroy')->where('id', '[0-9]+');
     Route::get('permission-groups/{id}/permissions', 'Api\Admin\AccessControlController@listPermissionGroupPermissions')->where('id', '[0-9]+');
     Route::post('permission-groups/{id}/permission', 'Api\Admin\AccessControlController@createPermissionGroupPermission')->where('id', '[0-9]+');
     

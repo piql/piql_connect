@@ -1,6 +1,6 @@
 <template>
     <div class="w-100">
-        <page-heading icon="fa-users" :title="$t('settings.settings.groups')" :ingress="$t('settings.settings.groupsdesc')" />
+        <page-heading icon="fa-user-shield" :title="$t('settings.settings.groups')" :ingress="$t('settings.settings.groupsdesc')" />
         <div class="card">
             <div class="card-header">
         
@@ -12,20 +12,20 @@
                     Add Group
                     </template>
                     <div class="d-block">
-                    <div class="form-group">
-                        <label>Group</label>
-                        <input type="text" class="form-control" v-model="group" >
-                    </div>
-                    <div class="form-group">
-                        <label>Description</label>
-                        <textarea v-model="description" class="form-control"></textarea>
-                    </div>
+                        <div class="form-group">
+                            <label>Group</label>
+                            <input type="text" class="form-control" v-model="group" >
+                        </div>
+                        <div class="form-group">
+                            <label>Description</label>
+                            <textarea v-model="description" class="form-control"></textarea>
+                        </div>
                     </div>
                     <b-button class="mt-3" block @click="addGroup" @keydown="addGroup"><i class="fa fa-group"></i> Add Group</b-button>
                 </b-modal>
             </div>
             <div class="card-body">
-                <user-group-items :key="groupkey" @addRole="addRole" @assignGroupToUsers="assignGroupToUsers" />
+                <user-group-items :key="groupkey" @editGroup="editGroup" @deleteGroup='deleteGroup' />
             </div>
         </div>
 
@@ -52,21 +52,9 @@
                 this.groupkey += 1;
 
             },
-            async assignGroupToUsers(data){
-                this.infoToast("Assigning group", "assigning user group to a group of selected users");
-                this.response = (await axios.post("/api/v1/admin/permissions/users/assign",data,{
-                    headers:{
-                        'content-type': 'application/json'
-                    }
-                })).data;
-
-                this.forceRerender();
-                this.$bvModal.hide('assign-group');
-
-            },
             async addGroup(){
-                this.infoToast('Add Group','Adding '+ this.group + ' user group');
-                 this.response = (await axios.post("/api/v1/admin/permissions/groups", {
+                this.infoToast('Add Group','Adding '+ this.group + ' accesss group');
+                 this.response = (await axios.post("/api/v1/admin/access-control/permission-groups", {
                     name: this.group,
                     description: this.description
                 },{
@@ -79,11 +67,11 @@
                 this.$bvModal.hide('add-group')
             },
 
-            async addRole(role){
-                this.infoToast('Add Group Role','Adding '+ role.name);
-                 this.response = (await axios.post("/api/v1/admin/permissions/groups/"+ role.groupId +"/role", {
-                    name: role.name,
-                    description: role.description
+            async editGroup(data){
+                this.infoToast('Edit Group','Editing '+ data.name);
+                 this.response = (await axios.put("/api/v1/admin/access-control/permission-groups/"+ data.groupId, {
+                    name: data.name,
+                    description: data.description
                 },{
                     headers:{
                         'content-type': 'application/json'
@@ -91,8 +79,20 @@
                 })).data;
                 
                 this.forceRerender();
-                this.$bvModal.hide('add-action')
+                this.$bvModal.hide('edit-group');
                 
+            },
+            async deleteGroup(groupId){
+                this.infoToast('Delete Group','Deleting an access group ');
+                await axios.delete("/api/v1/admin/access-control/permission-groups/"+ groupId).then(res => {
+                    this.response = res;
+                }).catch(err => {
+                    this.response = err;
+                    this.errorToast('Group Delete Failed',"Unable to delete group, check endpoint");
+                });
+                
+                this.forceRerender();
+                this.$bvModal.hide('delete-group')
             }
         }
     }
