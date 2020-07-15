@@ -14,7 +14,7 @@ class RenameAccessControlRole extends Migration
     public function up()
     {
         Schema::table('access_controls', function (Blueprint $table) {
-            $table->renameColumn('role_id', 'group_id');
+            $table->renameColumn('parent_id', 'group_id');
         });
     }
 
@@ -26,7 +26,7 @@ class RenameAccessControlRole extends Migration
     public function down()
     {
         Schema::table('user_permissions', function (Blueprint $table) {
-            $table->renameColumn('group_id', 'role_id');
+            $table->renameColumn('group_id', 'parent_id');
         });
     }
 }
