@@ -59,7 +59,8 @@ Route::group(['prefix' => 'v1' , 'middleware' => ['auth:api', 'activity']], func
         Route::get('bags/{id}/files', 'Api\Ingest\BagController@showFiles');
         Route::post('bags/{bagId}/files', 'Api\Ingest\FileUploadController@store'); //Create a file model in the db, push an event
         Route::delete('bags/{bagId}/files/{fileId}', 'Api\Ingest\BagController@deleteFile');
-
+        Route::get('bags/files/{file}', 'Api\Ingest\BagController@showFile');
+        
         Route::post('bags/{id}/commit', 'Api\Ingest\BagController@commit')->name('api.ingest.bags.commit');
         Route::post('bags/{id}/piql', 'Api\Ingest\BagController@piqlIt');
         Route::get('bags/{id}/download', 'Api\Ingest\BagController@download');
@@ -122,6 +123,7 @@ Route::group(['prefix' => 'v1' , 'middleware' => ['auth:api', 'activity']], func
         Route::get('dips', 'Api\Access\DipController@index');
         Route::get('dips/{dipId}', 'Api\Access\DipController@show');
         Route::get('dips/{dipId}/files', 'Api\Access\DipController@files');
+        Route::get('dips/{dipId}/files/{fileId}', 'Api\Access\DipController@showFile');
         Route::get('dips/{dipId}/thumbnails', 'Api\Access\DipController@package_thumbnail');
         Route::get('dips/{dipId}/thumbnails/files/{fileId}', 'Api\Access\DipController@file_thumbnail');
         Route::get('dips/{dipId}/previews', 'Api\Access\DipController@package_preview');

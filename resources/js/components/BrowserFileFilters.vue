@@ -2,9 +2,7 @@
     <div>
         <form v-on:submit.prevent>
             <div class="row mb-2 alignItens">
-                <div class="subTitle">
-                    <span v-if="subTitle"><i class="fas fa-chevron-right"></i> <router-link :to="{ name: 'access.browse' }" class="subTitleLink">{{subTitle}}</router-link> </span>
-                </div>
+                <breadcumb :subTitle="subTitle" :subTitleRoute="{ name: 'access.browse' }"/>
                 <div v-if="filters.search" class="col-lg-3 col-md col-sm-12">
                     <SearchField :label="$t('access.browse.withContents')" />
                 </div>

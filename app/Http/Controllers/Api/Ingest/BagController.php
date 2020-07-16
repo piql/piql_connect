@@ -197,7 +197,12 @@ class BagController extends Controller
  */
         return new FileCollection( $files );
     }
-
+    
+    public function showFile(File $file)
+    {
+        return $file->toArray();
+    }
+    
     public function complete()
     {
         $bags = Bag::with('files')->latest()

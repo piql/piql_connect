@@ -208,6 +208,12 @@ class DipController extends Controller
             })->first();
     }
 
+    public function showFile($dipId, $fileId)
+    {
+        $dip = Dip::find( $dipId );
+        return $dip->fileObjects->find( $fileId )->toArray();
+    }
+
     public function file_thumbnail( ArchivalStorageInterface $storage, Request $request )
     {
         $dip = Dip::find( $request->dipId );

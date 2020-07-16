@@ -1,7 +1,7 @@
 <template>
     <div class="w-100">
         <page-heading icon="fa-hdd" :title="$t('ingest.offlineStorage.package.header')" :ingress="$t('ingest.offlineStorage.package.ingress')" />
-
+        <breadcumb :subTitle="$t('ingest.taskList.title')" :subTitleRoute="{ name: 'ingest.offline' }"/>
         <bucket-content-list @openObject="openObject" @onDelete="onDelete" :location="selectedLocation" :dataObjects="currentObjects"
             :selectedArchive="selectedArchiveUuid" :selectedHolding="selectedHolding"/>
         <div class="row text-center pagerRow">

@@ -191,7 +191,7 @@
     "ingest.status.writing": "Skriver til piqlFilm",
 
     "ingest.metadata.editJob": "Jobbmetadata",
-    "ingest.metadata.file.title": "Filmetadata (Dublin Core)",
+    "ingest.metadata.file.title": "Filmetadata",
     "ingest.metadata.file.ingress": "Rediger beskrivende metadata for denne filen",
     "ingest.metadata.showFile.ingress": "This page displays file's descriptive metadata",
     "ingest.metadata.editFile.fileName": "Filnavn",
@@ -229,7 +229,7 @@
     "access.browse.archive.closeButtonTitle": "Lukk arkivpakken",
     "access.browse.archive.downloadButtonTitle": "Last ned normalisert fil",
 
-    "access.metadata.file.title": "Filmetadata (Dublin Core)",
+    "access.metadata.file.title": "Filmetadata",
     "access.metadata.file.ingress": "Vis beskrivende metadata for denne filen",
 
 
