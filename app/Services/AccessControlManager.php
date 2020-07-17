@@ -295,13 +295,13 @@ class AccessControlManager
           ];
           $data[$groupId]['roles'][$roleId] = $role;
         }
-        $user = [
+        $permission = [
           'id'=> $id,
           'name'=> $accessControl[$d->permission_id]['name'],
           'type'=> AccessControlType::getDescription($accessControl[$id]->type),
         ];
-        if($userId != null) $user['allowed'] = $access[$id];
-        $data[$groupId]['roles'][$roleId]['permissions'][] = $user;
+        if($userId != null) $permission['allowed'] = $access[$id];
+        $data[$groupId]['roles'][$roleId]['permissions'][] = $permission;
       }
       return $data;
     }

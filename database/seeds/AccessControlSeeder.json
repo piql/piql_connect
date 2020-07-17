@@ -1,0 +1,229 @@
+{
+  "data": [
+    {
+      "type": "App\\AccessControl",
+      "attributes": {
+        "collection": [
+          {
+            "name": "GENERAL",
+            "description": "GENERAL",
+            "permissions": [
+              {
+                "name": "Overview",
+                "description": "Overview"
+              },
+              {
+                "name": "Ingest",
+                "description": "Ingest"
+              },
+              {
+                "name": "Access",
+                "description": "Access"
+              },
+              {
+                "name": "Settings",
+                "description": "Settings"
+              }
+            ]
+          },
+          {
+            "name": "OVERVIEW",
+            "description": "OVERVIEW",
+            "permissions": [
+              {
+                "name": "Dashboard",
+                "description": "Dashboard"
+              },
+              {
+                "name": "Reports",
+                "description": "Reports"
+              }
+            ]
+          },
+          {
+            "name": "INGEST",
+            "description": "INGEST",
+            "permissions": [
+              {
+                "name": "Upload",
+                "description": "Upload"
+              },
+              {
+                "name": "Processing",
+                "description": "Processing"
+              },
+              {
+                "name": "Offline Storage",
+                "description": "Offline Storage"
+              },
+              {
+                "name": "Offline Storage Settings",
+                "description": "Offline Storage Settings"
+              },
+              {
+                "name": "Offline Storage Delete",
+                "description": "Offline Storage Delete"
+              },
+              {
+                "name": "Offline Storage – PIQL it",
+                "description": "Offline Storage – PIQL it"
+              },
+              {
+                "name": "Status",
+                "description": "Status"
+              }
+            ]
+          },
+          {
+            "name": "ACCESS",
+            "description": "ACCESS",
+            "permissions": [
+              {
+                "name": "Browse",
+                "description": "Browse"
+              },
+              {
+                "name": "Browse Download",
+                "description": "Browse Download"
+              },
+              {
+                "name": "Browse Metadata edit",
+                "description": "Browse Metadata edit"
+              },
+              {
+                "name": "Offline Browse",
+                "description": "Offline Browse"
+              },
+              {
+                "name": "Offline Browse Retrieval",
+                "description": "Offline Browse Retrieval"
+              },
+              {
+                "name": "Offline Browse Metadata edit",
+                "description": "Offline Browse Metadata edit"
+              },
+              {
+                "name": "Retrieve",
+                "description": "Retrieve"
+              },
+              {
+                "name": "Ready to Retrieve",
+                "description": "Ready to Retrieve"
+              },
+              {
+                "name": "Ready to Retrieve Delete",
+                "description": "Ready to Retrieve Delete"
+              },
+              {
+                "name": "Ready to Retreive - Retrieve",
+                "description": "Ready to Retreive - Retrieve"
+              },
+              {
+                "name": "Being Retrieved",
+                "description": "Being Retrieved"
+              },
+              {
+                "name": "Ready for Download",
+                "description": "Ready for Download"
+              },
+              {
+                "name": "Ready for Download – Download",
+                "description": "Ready for Download – Download"
+              },
+              {
+                "name": "Ready to Download Delete",
+                "description": "Ready to Download Delete"
+              },
+              {
+                "name": "Retrieve Data",
+                "description": "Retrieve Data"
+              },
+              {
+                "name": "Delete Retrieve Data",
+                "description": "Delete Retrieve Data"
+              },
+              {
+                "name": "History",
+                "description": "History"
+              }
+            ]
+          },
+          {
+            "name": "SETTINGS",
+            "description": "SETTINGS",
+            "permissions": [
+              {
+                "name": "Admin Settings",
+                "description": "Admin Settings"
+              },
+              {
+                "name": "User Settings",
+                "description": "User Settings"
+              },
+              {
+                "name": "Users - Add Users",
+                "description": "Users - Add Users"
+              },
+              {
+                "name": "Users Edit",
+                "description": "Users Edit"
+              },
+              {
+                "name": "Users Assign Group",
+                "description": "Users Assign Group"
+              },
+              {
+                "name": "Users disable/enable",
+                "description": "Users disable/enable"
+              },
+              {
+                "name": "Users Delete",
+                "description": "Users Delete"
+              },
+              {
+                "name": "User Groups - Add Groups",
+                "description": "User Groups - Add Groups"
+              },
+              {
+                "name": "User Groups Edit",
+                "description": "User Groups Edit"
+              },
+              {
+                "name": "User Groups Assign Users",
+                "description": "User Groups Assign Users"
+              },
+              {
+                "name": "User Groups Delete",
+                "description": "User Groups Delete"
+              },
+              {
+                "name": "User Group Roles",
+                "description": "User Group Roles"
+              },
+              {
+                "name": "User Roles - Add Roles",
+                "description": "User Roles - Add Roles"
+              },
+              {
+                "name": "User Roles Edit",
+                "description": "User Roles Edit"
+              },
+              {
+                "name": "User Roles Assign Groups",
+                "description": "User Roles Assign Groups"
+              },
+              {
+                "name": "User Roles Delete",
+                "description": "User Roles Delete"
+              },
+              {
+                "name": "User Roles Permissions",
+                "description": "User Roles Permissions"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}
