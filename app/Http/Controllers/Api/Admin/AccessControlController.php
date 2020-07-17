@@ -188,6 +188,15 @@ class AccessControlController extends Controller
             return response(['message' => $e->getMessage()], 400);
         }
     }
+    
+    public function userPermissions(Request $request, $id)
+    {
+        try {
+            return AccessControlManager::getUserPermissions($id);
+        } catch (Throwable $e) {
+            return response(['message' => $e->getMessage()], 400);
+        }
+    }
 
     /**
      * Display the specified resource.
