@@ -3,7 +3,6 @@
 namespace Tests\Feature;
 
 use App\AccessControl;
-use App\Enums\AccessControlType;
 use App\Services\AccessControlManager;
 use App\User;
 use Tests\TestCase;
@@ -122,11 +121,10 @@ class AccessControlControllerTest extends TestCase
         };
         $this->assertEquals($p1->id, $uhac($u1->id, $p1->id)['permission_id']);
         $this->assertEquals($p2->id, $uhac($u1->id, $p2->id)['permission_id']);
-        // var_dump($uhac($u1->id, $r1->id));
-        // $this->assertEquals($r1->id, $uhac($u1->id, $r1->id)['permission_id']);
-        // $hp = AccessControlManager::userHasAccessControl($u1->id, $p->id);
-        // $this->assertEquals($p->id, $hp['permission_id']);
-        // $this->assertEquals($u1->getIdAttribute(), $hp['user_id']);
+        $this->assertEquals($r1->id, $uhac($u1->id, $r1->id)['permission_id']);
+        $this->assertEquals($r1->id, $uhac($u2->id, $r1->id)['permission_id']);
+        $this->assertEmpty($uhac($u1->id, $r2->id));
+        $this->assertEmpty($uhac($u2->id, $r2->id));
     } 
     
     public function test_can_unassign_permission_from_user()
@@ -138,8 +136,7 @@ class AccessControlControllerTest extends TestCase
         ]);
         $response->assertOk();
         $hp = AccessControlManager::userHasAccessControl($u1->id, $p->id);
-        $this->assertEquals($p->id, $hp['permission_id']);
-        $this->assertEquals(null, $hp['user_id']);
+        $this->assertEmpty($hp);
     }
     
     public function test_can_list_users_with_permissions()

@@ -149,10 +149,50 @@ class AccessControlManager
     }
 
     public static function userHasAccessControl($userId, $accessControlId) {
-        $group = self::userHasGroupOrPermission($userId, $accessControlId);
-        if($group == null || empty($group) || !isset($group['permission_id'])|| !isset($group['user_id']))
-            return self::userHasGroupOrPermission($userId, $accessControlId);
-        return $group;
+        $groupEnum = AccessControlType::PermissionGroup;
+        $roleEnum = AccessControlType::Role;
+        $userIdFormat = 
+            "LOWER(CONCAT(".
+                "SUBSTR(HEX(user_id), 1,  8), '-',".
+                "SUBSTR(HEX(user_id), 9,  4), '-',".
+                "SUBSTR(HEX(user_id), 13, 4), '-',".
+                "SUBSTR(HEX(user_id), 17, 4), '-',".
+                "SUBSTR(HEX(user_id), 21)".
+            "))";        
+        $table = 
+        "select $userIdFormat user_id, p.permission_id, p.group_id, p.role_id
+        from user_access_controls a
+            left join (
+                select pm.permission_id,
+                    IF(pm.type=$groupEnum, cast(pm.permission_id as int), pm.group_id) group_id,
+                    CASE
+                        WHEN g.role_id is not null THEN cast(g.role_id as int)
+                        WHEN pm.type=$roleEnum THEN cast(pm.permission_id as int)
+                        ELSE r.role_id
+                    END role_id
+                from (
+                    select id permission_id, group_id, type from access_controls
+                ) pm
+                    left join role_permissions r
+                       on pm.permission_id = r.permission_id
+                    left join (
+                        select group_id, role_id
+                        from (
+                            select id group_id from access_controls where type=$groupEnum
+                        ) grp
+                            left join role_permissions r
+                               on grp.group_id = r.permission_id
+                    ) g
+                        on g.group_id = pm.group_id
+        ) p
+            on a.access_control_id in (p.group_id, p.role_id, p.permission_id)";
+        $accessControl = DB::table(DB::raw("($table) permissions"))
+            ->select(DB::raw('user_id, permission_id, group_id, role_id'))
+            ->where([
+                'user_id'=> $userId,
+                'permission_id' => $accessControlId,
+            ])->get();
+        return (empty($accessControl) || !isset($accessControl[0])) ? [] : (array)$accessControl[0];
     }
 
     private static function userHasGroupOrPermission($userId, $accessControlId) {
