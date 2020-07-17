@@ -197,7 +197,6 @@ class AccessControlManager
             ])->get();
         return (empty($accessControl) || !isset($accessControl[0])) ? [] : (array)$accessControl[0];
     }
-
     
     public static function getUserPermissions($userId) {
       $groupEnum = AccessControlType::PermissionGroup;
@@ -244,6 +243,69 @@ class AccessControlManager
         return [$p['permission_id'] => $p['has_permission'] ? true : false];
       })->all();
     }
+
+    public static function getPermissionAllocation() {
+      $groupEnum = AccessControlType::PermissionGroup;
+
+      $groupTable = 
+      "select group_id, role_id
+        from (
+              select id group_id from access_controls where type = $groupEnum
+        ) grp
+              left join role_permissions r2
+                on grp.group_id = r2.permission_id";
+
+      return DB::table(DB::raw("(select id permission_id, group_id from access_controls) pm"))
+        ->select(
+          'pm.permission_id', 'pm.group_id',
+          DB::raw('IF(g.role_id is not null, g.role_id, r.role_id) role_id')
+        )
+        ->leftJoin(DB::raw('role_permissions r'), 'pm.permission_id', 'r.permission_id')
+        ->leftJoin(DB::raw("($groupTable) g"), 'g.group_id', 'pm.group_id')
+        ->get();
+    }
+    
+    public static function getPermissionGrouping($userId = null) {
+      $accessControl = collect(AccessControl::all())->mapWithKeys(function($p){
+        return [$p['id'] => $p];
+      })->all();
+      if(empty($accessControl)) return [];
+      $data = [];
+      $access = ($userId == null) ? [] : self::getUserPermissions($userId);
+      foreach(self::getPermissionAllocation() as $d) {
+        $id = $d->permission_id;
+        if(AccessControlType::Permission != $accessControl[$id]->type) continue;
+        $groupId = ($d->group_id == null) ? 0 : $d->group_id;
+        if(!isset($data[$groupId])) {          
+          $group = [
+            'id'=> $groupId,
+            'name'=> ($groupId == 0) ? 'Unassigned' : $accessControl[$groupId]['name'],
+            'type'=> AccessControlType::getDescription(AccessControlType::PermissionGroup),
+            'roles' => []
+          ];
+          $data[$groupId] = $group;
+        }
+        $roleId = ($d->role_id == null) ? 0 : $d->role_id;
+        if(!isset($data[$groupId][$roleId])) {          
+          $role = [
+            'id'=> $roleId,
+            'name'=> ($roleId == 0) ? 'Unassigned' : $accessControl[$roleId]['name'],
+            'type'=> AccessControlType::getDescription(AccessControlType::Role),
+            'permissions' => []
+          ];
+          $data[$groupId]['roles'][$roleId] = $role;
+        }
+        $user = [
+          'id'=> $id,
+          'name'=> $accessControl[$d->permission_id]['name'],
+          'type'=> AccessControlType::getDescription($accessControl[$id]->type),
+        ];
+        if($userId != null) $user['allowed'] = $access[$id];
+        $data[$groupId]['roles'][$roleId]['permissions'][] = $user;
+      }
+      return $data;
+    }
+
 
     private static function userHasGroupOrPermission($userId, $accessControlId) {
         if(!is_numeric($accessControlId)) 
