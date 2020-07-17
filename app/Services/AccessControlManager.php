@@ -132,7 +132,7 @@ class AccessControlManager
     public static function addPermissionsToRole($roleId, $permissions) {
         $role = AccessControl::where(['id'=>$roleId, 'type'=>AccessControlType::Role])->get();
         if($role == null) throw new Exception("Role with id '$roleId' does not exist");
-        $perms = AccessControl::select('id')->where('id', $permissions)->get();
+        $perms = AccessControl::select('id')->whereIn('id', $permissions)->get();
         if(count($perms) == 0) throw new Exception('permissions supplied are invalid or empty');
         $permIds = collect($perms)->map(function($p){return $p->id;})->all();
         $existing = RolePermission::select('permission_id')->where('role_id', $roleId)->whereIn('permission_id', $permIds)->get();
@@ -141,9 +141,10 @@ class AccessControlManager
             foreach($existing as $p) if(!in_array($p->permission_id, $permIds)) $ids[] = $p->$p->permission_id;
             $permIds = $ids;
         }
-        RolePermission::insert(collect($permIds)->map(function($p) use($roleId) {
-            return ['role_id' => $roleId, 'permission_id'=>$p];
-        })->all());
+        if(count($permIds) > 0)
+            RolePermission::insert(collect($permIds)->map(function($p) use($roleId) {
+                return ['role_id' => $roleId, 'permission_id'=>$p];
+            })->all());
         return AccessControl::whereIn('id', $permIds)->get();
     }
 
