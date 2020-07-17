@@ -191,7 +191,7 @@
     "ingest.status.writing": "Writing to piqlFilm",
 
     "ingest.metadata.editJob": "Offline package metadata",
-    "ingest.metadata.file.title": "File metadata (Dublin Core)",
+    "ingest.metadata.file.title": "File metadata",
     "ingest.metadata.file.ingress": "Enter descriptive metadata for this file",
     "ingest.metadata.showFile.ingress": "This page displays the file's descriptive metadata",
     "ingest.metadata.editFile.fileName": "File name",
@@ -233,7 +233,7 @@
     "access.browse.archive.closeButtonTitle": "Close archival package",
     "access.browse.archive.downloadButtonTitle": "Download normalized file",
 
-    "access.metadata.file.title": "File metadata (Dublin Core)",
+    "access.metadata.file.title": "File metadata",
     "access.metadata.file.ingress": "View descriptive metadata for this file",
 
     "access.retrieve": "Retrieve",

@@ -1,15 +1,11 @@
 <template>
     <div class="w-100">
         <page-heading icon="fa-hdd" :title="$t('ingest.offlineStorage.package.list.title')" :ingress="$t('ingest.offlineStorage.package.list.ingress')" />
+        <breadcumb :subTitle="subTitle"/>
         <div class="row plistHeader text-truncate text-center mt-2">
           <div class="col-sm-2">{{$t("access.browse.header.preview")}}</div>
             <div class="col-sm-7 text-left">{{$t('access.browse.header.files')}}</div>
             <div class="col-sm-2 text-center">{{$t('access.browse.header.actions')}}</div>
-            <div class="col-sm-1">
-                <button class="btn btn-tiny" :title="$t('access.browse.archive.closeButtonTitle')"
-                    @click="close"><i class="fas fa-backspace"></i>
-                </button>
-            </div>
         </div>
 
         <aip-browser-file-item v-for="item in dipFiles" :item="item" :key="item.id" @showMetadata="showMetadata" @showPreview="showPreview" />
@@ -40,7 +36,8 @@ export default {
             index: 0,
             imgLength: 0,
             previewDip: {},
-            previewImages: []
+            previewImages: [],
+	    dip: null,
         }
     },
 
@@ -49,6 +46,7 @@ export default {
             type: Number,
             default: 0
         }
+
     },
 
     mounted () {
@@ -62,7 +60,19 @@ export default {
         dipId: function() {
             return this.$route.params.dipId;
         },
-
+	subTitle: function() {
+            if (!this.dip && this.dipId > 0) {
+                axios.get(`/api/v1/access/dips/${this.dipId}`).then( async ( dipResponse ) =>  {
+                    this.dip = dipResponse.data;
+                });
+            }
+            if (this.dip) {
+                let nameArr = this.dip.storage_path.split('/');
+                nameArr = nameArr[nameArr.length-1].split('-');
+                return nameArr[0];
+            }
+            return "";
+        }
     },
 
     methods: {

@@ -176,7 +176,7 @@
     "ingest.estatus.writing": "Escribiendo a piqlFilm",
 
     "ingest.metadata.editJob": "Metadades del paquet fora de línia",
-    "ingest.metadata.file.title": "Metadades de fitxer (Dublin Core)",
+    "ingest.metadata.file.title": "Metadades de fitxer",
     "ingest.metadata.file.ingress": "Introdueixi metadades descriptives per a aquest fitxer",
     "ingest.metadata.showFile.ingress": "Aquesta pàgina mostra les metadades descriptives del fitxer",
     "ingest.metadata.editFile.fileName": "Nom de fitxer",
@@ -215,7 +215,7 @@
     "access.browse.arxivi.closeButtonTitle": "Tancar paquet d'arxivat",
     "access.browse.arxivi.downloadButtonTitle": "Descarregar fitxer normalitzat",
 
-    "access.metadata.file.title": "Metadades de fitxer (Dublin Core)",
+    "access.metadata.file.title": "Metadades de fitxer",
     "access.metadata.file.ingress": "Visualitzar metadades descriptives per a aquest fitxer",
 
     "access.retrieve": "Recuperar",

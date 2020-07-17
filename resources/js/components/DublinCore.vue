@@ -1,6 +1,7 @@
 <template>
     <div class="w-100">
-        <form>
+        <breadcumb :subTitle="fileName" :subTitleRoute="{ name: 'ingest.uploader' }"/>
+	<form>
             <div class="row">
                 <div v-for="scheme in schemes" class="col-sm-4">
                     <div v-for="schemeItem in scheme" class="row mb-2">
@@ -30,6 +31,8 @@
     </template>
 
 <script>
+import axios from 'axios';
+
 export default {
     data () {
         return {
@@ -45,6 +48,10 @@ export default {
             default: "/api/v1/ingest/files",
         },
         urlParam: {
+            type: String,
+            default: "fileId"
+        },
+        baseFileUrl: {
             type: String,
             default: "fileId"
         },
@@ -84,6 +91,19 @@ export default {
         },
         url: function() {
             return `${this.baseUrl}/${this.idParam}/metadata`;
+        },
+        fileName: function() {
+            if (!this.file && this.baseFileUrl && this.metadataObject && this.idParam) {
+                let urlTmp = this.baseFileUrl + this.idParam;
+                axios.get(urlTmp).then( async ( resp ) =>  {
+                    this.file = resp.data;
+                });
+            }
+            if (this.file) {
+                return this.file.filename;
+            } else {
+                return "";
+            }
         }
     },
     async mounted () {

@@ -118,7 +118,7 @@ class AccessControlManagerTest extends TestCase
         AccessControlManager::removeAccessControlsFromUsers([$r->id], [$u->getIdAttribute()]);
 
         $p2 = AccessControlManager::userHasAccessControl($u->getIdAttribute(), $r->id);
-        $this->assertEquals(null, $p2['user_id']);
+        $this->assertEmpty($p2);
     }
     
     public function testAccessControlDeletionAlsoDeletesUserAssignment()
@@ -133,6 +133,6 @@ class AccessControlManagerTest extends TestCase
         AccessControlManager::assignAccessControlsToUsers([$a2->id], [$u->getIdAttribute()]);
         $this->assertEquals($u->getIdAttribute(), AccessControlManager::userHasAccessControl($u->getIdAttribute(), $a2->id)['user_id']);
         AccessControlManager::delete($g->id);
-        $this->assertEquals(null, AccessControlManager::userHasAccessControl($u->getIdAttribute(), $a2->id)['user_id']);
+        $this->assertEmpty(AccessControlManager::userHasAccessControl($u->getIdAttribute(), $a2->id));
     }
 }

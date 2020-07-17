@@ -176,7 +176,7 @@
     "ingest.status.writing": "Gravando em piqlFilm",
 
     "ingest.metadata.editJob": "Metadados de pacotes offline",
-    "ingest.metadata.file.title": "Metadados do arquivo (Dublin Core)",
+    "ingest.metadata.file.title": "Metadados do arquivo",
     "ingest.metadata.file.ingress": "Digite os metadados descritivos para este arquivo",
     "ingest.metadata.showFile.ingress": "Esta página exibe os metadados descritivos do arquivo",
     "ingest.metadata.editFile.fileName": "Nome do arquivo",
@@ -215,7 +215,7 @@
     "access.browse.archive.closeButtonTitle": "Fechar pacote de arquivo",
     "access.browse.archive.downloadButtonTitle": "Baixar arquivo normalizado",
 
-    "access.metadata.file.title": "Metadados do arquivo (Dublin Core)",
+    "access.metadata.file.title": "Metadados do arquivo",
     "access.metadata.file.ingress": "Exibir metadados descritivos para este arquivo",
 
     "access.retrieve": "Recuperar",
