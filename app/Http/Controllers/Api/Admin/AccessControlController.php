@@ -192,11 +192,22 @@ class AccessControlController extends Controller
     public function userPermissions(Request $request, $id)
     {
         try {
+            return AccessControlManager::getUserPermissions($id);
+        } catch (Throwable $e) {
+            return response(['message' => $e->getMessage()], 400);
+        }
+    
+    
+    }public function userAccess(Request $request, $id)
+    {
+        try {
             return AccessControlManager::getPermissionGrouping($id);
         } catch (Throwable $e) {
             return response(['message' => $e->getMessage()], 400);
         }
     }
+
+
     /**
      * Display the specified resource.
      *

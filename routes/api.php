@@ -218,6 +218,7 @@ Route::group(['prefix' => 'v1/admin/access-control'], function () {
     Route::post('users/unassign', 'Api\Admin\AccessControlController@unAssignUsers');
     Route::post('users/has-access-control', 'Api\Admin\AccessControlController@userHasAccessControl');
     Route::get('users/{id}/permissions', 'Api\Admin\AccessControlController@userPermissions');
+    Route::get('users/{id}/access', 'Api\Admin\AccessControlController@userAccess');
  });
 
 Route::group(['prefix' => 'v1/admin/users'], function () {
