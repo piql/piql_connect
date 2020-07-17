@@ -191,14 +191,14 @@ Route::group(['prefix' => 'v1/admin/access-control'], function () {
     Route::get('permissions/{id}', 'Api\Admin\AccessControlController@show')->where('id', '[0-9]+');
     Route::put('permissions/{id}', 'Api\Admin\AccessControlController@update')->where('id', '[0-9]+');
     Route::put('permissions/{id}/set-group/{groupId}', 'Api\Admin\AccessControlController@updateGroup')->where(['id' => '[0-9]+', 'groupId' => '[0-9]+']);
-    Route::delete('permissions/{id}', 'Api\Admin\AccessControlController@delete')->where('id', '[0-9]+');
+    Route::delete('permissions/{id}', 'Api\Admin\AccessControlController@destroy')->where('id', '[0-9]+');
     Route::get('permissions/{id}/users', 'Api\Admin\AccessControlController@users');
     
     Route::get('roles', 'Api\Admin\AccessControlController@listRoles');
     Route::post('roles', 'Api\Admin\AccessControlController@createRole');
     Route::get('roles/{id}', 'Api\Admin\AccessControlController@show')->where('id', '[0-9]+');
     Route::put('roles/{id}', 'Api\Admin\AccessControlController@update')->where('id', '[0-9]+');
-    Route::delete('roles/{id}', 'Api\Admin\AccessControlController@delete')->where('id', '[0-9]+');
+    Route::delete('roles/{id}', 'Api\Admin\AccessControlController@destroy')->where('id', '[0-9]+');
     Route::get('roles/{id}/users', 'Api\Admin\AccessControlController@users');
     Route::get('roles/{id}/permissions', 'Api\Admin\AccessControlController@listRolePermissions')->where('id', '[0-9]+');
     Route::post('roles/{id}/permissions', 'Api\Admin\AccessControlController@addPermissionsToRole')->where('id', '[0-9]+');

@@ -44,24 +44,16 @@
                     </router-link>
                     <router-link :to="{ name: 'settings.groups' }">
                         <li class="list-group-item" :class="{ active: routeBelongsTo('settings.groups') }" >
-                            <i class="fas fa-user-shield"></i>
+                            <i class="fas fa-users"></i>
                             <div class="leftMenuItem">
-                                {{$t('sidebar.accessGroups')}}
-                            </div>
-                        </li>
-                    </router-link>
-                    <router-link :to="{ name: 'settings.permissions' }">
-                        <li class="list-group-item" :class="{ active: routeBelongsTo('settings.permissions') }" >
-                            <i class="fas fa-key"></i>
-                            <div class="leftMenuItem">
-                                {{$t('sidebar.permissions')}}
+                                {{$t('sidebar.userGroups')}}
                             </div>
                         </li>
                     </router-link>
 
                     <router-link :to="{ name: 'settings.roles' }">
                         <li class="list-group-item" :class="{ active: routeBelongsTo('settings.roles') }" >
-                            <i class="fas fa-user-secret"></i>
+                            <i class="fas fa-user-shield"></i>
                             <div class="leftMenuItem">
                                 {{$t('sidebar.roles')}}
                             </div>

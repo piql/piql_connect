@@ -4,24 +4,24 @@
        <table class="table table-hover table-sm table-bordered">
                     <thead>
                         <tr>
-                            <th>Group</th>
+                            <th>Role</th>
                             <th>Description</th>
                           
                             <th width="18%">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="group in groups" :key="group.id">
-                            <td>{{group.name}}</td>
-                            <td>{{group.description}}</td>
+                        <tr v-for="role in roles" :key="role.id">
+                            <td>{{role.name}}</td>
+                            <td>{{role.description}}</td>
                             <td>
-                                <a class="btn btn-xs btn-primary" @click="viewPermissions(group.id)" title="View Permissions" style="color:white">
+                                <a class="btn btn-xs btn-primary" @click="viewPermissions(role.id)" title="View Permissions" style="color:white">
                                     <i class="fa fa-eye"></i>
                                     </a>
-                                <a class="btn btn-xs btn-primary" title="Edit Access Group" style="color:white" @click="showEditModal(group.id)">
+                                <a class="btn btn-xs btn-primary" title="Edit Role" style="color:white" @click="showEditModal(role.id)">
                                     <i class="fa fa-edit"></i>
                                     </a>
-                                <a class="btn btn-xs btn-primary"  title="Delete Access Group" @click="showDeleteModal(group.id)" style="color:white">
+                                <a class="btn btn-xs btn-primary"  title="Delete Role" @click="showDeleteModal(role.id)" style="color:white">
                                     <i class="fa fa-trash"></i>
                                     </a>
                             </td>
@@ -38,31 +38,31 @@
                     </div>
                 </div>
 
-                <b-modal id="delete-group" hide-footer>
+                <b-modal id="delete-role" hide-footer>
                     <template v-slot:modal-title>
-                        <h4> <b>DELETE GROUP [ {{ group[0].name.toUpperCase() }} ]</b></h4>
+                        <h4> <b>DELETE ROLE [ {{ role[0].name.toUpperCase() }} ]</b></h4>
                     </template>
                     <div class="d-block">
-                        <b-alert show variant="warning">Do you want to delete this group? if so, click below to proceed</b-alert>
+                        <b-alert show variant="warning">Do you want to delete this role? if so, click below to proceed</b-alert>
                     </div>
-                    <b-button class="mt-3" block @click="deleteGroupClicked(group[0].id)" @keydown="deleteGroupClicked(group[0].id)"><i class="fa fa-trash"></i> DELETE GROUP</b-button>
+                    <b-button class="mt-3" block @click="deleteRoleClicked(role[0].id)" @keydown="deleteRoleClicked(role[0].id)"><i class="fa fa-trash"></i> DELETE ROLE</b-button>
                 </b-modal>
 
-                <b-modal id="edit-group" size="lg" hide-footer>
+                <b-modal id="edit-role" size="lg" hide-footer>
                     <template v-slot:modal-title>
-                   <h4> <b>EDIT GROUP [ {{ group[0].name.toUpperCase() }} ]</b></h4>
+                   <h4> <b>EDIT ROLE [ {{ role[0].name.toUpperCase() }} ]</b></h4>
                     </template>
                     <div class="d-block">
                         <div class="form-group">
-                            <label>Group</label>
-                            <input type="text" class="form-control" v-model="groupName" >
+                            <label>Role</label>
+                            <input type="text" class="form-control" v-model="roleName" >
                         </div>
                         <div class="form-group">
                             <label>Description</label>
                             <textarea v-model="description" class="form-control"></textarea>
                         </div>
                     </div>
-                    <b-button class="mt-3" @click="editButtonClicked(group[0].id)" block><i class="fa fa-edit"></i> Edit Group</b-button>
+                    <b-button class="mt-3" @click="editButtonClicked(role[0].id)" block><i class="fa fa-edit"></i> EDIT ROLE</b-button>
                 </b-modal>
                 
               
@@ -79,11 +79,11 @@ export default {
             return {
                 response:null,
                 description: null,
-                groups:null,
+                roles:null,
                 pageMeta: null,
-                groupId: null,
-                group: null,
-                groupName: null,
+                roleId: null,
+                role: null,
+                roleName: null,
                 description: null,
                
             };
@@ -119,49 +119,49 @@ export default {
         
     },
     methods:{
-        editButtonClicked(groupId){
+        editButtonClicked(roleId){
             let data = {
-                name: this.groupName,
+                name: this.roleName,
                 description: this.description,
-                groupId: groupId
+                roleId: roleId
             }
 
-            this.$emit('editGroup', data);
+            this.$emit('editRole', data);
 
 
         },
-        showEditModal(groupId){
-            this.group = this.groups.filter(group => group.id === groupId);
-            this.groupName = this.group[0].name;
-            this.description = this.group[0].description;
-            this.$bvModal.show('edit-group')
+        showEditModal(roleId){
+            this.role = this.roles.filter(role => role.id === roleId);
+            this.roleName = this.role[0].name;
+            this.description = this.role[0].description;
+            this.$bvModal.show('edit-role')
 
         },
        dispatchRouting() {
             this.refreshObjects( this.apiQueryString );
         },
-       showDeleteModal(groupId){
-           this.group = this.groups.filter(group => group.id === groupId);
-           this.$bvModal.show('delete-group')
+       showDeleteModal(roleId){
+           this.role = this.roles.filter(role => role.id === roleId);
+           this.$bvModal.show('delete-role');
 
         },
-        deleteGroupClicked(groupId){
-            this.$emit('deleteGroup', groupId);
+        deleteRoleClicked(roleId){
+            this.$emit('deleteRole', roleId);
 
         },
 
         refreshObjects( apiQueryString ){
             axios.get("/api/v1/admin/access-control/permission-groups" + apiQueryString).then( (response ) => {
                this.response = response
-                this.groups = this.response.data.data;
+                this.roles = this.response.data.data;
                 this.pageMeta = this.response.data.meta
             }).catch(error => {
                 this.response = error;
             });
         },
 
-        viewPermissions(groupId){
-          this.$router.push({ name:'settings.groups.permissions', params: { groupId: groupId } });
+        viewPermissions(roleId){
+          this.$router.push({ name:'settings.roles.permissions', params: { roleId: roleId } });
         },
         
     }

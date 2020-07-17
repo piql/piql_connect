@@ -6,6 +6,7 @@
                         <tr>
                             <th>Permission</th>
                             <th>Description</th>
+                            <th>Role</th>
                             <th width="18%">Actions </th>
                         </tr>
                     </thead>
@@ -13,6 +14,8 @@
                         <tr v-for="perm in permissions" :key="perm.id">
                             <td>{{perm.name}}</td>
                             <td>{{perm.description}}</td>
+                            <td v-if="perm.group_id === null"> <b-badge variant="warning"> {{perm.roleName}}</b-badge></td>
+                            <td v-else > <b-badge variant="info">  Has Role -ref #{{ perm.group_id }}</b-badge></td>
                             <td>
                                 <a class="btn btn-xs btn-primary" title="Configure Permissions" style="color:white">
                                     <i class="fa fa-user-cog"></i>
@@ -21,10 +24,10 @@
                                 <a class="btn btn-xs btn-primary" @click="showAssignModal(perm.id)" title="Assign Access Group" style="color:white">
                                     <i class="fa fa-user-shield"></i>
                                     </a>
-                                <a class="btn btn-xs btn-primary" title="Edit Permission" style="color:white">
+                                <a class="btn btn-xs btn-primary" @click="showEditModal(perm.id)" title="Edit Permission" style="color:white">
                                     <i class="fa fa-edit"></i>
                                     </a>
-                                <a class="btn btn-xs btn-primary" title="Delete Role" style="color:white">
+                                <a class="btn btn-xs btn-primary" @click="showDeleteModal(perm.id)" title="Delete Role" style="color:white">
                                     <i class="fa fa-trash"></i>
                                     </a>
                             </td>
@@ -40,16 +43,43 @@
                     </div>
                 </div>
 
+                <b-modal id="delete-perm" hide-footer>
+                    <template v-slot:modal-title>
+                        <h4> <b>DELETE PERMISSION [ {{ permission[0].name.toUpperCase() }} ]</b></h4>
+                    </template>
+                    <div class="d-block">
+                        <b-alert show variant="warning">Do you want to delete this permission? if so, click below to proceed</b-alert>
+                    </div>
+                    <b-button class="mt-3" block @click="deletePermClicked(permission[0].id)" @keydown="deletePermClicked(perm[0].id)"><i class="fa fa-trash"></i> DELETE PERMISSION</b-button>
+                </b-modal>
+
+                <b-modal id="edit-perm" size="lg" hide-footer>
+                    <template v-slot:modal-title>
+                   <h4> <b>EDIT PERMISSION [ {{ permission[0].name.toUpperCase() }} ]</b></h4>
+                    </template>
+                    <div class="d-block">
+                        <div class="form-group">
+                            <label>Permission</label>
+                            <input type="text" class="form-control" v-model="permName" >
+                        </div>
+                        <div class="form-group">
+                            <label>Description</label>
+                            <textarea v-model="description" class="form-control"></textarea>
+                        </div>
+                    </div>
+                    <b-button class="mt-3" @click="editButtonClicked(permission[0].id)" block><i class="fa fa-edit"></i> EdIT PERMISSION</b-button>
+                </b-modal>
+
 
                 <b-modal id="assign-perm" size="lg" hide-footer>
                     <template v-slot:modal-title>
-                   <h4> <b>ASSIGN ACCESS GROUP TO PERMISSION [ {{ permission[0].name.toUpperCase() }} ]</b></h4>
+                   <h4> <b>ASSIGN ROLE TO PERMISSION [ {{ permission[0].name.toUpperCase() }} ]</b></h4>
                     </template>
                     <div class="form-group">
-                        <label for="groups">Select Access Group</label>
-                        <select v-model="selgroup" id="groups" class="form-control">
-                            <option v-for="group in list" :key="group.id" :value="group.id">
-                                {{ group.name }}
+                        <label for="roles">Select Role</label>
+                        <select v-model="selrole" id="roles" class="form-control">
+                            <option v-for="role in list" :key="role.id" :value="role.id">
+                                {{ role.name }}
                             </option>
 
                         </select>
@@ -57,7 +87,7 @@
                         
 
                     </div>
-                    <b-button class="mt-3" @click="assignButtonClicked" block><i class="fa fa-user-shield"></i> Assign Access Group</b-button>
+                    <b-button class="mt-3" @click="assignButtonClicked" block><i class="fa fa-user-shield"></i> ASSIGN ROLE</b-button>
                 </b-modal>
 
 
@@ -74,7 +104,9 @@ export default {
             pageMeta: null,
             permission: null,
             list: [],
-            selgroup:null
+            selrole:null,
+            permName: null,
+            description: null
         };
     },
 
@@ -96,10 +128,10 @@ export default {
             return filter;
         },
      apiQueryEndPoint: function(){
-         let groupId = this.$route.params.groupId;
+         let roleId = this.$route.params.roleId;
 
-         if( parseInt( groupId ) ) {
-                return '/api/v1/admin/access-control/permission-groups/'+ groupId +'/permissions';
+         if( parseInt( roleId ) ) {
+                return '/api/v1/admin/access-control/permission-groups/'+ roleId +'/permissions';
             } else {
                 return '/api/v1/admin/access-control/permissions';
             }
@@ -117,11 +149,13 @@ export default {
         }
         this.refreshObjects( this.apiQueryString, this.apiQueryEndPoint);
 
+        
+
         /**list users * i can only pull in 10 at a time, need help getting all at 
          * the same time unless allowed to tamper with the backend **/
 
-       let groups = (await axios.get("/api/v1/admin/access-control/permission-groups",{ params: { limit: 100 } })).data.data;
-        groups.forEach(single => {
+       let roles = (await axios.get("/api/v1/admin/access-control/permission-groups",{ params: { limit: 100 } })).data.data;
+        roles.forEach(single => {
             this.list.push({
                 name: single.name,
                 id: single.id
@@ -130,13 +164,39 @@ export default {
 
     },
     methods:{
+        showEditModal(permId){
+            this.permission = this.permissions.filter(permission => permission.id === permId);
+            this.permName = this.permission[0].name;
+            this.description = this.permission[0].description;
+            this.$bvModal.show('edit-perm')
+
+        },
+        editButtonClicked(permId){
+            let data = {
+                name: this.permName,
+                description: this.description,
+                permId: permId
+            }
+
+            this.$emit('editPermission', data);
+
+        },
+        showDeleteModal(permId){
+            this.permission = this.permissions.filter(permission => permission.id === permId);
+           
+            this.$bvModal.show('delete-perm')
+
+        },
+        deletePermClicked(permId){
+            this.$emit('deletePermission', permId);
+        },
         assignButtonClicked(){
             let data = {
-                groupId: this.selgroup,
+                roleId: this.selrole,
                 permissionId: this.permission[0].id
             }
 
-            this.$emit('assignGroupToPermission', data);
+            this.$emit('assignRoleToPermission', data);
 
 
         },
@@ -150,13 +210,39 @@ export default {
             this.refreshObjects( this.apiQueryString, this.apiQueryEndPoint);
         },
 
-        refreshObjects( apiQueryString, apiQueryEndPoint){
-            axios.get(apiQueryEndPoint + apiQueryString).then( (response ) => {
+        async refreshObjects( apiQueryString, apiQueryEndPoint){
+            await axios.get(apiQueryEndPoint + apiQueryString).then( (response ) => {
                this.response = response
                 this.permissions = this.response.data.data;
+
+                //get group name
+                this.permissions.forEach(perm => {
+                    if(perm.group_id !== null){
+                        axios.get('/api/v1/admin/access-control/permission-groups/'+ perm.group_id).then(res => {
+                            //console.log(res.data.data.name);
+                            perm.roleName = res.data.data.name;
+                        });
+
+                    }else{
+                        perm.roleName = "N/A";
+                    }
+                   
+
+                });
                 
                 this.pageMeta = this.response.data.meta
             });
+        },
+        fetchGroupName(roleId){
+
+            //return "steven";
+            axios.get('/api/v1/admin/access-control/permission-groups/'+ roleId).then(res => {
+                //console.log(res.data.data.name);
+                return res.data.data.name;
+            }).catch(err => {
+                return err;
+            });
+
         }
         
     }

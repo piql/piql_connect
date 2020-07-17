@@ -1,6 +1,6 @@
 <template>
     <div class="w-100">
-        <page-heading icon="fa-user-shield" :title="$t('settings.settings.groups')" :ingress="$t('settings.settings.groupsdesc')" />
+        <page-heading icon="fa-users" :title="$t('settings.settings.userGroups')" :ingress="$t('settings.settings.userGroupDesc')" />
         <div class="card">
             <div class="card-header">
         
@@ -9,41 +9,42 @@
                 </button>
                 <b-modal id="add-group" hide-footer>
                     <template v-slot:modal-title>
-                    Add Group
+                   <h4> Add Group </h4>
                     </template>
                     <div class="d-block">
-                        <div class="form-group">
-                            <label>Group</label>
-                            <input type="text" class="form-control" v-model="group" >
-                        </div>
-                        <div class="form-group">
-                            <label>Description</label>
-                            <textarea v-model="description" class="form-control"></textarea>
-                        </div>
+                    <div class="form-group">
+                        <label>Group</label>
+                        <input type="text" class="form-control" v-model="group" required>
                     </div>
-                    <b-button class="mt-3" block @click="addGroup" @keydown="addGroup"><i class="fa fa-group"></i> Add Group</b-button>
+                    <div class="form-group">
+                        <label>Description</label>
+                        <textarea v-model="description" class="form-control" required="required"></textarea>
+                    </div>
+                    </div>
+                    <b-button class="mt-3" block @click="addGroup"><i class="fa fa-users"></i> Add Group</b-button>
                 </b-modal>
             </div>
             <div class="card-body">
-                <user-group-items :key="groupkey" @editGroup="editGroup" @deleteGroup='deleteGroup' />
+                <groups-listing :key="groupkey" @assignGroupToRoles="assignGroupToRoles" />
+               
             </div>
         </div>
 
         
     </div>
-</template> 
+</template>
 
 <script>
 
     export default {
-     
        
         data() {
             return {
                 group:null,
                 description:null,
-                response: null,
+                response:null,
                 groupkey: 0,
+                msg:null
             };
         },
 
@@ -53,46 +54,38 @@
 
             },
             async addGroup(){
-                this.infoToast('Add Group','Adding '+ this.group + ' accesss group');
-                 this.response = (await axios.post("/api/v1/admin/access-control/permission-groups", {
-                    name: this.group,
-                    description: this.description
+                if((this.group != null) && (this.description != null)){
+                    this.infoToast('Add Group','Adding '+ this.role);
+                    this.response = (await axios.post('/api/v1/admin/access-control/roles', {
+                        name: this.group,
+                        description: this.description
+                    },{
+                        headers:{
+                            'content-type': 'application/json'
+                        }
+                    })).data;
+                    
+                    this.forceRerender();
+                    this.$bvModal.hide('add-group');
+                }else{
+                    this.errorToast("Error","Fill in both fields");
+                    this.forceRerender();
+                    this.$bvModal.hide('add-group');
+                }
+                
+            },
+            async assignGroupToRoles(data){
+                this.infoToast("Assigning group", "assigning group to roles selected");
+                this.response = (await axios.post("/api/v1/admin/access-control/roles/"+ data.groupId +"/permissions",{
+                    permissions: data.roles
                 },{
                     headers:{
                         'content-type': 'application/json'
                     }
                 })).data;
-                
-                this.forceRerender();
-                this.$bvModal.hide('add-group')
-            },
 
-            async editGroup(data){
-                this.infoToast('Edit Group','Editing '+ data.name);
-                 this.response = (await axios.put("/api/v1/admin/access-control/permission-groups/"+ data.groupId, {
-                    name: data.name,
-                    description: data.description
-                },{
-                    headers:{
-                        'content-type': 'application/json'
-                    }
-                })).data;
-                
                 this.forceRerender();
-                this.$bvModal.hide('edit-group');
-                
-            },
-            async deleteGroup(groupId){
-                this.infoToast('Delete Group','Deleting an access group ');
-                await axios.delete("/api/v1/admin/access-control/permission-groups/"+ groupId).then(res => {
-                    this.response = res;
-                }).catch(err => {
-                    this.response = err;
-                    this.errorToast('Group Delete Failed',"Unable to delete group, check endpoint");
-                });
-                
-                this.forceRerender();
-                this.$bvModal.hide('delete-group')
+                this.$bvModal.hide('assign-role');
             }
         }
     }

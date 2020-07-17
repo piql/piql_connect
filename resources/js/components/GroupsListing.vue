@@ -4,25 +4,25 @@
        <table class="table table-hover table-sm table-bordered">
                     <thead>
                         <tr>
-                            <th>Role</th>
+                            <th>Group</th>
                             <th>Description</th>
                             <th width="18%">Actions </th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="role in roles" :key="role.id">
-                            <td>{{role.name}}</td>
-                            <td>{{role.description}}</td>
+                        <tr v-for="group in groups" :key="group.id">
+                            <td>{{group.name}}</td>
+                            <td>{{group.description}}</td>
                             <td>
-                                <a class="btn btn-xs btn-primary" title="Edit Role" style="color:white">
+                                <a class="btn btn-xs btn-primary" title="Edit Group" style="color:white">
                                     <i class="fa fa-edit"></i>
                                     </a>
-                                <a class="btn btn-xs btn-primary" @click="viewUsers(role.id)" title="List Users" style="color:white">
+                                <a class="btn btn-xs btn-primary" @click="viewUsers(group.id)" title="List Users" style="color:white">
                                     <i class="fa fa-users"></i>
                                     </a>
                                 
-                                <a class="btn btn-xs btn-primary" @click="showAssignModal(role.id)" title="Assign Permissions" style="color:white">
-                                    <i class="fa fa-key"></i>
+                                <a class="btn btn-xs btn-primary" @click="showAssignModal(group.id)" title="Assign Roles" style="color:white">
+                                    <i class="fa fa-user-shield"></i>
                                     </a>
                                 <a class="btn btn-xs btn-primary" title="Delete Role" style="color:white">
                                     <i class="fa fa-trash"></i>
@@ -40,9 +40,9 @@
                     </div>
                 </div>
 
-                <b-modal id="role-users" hide-footer>
+                <b-modal id="group-users" hide-footer>
                     <template v-slot:modal-title>
-                   <h4> <b>ROLE [ {{ role[0].name.toUpperCase() }} ] USERS</b></h4>
+                   <h4> <b>ROLE [ {{ group[0].name.toUpperCase() }} ] USERS</b></h4>
                     </template>
                     <div>
                         <ul>
@@ -52,19 +52,19 @@
                     </div>
                 </b-modal>
 
-                <b-modal id="assign-role" size="lg" hide-footer>
+                <b-modal id="assign-group" size="lg" hide-footer>
                     <template v-slot:modal-title>
-                   <h4> <b>ASSIGN PERMISSIONS TO ROLE [ {{ role[0].name.toUpperCase() }} ]</b></h4>
+                   <h4> <b>ASSIGN ROLES TO GROUP [ {{ group[0].name.toUpperCase() }} ]</b></h4>
                     </template>
                     <div>
                         <vue-select-sides
                         type="mirror"
-                        v-model="selectedUsers"
+                        v-model="selectedRoles"
                         :list="list"
                         ></vue-select-sides>
                     
                     </div>
-                    <b-button class="mt-3" @click="assignButtonClicked(role[0].id)" block><i class="fa fa-users"></i> Assign Users</b-button>
+                    <b-button class="mt-3" @click="assignButtonClicked(group[0].id)" block><i class="fa fa-user-shield"></i> Assign Roles</b-button>
                 </b-modal>
 
 
@@ -77,11 +77,11 @@ export default {
     data() {
         return {
             response:null,
-            roles: null,
+            groups: null,
             pageMeta: null,
-            role: null,
+            group: null,
             list: [],
-            selectedUsers: [],
+            selectedRoles: [],
             users: []
         };
     },
@@ -116,32 +116,33 @@ export default {
         }
         this.refreshObjects( this.apiQueryString);
 
-        /**list users * i can only pull in 10 at a time, need help getting all at 
+        /**list roles * i can only pull in 10 at a time, need help getting all at 
          * the same time unless allowed to tamper with the backend **/
 
-       let users = (await axios.get("/api/v1/admin/users",{ params: { limit: 100 } })).data.data;
-        users.forEach(single => {
+       let roles = (await axios.get("/api/v1/admin/access-control/permission-groups",{ params: { limit: 100 } })).data.data;
+        roles.forEach(single => {
             this.list.push({
-                label: single.full_name,
+                label: single.name,
                 value: single.id
                 })
         });
 
+
     },
     methods:{
-        assignButtonClicked(roleId){
+        assignButtonClicked(groupId){
             let data = {
-                users: this.selectedUsers,
-                permissions: [roleId]
+                roles: this.selectedRoles,
+                groupId: groupId
             }
 
-            this.$emit('assignRoleToUsers', data);
+            this.$emit('assignGroupToRoles', data);
 
 
         },
-        showAssignModal(roleId){
-            this.role = this.roles.filter(role => role.id === roleId);
-            this.$bvModal.show('assign-role')
+        showAssignModal(groupId){
+            this.group = this.groups.filter(group => group.id === groupId);
+            this.$bvModal.show('assign-group')
 
         },
         
@@ -152,21 +153,21 @@ export default {
         refreshObjects( apiQueryString){
             axios.get('/api/v1/admin/access-control/roles' + apiQueryString).then( (response ) => {
                this.response = response
-                this.roles = this.response.data.data;
+                this.groups = this.response.data.data;
                 
                 this.pageMeta = this.response.data.meta
             });
         },
-        async viewUsers(roleId){
-            this.role = this.roles.filter(role => role.id === roleId);
-            await axios.get('/api/v1/admin/access-control/roles/' + roleId +'/users',{ params: { limit: 100 } }).then( response => {
+        async viewUsers(groupId){
+            this.group = this.groups.filter(group => group.id === groupId);
+            await axios.get('/api/v1/admin/access-control/roles/' + groupId +'/users',{ params: { limit: 100 } }).then( response => {
                 this.response = response;
                 this.users = this.response.data.data;
             }).catch(error => {
                 console.log(error);
             });
 
-            this.$bvModal.show('role-users');
+            this.$bvModal.show('group-users');
         }
         
     }
