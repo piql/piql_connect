@@ -22,6 +22,7 @@ class AccessControlResource extends JsonResource
             "description" => $this->description,
             "updated_at" => $this->updated_at,
             "created_at" => $this->created_at,
+            "group_id" => $this->group_id
         ];
         switch($this->type) {
             case AccessControlType::PermissionGroup:
