@@ -3,7 +3,7 @@
 
         <page-heading icon="fa-hourglass-half" :title="$t('ingest.processing.title')" :ingress="$t('ingest.processing.ingress')" />
 
-        <div class="row plistHeader">
+        <div class="row plistHeader mt-5">
             <div class="col-sm-3">{{$t('ingest.processing.sip')}}</div>
             <div class="col-sm-3 text-center">{{$t('upload.files')}}</div>
             <div class="col-sm-3 text-center">{{$t('ingest.processing.ingestDate')}}</div>
