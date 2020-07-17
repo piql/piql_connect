@@ -34,6 +34,24 @@
                         </li>
                     </router-link>
 
+                    <li class="list-group-item cursorPointer" :class="{ active: routeBelongsTo('settings.admin') }" @click="toggleLogoMenu()">
+                        <i class="fas fa-wrench"></i>
+                        <div class="leftMenuItem">
+                            {{$t('sidebar.admin')}}
+                        </div>
+                    </li>
+
+                    <span v-if="isLogoShown">
+                        <router-link :to="{ name: 'settings.logo' }">
+                            <li class="list-group-item submenu" :class="{ active: routeBelongsTo('settings.logo') }" >
+                                <i class="fas fa-shapes"></i>
+                                <div class="leftMenuItem">
+                                    {{$t('sidebar.logo')}}
+                                </div>
+                            </li>
+                        </router-link>
+                    </span>
+
                     <router-link :to="{ name: 'settings.listing' }">
                         <li class="list-group-item" :class="{ active: routeBelongsTo('settings.listing') }" >
                             <i class="fas fa-user"></i>
@@ -155,6 +173,7 @@ import axios from 'axios';
 export default {
     data() {
         return {
+            logoShown: false
         };
     },
     mounted() {
@@ -182,11 +201,17 @@ export default {
         invisibleIfNarrow() {
             return this.width > 1000 ? "" : "invisible";
         },
+        isLogoShown() {
+            return this.logoShown;
+        }
     },
     methods: {
         routeBelongsTo( checkRoute ) {
             return this.$route.name.startsWith( checkRoute );
         },
+        toggleLogoMenu() {
+            this.logoShown = this.logoShown ? false : true;
+        }
     }
 }
 </script>

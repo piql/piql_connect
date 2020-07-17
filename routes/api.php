@@ -226,6 +226,12 @@ Route::group(['prefix' => 'v1/admin/users'], function () {
     Route::post('enable', 'Api\Admin\UserController@enable');
 });
 
+
+Route::group(['prefix' => 'v1/admin/logo'], function () {
+    Route::get('show', 'Api\Admin\LogoController@show');
+    Route::post('upload', 'Api\Admin\LogoController@upload');
+});
+
 Route::group(['prefix' => 'v1/registration'], function () {
     Route::post('register', 'Api\Registration\UserRegistrationController@register');
     Route::post('confirm', 'Api\Registration\UserRegistrationController@confirm');
