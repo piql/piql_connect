@@ -15,8 +15,11 @@
                             <td>{{role.name}}</td>
                             <td>{{role.description}}</td>
                             <td>
-                                <a class="btn btn-xs btn-primary" @click="viewPermissions(role.id)" title="View Permissions" style="color:white">
-                                    <i class="fa fa-eye"></i>
+                                <a class="btn btn-xs btn-primary" @click="viewPermissions(role.id)" title="Configure Permissions" style="color:white">
+                                    <i class="fa fa-user-cog"></i>
+                                    </a>
+                                <a class="btn btn-xs btn-primary" title="Assign User Group" style="color:white">
+                                    <i class="fa fa-users"></i>
                                     </a>
                                 <a class="btn btn-xs btn-primary" title="Edit Role" style="color:white" @click="showEditModal(role.id)">
                                     <i class="fa fa-edit"></i>

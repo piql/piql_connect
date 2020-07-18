@@ -5,8 +5,9 @@
         :ingress="$t('settings.settings.rolePermDesc')" />
         <div class="card">
             <div class="card-header">
+                CONFIGURE PERMISSIONS
         
-                <button type="button" class="btn btn-primary" @click="$bvModal.show('add-permission')">
+                <!-- <button type="button" class="btn btn-primary" @click="$bvModal.show('add-permission')">
                     <i class="fa fa-key"></i>  Add Role Permission
                 </button>
                 <b-modal id="add-permission" hide-footer>
@@ -24,14 +25,14 @@
                     </div>
                     </div>
                     <b-button class="mt-3" block @click="addPermission"><i class="fa fa-key"></i> Add Permission</b-button>
-                </b-modal>
+                </b-modal> -->
             </div>
             <div class="card-body">
-                <permissions-listing 
+                <!-- <permissions-listing 
                 :key="permkey" 
                 @deletePermission="deletePermission" 
                 @editPermission="editPermission" 
-                @assignRoleToPermission="assignRoleToPermission"></permissions-listing>
+                @assignRoleToPermission="assignRoleToPermission"></permissions-listing> -->
                
             </div>
         </div>

@@ -6,7 +6,7 @@
                         <tr>
                             <th>Group</th>
                             <th>Description</th>
-                            <th width="18%">Actions </th>
+                            <th width="20%">Actions </th>
                         </tr>
                     </thead>
                     <tbody>
@@ -17,8 +17,11 @@
                                 <a class="btn btn-xs btn-primary" title="Edit Group" style="color:white">
                                     <i class="fa fa-edit"></i>
                                     </a>
-                                <a class="btn btn-xs btn-primary" @click="viewUsers(group.id)" title="List Users" style="color:white">
+                                <a class="btn btn-xs btn-primary" @click="showAssignUsersModal(group.id)" title="Assign Users" style="color:white">
                                     <i class="fa fa-users"></i>
+                                    </a>
+                                <a class="btn btn-xs btn-primary" @click="showListingModal(group.id)" title="List roles and users assigned" style="color:white">
+                                    <i class="fa fa-list"></i>
                                     </a>
                                 
                                 <a class="btn btn-xs btn-primary" @click="showAssignModal(group.id)" title="Assign Roles" style="color:white">
@@ -40,16 +43,49 @@
                     </div>
                 </div>
 
-                <b-modal id="group-users" hide-footer>
+                <b-modal id="group-users" size="lg" hide-footer>
                     <template v-slot:modal-title>
-                   <h4> <b>ROLE [ {{ group[0].name.toUpperCase() }} ] USERS</b></h4>
+                   <h4> <b>GROUP " {{ group[0].name.toUpperCase() }} " </b></h4>
                     </template>
-                    <div>
-                        <ul>
-                            <li>list of users in this role</li>
-                        </ul>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <b>Users</b>
+                            <p v-if="users.length <= 0">No Users assigned to group yet.</p>
+                            <table class="table table-condensed table-bordered table-sm table-striped" role="table">
+                                <tr v-for="user in users" :key="user.id">
+                                    <td>{{user.full_name}}</td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="col-md-6">
+                            <b>Roles</b>
+                            <p v-if="roles.length <= 0">No Roles assigned to group yet.</p>
+                             <table class="table table-condensed table-bordered table-sm table-striped" role="table">
+                                 <tr v-for="role in roles" :key="role.id">
+                                    <td>{{role.name}}</td>
+                                </tr>
+                             </table>
+                            
+                        </div>
                     
                     </div>
+                </b-modal>
+
+                <b-modal id="assign-users" size="lg" hide-footer>
+                    <template v-slot:modal-title>
+                   <h4> <b>ASSIGN USERS TO GROUP [ {{ group[0].name.toUpperCase() }} ]</b></h4>
+                    </template>
+                    <div>
+                        <vue-select-sides
+                        type="mirror"
+                        v-model="selectedUsers"
+                        :list="ulist"
+                        ></vue-select-sides>
+                    
+                    </div>
+                    <b-button class="mt-3" @click="assignUserButtonClicked(group[0].id)" block>
+                        <i class="fa fa-users"></i> ASSIGN USERS
+                    </b-button>
                 </b-modal>
 
                 <b-modal id="assign-group" size="lg" hide-footer>
@@ -64,7 +100,8 @@
                         ></vue-select-sides>
                     
                     </div>
-                    <b-button class="mt-3" @click="assignButtonClicked(group[0].id)" block><i class="fa fa-user-shield"></i> Assign Roles</b-button>
+                    <b-button class="mt-3" @click="assignButtonClicked(group[0].id)" block><i class="fa fa-user-shield"></i> 
+                    ASSIGN ROLES</b-button>
                 </b-modal>
 
 
@@ -81,8 +118,11 @@ export default {
             pageMeta: null,
             group: null,
             list: [],
+            ulist: [],
             selectedRoles: [],
-            users: []
+            selectedUsers: [],
+            users: [],
+            roles:[],
         };
     },
 
@@ -127,6 +167,14 @@ export default {
                 })
         });
 
+        let users = (await axios.get("/api/v1/admin/users",{ params: { limit: 100 } })).data.data;
+        users.forEach(single => {
+            this.ulist.push({
+                label: single.full_name,
+                value: single.id
+                })
+        });
+
 
     },
     methods:{
@@ -140,9 +188,23 @@ export default {
 
 
         },
+        assignUserButtonClicked(groupId){
+            let data = {
+                users: this.selectedUsers,
+                access_controls: [groupId]
+            }
+
+            this.$emit('assignGroupToUsers', data);
+
+        },
         showAssignModal(groupId){
             this.group = this.groups.filter(group => group.id === groupId);
             this.$bvModal.show('assign-group')
+
+        },
+        showAssignUsersModal(groupId){
+            this.group = this.groups.filter(group => group.id === groupId);
+            this.$bvModal.show('assign-users');
 
         },
         
@@ -158,16 +220,35 @@ export default {
                 this.pageMeta = this.response.data.meta
             });
         },
-        async viewUsers(groupId){
-            this.group = this.groups.filter(group => group.id === groupId);
+        async fetchGroupUsers(groupId){
+            
             await axios.get('/api/v1/admin/access-control/roles/' + groupId +'/users',{ params: { limit: 100 } }).then( response => {
-                this.response = response;
-                this.users = this.response.data.data;
+              
+                this.users = response.data.data;
             }).catch(error => {
                 console.log(error);
             });
 
+            
+        },
+
+        async fetchGroupRoles(groupId){
+            await axios.get('/api/v1/admin/access-control/roles/'+ groupId +'/permissions',{ params: { limit: 100 } }).then( response => {
+                //this.response = response;
+                this.roles = response.data.data;
+            }).catch(error => {
+                console.log(error)
+            });
+
+        },
+        showListingModal(groupId){
+            this.group = this.groups.filter(group => group.id === groupId);
+            //fetch users and roles
+            this.fetchGroupUsers(groupId);
+            this.fetchGroupRoles(groupId);
+
             this.$bvModal.show('group-users');
+
         }
         
     }
