@@ -22,13 +22,13 @@
                 <div class="col-md-7 navLinks w-100">
                     <ul class="navbar-nav m-auto signal">
                         <li class="navbar" ref='nav-home' :class="[ routeBelongsTo('stats') ? 'top-active' : 'top-inactive' ]">
-                            <router-link :to="{ name: 'stats.dashboard'}">{{$t('Home')}}</router-link>
+                            <router-link :to="{ name: 'stats.dashboard'}"><b>{{$t('Home')}}</b></router-link>
                         </li>
                         <li class="navbar" ref='nav-ingest' :class="[ routeBelongsTo('ingest') ? 'top-active' : 'top-inactive' ]">
-                            <router-link :to="{ name: 'ingest.uploader' }">{{$t('Ingest')}}</router-link>
+                            <router-link :to="{ name: 'ingest.uploader' }"><b>{{$t('Ingest')}}</b></router-link>
                         </li>
                         <li class="navbar" ref='nav-access' :class="[ routeBelongsTo('access') ? 'top-active' : 'top-inactive' ]">
-                            <router-link :to="{ name: 'access.browse' }">{{$t('Access')}}</router-link>
+                            <router-link :to="{ name: 'access.browse' }"><b>{{$t('Access')}}</b></router-link>
                         </li>
 
                         <li class="navbar" ref='nav-settings' :class="[ routeBelongsTo('settings') ? 'top-active' : '']" data-toggle="tooltip" :title="$t('sidebar.settings')" >

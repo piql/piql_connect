@@ -106,7 +106,7 @@ class AccessControlController extends Controller
         try {
             $group = AccessControl::where('type', AccessControlType::PermissionGroup)->where('id', $id)->first();
             if ($group == null) return response(['message' => 'Group Not Found!'], 404);
-            $group->actions = AccessControl::select('id', 'name')->where('parent_id', $id)->get();
+            $group->actions = AccessControl::select('id', 'name')->where('group_id', $id)->get();
             return new AccessControlResource($group);
         } catch (Throwable $e) {
             return response(['message' => $e->getMessage()], 400);
@@ -117,7 +117,7 @@ class AccessControlController extends Controller
     {
         try {
             $limit = $request->limit ? $request->limit : env('DEFAULT_ENTRIES_PER_PAGE', 10);
-            $actions = AccessControl::where(['type' => AccessControlType::Permission, 'parent_id' => $id])->paginate($limit, ['*'], 'page');
+            $actions = AccessControl::where(['type' => AccessControlType::Permission, 'group_id' => $id])->paginate($limit, ['*'], 'page');
             return AccessControlResource::collection($actions);
         } catch (Throwable $e) {
             return response(['message' => $e->getMessage()], 400);

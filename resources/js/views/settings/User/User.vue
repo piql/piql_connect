@@ -1,21 +1,34 @@
 <template>
     <div class="w-100">
         <page-heading icon="fa-cog" :title="$t('settings.settings.header')" :ingress="$t('settings.settings.ingress')" />
+        <div class="row">
+            <div class="col-md-12">
+                <div>
+                    <b-card no-body>
+                        <b-tabs nav-class="toggle-nav" card>
+                            <b-tab :title="$t('settings.settings.userInterfaceHeader')" active>
+                                <b-card-text>
+                                    <language-picker v-bind:label="$t('settings.settings.languagelabel')" :initialSelection="selectedLanguage" @selectionChanged="changedLanguage"></language-picker>
+                                    <row-selector :rowlabel="$t('settings.settings.rowslabel')"></row-selector>
+                                    <upload-logo v-bind:logolabel="$t('settings.settings.logolabel')"></upload-logo>
+                                </b-card-text>
+                            </b-tab>
+                            <b-tab :title="$t('settings.settings.setPasswordHeader')">
+                                <b-card-text>
+                                    <password-picker v-bind:oldPasswordLabel="$t('settings.settings.oldPassword.label')" 
+                                    v-bind:newPasswordLabel1="$t('settings.settings.newPassword1.label')" 
+                                    v-bind:newPasswordLabel2="$t('settings.settings.newPassword2.label')" 
+                                    v-bind:saveButtonText="$t('settings.settings.passwordSaveButtonText')" 
+                                    @saveButtonClicked="changePassword" ref="passwordPicker"></password-picker>
+                                </b-card-text>
+                            </b-tab>
 
-        <form>
-            <h2 class="mb-3">{{$t('settings.settings.userInterfaceHeader')}}</h2>
-            <div class="row">
-                <div class="col-10">
-                    <language-picker v-bind:label="$t('settings.settings.languagelabel')" :initialSelection="selectedLanguage" @selectionChanged="changedLanguage"></language-picker>
+                        </b-tabs>
+                    </b-card>
                 </div>
             </div>
-            <h2 class="mt-4 mb-3">{{$t('settings.settings.setPasswordHeader')}}</h2>
-            <div class="row">
-                <div class="col-10">
-                    <password-picker v-bind:oldPasswordLabel="$t('settings.settings.oldPassword.label')" v-bind:newPasswordLabel1="$t('settings.settings.newPassword1.label')" v-bind:newPasswordLabel2="$t('settings.settings.newPassword2.label')" v-bind:saveButtonText="$t('settings.settings.passwordSaveButtonText')" @saveButtonClicked="changePassword" ref="passwordPicker"></password-picker>
-                </div>
-            </div>
-        </form>
+        </div>
+
     </div>
 </template>
 

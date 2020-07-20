@@ -1,6 +1,6 @@
 <template>
     <div class="w-100">
-        <page-heading icon="fa-user-secret" :title="$t('settings.settings.roles')" :ingress="$t('settings.settings.rolesdesc')" />
+        <page-heading icon="fa-user-shield" :title="$t('settings.settings.roles')" :ingress="$t('settings.settings.rolesDesc')" />
         <div class="card">
             <div class="card-header">
         
@@ -9,42 +9,41 @@
                 </button>
                 <b-modal id="add-role" hide-footer>
                     <template v-slot:modal-title>
-                   <h4> Add Role </h4>
+                    Add Role
                     </template>
                     <div class="d-block">
-                    <div class="form-group">
-                        <label>Role</label>
-                        <input type="text" class="form-control" v-model="role" required>
+                        <div class="form-group">
+                            <label>Role</label>
+                            <input type="text" class="form-control" v-model="role" >
+                        </div>
+                        <div class="form-group">
+                            <label>Description</label>
+                            <textarea v-model="description" class="form-control"></textarea>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label>Description</label>
-                        <textarea v-model="description" class="form-control" required="required"></textarea>
-                    </div>
-                    </div>
-                    <b-button class="mt-3" block @click="addRole"><i class="fa fa-user-secret"></i> Add Role</b-button>
+                    <b-button class="mt-3" block @click="addRole" @keydown="addRole"><i class="fa fa-user-shield"></i> Add Role</b-button>
                 </b-modal>
             </div>
             <div class="card-body">
-                <roles-listing :key="rolekey" @assignRoleToUsers="assignRoleToUsers" />
-               
+                <role-items :key="rolekey" @editRole="editRole" @deleteRole='deleteRole' />
             </div>
         </div>
 
         
     </div>
-</template>
+</template> 
 
 <script>
 
     export default {
+     
        
         data() {
             return {
                 role:null,
                 description:null,
-                response:null,
+                response: null,
                 rolekey: 0,
-                msg:null
             };
         },
 
@@ -54,36 +53,46 @@
 
             },
             async addRole(){
-                if((this.role != null) && (this.description != null)){
-                    this.infoToast('Add Role','Adding '+ this.role);
-                    this.response = (await axios.post("/api/v1/admin/permissions/roles", {
-                        name: this.role,
-                        description: this.description
-                    },{
-                        headers:{
-                            'content-type': 'application/json'
-                        }
-                    })).data;
-                    
-                    this.forceRerender();
-                    this.$bvModal.hide('add-role');
-                }else{
-                    this.errorToast("Error","Fill in both fields");
-                    this.forceRerender();
-                    this.$bvModal.hide('add-role');
-                }
-                
-            },
-            async assignRoleToUsers(data){
-                this.infoToast("Assigning role", "assigning role to a group of selected users");
-                this.response = (await axios.post("/api/v1/admin/permissions/users/assign",data,{
+                this.infoToast('Add Role','Adding '+ this.role + ' role');
+                 this.response = (await axios.post("/api/v1/admin/access-control/permission-groups", {
+                    name: this.role,
+                    description: this.description
+                },{
                     headers:{
                         'content-type': 'application/json'
                     }
                 })).data;
-
+                
                 this.forceRerender();
-                this.$bvModal.hide('assign-role');
+                this.$bvModal.hide('add-role')
+            },
+
+            async editRole(data){
+                this.infoToast('Edit Role','Editing '+ data.name);
+                 this.response = (await axios.put("/api/v1/admin/access-control/permission-groups/"+ data.roleId, {
+                    name: data.name,
+                    description: data.description
+                },{
+                    headers:{
+                        'content-type': 'application/json'
+                    }
+                })).data;
+                
+                this.forceRerender();
+                this.$bvModal.hide('edit-role');
+                
+            },
+            async deleteRole(roleId){
+                this.infoToast('Delete Role','Deleting a role ');
+                await axios.delete("/api/v1/admin/access-control/permission-groups/"+ roleId).then(res => {
+                    this.response = res;
+                }).catch(err => {
+                    this.response = err;
+                    this.errorToast('Role Delete Failed',"Unable to delete role, check endpoint");
+                });
+                
+                this.forceRerender();
+                this.$bvModal.hide('delete-role')
             }
         }
     }

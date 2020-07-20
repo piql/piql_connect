@@ -4,7 +4,7 @@
             <label v-if="showLabel" for="languagePicker" class="col-form-label-sm">
                 {{label}}
             </label>
-            <select v-model="selection" id="languagePicker" class="col-3 form-control" data-live-search="true" @change="selectionChanged">
+            <select v-model="selection" required id="languagePicker" class="col-3 form-control" data-live-search="true" @change="selectionChanged">
                 <option v-for="language in languages" v-bind:value="language.code">
                     {{language.title}}
                 </option>

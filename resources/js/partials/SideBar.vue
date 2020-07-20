@@ -60,15 +60,6 @@
                             </div>
                         </li>
                     </router-link>
-                    <router-link :to="{ name: 'settings.roles' }">
-                        <li class="list-group-item" :class="{ active: routeBelongsTo('settings.roles') }" >
-                            <i class="fas fa-user-secret"></i>
-                            <div class="leftMenuItem">
-                                {{$t('sidebar.roles')}}
-                            </div>
-                        </li>
-                    </router-link>
-
                     <router-link :to="{ name: 'settings.groups' }">
                         <li class="list-group-item" :class="{ active: routeBelongsTo('settings.groups') }" >
                             <i class="fas fa-users"></i>
@@ -77,6 +68,17 @@
                             </div>
                         </li>
                     </router-link>
+
+                    <router-link :to="{ name: 'settings.roles' }">
+                        <li class="list-group-item" :class="{ active: routeBelongsTo('settings.roles') }" >
+                            <i class="fas fa-user-shield"></i>
+                            <div class="leftMenuItem">
+                                {{$t('sidebar.roles')}}
+                            </div>
+                        </li>
+                    </router-link>
+
+                    
 
                 </span>
 
