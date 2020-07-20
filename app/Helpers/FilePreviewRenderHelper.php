@@ -64,6 +64,7 @@ class FilePreviewRenderHelper
 		$im->setBackgroundColor('white');
 		$im->mergeImageLayers(\Imagick::LAYERMETHOD_FLATTEN);
 		$im->setImageAlphaChannel(\Imagick::ALPHACHANNEL_REMOVE);
+		$im->borderImage('black', 3, 3);
 		Storage::delete($file);
 		return $im;
 	}

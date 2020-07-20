@@ -8,7 +8,7 @@
                     </router-link>
                 </div>
                 <div class="col-md-1 ml-0 mr-0 pr-0">
-                    <img style="position: fixed; top: 1.5rem; left: 22rem; width: 10rem;" src="/images/customer_top_logo.png">
+                    <img id="customLogiImg" style="position: fixed; top: 1.5rem; left: 22rem; max-width: 250px; max-height: 80px;" src="/api/v1/admin/logo/show">
                 </div>
                 <div class="col-md-1">
                     <session-timeout-monitor

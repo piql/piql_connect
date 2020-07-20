@@ -78,6 +78,8 @@
     "sidebar.retrieve.retrieving": "Being retrieved",
     "sidebar.retrieve.downloadable": "Ready for download",
     "sidebar.retrieve.history": "History",
+    "sidebar.admin": "Admin settings",
+    "sidebar.logo": "Change logo",
 
     "dashboard.title": "Dashboard",
     "dashboard.ingress": "Your stored information",
@@ -290,6 +292,11 @@
     "settings.settings.toasts.failedSetPassword.title": "Password update failed",
     "settings.settings.toasts.failedSetPassword.message": "Failed to update password",
     "settings.settings.alert.changedPassword": "The password has been changed, you will need to log in again",
+    "settings.log.alert.notAllowedExtensions": "Please, use PNG images",
+    "settings.logo.header": "Change logo",
+    "settings.logo.ingress": "Upload a new logo image",
+    "settings.logo.button": "Select logo file",
+    "settings.logo.successful": "Your log has been changed",
     
     "timeout.warning": "Inactivity warning. Automatic log out in",
     "timeout.seconds": "seconds",

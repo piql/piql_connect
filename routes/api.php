@@ -218,6 +218,7 @@ Route::group(['prefix' => 'v1/admin/access-control'], function () {
     Route::post('users/unassign', 'Api\Admin\AccessControlController@unAssignUsers');
     Route::post('users/has-access-control', 'Api\Admin\AccessControlController@userHasAccessControl');
     Route::get('users/{id}/permissions', 'Api\Admin\AccessControlController@userPermissions');
+    Route::get('users/{id}/access', 'Api\Admin\AccessControlController@userAccess');
  });
 
 Route::group(['prefix' => 'v1/admin/users'], function () {
@@ -225,6 +226,12 @@ Route::group(['prefix' => 'v1/admin/users'], function () {
     Route::get('{id}', 'Api\Admin\UserController@show');
     Route::post('disable', 'Api\Admin\UserController@disable');
     Route::post('enable', 'Api\Admin\UserController@enable');
+});
+
+
+Route::group(['prefix' => 'v1/admin/logo'], function () {
+    Route::get('show', 'Api\Admin\LogoController@show');
+    Route::post('upload', 'Api\Admin\LogoController@upload');
 });
 
 Route::group(['prefix' => 'v1/registration'], function () {

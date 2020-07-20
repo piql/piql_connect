@@ -1,8 +1,7 @@
 <?php
 
 use App\Enums\AccessControlType;
-use App\Acc
-usAccessControle App\AccessControl;
+use App\AccessControl;
 use App\User;
 use App\UserAccessControl;
 use Webpatser\Uuid\Uuid;
