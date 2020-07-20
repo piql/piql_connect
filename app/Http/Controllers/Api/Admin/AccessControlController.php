@@ -7,7 +7,8 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\AccessControlResource;
 use App\Http\Resources\UserResource;
-use App\accessControl;
+use App\AccessControl;
+use App\RolePermission;
 use App\Services\AccessControlManager;
 use App\User;
 use Throwable;
@@ -76,12 +77,14 @@ class AccessControlController extends Controller
     public function listRolePermissions(Request $request, $id)
     {
         try {
+            $permissions = RolePermission::select('permission_id')->where('role_id', $id)->get();
+            if(empty($permissions)) return AccessControlResource::collection([]);
+            $permissionIds = collect($permissions)->map(function($p){
+                return $p->permission_id;
+            })->all();
+
             $limit = $request->limit ? $request->limit : env('DEFAULT_ENTRIES_PER_PAGE', 10);
-            $permissions = AccessControl::where('type', AccessControlType::Permission)
-                ->join('role_permissions', function ($join) {
-                    $join->on('access_controls.id', '=', 'role_permissions.role_id');
-                })->where('role_permissions.id', $id)
-                ->paginate($limit, ['*'], 'page');
+            $permissions = AccessControl::whereIn('id', $permissionIds)->paginate($limit, ['*'], 'page');
             return AccessControlResource::collection($permissions);
         } catch (Throwable $e) {
             return response(['message' => $e->getMessage()], 400);
@@ -185,6 +188,25 @@ class AccessControlController extends Controller
             return response(['message' => $e->getMessage()], 400);
         }
     }
+    
+    public function userPermissions(Request $request, $id)
+    {
+        try {
+            return AccessControlManager::getUserPermissions($id);
+        } catch (Throwable $e) {
+            return response(['message' => $e->getMessage()], 400);
+        }
+    
+    
+    }public function userAccess(Request $request, $id)
+    {
+        try {
+            return AccessControlManager::getPermissionGrouping($id);
+        } catch (Throwable $e) {
+            return response(['message' => $e->getMessage()], 400);
+        }
+    }
+
 
     /**
      * Display the specified resource.
