@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div ref="previewMainDiv" tabindex="0" @keydown.esc="getOut">
     <!-- The overlay -->
     <div id="myNav" :class="myNavClass">
 
@@ -122,10 +122,19 @@
       rotate: function(adj) {
         this.rotateIndex += adj;
       },
+      getOut: function() {
+        this.closeNav();
+      },
+      prepareFocus: function(){
+        if (this.$refs.previewMainDiv != null && this.$refs.previewMainDiv != undefined) {
+          this.$refs.previewMainDiv.focus();
+        }
+      },
     },
     computed: {
       myNavClass: function () {
         this.setImgSrc();
+        this.prepareFocus();
         return "overlay overlay" + (this.visible ? "On" : "Off")
       },
       zoomRate: function () {
