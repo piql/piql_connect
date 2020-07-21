@@ -37,12 +37,17 @@
                             </router-link>
                         </li>
 
-                        <li class="pr-3 plistIcon navbar"><notifications/>
+                        <li class="pr-2 plistIcon navbar"><notifications/>
                         </li>
-                        <li class="pr-3 plistIcon navbar">
+                        <li class="pr-2 plistIcon navbar">
                             <a href="/logout"><i class="fas fa-sign-out-alt signal"></i></a>
                         </li>
-
+                        <li class="pr-2 plistIcon navbar">
+                            <div>
+                                <div class="userImgCont"><img :src="userImg" class="userImg"/></div>
+                            </div>
+                            <div class="userName">{{ userName }}</div>
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -51,6 +56,7 @@
 </template>
 
 <script>
+import axios from 'axios';
 import serviceCall from '../mixins/serviceCall';
 export default {
     mixins: [
@@ -62,6 +68,7 @@ export default {
     data() {
         return {
             sessionLifetimeMs: null,
+            user: null,
             modalTimeMs: 300000,     /* 5 minutes */
             updateIntervalMs: 1000   /* 1 second */
         };
@@ -70,11 +77,32 @@ export default {
         currentActiveRoute() {
             return this.$route.name;
         },
+        userName() {
+            this.loadUser();
+            if (this.user != null) {
+                return this.user.first_name;
+            }
+            return "";
+        },
+        userImg() {
+            this.loadUser();
+            if (this.user != null) {
+                return 'data:image/jpeg;base64, ' + this.user.img;
+            }
+            return "";
+        }
     },
     methods: {
         routeBelongsTo( checkRoute ) {
             return this.$route.name.startsWith( checkRoute );
         },
+        loadUser() {
+            if (this.user == null) {
+                axios.get("/api/v1/system/users/me").then( async ( resp ) =>  {
+                    this.user = resp.data;
+                });
+            }
+        }
     }
 
 }

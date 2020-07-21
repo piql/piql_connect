@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
+use Log;
 
 class SelfServiceController extends Controller
 {
@@ -109,6 +111,21 @@ class SelfServiceController extends Controller
         // todo: avoid being logged out
 
         return response()->json([ 'status' => 0, 'message' => 'Password was updated successfully' ], 200 );
+    }
+
+    public function me(Request $request) {
+        $user = Auth::user();
+        $userSess = array();
+        $userSess['full_name'] = $user->full_name;
+        $userSess['email'] = $user->email;
+        $nameArr = explode(' ', $user->full_name);
+        $userSess['first_name'] = $nameArr[0];
+        $file = 'custom-files/user/'.$user->id.'.png';
+        if (!file_exists(storage_path($file))) {
+            $file = 'custom-files/user/avatar.png';
+        }
+        $userSess['img'] = base64_encode(Storage::disk('local')->get($file));
+        return response()->json($userSess, 200);
     }
 
 }
