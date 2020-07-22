@@ -1854,3 +1854,20 @@ input:invalid {
 .submenu {
     padding-left: 40px;
 }
+.userImgCont {
+    width: 40px;
+    height: 40px;
+    position: relative;
+    overflow: hidden;
+    border-radius: 50%;
+}
+
+.userImgCont img {
+    display: inline;
+    margin: 0 auto;
+    height: 100%;
+    width: auto;
+}
+.userName {
+    margin-left: 5px;
+}

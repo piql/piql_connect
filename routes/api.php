@@ -39,6 +39,7 @@ Route::group(['prefix' => 'v1' , 'middleware' => ['auth:api', 'activity']], func
 //FIXME:        Route::get('statuses/current-bag', 'Api\System\StatusController@currentBag');
         Route::get('languages', 'Api\System\SystemController@languages');
         Route::get('system/session-lifetime', 'Api\System\SystemController@sessionLifetime');
+        Route::get('users/me', 'Api\Users\SelfServiceController@me');
     });
 
     Route::group(['prefix' => 'ingest'], function() {
