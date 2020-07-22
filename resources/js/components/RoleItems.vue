@@ -18,7 +18,7 @@
                                 <a class="btn btn-xs btn-primary" @click="viewPermissions(role.id)" title="Configure Permissions" style="color:white">
                                     <i class="fa fa-user-cog"></i>
                                     </a>
-                                <a class="btn btn-xs btn-primary" title="Assign User Group" style="color:white">
+                                <a class="btn btn-xs btn-primary" @click="showAssignModal(role.id)" title="Assign User Group" style="color:white">
                                     <i class="fa fa-users"></i>
                                     </a>
                                 <a class="btn btn-xs btn-primary" title="Edit Role" style="color:white" @click="showEditModal(role.id)">
@@ -67,6 +67,23 @@
                     </div>
                     <b-button class="mt-3" @click="editButtonClicked(role[0].id)" block><i class="fa fa-edit"></i> EDIT ROLE</b-button>
                 </b-modal>
+
+                <b-modal id="assign-role" size="lg" hide-footer>
+                    <template v-slot:modal-title>
+                   <h4> <b>ASSIGN GROUPS TO ROLE [ {{ role[0].name.toUpperCase() }} ]</b></h4>
+                    </template>
+                    <div class="form-group">
+                        <label for="group">Select Group</label>
+                        <select v-model="selGroup" id="group" class="form-control">
+                            <option v-for="group in list" :key="group.value" :value="group.value">
+                                {{ group.label }}
+                            </option>
+
+                        </select>
+                    </div>
+                    <b-button class="mt-3" @click="assignButtonClicked(role[0].id)" block><i class="fa fa-group"></i> 
+                    ASSIGN GROUP</b-button>
+                </b-modal>
                 
               
   
@@ -88,6 +105,8 @@ export default {
                 role: null,
                 roleName: null,
                 description: null,
+                list:[],
+                selGroup:[]
                
             };
     },
@@ -119,9 +138,27 @@ export default {
         }
         this.refreshObjects( this.apiQueryString );
 
+        let groups = (await axios.get('/api/v1/admin/access-control/roles',{ params: { limit: 100 } })).data.data;
+        groups.forEach(single => {
+            this.list.push({
+                label: single.name,
+                value: single.id
+                })
+        });
+
         
     },
     methods:{
+        assignButtonClicked(roleId){
+            let data = {
+                roles: [roleId],
+                groupId: this.selGroup
+            }
+
+            this.$emit('assignGroup', data);
+
+
+        },
         editButtonClicked(roleId){
             let data = {
                 name: this.roleName,
@@ -133,11 +170,16 @@ export default {
 
 
         },
+        showAssignModal(roleId){
+            this.role = this.roles.filter(role => role.id === roleId);
+            this.$bvModal.show('assign-role')
+
+        },
         showEditModal(roleId){
             this.role = this.roles.filter(role => role.id === roleId);
             this.roleName = this.role[0].name;
             this.description = this.role[0].description;
-            this.$bvModal.show('edit-role')
+            this.$bvModal.show('edit-role');
 
         },
        dispatchRouting() {

@@ -53,7 +53,7 @@
                 users: null,
                 pageMeta:null,
                 listingKey: 0,
-                response: null
+                response: null,
             };
         },
         props: {
@@ -74,12 +74,6 @@
             }
             this.refreshObjects( this.apiQueryString, this.apiEndPoint );
 
-             let query = this.$route.query;
-
-            if( parseInt( query.groupId ) || parseInt(query.roleId) ) {
-                let btn = document.querySelector('.btncheck');
-                btn.style.display = 'none';
-            }
 
         },
 
@@ -114,12 +108,12 @@
                 this.refreshObjects( this.apiQueryString, this.apiEndPoint );
             },
 
-            refreshObjects( apiQueryString, apiEndPoint){
+            async refreshObjects( apiQueryString, apiEndPoint){
                 let data = {
                     limit: 10
                 }; 
-                axios.get(apiEndPoint + apiQueryString,{
-                    params: data
+                await axios.get(apiEndPoint + apiQueryString, {
+                   params: data
                 }).then( (response ) => {
                 this.response = response
                     this.users = this.response.data.data;
@@ -131,6 +125,7 @@
                 this.listingKey += 1;
 
             },
+            
             async addUser(){
                 this.infoToast("Adding User", "creating new user in the system");
 
@@ -203,7 +198,7 @@
                 //this.forceRerender()
                 this.$bvModal.hide('enable-user');
 
-            }
+            },
         }
     }
 </script>

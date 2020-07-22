@@ -1,6 +1,6 @@
 <template>
     <div class="w-100">
-        <page-heading icon="fa-list-ul" :title="$t('ingest.taskList.title')" :ingress="$t('ingest.taskList.ingress')" />
+        <page-heading icon="fa-clock" :title="$t('ingest.taskList.title')" :ingress="$t('ingest.taskList.ingress')" />
 
         <div class="row plistHeader mt-5">
             <div class="col-sm-3">{{$t('ingest.offlineStorage.jobName')}}</div>

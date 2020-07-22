@@ -19,7 +19,7 @@
                             <td>{{staff.email}}</td>
                             <td v-if="staff.disabled === true"> <b-badge variant="danger"> Disabled</b-badge></td>
                             <td v-else > <b-badge variant="success"> Active</b-badge></td>
-                            <td>{{staff.created_at}}</td>
+                            <td>{{formatDate(staff.created_at)}}</td>
                             <td>
                                 <a class="btn btn-xs btn-primary" title="Assign Role" style="color:white">
                                     <i class="fa fa-user-secret"></i>
@@ -167,7 +167,24 @@ export default {
         editButtonClicked(){
             //some data will be passed here before emitting
             this.$emit('editUser');
-        }
+        },
+        formatDate(ISOdate){
+                let date = new Date(ISOdate);
+                let year = date.getFullYear();
+                let month = date.getMonth()+1;
+                let dt = date.getDate();
+                let time = date.getHours() + ':'+ date.getMinutes();
+
+                if (dt < 10) {
+                dt = '0' + dt;
+                }
+                if (month < 10) {
+                month = '0' + month;
+                }
+
+                return year+'-' + month + '-'+dt + ' '+time;
+                
+            },
 
     
         

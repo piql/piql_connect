@@ -1,6 +1,6 @@
 <template>
     <div class="w-100">
-        <page-heading icon="fa-tachometer-alt" :title="$t('upload.title')" :ingress="$t('upload.ingress')" />
+        <page-heading icon="fa-upload" :title="$t('upload.title')" :ingress="$t('upload.ingress')" />
 
         <form v-on:submit.prevent>
        

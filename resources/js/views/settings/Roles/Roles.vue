@@ -25,7 +25,7 @@
                 </b-modal>
             </div>
             <div class="card-body">
-                <role-items :key="rolekey" @editRole="editRole" @deleteRole='deleteRole' />
+                <role-items :key="rolekey" @assignGroup="assignGroup" @editRole="editRole" @deleteRole='deleteRole' />
             </div>
         </div>
 
@@ -93,6 +93,19 @@
                 
                 this.forceRerender();
                 this.$bvModal.hide('delete-role')
+            },
+            async assignGroup(data){
+                this.infoToast("Assigning group", "assigning group to role selected");
+                this.response = (await axios.post("/api/v1/admin/access-control/roles/"+ data.groupId +"/permissions",{
+                    permissions: data.roles
+                },{
+                    headers:{
+                        'content-type': 'application/json'
+                    }
+                })).data;
+
+                this.forceRerender();
+                this.$bvModal.hide('assign-role');
             }
         }
     }
