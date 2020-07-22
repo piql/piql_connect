@@ -192,13 +192,11 @@
     "ingest.status.status": "Status",
     "ingest.status.preparing": "Preparing writing",
     "ingest.status.writing": "Writing to piqlFilm",
-
     "ingest.metadata.editJob": "Offline package metadata",
     "ingest.metadata.file.title": "File metadata",
     "ingest.metadata.file.ingress": "Enter descriptive metadata for this file",
     "ingest.metadata.showFile.ingress": "This page displays the file's descriptive metadata",
     "ingest.metadata.editFile.fileName": "File name",
-
     "access.browse.ingress": "Access your archives",
     "access.browse.selectArchive": "Select archive",
     "access.browse.selectHolding": "Select holding",
@@ -223,7 +221,6 @@
     "access.browse.metadata.editFile": "File metadata",
     "access.browse.content": "Package contents",
     "access.browse.content.ingress": "Access your files",
-
     "access.browse.header.preview": "Preview",
     "access.browse.header.name": "Package name",
     "access.browse.header.size": "Size",
@@ -232,23 +229,18 @@
     "access.browse.header.files": "Files",
     "access.browse.header.actions": "Actions",
     "access.browse.header.filename": "File name",
-
     "access.browse.archive.closeButtonTitle": "Close archival package",
     "access.browse.archive.downloadButtonTitle": "Download normalized file",
-
     "access.metadata.file.title": "File metadata",
     "access.metadata.file.ingress": "View descriptive metadata for this file",
-
     "access.retrieve": "Retrieve",
     "access.retrieve.readyToRetrieve": "Ready to retrieve",
-
     "access.retrieve.nowRetrieving": "Now retrieving",
     "access.retrieve.nowRetrieving.ingress": "Information queued for retrieval from piqlFilm",
     "access.retrieve.downloadable": "Ready for download",
     "access.retrieve.downloadable.ingress": "Download your retrieved information",
     "access.retrieve.history": "Retrieval history",
     "access.retrieve.history.ingress": "Information previously retrieved",
-
     "access.ready.aipName": "Offline package name",
     "access.ready.ingestDate": "Ingest date",
     "access.ready.filesize": "File size",
@@ -259,7 +251,6 @@
     "access.retrieved.idle": "No files are currently being retrieved.",
     "access.download.download": "Download",
     "access.download.takeOffline": "Take offline",
-
     "settings.settings.header": "User settings",
     "settings.settings.ingress": "Configure user settings",
     "settings.settings.users": "Users",
@@ -292,7 +283,7 @@
     "settings.settings.toasts.failedSetPassword.title": "Password update failed",
     "settings.settings.toasts.failedSetPassword.message": "Failed to update password",
     "settings.settings.alert.changedPassword": "The password has been changed, you will need to log in again",
-    "settings.log.alert.notAllowedExtensions": "Please, use PNG images",
+    "settings.logo.alert.notAllowedExtensions": "Please, use PNG images",
     "settings.logo.header": "Change logo",
     "settings.logo.ingress": "Upload a new logo image",
     "settings.logo.button": "Select logo file",
