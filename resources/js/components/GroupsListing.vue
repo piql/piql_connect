@@ -110,7 +110,12 @@
 </template>
 
 <script>
+import Pager from "./Pager"
+import axios from "axios"
 export default {
+    components: {
+        Pager
+    },
     data() {
         return {
             response:null,
@@ -156,28 +161,36 @@ export default {
         }
         this.refreshObjects( this.apiQueryString);
 
-        /**list roles * i can only pull in 10 at a time, need help getting all at 
-         * the same time unless allowed to tamper with the backend **/
-
-       let roles = (await axios.get("/api/v1/admin/access-control/permission-groups",{ params: { limit: 100 } })).data.data;
-        roles.forEach(single => {
-            this.list.push({
-                label: single.name,
-                value: single.id
-                })
-        });
-
-        let users = (await axios.get("/api/v1/admin/users",{ params: { limit: 100 } })).data.data;
-        users.forEach(single => {
-            this.ulist.push({
-                label: single.full_name,
-                value: single.id
-                })
-        });
+        this.fetchRoles(100);
+        this.fetchUsers(100);
 
 
     },
     methods:{
+        async fetchRoles(limit){
+            await axios.get("/api/v1/admin/access-control/permission-groups",{ params: { limit: limit } }).then(response => {
+                let roles = response.data.data;
+                roles.forEach(single => {
+                    this.list.push({
+                        label: single.name,
+                        value: single.id
+                        })
+                });
+            })
+
+        },
+        async fetchUsers(limit){
+            await axios.get("/api/v1/admin/users",{ params: { limit: limit } }).then(response => {
+                let users = response.data.data
+                users.forEach(single => {
+                    this.ulist.push({
+                        label: single.full_name,
+                        value: single.id
+                        })
+                });
+            })
+
+        },
         assignButtonClicked(groupId){
             let data = {
                 roles: this.selectedRoles,
@@ -212,8 +225,8 @@ export default {
             this.refreshObjects( this.apiQueryString);
         },
 
-        refreshObjects( apiQueryString){
-            axios.get('/api/v1/admin/access-control/roles' + apiQueryString).then( (response ) => {
+        async refreshObjects( apiQueryString){
+            await axios.get('/api/v1/admin/access-control/roles' + apiQueryString).then( (response ) => {
                this.response = response
                 this.groups = this.response.data.data;
                 

@@ -43,8 +43,13 @@
 </template>
 
 <script>
+import Pager from "../../../components/Pager"
+import axios from "axios"
 
     export default {
+        components:{
+            Pager
+        },
         data() {
             return {
                 fullname:null,
@@ -54,7 +59,6 @@
                 pageMeta:null,
                 listingKey: 0,
                 response: null,
-                page: null
             };
         },
         props: {
@@ -69,8 +73,9 @@
     },
 
         async mounted() {
-            //this.page = this.$route.query.page;
-            if( isNaN( this.$route.query.page ) || parseInt( this.$route.query.page ) < 2 ) {
+            let page = this.$route.query.page;
+            //console.log(this.$route.query)
+            if( isNaN( page ) || parseInt( page ) < 2 ) {
                 this.$route.query.page = 1;
             }
             this.refreshObjects( this.apiQueryString, this.apiEndPoint );
