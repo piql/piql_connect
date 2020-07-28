@@ -46,3 +46,6 @@ deploy/nginx/ssl/fullchain.pem
 
 package-lock.json
 *.js.snap
+
+.composer
+composer.phar
