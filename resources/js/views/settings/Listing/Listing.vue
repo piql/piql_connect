@@ -54,6 +54,7 @@
                 pageMeta:null,
                 listingKey: 0,
                 response: null,
+                page: null
             };
         },
         props: {
@@ -68,8 +69,8 @@
     },
 
         async mounted() {
-            let page = this.$route.query.page;
-            if( isNaN( page ) || parseInt( page ) < 2 ) {
+            //this.page = this.$route.query.page;
+            if( isNaN( this.$route.query.page ) || parseInt( this.$route.query.page ) < 2 ) {
                 this.$route.query.page = 1;
             }
             this.refreshObjects( this.apiQueryString, this.apiEndPoint );
