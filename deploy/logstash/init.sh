@@ -20,6 +20,8 @@ for conf_path in $CONFIG_DIR/*conf; do
     sed -ie "s/{{mongo_user}}/$MONGO_USER/g" $conf_path
     sed -ie "s/{{mongo_pass}}/$MONGO_PASS/g" $conf_path
     sed -ie "s/{{mongo_dbnm}}/$MONGO_NAME/g" $conf_path
+    sed -ie "s/{{mongo_host}}/$MONGO_HOST/g" $conf_path
+    sed -ie "s/{{mongo_port}}/$MONGO_PORT/g" $conf_path
 done
 
 echo "cleaning up after sed"
