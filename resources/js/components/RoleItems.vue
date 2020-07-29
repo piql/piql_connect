@@ -138,17 +138,26 @@ export default {
         }
         this.refreshObjects( this.apiQueryString );
 
-        let groups = (await axios.get('/api/v1/admin/access-control/roles',{ params: { limit: 100 } })).data.data;
-        groups.forEach(single => {
-            this.list.push({
-                label: single.name,
-                value: single.id
-                })
-        });
+        this.fetchGroups(100);
+        
 
         
     },
     methods:{
+        async fetchGroups(limit){
+            await axios.get('/api/v1/admin/access-control/roles',{ params: { limit: limit } }).then(res => {
+                let groups = res.data.data;
+                groups.forEach(single => {
+                    this.list.push({
+                        label: single.name,
+                        value: single.id
+                        })
+                });
+            }).catch(err => {
+                console.log(err);
+            })
+
+        },
         assignButtonClicked(roleId){
             let data = {
                 roles: [roleId],

@@ -125,6 +125,8 @@ import axios from "axios"
                     this.users = this.response.data.data;
                     
                     this.pageMeta = this.response.data.meta
+                }).catch(err => {
+                    console.log(err)
                 });
             },
             forceRerender(){
