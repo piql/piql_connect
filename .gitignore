@@ -49,3 +49,4 @@ package-lock.json
 
 .composer
 composer.phar
+deploy/logstash/conf.d/*.conf
