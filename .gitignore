@@ -50,3 +50,5 @@ package-lock.json
 .composer
 composer.phar
 deploy/logstash/conf.d/*.conf
+deploy/logstash/conf.d/inputs/*.conf
+deploy/logstash/conf.d/outputs/*.conf
