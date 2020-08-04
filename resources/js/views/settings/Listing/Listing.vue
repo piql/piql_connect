@@ -74,7 +74,6 @@ import axios from "axios"
 
         async mounted() {
             let page = this.$route.query.page;
-            //console.log(this.$route.query)
             if( isNaN( page ) || parseInt( page ) < 2 ) {
                 this.$route.query.page = 1;
             }
@@ -173,22 +172,17 @@ import axios from "axios"
                 if(!this.forceRerender()){
                     location.reload();
                 }
-                //this.forceRerender();
 
                 this.$bvModal.hide('disable-user');
             },
             deleteUser(data){
                 this.infoToast("Delete User", "deleting a user from listing");
-                // this.response = (await axios.post("/api/v1/admin/users/disable",data,{
-                //     headers:{
-                //         'content-type': 'application/json'
-                //     }
-                // })).data;
+               
 
                 if(!this.forceRerender()){
                     location.reload();
                 }
-                //this.forceRerender();
+                
 
                 this.$bvModal.hide('delete-user');
             },
@@ -203,7 +197,6 @@ import axios from "axios"
                 if(!this.forceRerender()){
                     location.reload();
                 }
-                //this.forceRerender()
                 this.$bvModal.hide('enable-user');
 
             },
