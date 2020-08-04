@@ -2,8 +2,6 @@ import { shallowMount } from "@vue/test-utils";
 import GroupListing from "@/components/GroupsListing"
 import flushPromises from "flush-promises"
 
-//import axios from "axios"
-
 const $route = { name: 'test', query: { page: 1 }}
 const $t = (s)=>s;
 
