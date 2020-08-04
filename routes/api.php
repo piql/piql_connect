@@ -161,7 +161,7 @@ Route::group(['prefix' => 'v1' , 'middleware' => ['auth:api', 'activity']], func
         Route::get('retrievals/{id}/files', 'Api\Storage\RetrievalCollectionController@files');
         Route::post('retrievals/{id}/close', 'Api\Storage\RetrievalCollectionController@close');
         Route::get('retrievals/{id}/download', 'Api\Storage\RetrievalCollectionController@download');
-        Route::apiResource('retrievals', 'Api\Storage\RetrievalCollectionController', ['as' => 'retrievals']);
+        Route::get('jobs/{id}', 'Api\Storage\RetrievalJobsController@show')->name('storage.jobs');
     });
 
 

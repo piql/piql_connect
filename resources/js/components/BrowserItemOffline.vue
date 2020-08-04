@@ -49,7 +49,7 @@
                this.$emit('addObjectToRetrieval', this.item); 
             },
             open: function() {
-                this.$emit('openObject', this.item.id);
+                this.$emit('openObject', this.item);
             },
 
         },
