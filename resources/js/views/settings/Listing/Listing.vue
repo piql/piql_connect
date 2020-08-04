@@ -5,27 +5,27 @@
             <div class="card-header">
         
                 <button type="button" class="btn btn-primary btncheck" @click="$bvModal.show('add-user')">
-                    <i class="fa fa-user-plus"></i>  Add User
+                    <i class="fa fa-user-plus"></i>  {{$t('settings.settings.addUser')}}
                 </button>
                 <b-modal id="add-user" hide-footer>
                     <template v-slot:modal-title>
-                   <h4>Add User</h4>
+                   <h4>{{$t('settings.settings.addUser')}}</h4>
                     </template>
                     <div class="d-block">
                         <div class="form-group">
-                            <label>Fullname</label>
+                            <label>{{$t('settings.listing.fullname')}}</label>
                             <input type="text" class="form-control" v-model="fullname" required>
                         </div>
                         <div class="form-group">
-                            <label>Username</label>
+                            <label>{{$t('settings.listing.username')}}</label>
                             <input type="text" class="form-control" v-model="username" required>
                         </div>
                         <div class="form-group">
-                            <label>Email</label>
+                            <label>{{$t('settings.listing.email')}}</label>
                             <input type="email" class="form-control" v-model="email" required>
                         </div>
                     </div>
-                    <b-button class="mt-3" block @click="addUser" @keydown="addUser"><i class="fa fa-user-plus"></i> Add User</b-button>
+                    <b-button class="mt-3" block @click="addUser" @keydown="addUser"><i class="fa fa-user-plus"></i> {{$t('settings.settings.addUser')}}</b-button>
                 </b-modal>
             </div>
             <div class="card-body">

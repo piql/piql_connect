@@ -1,8 +1,8 @@
 import { shallowMount } from "@vue/test-utils";
-import Listing from "../../../views/settings/Listing/Listing";
+import Listing from "@/views/settings/Listing/Listing";
 
 
-const $t = function(s){ return s; }
+const $t = (s)=> s
 const $route = { name: 'test', query:{ page: 1} }
 
 

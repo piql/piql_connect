@@ -1,5 +1,5 @@
 import { shallowMount } from "@vue/test-utils";
-import UserListing from "../../../components/UserListing"
+import UserListing from "@/components/UserListing"
 
 const $t = (s)=>s;
 const users = [

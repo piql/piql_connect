@@ -1,4 +1,4 @@
-import Roles from "../../../views/settings/Roles/Roles"
+import Roles from '@/views/settings/Roles/Roles'
 import { shallowMount } from "@vue/test-utils"
 
 const $t = (s) => s;

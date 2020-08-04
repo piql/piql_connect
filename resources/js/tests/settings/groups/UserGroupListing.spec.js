@@ -1,9 +1,10 @@
 import { shallowMount } from "@vue/test-utils";
-import GroupListing from "../../../components/GroupsListing"
+import GroupListing from "@/components/GroupsListing"
 
 //import axios from "axios"
 
 const $route = { name: 'test', query: { page: 1 }}
+const $t = (s)=>s;
 
 
 
@@ -13,7 +14,9 @@ describe("GroupsListing.vue", ()=> {
 
         let wrapper = shallowMount(GroupListing, {
             mocks:{
-                $route
+                $route,
+                $t
+
             },
             stubs:{
                 'b-modal': true,
@@ -34,7 +37,8 @@ describe("GroupsListing.vue", ()=> {
     test("list role objects for selection", async ()=>{
         let wrapper = shallowMount(GroupListing, {
             mocks:{
-                $route
+                $route,
+                $t
             },
             stubs:{
                 'b-modal': true,
@@ -47,7 +51,7 @@ describe("GroupsListing.vue", ()=> {
         })
 
         await wrapper.vm.fetchRoles(100);
-        //wrapper.vm.$nextTick()
+        wrapper.vm.$nextTick()
 
         expect(typeof wrapper.vm.list).toEqual('object');
 
@@ -56,7 +60,8 @@ describe("GroupsListing.vue", ()=> {
     test("list user objects for selection", async ()=>{
         let wrapper = shallowMount(GroupListing, {
             mocks:{
-                $route
+                $route,
+                $t
             },
             stubs:{
                 'b-modal': true,
@@ -69,7 +74,7 @@ describe("GroupsListing.vue", ()=> {
         })
 
         await wrapper.vm.fetchUsers(100);
-        //wrapper.vm.$nextTick()
+        wrapper.vm.$nextTick()
 
         expect(typeof wrapper.vm.ulist).toEqual('object');
 

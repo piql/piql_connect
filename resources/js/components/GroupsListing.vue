@@ -4,9 +4,9 @@
        <table class="table table-hover table-sm table-bordered">
                     <thead>
                         <tr>
-                            <th>Group</th>
-                            <th>Description</th>
-                            <th width="20%">Actions </th>
+                            <th>{{$t('settings.groups.group')}}</th>
+                            <th>{{$t('settings.groups.description')}}</th>
+                            <th width="20%">{{$t('settings.settings.actions')}} </th>
                         </tr>
                     </thead>
                     <tbody>
@@ -14,20 +14,20 @@
                             <td>{{group.name}}</td>
                             <td>{{group.description}}</td>
                             <td>
-                                <a class="btn btn-xs btn-primary" title="Edit Group" style="color:white">
+                                <a class="btn btn-xs btn-primary" :title="$t('settings.groups.editGroup')" style="color:white">
                                     <i class="fa fa-edit"></i>
                                     </a>
-                                <a class="btn btn-xs btn-primary" @click="showAssignUsersModal(group.id)" title="Assign Users" style="color:white">
+                                <a class="btn btn-xs btn-primary" @click="showAssignUsersModal(group.id)" :title="$t('settings.groups.assignUsers')" style="color:white">
                                     <i class="fa fa-users"></i>
                                     </a>
-                                <a class="btn btn-xs btn-primary" @click="showListingModal(group.id)" title="List roles and users assigned" style="color:white">
+                                <a class="btn btn-xs btn-primary" @click="showListingModal(group.id)" :title="$t('settings.groups.listRolesAndUsers')" style="color:white">
                                     <i class="fa fa-list"></i>
                                     </a>
                                 
-                                <a class="btn btn-xs btn-primary" @click="showAssignModal(group.id)" title="Assign Roles" style="color:white">
+                                <a class="btn btn-xs btn-primary" @click="showAssignModal(group.id)" :title="$t('settings.groups.assignRoles')" style="color:white">
                                     <i class="fa fa-user-shield"></i>
                                     </a>
-                                <a class="btn btn-xs btn-primary" title="Delete Role" style="color:white">
+                                <a class="btn btn-xs btn-primary" :title="$t('settings.groups.deleteGroup')" style="color:white">
                                     <i class="fa fa-trash"></i>
                                     </a>
                             </td>
@@ -45,12 +45,12 @@
 
                 <b-modal id="group-users" size="lg" hide-footer>
                     <template v-slot:modal-title>
-                   <h4> <b>GROUP " {{ group[0].name.toUpperCase() }} " </b></h4>
+                   <h4> <b>{{$t('settings.groups.group')}} " {{ group[0].name.toUpperCase() }} " </b></h4>
                     </template>
                     <div class="row">
                         <div class="col-md-6">
-                            <b>Users</b>
-                            <p v-if="users.length <= 0">No Users assigned to group yet.</p>
+                            <b>{{$t('settings.settings.users')}}</b>
+                            <p v-if="users.length <= 0">{{$t('settings.groups.noUsersAssignedMessage')}}</p>
                             <table class="table table-condensed table-bordered table-sm table-striped" role="table">
                                 <tr v-for="user in users" :key="user.id">
                                     <td>{{user.full_name}}</td>
@@ -58,8 +58,8 @@
                             </table>
                         </div>
                         <div class="col-md-6">
-                            <b>Roles</b>
-                            <p v-if="roles.length <= 0">No Roles assigned to group yet.</p>
+                            <b>{{$t('settings.settings.roles')}}</b>
+                            <p v-if="roles.length <= 0">{{$t('settings.groups.noRolesAssignedMessage')}}.</p>
                              <table class="table table-condensed table-bordered table-sm table-striped" role="table">
                                  <tr v-for="role in roles" :key="role.id">
                                     <td>{{role.name}}</td>
@@ -73,7 +73,7 @@
 
                 <b-modal id="assign-users" size="lg" hide-footer>
                     <template v-slot:modal-title>
-                   <h4> <b>ASSIGN USERS TO GROUP [ {{ group[0].name.toUpperCase() }} ]</b></h4>
+                   <h4> <b>{{$t('settings.groups.assignUsersToGroup').toUpperCase()}} [ {{ group[0].name.toUpperCase() }} ]</b></h4>
                     </template>
                     <div>
                         <vue-select-sides
@@ -84,13 +84,13 @@
                     
                     </div>
                     <b-button class="mt-3" @click="assignUserButtonClicked(group[0].id)" block>
-                        <i class="fa fa-users"></i> ASSIGN USERS
+                        <i class="fa fa-users"></i> {{$t('settings.groups.assignUsers').toUpperCase()}}
                     </b-button>
                 </b-modal>
 
                 <b-modal id="assign-group" size="lg" hide-footer>
                     <template v-slot:modal-title>
-                   <h4> <b>ASSIGN ROLES TO GROUP [ {{ group[0].name.toUpperCase() }} ]</b></h4>
+                   <h4> <b>{{$t('settings.groups.assignRolesToGroup').toUpperCase()}} [ {{ group[0].name.toUpperCase() }} ]</b></h4>
                     </template>
                     <div>
                         <vue-select-sides
@@ -101,7 +101,7 @@
                     
                     </div>
                     <b-button class="mt-3" @click="assignButtonClicked(group[0].id)" block><i class="fa fa-user-shield"></i> 
-                    ASSIGN ROLES</b-button>
+                    {{$t('settings.groups.assignRoles').toUpperCase()}}</b-button>
                 </b-modal>
 
 

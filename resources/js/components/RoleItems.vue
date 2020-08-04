@@ -4,10 +4,10 @@
        <table class="table table-hover table-sm table-bordered">
                     <thead>
                         <tr>
-                            <th>Role</th>
-                            <th>Description</th>
+                            <th>{{$t('settings.roles.role')}}</th>
+                            <th>{{$t('settings.groups.description')}}</th>
                           
-                            <th width="18%">Actions</th>
+                            <th width="18%">{{$t('settings.settings.actions')}}</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -15,16 +15,16 @@
                             <td>{{role.name}}</td>
                             <td>{{role.description}}</td>
                             <td>
-                                <a class="btn btn-xs btn-primary" @click="viewPermissions(role.id)" title="Configure Permissions" style="color:white">
+                                <a class="btn btn-xs btn-primary" @click="viewPermissions(role.id)" :title="$t('settings.roles.confPermissions')" style="color:white">
                                     <i class="fa fa-user-cog"></i>
                                     </a>
-                                <a class="btn btn-xs btn-primary" @click="showAssignModal(role.id)" title="Assign User Group" style="color:white">
+                                <a class="btn btn-xs btn-primary" @click="showAssignModal(role.id)" :title="$t('settings.roles.assignGroup')" style="color:white">
                                     <i class="fa fa-users"></i>
                                     </a>
-                                <a class="btn btn-xs btn-primary" title="Edit Role" style="color:white" @click="showEditModal(role.id)">
+                                <a class="btn btn-xs btn-primary" :title="$t('settings.roles.editRole')" style="color:white" @click="showEditModal(role.id)">
                                     <i class="fa fa-edit"></i>
                                     </a>
-                                <a class="btn btn-xs btn-primary"  title="Delete Role" @click="showDeleteModal(role.id)" style="color:white">
+                                <a class="btn btn-xs btn-primary"  :title="$t('settings.roles.deleteRole')" @click="showDeleteModal(role.id)" style="color:white">
                                     <i class="fa fa-trash"></i>
                                     </a>
                             </td>
@@ -43,37 +43,38 @@
 
                 <b-modal id="delete-role" hide-footer>
                     <template v-slot:modal-title>
-                        <h4> <b>DELETE ROLE [ {{ role[0].name.toUpperCase() }} ]</b></h4>
+                        <h4> <b>{{$t('settings.roles.deleteRole').toUpperCase()}}[ {{ role[0].name.toUpperCase() }} ]</b></h4>
                     </template>
                     <div class="d-block">
-                        <b-alert show variant="warning">Do you want to delete this role? if so, click below to proceed</b-alert>
+                        <b-alert show variant="warning">{{$t('settings.roles.deleteRoleWarning')}}</b-alert>
                     </div>
-                    <b-button class="mt-3" block @click="deleteRoleClicked(role[0].id)" @keydown="deleteRoleClicked(role[0].id)"><i class="fa fa-trash"></i> DELETE ROLE</b-button>
+                    <b-button class="mt-3" block @click="deleteRoleClicked(role[0].id)" @keydown="deleteRoleClicked(role[0].id)">
+                        <i class="fa fa-trash"></i> {{$t('settings.roles.deleteRole').toUpperCase()}}</b-button>
                 </b-modal>
 
                 <b-modal id="edit-role" size="lg" hide-footer>
                     <template v-slot:modal-title>
-                   <h4> <b>EDIT ROLE [ {{ role[0].name.toUpperCase() }} ]</b></h4>
+                   <h4> <b>{{$t('settings.roles.editRole').toUpperCase()}} [ {{ role[0].name.toUpperCase() }} ]</b></h4>
                     </template>
                     <div class="d-block">
                         <div class="form-group">
-                            <label>Role</label>
+                            <label>{{$t('settings.roles.role')}}</label>
                             <input type="text" class="form-control" v-model="roleName" >
                         </div>
                         <div class="form-group">
-                            <label>Description</label>
+                            <label>{{$t('settings.groups.description')}}</label>
                             <textarea v-model="description" class="form-control"></textarea>
                         </div>
                     </div>
-                    <b-button class="mt-3" @click="editButtonClicked(role[0].id)" block><i class="fa fa-edit"></i> EDIT ROLE</b-button>
+                    <b-button class="mt-3" @click="editButtonClicked(role[0].id)" block><i class="fa fa-edit"></i> {{$t('settings.roles.editRole').toUpperCase()}}</b-button>
                 </b-modal>
 
                 <b-modal id="assign-role" size="lg" hide-footer>
                     <template v-slot:modal-title>
-                   <h4> <b>ASSIGN GROUPS TO ROLE [ {{ role[0].name.toUpperCase() }} ]</b></h4>
+                   <h4> <b>{{$t('settings.roles.assignGroupsToRole').toUpperCase()}} [ {{ role[0].name.toUpperCase() }} ]</b></h4>
                     </template>
                     <div class="form-group">
-                        <label for="group">Select Group</label>
+                        <label for="group">{{$t('settings.settings.userGroups')}}</label>
                         <select v-model="selGroup" id="group" class="form-control">
                             <option v-for="group in list" :key="group.value" :value="group.value">
                                 {{ group.label }}
@@ -82,7 +83,7 @@
                         </select>
                     </div>
                     <b-button class="mt-3" @click="assignButtonClicked(role[0].id)" block><i class="fa fa-group"></i> 
-                    ASSIGN GROUP</b-button>
+                    {{$t('settings.roles.assignGroup').toUpperCase()}}</b-button>
                 </b-modal>
                 
               
@@ -165,7 +166,7 @@ export default {
             }
 
             this.$emit('assignGroup', data);
-
+ 
 
         },
         editButtonClicked(roleId){
