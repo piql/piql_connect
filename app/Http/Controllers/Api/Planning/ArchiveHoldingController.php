@@ -16,7 +16,8 @@ class ArchiveHoldingController extends Controller
      */
     public function index($archive_uuid)
     {
-        return new HoldingCollection(Archive::findByUuid($archive_uuid)->holdings()->get());
+        $archives = Archive::findByUuid($archive_uuid);
+        return $archives != null ? new HoldingCollection($archives->holdings()->get()) : null;
     }
 
     /**

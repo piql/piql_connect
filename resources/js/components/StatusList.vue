@@ -28,7 +28,7 @@ export default {
         },
     },
     async mounted() {
-        axios.get(this.jobListUrl+"/jobs").then( (response) => {
+        axios.get(this.jobListUrl+"/buckets").then( (response) => {
             this.items = response.data.data;
         });
     },

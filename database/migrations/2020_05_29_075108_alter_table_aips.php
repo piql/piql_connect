@@ -22,7 +22,11 @@ class AlterTableAips extends Migration
             ->groupBy("storable_id")
             ->chunk(100, function($objs) {
                 foreach($objs as $obj) {
-                    \App\Aip::find($obj->id)->update(["size" => $obj->size]);
+                    $aip = \App\Aip::find($obj->id);
+                    if($aip)
+                    {
+                        $aip->update(["size" => $obj->size]);
+                    }
                 }
             });
     }
