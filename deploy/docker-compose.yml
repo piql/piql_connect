@@ -144,4 +144,7 @@ services:
 networks:
   piqlConnect-net:
     driver: bridge
-
+    
+volumes:
+  piqlConnect-mongodb:
+    external: true
