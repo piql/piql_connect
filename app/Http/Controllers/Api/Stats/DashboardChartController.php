@@ -271,7 +271,7 @@ class DashboardChartController extends Controller
             'Apr',
             'May',
             'Jun',
-            'Jul ',
+            'Jul',
             'Aug',
             'Sep',
             'Oct',
