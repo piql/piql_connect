@@ -5,23 +5,23 @@
             <div class="card-header">
         
                 <button type="button" class="btn btn-primary" @click="$bvModal.show('add-role')">
-                    <i class="fa fa-plus"></i>  Add Role
+                    <i class="fa fa-plus"></i>  {{$t('settings.roles.addRole')}}
                 </button>
                 <b-modal id="add-role" hide-footer>
                     <template v-slot:modal-title>
-                    Add Role
+                    {{$t('settings.roles.addRole')}}
                     </template>
                     <div class="d-block">
                         <div class="form-group">
-                            <label>Role</label>
+                            <label>{{$t('settings.roles.role')}}</label>
                             <input type="text" class="form-control" v-model="role" >
                         </div>
                         <div class="form-group">
-                            <label>Description</label>
+                            <label>{{$t('settings.groups.description')}}</label>
                             <textarea v-model="description" class="form-control"></textarea>
                         </div>
                     </div>
-                    <b-button class="mt-3" block @click="addRole" @keydown="addRole"><i class="fa fa-user-shield"></i> Add Role</b-button>
+                    <b-button class="mt-3" block @click="addRole" @keydown="addRole"><i class="fa fa-user-shield"></i> {{$t('settings.roles.addRole')}}</b-button>
                 </b-modal>
             </div>
             <div class="card-body">
