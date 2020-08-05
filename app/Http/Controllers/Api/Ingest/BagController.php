@@ -197,12 +197,12 @@ class BagController extends Controller
  */
         return new FileCollection( $files );
     }
-    
+
     public function showFile(File $file)
     {
         return $file->toArray();
     }
-    
+
     public function complete()
     {
         $bags = Bag::with('files')->latest()
@@ -406,6 +406,7 @@ class BagController extends Controller
         try {
             $bag->applyTransition('close');
             $bag->save();
+            $bag->storage_properties->update(["name" => $bag->name]);
             Log::debug("emitting ProcessFilesEvent for bag with id " . $id);
             event(new PreProcessBagEvent($bag));
         } catch (BagTransitionException $e) {
@@ -432,6 +433,7 @@ class BagController extends Controller
         try {
             $bag->applyTransition('close');
             $bag->save();
+            $bag->storage_properties->update(["name" => $bag->name]);
             Log::debug("emitting ProcessFilesEvent for bag with id " . $bag->id);
             event(new PreProcessBagEvent($bag));
         } catch (BagTransitionException $e) {
