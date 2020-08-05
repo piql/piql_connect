@@ -31,25 +31,18 @@ class FilePreviewRenderHelper
 		$this->file = $file;
 	}
 	
-	public function getContent() {
+	public function getContent($forThumb=false) {
 		$pathInfo = pathinfo($this->file->fullpath);
 		$ext = strtolower($pathInfo['extension']);
-		switch ($ext) {
-			case 'pdf':
-				return $this->getPdfContent();
-			case 'png':
-			case 'jpg':
-			case 'jpeg':
-			case 'gif':
-			case 'tif':
-			case 'tiff':
-			case 'bmp':
-			case 'ico':
-				return $this->getRegularContent();
-			default:
-				return $this->getCustonIcon($ext);
+		if ($ext == 'pdf') {
+		    return $this->getPdfContent();
+		} elseif (in_array($ext, self::getPreviwableFileArr($forThumb))) {
+		    return $this->getRegularContent();
+		} else {
+		    $path = self::getCustomIcon($ext);
+		    $this->mimeType = \File::mimeType($path);
+		    return \File::get($path);
 		}
-		
 	}
 	
 	private function getRegularContent() {
@@ -69,14 +62,18 @@ class FilePreviewRenderHelper
 		return $im;
 	}
 	
-	public static function getPreviwableFileArr() {
-		return array('png', 'jpg', 'jpeg', 'gif', 'tif', 'tiff', 'bmp', 'ico');
+	public static function getPreviwableFileArr($forThumb=false) {
+	    $extArr = array('png', 'jpg', 'jpeg', 'gif', 'tif', 'tiff', 'bmp', 'ico');
+	    if (!$forThumb) {
+	        $extArr = array_merge($extArr, array('mp3', 'mp4'));
+	    }
+	    return $extArr;
 	}
 	
-	public static function isPreviwableFile($file) {
+	public static function isPreviwableFile($file, $forThumb=false) {
 		$pathInfo = pathinfo($file);
 		$ext = strtolower($pathInfo['extension']);
-		return in_array($ext, self::getPreviwableFileArr());
+		return in_array($ext, self::getPreviwableFileArr($forThumb));
 	}
 	
 	public static function isIconableFile($file) {
@@ -104,7 +101,7 @@ class FilePreviewRenderHelper
 		return self::$extList;
 	}
 	
-	private function getCustonIcon($ext) {
+	public static function getCustomIcon($ext) {
 		if (array_key_exists($ext, self::ICON_EXT_MAP)) {
 			$ext = self::ICON_EXT_MAP[$ext];
 		}
@@ -112,8 +109,7 @@ class FilePreviewRenderHelper
 		if(!\File::exists($path)) {
 			$path = resource_path() . '/images/file_icon/icon_piql.png';
 		}
-		$this->mimeType = \File::mimeType($path);
-		return \File::get($path);
+		return $path;
 	}
 	
 	public function getMimeType() {

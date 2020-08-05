@@ -44,7 +44,7 @@
         },
         methods: {
 	    preview: function(){
-                this.$emit('showPreview', this.dipId, this.item.id);
+                this.$emit('showPreview', this.dipId, this.item.id, this.fileName);
             },
             showMetadata() {
                 this.$emit('showMetadata', this.aipItem.id );

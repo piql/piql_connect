@@ -29,6 +29,7 @@
     "resolve-url-loader": "^2.3.1",
     "sass": "^1.26.8",
     "sass-loader": "^7.3.1",
+    "video.js": "^7.8.4",
     "vue": "^2.6.11",
     "vue-jest": "^3.0.5",
     "vue-template-compiler": "^2.6.11",

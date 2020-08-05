@@ -22,8 +22,10 @@
 				</div>
 
         <Lightbox
+            ref="lgbx"
             :visible="lbVisible"
             :imgs="previewImages"
+            :fileNames="previewFileNames"
             :index="index"
             :hide="hideLightBox"
         />
@@ -52,6 +54,7 @@ export default {
             lbVisible: false,
             index: 0,
             dip: null,
+            previewFileNames: [],
             previewImages: []
         }
     },
@@ -140,16 +143,22 @@ export default {
         close() {
             this.$router.push(this.prevRoute);
         },
-        async showPreview ( dip, fileId ) {
+        async showPreview ( dip, fileId, fileName ) {
             this.lbVisible = true;
-            let image = (await axios.get('/api/v1/access/dips/'+dip+'/previews/files/'+fileId, { responseType: 'blob' }));
-            let reader = new FileReader();
-            reader.onload = e => this.previewImages.push( reader.result );
-            reader.readAsDataURL( image.data );
+            if (this.$refs.lgbx.isPlayable(fileName)) {
+                this.previewImages.push( '/api/v1/media/dips/'+dip+'/previews/files/'+fileId );
+            } else {
+                let image = (await axios.get('/api/v1/access/dips/'+dip+'/previews/files/'+fileId, { responseType: 'blob' }));
+                let reader = new FileReader();
+                reader.onload = e => this.previewImages.push( reader.result );
+                reader.readAsDataURL( image.data );
+            }
+            this.previewFileNames.push( fileName );
         },
         hideLightBox: function( e ) {
             this.lbVisible = false;
             this.previewImages = [];
+            this.previewFileNames = [];
         },
     },
 };

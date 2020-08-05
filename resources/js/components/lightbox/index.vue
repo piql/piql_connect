@@ -9,7 +9,9 @@
       <!-- Overlay content -->
       <div class="overlayContent">
         <div class="overlayContentImg">
-          <img :src="currentImgSrc" :style="'transform: translateY(-50%) scale(' + zoomRate + ') rotate(' + rotateRate + 'deg)'"/>
+          <img v-if="isPlayableFile == false" :src="currentImgSrc" :alt="currentFileName" :style="'transform: translateY(-50%) scale(' + zoomRate + ') rotate(' + rotateRate + 'deg)'"/>
+          <video-player v-if="isPlayableFile == true" :options="videoOptions" class="overlayContentImgVideoPlayer" :style="isPlayableAudio ? 'top: 50%;' : '' "/>
+          <img v-if="isPlayableFile == null" src="/images/loading.gif" style="width: 40px;"/>
         </div>
       </div>
 
@@ -22,7 +24,7 @@
             <button @click="nav(-1)" class="btn btn-sm btn-info"><i class="fas fa-angle-left"></i></button>
           </div>
           <div class="toolBoxImgList">
-            <div v-for="img, i in imgs" class="toolBoxImg" @click="thumbClick(i)" v-if=""><img :src="img" :style="index == i ? 'border: 3px #ff6633 solid' : 'border: 3px #000000 solid'"/></div>
+            <div v-for="img, i in thumbs" class="toolBoxImg" @click="thumbClick(i)"><img :src="img" :style="index == i ? 'border: 3px #ff6633 solid' : 'border: 3px #000000 solid'"/></div>
           </div>
           <div :class="overlayContentNavButtonNext">
             <button @click="nav(+1)" class="btn btn-sm btn-info"><i class="fas fa-angle-right"></i></button>
@@ -31,7 +33,7 @@
             <button @click="pageNav(+1)" class="btn btn-sm btn-info"><i class="fas fa-angle-double-right"></i></button>
           </div>
         </div>
-        <div :class="toolBoxImgPanel">
+        <div :class="toolBoxImgPanel" :style="isPlayableFile == false ? 'visibility:' : 'visibility:hidden'">
           <button class="btn btn-sm btn-info" @click="zoom(-1)"><i class="fas fa-search-minus"></i></button>
           <button class="btn btn-sm btn-info" @click="zoom(+1)"><i class="fas fa-search-plus"></i></button>
           <button class="btn btn-sm btn-info" @click="rotate(+1)"><i class="fas fa-sync-alt"></i></button>
@@ -43,9 +45,13 @@
 
 
 <script>
+  import VideoPlayer from '@components/lightbox';
+
   export default {
     created: function() {
       this.currentImgSrc = "";
+      this.isMultimedia = false;
+      this.currentFileName = "";
       this.toolBoxNavPanel = "toolBoxNavPanelOff";
       this.toolBoxImgPanel = "toolBoxImgPanelOff";
       this.overlayContentNavButtonPrev = "overlayContentNavButtonOff";
@@ -62,7 +68,11 @@
       },
       imgs: {
         type: Array,
-        default: "",
+        default: null,
+      },
+      fileNames: {
+        type: Array,
+        default: null,
       },
       hide: {
         type: Function
@@ -93,11 +103,27 @@
         this.hide()
       },
       nav: function(adj) {
+        this.isMultimedia = null;
         this.index += adj;
         this.setImgSrc();
       },
+      isPlayable(fileName) {
+        if (fileName != null) {
+          let nameArr = fileName.split(".");
+          let extArr = ['mp3', 'mp4', 'mov', 'wav', 'wave'];
+          return extArr.includes(nameArr[nameArr.length-1].toLowerCase());
+        }
+        return false;
+      },
       setImgSrc() {
-        this.currentImgSrc = this.imgs != null && this.imgs.length > 0 ? this.imgs[this.index] : "";
+        if (this.imgs != null && this.imgs.length > this.index - 1 && this.imgs[this.index] != undefined && this.imgs[this.index] != null) {
+         this.currentImgSrc = this.imgs[this.index];
+        } else {
+         this.currentImgSrc = null;
+        }
+        this.currentFileName = this.fileNames != null && this.fileNames.length > this.index - 1 ? this.fileNames[this.index] : "";
+        this.isMultimedia = this.isPlayable(this.currentFileName) && this.currentImgSrc != undefined && this.currentImgSrc != null;
+        this.videoOptionsHeight = this.isPlayableAudio ? 30 : null;
         this.toolBoxNavPanel = "toolBoxNavPanel" + (this.imgs.length >= 1 ? "On" : "Off");
         this.toolBoxImgPanel = "toolBoxImgPanel" + (this.imgs.length > 0 ? "On" : "Off");
         this.overlayContentNavButtonPrev = "overlayContentNavButtonPrev overlayContentNavButton" + (this.index > 0 ? "On" : "Off");
@@ -108,6 +134,7 @@
         this.rotateIndex = 0;
       },
       thumbClick(index) {
+        this.isMultimedia = null;
         this.index = index;
         this.setImgSrc();
       },
@@ -142,13 +169,61 @@
       },
       rotateRate: function () {
         return this.rotateIndex * 90;
+      },
+      playableType: function() {
+          return "video/mp4";
+      },
+      thumbs: function() {
+        if (this.thumbList == undefined || this.thumbList == null || this.thumbList.length != this.imgs.length) {
+          this.thumbList = [];
+          for (let i=0; i < this.imgs.length; i++) {
+            this.thumbList[this.thumbList.length] = this.fileNames != null && this.fileNames.length > this.index - 1 && this.isPlayable(this.fileNames[i]) ? '/api/v1/media/thumb/' + this.fileNames[i] : this.imgs[i];
+          }
+        }
+        return this.thumbList;
+      },
+      isPlayableAudio: function() {
+        if (this.currentFileName != undefined && this.currentFileName != null) {
+          let nameArr = this.currentFileName.split(".");
+          let extArr = ['mp3', 'wav', 'wave'];
+          return extArr.includes(nameArr[nameArr.length-1].toLowerCase());
+        }
+        return false;
+      },
+      videoOptions: function () {
+        return {
+          autoplay: true,
+          controls: true,
+          width: 900,
+          height: this.videoOptionsHeight,
+          sources: [
+            {
+              src: this.currentImgSrc,
+              type: "video/mp4"
+            }
+          ]
+  			}
+      },
+      isPlayableFile: function() {
+        if (this.isMultimedia && !this.reloading) {
+          this.isMultimedia = null;
+          this.reloading = true;
+          setTimeout(() => this.isMultimedia = true, 500);
+        } else if (this.isMultimedia && this.reloading) {
+          this.reloading = false;
+        }
+        return this.isMultimedia;
       }
     },
     data() {
       return {
         currentImgSrc: this.currentImgSrc,
+        currentFileName: this.currentFileName,
         zoomIndex: this.zoomIndex,
         rotateIndex: this.rotateIndex,
+        reloading: false,
+        isMultimedia: null,
+        thumbList: null
       }
     },
   }
@@ -226,6 +301,13 @@
     margin: 15px;
     position: relative;
     top: 50%;
+  }
+  .overlayContentImgVideoPlayer {
+    position: relative;
+    display: inline-block;
+    box-shadow: 0 0 10px #222;
+    -webkit-box-shadow: 0 0 10px #222;
+    margin: 15px;
   }
   .toolBox {
     position: absolute;

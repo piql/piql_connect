@@ -89,7 +89,7 @@ class DipController extends Controller
     	return $dip->fileObjects->filter( function ($file, $key) {
             $pathInfo = pathinfo($file->fullpath);
             $ext = strtolower($pathInfo['extension']);
-            if ($ext != 'xml' && !FilePreviewRenderHelper::isPreviwableFile($file->fullpath)) {
+            if ($ext != 'xml' && !FilePreviewRenderHelper::isPreviwableFile($file->fullpath, true)) {
                 return $file;
             } else {
                 return Str::contains( $file->fullpath, '/thumbnails' );
@@ -102,7 +102,7 @@ class DipController extends Controller
         $dip = Dip::find( $request->dipId );
         $file = $this->filter_package_thumbnail($dip);
         $filePreviewRenderHelper = new FilePreviewRenderHelper($storage, $dip, $file);
-        return response($filePreviewRenderHelper->getContent())
+        return response($filePreviewRenderHelper->getContent(true))
         ->header("Content-Type" , $filePreviewRenderHelper->getMimeType());
     }
 
@@ -198,7 +198,7 @@ class DipController extends Controller
     private function filter_file_thumbnail($dip, $file)
     {
         return $dip->fileObjects->filter( function ($thumb, $key) use( $file ) {
-                if (!FilePreviewRenderHelper::isPreviwableFile($file->fullpath)) {
+                if (!FilePreviewRenderHelper::isPreviwableFile($file->fullpath, true)) {
                     return $file;
                 } else {
                     return Str::contains( $thumb->path, '/thumbnails' );;
@@ -220,7 +220,7 @@ class DipController extends Controller
         $file = $dip->fileObjects->find( $request->fileId );
         $thumbnail = $this->filter_file_thumbnail($dip, $file);
         $filePreviewRenderHelper = new FilePreviewRenderHelper($storage, $dip, $thumbnail);
-        return response($filePreviewRenderHelper->getContent())
+        return response($filePreviewRenderHelper->getContent(true))
         ->header("Content-Type" , $filePreviewRenderHelper->getMimeType());
     }
 
