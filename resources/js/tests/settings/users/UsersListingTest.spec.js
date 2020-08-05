@@ -1,6 +1,26 @@
 import { shallowMount } from "@vue/test-utils";
 import UserListing from "@/components/UserListing"
 
+const fns = {
+  convertTime:(isoDate)=>{
+    let date = new Date(isoDate);
+    let year = date.getFullYear();
+    let month = date.getMonth()+1;
+    let dt = date.getDate();
+    let time = date.getHours() + ':'+ date.getMinutes();
+
+    if (dt < 10) {
+    dt = '0' + dt;
+    }
+    if (month < 10) {
+    month = '0' + month;
+    }
+
+    return year+'-' + month + '-'+dt + ' '+time;
+
+    }
+}
+
 const $t = (s)=>s;
 const users = [
   {
@@ -65,7 +85,10 @@ describe("UserListing.vue", ()=>{
   })
 
   test("the format date function should work", ()=>{
-    let sampleDate = "2020-07-17T11:42:17.000000Z";
+    let isoDate = "2020-07-17T11:42:17.000000Z";
+    let returnDate = fns.convertTime(isoDate);
+
+    
 
     let wrapper = shallowMount(UserListing, {
       mocks:{
@@ -82,7 +105,7 @@ describe("UserListing.vue", ()=>{
       }
     });
 
-    expect(wrapper.vm.formatDate(sampleDate)).toBe('2020-07-17 14:42');
+    expect(wrapper.vm.formatDate(isoDate)).toBe(returnDate);
   })
 
 })

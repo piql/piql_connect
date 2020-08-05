@@ -1,10 +1,13 @@
 import { shallowMount } from "@vue/test-utils";
 import GroupListing from "@/components/GroupsListing"
-
-//import axios from "axios"
+import flushPromises from "flush-promises"
 
 const $route = { name: 'test', query: { page: 1 }}
 const $t = (s)=>s;
+
+jest.mock("axios", () => ({
+    get: () => Promise.resolve({ data: { data:[{ val: 1 }], meta: {val:2} } })
+  }));
 
 
 
@@ -28,9 +31,9 @@ describe("GroupsListing.vue", ()=> {
             }
         })
 
-        wrapper.vm.$nextTick();
+        await flushPromises();
         
-        expect(await wrapper.exists()).toBeTruthy();
+        expect(wrapper.exists()).toBeTruthy();
 
     })
 
@@ -50,10 +53,9 @@ describe("GroupsListing.vue", ()=> {
             }
         })
 
-        await wrapper.vm.fetchRoles(100);
-        wrapper.vm.$nextTick()
+        await flushPromises();
 
-        expect(typeof wrapper.vm.list).toEqual('object');
+        expect(wrapper.vm.list.length).toBe(1);
 
     })
 
@@ -73,10 +75,12 @@ describe("GroupsListing.vue", ()=> {
             }
         })
 
-        await wrapper.vm.fetchUsers(100);
-        wrapper.vm.$nextTick()
+        await flushPromises();
 
-        expect(typeof wrapper.vm.ulist).toEqual('object');
+        expect(wrapper.vm.ulist.length).toBe(1);
+        
+
+        
 
     })
 })
