@@ -6,8 +6,6 @@
 
 <script>
 import videojs from 'video.js';
-import 'video.js/dist/video-js.min.css';
-import 'video.js/dist/video.min.js';
 
 export default {
     name: "VideoPlayer",

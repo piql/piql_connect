@@ -11,7 +11,7 @@
         <div class="overlayContentImg">
           <img v-if="isPlayableFile == false" :src="currentImgSrc" :alt="currentFileName" :style="'transform: translateY(-50%) scale(' + zoomRate + ') rotate(' + rotateRate + 'deg)'"/>
           <video-player v-if="isPlayableFile == true" :options="videoOptions" class="overlayContentImgVideoPlayer" :style="isPlayableAudio ? 'top: 50%;' : '' "/>
-          <img v-if="isPlayableFile == null" src="/images/loading.gif" style="width: 40px;"/>
+          <img v-if="isPlayableFile == null" src="/images/loading.webp" class="overlayContentImgLoading"/>
         </div>
       </div>
 
@@ -24,7 +24,7 @@
             <button @click="nav(-1)" class="btn btn-sm btn-info"><i class="fas fa-angle-left"></i></button>
           </div>
           <div class="toolBoxImgList">
-            <div v-for="img, i in thumbs" class="toolBoxImg" @click="thumbClick(i)"><img :src="img" :style="index == i ? 'border: 3px #ff6633 solid' : 'border: 3px #000000 solid'"/></div>
+            <div v-for="img, i in thumbs" class="toolBoxImg" @click="thumbClick(i)"><img :src="img" :class="index == i ? 'selectedThumb' : 'regularThumb'"/></div>
           </div>
           <div :class="overlayContentNavButtonNext">
             <button @click="nav(+1)" class="btn btn-sm btn-info"><i class="fas fa-angle-right"></i></button>
@@ -302,6 +302,9 @@
     position: relative;
     top: 50%;
   }
+  .overlayContentImgLoading {
+    width: 5rem;
+  }
   .overlayContentImgVideoPlayer {
     position: relative;
     display: inline-block;
@@ -353,5 +356,11 @@
     margin-right: 30px;
     margin-bottom: 30px;
     float: right;
+  }
+  .selectedThumb {
+    border: 3px #ff6633 solid
+  }
+  .regularThumb {
+    border: 3px #000000 solid
   }
 </style>

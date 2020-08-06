@@ -97,11 +97,7 @@ import Lightbox from './lightbox';
             this.imgLength = dip.storage_properties.bag.fileCount;
             this.lbVisible = true;
             let allFiles = ( await axios.get('/api/v1/access/dips/'+dip.id+'/files?page=' + this.page) ).data.data;
-            let fileIds = [];
-            for ( var i in allFiles ) {
-                fileIds.push( allFiles[i] );
-            }
-            fileIds.map( async (file) => {
+            allFiles.map( async (file) => {
                 let fileId = file.id;
                 let fileName = file.filename;
                 if (this.$refs.lgbx.isPlayable(fileName)) {

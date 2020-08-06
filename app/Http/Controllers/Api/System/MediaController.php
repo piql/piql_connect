@@ -12,12 +12,6 @@ use App\Helpers\FilePreviewRenderHelper;
 use Log;
 
 class MediaController extends Controller {
-    public function show() {
-        $file = storage_path('custom-files/evn.mp4');
-        $stream = new VideoStreamHelper($file);
-        $stream->start();
-        return null;
-    }
     public function showDipFile(Request $request, ArchivalStorageInterface $storage) {
         $dipId = $request->dipId;
         $fileId = $request->fileId;
