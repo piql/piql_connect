@@ -12,7 +12,7 @@
                         <i class="fas fa-angle-left"></i>
                     </a>
                 </li>
-                <li v-for="page in pages" class="page-item" v-bind:class="{ active: isActivePage(page.pageNumber) }">
+                <li v-for="page in pages" :key="page.pageNumber" class="page-item" v-bind:class="{ active: isActivePage(page.pageNumber) }">
                     <a @click="goToPage (page.pageNumber) " class="page-link">{{page.pageNumber}}</a>
                 </li>
                 <li class="page-item" v-bind:class="{ disabled: onLastPage }">
@@ -36,6 +36,7 @@ import RouterTools from '../mixins/RouterTools.js';
 import axios from 'axios';
 
 export default {
+    name: 'Pager',
     mixins: [ RouterTools ],
     mounted() {
         /*

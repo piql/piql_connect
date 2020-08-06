@@ -5,23 +5,23 @@
             <div class="card-header">
         
                 <button type="button" class="btn btn-primary" @click="$bvModal.show('add-group')">
-                    <i class="fa fa-plus"></i>  Add Group
+                    <i class="fa fa-plus"></i>  {{$t('settings.groups.addGroup')}}
                 </button>
                 <b-modal id="add-group" hide-footer>
                     <template v-slot:modal-title>
-                   <h4> Add Group </h4>
+                   <h4> {{$t('settings.groups.addGroup')}} </h4>
                     </template>
                     <div class="d-block">
                     <div class="form-group">
-                        <label>Group</label>
+                        <label>{{$t('settings.groups.group')}}</label>
                         <input type="text" class="form-control" v-model="group" required>
                     </div>
                     <div class="form-group">
-                        <label>Description</label>
+                        <label>{{$t('settings.groups.description')}}</label>
                         <textarea v-model="description" class="form-control" required="required"></textarea>
                     </div>
                     </div>
-                    <b-button class="mt-3" block @click="addGroup"><i class="fa fa-users"></i> Add Group</b-button>
+                    <b-button class="mt-3" block @click="addGroup"><i class="fa fa-users"></i> {{$t('settings.groups.addGroup')}}</b-button>
                 </b-modal>
             </div>
             <div class="card-body">
