@@ -10,7 +10,6 @@
             </div>
         </div>
 
-
         <div class="row">
             <div class="col">
                 <Pager :meta="pageMeta" @updatePage="updatePage" />
