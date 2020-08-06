@@ -23,6 +23,9 @@ use Log;
 
 class OfflineStorageController extends Controller
 {
+    private $nameValidationRule = '/(^[^:\\<>"\/?*|]{3,64}$)/';
+    private $newNameValidationRule = '/(^[^:\\<>"\/?*|]{0,64}$)/';
+
     /**
      * Display a listing of the resource.
      *
@@ -92,10 +95,18 @@ class OfflineStorageController extends Controller
         ]);
 
         if(array_key_exists('name', $data)) {
+            if($this->validateFails($job->name, $this->newNameValidationRule))
+            {
+                abort(response()->json(["error" => 424, "message" => "Bucket doesn't have a valid name: {$job->name}"], 424));
+            }
             $job->name = $data['name'] ?? "";
         }
 
         if(isset($data['status']) && ($data['status'] == 'ingesting' )) {
+            if($this->validateFails($job->name))
+            {
+                abort(response()->json(["error" => 424, "message" => "Bucket doesn't have a valid name: {$job->name}"], 424));
+            }
             $job->status = "ingesting";
         }
         $job->save();
@@ -111,6 +122,13 @@ class OfflineStorageController extends Controller
         $job->aips()->detach();
         $job->delete();
         return response()->json([], 204 );
+    }
+
+    private function validateFails($name, $rule = null) : bool {
+        if(!preg_match($rule ?? $this->nameValidationRule, $name, $matches, PREG_OFFSET_CAPTURE)) {
+            return true;
+        }
+        return false;
     }
 
 }
