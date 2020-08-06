@@ -3,6 +3,56 @@
 require_once __DIR__ . '/../vendor/scholarslab/bagit/lib/bagit.php';
 require_once __DIR__ . '/../vendor/scholarslab/bagit/lib/bagit_utils.php';
 
+// Custom class that prevents files from being renamed when bag is created.
+// See CON-439 for more info.
+class BagItCustom extends BagIt
+{
+    private function _writeBagInfoCustom()
+    {
+        $lines = array();
+
+        if (count($this->bagInfoData)) {
+            foreach ($this->bagInfoData as $label => $value) {
+                if (is_array($value)) {
+                    foreach ($value as $v) {
+                        $lines[] = "$label: $v\n";
+                    }
+                } else {
+                    $lines[] = "$label: $value\n";
+                }
+            }
+        }
+
+        writeFileText($this->bagInfoFile, $this->tagFileEncoding, join('', $lines));
+    }
+
+    public function updateCustom()
+    {
+        // Clear the manifests.
+        $this->manifest->clear();
+        if ($this->tagManifest !== null) {
+            $this->tagManifest->clear();
+        }
+
+        if ($this->extended || count($this->bagInfoData) > 0) {
+            $this->_writeBagInfoCustom();
+        }
+
+        // Update the manifests.
+        $this->manifest->update(rls($this->getDataDirectory()));
+        if ($this->tagManifest !== null) {
+            $bagdir = $this->bagDirectory;
+            $tagFiles = array(
+                "$bagdir/bagit.txt",
+                "$bagdir/bag-info.txt",
+                $this->fetch->fileName,
+                $this->manifest->getFileName()
+            );
+            $this->tagManifest->update($tagFiles);
+        }
+    }
+}
+
 class BagitUtil
 {
     private $m_InputFilesSource = array();
@@ -45,7 +95,6 @@ class BagitUtil
         array_push($this->m_InputMetadataFilesDestination, $filePathDestination);
     }
 
-
     public function createBag($outputFile)
     {
         $outputFileExtension = pathinfo($outputFile, PATHINFO_EXTENSION);
@@ -60,7 +109,7 @@ class BagitUtil
 
         // Create empty bag
         $bagPath = $tempDir . '/' . basename($outputFileWithoutExtension);
-        $bag = new BagIt($bagPath);
+        $bag = new BagItCustom($bagPath);
 
         // Change bagit version
         $bag->bagVersion = array('major' => 0, 'minor' => 97);
@@ -127,9 +176,8 @@ class BagitUtil
             }
         }
 
-
         // Update bag with added files
-        $bag->update();
+        $bag->updateCustom();
 
         if ($outputFileExtension != 'zip' && $outputFileExtension != 'tgz')
         {
@@ -141,7 +189,7 @@ class BagitUtil
         $bag->package($outputFile, $outputFileExtension);
 
         // Validate created bag
-        $createdBag = new BagIt($outputFile);
+        $createdBag = new BagItCustom($outputFile);
         array_push($this->m_TempResources, $createdBag->bagDirectory);
 
         $expectedContent = "BagIt-Version: 0.97\n" . "Tag-File-Character-Encoding: UTF-8\n";
@@ -202,5 +250,4 @@ class BagitUtil
         }
     }
 }
-
 ?>
