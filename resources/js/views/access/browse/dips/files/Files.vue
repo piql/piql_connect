@@ -132,7 +132,7 @@ export default {
         refreshFiles() {
             let dipId = this.dipId;
             let apiQueryString = this.apiQueryString;
-            axios.get(`/api/v1/access/dips/${dipId}/files${apiQueryString}`).then( async ( dipFilesResponse ) =>  {
+            axios.get(`/api/v1/access/dips/${dipId}/files${apiQueryString}`, { params: { limit: 8 } }).then( async ( dipFilesResponse ) =>  {
                 this.dipFiles = dipFilesResponse.data.data;
                 this.meta = dipFilesResponse.data.meta;
             });

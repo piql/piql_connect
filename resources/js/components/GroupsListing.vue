@@ -169,6 +169,7 @@ export default {
     methods:{
         async fetchRoles(limit){
             await axios.get("/api/v1/admin/access-control/permission-groups",{ params: { limit: limit } }).then(response => {
+            
                 let roles = response.data.data;
                 roles.forEach(single => {
                     this.list.push({

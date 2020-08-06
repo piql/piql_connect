@@ -28,8 +28,13 @@ class OfflineStorageController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function jobs()
+
+
+    public function jobs( Request $request)
     {
+        $limit = $request->limit ? $request->limit : env('DEFAULT_ENTRIES_PER_PAGE');
+        
+        
         $jobs = Job::where('owner', Auth::id() )
             ->where(function($query) {
                 $query->where('status', 'created')
@@ -37,7 +42,7 @@ class OfflineStorageController extends Controller
             })
             ->withCount('aips')
             ->latest()
-            ->paginate( env('DEFAULT_ENTRIES_PER_PAGE') );
+            ->paginate($limit);
 
         return new JobCollection( $jobs );
     }
@@ -48,20 +53,23 @@ class OfflineStorageController extends Controller
         return  response()->json( ["data" => $job] );
     }
 
-    public function archiveJobs()
+    public function archiveJobs( Request $request)
     {
+        
         // This is a bit nasty because there is no owner validation here
         // Should be safe when used internally e.i when owner is valid
         $jobs = \App\Job::where('status', '=', 'ingesting');
+        $limit = $request->limit ? $request->limit : env('DEFAULT_ENTRIES_PER_PAGE');
 
-        return new JobCollection( $jobs->paginate( env('DEFAULT_ENTRIES_PER_PAGE') ) );
+        return new JobCollection( $jobs->paginate( $limit ) );
     }
 
 
-    public function dips($jobId)
+    public function dips(Request $request ,$jobId)
     {
+        $limit = $request->limit ? $request->limit : env('DEFAULT_ENTRIES_PER_PAGE');
         $job = Job::findOrFail($jobId);
-        return AipToDipResource::collection( $job->aips()->paginate( env('DEFAULT_ENTRIES_PER_PAGE') ) );
+        return AipToDipResource::collection( $job->aips()->paginate( $limit ) );
     }
 
     public function detachDip($jobId, $dipId)
