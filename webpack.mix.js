@@ -42,7 +42,7 @@ mix.styles([
             'node_modules/fine-uploader/fine-uploader/fine-uploader.css',
             'node_modules/fine-uploader/fine-uploader/fine-uploader-gallery.css',
             'node_modules/vue-resize/dist/vue-resize.css',
-			'node_modules/video.js/dist/video-js.min.css'
+            'node_modules/video.js/dist/video-js.min.css'
 ], 'public/css/vendor.css');
 
 mix.autoload({
