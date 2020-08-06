@@ -65,9 +65,9 @@ class StatisticsData
     public function monthlyOnlineDataIngested($userId)
     {
         $first = new \DateTime('first day of january ' . date('Y'));
-        $last = new \DateTime('last day of december ' . date('Y'));
+        $last = new \DateTime('first day of december ' . date('Y'));
 
-        $interval = DateInterval::createFromDateString('1 day');
+        $interval = DateInterval::createFromDateString('1 month');
         $period = new DatePeriod($first, $interval, $last);
 
         $result = range(0, 11);
@@ -76,10 +76,8 @@ class StatisticsData
             if (empty($result[$month]) || !isset($result[$month]['bags']))
                 $result[$month] = ['bags' => 0, 'size' => 0, 'month' => $date->format('M')];
 
-            $data = IngestedDataOnline::where([
-                'ingest_date' => $date,
-                'owner' => $userId,
-            ])
+            $data = IngestedDataOnline::where('owner', $userId)
+                ->whereBetween('ingest_date', [$date, new DateTime('last day of ' . $date->format('Y-m'))])
                 ->orderBy('recorded_at', 'desc')->take(1)->get(['bags', 'size']);
             if ($data == null || empty($data) || !isset($data[0])) continue;
             $result[$month]['bags'] += $data[0]->bags;

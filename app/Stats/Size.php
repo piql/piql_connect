@@ -10,7 +10,7 @@ class Size
 
     public static function convert($size, $num) {
         if($num <= 0) return 0;
-        return number_format($num/$size, 2);
+        return (float) number_format($num/$size, 2);
     }
 }
 
