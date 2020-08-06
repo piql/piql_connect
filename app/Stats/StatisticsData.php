@@ -91,18 +91,21 @@ class StatisticsData
     public function latestOnlineFileFormatsIngested($userId)
     {
         $latest = IngestedMimeOnline::orderBy('recorded_at', 'desc')->take(1)->get(['recorded_at']);
-        if (empty($latest)) return [];
+        if ($latest == null || empty($latest) || !isset($latest[0])) return [(object)[
+            'ingested' => 1,
+            'mime_type' => 'none',
+        ]];
         return IngestedMimeOnline::where([
             'recorded_at' => new DateTime($latest[0]['recorded_at']),
             // 'owner'=> $userId, //not yet querry-able
         ])->orderBy('ingested', 'desc')
-          ->get(['mime_type', 'ingested']);
+            ->get(['mime_type', 'ingested']);
     }
 
     public function fileFormatsIngested($userId)
     {
         $formats = $this->latestOnlineFileFormatsIngested($userId);
-        if (empty($formats)) return [];
+        if ($formats == null || empty($formats) || !isset($formats[0])) return [];
         $ingested = collect($formats)->sum(function ($f) {
             return $f->ingested;
         });
