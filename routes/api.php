@@ -167,15 +167,6 @@ Route::group(['prefix' => 'v1', 'middleware' => ['auth:api', 'activity']], funct
 
     Route::group(['prefix' => 'stats', 'middleware' => 'auth:api'], function () {
         Route::group(['prefix' => 'charts'], function () {
-            // Route::get('aips/online/ingested/monthly', 'Api\Stats\DashboardChartController@monthlyOnlineAIPsIngestedEndpoint')->name('monthlyOnlineAIPsIngested');
-            // Route::get('data/online/ingested/monthly', 'Api\Stats\DashboardChartController@monthlyOnlineDataIngestedEndpoint')->name('monthlyOnlineDataIngested');
-            // Route::get('aips/online/accessed/monthly', 'Api\Stats\DashboardChartController@monthlyOnlineAIPsAccessedEndpoint')->name('monthlyOnlineAIPsAccessed');
-            // Route::get('data/online/accessed/monthly', 'Api\Stats\DashboardChartController@monthlyOnlineDataAccessedEndpoint')->name('monthlyOnlineDataAccessed');
-            // Route::get('aips/online/ingested/daily', 'Api\Stats\DashboardChartController@dailyOnlineAIPsIngestedEndpoint')->name('dailyOnlineAIPsIngested');
-            // Route::get('data/online/ingested/daily', 'Api\Stats\DashboardChartController@dailyOnlineDataIngestedEndpoint')->name('dailyOnlineDataIngested');
-            // Route::get('aips/online/accessed/daily', 'Api\Stats\DashboardChartController@dailyOnlineAIPsAccessedEndpoint')->name('dailyOnlineAIPsAccessed');
-            // Route::get('data/online/accessed/daily', 'Api\Stats\DashboardChartController@dailyOnlineDataAccessedEndpoint')->name('dailyOnlineDataAccessed');
-            // Route::get('file-formats/ingested', 'Api\Stats\DashboardChartController@fileFormatsIngestedEndpoint')->name('fileFormatsIngested');
             Route::get('aips/online/ingested', 'Api\Stats\ChartController@onlineAIPsIngested');
             Route::get('aips/online/ingested/monthly', 'Api\Stats\ChartController@monthlyOnlineAIPsIngested')->name('monthlyOnlineAIPsIngested');
             Route::get('data/online/ingested/monthly', 'Api\Stats\ChartController@monthlyOnlineDataIngested')->name('monthlyOnlineDataIngested');
@@ -193,12 +184,6 @@ Route::group(['prefix' => 'v1', 'middleware' => ['auth:api', 'activity']], funct
 
 Route::group(['prefix' => 'v1/admin/access-control'], function () {
     Route::get('', 'Api\Admin\AccessControlController@index');
-
-    // Route::get('{id}', 'Api\Admin\AccessControlController@show')->where('id', '[0-9]+');
-    // Route::get('{id}/users', 'Api\Admin\AccessControlController@users');
-    // Route::put('{id}', 'Api\Admin\AccessControlController@update')->where('id', '[0-9]+');
-    // Route::delete('{id}', 'Api\Admin\AccessControlController@delete')->where('id', '[0-9]+');
-
     Route::get('permissions', 'Api\Admin\AccessControlController@listPermissions');
     Route::post('permissions', 'Api\Admin\AccessControlController@createPermission');
     Route::get('permissions/{id}', 'Api\Admin\AccessControlController@show')->where('id', '[0-9]+');
