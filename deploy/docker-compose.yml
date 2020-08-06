@@ -140,6 +140,8 @@ services:
 
   mongodb:
     image: mongo:4.2.8
+    ports:
+      - "27017:27017"
     environment:
       MONGO_INITDB_ROOT_USERNAME: connectuser
       MONGO_INITDB_ROOT_PASSWORD: Fw86TQZrJ5
