@@ -80,8 +80,10 @@ class DipController extends Controller
             });
         }
 
+        $limit = $request->limit ? $request->limit : env('DEFAULT_ENTRIES_PER_PAGE');
+
         return DipResource::collection(
-            $q->paginate( env('DEFAULT_ENTRIES_PER_PAGE') )
+            $q->paginate( $limit )
         );
     }
     
@@ -119,12 +121,14 @@ class DipController extends Controller
 
     public function files( Request $request )
     {
+        $limit = $request->limit ? $request->limit : env('DEFAULT_ENTRIES_PER_PAGE');
+        
         $dip = Dip::find( $request->dipId );
         $q = $dip->fileObjects()->where( 'path', 'LIKE', "%/objects" );
         if ($search = $request->query('search')) {
             $q->where('filename', 'LIKE', '%' . $search . '%');
         }
-        $files = $q->paginate( env('DEFAULT_ENTRIES_PER_PAGE') );
+        $files = $q->paginate( $limit );
         return FileObjectResource::collection( $files );
     }
 
