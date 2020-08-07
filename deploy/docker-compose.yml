@@ -93,7 +93,10 @@ services:
 
   composer:
     user: ${HOST_USERID}:${HOST_GROUPID}
-    image: composer
+    build:
+      network: host
+      context: ./
+      dockerfile: ./composer/Dockerfile
     command: bash -c "composer install && composer dump-autoload"
     stdin_open: true
     tty: true
