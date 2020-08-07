@@ -9,6 +9,7 @@ use App\Stats\Dataset;
 use App\Stats\Size;
 use App\Stats\StatisticsData;
 use Illuminate\Support\Facades\Auth;
+use Throwable;
 
 class ChartController extends Controller
 {
@@ -135,6 +136,11 @@ class ChartController extends Controller
         if ($user == null) {
             return response()->json(['error' => 401, 'message' => "$message."], 401);
         }
-        return $action($user);
+        try {
+            return $action($user);
+        } catch (Throwable $e) {
+            return response(['message' => $e->getMessage()], 400);
+        }
+        
     }
 }
