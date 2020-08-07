@@ -64,8 +64,8 @@ class StatisticsData
 
     public function monthlyOnlineDataIngested($userId)
     {
-        $first = new \DateTime('first day of january ' . date('Y'));
-        $last = new \DateTime('first day of december ' . date('Y'));
+        $first = new \DateTime('-9 months');
+        $last = new \DateTime('+2 month');
 
         $interval = DateInterval::createFromDateString('1 month');
         $period = new DatePeriod($first, $interval, $last);
