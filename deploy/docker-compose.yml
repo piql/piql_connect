@@ -97,7 +97,7 @@ services:
       network: host
       context: ./composer/
       dockerfile: ./Dockerfile
-    command: bash -c "composer install --ignore-platform-reqs && composer dump-autoload"
+    command: bash -c "composer install && composer dump-autoload"
     stdin_open: true
     tty: true
     user: ${HOST_USERID}:${HOST_GROUPID}
