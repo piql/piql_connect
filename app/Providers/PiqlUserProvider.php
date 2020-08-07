@@ -35,7 +35,17 @@ class PiqlUserProvider extends EloquentUserProvider implements UserProvider
     public function retrieveByCredentials(array $credentials)
     {
         time_nanosleep(0,100000000); //slightly hamper brute force attacks
-        return $user = User::findByUsername($credentials['username']);
+        if (isset($credentials['email']))
+        {
+            return $user = User::findByEmail($credentials['email']);
+        }
+        else if (isset($credentials['username']))
+        {
+            return $user = User::findByUsername($credentials['username']);
+        }
+
+        Log::error('Credentials were not defined');
+        return null;
     }
 
     public function validateCredentials(Authenticatable $user, array $credentials)
