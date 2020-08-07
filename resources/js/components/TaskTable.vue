@@ -28,7 +28,7 @@
                     <td>
                         <div v-if="fileSize(item) !== '---'" class="progress bucket-progress bg-fill">
                             <div class="progress-bar bg-brand" role="progressbar" aria-valuenow="usage" aria-valuemin="0" aria-valuemax="100" :style="usagePercentage(item)">
-                                <div class="fg-white bucket-text d-flex position-absolute w-50" style="margin-left:10vh" >{{usage(item)}}%</div>
+                                <div class="fg-white bucket-text d-flex position-absolute w-50" style="margin-left:10vh" >{{usageLabel(item)}}%</div>
                             </div>
                         </div>
                     </td>
@@ -59,6 +59,7 @@
 
 <script>
 import axios from "axios"
+import numeral from 'numeral'
 export default {
     props: {
             items: Array,
@@ -148,9 +149,10 @@ export default {
             if((item.bucket_size === undefined) || item.bucket_size === 0) {
                 return 0;
             }
-            let val = (100 * item.size / (item.bucket_size)).toFixed(0)
-
-            return val > 100 ? 100 : val
+            return (100 * item.size / item.bucket_size) * 100;
+        },
+        usageLabel(item) {
+            return numeral(this.usage(item)).format('0.0');
         },
         usagePercentage(item) {
             return {'width': `${this.usage(item)}%` };
