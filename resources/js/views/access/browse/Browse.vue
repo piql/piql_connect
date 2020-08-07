@@ -2,15 +2,20 @@
     <div class="w-100">
         <page-heading icon="fa-hdd" :title="$t('access.browse')" :ingress="$t('access.browse.ingress')" />
 
-        <access-browser-filters :singleArchiveTitle="$t('Your archive')"></access-browser-filters>
+        
 
+        <access-browser-filters :singleArchiveTitle="$t('Your archive')"></access-browser-filters>
         <browser-list @openObject="openObject" :location="selectedLocation" :dataObjects="currentObjects"
             @addObjectToRetrieval="addObjectToRetrieval" :selectedArchive="selectedArchiveUuid" :selectedHolding="selectedHolding"/>
-        <div class="row text-center pagerRow">
-            <div class="col">
-                <Pager :meta='packagePageMeta' :height='height' />
+
+              <div class="row text-center pagerRow">
+                <div class="col">
+                    <Pager :meta='packagePageMeta' :height='height' />
+                </div>
             </div>
-        </div>
+
+        
+      
     </div>
 </template>
 
@@ -109,7 +114,7 @@ export default {
             this.refreshObjects( this.apiQueryString );
         },
         refreshObjects( apiQueryString ){
-            axios.get("/api/v1/access/dips"+apiQueryString).then( (dips ) => {
+            axios.get("/api/v1/access/dips"+apiQueryString, { params: { limit: 8 } }).then( (dips ) => {
                 this.dataObjects = dips.data.data;
                 this.packagePageMeta = dips.data.meta;
             });

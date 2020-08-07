@@ -10,17 +10,6 @@
             </div>
         </div>
 
-        <!-- <div class="row plistHeader mt-5">
-            <div class="col-sm-3">{{$t('ingest.offlineStorage.jobName')}}</div>
-            <div class="col-sm-1 text-right">{{$t('ingest.offlineStorage.numberOfAips')}}</div>
-            <div class="col-sm-2 text-right">{{$t('ingest.offlineStorage.size')}}</div>
-            <div class="col-sm">{{$t('ingest.offlineStorage.filled')}}</div>
-            <div class="col-4 text-center align-self-center">{{$t('ingest.offlineStorage.actions')}}</div>
-        </div> -->
-
-        <!-- <Task v-for="item in items" v-bind:item="item" v-bind:key="item.id"
-                           :jobListUrl="jobListUrl" :actionIcons="actionIcons" @piqlIt="piqlIt" @onDelete="update"/> -->
-
         <div class="row">
             <div class="col">
                 <Pager :meta="pageMeta" @updatePage="updatePage" />
