@@ -9,11 +9,11 @@
         <link href="{{ asset('css/app.css') }}" rel="stylesheet" />
 
 @if (Route::current()->getName() == 'login')
-		<script type="text/javascript">
-			let timeout = {{env('SESSION_LIFETIME', 120) * 60000 }} - 1000;
-			setTimeout(function(){
-				location.reload();
-			}, timeout );
+    <script type="text/javascript">
+        let timeout = {{env('SESSION_LIFETIME', 120) * 60000 }} - 1000;
+        setTimeout(function(){
+            location.reload();
+        }, timeout );
         </script>
 @else
         <script type="text/javascript">Window.locale = '{{\App::getLocale()}}';</script>

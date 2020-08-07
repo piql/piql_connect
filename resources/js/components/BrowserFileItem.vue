@@ -65,7 +65,7 @@
             showMetadata() {
                 this.$router.push({ name:'access.browse.dips.files.metadata', params: { dipId: this.dipId, fileId: this.aipItem.id, showFileId: this.item.id } });
             },
-	    preview: function(){
+            preview: function(){
                 this.$emit('showPreview', this.item.storable_id, this.item.id);
             }
         },

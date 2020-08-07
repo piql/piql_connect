@@ -43,10 +43,10 @@
         "optimize-autoloader": true,
         "preferred-install": "dist",
         "sort-packages": true,
-				"platform": {
-					"php":	"7.3.1",
-					"ext-bcmath": "2.7.3"
-				}
+        "platform": {
+            "php": "7.3.1",
+            "ext-bcmath": "2.7.3"
+        }
     },
     "extra": {
         "laravel": {
@@ -62,8 +62,8 @@
             "database/factories"
         ],
         "files": [
-	        "bootstrap/bagitutil.php"
-	    ]
+            "bootstrap/bagitutil.php"
+        ]
     },
     "autoload-dev": {
         "psr-4": {
