@@ -149,7 +149,7 @@ export default {
             if((item.bucket_size === undefined) || item.bucket_size === 0) {
                 return 0;
             }
-            return (100 * item.size / item.bucket_size) * 100;
+            return 100 * item.size / item.bucket_size;
         },
         usageLabel(item) {
             return numeral(this.usage(item)).format('0.0');
