@@ -95,9 +95,9 @@ class OfflineStorageController extends Controller
         ]);
 
         if(array_key_exists('name', $data)) {
-            if($this->validateFails($job->name, $this->newNameValidationRule))
+            if($this->validateFails($data['name'], $this->newNameValidationRule))
             {
-                abort(response()->json(["error" => 424, "message" => "Bucket doesn't have a valid name: {$job->name}"], 424));
+                abort(response()->json(["error" => 400, "message" => "Bucket doesn't have a valid name: {$job->name}"], 400));
             }
             $job->name = $data['name'] ?? "";
         }
