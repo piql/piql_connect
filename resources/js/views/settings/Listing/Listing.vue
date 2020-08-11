@@ -65,7 +65,17 @@ import { mapGetters, mapActions } from "vuex";
             }
         },
         watch: {
-            '$route': 'dispatchRouting'
+            '$route': 'dispatchRouting',
+            userApiResponse(newValue,prevValue){
+                //will run on success or failure of any post operation
+                 if(newValue && newValue.status == 200){
+                     this.successToast('Success: ' + newValue.status ,newValue.message);
+                    }else if(newValue && newValue.status){
+                        this.errorToast('Error: ' + n.status,n.message);
+                    }
+                
+
+            }
         },
 
         async mounted() {
@@ -73,11 +83,7 @@ import { mapGetters, mapActions } from "vuex";
             if( isNaN( page ) || parseInt( page ) < 2 ) {
                 this.$route.query.page = 1;
             }
-            this.fetchUsers(this.apiQueryString,{
-                    limit: 10
-                })
-
-
+            this.fetchUsers(this.apiQueryString)
 
         },
 
@@ -92,6 +98,7 @@ import { mapGetters, mapActions } from "vuex";
                 }
                 return filter;
             }
+            
 
         },
 
@@ -103,21 +110,7 @@ import { mapGetters, mapActions } from "vuex";
             forceRerender(){
                 this.listingKey += 1;
             },
-            runCallBack(modal,timeOut){
-                //to handle promises from vuex
-                setTimeout(() => {
-                    if(this.userApiResponse.status == 200){
-                        this.successToast('Success: ' + this.userApiResponse.status ,this.userApiResponse.message);
-                    }else{
-                        this.errorToast('Error: ' + this.userApiResponse.status,this.userApiResponse.message,);
-                    }
-
-                     this.forceRerender();
-                     this.$bvModal.hide(modal);
-                    
-                }, timeOut)
-
-            },
+        
             addUser(){
                 this.infoToast("Adding User", "creating new user in the system");
 
@@ -128,11 +121,11 @@ import { mapGetters, mapActions } from "vuex";
                     'email': this.email
                 });
 
-                //callback to handle promise
-                this.runCallBack('add-user',2000);      
+                this.$bvModal.hide('add-user');
+                this.forceRerender();    
 
             },
-            async editUser(){
+            editUser(){
                 this.infoToast("Editing User", "editing user in the system");
                 //logic to send data to endpoint goes here
 
@@ -147,8 +140,8 @@ import { mapGetters, mapActions } from "vuex";
                 //vuex action call
                 this.disableUserRequest(data);
 
-                //callback to handle promise
-                this.runCallBack('disable-user',2000);
+                this.forceRerender();
+                this.$bvModal.hide('disable-user');
                
             },
             
@@ -161,14 +154,14 @@ import { mapGetters, mapActions } from "vuex";
 
                 this.$bvModal.hide('delete-user');
             },
-            async enableUser(data){
+            enableUser(data){
                 this.infoToast("Enable User", "enabling a user in listing");
 
                 //vuex request
                 this.enableUserRequest(data);
 
-                //callback to handle promise
-                this.runCallBack('enable-user',2000);
+                this.forceRerender();
+                this.$bvModal.hide('enable-user');
 
             },
         }
