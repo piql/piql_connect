@@ -8,7 +8,8 @@ export default {
         isValidDateString: function( dateString ) {
             let jsDate = new Date( dateString );
             return isValid( jsDate );
-        }
+        },
+        
 
     }
 };
