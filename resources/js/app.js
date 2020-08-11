@@ -20,6 +20,8 @@ import serviceCall from './mixins/serviceCall.js';
 window.Vue.mixin(serviceCall);
 import DateTime from './mixins/DateTime.js';
 window.Vue.mixin(DateTime);
+// import callbacks from "./mixins/callbacks";
+// window.Vue.mixin(callbacks);
 import Echo from "laravel-echo";
 window.io = require('socket.io-client');
 if (typeof io !== 'undefined') {
@@ -101,8 +103,12 @@ Vue.component("vue-select-sides",vueSelectSides);
 
 import { router } from "./router.js";
 
+//import store
+import { store } from "./store/store";
+
 const app = new Vue({
     el: '#app',
+    store: store,
     i18n,
     router,
     mixins: [refreshSessionActivity],

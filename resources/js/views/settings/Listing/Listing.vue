@@ -29,10 +29,10 @@
                 </b-modal>
             </div>
             <div class="card-body">
-               <user-listing :key="listingKey" @deleteUser='deleteUser'  @disableUser="disableUser" :users="users" @editUser="editUser" @enableUser="enableUser"></user-listing>
+               <user-listing :key="listingKey" @deleteUser='deleteUser'  @disableUser="disableUser" :users="formattedUsers" @editUser="editUser" @enableUser="enableUser"></user-listing>
                <div class="row text-center pagerRow">
                     <div class="col">
-                        <Pager :meta='pageMeta' :height='height' />
+                        <Pager :meta='usersPageMeta' :height='height' />
                     </div>
                 </div>
             </div>
@@ -44,7 +44,7 @@
 
 <script>
 import Pager from "../../../components/Pager"
-import axios from "axios"
+import { mapGetters, mapActions } from "vuex";
 
     export default {
         components:{
@@ -55,10 +55,7 @@ import axios from "axios"
                 fullname:null,
                 email:null,
                 username:null,
-                users: null,
-                pageMeta:null,
                 listingKey: 0,
-                response: null,
             };
         },
         props: {
@@ -67,90 +64,72 @@ import axios from "axios"
                 default: 0
             }
         },
-
-     watch: {
-        '$route': 'dispatchRouting'
-    },
+        watch: {
+            '$route': 'dispatchRouting'
+        },
 
         async mounted() {
             let page = this.$route.query.page;
             if( isNaN( page ) || parseInt( page ) < 2 ) {
                 this.$route.query.page = 1;
             }
-            this.refreshObjects( this.apiQueryString, this.apiEndPoint );
+            this.fetchUsers(this.apiQueryString,{
+                    limit: 10
+                })
+
 
 
         },
 
         computed:  {
+            ...mapGetters(['formattedUsers','usersPageMeta','userApiResponse']),
             apiQueryString: function() {
-            let query = this.$route.query;
-            let filter = '';
+                let query = this.$route.query;
+                let filter = '';
 
-            if( parseInt( query.page ) ) {
-                filter += "?page=" + query.page;
+                if( parseInt( query.page ) ) {
+                    filter += "?page=" + query.page;
+                }
+                return filter;
             }
-            return filter;
-        },
-
-        apiEndPoint: function () {
-            let query = this.$route.query;
-
-            if( parseInt( query.groupId ) ) {
-                return '/api/v1/admin/permissions/'+ query.groupId + '/users';
-            }else if( parseInt( query.roleId ) ) {
-                return '/api/v1/admin/permissions/'+ query.roleId + '/users';
-            }  else{
-                return '/api/v1/admin/users';
-            }
-            
-        }
 
         },
 
         methods: {
+            ...mapActions(['fetchUsers','postNewUser','disableUserRequest','enableUserRequest']), 
             dispatchRouting() {
-                this.refreshObjects( this.apiQueryString, this.apiEndPoint );
-            },
-
-            async refreshObjects( apiQueryString, apiEndPoint){
-                let data = {
-                    limit: 10
-                }; 
-                await axios.get(apiEndPoint + apiQueryString, {
-                   params: data
-                }).then( (response ) => {
-                this.response = response
-                    this.users = this.response.data.data;
-                    
-                    this.pageMeta = this.response.data.meta
-                }).catch(err => {
-                    console.log(err)
-                });
+                this.fetchUsers(this.apiQueryString);
             },
             forceRerender(){
                 this.listingKey += 1;
+            },
+            runCallBack(modal,timeOut){
+                //to handle promises from vuex
+                setTimeout(() => {
+                    if(this.userApiResponse.status == 200){
+                        this.successToast('Success: ' + this.userApiResponse.status ,this.userApiResponse.message);
+                    }else{
+                        this.errorToast('Error: ' + this.userApiResponse.status,this.userApiResponse.message,);
+                    }
+
+                     this.forceRerender();
+                     this.$bvModal.hide(modal);
+                    
+                }, timeOut)
 
             },
-            
-            async addUser(){
+            addUser(){
                 this.infoToast("Adding User", "creating new user in the system");
 
-                await axios.post("/api/v1/registration/register",{
+                //invoke vuex axction postNewUser defined above
+                this.postNewUser({
                     'name': this.fullname,
                     'username': this.username,
                     'email': this.email
-                }).then(response => {
-                    console.log(response);
-                    this.response = response;
-
-                }).catch(error => {
-                    console.log(error);
-                    this.errorToast(error.message, error.message);
                 });
 
-                this.forceRerender();
-                this.$bvModal.hide('add-user');
+                //callback to handle promise
+                this.runCallBack('add-user',2000);      
 
             },
             async editUser(){
@@ -159,45 +138,37 @@ import axios from "axios"
 
                 this.forceRerender();
                 this.$bvModal.hide('edit-user');
+                
 
             },
-           async disableUser(data){
+           disableUser(data){
                 this.infoToast("Disable User", "disabling a user from listing");
-                this.response = (await axios.post("/api/v1/admin/users/disable",data,{
-                    headers:{
-                        'content-type': 'application/json'
-                    }
-                })).data;
 
-                if(!this.forceRerender()){
-                    location.reload();
-                }
+                //vuex action call
+                this.disableUserRequest(data);
 
-                this.$bvModal.hide('disable-user');
+                //callback to handle promise
+                this.runCallBack('disable-user',2000);
+               
             },
+            
             deleteUser(data){
                 this.infoToast("Delete User", "deleting a user from listing");
-               
 
-                if(!this.forceRerender()){
-                    location.reload();
-                }
+                //delete request goes here
+                this.forceRerender();
                 
 
                 this.$bvModal.hide('delete-user');
             },
             async enableUser(data){
                 this.infoToast("Enable User", "enabling a user in listing");
-                this.response = (await axios.post("/api/v1/admin/users/enable",data,{
-                    headers:{
-                        'content-type': 'application/json'
-                    }
-                })).data;
 
-                if(!this.forceRerender()){
-                    location.reload();
-                }
-                this.$bvModal.hide('enable-user');
+                //vuex request
+                this.enableUserRequest(data);
+
+                //callback to handle promise
+                this.runCallBack('enable-user',2000);
 
             },
         }
