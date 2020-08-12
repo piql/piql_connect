@@ -36,7 +36,7 @@ class StatisticsData
             return array_fill(0, 12, 0);
             
         $interval = DateInterval::createFromDateString('1 month');
-        $period = new DatePeriod(new \DateTime('-10 months'), $interval, new \DateTime('+1 month'));
+        $period = new DatePeriod(new \DateTime('-10 months'), $interval, new \DateTime('+2 month'));
 
         $result = [];
         foreach ($period as $date) {
@@ -65,7 +65,7 @@ class StatisticsData
     public function monthlyOnlineDataIngested($userId)
     {
         $first = new \DateTime('-10 months');
-        $last = new \DateTime('+1 month');
+        $last = new \DateTime('+2 month');
 
         $interval = DateInterval::createFromDateString('1 month');
         $period = new DatePeriod($first, $interval, $last);
@@ -74,7 +74,10 @@ class StatisticsData
         foreach ($period as $date) {
             $ingested = ['bags' => 0, 'size' => 0, 'month' => $date->format('M')];
             $data = IngestedDataOnline::where('owner', $userId)
-                ->whereBetween('ingest_date', [$date, new DateTime('last day of ' . $date->format('Y-m'))])
+                ->whereBetween('ingest_date', [
+                    new DateTime('first day of ' . $date->format('Y-m')), 
+                    new DateTime( 'last day of ' . $date->format('Y-m'))
+                ])
                 ->orderBy('recorded_at', 'desc')->take(1)->get(['bags', 'size']);
             if ($data != null && !empty($data) && isset($data[0])) {
                 $ingested['bags'] += $data[0]->bags;
