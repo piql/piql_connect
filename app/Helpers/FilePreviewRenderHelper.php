@@ -35,13 +35,10 @@ class FilePreviewRenderHelper
 		$pathInfo = pathinfo($this->file->fullpath);
 		$ext = strtolower($pathInfo['extension']);
 		if ($ext == 'pdf') {
-			Log::info("PREV: ".$this->file->filename." 0");
 			return $this->getPdfContent();
 		} elseif (self::isPreviwableFile($this->file->mime_type, $forThumb)) {
-			Log::info("PREV: ".$this->file->filename." 1");
 			return $this->getRegularContent();
 		} else {
-			Log::info("PREV: ".$this->file->filename." 2");
 			$path = self::getCustomIcon($ext);
 		    $this->mimeType = \File::mimeType($path);
 		    return \File::get($path);
