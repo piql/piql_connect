@@ -686,7 +686,7 @@ button {
     border: 1px solid $gray;
     background: $color_fill_2;
 }
-.loginForm {
+.authForm {
     margin-top: 10%;
     margin-left: auto;
     margin-right: auto;
@@ -720,8 +720,7 @@ button {
     background-size: 15%;
     background-repeat: repeat;
 }
-
-.theLoginForm {
+.theAuthForm {
     margin-left: auto;
     margin-right: auto;
     input {

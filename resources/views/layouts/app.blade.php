@@ -23,7 +23,7 @@
 @endif
     </head>
 
-@if (Route::current()->getName() == 'login')
+@if (! Auth::check())
     <body class="loginBody">
         <div id="app" class="container-fluid">
             @yield('content')
