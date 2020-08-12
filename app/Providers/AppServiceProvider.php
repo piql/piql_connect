@@ -44,5 +44,8 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         //
+        if(version_compare(phpversion(), '7.4', '>=')) {
+            error_reporting(E_ALL ^ E_DEPRECATED);
+        }
     }
 }
