@@ -59,7 +59,6 @@
 
 <script>
 import axios from "axios"
-import numeral from 'numeral'
 export default {
     props: {
             items: Array,
@@ -151,8 +150,12 @@ export default {
             }
             return 100 * item.size / item.bucket_size;
         },
+        formatNumber(value) {
+            let valueArr = value.toString().split('\.');
+            return valueArr[0] + (valueArr[1] != undefined ? '.' + valueArr[1].substring(0,1) : '');
+        },
         usageLabel(item) {
-            return numeral(this.usage(item)).format('0.0');
+            return this.formatNumber(this.usage(item));
         },
         usagePercentage(item) {
             return {'width': `${this.usage(item)}%` };
