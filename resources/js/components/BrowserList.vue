@@ -21,6 +21,7 @@
             :visible="lbVisible"
             :imgs="previewImages"
             :fileNames="previewFileNames"
+            :fileTypes="previewFileTypes"
             :index="index"
             :hide="hideLightBox"
             :totalImgs="imgLength"
@@ -61,6 +62,7 @@ import Lightbox from './lightbox';
             index: 0,
             previewImages: [],
             previewFileNames: [],
+            previewFileTypes: [],
             imgLength: 0,
             perPage: 5,
             page: 1,
@@ -99,8 +101,8 @@ import Lightbox from './lightbox';
             let allFiles = ( await axios.get('/api/v1/access/dips/'+dip.id+'/files?page=' + this.page) ).data.data;
             allFiles.map( async (file) => {
                 let fileId = file.id;
-                let fileName = file.filename;
-                if (this.$refs.lgbx.isPlayable(fileName)) {
+                let fileType = file.mime_type;
+                if (this.$refs.lgbx.isPlayable(fileType)) {
                     this.previewImages.push( '/api/v1/media/dips/'+dip.id+'/previews/files/'+fileId );
                 } else {
                     let image = (await axios.get('/api/v1/access/dips/'+dip.id+'/previews/files/'+fileId, { responseType: 'blob' }));
@@ -108,18 +110,21 @@ import Lightbox from './lightbox';
                     reader.onload = e => this.previewImages.push( reader.result );
                     reader.readAsDataURL( image.data );
                 }
-                this.previewFileNames.push( fileName );
+                this.previewFileTypes.push( fileType );
+                this.previewFileNames.push( file.filename.substring(37, file.filename.length-1) );
             });
         },
         hideLightBox: function( e ) {
             this.lbVisible = false;
             this.previewImages = [];
             this.previewFileNames = [];
+            this.previewFileTypes = [];
         },
         pageNav: function ( adj ) {
             this.page += adj
             this.previewImages = [];
             this.previewFileNames = [];
+            this.previewFileTypes = [];
             this.showPreview(this.previewDip);
         }
     },

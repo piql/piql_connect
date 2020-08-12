@@ -16,6 +16,7 @@
             :visible="lbVisible"
             :imgs="previewImages"
             :fileNames="previewFileNames"
+            :fileTypes="previewFileTypes"
             :index="index"
             :hide="hideLightBox"
             :totalImgs="imgLength"
@@ -54,6 +55,7 @@ import Lightbox from './lightbox';
             previewDip: {},
             previewImages: [],
             previewFileNames: [],
+            previewFileTypes: [],
         }
     },
     methods: {
@@ -73,8 +75,8 @@ import Lightbox from './lightbox';
             this.imgLength = dip.storage_properties.bag.fileCount;
             allFiles.map( async (file) => {
                 let fileId = file.id;
-                let fileName = file.filename;
-                if (this.$refs.lgbx.isPlayable(fileName)) {
+                let fileType = file.mime_type;
+                if (this.$refs.lgbx.isPlayable(fileType)) {
                     this.previewImages.push( '/api/v1/media/dips/'+dip.id+'/previews/files/'+fileId );
                 } else {
                     let image = (await axios.get('/api/v1/access/dips/'+dip.id+'/previews/files/'+fileId, { responseType: 'blob' }));
@@ -82,18 +84,21 @@ import Lightbox from './lightbox';
                     reader.onload = e => this.previewImages.push( reader.result );
                     reader.readAsDataURL( image.data );
                 }
-                this.previewFileNames.push( fileName );
+                this.previewFileTypes.push( fileType );
+                this.previewFileNames.push( file.filename.substring(37, file.filename.length-1) );
             });
         },
         hideLightBox: function( e ) {
             this.lbVisible = false;
             this.previewImages = [];
             this.previewFileNames = [];
+            this.previewFileTypes = [];
         },
         pageNav: function ( adj ) {
             this.page += adj
             this.previewImages = [];
             this.previewFileNames = [];
+            this.previewFileTypes = [];
             this.showPreview(this.previewDip);
         }
     },

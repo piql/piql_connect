@@ -24,7 +24,7 @@
             <button @click="nav(-1)" class="btn btn-sm btn-info"><i class="fas fa-angle-left"></i></button>
           </div>
           <div class="toolBoxImgList">
-            <div v-for="img, i in thumbs" class="toolBoxImg" @click="thumbClick(i)"><img :src="img" :class="index == i ? 'selectedThumb' : 'regularThumb'"/></div>
+            <div v-for="thumb, i in thumbs" class="toolBoxImg" @click="thumbClick(i)" :title="thumb.name"><img :src="thumb.img" :alt="thumb.name" :class="index == i ? 'selectedThumb' : 'regularThumb'"/></div>
           </div>
           <div :class="overlayContentNavButtonNext">
             <button @click="nav(+1)" class="btn btn-sm btn-info"><i class="fas fa-angle-right"></i></button>
@@ -52,6 +52,7 @@
       this.currentImgSrc = "";
       this.isMultimedia = false;
       this.currentFileName = "";
+      this.currentFileType = "";
       this.toolBoxNavPanel = "toolBoxNavPanelOff";
       this.toolBoxImgPanel = "toolBoxImgPanelOff";
       this.overlayContentNavButtonPrev = "overlayContentNavButtonOff";
@@ -71,6 +72,10 @@
         default: null,
       },
       fileNames: {
+        type: Array,
+        default: null,
+      },
+      fileTypes: {
         type: Array,
         default: null,
       },
@@ -107,13 +112,19 @@
         this.index += adj;
         this.setImgSrc();
       },
-      isPlayable(fileName) {
-        if (fileName != null) {
-          let nameArr = fileName.split(".");
-          let extArr = ['mp3', 'mp4', 'mov', 'wav', 'wave'];
-          return extArr.includes(nameArr[nameArr.length-1].toLowerCase());
+      isPlayableTypes(fileType, extArr) {
+        if (fileType != null) {
+          let nameArr = fileType.split("/");
+          for (let i=0;i<extArr.length;i++) {
+            if (nameArr.includes(extArr[i].toLowerCase())) {
+              return true;
+            }
+          }
         }
         return false;
+      },
+      isPlayable(fileType) {
+          return this.isPlayableTypes(fileType, ['audio', 'video']);
       },
       setImgSrc() {
         if (this.imgs != null && this.imgs.length > this.index - 1 && this.imgs[this.index] != undefined && this.imgs[this.index] != null) {
@@ -122,7 +133,8 @@
          this.currentImgSrc = null;
         }
         this.currentFileName = this.fileNames != null && this.fileNames.length > this.index - 1 ? this.fileNames[this.index] : "";
-        this.isMultimedia = this.isPlayable(this.currentFileName) && this.currentImgSrc != undefined && this.currentImgSrc != null;
+        this.currentFileType = this.fileTypes != null && this.fileTypes.length > this.index - 1 ? this.fileTypes[this.index] : "";
+        this.isMultimedia = this.isPlayable(this.currentFileType) && this.currentImgSrc != undefined && this.currentImgSrc != null;
         this.videoOptionsHeight = this.isPlayableAudio ? 30 : null;
         this.toolBoxNavPanel = "toolBoxNavPanel" + (this.imgs.length >= 1 ? "On" : "Off");
         this.toolBoxImgPanel = "toolBoxImgPanel" + (this.imgs.length > 0 ? "On" : "Off");
@@ -177,18 +189,16 @@
         if (this.thumbList == undefined || this.thumbList == null || this.thumbList.length != this.imgs.length) {
           this.thumbList = [];
           for (let i=0; i < this.imgs.length; i++) {
-            this.thumbList[this.thumbList.length] = this.fileNames != null && this.fileNames.length > this.index - 1 && this.isPlayable(this.fileNames[i]) ? '/api/v1/media/thumb/' + this.fileNames[i] : this.imgs[i];
+            this.thumbList[this.thumbList.length] = {
+              img: this.fileNames != null && this.fileNames.length > this.index - 1 && this.isPlayable(this.fileTypes[i]) ? '/api/v1/media/thumb/' + this.fileNames[i] : this.imgs[i],
+              name: this.fileNames[i],
+            } 
           }
         }
         return this.thumbList;
       },
       isPlayableAudio: function() {
-        if (this.currentFileName != undefined && this.currentFileName != null) {
-          let nameArr = this.currentFileName.split(".");
-          let extArr = ['mp3', 'wav', 'wave'];
-          return extArr.includes(nameArr[nameArr.length-1].toLowerCase());
-        }
-        return false;
+          return this.isPlayableTypes(this.currentFileType, ['audio']);
       },
       videoOptions: function () {
         return {
@@ -219,6 +229,7 @@
       return {
         currentImgSrc: this.currentImgSrc,
         currentFileName: this.currentFileName,
+        currentFileType: this.currentFileType,
         zoomIndex: this.zoomIndex,
         rotateIndex: this.rotateIndex,
         reloading: false,

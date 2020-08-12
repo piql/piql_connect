@@ -17,6 +17,7 @@
             :visible="lbVisible"
             :imgs="previewImages"
             :fileNames="previewFileNames"
+            :fileTypes="previewFileTypes"
             :index="index"
             :hide="hideLightBox"
         />
@@ -40,6 +41,7 @@ export default {
             previewDip: {},
             previewImages: [],
             previewFileNames: [],
+            previewFileTypes: [],
             dip: null,
         }
     },
@@ -93,9 +95,9 @@ export default {
         close() {
             this.$router.go(-1);
         },
-        async showPreview ( dip, fileId, fileName ) {
+        async showPreview ( dip, fileId, fileName, fileType ) {
             this.lbVisible = true;
-            if (this.$refs.lgbx.isPlayable(fileName)) {
+            if (this.$refs.lgbx.isPlayable(fileType)) {
                 this.previewImages.push( '/api/v1/media/dips/'+dip+'/previews/files/'+fileId );
             } else {
                 let image = (await axios.get('/api/v1/access/dips/'+dip+'/previews/files/'+fileId, { responseType: 'blob' }));
@@ -103,11 +105,13 @@ export default {
                 reader.onload = e => this.previewImages.push( reader.result );
                 reader.readAsDataURL( image.data );
             }
+            this.previewFileTypes.push( fileType );
             this.previewFileNames.push( fileName );
         },
         hideLightBox: function( e ) {
             this.lbVisible = false;
             this.previewImages = [];
+            this.previewFileTypes = [];
             this.previewFileNames = [];
         }
     }
