@@ -35,11 +35,14 @@ class FilePreviewRenderHelper
 		$pathInfo = pathinfo($this->file->fullpath);
 		$ext = strtolower($pathInfo['extension']);
 		if ($ext == 'pdf') {
-		    return $this->getPdfContent();
-		} elseif (in_array($ext, self::getPreviwableFileArr($forThumb))) {
-		    return $this->getRegularContent();
+			Log::info("PREV: ".$this->file->filename." 0");
+			return $this->getPdfContent();
+		} elseif (self::isPreviwableFile($this->file->mime_type, $forThumb)) {
+			Log::info("PREV: ".$this->file->filename." 1");
+			return $this->getRegularContent();
 		} else {
-		    $path = self::getCustomIcon($ext);
+			Log::info("PREV: ".$this->file->filename." 2");
+			$path = self::getCustomIcon($ext);
 		    $this->mimeType = \File::mimeType($path);
 		    return \File::get($path);
 		}
@@ -63,17 +66,21 @@ class FilePreviewRenderHelper
 	}
 	
 	public static function getPreviwableFileArr($forThumb=false) {
-	    $extArr = array('png', 'jpg', 'jpeg', 'gif', 'tif', 'tiff', 'bmp', 'ico');
+	    $extArr = array('image');
 	    if (!$forThumb) {
-	        $extArr = array_merge($extArr, array('mp3', 'mp4'));
+	        $extArr = array_merge($extArr, array('audio', 'video'));
 	    }
 	    return $extArr;
 	}
 	
-	public static function isPreviwableFile($file, $forThumb=false) {
-		$pathInfo = pathinfo($file);
-		$ext = strtolower($pathInfo['extension']);
-		return in_array($ext, self::getPreviwableFileArr($forThumb));
+	public static function isPreviwableFile($mimeType, $forThumb=false) {
+		$mimeTypeArr = explode('/', $mimeType);
+		foreach ($mimeTypeArr as $mimeTypeTmp) {
+			if (in_array($mimeTypeTmp, self::getPreviwableFileArr($forThumb))) {
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	public static function isIconableFile($file) {

@@ -89,7 +89,7 @@ class DipController extends Controller
     	return $dip->fileObjects->filter( function ($file, $key) {
             $pathInfo = pathinfo($file->fullpath);
             $ext = strtolower($pathInfo['extension']);
-            if ($ext != 'xml' && !FilePreviewRenderHelper::isPreviwableFile($file->fullpath, true)) {
+            if ($ext != 'xml' && !FilePreviewRenderHelper::isPreviwableFile($file->mime_type, true)) {
                 return $file;
             } else {
                 return Str::contains( $file->fullpath, '/thumbnails' );
@@ -198,7 +198,7 @@ class DipController extends Controller
     private function filter_file_thumbnail($dip, $file)
     {
         return $dip->fileObjects->filter( function ($thumb, $key) use( $file ) {
-                if (!FilePreviewRenderHelper::isPreviwableFile($file->fullpath, true)) {
+                if (!FilePreviewRenderHelper::isPreviwableFile($file->mime_type, true)) {
                     return $file;
                 } else {
                     return Str::contains( $thumb->path, '/thumbnails' );;
