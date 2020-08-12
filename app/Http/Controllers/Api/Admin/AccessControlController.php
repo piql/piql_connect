@@ -33,7 +33,7 @@ class AccessControlController extends Controller
     }
     /**
      * @OA\Post(
-     *     path="/api/v1/v1/admin/access-control/permission-groups",
+     *     path="/api/v1/admin/access-control/permission-groups",
      *     summary="Creates new Permission Group",
      *     operationId="createPermissionGroup",
      *     @OA\RequestBody(
@@ -76,7 +76,7 @@ class AccessControlController extends Controller
 
     /**
      * @OA\Get(
-     *     path="/api/v1/v1/admin/access-control/permission-groups",
+     *     path="/api/v1/admin/access-control/permission-groups",
      *     summary="Lists Permission Group",
      *     operationId="listPermissionGroup",
      *     @OA\Response(
@@ -107,7 +107,7 @@ class AccessControlController extends Controller
 
     /**
      * @OA\Get(
-     *     path="/api/v1/v1/admin/access-control/permissions",
+     *     path="/api/v1/admin/access-control/permissions",
      *     summary="Lists Permissions",
      *     operationId="listPermissions",
      *     @OA\Response(
@@ -138,7 +138,7 @@ class AccessControlController extends Controller
 
     /**
      * @OA\Get(
-     *     path="/api/v1/v1/admin/access-control/roles",
+     *     path="/api/v1/admin/access-control/roles",
      *     summary="Lists Roles",
      *     operationId="listRoles",
      *     description="gets roles",
@@ -170,7 +170,7 @@ class AccessControlController extends Controller
 
     /**
      * @OA\Get(
-     *     path="/api/v1/v1/admin/access-control/roles/{id}/permissions",
+     *     path="/api/v1/admin/access-control/roles/{id}/permissions",
      *     summary="Lists Permissions",
      *     operationId="listRolePermissions",
      *     @OA\Parameter(
@@ -216,7 +216,7 @@ class AccessControlController extends Controller
 
     /**
      * @OA\Post(
-     *     path="/api/v1/v1/admin/access-control/roles/{id}/permissions ",
+     *     path="/api/v1/admin/access-control/roles/{id}/permissions ",
      *     summary="Add Permission to Role",
      *     operationId="addPermissionToRole",
      *     @OA\Parameter(
@@ -266,7 +266,7 @@ class AccessControlController extends Controller
 
     /**
      * @OA\Get(
-     *     path="/api/v1/v1/admin/access-control/permission-groups/{id}",
+     *     path="/api/v1/admin/access-control/permission-groups/{id}",
      *     summary="Get Permission Group",
      *     operationId="getPermissionGroup",
      *     @OA\Parameter(
@@ -307,7 +307,7 @@ class AccessControlController extends Controller
 
     /**
      * @OA\Get(
-     *     path="/api/v1/v1/admin/access-control/permission-groups/{id}/permissions",
+     *     path="/api/v1/admin/access-control/permission-groups/{id}/permissions",
      *     summary="Lists Permission Group Permissions",
      *     operationId="listPermissionGroupPermissions",
      *     @OA\Parameter(
@@ -367,7 +367,7 @@ class AccessControlController extends Controller
 
     /**
      * @OA\Post(
-     *     path="/api/v1/v1/admin/access-control/permission-groups/{id}/permissions",
+     *     path="/api/v1/admin/access-control/permission-groups/{id}/permissions",
      *     summary="Add Permission to Permission Group",
      *     operationId="addPermissionToPermissionGroup",
      *     @OA\Parameter(
@@ -417,7 +417,7 @@ class AccessControlController extends Controller
 
     /**
      * @OA\Post(
-     *     path="/api/v1/v1/admin/access-control/users/assign",
+     *     path="/api/v1/admin/access-control/users/assign",
      *     summary="Assign Permission to User",
      *     operationId="assignPermissionToUser",
      *     @OA\RequestBody(
@@ -461,7 +461,7 @@ class AccessControlController extends Controller
 
     /**
      * @OA\Post(
-     *     path="/api/v1/v1/admin/access-control/users/unassign",
+     *     path="/api/v1/admin/access-control/users/unassign",
      *     summary="Unassign Permission to User",
      *     operationId="unassignPermissionToUser",
      *     @OA\RequestBody(
@@ -505,7 +505,7 @@ class AccessControlController extends Controller
 
     /**
      * @OA\Post(
-     *     path="/api/v1/v1/admin/access-control/users/has-access-control",
+     *     path="/api/v1/admin/access-control/users/has-access-control",
      *     summary="Check if user has permission",
      *     operationId="assignPermissionToUser",
      *     @OA\RequestBody(
