@@ -23,7 +23,7 @@ class StatisticsData
                 'ingest_date' => $date,
                 'owner' => $userId,
             ])->orderBy('recorded_at', 'desc')->take(1)->get(['aips']);
-            $data[] = empty($aip) ? 0 : $aip[0]->aips;
+            $data[] = ($aip == null || empty($aip) || !isset($latest[0])) ? 0 : $aip[0]->aips;
         }
         return $data;
     }
@@ -54,12 +54,12 @@ class StatisticsData
     {
         $first = new \DateTime('-29 days');
         $last = new \DateTime();
-        return IngestedDataOnline:: //distinct('ingest_date')
-            whereBetween('ingest_date', [$first, $last])
+        $data = IngestedDataOnline::whereBetween('ingest_date', [$first, $last])
             ->where('owner', $userId)
             ->orderBy('recorded_at', 'desc')
             ->groupBy('ingest_date')
             ->get(['ingest_date', 'bags', 'size']);
+        return ($data == null || empty($data) || !isset($data[0])) ? [] : $data;
     }
 
     public function monthlyOnlineDataIngested($userId)
