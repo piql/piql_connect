@@ -67,7 +67,10 @@ services:
       - piqlConnect-mariadb:/var/lib/mysql
       - ./mysql/my.cnf:/etc/my.cnf
     networks:
-      - piqlConnect-net
+      piqlConnect-net:
+        aliases:
+          - piqlConnectMariaDB
+
 
   cache:
     image: redis
@@ -129,14 +132,14 @@ services:
       - ./logstash/config/pipelines.yml:/usr/share/logstash/config/pipelines.yml:ro
     environment:
       MYSQL_NAME: connect
-      MYSQL_HOST: ${CONNECT_HOSTNAME}
+      MYSQL_HOST: piqlConnectMariaDB
       MYSQL_PORT: 3306
       MYSQL_USER: connectdbuser
       MYSQL_PASS: AeJua4le
       MONGO_NAME: connectstats
       MONGO_USER: connectuser
       MONGO_PASS: Fw86TQZrJ5
-      MONGO_HOST: ${CONNECT_HOSTNAME}
+      MONGO_HOST: piqlConnectMongoDB
       MONGO_PORT: 27017
     networks:
       - piqlConnect-net
@@ -154,7 +157,9 @@ services:
     volumes:
       - piqlConnect-mongodb:/data/db
     networks:
-      - piqlConnect-net
+      piqlConnect-net:
+        aliases:
+          - piqlConnectMongoDB
 
 networks:
   piqlConnect-net:
