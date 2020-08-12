@@ -11,7 +11,9 @@
         <div class="overlayContentImg">
           <img v-if="isPlayableFile == false" :src="currentImgSrc" :alt="currentFileName" :style="'transform: translateY(-50%) scale(' + zoomRate + ') rotate(' + rotateRate + 'deg)'"/>
           <video-player v-if="isPlayableFile == true" :options="videoOptions" class="overlayContentImgVideoPlayer" :style="isPlayableAudio ? 'top: 50%;' : '' "/>
-          <img v-if="isPlayableFile == null" src="/images/loading.webp" class="overlayContentImgLoading"/>
+          <div v-if="isPlayableFile == null" class="spinner-border text-warning" role="status">
+            <span class="sr-only">Loading...</span>
+          </div>
         </div>
       </div>
 
@@ -312,9 +314,6 @@
     margin: 15px;
     position: relative;
     top: 50%;
-  }
-  .overlayContentImgLoading {
-    width: 5rem;
   }
   .overlayContentImgVideoPlayer {
     position: relative;
