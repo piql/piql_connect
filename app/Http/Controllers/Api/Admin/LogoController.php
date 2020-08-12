@@ -19,8 +19,8 @@ class LogoController extends Controller {
         return response()->file($file);
     }
     public function upload(Request $request) {
-		Storage::delete(self::LOGO_PATH);
-		Storage::disk('local')->move($request->file('qqfile')->store('tmp'), self::LOGO_PATH);
+        Storage::delete(self::LOGO_PATH);
+        Storage::disk('local')->move($request->file('qqfile')->store('tmp'), self::LOGO_PATH);
         return response()->json(['success' => true]);
     }
 }

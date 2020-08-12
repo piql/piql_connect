@@ -77,7 +77,7 @@ class DipController extends Controller
     }
 
     private function filter_package_thumbnail($dip) {
-    	return $dip->fileObjects->filter( function ($file, $key) {
+        return $dip->fileObjects->filter( function ($file, $key) {
             $pathInfo = pathinfo($file->fullpath);
             $ext = strtolower($pathInfo['extension']);
             if ($ext != 'xml' && !FilePreviewRenderHelper::isPreviwableFile($file->fullpath)) {
