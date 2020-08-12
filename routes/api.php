@@ -36,7 +36,6 @@ Route::group(['prefix' => 'v1', 'middleware' => ['auth:api', 'activity']], funct
 
         Route::post('users/{user_id}/password', 'Api\Users\SelfServiceController@updatePassword');
 
-        //FIXME:        Route::get('statuses/current-bag', 'Api\System\StatusController@currentBag');
         Route::get('languages', 'Api\System\SystemController@languages');
         Route::get('system/session-lifetime', 'Api\System\SystemController@sessionLifetime');
         Route::get('users/me', 'Api\Users\SelfServiceController@me');

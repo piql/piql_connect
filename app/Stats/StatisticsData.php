@@ -9,14 +9,6 @@ use DateTime;
 class StatisticsData
 {
 
-    public function latestOnlineAIPsIngested($userId)
-    {
-        return IngestedAIPOnline::orderBy('recorded_at', 'desc')
-            ->where('owner', $userId)
-            ->take(1)
-            ->get(['aips', 'ingest_date']);
-    }
-
     public function dailyOnlineAIPsIngested($userId)
     {
         $first = new \DateTime('-29 days');
@@ -25,29 +17,37 @@ class StatisticsData
         $interval = DateInterval::createFromDateString('1 day');
         $period = new DatePeriod($first, $interval, $last);
 
-        $data = array_fill(0, 30, 0);
+        $data = [];
         foreach ($period as $date) {
             $aip = IngestedAIPOnline::where([
                 'ingest_date' => $date,
                 'owner' => $userId,
             ])->orderBy('recorded_at', 'desc')->take(1)->get(['aips']);
-            if (empty($aip)) continue;
-            $month = +$date->format('m') - 1;
-            $data[$month] = $aip[0]->aips;
+            $data[] = empty($aip) ? 0 : $aip[0]->aips;
         }
         return $data;
     }
 
     public function monthlyOnlineAIPsIngested($userId)
     {
-        $aips = $this->latestOnlineAIPsIngested($userId);
-        if (empty($aips)) return [];
-        $data = array_fill(0, 12, 0);
-        foreach ($aips as $a) {
-            $date = new DateTime(strtotime($a->ingest_date));
-            $data[+$date->format('m') - 1] += $a->aips;
+        $latest = IngestedAIPOnline::orderBy('recorded_at', 'desc')
+            ->where('owner', $userId)->take(1)->get(['ingest_date']);
+        if ($latest == null || empty($latest) || !isset($latest[0])) 
+            return array_fill(0, 12, 0);
+            
+        $interval = DateInterval::createFromDateString('1 month');
+        $period = new DatePeriod(new \DateTime('-10 months'), $interval, new \DateTime('+1 month'));
+
+        $result = [];
+        foreach ($period as $date) {
+            $data = IngestedAIPOnline::where([ 
+                'owner' => $userId, 
+                'ingest_date' => $date,
+                'recorded_at' => $latest[0]->recorded_at,
+            ])->take(1)->get(['aips']);
+            $result[] = ($data != null && !empty($data) && isset($data[0])) ? $data[0]->aips : 0;
         }
-        return $data;
+        return $result;
     }
 
     public function dailyOnlineDataIngested($userId)
@@ -64,24 +64,23 @@ class StatisticsData
 
     public function monthlyOnlineDataIngested($userId)
     {
-        $first = new \DateTime('-9 months');
-        $last = new \DateTime('+2 month');
+        $first = new \DateTime('-10 months');
+        $last = new \DateTime('+1 month');
 
         $interval = DateInterval::createFromDateString('1 month');
         $period = new DatePeriod($first, $interval, $last);
 
-        $result = range(0, 11);
+        $result = [];
         foreach ($period as $date) {
-            $month = +$date->format('m') - 1;
-            if (empty($result[$month]) || !isset($result[$month]['bags']))
-                $result[$month] = ['bags' => 0, 'size' => 0, 'month' => $date->format('M')];
-
+            $ingested = ['bags' => 0, 'size' => 0, 'month' => $date->format('M')];
             $data = IngestedDataOnline::where('owner', $userId)
                 ->whereBetween('ingest_date', [$date, new DateTime('last day of ' . $date->format('Y-m'))])
                 ->orderBy('recorded_at', 'desc')->take(1)->get(['bags', 'size']);
-            if ($data == null || empty($data) || !isset($data[0])) continue;
-            $result[$month]['bags'] += $data[0]->bags;
-            $result[$month]['size'] += $data[0]->size;
+            if ($data != null && !empty($data) && isset($data[0])) {
+                $ingested['bags'] += $data[0]->bags;
+                $ingested['size'] += $data[0]->size;
+            }
+            $result[] = $ingested;
         }
         return $result;
     }

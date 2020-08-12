@@ -22,13 +22,6 @@ class ChartController extends Controller
         $this->charts = new ChartHelper();
     }
 
-    public function onlineAIPsIngested()
-    {
-        return $this->onAuthenticated('online aips ingested', function ($user) {
-            return $this->stats->latestOnlineAIPsIngested($user->getIdAttribute());
-        });
-    }
-
     public function monthlyOnlineAIPsIngested()
     {
         return $this->onAuthenticated('monthly online aips ingested', function ($user) {
@@ -128,7 +121,7 @@ class ChartController extends Controller
         });
     }
 
-    private function onAuthenticated($statsName = null, callable $action)
+    private function onAuthenticated($statsName, callable $action)
     {
         $message = 'User must be authenticated';
         if ($statsName != null && $statsName != '') $message = "$message to access $statsName";
