@@ -48,13 +48,13 @@
                             </div>
                         </div>
                     </td>
-                    
+
                 </tr>
             </tbody>
         </table>
 
     </div>
-  
+
 </template>
 
 <script>
@@ -93,7 +93,7 @@ export default {
         onDelete(item) {
             let name = item.name;
             this.delete(
-                this.jobListUrl+"/jobs/"+item.id
+                this.jobListUrl+"/buckets/"+item.id
             ).then( (response) => {
                 this.$emit('onDelete', item );
             }).catch( (exception) => {
@@ -108,11 +108,11 @@ export default {
             this.$emit('piqlIt', item );
         },
         async setBucketName(item) {
-           
+
             let currentId = item.id;
             let jobName = item.name;
             let job = null;
-            await axios.patch(this.jobListUrl+"/jobs/"+currentId, {
+            await axios.patch(this.jobListUrl+"/buckets/"+currentId, {
                 'name': jobName
             }).then( (result) => {
                 job = result.data;
@@ -167,7 +167,7 @@ export default {
         },
     },
     async mounted(){
-       
+
     }
 
 }
