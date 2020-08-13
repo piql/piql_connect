@@ -314,6 +314,8 @@
     margin: 15px;
     position: relative;
     top: 50%;
+    max-width: 50%;
+    max-height: 50%;
   }
   .overlayContentImgVideoPlayer {
     position: relative;

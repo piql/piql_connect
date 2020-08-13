@@ -4,8 +4,11 @@ RUN apt-get update && apt-get upgrade -y && apt-get install -y supervisor procps
 RUN docker-php-ext-install bcmath soap pdo_mysql sockets mbstring exif zip
 RUN pecl install mcrypt-1.0.2
 RUN pecl install imagick-3.4.4
-RUN docker-php-ext-enable imagick mcrypt
+RUN docker-php-ext-enable imagick mcrypt 
 RUN docker-php-ext-configure zip --with-libzip && docker-php-ext-install zip
+RUN pecl install mongodb
+RUN echo "extension=mongodb.so" > /usr/local/etc/php/conf.d/mongo.ini
+RUN docker-php-ext-enable mongodb
 WORKDIR /var/www
 RUN groupmod -g 333 www-data
 RUN usermod -u 333 -g 333 www-data

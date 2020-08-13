@@ -4,12 +4,12 @@
 <div>
     <div class="row justify-content-center">
         <div class="col-md-12">
-            <div class="card loginForm">
+            <div class="card authForm">
                 <div>
                     <img src="{{ asset('images/piql-connect.png') }}" alt="{{ __('Login') }}"/>
                 </div>
 
-                    <form class="theLoginForm" method="POST" action="{{ route('login') }}">
+                    <form class="theAuthForm" method="POST" action="{{ route('login') }}">
                         @csrf
 
                         <div class="form-group row">

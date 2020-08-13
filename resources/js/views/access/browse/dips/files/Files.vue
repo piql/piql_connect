@@ -15,11 +15,11 @@
 
         <browser-file-item v-for="item in dipFiles" :item="item" :key="item.id" @showPreview="showPreview"/>
 
-				<div class="row text-center pagerRow">
-						<div class="col">
-								<Pager :meta='meta' :height='height' />
-						</div>
-				</div>
+        <div class="row text-center pagerRow">
+            <div class="col">
+                <Pager :meta='meta' :height='height' />
+            </div>
+        </div>
 
         <Lightbox
             ref="lgbx"
@@ -122,7 +122,7 @@ export default {
     beforeRouteEnter: function( to, from, next ) {
         /* Store the originating route, so that a close returns to
          * the page that was open before we entered the Dip.
-				 * If the link was opened directly, return to 'access.browse'.
+         * If the link was opened directly, return to 'access.browse'.
          */
 
         next( self => {
@@ -137,7 +137,7 @@ export default {
         refreshFiles() {
             let dipId = this.dipId;
             let apiQueryString = this.apiQueryString;
-            axios.get(`/api/v1/access/dips/${dipId}/files${apiQueryString}`).then( async ( dipFilesResponse ) =>  {
+            axios.get(`/api/v1/access/dips/${dipId}/files${apiQueryString}`, { params: { limit: 8 } }).then( async ( dipFilesResponse ) =>  {
                 this.dipFiles = dipFilesResponse.data.data;
                 this.meta = dipFilesResponse.data.meta;
             });

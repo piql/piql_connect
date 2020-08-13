@@ -47,11 +47,11 @@ class ChangeUserFieldToBinary extends Migration
         DB::table('user_permissions')->update([
             'user_id' => DB::raw(
                 "LOWER(CONCAT(".
-                "	SUBSTR(HEX(user_id_tmp), 1,  8), '-',".
-                "	SUBSTR(HEX(user_id_tmp), 9,  4), '-',".
-                "	SUBSTR(HEX(user_id_tmp), 13, 4), '-',".
-                "	SUBSTR(HEX(user_id_tmp), 17, 4), '-',".
-                "	SUBSTR(HEX(user_id_tmp), 21)".
+                "       SUBSTR(HEX(user_id_tmp), 1,  8), '-',".
+                "       SUBSTR(HEX(user_id_tmp), 9,  4), '-',".
+                "       SUBSTR(HEX(user_id_tmp), 13, 4), '-',".
+                "       SUBSTR(HEX(user_id_tmp), 17, 4), '-',".
+                "       SUBSTR(HEX(user_id_tmp), 21)".
                 "))"
             )
         ]);

@@ -65,7 +65,7 @@ export default {
         dipId: function() {
             return this.$route.params.dipId;
         },
-	subTitle: function() {
+        subTitle: function() {
             if (!this.dip && this.dipId > 0) {
                 axios.get(`/api/v1/access/dips/${this.dipId}`).then( async ( dipResponse ) =>  {
                     this.dip = dipResponse.data;

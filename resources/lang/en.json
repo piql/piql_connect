@@ -253,15 +253,62 @@
     "access.download.takeOffline": "Take offline",
     "settings.settings.header": "User settings",
     "settings.settings.ingress": "Configure user settings",
+
     "settings.settings.users": "Users",
     "settings.settings.listing": "User management",
+    "settings.settings.addUser": "Add User",
+    "settings.settings.editUser": "Edit User",
+    "settings.settings.viewUser": "View",
+    "settings.settings.disableUser": "Disable User",
+    "settings.settings.enableUser": "Enable User",
+    "settings.settings.deleteUser": "Delete User",
+    "settings.settings.deleteUserWarning": "Are you sure you want to delete this user? If so, proceed to delete",
+    "settings.settings.disableUserWarning": "Are you sure you want to disable this user? If so, proceed to disable",
+    "settings.settings.enableUserWarning": "Are you sure you want to enable this user? If so, proceed to enable",
+
+    "settings.listing.fullname": "Fullname",
+    "settings.listing.username": "Username",
+    "settings.listing.email": "Email",
+    "settings.listing.status": "Status",
+    "settings.listing.created": "Created",
+
+    "settings.settings.actions": "Actions",
+
+
+
     "settings.settings.userGroups": "User Groups",
     "settings.settings.userGroupDesc": "Manage User Groups",
+
+    "settings.groups.addGroup": "Add Group",
+    "settings.groups.group": "Group",
+    
+    "settings.groups.description": "Description", 
+    "settings.groups.assignUsers": "Assign Users",
+    "settings.groups.listRolesAndUsers": "List Roles & Users Assigned",
+    "settings.groups.assignRoles": "Assign Roles",
+    "settings.groups.deleteGroup": "Delete Group",
+    "settings.groups.editGroup": "Edit Group",
+    "settings.groups.noUsersAssignedMessage": "No Users assigned to group yet",
+    "settings.groups.noRolesAssignedMessage": "No Roles assigned to group yet",
+    "settings.groups.assignUsersToGroup": "Assign Users to Group",
+    "settings.groups.assignRolesToGroup": "Assign Roles to Group",
+
 
     "settings.settings.roles": "Access Roles",
     "settings.settings.rolesDesc": "Manage Access Roles",
     "settings.settings.rolePermissions": "Permissions",
     "settings.settings.rolePermDesc": "Listing and Management of role permissions",
+
+    "settings.roles.addRole": "Add Role",
+    "settings.roles.role": "Role",
+    "settings.roles.confPermissions": "Configure Permissions",
+    "settings.roles.assignGroup": "Assign User Group",
+    "settings.roles.editRole": "Edit Role",
+    "settings.roles.deleteRole": "Delete Role",
+    "settings.roles.deleteRoleWarning": "Do you want to delete this role? if so, click below to proceed",
+    "settings.roles.assignGroupsToRole": "Assign Groups to Role",
+
+
 
     "settings.settings.languagelabel": "Language",
     "settings.settings.rowslabel": "Results Displayed/Page",

@@ -4,12 +4,12 @@
        <table class="table table-hover table-sm table-bordered">
                     <thead>
                         <tr>
-                            <th>Fullname</th>
-                            <th>Username</th>
-                            <th>Email</th>
-                            <th>Status</th>
-                            <th>Created</th>
-                            <th>Actions</th>
+                            <th>{{$t('settings.listing.fullname')}}</th>
+                            <th>{{$t('settings.listing.username')}}</th>
+                            <th>{{$t('settings.listing.email')}}</th>
+                            <th>{{$t('settings.listing.status')}}</th>
+                            <th>{{$t('settings.listing.created')}}</th>
+                            <th>{{$t('settings.settings.actions')}}</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -24,16 +24,16 @@
                                 <a class="btn btn-xs btn-primary" title="Assign Role" style="color:white">
                                     <i class="fa fa-user-secret"></i>
                                     </a>
-                                <a class="btn btn-xs btn-primary" title="Edit" style="color:white" @keydown="showEditModal(staff.id)" @click="showEditModal(staff.id)">
+                                <a class="btn btn-xs btn-primary" :title="$t('settings.settings.editUser')" style="color:white" @keydown="showEditModal(staff.id)" @click="showEditModal(staff.id)">
                                     <i class="fa fa-edit"></i>
                                     </a>
-                                <a v-if="staff.disabled === true" class="btn btn-xs btn-primary" title="Enable" style="color:white" @keydown="showEnableModal(staff.id)" @click="showEnableModal(staff.id)">
+                                <a v-if="staff.disabled === true" class="btn btn-xs btn-primary" :title="$t('settings.settings.enableUser')" style="color:white" @keydown="showEnableModal(staff.id)" @click="showEnableModal(staff.id)">
                                     <i class="fa fa-plug"></i>
                                     </a>
-                                <a v-else class="btn btn-xs btn-primary" title="Disable" style="color:white" @keydown="showDisableModal(staff.id)" @click="showDisableModal(staff.id)">
+                                <a v-else class="btn btn-xs btn-primary" :title="$t('settings.settings.disableUser')" style="color:white" @keydown="showDisableModal(staff.id)" @click="showDisableModal(staff.id)">
                                     <i class="fa fa-ban"></i>
                                     </a>
-                                <a class="btn btn-xs btn-primary" title="Delete User" style="color:white" @keydown="showDeleteModal(staff.id)" @click="showDeleteModal(staff.id)">
+                                <a class="btn btn-xs btn-primary" :title="$t('settings.settings.deleteUser')" style="color:white" @keydown="showDeleteModal(staff.id)" @click="showDeleteModal(staff.id)">
                                     <i class="fa fa-trash"></i>
                                     </a>
                             </td>
@@ -45,39 +45,41 @@
 
                 <b-modal id="delete-user" hide-footer>
                     <template v-slot:modal-title>
-                    <h3><b> DELETE USER : {{ user[0].full_name }} </b></h3>
+                    <h3><b> {{$t('settings.settings.deleteUser').toUpperCase()}} : {{ user[0].full_name }} </b></h3>
                     </template>
                     <div class="d-block">
                         <div class="alert alert-warning">
-                            Are you sure you want to delete this user? If so, proceed to delete
+                            {{$t('settings.settings.deleteUserWarning')}}
                         </div>
                     </div>
-                    <b-button class="mt-3" block @click="deleteButtonClicked(user[0].id)" @keydown="deleteButtonClicked(user[0].id)"><i class="fa fa-trash"></i> Disable </b-button>
+                    <b-button class="mt-3" block @click="deleteButtonClicked(user[0].id)" @keydown="deleteButtonClicked(user[0].id)"><i class="fa fa-trash"></i> {{ $t('settings.settings.deleteUser') }} </b-button>
                 </b-modal>
                 
 
                 <b-modal id="disable-user" hide-footer>
                     <template v-slot:modal-title>
-                    <h3><b> DISABLE USER : {{ user[0].full_name }} </b></h3>
+                    <h3><b> {{$t('settings.settings.disableUser').toUpperCase()}} : {{ user[0].full_name }} </b></h3>
                     </template>
                     <div class="d-block">
                         <div class="alert alert-warning">
-                            Are you sure you want to disable this user? If so, proceed to disable
+                            {{$t('settings.settings.disableUserWarning')}}
                         </div>
                     </div>
-                    <b-button class="mt-3" block @click="disableButtonClicked(user[0].id)" @keydown="disableButtonClicked(user[0].id)"><i class="fa fa-ban"></i> Disable </b-button>
+                    <b-button class="mt-3" block @click="disableButtonClicked(user[0].id)" @keydown="disableButtonClicked(user[0].id)">
+                        <i class="fa fa-ban"></i> {{$t('settings.settings.disableUser')}} </b-button>
                 </b-modal>
 
                 <b-modal id="enable-user" hide-footer>
                     <template v-slot:modal-title>
-                    <h3><b> ENABLE USER : {{ user[0].full_name }} </b></h3>
+                    <h3><b> {{$t('settings.settings.enableUser').toUpperCase()}} : {{ user[0].full_name }} </b></h3>
                     </template>
                     <div class="d-block">
                         <div class="alert alert-info">
-                            This action will enable this user, do you want to proceed? If so, click to proceed
+                            {{$t('settings.settings.enableUserWarning')}}
                         </div>
                     </div>
-                    <b-button class="mt-3" block @click="enableButtonClicked(user[0].id)" @keydown="enableButtonClicked(user[0].id)"><i class="fa fa-plug"></i> Enable </b-button>
+                    <b-button class="mt-3" block @click="enableButtonClicked(user[0].id)" @keydown="enableButtonClicked(user[0].id)">
+                        <i class="fa fa-plug"></i> {{$t('settings.settings.enableUser')}} </b-button>
                 </b-modal>
                 
                 
@@ -85,23 +87,24 @@
                 
                 <b-modal id="edit-user" hide-footer>
                     <template v-slot:modal-title>
-                   <h4>Edit User</h4>
+                   <h4>{{$t('settings.settings.editUser').toUpperCase()}} </h4>
                     </template>
                     <div class="d-block">
                         <div class="form-group">
-                            <label>Fullname</label>
+                            <label>{{$t('settings.listing.fullname')}}</label>
                             <input type="text" class="form-control" v-model="fullname" required>
                         </div>
                         <div class="form-group">
-                            <label>Username</label>
+                            <label>{{$t('settings.listing.username')}}</label>
                             <input type="text" class="form-control" v-model="username" required>
                         </div>
                         <div class="form-group">
-                            <label>Email</label>
+                            <label>{{$t('settings.listing.email')}}</label>
                             <input type="email" class="form-control" v-model="email" required>
                         </div>
                     </div>
-                    <b-button class="mt-3" block @click="editButtonClicked" @keydown="editButtonClicked"><i class="fa fa-edit"></i> Edit User</b-button>
+                    <b-button class="mt-3" block @click="editButtonClicked" @keydown="editButtonClicked">
+                        <i class="fa fa-edit"></i> {{$t('settings.settings.editUser')}} </b-button>
                 </b-modal>
   
   

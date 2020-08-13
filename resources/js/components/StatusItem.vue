@@ -11,7 +11,7 @@
                 {{ formatShortDate( item.created_at ) }}
             </div>
             <div class="col-3 text-center">
-                {{ $t('ingest.status.preparing') }}
+                {{ item.status }}
             </div>
         </div>
     </div>
