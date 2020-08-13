@@ -43,7 +43,7 @@
             };
         },
         methods: {
-	    preview: function(){
+            preview: function(){
                 this.$emit('showPreview', this.dipId, this.item.id);
             },
             showMetadata() {

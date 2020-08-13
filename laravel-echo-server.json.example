@@ -1,33 +1,33 @@
 {
     "bootstrap": "^4.4.1",
-	"authHost": "https://app_authentication_server",
-	"authEndpoint": "/broadcasting/auth",
-	"clients": [],
-	"database": "redis",
-	"databaseConfig": {
-		"redis": {
-            "port": "6379",
-            "host": "redis_message_server"
+        "authHost": "https://app_authentication_server",
+        "authEndpoint": "/broadcasting/auth",
+        "clients": [],
+        "database": "redis",
+        "databaseConfig": {
+            "redis": {
+                "port": "6379",
+                "host": "redis_message_server"
+            },
+            "sqlite": {
+                "databasePath": "/database/laravel-echo-server.sqlite"
+            }
         },
-		"sqlite": {
-			"databasePath": "/database/laravel-echo-server.sqlite"
-		}
-	},
-	"devMode": true,
-	"host": null,
-	"port": "6001",
-	"protocol": "https",
-	"socketio": {},
-	"secureOptions": 67108864,
-	"sslCertPath": "/ssl/fullchain.pem",
-	"sslKeyPath": "/ssl/fullchain.key",
-	"sslCertChainPath": "",
-	"sslPassphrase": "",
-	"subscribers": {
-		"http": true,
-		"redis": true
-	},
-    "apiOriginAllow": {
+        "devMode": true,
+        "host": null,
+        "port": "6001",
+        "protocol": "https",
+        "socketio": {},
+        "secureOptions": 67108864,
+        "sslCertPath": "/ssl/fullchain.pem",
+        "sslKeyPath": "/ssl/fullchain.key",
+        "sslCertChainPath": "",
+        "sslPassphrase": "",
+        "subscribers": {
+            "http": true,
+            "redis": true
+        },
+        "apiOriginAllow": {
         "allowCors": true,
         "allowOrigin": "*",
         "allowMethods": "OPTIONS, GET, POST, PUT",

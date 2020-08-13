@@ -113,9 +113,25 @@ class OfflineStorageControllerTest extends TestCase
         $response = $this->actingAs( $this->user )
             ->json('PATCH',
                 route('api.ingest.bucket.update', [$this->job->id]),
+                ['name' => "bucket name"]);
+        $response->assertStatus( 200 )
+            ->assertJsonFragment(['name' => "bucket name"]);
+
+        $response = $this->actingAs( $this->user )
+            ->json('PATCH',
+                route('api.ingest.bucket.update', [$this->job->id]),
                 ['status' => "ingesting"]);
         $response->assertStatus( 200 )
             ->assertJsonFragment(['status' => "ingesting"]);
+    }
+
+    public function test_given_an_authenticated_user_when_updating_a_created_bucket_with_invalid_name_and_with_status_ingesting_it_responds_400()
+    {
+        $response = $this->actingAs( $this->user )
+            ->json('PATCH',
+                route('api.ingest.bucket.update', [$this->job->id]),
+                ['name' => ":"]);
+        $response->assertStatus( 400 );
     }
 
     public function test_given_an_authenticated_user_when_updating_a_created_bucket_with_invalid_status_it_responds_200()

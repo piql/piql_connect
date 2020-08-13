@@ -9,6 +9,8 @@ volumes:
       name: "ss-location-data"
   piqlConnect-mariadb:
     external: true
+  piqlConnect-mongodb:
+    external: true
 
 services:
   app:
@@ -65,7 +67,10 @@ services:
       - piqlConnect-mariadb:/var/lib/mysql
       - ./mysql/my.cnf:/etc/my.cnf
     networks:
-      - piqlConnect-net
+      piqlConnect-net:
+        aliases:
+          - piqlConnectMariaDB
+
 
   cache:
     image: redis
@@ -91,13 +96,16 @@ services:
 
   composer:
     user: ${HOST_USERID}:${HOST_GROUPID}
-    image: composer
+    build:
+      network: host
+      context: ./composer/
+      dockerfile: ./Dockerfile
     command: bash -c "composer install && composer dump-autoload"
     stdin_open: true
     tty: true
     user: ${HOST_USERID}:${HOST_GROUPID}
     volumes:
-      - .././:/app
+      - .././:/var/www/html/
 
   npm:
     build:
@@ -111,8 +119,47 @@ services:
       - .././:/app
     environment:
       - "NPM_RUN=${NPM_RUN:-dev}"
+  
+  logstash:
+    image: logstash:7.8.0
+    command: /etc/logstash/init.sh
+    volumes:
+      - ./logstash/java/libs:/etc/logstash/libs
+      - ./logstash/conf.d:/etc/logstash/config-templates
+      - ./logstash/init.sh:/etc/logstash/init.sh:ro
+      - ./logstash/config/logstash.yml:/usr/share/logstash/config/logstash.yml:ro
+      - ./logstash/config/pipelines.yml:/usr/share/logstash/config/pipelines.yml:ro
+    environment:
+      MYSQL_NAME: connect
+      MYSQL_HOST: piqlConnectMariaDB
+      MYSQL_PORT: 3306
+      MYSQL_USER: connectdbuser
+      MYSQL_PASS: AeJua4le
+      MONGO_NAME: connectstats
+      MONGO_USER: connectuser
+      MONGO_PASS: Fw86TQZrJ5
+      MONGO_HOST: piqlConnectMongoDB
+      MONGO_PORT: 27017
+    networks:
+      - piqlConnect-net
+
+  mongodb:
+    image: mongo:4.2.8
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: connectuser
+      MONGO_INITDB_ROOT_PASSWORD: Fw86TQZrJ5
+      MONGO_INITDB_USERNAME: mongo
+      MONGO_INITDB_PASSWORD: mongo
+      MONGO_INITDB_DATABASE: connectstats
+    volumes:
+      - piqlConnect-mongodb:/data/db
+    networks:
+      piqlConnect-net:
+        aliases:
+          - piqlConnectMongoDB
 
 networks:
   piqlConnect-net:
     driver: bridge
-

@@ -77,6 +77,10 @@ docker volume ls | grep piqlConnect-mariadb
 if [ $? -ne 0 ] ; then
   docker volume create --name=piqlConnect-mariadb || exit $?
 fi
+docker volume ls | grep piqlConnect-mongodb
+if [ $? -ne 0 ] ; then
+  docker volume create --name=piqlConnect-mongodb || exit $?
+fi
 
 echo "Set file permissions"
 sudo chown 333:$USER -R ../storage || exit $?

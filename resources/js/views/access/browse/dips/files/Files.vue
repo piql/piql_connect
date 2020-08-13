@@ -15,11 +15,11 @@
 
         <browser-file-item v-for="item in dipFiles" :item="item" :key="item.id" @showPreview="showPreview"/>
 
-				<div class="row text-center pagerRow">
-						<div class="col">
-								<Pager :meta='meta' :height='height' />
-						</div>
-				</div>
+        <div class="row text-center pagerRow">
+            <div class="col">
+                <Pager :meta='meta' :height='height' />
+            </div>
+        </div>
 
         <Lightbox
             :visible="lbVisible"
@@ -117,7 +117,7 @@ export default {
     beforeRouteEnter: function( to, from, next ) {
         /* Store the originating route, so that a close returns to
          * the page that was open before we entered the Dip.
-				 * If the link was opened directly, return to 'access.browse'.
+         * If the link was opened directly, return to 'access.browse'.
          */
 
         next( self => {

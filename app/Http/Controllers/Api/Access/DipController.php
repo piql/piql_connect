@@ -3,16 +3,15 @@
 namespace App\Http\Controllers\Api\Access;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\DipResource;
+use App\Http\Resources\StoragePropertiesToDipResource;
 use App\Http\Resources\FileObjectResource;
 use App\Dip;
-use http\Env\Response;
+use App\StorageProperties;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
 use App\Interfaces\ArchivalStorageInterface;
 use App\FileObject;
-use App\Bag;
 use App\Helpers\FilePreviewRenderHelper;
 use Log;
 
@@ -26,7 +25,7 @@ class DipController extends Controller
 
     public function index( Request $request )
     {
-        $q = Dip::query();
+        $q = StorageProperties::query()->whereHas("dip");
         $terms = collect(explode(" ", $request->query('search')))->reject("");
         $archiveUuid = $request->query('archive');
         $holdingTitle = $request->query('holding');
@@ -57,38 +56,28 @@ class DipController extends Controller
 
 
         if($archiveUuid) {
-            $q->whereHas('storage_properties',
-                function ($storage_property) use ($archiveUuid, $holdingTitle) {
-                    $storage_property->where('archive_uuid', $archiveUuid);
-                    if($holdingTitle) {
-                        $storage_property->where('holding_name', $holdingTitle);
-                    }
-                });
+            $q->where('archive_uuid', $archiveUuid);
+            if($holdingTitle) {
+                $q->where('holding_name', $holdingTitle);
+            }
         }
 
         if($terms->count() == 1) {
-            $q->whereHas('storage_properties.bag',
-                function( $bag ) use( $terms ) {
-                    $bag->where('name', 'LIKE', "%{$terms->first()}%");
-                });
+            $q->where('name', 'LIKE', "%{$terms->first()}%");
         } elseif( $terms->count() > 1) {
             $terms->each( function ($term, $key) use ($q) {
-                $q->whereHas('storage_properties.bag',
-                    function( $bag ) use ($term) {
-                        $bag->where('name','LIKE',"%{$term}%");
-                    });
+                $q->where('name','LIKE',"%{$term}%");
             });
         }
 
         $limit = $request->limit ? $request->limit : env('DEFAULT_ENTRIES_PER_PAGE');
-
-        return DipResource::collection(
+        return StoragePropertiesToDipResource::collection(
             $q->paginate( $limit )
         );
     }
-    
+
     private function filter_package_thumbnail($dip) {
-    	return $dip->fileObjects->filter( function ($file, $key) {
+        return $dip->fileObjects->filter( function ($file, $key) {
             $pathInfo = pathinfo($file->fullpath);
             $ext = strtolower($pathInfo['extension']);
             if ($ext != 'xml' && !FilePreviewRenderHelper::isPreviwableFile($file->fullpath)) {
@@ -122,7 +111,7 @@ class DipController extends Controller
     public function files( Request $request )
     {
         $limit = $request->limit ? $request->limit : env('DEFAULT_ENTRIES_PER_PAGE');
-        
+
         $dip = Dip::find( $request->dipId );
         $q = $dip->fileObjects()->where( 'path', 'LIKE', "%/objects" );
         if ($search = $request->query('search')) {
@@ -179,9 +168,9 @@ class DipController extends Controller
     {
         $dip = Dip::find( $request->dipId );
         $file = $dip->fileObjects->find( $request->fileId );
-        
+
         $filePreviewRenderHelper = new FilePreviewRenderHelper($storage, $dip, $file);
-		
+
         return response($filePreviewRenderHelper->getContent())
         ->header("Content-Type" , $filePreviewRenderHelper->getMimeType());
     }
@@ -198,7 +187,7 @@ class DipController extends Controller
             "Content-Disposition" => "attachment; { $file->filename }"
         ]);
     }
-    
+
     private function filter_file_thumbnail($dip, $file)
     {
         return $dip->fileObjects->filter( function ($thumb, $key) use( $file ) {
