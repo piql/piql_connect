@@ -5,9 +5,10 @@ namespace Tests\Feature;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Illuminate\Support\Facades\Log;
 use Laravel\Passport\Passport;
 
-class DashboardControllerTest extends TestCase
+class ChartControllerTest extends TestCase
 {
     use DatabaseTransactions;
 
@@ -55,7 +56,7 @@ class DashboardControllerTest extends TestCase
         $response = $this->get( route( 'dailyOnlineAIPsIngested' ) );
         $response->assertStatus(200);
     }
-
+    
     public function test_when_requesting_daily_online_data_ingested_it_responds_200()
     {
         $response = $this->get( route( 'dailyOnlineDataIngested' ) );

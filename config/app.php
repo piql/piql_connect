@@ -194,6 +194,12 @@ return [
         App\Providers\PreProcessBagServiceProvider::class,
         App\Providers\IngestValidationServiceProvider::class,
 
+
+        /*
+        * Database Providers
+        */
+        Jenssegers\Mongodb\MongodbServiceProvider::class,
+
     ],
 
     /*
