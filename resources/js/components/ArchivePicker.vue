@@ -23,13 +23,11 @@
 
 <script>
 import RouterTools from '../mixins/RouterTools.js';
-import DeferUpdate from '../mixins/DeferUpdate.js';
 
 export default {
-    mixins: [ RouterTools, DeferUpdate ],
+    mixins: [ RouterTools ],
 
     mounted() {
-        this.deferUpdates();
         axios.get("/api/v1/planning/archives").then( (response) => {
             this.archives = response.data.data;
         });
@@ -90,7 +88,6 @@ export default {
         '$route': 'dispatchRouting',
 
         selection: function ( archive ){
-            if( this.updatesDeferred() ) return;
             if( archive === '0' ){
                 this.updateQueryParams({ archive : null, page: null, holding: null });
             } else {

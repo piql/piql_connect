@@ -93,13 +93,13 @@ class RetrievalJobsControllerTest extends TestCase
 
     public function test_when_requesting_jobs_index_it_responds_200()
     {
-        $response = $this->get( route('storage.buckets.all'));
+        $response = $this->get( route('storage.buckets.aips'));
         $response->assertStatus(200);
     }
 
     public function test_when_requesting_job_index_it_responds_with_a_list_of_jobs_with_aips_owned_by_current_user()
     {
-        $response = $this->get( route('storage.buckets.all' ));
+        $response = $this->get( route('storage.buckets.aips' ));
         $result = $response->decodeResponseJson();
         /* We should see exactly the number of jobs we created, because the api checks for ownership */
         $aipsCreated = self::JOBS_CREATED * self::AIPS_PER_JOB_CREATED;

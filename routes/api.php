@@ -161,7 +161,7 @@ Route::group(['prefix' => 'v1' , 'middleware' => ['auth:api', 'activity']], func
         Route::get('retrievals/{id}/files', 'Api\Storage\RetrievalCollectionController@files');
         Route::post('retrievals/{id}/close', 'Api\Storage\RetrievalCollectionController@close');
         Route::get('retrievals/{id}/download', 'Api\Storage\RetrievalCollectionController@download');
-        Route::get('buckets', 'Api\Storage\RetrievalJobsController@index')->name('storage.buckets.all');
+        Route::get('requests/aips', 'Api\Storage\RetrievalJobsController@aipsOnFilm')->name('storage.buckets.aips');
         Route::get('buckets/{id}', 'Api\Storage\RetrievalJobsController@show')->name('storage.buckets');
     });
 

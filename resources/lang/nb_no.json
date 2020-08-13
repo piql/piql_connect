@@ -83,7 +83,7 @@
 
     "dashboard.title": "Oversikt",
     "dashboard.ingress": "Om din informasjon i piqlConnect",
-    "dashboard.content": "Andre typer innhold legges her."
+    "dashboard.content": "Andre typer innhold legges her.",
     "dashboard.month.abbrev.array": "['Jan','Feb', 'Mar', 'Apr', 'Mai', 'Jun', 'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Des']",
 
     "dashboard.graphs.monthlyOnlineAIPsIngested": "Opplastede arkivpakker (pr.mnd.)",
@@ -234,6 +234,9 @@
     "access.metadata.file.title": "Filmetadata",
     "access.metadata.file.ingress": "Vis beskrivende metadata for denne filen",
     "access.retrieve": "Gjenopprett",
+    "access.retrieve.request": "Gjenopprettingsforespørsel",
+    "access.retrieve.request.ingress": "Forespørsler for gjenoppretting fra film",
+    "access.retrieve.addObjectToRetrieval": "Legg dette objektet til i køen for gjenoppretting",
     "access.retrieve.readyToRetrieve": "Filer klare for gjenoppretting",
     "access.retrieve.nowRetrieving": "Under gjenopprettelse",
     "access.retrieve.nowRetrieving.ingress": "Informasjon i kø for gjenopphenting fra piqlFilm",
@@ -241,6 +244,8 @@
     "access.retrieve.downloadable.ingress": "Last ned dine gjenopphentede filer",
     "access.retrieve.history": "Gjenopprettelseshistorikk",
     "access.retrieve.history.ingress": "Tidligere gjenopprettet informasjon",
+    "access.retrieve.toasts.added.title" : "Pakke lagt til",
+    "access.retrieve.toasts.added.message": "Pakken %ITEMTITLE% er lagt til for gjenoppretting",
     "access.ready.aipName": "Arkivnavn",
     "access.ready.ingestDate": "Arkiveringsdato",
     "access.ready.filesize": "Filstørrelse",

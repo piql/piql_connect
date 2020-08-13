@@ -14,16 +14,20 @@ class AipRetrievalResource extends JsonResource
      */
     public function toArray( $request )
     {
-        $dipUuid = $this->storage_properties->dip ? $this->storage_properties->dip->external_uuid : "";
+        $dipId = $this->storage_properties->dip ? $this->storage_properties->dip->id : "";
         return [
             'id' => $this->id,
             'title' => $this->storage_properties->name,
             'external_uuid' => $this->external_uuid,
             'owner' => $this->owner,
             'aip_external_uuid' => $this->external_uuid,
-            'dip_external_uuid' => $dipUuid,
+            'dipId' => $dipId,
             'archived_at' => $this->created_at,
-            'bucket_name' => $this->jobs->first()->name
+            'bucket_name' => $this->jobs->first()->name,
+            'size_on_disk' => $this->size,
+            'file_count' => $this->fileObjects->count(),
+            'archive_uuid' => $this->storage_properties->archive_uuid,
+            'holding_name' => $this->storage_properties->holding_name
         ];
     }
 }
