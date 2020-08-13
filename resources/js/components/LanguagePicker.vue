@@ -5,7 +5,7 @@
                 {{label}}
             </label>
             <select v-model="selection" required id="languagePicker" class="col-3 form-control" data-live-search="true" @change="selectionChanged">
-                <option v-for="language in languages" v-bind:value="language.code">
+                <option v-for="language in userLanguages" :key="language.id" v-bind:value="language.code">
                     {{language.title}}
                 </option>
             </select>
@@ -15,13 +15,15 @@
 
 <script>
 import JQuery from 'jquery';
+import { mapGetters, mapActions } from "vuex";
 let $ = JQuery;
 
 export default {
     async mounted() {
-        this.languages = (await axios.get("/api/v1/system/languages")).data; // Populate language when user settings are empty, should not be needed
+        this.fetchLanguages(); // Populate language when user settings are empty, should not be needed
     },
     methods: {
+        ...mapActions(['fetchLanguages']),
         selectionChanged: function () {
             if (this.selection) {
                 this.$emit('selectionChanged', this.selection);
@@ -30,8 +32,7 @@ export default {
     },
     data() {
         return {
-            selection: '',
-            languages: []
+            selection: ''
         };
     },
     props: {
@@ -43,7 +44,7 @@ export default {
     },
     watch: {
         async initialSelection(value) {
-            this.languages = (await axios.get("/api/v1/system/languages")).data;
+            this.fetchLanguages();
             this.selection = this.initialSelection;
             Vue.nextTick( () => {
                 $('#languagePicker').selectpicker('refresh');
@@ -52,6 +53,7 @@ export default {
         }
     },
     computed: {
+        ...mapGetters(['userLanguages']),
         showLabel: function() {
             return this.label.length > 0;
         }

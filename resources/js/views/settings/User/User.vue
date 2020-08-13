@@ -33,21 +33,52 @@
 </template>
 
 <script>
+import { mapActions, mapGetters } from "vuex";
     export default {
-        data() {
-            return {
-                userSettings: null
-            };
-        },
+        
 
         async mounted() {
-            this.userSettings = (await axios.get("/api/v1/system/users/current-user/preferences")).data;
+            this.fetchUserSettings();
+        },
+        watch: {
+            setPasswordData(NewPassword,oldPassword){
+                if (NewPassword && NewPassword.status == 0) {
+                    this.$refs.passwordPicker.clearData();
+                    this.infoToast(
+                        this.$t('settings.settings.toasts.passwordUpdated.title'),
+                        this.$t('settings.settings.toasts.passwordUpdated.message')
+                    );
+                    alert(this.$t('settings.settings.alert.changedPassword'));
+                    Vue.nextTick( () => { window.location = "/logout"; } );
+                }
+                else if (NewPassword && NewPassword.status == 1) {
+                    this.errorToast(
+                        this.$t('settings.settings.toasts.newPasswordTooShort.title'),
+                        this.$t('settings.settings.toasts.newPasswordTooShort.message')
+                    );
+                }
+                else if (NewPassword && NewPassword.status == 2) {
+                    this.errorToast(
+                        this.$t('settings.settings.toasts.oldPasswordWrong.title'),
+                        this.$t('settings.settings.toasts.oldPasswordWrong.message')
+                    );
+                }
+                else {
+                    this.errorToast(
+                        this.$t('settings.settings.toasts.failedSetPassword.title'),
+                        this.$t('settings.settings.toasts.failedSetPassword.message')
+                    );
+                }
+
+            }
+
         },
 
         methods: {
-            async changedLanguage(language) {
+            ...mapActions(['fetchUserSettings','changeLanguage','setNewPassword']),
+            changedLanguage(language) {
                 if (language && language != this.selectedLanguage) {
-                    await axios.post("/api/v1/system/users/current-user/preferences", {"interface": { "language": language }});
+                    this.changeLanguage(language);
                     this.$router.go(0);
                 }
             },
@@ -60,42 +91,17 @@
                     return;
                 }
 
-                let setPasswordData = (await axios.post("/api/v1/system/users/current-user/password", {
+                let data = {
                     oldPassword: oldPassword,
                     newPassword: newPassword1
-                })).data;
+                }
 
-                if (setPasswordData.status == 0) {
-                    this.$refs.passwordPicker.clearData();
-                    this.infoToast(
-                        this.$t('settings.settings.toasts.passwordUpdated.title'),
-                        this.$t('settings.settings.toasts.passwordUpdated.message')
-                    );
-                    alert(this.$t('settings.settings.alert.changedPassword'));
-                    Vue.nextTick( () => { window.location = "/logout"; } );
-                }
-                else if (setPasswordData.status == 1) {
-                    this.errorToast(
-                        this.$t('settings.settings.toasts.newPasswordTooShort.title'),
-                        this.$t('settings.settings.toasts.newPasswordTooShort.message')
-                    );
-                }
-                else if (setPasswordData.status == 2) {
-                    this.errorToast(
-                        this.$t('settings.settings.toasts.oldPasswordWrong.title'),
-                        this.$t('settings.settings.toasts.oldPasswordWrong.message')
-                    );
-                }
-                else {
-                    this.errorToast(
-                        this.$t('settings.settings.toasts.failedSetPassword.title'),
-                        this.$t('settings.settings.toasts.failedSetPassword.message')
-                    );
-                }
+                this.setNewPassword(data);     
             }
         },
 
         computed: {
+            ...mapGetters(['userSettings','setPasswordData']),
             selectedLanguage() {
                 if (this.userSettings && this.userSettings.interface && this.userSettings.interface.language) {
                     return this.userSettings.interface.language;
