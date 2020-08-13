@@ -5,32 +5,32 @@
 # - pipeline.id: main
 #   path.config: /usr/share/logstash/pipeline
 - pipeline.id: pipeline-ingested-aips-online-input
-  path.config: /etc/logstash/conf.d/inputs/ingested_aips_online.conf
+  path.config: /tmp/logstash/conf.d/inputs/ingested_aips_online.conf
   pipeline.workers: 1
   pipeline.batch.size: 1
   pipeline.ordered: false
 - pipeline.id: pipeline-ingested-data-online-input
-  path.config: /etc/logstash/conf.d/inputs/ingested_data_online.conf
+  path.config: /tmp/logstash/conf.d/inputs/ingested_data_online.conf
   pipeline.ordered: false
   pipeline.workers: 1
   pipeline.batch.size: 1
 - pipeline.id: pipeline-ingested-file-formats-input
-  path.config: /etc/logstash/conf.d/inputs/ingested_file_formats.conf
+  path.config: /tmp/logstash/conf.d/inputs/ingested_file_formats.conf
   pipeline.ordered: false
   pipeline.workers: 1
   pipeline.batch.size: 1
 - pipeline.id: pipeline-ingested-aips-online-output
-  path.config: /etc/logstash/conf.d/outputs/ingested_aips_online.conf
+  path.config: /tmp/logstash/conf.d/outputs/ingested_aips_online.conf
   pipeline.workers: 1
   pipeline.batch.size: 1
   pipeline.ordered: false
 - pipeline.id: pipeline-ingested-data-online-output
-  path.config: /etc/logstash/conf.d/outputs/ingested_data_online.conf
+  path.config: /tmp/logstash/conf.d/outputs/ingested_data_online.conf
   pipeline.ordered: false
   pipeline.workers: 1
   pipeline.batch.size: 1
 - pipeline.id: pipeline-ingested-file-formats-output
-  path.config: /etc/logstash/conf.d/outputs/ingested_file_formats.conf
+  path.config: /tmp/logstash/conf.d/outputs/ingested_file_formats.conf
   pipeline.ordered: false
   pipeline.workers: 1
   pipeline.batch.size: 1

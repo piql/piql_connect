@@ -44,7 +44,10 @@ configure_ingest_templates() {
     fi
 
     echo "clean up old configuration files"
-    rm $config_dir/*.conf
+    config_dir_files=($config_dir/*.conf)
+    if [ ${#config_dir_files[@]} -gt 0 ]; then 
+      rm $config_dir/*.conf
+    fi
 
     echo "load new configuration files"
     cp $template_dir/*.conf $config_dir/
@@ -70,9 +73,11 @@ configure_ingest_templates() {
 
 
 # do stuff
-CONFIG_DIR=/etc/logstash/conf.d
+CONFIG_DIR=/tmp/logstash/conf.d
 TEMPLATES_DIR=/etc/logstash/config-templates
 CONFIG_PATH=/usr/share/logstash/config/pipelines.yml
+
+mkdir -p $CONFIG_DIR
 
 echo ""
 echo "processing general configurations"
@@ -105,5 +110,5 @@ echo "installing plugins"
 logstash-plugin install --version=3.1.5 logstash-output-mongodb 
 
 #start logstash with configuration folder
-echo "starting logstash with configuration template_dir: '$CONFIG_PATH'"
+echo "starting logstash with pipeline config: '$CONFIG_PATH'"
 logstash 
