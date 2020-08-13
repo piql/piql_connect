@@ -34,6 +34,7 @@
 </template> 
 
 <script>
+import { mapActions, mapGetters } from "vuex";
 
     export default {
      
@@ -46,22 +47,35 @@
                 rolekey: 0,
             };
         },
+        computed:{
+            ...mapGetters(['rolesApiResponse'])
+        },
+        watch:{
+            rolesApiResponse(newValue,prevValue){
+                //will run on success or failure of any post operation
+                if(newValue && (newValue.status >= 200 && newValue.status <= 299)){
+                    this.successToast('Success: ' + newValue.status ,newValue.message);
+                }else if(newValue && newValue.status){
+                    this.errorToast('Error: ' + newValue.status,newValue.message);
+                }
+            }
+
+        },
 
         methods: {
+            ...mapActions(['postNewRole','updateRole','removeRole','postRolesToGroup']),
             forceRerender(){
                 this.rolekey += 1;
 
             },
             async addRole(){
                 this.infoToast('Add Role','Adding '+ this.role + ' role');
-                 this.response = (await axios.post("/api/v1/admin/access-control/permission-groups", {
+                let data = {
                     name: this.role,
                     description: this.description
-                },{
-                    headers:{
-                        'content-type': 'application/json'
-                    }
-                })).data;
+                }
+
+                this.postNewRole(data);
                 
                 this.forceRerender();
                 this.$bvModal.hide('add-role')
@@ -69,14 +83,8 @@
 
             async editRole(data){
                 this.infoToast('Edit Role','Editing '+ data.name);
-                 this.response = (await axios.put("/api/v1/admin/access-control/permission-groups/"+ data.roleId, {
-                    name: data.name,
-                    description: data.description
-                },{
-                    headers:{
-                        'content-type': 'application/json'
-                    }
-                })).data;
+                
+                this.updateRole(data);
                 
                 this.forceRerender();
                 this.$bvModal.hide('edit-role');
@@ -84,25 +92,16 @@
             },
             async deleteRole(roleId){
                 this.infoToast('Delete Role','Deleting a role ');
-                await axios.delete("/api/v1/admin/access-control/permission-groups/"+ roleId).then(res => {
-                    this.response = res;
-                }).catch(err => {
-                    this.response = err;
-                    this.errorToast('Role Delete Failed',"Unable to delete role, check endpoint");
-                });
+
+                this.removeRole(roleId);
                 
                 this.forceRerender();
                 this.$bvModal.hide('delete-role')
             },
             async assignGroup(data){
                 this.infoToast("Assigning group", "assigning group to role selected");
-                this.response = (await axios.post("/api/v1/admin/access-control/roles/"+ data.groupId +"/permissions",{
-                    permissions: data.roles
-                },{
-                    headers:{
-                        'content-type': 'application/json'
-                    }
-                })).data;
+
+                this.postRolesToGroup(data);
 
                 this.forceRerender();
                 this.$bvModal.hide('assign-role');

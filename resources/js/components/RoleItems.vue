@@ -11,7 +11,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="role in roles" :key="role.id">
+                        <tr v-for="role in userRoles" :key="role.id">
                             <td>{{role.name}}</td>
                             <td>{{role.description}}</td>
                             <td>
@@ -37,7 +37,7 @@
                     <div class="col">
 
                       
-                        <Pager :meta='pageMeta' :height='height' />
+                        <Pager :meta='rolesPageMeta' :height='height' />
                     </div>
                 </div>
 
@@ -95,13 +95,10 @@
 </template>
 
 <script>
+import { mapGetters, mapActions } from "vuex";
 export default {
     data() {
             return {
-                response:null,
-                description: null,
-                roles:null,
-                pageMeta: null,
                 roleId: null,
                 role: null,
                 roleName: null,
@@ -119,6 +116,7 @@ export default {
         }
     },
     computed:{
+        ...mapGetters(['userGroups','userRoles','rolesPageMeta']),
       apiQueryString: function() {
             let query = this.$route.query;
             let filter = '';
@@ -130,35 +128,32 @@ export default {
 
     },
      watch: {
-        '$route': 'dispatchRouting'
+        '$route': 'dispatchRouting',
+        userGroups(newValue,oldValue){
+            if(newValue){
+                newValue.forEach(single => {
+                    this.list.push({
+                        label: single.name,
+                        value: single.id
+                        })
+                });
+            }
+        }
     },
     async mounted() {
        let page = this.$route.query.page;
         if( isNaN( page ) || parseInt( page ) < 2 ) {
             this.$route.query.page = 1;
         }
-        this.refreshObjects( this.apiQueryString );
+        this.fetchRoles(this.apiQueryString );
 
-        this.fetchGroups(100);
+        this.fetchGroups('',{limit: 100});
         
 
         
     },
     methods:{
-        async fetchGroups(limit){
-            await axios.get('/api/v1/admin/access-control/roles',{ params: { limit: limit } }).then(res => {
-                let groups = res.data.data;
-                groups.forEach(single => {
-                    this.list.push({
-                        label: single.name,
-                        value: single.id
-                        })
-                });
-            }).catch(err => {
-                console.log(err);
-            })
-
-        },
+        ...mapActions(['fetchGroups','fetchRoles']),
         assignButtonClicked(roleId){
             let data = {
                 roles: [roleId],
@@ -181,38 +176,28 @@ export default {
 
         },
         showAssignModal(roleId){
-            this.role = this.roles.filter(role => role.id === roleId);
+            this.role = this.userRoles.filter(role => role.id === roleId);
             this.$bvModal.show('assign-role')
 
         },
         showEditModal(roleId){
-            this.role = this.roles.filter(role => role.id === roleId);
+            this.role = this.userRoles.filter(role => role.id === roleId);
             this.roleName = this.role[0].name;
             this.description = this.role[0].description;
             this.$bvModal.show('edit-role');
 
         },
        dispatchRouting() {
-            this.refreshObjects( this.apiQueryString );
+            this.fetchRoles( this.apiQueryString );
         },
        showDeleteModal(roleId){
-           this.role = this.roles.filter(role => role.id === roleId);
+           this.role = this.userRoles.filter(role => role.id === roleId);
            this.$bvModal.show('delete-role');
 
         },
         deleteRoleClicked(roleId){
             this.$emit('deleteRole', roleId);
 
-        },
-
-        refreshObjects( apiQueryString ){
-            axios.get("/api/v1/admin/access-control/permission-groups" + apiQueryString).then( (response ) => {
-               this.response = response
-                this.roles = this.response.data.data;
-                this.pageMeta = this.response.data.meta
-            }).catch(error => {
-                this.response = error;
-            });
         },
 
         viewPermissions(roleId){

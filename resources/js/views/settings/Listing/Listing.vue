@@ -68,13 +68,11 @@ import { mapGetters, mapActions } from "vuex";
             '$route': 'dispatchRouting',
             userApiResponse(newValue,prevValue){
                 //will run on success or failure of any post operation
-                 if(newValue && newValue.status == 200){
-                     this.successToast('Success: ' + newValue.status ,newValue.message);
-                    }else if(newValue && newValue.status){
-                        this.errorToast('Error: ' + n.status,n.message);
-                    }
-                
-
+                if(newValue && (newValue.status >= 200 && newValue.status <= 299)){
+                    this.successToast('Success: ' + newValue.status ,newValue.message);
+                }else if(newValue && newValue.status){
+                    this.errorToast('Error: ' + newValue.status,newValue.message);
+                }
             }
         },
 
@@ -140,7 +138,10 @@ import { mapGetters, mapActions } from "vuex";
                 //vuex action call
                 this.disableUserRequest(data);
 
-                this.forceRerender();
+                if(!this.forceRerender()){
+                    location.reload();
+                }
+
                 this.$bvModal.hide('disable-user');
                
             },
@@ -151,7 +152,6 @@ import { mapGetters, mapActions } from "vuex";
                 //delete request goes here
                 this.forceRerender();
                 
-
                 this.$bvModal.hide('delete-user');
             },
             enableUser(data){
@@ -160,7 +160,10 @@ import { mapGetters, mapActions } from "vuex";
                 //vuex request
                 this.enableUserRequest(data);
 
-                this.forceRerender();
+                if(!this.forceRerender()){
+                    location.reload();
+                }
+
                 this.$bvModal.hide('enable-user');
 
             },

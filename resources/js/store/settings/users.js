@@ -14,7 +14,7 @@ const state = {
 //if you want to alter state in some way, you could use the getters for that, 
 //but you can also use then to return state
 const getters = {
-    formattedUsers: state => state.users,
+    formattedUsers:state => state.users,
     usersPageMeta: state => state.pageMeta,
     userApiResponse: state => state.response
 
@@ -23,17 +23,17 @@ const getters = {
 //actions
 const actions = {
     async fetchUsers({commit},query, data = { limit:10 }){
-        await axios.get('/api/v1/admin/users' + query, { params: data }).then( (response ) => {
-             //commit to mutation
-             commit('setUsersMutation', response.data)
-         
-         }).catch(err => {
-             console.log(err)
-         });
+        let response  = await axios.get('/api/v1/admin/users' + query, { params: data });
+        commit('setUsersMutation', response.data)
+    },
+
+    async fetchSelectUsers({commit},data = { limit:100 }){
+        let response = await axios.get('/api/v1/admin/users', { params: data });
+        commit('setUsersMutation', response.data)
     },
 
     async postNewUser({commit}, request){
-        await axios.post("/api/v1/registration/register",request).then(response => {
+        axios.post("/api/v1/registration/register",request).then(response => {
             //response
             commit('setResponse',response)
             
@@ -45,7 +45,7 @@ const actions = {
     },
 
     async disableUserRequest({commit}, data){
-        await axios.post("/api/v1/admin/users/disable",data).then(response => {
+        axios.post("/api/v1/admin/users/disable",data).then(response => {
             commit('setResponse',response)
         }).catch(err => {
             commit('setErrorResponse',err.response)
@@ -54,7 +54,7 @@ const actions = {
     },
 
     async enableUserRequest({commit}, data){
-        await axios.post("/api/v1/admin/users/enable",data).then(response => {
+        axios.post("/api/v1/admin/users/enable",data).then(response => {
             commit('setResponse',response)
         }).catch(err => {
             commit('setErrorResponse',err.response)
