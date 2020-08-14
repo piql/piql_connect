@@ -10,6 +10,21 @@ use App\Interfaces\FileArchiveInterface;
 use App\FileObject;
 use Log;
 
+/**
+ * @OA\Info(
+ *      version="0.3.0",
+ *      title="AIP Controller",
+ *      description="Manages AIPs ",
+ *      @OA\Contact(
+ *          email="kare.andersen@piql.com"
+ *      ),
+ *     @OA\License(
+ *         name="Apache 2.0",
+ *         url="http://www.apache.org/licenses/LICENSE-2.0.html"
+ *     )
+ * )
+ */
+
 class AipController extends Controller
 {
     /**
@@ -48,6 +63,23 @@ class AipController extends Controller
      *
      * @param  \App\Aip  $aip
      * @return \Illuminate\Http\Response
+     * 
+     * @OA\Get(
+     *     path="/api/v1/access/aips/{aipId}",
+     *     summary="Get AIP by ID",
+     *     operationId="showAIPById",
+     *     @OA\Parameter(
+     *          name="aipId",
+     *          description="AIP ID",
+     *          required=true,
+     *          in="path",
+     *          @OA\Schema(
+     *              type="integer"
+     *          )
+     *     ),
+     *     @OA\Response( response=200, description="Success"),
+     *     @OA\Response( response=404, description="Not Found"),
+     * )
      */
 
     public function show( Request $request )
@@ -56,12 +88,48 @@ class AipController extends Controller
         return response( $aip );
     }
 
+    /**
+     *  @OA\Get(
+     *     path="/api/v1/access/aips/{aipId}/filename",
+     *     summary="Get filename of AIP by ID",
+     *     operationId="getAIPFilenameById",
+     *     @OA\Parameter(
+     *          name="aipId",
+     *          description="AIP ID",
+     *          required=true,
+     *          in="path",
+     *          @OA\Schema(
+     *              type="integer"
+     *          )
+     *     ),
+     *     @OA\Response( response=200, description="Success"),
+     *     @OA\Response( response=404, description="Not Found"),
+     * )
+    */
     public function filename( Request $request )
     {
         $aip = Aip::find( $request->aipId );
         return response ( $aip->fileObjects->first()->filename );
     }
 
+    /**
+     *  @OA\Get(
+     *     path="/api/v1/access/aips/dips/{dipId}/filename",
+     *     summary="Get AIP filename by DIP ID",
+     *     operationId="getAIPFilenameByDIPId",
+     *     @OA\Parameter(
+     *          name="dipId",
+     *          description="DIP ID",
+     *          required=true,
+     *          in="path",
+     *          @OA\Schema(
+     *              type="integer"
+     *          )
+     *     ),
+     *     @OA\Response( response=200, description="Success"),
+     *     @OA\Response( response=404, description="Not Found"),
+     * )
+    */
     public function filenameFromDipId( Request $request )
     {
         $dip = \App\Dip::find ($request->dipId );
@@ -69,7 +137,33 @@ class AipController extends Controller
         return response ( $aip->fileObjects->first()->filename );
     }
 
-
+    /**
+     * @OA\Get(
+     *     path="/api/v1/access/aips/{aipId}/file/{fileId}/download",
+     *     summary="Download AIP from AIP ID and DIP ID",
+     *     operationId="getAIPFilenameByDIPId",
+     *     @OA\Parameter(
+     *          name="aipId",
+     *          description="AIP ID",
+     *          required=true,
+     *          in="path",
+     *          @OA\Schema(
+     *              type="integer"
+     *          )
+     *     ),
+     *     @OA\Parameter(
+     *          name="fileId",
+     *          description="File ID",
+     *          required=true,
+     *          in="path",
+     *          @OA\Schema(
+     *              type="integer"
+     *          )
+     *     ),
+     *     @OA\Response( response=200, description="Success"),
+     *     @OA\Response( response=404, description="Not Found"),
+     * )
+    */
     public function fileDownload(ArchivalStorageInterface $storage, Request $request)
     {
         /*USED FOR SINGLE FILE DOWNLOAD */
@@ -83,6 +177,33 @@ class AipController extends Controller
         ]);
     }
 
+    /**
+     * @OA\Get(
+     *     path="/api/v1/access/aips/{dipId}/downloads/files/{fileId}",
+     *     summary="Download DIP from AIP ID and DIP ID",
+     *     operationId="getAIPFilenameByDIPId",
+     *     @OA\Parameter(
+     *          name="dipId",
+     *          description="DIP ID",
+     *          required=true,
+     *          in="path",
+     *          @OA\Schema(
+     *              type="integer"
+     *          )
+     *     ),
+     *     @OA\Parameter(
+     *          name="fileId",
+     *          description="File ID",
+     *          required=true,
+     *          in="path",
+     *          @OA\Schema(
+     *              type="integer"
+     *          )
+     *     ),
+     *     @OA\Response( response=200, description="Success"),
+     *     @OA\Response( response=404, description="Not Found"),
+     * )
+    */
     public function download(FileArchiveInterface $fileArchiveService, Request $request )
     {
         $aip = Aip::find($request->aipId);
@@ -96,7 +217,25 @@ class AipController extends Controller
             "Content-Disposition" => "attachment; { $result }"
         ])->deleteFileAfterSend();
     }
-
+    
+    /**
+     *  @OA\Get(
+     *     path="/api/v1/access/aips/dips/{dipId}/download",
+     *     summary="Download file by DIP ID",
+     *     operationId="getAIPFilenameByDIPId",
+     *     @OA\Parameter(
+     *          name="dipId",
+     *          description="DIP ID",
+     *          required=true,
+     *          in="path",
+     *          @OA\Schema(
+     *              type="integer"
+     *          )
+     *     ),
+     *     @OA\Response( response=200, description="Success"),
+     *     @OA\Response( response=404, description="Not Found"),
+     * )
+    */
     public function downloadFromDipId( FileArchiveInterface $fileArchiveService, Request $request )
     { /* USED FOR FULL AIP DOWNLOAD */
         $dip = \App\Dip::find( $request->dipId );
