@@ -326,7 +326,7 @@ class BagApiTest extends TestCase
         Event::fake();
         $response = $this->post( route( 'api.ingest.bags.commit', $createdBag->id ) );
         $response->assertStatus( 200 );
-        Event::assertDispatched( PreProcessBagEvent::class );
+        Event::assertNotDispatched( PreProcessBagEvent::class );
     }
 
     public function test_commit_bag_without_a_empty_name_and_it_returns_424()

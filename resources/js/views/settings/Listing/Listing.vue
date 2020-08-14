@@ -29,10 +29,10 @@
                 </b-modal>
             </div>
             <div class="card-body">
-               <user-listing :key="listingKey" @deleteUser='deleteUser'  @disableUser="disableUser" :users="users" @editUser="editUser" @enableUser="enableUser"></user-listing>
+               <user-listing :key="listingKey" @deleteUser='deleteUser'  @disableUser="disableUser" :users="formattedUsers" @editUser="editUser" @enableUser="enableUser"></user-listing>
                <div class="row text-center pagerRow">
                     <div class="col">
-                        <Pager :meta='pageMeta' :height='height' />
+                        <Pager :meta='usersPageMeta' :height='height' />
                     </div>
                 </div>
             </div>
@@ -44,7 +44,7 @@
 
 <script>
 import Pager from "../../../components/Pager"
-import axios from "axios"
+import { mapGetters, mapActions } from "vuex";
 
     export default {
         components:{
@@ -55,10 +55,7 @@ import axios from "axios"
                 fullname:null,
                 email:null,
                 username:null,
-                users: null,
-                pageMeta:null,
                 listingKey: 0,
-                response: null,
             };
         },
         props: {
@@ -67,136 +64,106 @@ import axios from "axios"
                 default: 0
             }
         },
-
-     watch: {
-        '$route': 'dispatchRouting'
-    },
+        watch: {
+            '$route': 'dispatchRouting',
+            userApiResponse(newValue,prevValue){
+                //will run on success or failure of any post operation
+                if(newValue && (newValue.status >= 200 && newValue.status <= 299)){
+                    this.successToast('Success: ' + newValue.status ,newValue.message);
+                }else if(newValue && newValue.status){
+                    this.errorToast('Error: ' + newValue.status,newValue.message);
+                }
+            }
+        },
 
         async mounted() {
             let page = this.$route.query.page;
             if( isNaN( page ) || parseInt( page ) < 2 ) {
                 this.$route.query.page = 1;
             }
-            this.refreshObjects( this.apiQueryString, this.apiEndPoint );
-
+            this.fetchUsers(this.apiQueryString)
 
         },
 
         computed:  {
+            ...mapGetters(['formattedUsers','usersPageMeta','userApiResponse']),
             apiQueryString: function() {
-            let query = this.$route.query;
-            let filter = '';
+                let query = this.$route.query;
+                let filter = '';
 
-            if( parseInt( query.page ) ) {
-                filter += "?page=" + query.page;
-            }
-            return filter;
-        },
-
-        apiEndPoint: function () {
-            let query = this.$route.query;
-
-            if( parseInt( query.groupId ) ) {
-                return '/api/v1/admin/permissions/'+ query.groupId + '/users';
-            }else if( parseInt( query.roleId ) ) {
-                return '/api/v1/admin/permissions/'+ query.roleId + '/users';
-            }  else{
-                return '/api/v1/admin/users';
+                if( parseInt( query.page ) ) {
+                    filter += "?page=" + query.page;
+                }
+                return filter;
             }
             
-        }
 
         },
 
         methods: {
+            ...mapActions(['fetchUsers','postNewUser','disableUserRequest','enableUserRequest']), 
             dispatchRouting() {
-                this.refreshObjects( this.apiQueryString, this.apiEndPoint );
-            },
-
-            async refreshObjects( apiQueryString, apiEndPoint){
-                let data = {
-                    limit: 10
-                }; 
-                await axios.get(apiEndPoint + apiQueryString, {
-                   params: data
-                }).then( (response ) => {
-                this.response = response
-                    this.users = this.response.data.data;
-                    
-                    this.pageMeta = this.response.data.meta
-                }).catch(err => {
-                    console.log(err)
-                });
+                this.fetchUsers(this.apiQueryString);
             },
             forceRerender(){
                 this.listingKey += 1;
-
             },
-            
-            async addUser(){
+        
+            addUser(){
                 this.infoToast("Adding User", "creating new user in the system");
 
-                await axios.post("/api/v1/registration/register",{
+                //invoke vuex axction postNewUser defined above
+                this.postNewUser({
                     'name': this.fullname,
                     'username': this.username,
                     'email': this.email
-                }).then(response => {
-                    console.log(response);
-                    this.response = response;
-
-                }).catch(error => {
-                    console.log(error);
-                    this.errorToast(error.message, error.message);
                 });
 
-                this.forceRerender();
                 this.$bvModal.hide('add-user');
+                this.forceRerender();    
 
             },
-            async editUser(){
+            editUser(){
                 this.infoToast("Editing User", "editing user in the system");
                 //logic to send data to endpoint goes here
 
                 this.forceRerender();
                 this.$bvModal.hide('edit-user');
+                
 
             },
-           async disableUser(data){
+           disableUser(data){
                 this.infoToast("Disable User", "disabling a user from listing");
-                this.response = (await axios.post("/api/v1/admin/users/disable",data,{
-                    headers:{
-                        'content-type': 'application/json'
-                    }
-                })).data;
+
+                //vuex action call
+                this.disableUserRequest(data);
 
                 if(!this.forceRerender()){
                     location.reload();
                 }
 
                 this.$bvModal.hide('disable-user');
+               
             },
+            
             deleteUser(data){
                 this.infoToast("Delete User", "deleting a user from listing");
-               
 
-                if(!this.forceRerender()){
-                    location.reload();
-                }
+                //delete request goes here
+                this.forceRerender();
                 
-
                 this.$bvModal.hide('delete-user');
             },
-            async enableUser(data){
+            enableUser(data){
                 this.infoToast("Enable User", "enabling a user in listing");
-                this.response = (await axios.post("/api/v1/admin/users/enable",data,{
-                    headers:{
-                        'content-type': 'application/json'
-                    }
-                })).data;
+
+                //vuex request
+                this.enableUserRequest(data);
 
                 if(!this.forceRerender()){
                     location.reload();
                 }
+
                 this.$bvModal.hide('enable-user');
 
             },

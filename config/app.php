@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'name' => env('APP_NAME', 'Laravel'),
+    'name' => env('APP_NAME', 'piqlConnect'),
 
     /*
     |--------------------------------------------------------------------------
@@ -193,6 +193,12 @@ return [
         App\Providers\MetadataGeneratorServiceProvider::class,
         App\Providers\PreProcessBagServiceProvider::class,
         App\Providers\IngestValidationServiceProvider::class,
+
+
+        /*
+        * Database Providers
+        */
+        Jenssegers\Mongodb\MongodbServiceProvider::class,
 
     ],
 

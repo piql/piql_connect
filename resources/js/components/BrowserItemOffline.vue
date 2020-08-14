@@ -50,7 +50,6 @@
                this.$emit('addObjectToRetrieval', this.item); 
             },
         },
-
     }
 </script>
 

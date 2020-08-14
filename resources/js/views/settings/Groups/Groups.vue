@@ -35,6 +35,7 @@
 </template>
 
 <script>
+import { mapGetters, mapActions } from "vuex";
 
     export default {
        
@@ -42,47 +43,52 @@
             return {
                 group:null,
                 description:null,
-                response:null,
                 groupkey: 0,
-                msg:null
             };
         },
+        computed: {
+            ...mapGetters(['groupsApiResponse']),
+            
+        },
+        watch:{
+            groupsApiResponse(newValue,prevValue){
+                //will run on success or failure of any post operation
+                if(newValue && (newValue.status >= 200 && newValue.status <= 299)){
+                    this.successToast('Success: ' + newValue.status ,newValue.message);
+                }else if(newValue && newValue.status){
+                    this.errorToast('Error: ' + newValue.status,newValue.message);
+                }
+            }
 
+        },
         methods: {
+            ...mapActions(['postNewGroup','postRolesToGroup','postUsersToGroup']),
             forceRerender(){
                 this.groupkey += 1;
 
             },
-            async addGroup(){
-                if((this.group != null) && (this.description != null)){
-                    this.infoToast('Add Group','Adding '+ this.role);
-                    this.response = (await axios.post('/api/v1/admin/access-control/roles', {
-                        name: this.group,
-                        description: this.description
-                    },{
-                        headers:{
-                            'content-type': 'application/json'
-                        }
-                    })).data;
-                    
-                    this.forceRerender();
-                    this.$bvModal.hide('add-group');
-                }else{
-                    this.errorToast("Error","Fill in both fields");
-                    this.forceRerender();
-                    this.$bvModal.hide('add-group');
+            addGroup(){
+                this.infoToast('Add Group','Adding '+ this.group);
+
+                //bundle the data
+                let data = {
+                    name: this.group,
+                    description: this.description
                 }
+                
+                //access vuex action
+                this.postNewGroup(data)
+
+                //refresh and hide group modal
+                this.forceRerender();
+                this.$bvModal.hide('add-group');
                 
             },
             async assignGroupToRoles(data){
                 this.infoToast("Assigning group", "assigning group to roles selected");
-                this.response = (await axios.post("/api/v1/admin/access-control/roles/"+ data.groupId +"/permissions",{
-                    permissions: data.roles
-                },{
-                    headers:{
-                        'content-type': 'application/json'
-                    }
-                })).data;
+
+                //push to vuex action
+                this.postRolesToGroup(data);
 
                 this.forceRerender();
                 this.$bvModal.hide('assign-group');
@@ -90,11 +96,8 @@
 
             async assignGroupToUsers(data){
                 this.infoToast("Assigning Users", "assigning group to users selected");
-                this.response = (await axios.post("/api/v1/admin/access-control/users/assign",data,{
-                    headers:{
-                        'content-type': 'application/json'
-                    }
-                })).data;
+                //push to vuex action
+                this.postUsersToGroup(data);
 
                 this.forceRerender();
                 this.$bvModal.hide('assign-users');

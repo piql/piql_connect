@@ -12,8 +12,11 @@
         <bucket-content-item  v-for="item in dataObjects" :item="item" :key="item.id" @onDelete="onDelete" @openObject="openObject"  @showPreview="showPreview"/>
 
         <Lightbox
+            ref="lgbx"
             :visible="lbVisible"
             :imgs="previewImages"
+            :fileNames="previewFileNames"
+            :fileTypes="previewFileTypes"
             :index="index"
             :hide="hideLightBox"
             :totalImgs="imgLength"
@@ -50,7 +53,9 @@ import Lightbox from './lightbox';
             perPage: 5,
             page: 1,
             previewDip: {},
-            previewImages: []
+            previewImages: [],
+            previewFileNames: [],
+            previewFileTypes: [],
         }
     },
     methods: {
@@ -68,24 +73,32 @@ import Lightbox from './lightbox';
             this.lbVisible = true;
             let allFiles = ( await axios.get('/api/v1/access/dips/'+dip.id+'/files?page=' + this.page) ).data.data;
             this.imgLength = dip.storage_properties.bag.fileCount;
-            let fileIds = [];
-            for ( var i in allFiles ) {
-                fileIds.push( allFiles[i].id );
-            }
-            fileIds.map( async (fileId) => {
-              let image = (await axios.get('/api/v1/access/dips/'+dip.id+'/previews/files/'+fileId, { responseType: 'blob' }));
-              let reader = new FileReader();
-              reader.onload = e => this.previewImages.push( reader.result );
-              reader.readAsDataURL( image.data );
+            allFiles.map( async (file) => {
+                let fileId = file.id;
+                let fileType = file.mime_type;
+                if (this.$refs.lgbx.isPlayable(fileType)) {
+                    this.previewImages.push( '/api/v1/media/dips/'+dip.id+'/previews/files/'+fileId );
+                } else {
+                    let image = (await axios.get('/api/v1/access/dips/'+dip.id+'/previews/files/'+fileId, { responseType: 'blob' }));
+                    let reader = new FileReader();
+                    reader.onload = e => this.previewImages.push( reader.result );
+                    reader.readAsDataURL( image.data );
+                }
+                this.previewFileTypes.push( fileType );
+                this.previewFileNames.push( file.filename.substring(37, file.filename.length-1) );
             });
         },
         hideLightBox: function( e ) {
             this.lbVisible = false;
             this.previewImages = [];
+            this.previewFileNames = [];
+            this.previewFileTypes = [];
         },
         pageNav: function ( adj ) {
             this.page += adj
             this.previewImages = [];
+            this.previewFileNames = [];
+            this.previewFileTypes = [];
             this.showPreview(this.previewDip);
         }
     },
