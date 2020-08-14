@@ -14,6 +14,7 @@ volumes:
 
 services:
   app:
+    image: piql.com/connect/app:v0.3
     build:
       network: host
       context: ./
@@ -96,6 +97,7 @@ services:
 
   composer:
     user: ${HOST_USERID}:${HOST_GROUPID}
+    image: piql.com/connect/compose:v0.3
     build:
       network: host
       context: ./composer/
