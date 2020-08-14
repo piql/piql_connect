@@ -23,6 +23,7 @@
             axios.get( '/api/v1/access/dips/'+this.dipId+'/aipfile/'+this.item.id ).then( (result) => {
                 this.aipItem = result.data.data[0];
                 this.fileName = this.aipItem.filename;
+                this.fileType = this.aipItem.mime_type;
             });
 
             axios.get('/api/v1/access/dips/'+this.dipId+'/thumbnails/files/'+this.item.id, { responseType: 'blob' }).then( (thumbnail) => {
@@ -38,13 +39,14 @@
         data() {
             return {
                 fileName: "",
+                fileType: "",
                 thumbnailImage: "",
                 aipItem: Object,
             };
         },
         methods: {
-            preview: function(){
-                this.$emit('showPreview', this.dipId, this.item.id);
+	          preview: function(){
+                this.$emit('showPreview', this.dipId, this.item.id, this.fileName, this.fileType);
             },
             showMetadata() {
                 this.$emit('showMetadata', this.aipItem.id );

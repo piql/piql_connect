@@ -233,3 +233,9 @@ Route::group(['prefix' => 'v1/registration'], function () {
     Route::post('register', 'Api\Registration\UserRegistrationController@register');
     Route::post('confirm', 'Api\Registration\UserRegistrationController@confirm');
 });
+
+Route::group(['prefix' => 'v1/media'], function () {
+    Route::get('thumb/{fileName}', 'Api\System\MediaController@thumb');
+    Route::get('dips/{dipId}/previews/files/{fileId}', 'Api\System\MediaController@showDipFile');
+});
+        

@@ -29,6 +29,7 @@
             axios.get( '/api/v1/access/dips/'+this.dipId+'/aipfile/'+this.item.id ).then( (result) => {
                 this.aipItem = result.data.data[0];
                 this.fileName = this.aipItem.filename;
+                this.fileType = this.aipItem.mime_type;
             });
 
             axios.get('/api/v1/access/dips/'+this.dipId+'/thumbnails/files/'+this.item.id, { responseType: 'blob' }).then( (thumbnail) => {
@@ -46,6 +47,7 @@
         data() {
             return {
                 fileName: "",
+                fileType: "",
                 thumbnailImage: "",
                 aipItem: Object,
                 isPreparingDownload: false
@@ -65,8 +67,8 @@
             showMetadata() {
                 this.$router.push({ name:'access.browse.dips.files.metadata', params: { dipId: this.dipId, fileId: this.aipItem.id, showFileId: this.item.id } });
             },
-            preview: function(){
-                this.$emit('showPreview', this.item.storable_id, this.item.id);
+	          preview: function(){
+                this.$emit('showPreview', this.item.storable_id, this.item.id, this.fileName, this.fileType);
             }
         },
         computed: {
