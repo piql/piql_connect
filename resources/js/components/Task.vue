@@ -101,7 +101,7 @@
                 let currentId = this.item.id;
                 let jobName = this.item.name;
                 let job = null;
-                await axios.patch(this.jobListUrl+"/jobs/"+currentId, {
+                await axios.patch(this.jobListUrl+"/buckets/"+currentId, {
                     'name': jobName
                 }).then( (result) => {
                     job = result.data;

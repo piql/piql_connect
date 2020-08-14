@@ -15,6 +15,7 @@ class Job extends Model
         'name', 'status', 'owner'
     ];
     protected $appends = ['archive_objects', 'bucket_size', 'size'];
+    protected $attributes = ['status' => 'created'];
 
     public static function boot()
     {
@@ -22,7 +23,6 @@ class Job extends Model
         self::creating( function( $model )
         {
             $model->uuid = Uuid::generate();
-            $model->status = "created";
         });
     }
 

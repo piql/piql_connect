@@ -6,7 +6,7 @@
 
         <access-browser-filters :singleArchiveTitle="$t('Your archive')"></access-browser-filters>
         <browser-list @openObject="openObject" :location="selectedLocation" :dataObjects="currentObjects"
-            @addObjectToRetrieval="addObjectToRetrieval" :selectedArchive="selectedArchiveUuid" :selectedHolding="selectedHolding"/>
+            :selectedArchive="selectedArchiveUuid" :selectedHolding="selectedHolding"/>
 
               <div class="row text-center pagerRow">
                 <div class="col">
@@ -135,26 +135,6 @@ export default {
         closeFileList: function() {
             this.currentFilesPage = 1;
             this.currentOpenDipId = null;
-        },
-
-        addObjectToRetrieval: async function(item) {
-            this.infoToast('Retrieval', `Package ${item.storage_properties.bag.name} added to retrieval basket`);
-            axios.post('/api/v1/storage/retrievals/add', {
-                'aipUuid' : item.storage_properties.aip_uuid
-            });
-        },
-        addFileToRetrieval: async function( fileObject ) {
-            /* For now, this is a fileObject resource entity. We really need an abstraction on top,
-                    to stop leaking internal data. We could for example push a unique id linked to the
-                    film reel and a filename for visualization and that should be enough.
-             */
-
-            this.infoToast('Retrieval', `Package ${fileObject.filename} added to retrieval basket`);
-
-            this.retrievalItems.push(fileObject);
-            await (axios.post('/api/v1/storage/retrievals/add', {
-                'fileObjectId' : fileObject.id,
-            }));
         },
     },
 }

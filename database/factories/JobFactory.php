@@ -10,8 +10,21 @@ use Webpatser\Uuid\Uuid;
 $factory->define(Job::class, function (Faker $faker) {
     return [
         'name' => $faker->company(),
-        'uuid' => $faker->uuid(),
-        'status' => 'created',
         'owner' => User::pluck('id')->random()
     ];
+});
+
+$factory->state( Job::class, 'ingesting', function() {
+
+    $owner = Auth::check()
+        ? Auth::id()
+        : User::pluck('id')->random();
+
+    return [
+        'owner' => $owner
+    ];
+});
+
+$factory->afterCreatingState(Job::class, 'ingesting', function ($job) {
+    $job->update(['status' => 'ingesting']);
 });

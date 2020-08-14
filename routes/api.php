@@ -160,7 +160,8 @@ Route::group(['prefix' => 'v1', 'middleware' => ['auth:api', 'activity']], funct
         Route::get('retrievals/{id}/files', 'Api\Storage\RetrievalCollectionController@files');
         Route::post('retrievals/{id}/close', 'Api\Storage\RetrievalCollectionController@close');
         Route::get('retrievals/{id}/download', 'Api\Storage\RetrievalCollectionController@download');
-        Route::apiResource('retrievals', 'Api\Storage\RetrievalCollectionController', ['as' => 'retrievals']);
+        Route::get('requests/aips', 'Api\Storage\RetrievalJobsController@aipsOnFilm')->name('storage.buckets.aips');
+        Route::get('buckets/{id}', 'Api\Storage\RetrievalJobsController@show')->name('storage.buckets');
     });
 
 
