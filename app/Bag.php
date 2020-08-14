@@ -17,7 +17,7 @@ class Bag extends Model
     use Uuids;
     protected $table = 'bags';
     protected $fillable = [
-        'name', 'status', 'owner' // todo: remove 'status'
+        'name', 'status', 'owner'
     ];
 
     protected const smConfig = [
@@ -125,6 +125,11 @@ class Bag extends Model
         {
             $model->storage_properties->delete();
         });
+    }
+
+    public static function currentlyProcessingCount()
+    {
+        return Bag::whereIn('status', ['creating_bag', 'move_to_outbox', 'initiate_transfer', 'approve_transfer', 'transferring', 'ingesting'])->count();
     }
 
     public function setOwnerIdAttribute($value)
