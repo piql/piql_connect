@@ -58,7 +58,7 @@ class AccessControlController extends Controller
      *     @OA\Response(
      *         response=200,
      *         description="Successful Operation",
-     *         @OA\JsonContent(ref="#/components/schemas/AccessControl")
+     *         @OA\JsonContent(ref="#/components/schemas/AccessControlResponse")
      *     ),
      *     @OA\Response( response=400, description="Bad User Data"),
      *     @OA\Response( response=404, description="Not Found"),
@@ -87,7 +87,7 @@ class AccessControlController extends Controller
      *           @OA\Property(
      *                property="access_controls",
      *                description="Access Control object",
-     *                @OA\Items(ref="#/components/schemas/AccessControl"),
+     *                @OA\Items(ref="#/components/schemas/AccessControlResponse"),
      *                type="array"
      *            )     *          
      *         )
@@ -118,7 +118,7 @@ class AccessControlController extends Controller
      *           @OA\Property(
      *                property="access_controls",
      *                description="Access Control object",
-     *                @OA\Items(ref="#/components/schemas/AccessControl"),
+     *                @OA\Items(ref="#/components/schemas/AccessControlResponse"),
      *                type="array"
      *            )     *          
      *         )
@@ -150,7 +150,7 @@ class AccessControlController extends Controller
      *           @OA\Property(
      *                property="access_controls",
      *                description="Access Control object",
-     *                @OA\Items(ref="#/components/schemas/AccessControl"),
+     *                @OA\Items(ref="#/components/schemas/AccessControlResponse"),
      *                type="array"
      *            )     *          
      *         ),
@@ -190,7 +190,7 @@ class AccessControlController extends Controller
      *           @OA\Property(
      *                property="access_controls",
      *                description="Access Control object",
-     *                @OA\Items(ref="#/components/schemas/AccessControl"),
+     *                @OA\Items(ref="#/components/schemas/AccessControlResponse"),
      *                type="array"
      *            )     *          
      *         ),
@@ -250,7 +250,7 @@ class AccessControlController extends Controller
      *     @OA\Response(
      *         response=200,
      *         description="created permission",
-     *          @OA\JsonContent(ref="#/components/schemas/AccessControl")
+     *          @OA\JsonContent(ref="#/components/schemas/AccessControlResponse")
      *     )
      * )
      */
@@ -286,7 +286,7 @@ class AccessControlController extends Controller
      *           @OA\Property(
      *                property="access_controls",
      *                description="Access Control object",
-     *                @OA\Items(ref="#/components/schemas/AccessControl"),
+     *                @OA\Items(ref="#/components/schemas/AccessControlResponse"),
      *                type="array"
      *            )     *          
      *         ),
@@ -327,7 +327,7 @@ class AccessControlController extends Controller
      *           @OA\Property(
      *                property="access_controls",
      *                description="Access Control object",
-     *                @OA\Items(ref="#/components/schemas/AccessControl"),
+     *                @OA\Items(ref="#/components/schemas/AccessControlResponse"),
      *                type="array"
      *            )     *          
      *         ),
@@ -401,7 +401,7 @@ class AccessControlController extends Controller
      *     @OA\Response(
      *         response=200,
      *         description="permissions list",
-     *         @OA\JsonContent(ref="#/components/schemas/AccessControl")
+     *         @OA\JsonContent(ref="#/components/schemas/AccessControlResponse")
      *     )
      * )
      */
@@ -444,7 +444,7 @@ class AccessControlController extends Controller
      *     @OA\Response(
      *         response=200,
      *         description="permission",
-     *         @OA\JsonContent(ref="#/components/schemas/AccessControl")
+     *         @OA\JsonContent(ref="#/components/schemas/AccessControlResponse")
      *     )
      * )
      */
@@ -488,7 +488,7 @@ class AccessControlController extends Controller
      *     @OA\Response(
      *         response=200,
      *         description="permission",
-     *         @OA\JsonContent(ref="#/components/schemas/AccessControl")
+     *         @OA\JsonContent(ref="#/components/schemas/AccessControlResponse")
      *     )
      * )
      */
@@ -537,7 +537,7 @@ class AccessControlController extends Controller
      *           @OA\Property( property="group_id", description="groupID", type="integer"),          
      *           @OA\Property( property="role_id", description="roleID", type="integer"),          
      *         ),
-     *         @OA\JsonContent(ref="#/components/schemas/AccessControl")
+     *         @OA\JsonContent(ref="#/components/schemas/AccessControlResponse")
      *     )
      * )
      */
