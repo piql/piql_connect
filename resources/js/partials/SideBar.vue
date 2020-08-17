@@ -91,7 +91,7 @@
                         </li>
                     </router-link>
 
-                    <router-link :to="{ name: 'ingest.processing' }">
+                    <router-link :to="{ name: 'ingest.processing' }" id="sideBarProcessing">
                         <li class="list-group-item" :class="{ active: routeBelongsTo('ingest.processing') }" >
                             <i class="fas fa-hourglass-half"></i><div class="leftMenuItem">{{$t('sidebar.processing')}}</div>
                         </li>
