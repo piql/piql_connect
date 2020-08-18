@@ -26,8 +26,9 @@
         "optimus/fineuploader-server": "^0.2.0",
         "optimus/fineuploader-server-thumbnail-creator": "^0.1.1",
         "predis/predis": "^1.1",
-        "scholarslab/bagit": "^0.3.0",
+        "scholarslab/bagit": "0.3.0",
         "sendgrid/sendgrid": "~7",
+        "tymon/jwt-auth": "dev-develop",
         "webpatser/laravel-uuid": "^3.0",
         "zachleigh/laravel-vue-generators": "^0.3.0"
     },

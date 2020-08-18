@@ -3,15 +3,14 @@
 namespace App;
 
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Facades\Hash;
 use Laravel\Passport\HasApiTokens;
 use Webpatser\Uuid\Uuid;
 use App\Traits\Uuids;
+use Tymon\JWTAuth\Contracts\JWTSubject;
 
-class User extends Authenticatable
+class User extends Authenticatable implements JWTSubject
 {
     use HasApiTokens, Notifiable, Uuids;
 
@@ -49,11 +48,10 @@ class User extends Authenticatable
     public static function boot()
     {
         parent::boot();
-        self::creating(function( $model ) /*Create a uuid converted to binary16 */
-        {
+        self::creating(function ($model) /*Create a uuid converted to binary16 */ {
             $model->id = Uuid::generate();
-            $model->api_token = Hash::make( Uuid::generate() );
-            \App\UserSetting::create([ 'user_id' => $model->id ]);
+            $model->api_token = Hash::make(Uuid::generate());
+            \App\UserSetting::create(['user_id' => $model->id]);
         });
     }
 
@@ -69,7 +67,7 @@ class User extends Authenticatable
 
     public static function find($id)
     {
-       return self::all()->find($id);
+        return self::all()->find($id);
     }
 
     public static function findByUsername($username)
@@ -110,5 +108,18 @@ class User extends Authenticatable
     public function storageLocations()
     {
         return $this->hasMany('App\StorageLocation', 'owner_id');
+    }
+
+    public function getJWTIdentifier()
+    {
+        return $this->getIdAttribute();
+    }
+    
+    public function getJWTCustomClaims()
+    {
+        //permissions and stuff go here
+        return [
+            'nam' => $this->full_name,
+        ];
     }
 }

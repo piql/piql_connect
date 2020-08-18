@@ -66,6 +66,7 @@ class Kernel extends HttpKernel
         'locale' => \App\Http\Middleware\SetLocale::class,
         'activity' => \App\Http\Middleware\SessionLastActivity::class,
         'user.checkDisabled' => \App\Http\Middleware\CheckUserDisabled::class,
+        'jwt.verify' => \App\Http\Middleware\JwtMiddleware::class,
     ];
 
     /**
