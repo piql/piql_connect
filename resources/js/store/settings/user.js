@@ -4,12 +4,8 @@ const state = {
     response: null,
     settings: null,
     password: null,
-<<<<<<< HEAD
     languages: null,
     user: null
-=======
-    languages: null
->>>>>>> steven/Merger
 
 }
 
@@ -17,12 +13,8 @@ const getters = {
     settingsApiResponse: state => state.response,
     setPasswordData: state => state.password,
     userSettings: state => state.settings,
-<<<<<<< HEAD
     userLanguages: state => state.languages,
     currentUser: state => state.user
-=======
-    userLanguages: state => state.languages
->>>>>>> steven/Merger
 
 }
 
