@@ -6,4 +6,4 @@ if [ "" = "$PKG_OK" ]; then
 fi
 SELENIUM_BROWSER=chrome:36:LINUX \
 SELENIUM_REMOTE_URL=http://localhost:4444/wd/hub \
-mocha --recursive --timeout 600000 ../app.js/ui-test.js
+mocha --recursive --timeout 600000 ui-test.js

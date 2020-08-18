@@ -43,7 +43,7 @@ describe('When open piql connect', () => {
 		await driver.findElement(By.id('processButton')).click();
 		await sleep(3000);
 		
-		var bagNameObj = await driver.wait(until.elementLocated(By.xpath("//div[@class='toast-body' and contains(string(), '" + packageName + "')]")), 10000);
+		var bagNameObj = await driver.wait(until.elementLocated(By.xpath("//div[@class='toast-body' and contains(string(), 'queue')]")), 10000);
 		
 		await driver.findElement(By.id('sideBarProcessing')).click();
 
