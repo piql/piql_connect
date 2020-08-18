@@ -13,37 +13,47 @@ use Log;
 
 class PiqlUserProvider extends EloquentUserProvider implements UserProvider 
 {
-        public function __construct()
+    public function __construct()
+    {
+    }
+
+    public function retrieveById($identifier)
+    {
+        return User::find($identifier);
+    }
+
+    public function retrieveByToken($identifier, $token)
+    {
+        Log::info("retrieveByToken");
+    }
+
+    public function updateRememberToken(Authenticatable $user, $token)
+    {
+        Log::info("updateRememberToken");
+    }
+
+    public function retrieveByCredentials(array $credentials)
+    {
+        time_nanosleep(0,100000000); //slightly hamper brute force attacks
+        if (isset($credentials['email']))
         {
+            return $user = User::findByEmail($credentials['email']);
         }
-
-        public function retrieveById($identifier)
+        else if (isset($credentials['username']))
         {
-            return User::find($identifier);
-	}
-
-        public function retrieveByToken($identifier, $token)
-        {
-            Log::info("retrieveByToken");
-        }
-
-        public function updateRememberToken(Authenticatable $user, $token)
-        {
-            Log::info("updateRememberToken");
-        }
-
-        public function retrieveByCredentials(array $credentials)
-        {
-            time_nanosleep(0,100000000); //slightly hamper brute force attacks
             return $user = User::findByUsername($credentials['username']);
         }
 
-        public function validateCredentials(Authenticatable $user, array $credentials)
+        Log::error('Credentials were not defined');
+        return null;
+    }
+
+    public function validateCredentials(Authenticatable $user, array $credentials)
+    {
+        if( env("AMU_SOAP_AUTH_ENABLED") == "true" )
         {
-            if( env("AMU_SOAP_AUTH_ENABLED") == "true" )
-            {
-                $soapAuth = $this->soapClient($user->id, $credentials['password']);
-                return (isset($soapAuth["isAuthenticated"]) && $soapAuth["isAuthenticated"] );
+            $soapAuth = $this->soapClient($user->id, $credentials['password']);
+            return (isset($soapAuth["isAuthenticated"]) && $soapAuth["isAuthenticated"] );
         }
         else
         { 

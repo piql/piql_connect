@@ -1,7 +1,7 @@
 <template>
     <div class="w-100">
         <breadcumb :subTitle="fileName" :subTitleRoute="{ name: 'ingest.uploader' }"/>
-	<form>
+        <form>
             <div class="row">
                 <div v-for="scheme in schemes" class="col-sm-4">
                     <div v-for="schemeItem in scheme" class="row mb-2">

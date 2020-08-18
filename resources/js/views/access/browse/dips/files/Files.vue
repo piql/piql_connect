@@ -15,15 +15,18 @@
 
         <browser-file-item v-for="item in dipFiles" :item="item" :key="item.id" @showPreview="showPreview"/>
 
-				<div class="row text-center pagerRow">
-						<div class="col">
-								<Pager :meta='meta' :height='height' />
-						</div>
-				</div>
+        <div class="row text-center pagerRow">
+            <div class="col">
+                <Pager :meta='meta' :height='height' />
+            </div>
+        </div>
 
         <Lightbox
+            ref="lgbx"
             :visible="lbVisible"
             :imgs="previewImages"
+            :fileNames="previewFileNames"
+            :fileTypes="previewFileTypes"
             :index="index"
             :hide="hideLightBox"
         />
@@ -52,6 +55,8 @@ export default {
             lbVisible: false,
             index: 0,
             dip: null,
+            previewFileNames: [],
+            previewFileTypes: [],
             previewImages: []
         }
     },
@@ -117,7 +122,7 @@ export default {
     beforeRouteEnter: function( to, from, next ) {
         /* Store the originating route, so that a close returns to
          * the page that was open before we entered the Dip.
-				 * If the link was opened directly, return to 'access.browse'.
+         * If the link was opened directly, return to 'access.browse'.
          */
 
         next( self => {
@@ -140,16 +145,24 @@ export default {
         close() {
             this.$router.push(this.prevRoute);
         },
-        async showPreview ( dip, fileId ) {
+        async showPreview ( dip, fileId, fileName, fileType ) {
             this.lbVisible = true;
-            let image = (await axios.get('/api/v1/access/dips/'+dip+'/previews/files/'+fileId, { responseType: 'blob' }));
-            let reader = new FileReader();
-            reader.onload = e => this.previewImages.push( reader.result );
-            reader.readAsDataURL( image.data );
+            if (this.$refs.lgbx.isPlayable(fileType)) {
+                this.previewImages.push( '/api/v1/media/dips/'+dip+'/previews/files/'+fileId );
+            } else {
+                let image = (await axios.get('/api/v1/access/dips/'+dip+'/previews/files/'+fileId, { responseType: 'blob' }));
+                let reader = new FileReader();
+                reader.onload = e => this.previewImages.push( reader.result );
+                reader.readAsDataURL( image.data );
+            }
+            this.previewFileNames.push( fileName );
+            this.previewFileTypes.push( fileType );
         },
         hideLightBox: function( e ) {
             this.lbVisible = false;
             this.previewImages = [];
+            this.previewFileNames = [];
+            this.previewFileTypes = [];
         },
     },
 };

@@ -62,7 +62,7 @@ export default {
         },
         async download(){
             this.isPreparingDownload = true;
-            let filename = `${this.item.storage_properties.bag.name}.tar`; // (await axios.get('/api/v1/access/aips/dips/'+this.item.id+'/filename')).data;
+            let filename = `${this.item.storage_properties.bag.name}.tar`;
             let response = await axios.get('/api/v1/access/aips/dips/'+this.item.id+'/download', { responseType: 'blob' });
             let fileUrl = window.URL.createObjectURL(new Blob([response.data]));
             let fileLink = document.createElement('a');

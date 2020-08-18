@@ -1087,7 +1087,7 @@
 
     <service name="ArchivatorCoreService">
         <port name="ArchivatorCoreEndpoint" binding="tns:ArchivatorCore">
-		<soap:address location="http://testamu1.piql.com:8081"/>
+            <soap:address location="http://testamu1.piql.com:8081"/>
         </port>
     </service>
 

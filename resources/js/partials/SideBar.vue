@@ -120,8 +120,8 @@
                     </router-link>
 
                     <span :class="{ collapse: !routeBelongsTo('access.browse') }">
-                        <router-link :to="{ name: 'access.retrieve.ready' }">
-                            <li class="list-group-item" :class="{ active: routeBelongsTo ('access.retrieve.ready') }" >
+                        <router-link :to="{ name: 'access.retrieve.request' }">
+                            <li class="list-group-item" :class="{ active: routeBelongsTo ('access.retrieve') }" >
                                 <i class="fas fa-file-export"></i><div class="leftMenuItem">{{$t('sidebar.retrieve')}}</div>
                             </li>
                         </router-link>
@@ -129,6 +129,13 @@
 
 
                     <span :class="{ collapse: !routeBelongsTo('access.retrieve') }">
+
+                        <router-link :to="{ name: 'access.retrieve.request' }">
+                            <li class="list-group-item" :class="{ active: routeBelongsTo('access.retrieve.request') }" >
+                                <i class="fas fa-file-export"></i><div class="leftMenuItem">{{$t('sidebar.retrieve')}}</div>
+                            </li>
+                        </router-link>
+
 
                         <router-link :to="{ name: 'access.retrieve.ready' }">
                             <li class="list-group-item" :class="{ active: routeBelongsTo('access.retrieve.ready') }" >

@@ -15,6 +15,7 @@ class Job extends Model
         'name', 'status', 'owner'
     ];
     protected $appends = ['archive_objects', 'bucket_size', 'size'];
+    protected $attributes = ['status' => 'created'];
 
     public static function boot()
     {
@@ -22,7 +23,6 @@ class Job extends Model
         self::creating( function( $model )
         {
             $model->uuid = Uuid::generate();
-            $model->status = "created";
         });
     }
 
@@ -69,7 +69,7 @@ class Job extends Model
 
     public function getBucketSizeAttribute()
     {
-        return env('APP_INGEST_BUCKET_SIZE', 150*1000*1000);
+        return env('APP_INGEST_BUCKET_SIZE', 150*1000*1000*1000);
     }
 
     public function metadata()

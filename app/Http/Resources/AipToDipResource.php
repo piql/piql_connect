@@ -26,7 +26,8 @@ class AipToDipResource extends JsonResource
             'storage_location_id' => $dip->storage_location_id,
             'storage_path' => $dip->storage_path,
             'storage_properties' => new StoragePropertiesResource( $dip->storage_properties ),
-            'archived_at' => $dip->created_at
+            'archived_at' => $dip->created_at,
+            'name' => $this->storage_properties->name
         ];
     }
 }

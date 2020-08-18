@@ -75,20 +75,20 @@ const files = require.context('./', true, /\.vue$/i);
 files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default));
 
 let refreshSessionActivity = Vue.mixin({
-        beforeUpdate: function() {
-            if( this.noRefresh !== true ){
-                this.refreshSession();
-            }
-        },
-        methods: {
-            refreshSession: () => { sessionStorage.setItem( "lastActivityTime", Date.now() );}
-        },
-		props: {
-			noRefresh: {
-				type: Boolean,
-				default: false
-			}
-		},
+    beforeUpdate: function() {
+        if( this.noRefresh !== true ){
+            this.refreshSession();
+        }
+    },
+    methods: {
+        refreshSession: () => { sessionStorage.setItem( "lastActivityTime", Date.now() );}
+    },
+    props: {
+        noRefresh: {
+            type: Boolean,
+            default: false
+        }
+    },
 });
 //to handle all multiside select options
 Vue.use(vueSelectSides,{});

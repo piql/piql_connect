@@ -2,7 +2,7 @@
     <div class="w-100">
         <page-heading icon="fa-tags" :title="$t('access.metadata.file.title')" :ingress="$t('access.metadata.file.ingress')" />
         <breadcumb :subTitle="dipName"/>
-	    <dublin-core baseUrl="/api/v1/access/files" :readOnly="true"> </dublin-core>
+        <dublin-core baseUrl="/api/v1/access/files" :readOnly="true"> </dublin-core>
     </div>
 </template>
 

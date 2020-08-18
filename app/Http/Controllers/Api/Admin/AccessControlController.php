@@ -13,6 +13,7 @@ use App\Services\AccessControlManager;
 use App\User;
 use Throwable;
 
+
 class AccessControlController extends Controller
 {
     /**
@@ -30,7 +31,39 @@ class AccessControlController extends Controller
             return response(['message' => $e->getMessage()], 400);
         }
     }
-
+    /**
+     * @OA\Post(
+     *     path="/api/v1/admin/access-control/permission-groups",
+     *     summary="Creates new Permission Group",
+     *     operationId="createPermissionGroup",
+     *     @OA\RequestBody(
+     *         description="Permission Group data",
+     *         @OA\MediaType(
+     *             mediaType="application/json",
+     *             @OA\Schema(
+     *                 type="object",
+     *                 @OA\Property(
+     *                     property="name",
+     *                     description="Name of permission group",
+     *                     type="string",
+     *                 ),
+     *                 @OA\Property(
+     *                     property="description",
+     *                     description="Descriptive text",
+     *                     type="string"
+     *                 )
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Successful Operation",
+     *         @OA\JsonContent(ref="#/components/schemas/AccessControlResponse")
+     *     ),
+     *     @OA\Response( response=400, description="Bad User Data"),
+     *     @OA\Response( response=404, description="Not Found"),
+     * )
+     */
     public function createPermissionGroup(Request $request)
     {
         try {
@@ -41,6 +74,26 @@ class AccessControlController extends Controller
         }
     }
 
+    /**
+     * @OA\Get(
+     *     path="/api/v1/admin/access-control/permission-groups",
+     *     summary="Lists Permission Group",
+     *     operationId="listPermissionGroup",
+     *     @OA\Response(
+     *         response=200,
+     *         description="Permission Groups",
+     *         @OA\Schema(
+     *           type="object",
+     *           @OA\Property(
+     *                property="access_controls",
+     *                description="Access Control object",
+     *                @OA\Items(ref="#/components/schemas/AccessControlResponse"),
+     *                type="array"
+     *            )     *          
+     *         )
+     *     )
+     * )
+     */
     public function listPermissionGroups(Request $request)
     {
         try {
@@ -52,6 +105,26 @@ class AccessControlController extends Controller
         }
     }
 
+    /**
+     * @OA\Get(
+     *     path="/api/v1/admin/access-control/permissions",
+     *     summary="Lists Permissions",
+     *     operationId="listPermissions",
+     *     @OA\Response(
+     *         response=200,
+     *         description="permissions list",
+     *         @OA\Schema(
+     *           type="object",
+     *           @OA\Property(
+     *                property="access_controls",
+     *                description="Access Control object",
+     *                @OA\Items(ref="#/components/schemas/AccessControlResponse"),
+     *                type="array"
+     *            )     *          
+     *         )
+     *     )
+     * )
+     */
     public function listPermissions(Request $request)
     {
         try {
@@ -63,6 +136,27 @@ class AccessControlController extends Controller
         }
     }
 
+    /**
+     * @OA\Get(
+     *     path="/api/v1/admin/access-control/roles",
+     *     summary="Lists Roles",
+     *     operationId="listRoles",
+     *     description="gets roles",
+     *     @OA\Response(
+     *         response=200,
+     *         description="roles list",
+     *         @OA\Schema(
+     *           type="object",
+     *           @OA\Property(
+     *                property="access_controls",
+     *                description="Access Control object",
+     *                @OA\Items(ref="#/components/schemas/AccessControlResponse"),
+     *                type="array"
+     *            )     *          
+     *         ),
+     *     )
+     * )
+     */
     public function listRoles(Request $request)
     {
         try {
@@ -74,6 +168,35 @@ class AccessControlController extends Controller
         }
     }
 
+    /**
+     * @OA\Get(
+     *     path="/api/v1/admin/access-control/roles/{id}/permissions",
+     *     summary="Lists Permissions",
+     *     operationId="listRolePermissions",
+     *     @OA\Parameter(
+     *          name="id",
+     *          description="Role ID",
+     *          required=true,
+     *          in="path",
+     *          @OA\Schema(
+     *              type="integer"
+     *          )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="permissions list",
+     *         @OA\Schema(
+     *           type="object",
+     *           @OA\Property(
+     *                property="access_controls",
+     *                description="Access Control object",
+     *                @OA\Items(ref="#/components/schemas/AccessControlResponse"),
+     *                type="array"
+     *            )     *          
+     *         ),
+     *     )
+     * )
+     */
     public function listRolePermissions(Request $request, $id)
     {
         try {
@@ -91,6 +214,46 @@ class AccessControlController extends Controller
         }
     }
 
+    /**
+     * @OA\Post(
+     *     path="/api/v1/admin/access-control/roles/{id}/permissions ",
+     *     summary="Add Permission to Role",
+     *     operationId="addPermissionToRole",
+     *     @OA\Parameter(
+     *          name="id",
+     *          description="Role ID",
+     *          required=true,
+     *          in="path",
+     *          @OA\Schema(
+     *              type="integer"
+     *          )
+     *     ),
+     *     @OA\RequestBody(
+     *         description="Permission  data",
+     *         @OA\MediaType(
+     *             mediaType="application/json",
+     *             @OA\Schema(
+     *                 type="object",
+     *                 @OA\Property(
+     *                     property="name",
+     *                     description="Name of permission",
+     *                     type="string",
+     *                 ),
+     *                 @OA\Property(
+     *                     property="description",
+     *                     description="Descriptive text",
+     *                     type="string"
+     *                 )
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="created permission",
+     *          @OA\JsonContent(ref="#/components/schemas/AccessControlResponse")
+     *     )
+     * )
+     */
     public function addPermissionsToRole(Request $request, $id)
     {
         try {
@@ -101,6 +264,35 @@ class AccessControlController extends Controller
         }
     }
 
+    /**
+     * @OA\Get(
+     *     path="/api/v1/admin/access-control/permission-groups/{id}",
+     *     summary="Get Permission Group",
+     *     operationId="getPermissionGroup",
+     *     @OA\Parameter(
+     *          name="id",
+     *          description="Group ID",
+     *          required=true,
+     *          in="path",
+     *          @OA\Schema(
+     *              type="integer"
+     *          )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="permission",
+     *         @OA\Schema(
+     *           type="object",
+     *           @OA\Property(
+     *                property="access_controls",
+     *                description="Access Control object",
+     *                @OA\Items(ref="#/components/schemas/AccessControlResponse"),
+     *                type="array"
+     *            )     *          
+     *         ),
+     *     )
+     * )
+     */
     public function getPermissionGroup($id)
     {
         try {
@@ -113,6 +305,35 @@ class AccessControlController extends Controller
         }
     }
 
+    /**
+     * @OA\Get(
+     *     path="/api/v1/admin/access-control/permission-groups/{id}/permissions",
+     *     summary="Lists Permission Group Permissions",
+     *     operationId="listPermissionGroupPermissions",
+     *     @OA\Parameter(
+     *          name="id",
+     *          description="Permission Group ID",
+     *          required=true,
+     *          in="path",
+     *          @OA\Schema(
+     *              type="integer"
+     *          )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="permissions list",
+     *         @OA\Schema(
+     *           type="object",
+     *           @OA\Property(
+     *                property="access_controls",
+     *                description="Access Control object",
+     *                @OA\Items(ref="#/components/schemas/AccessControlResponse"),
+     *                type="array"
+     *            )     *          
+     *         ),
+     *     )
+     * )
+     */
     public function listPermissionGroupPermissions(Request $request, $id)
     {
         try {
@@ -144,6 +365,46 @@ class AccessControlController extends Controller
         }
     }
 
+    /**
+     * @OA\Post(
+     *     path="/api/v1/admin/access-control/permission-groups/{id}/permissions",
+     *     summary="Add Permission to Permission Group",
+     *     operationId="addPermissionToPermissionGroup",
+     *     @OA\Parameter(
+     *          name="id",
+     *          description="Permission Group ID",
+     *          required=true,
+     *          in="path",
+     *          @OA\Schema(
+     *              type="integer"
+     *          )
+     *     ),
+     *     @OA\RequestBody(
+     *         description="Permission data",
+     *         @OA\MediaType(
+     *             mediaType="application/json",
+     *             @OA\Schema(
+     *                 type="object",
+     *                 @OA\Property(
+     *                     property="name",
+     *                     description="Name of permission",
+     *                     type="string",
+     *                 ),
+     *                 @OA\Property(
+     *                     property="description",
+     *                     description="Descriptive text",
+     *                     type="string"
+     *                 )
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="permissions list",
+     *         @OA\JsonContent(ref="#/components/schemas/AccessControlResponse")
+     *     )
+     * )
+     */
     public function createPermissionGroupPermission(Request $request, $id)
     {
         try {
@@ -154,6 +415,39 @@ class AccessControlController extends Controller
         }
     }
 
+    /**
+     * @OA\Post(
+     *     path="/api/v1/admin/access-control/users/assign",
+     *     summary="Assign Permission to User",
+     *     operationId="assignPermissionToUser",
+     *     @OA\RequestBody(
+     *         description="Assignment Request",
+     *         @OA\MediaType(
+     *             mediaType="application/json",
+     *             @OA\Schema(
+     *                 type="object",
+     *                 @OA\Property(
+     *                     property="users",
+     *                     description="List of user IDs",
+     *                     @OA\Items(type="string"),
+     *                     type="array",
+     *                 ),
+     *                 @OA\Property(
+     *                     property="access_controls",
+     *                     description="List of IDs of group/permission/role to assign",
+     *                     @OA\Items(type="integer"),
+     *                     type="array"
+     *                 )
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="permission",
+     *         @OA\JsonContent(ref="#/components/schemas/AccessControlResponse")
+     *     )
+     * )
+     */
     public function assignUsers(Request $request)
     {
         try {
@@ -165,7 +459,39 @@ class AccessControlController extends Controller
         }
     }
 
-
+    /**
+     * @OA\Post(
+     *     path="/api/v1/admin/access-control/users/unassign",
+     *     summary="Unassign Permission to User",
+     *     operationId="unassignPermissionToUser",
+     *     @OA\RequestBody(
+     *         description="Assignment Request",
+     *         @OA\MediaType(
+     *             mediaType="application/json",
+     *             @OA\Schema(
+     *                 type="object",
+     *                 @OA\Property(
+     *                     property="users",
+     *                     description="List of user IDs",
+     *                     @OA\Items(type="string"),
+     *                     type="array",
+     *                 ),
+     *                 @OA\Property(
+     *                     property="access_controls",
+     *                     description="List of IDs of group/permission/role to unassign",
+     *                     @OA\Items(type="integer"),
+     *                     type="array"
+     *                 )
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="permission",
+     *         @OA\JsonContent(ref="#/components/schemas/AccessControlResponse")
+     *     )
+     * )
+     */
     public function unAssignUsers(Request $request)
     {
         try {
@@ -177,6 +503,44 @@ class AccessControlController extends Controller
         }
     }
 
+    /**
+     * @OA\Post(
+     *     path="/api/v1/admin/access-control/users/has-access-control",
+     *     summary="Check if user has permission",
+     *     operationId="assignPermissionToUser",
+     *     @OA\RequestBody(
+     *         description="Assignment Request",
+     *         @OA\MediaType(
+     *             mediaType="application/json",
+     *             @OA\Schema(
+     *                 type="object",
+     *                 @OA\Property(
+     *                     property="user",
+     *                     description="user ID",
+     *                     type="string",
+     *                 ),
+     *                 @OA\Property(
+     *                     property="access_control",
+     *                     description="ID of group/permission/role",
+     *                     type="integer"
+     *                 )
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="assignment response",
+     *         @OA\Schema(
+     *           type="object",
+     *           @OA\Property( property="user_id", description="UserID", type="string"),          
+     *           @OA\Property( property="permission_id", description="PermissionID", type="integer"),          
+     *           @OA\Property( property="group_id", description="groupID", type="integer"),          
+     *           @OA\Property( property="role_id", description="roleID", type="integer"),          
+     *         ),
+     *         @OA\JsonContent(ref="#/components/schemas/AccessControlResponse")
+     *     )
+     * )
+     */
     public function userHasAccessControl(Request $request)
     {
         try {
