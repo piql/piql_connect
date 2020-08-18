@@ -8,6 +8,7 @@ use App\Metadata;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use phpDocumentor\Reflection\DocBlock\Tags\Author;
 use Webpatser\Uuid\Uuid;
 
 class MetadataTemplateController extends Controller
@@ -36,12 +37,12 @@ class MetadataTemplateController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(File $file)
+    public function index(Request $request)
     {
-        //
-        return response()->json([ "data" => $file->metadata->map(function($element) {
-            return new MetadataResource($element);
-        })]);
+        $metadata = \auth()->user()->morphMany( 'App\Metadata','owner');
+        $limit = $request->limit ? $request->limit : env('DEFAULT_ENTRIES_PER_PAGE');
+        return MetadataResource::collection( $metadata->paginate( $limit ) );
+
     }
 
     /**
@@ -51,11 +52,8 @@ class MetadataTemplateController extends Controller
      * @param File $file
      * @return void
      */
-    public function store(Request $request, File $file)
+    public function store(Request $request)
     {
-        if($file->bag->status != "open") {
-            abort( response()->json([ 'error' => 400, 'message' => 'Metadata is read only' ], 400 ) );
-        }
 
         $requestData = $this->validateRequest($request);
 
@@ -69,12 +67,10 @@ class MetadataTemplateController extends Controller
             "modified_by" => Auth::user()->id,
             "metadata" => $requestData,
         ]);
-        $metadata->parent()->associate($file);
+        $metadata->owner()->associate(auth()->user());
         $metadata->save();
 
-        return response()->json([ "data" => $file->refresh()->metadata->map(function($element) {
-            return new MetadataResource($element);
-        })]);
+        return response()->json([ "data" => new MetadataResource($metadata)]);
     }
 
     /**
@@ -83,7 +79,7 @@ class MetadataTemplateController extends Controller
      * @param  \App\Metadata  $metadata
      * @return \Illuminate\Http\Response
      */
-    public function show(File $file, Metadata $metadata)
+    public function show(Metadata $metadata)
     {
         return response()->json([ "data" => new MetadataResource($metadata)]);
     }
@@ -95,11 +91,8 @@ class MetadataTemplateController extends Controller
      * @param  \App\Metadata  $metadata
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, File $file, Metadata $metadata)
+    public function update(Request $request, Metadata $metadata)
     {
-        if($file->bag->status != "open") {
-            abort( response()->json([ 'error' => 400, 'message' => 'Metadata is read only' ], 400 ) );
-        }
         \Log::debug($request);
         $requestData = $this->validateRequest($request);
         \Log::debug($requestData);
@@ -108,9 +101,7 @@ class MetadataTemplateController extends Controller
             $metadata->save();
         }
 
-        return response()->json([ "data" => $file->refresh()->metadata->map(function($element) {
-            return new MetadataResource($element);
-        })]);
+        return response()->json([ "data" => new MetadataResource($metadata)]);
     }
 
     /**
@@ -119,16 +110,11 @@ class MetadataTemplateController extends Controller
      * @param  \App\Metadata  $metadata
      * @return \Illuminate\Http\Response
      */
-    public function destroy(File $file, Metadata $metadata)
+    public function destroy(Metadata $metadata)
     {
-        if($file->bag->status != "open") {
-            abort( response()->json([ 'error' => 400, 'message' => 'Metadata is read only' ], 400 ) );
-        }
 
         $metadata->parent()->dissociate();
         $metadata->delete();
-        return response()->json([ "data" => $file->refresh()->metadata->map(function($element) {
-            return new MetadataResource($element);
-        })]);
+        return response()->json([ "data" => new MetadataResource(null)]);
     }
 }

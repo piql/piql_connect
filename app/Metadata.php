@@ -16,6 +16,8 @@ class Metadata extends Model
         'modified_by',
         'parent_type',
         'parent_id',
+        'owner_type',
+        'owner_id',
         'metadata',
     ];
     protected $casts = [
@@ -23,6 +25,11 @@ class Metadata extends Model
     ];
 
     public function parent()
+    {
+        return $this->morphTo();
+    }
+
+    public function owner()
     {
         return $this->morphTo();
     }
