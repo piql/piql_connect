@@ -43,7 +43,7 @@
 </template>
 
 <script>
-import Pager from "../../../components/Pager"
+import Pager from "@components/Pager"
 import { mapGetters, mapActions } from "vuex";
 
     export default {

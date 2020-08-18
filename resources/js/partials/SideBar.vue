@@ -34,51 +34,62 @@
                         </li>
                     </router-link>
 
-                    <li class="list-group-item cursorPointer" :class="{ active: routeBelongsTo('settings.admin') }" @click="toggleLogoMenu()">
-                        <i class="fas fa-wrench"></i>
-                        <div class="leftMenuItem">
-                            {{$t('sidebar.admin')}}
-                        </div>
-                    </li>
-
-                    <span v-if="isLogoShown">
-                        <router-link :to="{ name: 'settings.logo' }">
-                            <li class="list-group-item submenu" :class="{ active: routeBelongsTo('settings.logo') }" >
-                                <i class="fas fa-shapes"></i>
-                                <div class="leftMenuItem">
-                                    {{$t('sidebar.logo')}}
-                                </div>
-                            </li>
-                        </router-link>
-                    </span>
-
-                    <router-link :to="{ name: 'settings.listing' }">
-                        <li class="list-group-item" :class="{ active: routeBelongsTo('settings.listing') }" >
-                            <i class="fas fa-user"></i>
+                    <router-link :to="{ name: 'settings.admin' }">
+                        <li class="list-group-item cursorPointer" :class="{ active: routeBelongsTo('settings.admin') }">
+                            <i class="fas fa-wrench"></i>
                             <div class="leftMenuItem">
-                                {{$t('sidebar.users')}}
-                            </div>
-                        </li>
-                    </router-link>
-                    <router-link :to="{ name: 'settings.groups' }">
-                        <li class="list-group-item" :class="{ active: routeBelongsTo('settings.groups') }" >
-                            <i class="fas fa-users"></i>
-                            <div class="leftMenuItem">
-                                {{$t('sidebar.userGroups')}}
+                                {{$t('sidebar.settings.admin')}}
                             </div>
                         </li>
                     </router-link>
 
-                    <router-link :to="{ name: 'settings.roles' }">
-                        <li class="list-group-item" :class="{ active: routeBelongsTo('settings.roles') }" >
-                            <i class="fas fa-user-shield"></i>
-                            <div class="leftMenuItem">
-                                {{$t('sidebar.roles')}}
-                            </div>
-                        </li>
-                    </router-link>
+                    <span v-if=" routeBelongsTo('settings.admin') ">
 
-                    
+                            <router-link :to="{ name: 'settings.admin.logo' }">
+                                <li class="list-group-item submenu" :class="{ active: routeBelongsTo('settings.admin.logo') }" >
+                                    <i class="fas fa-shapes"></i>
+                                    <div class="leftMenuItem">
+                                        {{$t('sidebar.settings.admin.logo')}}
+                                    </div>
+                                </li>
+                            </router-link>
+
+                            <router-link :to="{ name: 'settings.admin.account.metadata.template' }">
+                                <li class="list-group-item submenu" :class="{ active: routeBelongsTo('settings.admin.account.metadata.template') }" >
+                                    <i class="fas fa-list"></i>
+                                    <div class="leftMenuItem">
+                                        {{$t('sidebar.settings.admin.metadata')}}
+                                    </div>
+                                </li>
+                            </router-link>
+         
+                            <router-link :to="{ name: 'settings.admin.account.users' }">
+                                <li class="list-group-item submenu" :class="{ active: routeBelongsTo('settings.admin.account.users') }" >
+                                    <i class="fas fa-user"></i>
+                                    <div class="leftMenuItem">
+                                        {{$t('sidebar.users')}}
+                                    </div>
+                                </li>
+                            </router-link>
+                            <router-link :to="{ name: 'settings.admin.account.groups' }">
+                                <li class="list-group-item submenu" :class="{ active: routeBelongsTo('settings.admin.account.groups') }" >
+                                    <i class="fas fa-users"></i>
+                                    <div class="leftMenuItem">
+                                        {{$t('sidebar.userGroups')}}
+                                    </div>
+                                </li>
+                            </router-link>
+
+                            <router-link :to="{ name: 'settings.admin.account.roles' }">
+                                <li class="list-group-item submenu" :class="{ active: routeBelongsTo('settings.admin.account.roles') }" >
+                                    <i class="fas fa-user-shield"></i>
+                                    <div class="leftMenuItem">
+                                        {{$t('sidebar.roles')}}
+                                    </div>
+                                </li>
+                            </router-link>
+
+                        </span>
 
                 </span>
 
@@ -182,7 +193,6 @@ import axios from 'axios';
 export default {
     data() {
         return {
-            logoShown: false
         };
     },
     mounted() {
@@ -210,17 +220,12 @@ export default {
         invisibleIfNarrow() {
             return this.width > 1000 ? "" : "invisible";
         },
-        isLogoShown() {
-            return this.logoShown;
-        }
     },
     methods: {
         routeBelongsTo( checkRoute ) {
+            console.log("checking ",checkRoute );
             return this.$route.name.startsWith( checkRoute );
         },
-        toggleLogoMenu() {
-            this.logoShown = this.logoShown ? false : true;
-        }
     }
 }
 </script>
