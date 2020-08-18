@@ -78,8 +78,9 @@
     "sidebar.retrieve.retrieving": "Being retrieved",
     "sidebar.retrieve.downloadable": "Ready for download",
     "sidebar.retrieve.history": "History",
-    "sidebar.admin": "Admin settings",
-    "sidebar.logo": "Change logo",
+    "sidebar.settings.admin": "Admin settings",
+    "sidebar.settings.admin.logo": "Change logo",
+    "sidebar.settings.admin.metadata": "Configure metadata",
 
     "dashboard.title": "Dashboard",
     "dashboard.ingress": "Your stored information",
@@ -346,5 +347,8 @@
     "datepicker.noDateSelected": "No date selected",
     "datepicker.help": "Cursor keys and enter to select a date",
     "datepicker.toasts.illegalRangeTitle": "Invalid date range",
-    "datepicker.toasts.illegalRangeMessage": "The selected archived from-to date range is invalid. Updating."
+    "datepicker.toasts.illegalRangeMessage": "The selected archived from-to date range is invalid. Updating.",
+
+    "admin.metadata.template.title": "Create metadata templates",
+    "admin.metadata.template.ingress": "Create a metadata template that can then be used on account, archive and holding levels"
 }
