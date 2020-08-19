@@ -18,7 +18,7 @@ use Log;
 class RetrievalJobsController extends Controller
 {
     /**
-     * Display a listing of Aips belonging to Jobs in the "ingesting" state (for now)
+     * Display a listing of Aips belonging to Jobs in the "stored" state
      *
      * @return \Illuminate\Http\Response
      */
@@ -34,7 +34,7 @@ class RetrievalJobsController extends Controller
 
         $aq->whereHas('jobs', function(  $q) {
             /*TODO: Update this status query when we have a working state for ingested jobs */
-            $q->where('status','=', 'ingesting'); 
+            $q->where('status','=', 'stored'); 
         } )->where( 'owner', Auth::id() );
 
         if( $fromDate ) {
