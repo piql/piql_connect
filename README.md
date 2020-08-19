@@ -82,3 +82,30 @@ $ npm run dev
 
 To get piqlConnect rebuilt from your local shell.
 
+### End-to-end tests
+
+To perform user interface tests, you must run:
+
+```
+$ cd tests/endToEnd/
+$ ./ui-test.sh
+
+```
+
+It will open a background Chrome browser and navigate thoward some key actions in piqlConnect.
+
+All the actions happens inside "selenium/standalone-chrome" docker image.
+
+However it's possible to se theese actions if you change the image to a debug version.
+
+Edit "deploy/docker-compose.yml" file and append "-debug" to "selenium/standalone-chrome-chrome" image name:
+
+```
+  selenium-chrome:
+    image: selenium/standalone-chrome-chrome-debug
+
+```
+
+Stop the previous container and start the new one.
+
+Now you wil be able to use VNC at 5900 port and see Chrome running. Use VNC password "secret". 
