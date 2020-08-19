@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,6 +20,10 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::group(['prefix' => 'v1'], function () {
     Route::post('login', 'Auth\ApiLoginController@login')->middleware('user.checkDisabled');
+});
+
+Route::group(['prefix' => 'v1/auth'], function () {
+    Route::post('login', 'Api\Auth\UserController@authenticate')->middleware('user.checkDisabled');
 });
 
 // todo: mode to whitelist middleware or add token to headers in callback
@@ -217,7 +222,7 @@ Route::group(['prefix' => 'v1/admin/access-control'], function () {
     Route::get('users/{id}/access', 'Api\Admin\AccessControlController@userAccess');
 });
 
-Route::group(['prefix' => 'v1/admin/users'], function () {
+Route::group(['prefix' => 'v1/admin/users', 'middleware' => 'jwt.verify'], function () {
     Route::get('', 'Api\Admin\UserController@index');
     Route::get('{id}', 'Api\Admin\UserController@show');
     Route::post('disable', 'Api\Admin\UserController@disable');
