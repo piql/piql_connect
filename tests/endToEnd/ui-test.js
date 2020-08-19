@@ -6,12 +6,17 @@ describe('When open piql connect', () => {
         Key,
 		Keys,
         until
-    } = require('selenium-webdriver');
+	} = require('selenium-webdriver');
+	var chrome = require("selenium-webdriver/chrome");
 	var driver;
 	
 	before(() => {
+		var options = new chrome.Options();
+		options.addArguments("--start-maximized");
+		//options.addArguments("--auto-open-devtools-for-tabs");
         driver = new Builder()
-            .forBrowser('chrome')
+			.forBrowser('chrome')
+			.withCapabilities(options)
             .build();
     });
 
