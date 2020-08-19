@@ -66,7 +66,7 @@ import { mapGetters, mapActions } from "vuex";
         },
         watch: {
             '$route': 'dispatchRouting',
-            userApiResponse(newValue,prevValue){
+            userApiResponse(newValue){
                 //will run on success or failure of any post operation
                 if(newValue && (newValue.status >= 200 && newValue.status <= 299)){
                     this.successToast('Success: ' + newValue.status ,newValue.message);
