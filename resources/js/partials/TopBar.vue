@@ -19,7 +19,7 @@
                     />
                 </div>
 
-                <div class="col-md-7 navLinks w-100">
+                <div class="col-md-7 navLinks">
                     <ul class="navbar-nav m-auto signal">
                         <li class="navbar" ref='nav-home' :class="[ routeBelongsTo('stats') ? 'top-active' : 'top-inactive' ]">
                             <router-link :to="{ name: 'stats.dashboard'}"><b>{{$t('Home')}}</b></router-link>

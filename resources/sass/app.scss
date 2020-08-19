@@ -1653,9 +1653,13 @@ th {
 
 .navLinks {
     top: 0;
-    right: -25vw;
+    right: 0;
     font-size: 1.2rem;
     padding-top: 2rem;
+}
+
+.navbar-nav {
+    float: right;
 }
 
 .col-form-label-sm {
