@@ -23,7 +23,9 @@ Route::group(['prefix' => 'v1'], function () {
 });
 
 Route::group(['prefix' => 'v1/auth'], function () {
-    Route::post('login', 'Api\Auth\UserController@authenticate')->middleware('user.checkDisabled');
+    Route::post('login', 'Api\Auth\UserController@authenticate')->name('api.jwt.login')->middleware('user.checkDisabled');
+    Route::post('refresh', 'Api\Auth\UserController@refresh')->name('api.jwt.refresh');
+    Route::post('logout', 'Api\Auth\UserController@logout')->name('api.jwt.logout');
 });
 
 // todo: mode to whitelist middleware or add token to headers in callback

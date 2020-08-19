@@ -9,7 +9,7 @@
                     <img src="{{ asset('images/piql-connect.png') }}" alt="{{ __('Login') }}"/>
                 </div>
 
-                    <form class="theAuthForm" method="POST" action="{{ route('login') }}">
+                    <form class="theAuthForm" method="POST" action="{{ route('api.jwt.login') }}">
                         @csrf
 
                         <div class="form-group row">

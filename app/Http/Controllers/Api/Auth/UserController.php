@@ -8,6 +8,8 @@ use Tymon\JWTAuth\Exceptions\TokenExpiredException;
 use Tymon\JWTAuth\Exceptions\TokenInvalidException;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use App\Http\Controllers\Controller;
+use Exception;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
@@ -15,18 +17,43 @@ class UserController extends Controller
     {
         $credentials = $request->only('username', 'password');
         try {
-            if (!$token = JWTAuth::attempt($credentials)) 
+            if (!$token = auth()->attempt($credentials))
                 return response()->json(['error' => 'invalid_credentials'], 400);
         } catch (JWTException $e) {
             return response()->json(['error' => 'could_not_create_token'], 500);
         }
-        return response()->json(compact('token'));
+        return response()->json([
+            'user' => auth()->user(),
+            'token'=> $token,
+        ]);
+    }
+
+    public function refresh(Request $request)
+    {
+        try {
+            $token = auth()->refresh();
+        } catch (TokenInvalidException $e) {
+            return response()->json(['error' => $e->getMessage()], 401);
+        }
+        return response()->json(['token' => $token]);
+    }
+
+    public function logout()
+    {
+        try {
+            // auth()->logout();
+            return response()->json([
+                'message' => 'cannot invalidate jwt'
+            ], 200);
+        } catch (Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 400);
+        }
     }
 
     public function getAuthenticatedUser()
     {
         try {
-            if (!$user = JWTAuth::parseToken()->authenticate()) 
+            if (!$user = JWTAuth::parseToken()->authenticate())
                 return response()->json(['user_not_found'], 404);
         } catch (TokenExpiredException $e) {
             return response()->json(['token_expired'], $e->getStatusCode());
