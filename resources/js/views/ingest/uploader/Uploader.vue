@@ -10,7 +10,7 @@
                
                 <div class="card" :title="$t('upload.addFileButtonToolTip')">
                     <div class="card-header">
-                        <b><i class="fa fa-filter"></i> INGEST UPLOAD FORM</b>
+                        <b><i class="fa fa-upload"></i> INGEST UPLOAD FORM</b>
                     </div>
                     <div class="card-body">
                         
@@ -26,24 +26,15 @@
                          </div>
                          <div class="form-group">
                              <div :title="$t('upload.archiveToolTip')">
-                                <archive-picker v-bind:label="$t('Archive')"></archive-picker>
+                                <archive-picker v-bind:label="$t('Archive')" @loadNewHolders="loadNewHolders"></archive-picker>
                             </div>
                          </div>
                          <div class="form-group">
                              <div :title="$t('upload.holdingToolTip')">
-                                <holding-picker v-bind:label="$t('Holdings')" :useWildCard="false" ></holding-picker>
+                                <holding-picker v-bind:label="$t('Holdings')" :useWildCard="false" :key='holderKey' ></holding-picker>
                             </div>
                          </div>
-                         <div class="form-group">
-                             <div v-if="hasFailedUploads" class="text-center">
-                                <label for="processButton" class="col-form-label-sm">&nbsp;</label>
-                                <button class="btn form-control-btn btn-link" @click="retryAll" data-toggle="tooltip" :title="$t('upload.resumeAll')"><i class="fas fa-redo topIcon text-center mr-2"></i></button>
-                            </div>
-                            <div v-else="hasFailedUploads" class="text-left align-middle form-group">
-                                <label for="fileNameFilter" class="col-form-label-sm">{{$t("upload.fileNameFilter")}}</label>
-                                <input class="form-control" id="fileNameFilter" v-model="fileNameFilter">
-                            </div>
-                         </div>
+                         
                          <Dropzone
                                 class="dropzone is-6 has-text-centered"
                                 :multiple="true"
@@ -60,7 +51,7 @@
                              <div v-show="compoundModeEnabled">
                                 <label for="processButton" class="col-form-label-sm">&nbsp;</label>
                                 <button v-if="processDisabled" disabled title="Start the ingest process" id="processButton" class="btn form-control-btn w-100">{{$t('upload.processButton')}}</button>
-                                <button v-else="processDisabled" title="Start the ingest process" id="processButton" class="btn form-control-btn w-100"  v-on:click="commitBagToProcessing">{{$t('upload.processButton')}}</button>
+                                <button v-else title="Start the ingest process" id="processButton" class="btn form-control-btn w-100"  v-on:click="commitBagToProcessing">{{$t('upload.processButton')}}</button>
                             </div>
 
                          </div>
@@ -71,18 +62,34 @@
             <div class="col-md-8">
                 <div class="card">
                     <div class="card-header">
-                        <b><i class="fa fa-upload"></i>  UPLOADED ( {{ sortedFilesUploading.length }} files)</b>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <b><i class="fa fa-folder-open"></i>  UPLOADED ( {{ sortedFilesUploading.length }} files)</b>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <div v-if="hasFailedUploads" class="text-center">
+                                        <label for="processButton" class="col-form-label-sm">&nbsp;</label>
+                                        <button class="btn form-control-btn btn-link" @click="retryAll" data-toggle="tooltip" :title="$t('upload.resumeAll')"><i class="fas fa-redo topIcon text-center mr-2"></i></button>
+                                    </div>
+                                    <div v-else class="text-left align-right form-group">
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text" id="basic-addon1"><i class="fa fa-filter"></i></span>
+                                            </div>
+                                            <input class="form-control" :placeholder="$t('upload.fileNameFilter')" id="fileNameFilter" v-model="fileNameFilter">
+                                        </div>
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <div class="card-body">
                         <upload-file-item-listing :sortedFilesUploading="sortedFilesUploading"  
                         @metadataClicked="metadataClicked" @removeClicked="removeClicked"
                         @retryClicked="retryClicked" @removeFailedClicked="removeFailedClicked" :filesUploadingMeta="filesUploadingMeta"/>
 
-                        <!-- <div class="row text-center pagerRow">
-                            <div class="col">
-                                <Pager :meta="filesUploadingMeta" :height="height" v-if="totalFilesUploading > 0" />
-                            </div>
-                        </div> -->
                     </div>
                 </div>
 
@@ -280,7 +287,8 @@ export default {
             pageSize: 8,
             pageFrom: 1,
             pageTo: 4,
-            fileNameFilter: ""
+            fileNameFilter: "",
+            holderKey: 0
         };
     },
 
@@ -374,6 +382,12 @@ export default {
     },
 
     methods: {
+        forceHolderReRender(){
+            this.holderKey += 1;
+        },
+        loadNewHolders(){
+            this.forceHolderReRender();
+        },
         renameFile(name, index) {
             let nameArr = name.split(".");
             if (nameArr.length == 1) {

@@ -4,7 +4,7 @@
             {{label}}
         </label>
         <select v-model="selection" :id="elementId" class="form-control" data-live-search="true" >
-            <option v-for="holding in holdingsWithWildcard" v-bind:value="holding.title">
+            <option v-for="holding in holdingsWithWildcard" :key="holding.id" v-bind:value="holding.title">
                 {{holding.title}}
             </option>
         </select>
@@ -18,8 +18,9 @@ import RouterTools from '../mixins/RouterTools.js';
 
 export default {
     mixins: [ RouterTools ],
-    mounted() {
+    async mounted() {
         this.archive = this.$route.query.archive;
+
     },
     methods: {
         dispatchRouting: function() {
@@ -78,7 +79,10 @@ export default {
             if( !archive ) return;
 
             axios.get(`/api/v1/planning/archives/${archive}/holdings`).then( (response) => {
-                this.holdings = response.data.data;
+                (response.data.data.length === 0)?this.holdings = null: this.holdings = response.data.data;
+            }).catch(error => {
+                this.holdings = null;
+
             });
         },
         selection: function ( holding ) {
