@@ -1860,3 +1860,14 @@ input:invalid {
 .userName {
     margin-left: 5px;
 }
+
+.d-ruby {
+    display: ruby;
+}
+
+.table-vcenter {
+    td,
+    th {
+        vertical-align: middle;
+    }
+}
