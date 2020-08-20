@@ -47,6 +47,7 @@ class OfflineStorageControllerTest extends TestCase
             $file = factory(\App\FileObject::class)->state("dummyData")->create([
                 "size" => $this->job->bucketSize,
             ]);
+
             $aip->fileObjects()->save($file);
             $aip->update(["size" => $aip->fileObjects()->sum("size")]);
             $this->job->aips()->save($aip);
@@ -72,11 +73,11 @@ class OfflineStorageControllerTest extends TestCase
 
     public function test_given_an_authenticated_user_when_getting_all_archiving_jobs_it_responds_200()
     {
-        $this->job->update(['status' => 'ingesting']);
+        $this->job->update(['status' => 'transferring']);
         $response = $this->actingAs( $this->user )
             ->json( 'GET', route('api.ingest.buckets.archiving', $this->job->id) );
         $response->assertStatus( 200 )
-            ->assertJsonFragment(['status' => 'ingesting', 'archive_objects' => 2]);
+            ->assertJsonFragment(['status' => 'transferring', 'archive_objects' => 2]);
     }
 
     public function test_given_an_authenticated_user_when_getting_all_content_from_a_given_jobs_it_responds_200()
@@ -117,12 +118,16 @@ class OfflineStorageControllerTest extends TestCase
         $response->assertStatus( 200 )
             ->assertJsonFragment(['name' => "bucket name"]);
 
+        \Event::fake();
+
         $response = $this->actingAs( $this->user )
             ->json('PATCH',
                 route('api.ingest.bucket.update', [$this->job->id]),
-                ['status' => "ingesting"]);
+                ['status' => "commit"]);
         $response->assertStatus( 200 )
-            ->assertJsonFragment(['status' => "ingesting"]);
+            ->assertJsonFragment(['status' => "transferring"]);
+
+        \Event::assertDispatched(\App\Events\CommitJobEvent::class, 1);
     }
 
     public function test_given_an_authenticated_user_when_updating_a_created_bucket_with_invalid_name_and_with_status_ingesting_it_responds_400()
