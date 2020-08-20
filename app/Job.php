@@ -70,7 +70,7 @@ class Job extends Model
 
     public function getBucketSizeAttribute()
     {
-        return env('APP_INGEST_BUCKET_SIZE', 150*1000*1000*1000);
+        return env('APP_INGEST_BUCKET_SIZE', 120*1000*1000*1000);
     }
 
     public function metadata()
