@@ -59,7 +59,7 @@ export default {
         },
         wildCardLabel: {
             type: String,
-            default: null
+            default: 'All'
         },
         label: {
             type: String,
@@ -79,11 +79,10 @@ export default {
             if( !archive ) return;
 
             axios.get(`/api/v1/planning/archives/${archive}/holdings`).then( (response) => {
-                (response.data.data.length === 0)?this.holdings = null: this.holdings = response.data.data;
-            }).catch(error => {
-                this.holdings = null;
-
-            });
+                this.holdings = response.data.data; 
+                //default selection
+                this.selection = this.holdings[0].title;
+            })
         },
         selection: function ( holding ) {
             if( !this.initComplete ) {

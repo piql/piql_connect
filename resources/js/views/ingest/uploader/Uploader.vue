@@ -31,7 +31,7 @@
                          </div>
                          <div class="form-group">
                              <div :title="$t('upload.holdingToolTip')">
-                                <holding-picker v-bind:label="$t('Holdings')" :useWildCard="false" :key='holderKey' ></holding-picker>
+                                <holding-picker v-bind:label="$t('Holdings')" :useWildCard="true" :key='holderKey' ></holding-picker>
                             </div>
                          </div>
                          
@@ -305,7 +305,13 @@ export default {
                 .sort( (a,b)  => Number( b.isUploading) - Number( a.isUploading ) );
         },
         processDisabled: function() {
-            return this.invalidBagName | this.numberOfFiles === 0 | this.hasIncompleteFiles;
+            return this.invalidBagName | this.numberOfFiles === 0 | this.hasIncompleteFiles | this.setArchive === null | this.setHolding == null;
+        },
+        setArchive: function (){
+            return this.$route.query.archive;
+        },
+        setHolding: function (){
+            return this.$route.query.holding;
         },
         invalidBagName: function() {
             let valid = /^((?![:\\<>"/?*|]).){3,64}$/g;
