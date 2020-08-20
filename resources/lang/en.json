@@ -355,6 +355,16 @@
     "datepicker.toasts.illegalRangeTitle": "Invalid date range",
     "datepicker.toasts.illegalRangeMessage": "The selected archived from-to date range is invalid. Updating.",
 
+    "admin.account.metadata.title": "Title",
+    "admin.account.metadata.identifier": "Unique identifier",
+    "admin.account.metadata.created_at": "Creation date",
+    "admin.account.metadata.actions": "Actions",
+    "admin.metadata.createNewTemplate": "Create new metadata template",
+    "admin.metadata.listCurrentAssignments": "List current metadata assignments",
     "admin.metadata.template.title": "Create metadata templates",
-    "admin.metadata.template.ingress": "Create a metadata template that can then be used on account, archive and holding levels"
+    "admin.metadata.template.ingress": "Create a metadata template that can then be used on account, archive and holding levels",
+    "admin.metadata.template.edit.title": "Edit metadata fields",
+    "admin.metadata.template.edit.saveButton": "Save",
+    "admin.metadata.template.edit.cancelButton": "Cancel",
+    "admin.metadata.template.edit.schemeName": "Metadata scheme name"
 }

@@ -223,7 +223,6 @@ export default {
     },
     methods: {
         routeBelongsTo( checkRoute ) {
-            console.log("checking ",checkRoute );
             return this.$route.name.startsWith( checkRoute );
         },
     }
