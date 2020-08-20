@@ -79,9 +79,12 @@ export default {
             if( !archive ) return;
 
             axios.get(`/api/v1/planning/archives/${archive}/holdings`).then( (response) => {
-                this.holdings = response.data.data; 
-                //default selection
-                this.selection = this.holdings[0].title;
+                if(response.data.data.length > 0){
+                    this.holdings = response.data.data;
+                    //default selection
+                    this.selection = this.holdings[0].title;
+                }
+             
             })
         },
         selection: function ( holding ) {
