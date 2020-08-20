@@ -318,7 +318,7 @@
 
     "settings.settings.languagelabel": "Language",
     "settings.settings.rowslabel": "Results Displayed/Page",
-    "settings.settings.logolabel": "Logo",
+    "settings.settings.profileImagelabel": "Profile Image",
     "settings.settings.userInterfaceHeader": "User interface",
     "settings.settings.setPasswordHeader": "Change password",
     "settings.settings.oldPassword.label": "Old password",

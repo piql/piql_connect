@@ -47,6 +47,7 @@
     "chart.js": "^2.9.3",
     "chartjs": "^0.3.24",
     "date-fns": "^2.14.0",
+    "dropdown-hover": "0.0.2",
     "filesize": "^6.1.0",
     "fine-uploader": "^5.16.2",
     "fine-uploader-wrappers": "^1.0.1",
