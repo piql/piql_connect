@@ -59,7 +59,7 @@ export default {
         },
         wildCardLabel: {
             type: String,
-            default: 'Select Holding'
+            default: 'Nothing Selected'
         },
         label: {
             type: String,
