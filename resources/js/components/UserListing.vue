@@ -21,19 +21,19 @@
                             <td v-else > <b-badge variant="success"> Active</b-badge></td>
                             <td>{{formatDate(staff.created_at)}}</td>
                             <td>
-                                <a class="btn btn-xs btn-primary" title="Assign Role" style="color:white">
+                                <a class="btn btn-xs btn-primary" v-b-tooltip.hover title="Assign Role" style="color:white">
                                     <i class="fa fa-user-secret"></i>
                                     </a>
-                                <a class="btn btn-xs btn-primary" :title="$t('settings.settings.editUser')" style="color:white" @keydown="showEditModal(staff.id)" @click="showEditModal(staff.id)">
+                                <a class="btn btn-xs btn-primary" v-b-tooltip.hover :title="$t('settings.settings.editUser')" style="color:white" @keydown="showEditModal(staff.id)" @click="showEditModal(staff.id)">
                                     <i class="fa fa-edit"></i>
                                     </a>
-                                <a v-if="staff.disabled === true" class="btn btn-xs btn-primary" :title="$t('settings.settings.enableUser')" style="color:white" @keydown="showEnableModal(staff.id)" @click="showEnableModal(staff.id)">
+                                <a v-if="staff.disabled === true" class="btn btn-xs btn-primary" v-b-tooltip.hover :title="$t('settings.settings.enableUser')" style="color:white" @keydown="showEnableModal(staff.id)" @click="showEnableModal(staff.id)">
                                     <i class="fa fa-plug"></i>
                                     </a>
-                                <a v-else class="btn btn-xs btn-primary" :title="$t('settings.settings.disableUser')" style="color:white" @keydown="showDisableModal(staff.id)" @click="showDisableModal(staff.id)">
+                                <a v-else class="btn btn-xs btn-primary" v-b-tooltip.hover :title="$t('settings.settings.disableUser')" style="color:white" @keydown="showDisableModal(staff.id)" @click="showDisableModal(staff.id)">
                                     <i class="fa fa-ban"></i>
                                     </a>
-                                <a class="btn btn-xs btn-primary" :title="$t('settings.settings.deleteUser')" style="color:white" @keydown="showDeleteModal(staff.id)" @click="showDeleteModal(staff.id)">
+                                <a class="btn btn-xs btn-primary" v-b-tooltip.hover :title="$t('settings.settings.deleteUser')" style="color:white" @keydown="showDeleteModal(staff.id)" @click="showDeleteModal(staff.id)">
                                     <i class="fa fa-trash"></i>
                                     </a>
                             </td>

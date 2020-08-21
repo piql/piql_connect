@@ -1,5 +1,6 @@
-import { shallowMount } from "@vue/test-utils";
+import { shallowMount } from "@vue/test-utils"
 import UserListing from "@/components/UserListing"
+
 
 const fns = {
   convertTime:(isoDate)=>{
@@ -39,7 +40,10 @@ const users = [
   }
 ];
 
+
 describe("UserListing.vue", ()=>{
+  
+
 
   test("should render when users props is passed", ()=> {
     

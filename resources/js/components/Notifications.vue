@@ -1,6 +1,6 @@
 <template>
     <span>
-    <i @click="toggleShowNotifications()" class="fas fa-bell clickable" ></i>
+    <b-button variant="outline-primary"><i @click="toggleShowNotifications()" v-b-tooltip.hover title='Notifications' class="fas fa-bell clickable" ></i></b-button>
     <div class="dropdownList" v-if="false">
         <i class="fas fa-times closeNotifications" @click="toggleShowNotifications()" ></i>
         <strong>notifications</strong>
