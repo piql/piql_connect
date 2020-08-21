@@ -11,7 +11,7 @@
           <tbody>
               <tr v-if="currentlyIdle"><td colspan="3" style="text-align:center">{{$t('ingest.processing.noItems')}}</td></tr>
                <tr v-else v-for="item in items" :key="item.id">
-                        <td>{{item.name}}</td>
+                        <td class="processingPackageName">{{item.name}}</td>
                     <td>
                         {{formatShortDate( item.created_at )}}
                     </td>

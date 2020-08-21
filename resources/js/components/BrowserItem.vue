@@ -19,11 +19,11 @@
             {{fileCount}}
         </div>
         <div class="col-sm-3 d-inline-block align-self-center text-center">
-            <router-link :to="{ name: 'access.browse.dips.files', params: { dipId: item.id } }" data-toggle="tooltip" title="Access contents" ><i class="fas fa-folder-open actionIcon"></i></router-link>
+            <router-link :to="{ name: 'access.browse.dips.files', params: { dipId: item.id } }" data-toggle="tooltip" title="Access contents" class="openFiles"><i class="fas fa-folder-open actionIcon"></i></router-link>
             <a v-bind:class="{ collapse: !isPreparingDownload }" class="m-auto" href="" data-toggle="tooltip" title="Download file"><i class="fa fa-spinner fa-spin actionIcon"></i></a>
             <a v-bind:class="{ collapse: isPreparingDownload }" class="m-auto" @click="download" data-toggle="tooltip" title="Download file"><i class="fas fa-file-download actionIcon"></i></a>
 
-            <button class="btn-tiny m-auto" @click="preview" data-toggle="tooltip" title="Preview image"><i class="fas fa-eye actionIcon"></i></button>
+            <button class="btn-tiny m-auto previewButton" @click="preview" data-toggle="tooltip" title="Preview image"><i class="fas fa-eye actionIcon"></i></button>
         </div>
 
     </div>
