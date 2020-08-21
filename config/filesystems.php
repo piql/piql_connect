@@ -52,6 +52,10 @@ return [
             'driver' => 'local',
             'root' => storage_path(env('STORAGE_BAGS_PATH')),
         ],
+        'jobs' => [
+            'driver' => 'local',
+            'root' => storage_path(env('STORAGE_JOBS_PATH')),
+        ],
         'archivematica' => [
             'driver' => 'local',
             'root' => storage_path(env('STORAGE_TRANSFER_PATH')),

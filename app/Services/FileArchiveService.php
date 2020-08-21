@@ -27,6 +27,11 @@ class FileArchiveService implements \App\Interfaces\FileArchiveInterface
        return $this->outgoing->path( "{$prefix}{$aip->external_uuid}" );
     }
 
+    private function collectionDestinationPath( string $filename )
+    {
+       return $this->outgoing->path( $filename );
+    }
+
     public function buildTarFromAip( Aip $aip, $prefix = null ) : string
     {
         $prefix = ($prefix == null) ? Str::uuid()."-" : $prefix;
@@ -65,6 +70,23 @@ class FileArchiveService implements \App\Interfaces\FileArchiveInterface
             $this->outgoing->deleteDirectory( "{$prefix}{$aip->external_uuid}" );
         } catch ( \Exception $ex ) {
             Log::warn( "Failed to clean up temporary directories from aip {$aip->external_uuid}: {$ex}" );
+        }
+
+        return $destinationFilePath;
+    }
+
+    public function buildTarFromAipCollectionIncrementally( Array $aips, $basename = null ) : string
+    {
+        $basename = ($basename == null) ? Str::uuid() : $basename;
+        $destinationFilePath = "{$this->collectionDestinationPath( $basename )}.tar";
+        foreach ($aips as $aip) {
+            $downloadedFileSourcePath = $this->buildTarFromAipIncrementally($aip);
+            $this->collector->collectSingleFile(
+                $downloadedFileSourcePath,
+                basename($downloadedFileSourcePath),
+                $destinationFilePath,
+                true
+            );
         }
 
         return $destinationFilePath;

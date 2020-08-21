@@ -276,5 +276,41 @@ class FileArchiveServiceTest extends TestCase
         $this->assertDirectoryNotExists( Storage::disk('outgoing')->path( $this->aip->external_uuid ) );    //Must clean up after tar'ing
     }
 
+    public function test_given_multiple_aips_when_incrementally_building_a_tar_collection_from_it_the_aips_are_collected()
+    {
+        $prefix = Str::uuid()."-";
+        $texts = Collection::times(3, function() { return $this->faker->text(); } );
+        $filesWithTexts = $this->files->pluck("path")->combine( $texts );
+
+        $this->instance( FileCollectorInterface::class, Mockery::mock(
+            TarFileService::class, function ( $mock ) use ( $filesWithTexts ) {
+                $mock->shouldReceive( 'collectSingleFile' )
+                     ->times(8)
+		     ->with( Mockery::type('string'), Mockery::type('string'), Mockery::type('string'), Mockery::type('bool') );
+            } )
+        );
+
+        $this->instance( ArchivalStorageInterface::class, Mockery::mock(
+            ArchivalStorageService::class, function ( $mock ) use ( $filesWithTexts, $prefix ) {
+                $filesWithTexts->map( function( $text, $file ) use ( $mock, $prefix ) {
+
+                    $filePath = "{$prefix}{$this->aip->external_uuid}/{$file}";
+                    Storage::disk( 'outgoing' )->put( $filePath, $text );
+
+                    $mock->shouldReceive( 'download' )
+                         ->with( Mockery::type('\App\StorageLocation'), Mockery::type('string'), Mockery::type('string') )
+                         ->andReturnUsing(  function ($storageLocation, $storagePath, $destinationPath ){
+                             return $destinationPath;
+                         });
+                });
+            }
+        ));
+        $service = new FileArchiveService( $this->app,
+            $this->app->make( ArchivalStorageInterface::class),
+            $this->app->make( FileCollectorInterface::class)
+        );
+
+        $actualFilePath = $service->buildTarFromAipCollectionIncrementally( [$this->aip, $this->aip] );
+    }
 
 }
