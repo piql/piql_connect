@@ -5,6 +5,7 @@ namespace App\Stats;
 use DateInterval;
 use DatePeriod;
 use DateTime;
+use Illuminate\Support\Facades\Log;
 
 class StatisticsData
 {
@@ -30,21 +31,20 @@ class StatisticsData
 
     public function monthlyOnlineAIPsIngested($userId)
     {
-        $latest = IngestedAIPOnline::orderBy('recorded_at', 'desc')
-            ->where('owner', $userId)->take(1)->get(['ingest_date']);
-        if ($latest == null || empty($latest) || !isset($latest[0])) 
-            return array_fill(0, 12, 0);
-            
+        $first = new \DateTime('-11 months');
+        $last = new \DateTime('+1 month');
+
         $interval = DateInterval::createFromDateString('1 month');
-        $period = new DatePeriod(new \DateTime('-10 months'), $interval, new \DateTime('+2 month'));
+        $period = new DatePeriod($first, $interval, $last);
 
         $result = [];
         foreach ($period as $date) {
-            $data = IngestedAIPOnline::where([ 
-                'owner' => $userId, 
-                'ingest_date' => $date,
-                'recorded_at' => $latest[0]->recorded_at,
-            ])->take(1)->get(['aips']);
+            $data = IngestedAIPOnline::where('owner', $userId)
+                ->whereBetween('ingest_date', [
+                    new DateTime('first day of ' . $date->format('Y-m')),
+                    new DateTime('last day of ' . $date->format('Y-m'))
+                ])
+                ->orderBy('recorded_at', 'desc')->take(1)->get(['aips']);
             $result[] = ($data != null && !empty($data) && isset($data[0])) ? $data[0]->aips : 0;
         }
         return $result;
@@ -64,8 +64,8 @@ class StatisticsData
 
     public function monthlyOnlineDataIngested($userId)
     {
-        $first = new \DateTime('-10 months');
-        $last = new \DateTime('+2 month');
+        $first = new \DateTime('-11 months');
+        $last = new \DateTime('+1 month');
 
         $interval = DateInterval::createFromDateString('1 month');
         $period = new DatePeriod($first, $interval, $last);
@@ -75,8 +75,8 @@ class StatisticsData
             $ingested = ['bags' => 0, 'size' => 0, 'month' => $date->format('M')];
             $data = IngestedDataOnline::where('owner', $userId)
                 ->whereBetween('ingest_date', [
-                    new DateTime('first day of ' . $date->format('Y-m')), 
-                    new DateTime( 'last day of ' . $date->format('Y-m'))
+                    new DateTime('first day of ' . $date->format('Y-m')),
+                    new DateTime('last day of ' . $date->format('Y-m'))
                 ])
                 ->orderBy('recorded_at', 'desc')->take(1)->get(['bags', 'size']);
             if ($data != null && !empty($data) && isset($data[0])) {
