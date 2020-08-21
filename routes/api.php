@@ -91,6 +91,11 @@ Route::group(['prefix' => 'v1', 'middleware' => ['auth:api', 'activity']], funct
         Route::get('storage/offline/pending/buckets', 'Api\Ingest\OfflineStorageController@jobs')->name('api.ingest.buckets.pending');
         Route::get('storage/offline/archive/buckets', 'Api\Ingest\OfflineStorageController@archiveJobs')->name('api.ingest.buckets.archiving');
 
+        Route::post('storage/offline/config/upload', 'Api\Storage\BucketConfigController@upload')->name('api.ingest.buckets.config');
+        Route::get('storage/offline/config/showFiles', 'Api\Storage\BucketConfigController@showFiles')->name('api.ingest.buckets.config');
+        Route::get('storage/offline/config/showFile/{name}', 'Api\Storage\BucketConfigController@showFile')->name('api.ingest.buckets.config');
+        Route::post('storage/offline/config/removeFile/{name}', 'Api\Storage\BucketConfigController@removeFile')->name('api.ingest.buckets.config');
+
         Route::group(['prefix' => 'triggers'], function () {
             // todo: add middleware
             Route::group(['prefix' => 'am'], function () {

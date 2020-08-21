@@ -171,6 +171,14 @@
     "ingest.offlineStorage.contentOptions.reelDescription.buttonText" : "Velg fil",
     "ingest.offlineStorage.toasts.piqled.title" :"Klargjør for skriving til piqlFilm",
     "ingest.offlineStorage.toasts.piqled.message" :"Pakken %PACKAGENAME% klargjøres nå for skriving til piqlFilm",
+    "ingest.offlineStorage.config.imageUploadTitle": "Visual images upload",
+    "ingest.offlineStorage.config.ingress": "Drag your visual images here. Allowed extensions are",
+    "ingest.offlineStorage.config.alert.notAllowedExtensions" :"Please, use only allowed image types",
+    "ingest.offlineStorage.config.toast.fileUploaded.header": "Visual images upload",
+    "ingest.offlineStorage.config.uploadedTitle": "Uploaded images",
+    "ingest.offlineStorage.config.toast.fileUploaded.message": "Your image was sent",
+    "ingest.offlineStorage.config.removeQuestion": "Remove this file?",
+    
 
     "ingest.fileList.header": "Fil-liste",
     "ingest.fileList.ingress": "Her kan du se hvilke filer du har lagt til i en SIP. Du kan også legge til eller endre metadata per fil.",
