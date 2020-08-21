@@ -1,8 +1,10 @@
 <?php
 
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
+
+use App\AccountMetadata;
 use App\Metadata;
-use Illuminate\Support\Str;
+use App\MetadataTemplate;
 use Faker\Generator as Faker;
 
 /*
@@ -17,6 +19,23 @@ use Faker\Generator as Faker;
 */
 
 $factory->define(Metadata::class, function (Faker $faker) {
+    return [
+        'uuid' => $faker->uuid,
+        'modified_by' => $faker->uuid,
+        'metadata' => [ "dc:title" => "The greatest story ever told" ],
+    ];
+});
+
+$factory->define(MetadataTemplate::class, function (Faker $faker) {
+
+    return [
+        'uuid' => $faker->uuid,
+        'modified_by' => $faker->uuid,
+        'metadata' => [ "dc:title" => "The greatest story ever told" ],
+    ];
+});
+
+$factory->define(AccountMetadata::class, function (Faker $faker) {
     return [
         'uuid' => $faker->uuid,
         'modified_by' => $faker->uuid,

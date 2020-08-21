@@ -13,6 +13,8 @@ class Metadata extends Model
     protected $table = 'metadata';
     protected $fillable = [
         'uuid',
+        'title',
+        'description',
         'modified_by',
         'parent_type',
         'parent_id',

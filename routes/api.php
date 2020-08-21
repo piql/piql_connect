@@ -78,18 +78,23 @@ Route::group(['prefix' => 'v1', 'middleware' => ['auth:api', 'activity']], funct
         Route::patch('files/{file}/metadata/{metadata}', 'Api\Ingest\FileMetadataController@update')->name('api.ingest.files.metadata.update');
         Route::delete('files/{file}/metadata/{metadata}', 'Api\Ingest\FileMetadataController@destroy')->name('api.ingest.files.metadata.destroy');
 
-        //metadata template
         Route::get(   'metadata-template',            'Api\Ingest\MetadataTemplateController@index')  ->name('api.ingest.metadata-template.index');
         Route::get(   'metadata-template/{metadata}', 'Api\Ingest\MetadataTemplateController@show')   ->name('api.ingest.metadata-template.show');
         Route::post(  'metadata-template',            'Api\Ingest\MetadataTemplateController@store')  ->name('api.ingest.metadata-template.store');
         Route::patch( 'metadata-template/{metadata}', 'Api\Ingest\MetadataTemplateController@update') ->name('api.ingest.metadata-template.update');
         Route::delete('metadata-template/{metadata}', 'Api\Ingest\MetadataTemplateController@destroy')->name('api.ingest.metadata-template.destroy');
 
-        Route::get(   'account/{id}/metadata',            'Api\Ingest\AccountMetadataController@index')  ->name('api.ingest.account.metadata.index');
-        Route::get(   'account/{id}/metadata/{metadata}', 'Api\Ingest\AccountMetadataController@show')   ->name('api.ingest.account.metadata.show');
-        Route::post(  'account/{id}/metadata',            'Api\Ingest\AccountMetadataController@store')  ->name('api.ingest.account.metadata.store');
-        Route::patch( 'account/{id}/metadata/{metadata}', 'Api\Ingest\AccountMetadataController@update') ->name('api.ingest.account.metadata.update');
-        Route::delete('account/{id}/metadata/{metadata}', 'Api\Ingest\AccountMetadataController@destroy')->name('api.ingest.account.metadata.destroy');
+        Route::get(   'account/{account}/metadata',            'Api\Ingest\AccountMetadataController@index')  ->name('api.ingest.account.metadata.index');
+        Route::get(   'account/{account}/metadata/{metadata}', 'Api\Ingest\AccountMetadataController@show')   ->name('api.ingest.account.metadata.show');
+        Route::post(  'account/{account}/metadata',            'Api\Ingest\AccountMetadataController@store')  ->name('api.ingest.account.metadata.store');
+        Route::patch( 'account/{account}/metadata/{metadata}', 'Api\Ingest\AccountMetadataController@update') ->name('api.ingest.account.metadata.update');
+        Route::delete('account/{account}/metadata/{metadata}', 'Api\Ingest\AccountMetadataController@destroy')->name('api.ingest.account.metadata.destroy');
+
+        Route::get(   'account',           'Api\Ingest\AccountController@index')  ->name('api.ingest.account.index'); // guard admin only
+        Route::get(   'account/{account}', 'Api\Ingest\AccountController@show')   ->name('api.ingest.account.show'); // guard user
+        Route::post(  'account',           'Api\Ingest\AccountController@store')  ->name('api.ingest.account.store'); // guard admin only
+        Route::patch( 'account/{account}', 'Api\Ingest\AccountController@update') ->name('api.ingest.account.update'); // guard admin only
+        Route::delete('account/{account}', 'Api\Ingest\AccountController@destroy')->name('api.ingest.account.destroy'); // ???
 
 
         Route::get('storage/offline/pending/buckets/{bucket}/metadata', 'Api\Ingest\BucketMetadataController@index')->name('api.ingest.bucket.metadata.index');

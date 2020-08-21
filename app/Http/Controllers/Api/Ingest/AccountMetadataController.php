@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers\Api\Ingest;
 
-use App\File;
+use App\Account;
 use App\Http\Resources\MetadataResource;
-use App\MetadataTemplate;
+use App\AccountMetadata;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Webpatser\Uuid\Uuid;
 
-class MetadataTemplateController extends Controller
+class AccountMetadataController extends Controller
 {
     private function validateRequest(Request $request) {
         return $request->validate([
@@ -31,29 +31,31 @@ class MetadataTemplateController extends Controller
             "metadata.dc.rights" => "string|nullable",
         ]);
     }
+
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @param Account $account
+     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
      */
-    public function index(Request $request)
+    public function index(Request $request, Account $account)
     {
-        $metadata = \auth()->user()->morphMany( MetadataTemplate::class,'owner');
+        $metadata = $account->metadata();
         $limit = $request->limit ? $request->limit : env('DEFAULT_ENTRIES_PER_PAGE');
         return MetadataResource::collection( $metadata->paginate( $limit ) );
-
     }
 
     /**
      * Store a newly created resource in storage.
      *
      * @param \Illuminate\Http\Request $request
-     * @param File $file
+     * @param Account $account
      * @return void
+     * @throws \Exception
      */
-    public function store(Request $request)
+    public function store(Request $request, Account $account)
     {
-
         $requestData = $this->validateRequest($request);
 
         if(!isset($requestData->dc))
@@ -61,11 +63,13 @@ class MetadataTemplateController extends Controller
             $requestData =["dc" => (object)null];
         }
 
-        $metadata = new MetadataTemplate([
+        $metadata = new AccountMetadata([
             "uuid" => Uuid::generate()->string,
             "modified_by" => Auth::user()->id,
             "metadata" => $requestData,
         ]);
+        $metadata->owner()->associate($account->owner());
+        $metadata->parent()->associate($account);
         $metadata->save();
 
         return response()->json([ "data" => new MetadataResource($metadata)]);
@@ -74,26 +78,33 @@ class MetadataTemplateController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Metadata  $metadata
+     * @param Account $account
+     * @param AccountMetadata $metadata
      * @return \Illuminate\Http\Response
      */
-    public function show(MetadataTemplate $metadata)
+    public function show(Account $account, AccountMetadata $metadata)
     {
+        if($account->id !== $metadata->parent_id) {
+            abort( response()->json([ 'error' => 404, 'message' => 'Invalid metadata' ], 404 ) );
+        }
         return response()->json([ "data" => new MetadataResource($metadata)]);
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Metadata  $metadata
+     * @param \Illuminate\Http\Request $request
+     * @param Account $account
+     * @param AccountMetadata $metadata
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, MetadataTemplate $metadata)
+    public function update(Request $request, Account $account, AccountMetadata $metadata)
     {
-        \Log::debug($request);
+        if($account->id !== $metadata->parent_id) {
+            abort( response()->json([ 'error' => 404, 'message' => 'Invalid metadata' ], 404 ) );
+        }
+
         $requestData = $this->validateRequest($request);
-        \Log::debug($requestData);
         if(isset($requestData['metadata'])) {
             $metadata->metadata = $requestData['metadata'] + $metadata->metadata;
             $metadata->save();
@@ -105,11 +116,16 @@ class MetadataTemplateController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Metadata  $metadata
+     * @param Account $account
+     * @param AccountMetadata $metadata
      * @return \Illuminate\Http\Response
+     * @throws \Exception
      */
-    public function destroy(MetadataTemplate $metadata)
+    public function destroy(Account $account, AccountMetadata $metadata)
     {
+        if($account->id !== $metadata->parent_id) {
+            abort( response()->json([ 'error' => 404, 'message' => 'Invalid metadata' ], 404 ) );
+        }
 
         $metadata->parent()->dissociate();
         $metadata->owner()->dissociate();
