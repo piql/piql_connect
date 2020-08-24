@@ -4,7 +4,8 @@ const state = {
     response: null,
     settings: null,
     password: null,
-    languages: null
+    languages: null,
+    user: null
 
 }
 
@@ -12,7 +13,8 @@ const getters = {
     settingsApiResponse: state => state.response,
     setPasswordData: state => state.password,
     userSettings: state => state.settings,
-    userLanguages: state => state.languages
+    userLanguages: state => state.languages,
+    currentUser: state => state.user
 
 }
 
@@ -44,6 +46,9 @@ const actions = {
 }
 
 const mutations = {
+    setCurrentUserMutation: (state,payload)=> {
+        state.user = payload.data;
+    },
     setSettingsMutation: (state,payload)=> {
         state.settings = payload.data;
     },
