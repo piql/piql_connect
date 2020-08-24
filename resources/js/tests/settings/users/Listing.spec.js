@@ -1,71 +1,59 @@
-import { shallowMount, createLocalVue } from "@vue/test-utils"
-import Vuex from "vuex"
+import { Store } from 'vuex-mock-store'
+import { shallowMount} from "@vue/test-utils"
 import Listing from "@/views/settings/Listing/Listing";
-import users from "@/store/settings/users";
 
 
 const $t = (s)=> s
 const $route = { name: 'test', query:{ page: 1} }
 
-const localVue = createLocalVue()
+// create the Store mock
+const store = new Store({
+  state: { 
+    users: [{name: 'Test User'}],
+    pageMeta: {page: 1},
+    response: {status: 'test response'}
+   },
+  getters: { 
+    formattedUsers: [{name: 'Test User'}] ,
+    usersPageMeta: {page: 1},
+    userApiResponse: {status: 'test response'}
+  },
+})
+const $store = store;
+const errorToast = jest.fn();
+const successToast = jest.fn()
 
-localVue.use(Vuex)
+// reset spies, initial state and getters
+afterEach(() => store.reset())
 
 
 
 describe("Listing", ()=>{
-  //set mock for vuex
-  let actions
-  let getters
-  let state
-  let store
-
+  
+  let wrapper
   beforeEach(() => {
-    state = {
-        users: null,
-        pageMeta: null,
-        response: null
-    
-    }
+    wrapper = shallowMount(Listing, {
+      mocks:{
+        $t,
+        $route,
+        $store,
+        errorToast,
+        successToast
+      },
+      stubs: {
+        'page-heading': true,
+        'user-listing': true,
+        'pager':true,
+        'b-modal': true,
+        'b-button':true,
+        'Pager': true
 
-    actions = {
-      fetchUsers: jest.fn(),
-      postNewUser: jest.fn(),
-      disableUserRequest: jest.fn(),
-      enableUserRequest: jest.fn()
-      
     }
-
-    store = new Vuex.Store({
-      modules: {
-        users: {
-          state,
-          actions,
-          getters: users.getters
-        }
-      }
     })
   })
-    
-    
 
     it("should render page", async ()=> {
-        let wrapper = shallowMount(Listing, {
-            mocks:{
-              $t,
-              $route,
-              store,
-              localVue
-            },
-            stubs: {
-              'page-heading': true,
-              'user-listing': true,
-              'pager':true,
-              'b-modal': true,
-              'b-button':true,
-    
-          }
-          });
+        //let wrapper = shallowMount(Listing, );
 
           wrapper.vm.$nextTick();
     

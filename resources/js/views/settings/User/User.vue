@@ -23,6 +23,12 @@
                                 </b-card-text>
                             </b-tab>
 
+                            <b-tab :title="$t('sidebar.admin')">
+                                <b-card-text>
+                                   <logo />
+                                </b-card-text>
+                            </b-tab>
+
                         </b-tabs>
                     </b-card>
                 </div>

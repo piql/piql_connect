@@ -19,30 +19,30 @@
                     />
                 </div>
 
-                <div class="col-md-7 navLinks">
+                <div class="col-md-7 navLinks w-100">
                     <ul class="navbar-nav m-auto signal">
                         <li class="navbar" ref='nav-home' :class="[ routeBelongsTo('stats') ? 'top-active' : 'top-inactive' ]">
                             <router-link :to="{ name: 'stats.dashboard'}"><b>{{$t('Home')}}</b></router-link>
                         </li>
-                        <li class="navbar" ref='nav-ingest' :class="[ routeBelongsTo('ingest') ? 'top-active' : 'top-inactive' ]">
-                            <router-link :to="{ name: 'ingest.uploader' }"><b>{{$t('Ingest')}}</b></router-link>
+                        <li id="ingest" class="navbar" ref='nav-ingest' :class="[ routeBelongsTo('ingest') ? 'top-active' : 'top-inactive' ]">
+                            <router-link :to="{ name: 'ingest.uploader' }" id="navbarIngest"><b>{{$t('Ingest')}}</b></router-link>
                         </li>
                         <li class="navbar" ref='nav-access' :class="[ routeBelongsTo('access') ? 'top-active' : 'top-inactive' ]">
-                            <router-link :to="{ name: 'access.browse' }"><b>{{$t('Access')}}</b></router-link>
+                            <router-link :to="{ name: 'access.browse' }" id="navbarAccess"><b>{{$t('Access')}}</b></router-link>
                         </li>
 
-                        <li class="navbar" ref='nav-settings' :class="[ routeBelongsTo('settings') ? 'top-active' : '']" v-b-tooltip.hover :title="$t('sidebar.settings')" >
+                        <li class="navbar" ref='nav-settings' :class="[ routeBelongsTo('settings') ? 'top-active' : '']" data-toggle="tooltip" :title="$t('sidebar.settings')" >
                             <router-link :to="{ name: 'settings.user' }">
-                                <b-button variant="outline-primary"><i class="fas fa-cogs plistIcon navbar" ></i></b-button>
+                                <i class="fas fa-cogs plistIcon navbar" ></i>
                             </router-link>
                         </li>
 
-                        <li class="pr-2 plistIcon navbar"><notifications/>
+                        <li class="pr-2 navbar"><notifications/>
                         </li>
-                        <li class="pr-2 plistIcon navbar">
-                            <a href="/logout" class="btn btn-primary btn-sm" v-b-tooltip.hover title="Logout"><i class="fa fa-sign-out-alt navbar"></i></a>
+                        <li class="pr-2 navbar">
+                            <a href="/logout" id="navbarLogout"><i class="fas plistIcon fa-sign-out-alt signal"></i></a>
                         </li>
-                        <li class="pr-2 plistIcon navbar">
+                        <li class="pr-2 navbar">
                             <div>
                                 <div class="userImgCont"><img :src="userImg" class="userImg"/></div>
                             </div>

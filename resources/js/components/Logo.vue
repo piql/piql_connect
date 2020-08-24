@@ -1,9 +1,8 @@
 <template>
-    <div class="w-100">
-        <page-heading icon="fa-shapes" :title="$t('settings.logo.header')" :ingress="$t('settings.logo.ingress')" />
+    <div>
 
         <form>
-            <div class="col-10">
+            <div>
                 <FileInputComponent
                     id="uploadbutton"
                     :multiple="false"
