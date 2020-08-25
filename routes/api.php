@@ -78,6 +78,10 @@ Route::group(['prefix' => 'v1', 'middleware' => ['auth:api', 'activity']], funct
         Route::patch('files/{file}/metadata/{metadata}', 'Api\Ingest\FileMetadataController@update')->name('api.ingest.files.metadata.update');
         Route::delete('files/{file}/metadata/{metadata}', 'Api\Ingest\FileMetadataController@destroy')->name('api.ingest.files.metadata.destroy');
 
+        Route::apiResource('metadata-template', 'Api\Ingest\MetadataTemplateController', ['as' => 'api.ingest']);
+        Route::apiResource('account',           'Api\Ingest\AccountController',          ['as' => 'api.ingest']);
+        Route::apiResource('account.metadata', 'Api\Ingest\AccountMetadataController',   ['as' => 'api.ingest']);
+
         Route::get('storage/offline/pending/buckets/{bucket}/metadata', 'Api\Ingest\BucketMetadataController@index')->name('api.ingest.bucket.metadata.index');
         Route::post('storage/offline/pending/buckets/{bucket}/metadata', 'Api\Ingest\BucketMetadataController@store')->name('api.ingest.bucket.metadata.store');
         Route::patch('storage/offline/pending/buckets/{bucket}/metadata/{metadata}', 'Api\Ingest\BucketMetadataController@update')->name('api.ingest.bucket.metadata.update');
@@ -239,4 +243,3 @@ Route::group(['prefix' => 'v1/media'], function () {
     Route::get('thumb/{fileName}', 'Api\System\MediaController@thumb');
     Route::get('dips/{dipId}/previews/files/{fileId}', 'Api\System\MediaController@showDipFile');
 });
-        
