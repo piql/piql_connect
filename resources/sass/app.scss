@@ -1649,10 +1649,9 @@ th {
     color: $color_signal !important;
     font-size: 1rem;
     margin: 0;
-    //padding: 0;
     display: inline-block;
     border-radius: 60px;
-    box-shadow: 0px 0px 1px $color_signal;
+    box-shadow: 0px 0px 2px $color_signal;
     padding: 0.5em 0.6em;
 }
 

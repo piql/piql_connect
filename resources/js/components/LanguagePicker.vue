@@ -28,6 +28,14 @@ export default {
             if (this.selection) {
                 this.$emit('selectionChanged', this.selection);
             }
+        },
+        refreshPicker: function() {
+            $(`#languagePicker`).selectpicker('refresh');
+        },
+
+        updatePicker: function( selectedLang ) {
+            $(`#languagePicker`).selectpicker('val', selectedLang);
+            this.refreshPicker();
         }
     },
     data() {
@@ -46,9 +54,12 @@ export default {
         async initialSelection(value) {
             this.fetchLanguages();
             this.selection = this.initialSelection;
-            Vue.nextTick( () => {
-                $('#languagePicker').selectpicker('refresh');
+
+            $('#languagePicker').selectpicker('refresh');
+            
+            Vue.nextTick( () => { 
                 $('#languagePicker').selectpicker('val', this.selection);
+                $('#languagePicker').selectpicker('refresh');
             });
         }
     },
