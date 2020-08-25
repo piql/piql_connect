@@ -1,5 +1,6 @@
 <template>
     <div class="w-100">
+        <dublin-core-template @saveTemplate="saveTemplate" v-bind:initialTemplate="currentTemplate" />
 
         <page-heading icon="fa-tags"
             :title="$t('admin.metadata.template.title')"
@@ -18,7 +19,7 @@
 						</div>
 
 						<div class="card-body">
-                <MetadataTemplateList @cloneTemplate="cloneTemplate" />
+                            <metadata-template-list @cloneTemplate="cloneTemplate" v-bind:metadataTemplates="templates" />
 						</div>
 
 						<div class="row text-center pagerRow">
@@ -29,36 +30,46 @@
 				</div>
 
 
-        <dublin-core-template @save="save" v-bind:initialTemplate="currentTemplate" />
 
     </div>
 </template>
 
 <script>
+import {mapGetters, mapActions} from "vuex";
+
+
 export default {
     data() {
         return {
             updateDcKey: 0,
-            currentTemplate: {}
+            currentTemplate: {},
         }
     },
     props: {
     },
+    computed: {
+        ...mapGetters(['templates', 'templateById']),
+    },
     methods: {
-        save: function() {
-            this.$emit('save');
-        },
+        ...mapActions(),
         createTemplate: function(target){
             target.blur();
-            this.currentTemplate = {};
+            this.currentTemplate = JSON.parse(JSON.stringify({ "metadata": {"dc" : {} } }));
+            this.currentTemplate.id = "";       /* Remove the id and creation date, they will be filled out by the server later on */
+            this.currentTemplate.created_at = "";
             this.$bvModal.show("meta");
         },
         assignTemplate: function(target) {
             target.blur();
         },
-        cloneTemplate: function( template ){
-            this.currentTemplate = template;
+        cloneTemplate: function( templateId ){
+            this.currentTemplate = JSON.parse(JSON.stringify(this.templateById(templateId)));  /* Deep copy the template from the store */
+            this.currentTemplate.id = "";       /* Remove the id and creation date, they will be filled out by the server later on */
+            this.currentTemplate.created_at = "";
             this.$bvModal.show("meta");
+        },
+        saveTemplate: async function( template ){
+            this.$store.dispatch( 'addTemplate', template );
         }
 
     }

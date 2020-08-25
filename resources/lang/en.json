@@ -357,6 +357,8 @@
 
     "admin.account.metadata.title": "Title",
     "admin.account.metadata.identifier": "Unique identifier",
+    "admin.account.metadata.creator": "Creator",
+    "admin.account.metadata.subject": "Subject",
     "admin.account.metadata.created_at": "Creation date",
     "admin.account.metadata.actions": "Actions",
     "admin.metadata.createNewTemplate": "Create new metadata template",

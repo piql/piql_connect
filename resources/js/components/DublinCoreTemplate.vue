@@ -5,17 +5,15 @@
         :no-fade=true title-class="h3"
         :ok-title="$t('admin.metadata.template.edit.saveButton')"
         :cancel-title="$t('admin.metadata.template.edit.cancelButton')"
+        @ok="saveTemplate"
     >
         <b-container fluid>
-            <b-row v-for="(scheme,idx) in schemes" :key="scheme.id">
-                <b-col class="text-center">
-                    <h4>{{$t('admin.metadata.template.edit.schemeName')}}:&nbsp;{{scheme.type}}</h4>
-                </b-col>
+            <b-row v-for="scheme in schemes" :key="scheme.id">
                 <b-form inline>
                     <b-col class="form-group">
                         <b-form-row v-for="schemeItem in scheme.fields" :key="schemeItem.id" class="w-100">
                             <label :for="fieldId(scheme.type, schemeItem.name)" class="small" >{{schemeItem.label}}</label>
-                            <b-col class="m-2 w-100">
+                            <b-col class="m-1 w-100">
                                 <b-form-input class="w-100"
                                     :id="fieldId(scheme.type, schemeItem.name)"
                                     v-model="metadataObject.metadata.dc[schemeItem.name]"
@@ -42,6 +40,7 @@ export default {
 
     props: {
         schemes: {
+            /* Later on, this should also arrive from an api */
             type: Array,
             default : () => {
                 return [
@@ -85,23 +84,15 @@ export default {
     },
     watch: {
         initialTemplate: function(value){
-            this.metadataObject.metadata = JSON.parse(JSON.stringify(value.metadata)); //deep copy template
+            this.metadataObject.metadata = value.metadata;
         },
     },
     methods: {
-        getValue(key) {
-            return (((this.metadataObject||{}).metadata||{}).dc||{})[key]
-                ? this.metadataObject.metadata.dc[key]
-                : "";
-        },
-        setValue(key, value) {
-            if(! ((this.metadataObject||{}).metadata||{}).dc ) {
-                this.metadataObject = { "metadata": {"dc": {} } };
-            }
-            this.metadataObject.metadata.dc[key] = value;
-        },
         fieldId(type, name){
-            return `${type}-${name}`.replace(/\s/g,''); /* Strip all whitespace from fieldId */
+            return `${type}-${name}`.replace(/\s/g,'');     /* Strip all whitespace from fieldId */
+        },
+        saveTemplate() {
+            this.$emit( 'saveTemplate', this.metadataObject )
         }
     }
 };
