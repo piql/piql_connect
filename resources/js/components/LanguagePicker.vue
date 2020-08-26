@@ -22,6 +22,16 @@ export default {
     async mounted() {
         this.fetchUserSettings();
         this.fetchLanguages(); // Populate language when user settings are empty, should not be needed
+        
+         $('#languagePicker').selectpicker('refresh');
+
+        Vue.nextTick( () => { 
+           Vue.nextTick(()=> {
+                this.selection = this.currentLanguage;
+                $('#languagePicker').selectpicker('val', this.selection);
+           })
+        });
+   
 
     },
     updated(){
@@ -38,6 +48,7 @@ export default {
     methods: {
         ...mapActions(['fetchLanguages','fetchUserSettings','changeLanguage']),
         selectionChanged: function () {
+           
             this.changeLanguage(this.selection);
             Vue.nextTick(() => {
                 Vue.nextTick(()=> {
@@ -59,7 +70,7 @@ export default {
         }
     },
     watch: {
-        currentLanguage(value) {
+        currentLanguage(value, oldvalue) {
 
             if(value){
                 this.fetchLanguages();
@@ -70,6 +81,8 @@ export default {
                 Vue.nextTick( () => { 
                     $('#languagePicker').selectpicker('val', value);
                 });
+            }else {
+                this.selection = oldvalue
             }
         }
     },
