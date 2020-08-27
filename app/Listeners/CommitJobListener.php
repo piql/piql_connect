@@ -36,14 +36,14 @@ class CommitJobListener implements ShouldQueue
 
             // Build data package
             $aips = $job->aips()->get()->all();
-            $basename = "{$job->uuid}_data";
+            $basename = "data_{$job->uuid}";
             $dataFilePath = $fileArchiveService->buildTarFromAipCollectionIncrementally($aips, $basename);
 
             // Send data package to S3
             // TODO: Send data package to S3
 
             // Build info package
-            $infoFilePath = $this->outgoing->path("{$job->uuid}_info.tar");
+            $infoFilePath = $this->outgoing->path("info_{$job->uuid}.tar");
             $this->createInfoPackage($infoFilePath, $job);
 
             // Send info package to S3
