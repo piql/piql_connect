@@ -2,15 +2,16 @@
 
 namespace App\Http\Controllers\Api\Ingest;
 
-use App\File;
+use App\Account;
+use App\Archive;
+use App\ArchiveMetadata;
 use App\Http\Resources\MetadataResource;
-use App\Metadata;
+use App\AccountMetadata;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
-use Webpatser\Uuid\Uuid;
 
-class FileMetadataController extends Controller
+class AccountArchiveMetadataController extends Controller
 {
     private function validateRequest(Request $request) {
         return $request->validate([
@@ -31,32 +32,31 @@ class FileMetadataController extends Controller
             "metadata.dc.rights" => "string|nullable",
         ]);
     }
+
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @param Account $account
+     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
      */
-    public function index(File $file)
+    public function index(Request $request, Account $account, Archive $archive)
     {
-        //
-        return response()->json([ "data" => $file->metadata->map(function($element) {
-            return new MetadataResource($element);
-        })]);
+        $metadata = $account->metadata();
+        $limit = $request->limit ? $request->limit : env('DEFAULT_ENTRIES_PER_PAGE');
+        return MetadataResource::collection( $metadata->paginate( $limit ) );
     }
 
     /**
      * Store a newly created resource in storage.
      *
      * @param \Illuminate\Http\Request $request
-     * @param File $file
+     * @param Account $account
      * @return void
+     * @throws \Exception
      */
-    public function store(Request $request, File $file)
+    public function store(Request $request, Account $account, Archive $archive)
     {
-        if($file->bag->status != "open") {
-            abort( response()->json([ 'error' => 400, 'message' => 'Metadata is read only' ], 400 ) );
-        }
-
         $requestData = $this->validateRequest($request);
 
         if(!isset($requestData->dc))
@@ -64,70 +64,72 @@ class FileMetadataController extends Controller
             $requestData =["dc" => (object)null];
         }
 
-        $metadata = new Metadata([
+        $metadata = new ArchiveMetadata([
             "modified_by" => Auth::user()->id,
             "metadata" => $requestData,
         ]);
-        $metadata->parent()->associate($file);
+        $metadata->owner()->associate($account->owner());
+        $metadata->parent()->associate($archive);
         $metadata->save();
 
-        return response()->json([ "data" => $file->refresh()->metadata->map(function($element) {
-            return new MetadataResource($element);
-        })]);
+        return response()->json([ "data" => new MetadataResource($metadata)]);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Metadata  $metadata
+     * @param Account $account
+     * @param AccountMetadata $metadata
      * @return \Illuminate\Http\Response
      */
-    public function show(File $file, Metadata $metadata)
+    public function show(Account $account, Archive $archive, ArchiveMetadata $metadata)
     {
+        if($archive->id !== $metadata->parent_id) {
+            abort( response()->json([ 'error' => 404, 'message' => 'Invalid metadata' ], 404 ) );
+        }
         return response()->json([ "data" => new MetadataResource($metadata)]);
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Metadata  $metadata
+     * @param \Illuminate\Http\Request $request
+     * @param Account $account
+     * @param AccountMetadata $metadata
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, File $file, Metadata $metadata)
+    public function update(Request $request, Account $account, Archive $archive, ArchiveMetadata $metadata)
     {
-        if($file->bag->status != "open") {
-            abort( response()->json([ 'error' => 400, 'message' => 'Metadata is read only' ], 400 ) );
+        if($archive->id !== $metadata->parent_id) {
+            abort( response()->json([ 'error' => 404, 'message' => 'Invalid metadata' ], 404 ) );
         }
-        \Log::debug($request);
+
         $requestData = $this->validateRequest($request);
-        \Log::debug($requestData);
         if(isset($requestData['metadata'])) {
             $metadata->metadata = $requestData['metadata'] + $metadata->metadata;
             $metadata->save();
         }
 
-        return response()->json([ "data" => $file->refresh()->metadata->map(function($element) {
-            return new MetadataResource($element);
-        })]);
+        return response()->json([ "data" => new MetadataResource($metadata)]);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Metadata  $metadata
+     * @param Account $account
+     * @param AccountMetadata $metadata
      * @return \Illuminate\Http\Response
+     * @throws \Exception
      */
-    public function destroy(File $file, Metadata $metadata)
+    public function destroy(Account $account, Archive $archive, ArchiveMetadata $metadata)
     {
-        if($file->bag->status != "open") {
-            abort( response()->json([ 'error' => 400, 'message' => 'Metadata is read only' ], 400 ) );
+        if($archive->id !== $metadata->parent_id) {
+            abort( response()->json([ 'error' => 404, 'message' => 'Invalid metadata' ], 404 ) );
         }
 
         $metadata->parent()->dissociate();
+        $metadata->owner()->dissociate();
         $metadata->delete();
-        return response()->json([ "data" => $file->refresh()->metadata->map(function($element) {
-            return new MetadataResource($element);
-        })]);
+        return response()->json([ "data" => new MetadataResource(null)]);
     }
 }

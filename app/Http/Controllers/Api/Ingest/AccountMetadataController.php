@@ -64,7 +64,6 @@ class AccountMetadataController extends Controller
         }
 
         $metadata = new AccountMetadata([
-            "uuid" => Uuid::generate()->string,
             "modified_by" => Auth::user()->id,
             "metadata" => $requestData,
         ]);

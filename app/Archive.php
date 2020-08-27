@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Traits\AutoGenerateUuid;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Webpatser\Uuid\Uuid;
@@ -10,22 +11,13 @@ use Webpatser\Uuid\Uuid;
 class Archive extends Model
 {
     use SoftDeletes;
+    use AutoGenerateUuid;
 
     protected $table = 'archives';
     protected $fillable = [
-        'title','description','parent_uuid', 'uuid'
+        'title','description','parent_uuid', 'uuid', 'account_uuid'
     ];
 
-    protected static function boot()
-    {
-        parent::boot();
-        static::creating(function ($model) {
-            if(empty($model->uuid)){
-                $model->uuid = Uuid::generate()->string;
-            }
-        });
-    }
-   
     public static function findByParentUuid($parent_uuid)
     {
         return Archive::where('parent_uuid', '=', $parent_uuid)->first();

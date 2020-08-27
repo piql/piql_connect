@@ -52,7 +52,6 @@ class AccountController extends Controller
         $account->save();
 
         $metadata = new AccountMetadata([
-            "uuid" => Uuid::generate()->string,
             "modified_by" => auth()->user()->id,
             "metadata" => ["dc" => (object)null]
         ]);
