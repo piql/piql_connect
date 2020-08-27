@@ -20,15 +20,43 @@ let $ = JQuery;
 
 export default {
     async mounted() {
+        this.fetchUserSettings();
         this.fetchLanguages(); // Populate language when user settings are empty, should not be needed
+        
+         $('#languagePicker').selectpicker('refresh');
+
+        Vue.nextTick( () => { 
+           Vue.nextTick(()=> {
+                this.selection = this.currentLanguage;
+                $('#languagePicker').selectpicker('val', this.selection);
+           })
+        });
+   
+
+    },
+    updated(){
+        
+        $('#languagePicker').selectpicker('refresh');
+
+        Vue.nextTick( () => { 
+            this.selection = this.currentLanguage;
+            $('#languagePicker').selectpicker('val', this.selection);
+        });
+
+
     },
     methods: {
-        ...mapActions(['fetchLanguages']),
+        ...mapActions(['fetchLanguages','fetchUserSettings','changeLanguage']),
         selectionChanged: function () {
-            if (this.selection) {
-                this.$emit('selectionChanged', this.selection);
-            }
-        }
+           
+            this.changeLanguage(this.selection);
+            Vue.nextTick(() => {
+                Vue.nextTick(()=> {
+                    this.$router.go(0);
+                })     
+            })
+            
+        },
     },
     data() {
         return {
@@ -36,27 +64,33 @@ export default {
         };
     },
     props: {
-        initialSelection: '',
         label: {
             type: String,
             default: ""
         }
     },
     watch: {
-        async initialSelection(value) {
-            this.fetchLanguages();
-            this.selection = this.initialSelection;
-            Vue.nextTick( () => {
+        currentLanguage(value, oldvalue) {
+
+            if(value){
+                this.fetchLanguages();
+                this.selection = value;
+
                 $('#languagePicker').selectpicker('refresh');
-                $('#languagePicker').selectpicker('val', this.selection);
-            });
+
+                Vue.nextTick( () => { 
+                    $('#languagePicker').selectpicker('val', value);
+                });
+            }else {
+                this.selection = oldvalue
+            }
         }
     },
     computed: {
-        ...mapGetters(['userLanguages']),
+        ...mapGetters(['userLanguages','currentLanguage']),
         showLabel: function() {
             return this.label.length > 0;
-        }
+        },
     }
 }
 

@@ -15,16 +15,16 @@
                             <td>{{role.name}}</td>
                             <td>{{role.description}}</td>
                             <td>
-                                <a class="btn btn-xs btn-primary" @click="viewPermissions(role.id)" v-b-tooltip.hover :title="$t('settings.roles.confPermissions')" style="color:white">
+                                <a class="btn btn-xs btn-primary" @click="viewPermissions(role.id)" data-toggle="tooltip" :title="$t('settings.roles.confPermissions')" style="color:white">
                                     <i class="fa fa-user-cog"></i>
                                     </a>
-                                <a class="btn btn-xs btn-primary" @click="showAssignModal(role.id)" v-b-tooltip.hover :title="$t('settings.roles.assignGroup')" style="color:white">
+                                <a class="btn btn-xs btn-primary" @click="showAssignModal(role.id)" data-toggle="tooltip" :title="$t('settings.roles.assignGroup')" style="color:white">
                                     <i class="fa fa-users"></i>
                                     </a>
-                                <a class="btn btn-xs btn-primary" v-b-tooltip.hover :title="$t('settings.roles.editRole')" style="color:white" @click="showEditModal(role.id)">
+                                <a class="btn btn-xs btn-primary" data-toggle="tooltip" :title="$t('settings.roles.editRole')" style="color:white" @click="showEditModal(role.id)">
                                     <i class="fa fa-edit"></i>
                                     </a>
-                                <a class="btn btn-xs btn-primary" v-b-tooltip.hover  :title="$t('settings.roles.deleteRole')" @click="showDeleteModal(role.id)" style="color:white">
+                                <a class="btn btn-xs btn-primary" data-toggle="tooltip"  :title="$t('settings.roles.deleteRole')" @click="showDeleteModal(role.id)" style="color:white">
                                     <i class="fa fa-trash"></i>
                                     </a>
                             </td>

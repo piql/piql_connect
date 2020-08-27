@@ -14,20 +14,20 @@
                             <td>{{group.name}}</td>
                             <td>{{group.description}}</td>
                             <td>
-                                <a class="btn btn-xs btn-primary" v-b-tooltip.hover :title="$t('settings.groups.editGroup')" style="color:white">
+                                <a class="btn btn-xs btn-primary" data-toggle="tooltip" :title="$t('settings.groups.editGroup')" style="color:white">
                                     <i class="fa fa-edit"></i>
                                     </a>
-                                <a class="btn btn-xs btn-primary" @click="showAssignUsersModal(group.id)" v-b-tooltip.hover :title="$t('settings.groups.assignUsers')" style="color:white">
+                                <a class="btn btn-xs btn-primary" @click="showAssignUsersModal(group.id)" data-toggle="tooltip" :title="$t('settings.groups.assignUsers')" style="color:white">
                                     <i class="fa fa-users"></i>
                                     </a>
-                                <a class="btn btn-xs btn-primary" @click="showListingModal(group.id)" v-b-tooltip.hover :title="$t('settings.groups.listRolesAndUsers')" style="color:white">
+                                <a class="btn btn-xs btn-primary" @click="showListingModal(group.id)" data-toggle="tooltip" :title="$t('settings.groups.listRolesAndUsers')" style="color:white">
                                     <i class="fa fa-list"></i>
                                     </a>
                                 
-                                <a class="btn btn-xs btn-primary" @click="showAssignModal(group.id)" v-b-tooltip.hover :title="$t('settings.groups.assignRoles')" style="color:white">
+                                <a class="btn btn-xs btn-primary" @click="showAssignModal(group.id)" data-toggle="tooltip" :title="$t('settings.groups.assignRoles')" style="color:white">
                                     <i class="fa fa-user-shield"></i>
                                     </a>
-                                <a class="btn btn-xs btn-primary" v-b-tooltip.hover :title="$t('settings.groups.deleteGroup')" style="color:white">
+                                <a class="btn btn-xs btn-primary" data-toggle="tooltip" :title="$t('settings.groups.deleteGroup')" style="color:white">
                                     <i class="fa fa-trash"></i>
                                     </a>
                             </td>
@@ -150,7 +150,7 @@ export default {
      watch: {
         '$route': 'dispatchRouting',
         //watching vuex state change and tying them to actions
-        formattedUsers(newValue,oldValue){
+        formattedUsers(newValue){
             if(newValue){
                 newValue.forEach(single => {
                     this.ulist.push({
@@ -160,7 +160,7 @@ export default {
                 });
             }
         },
-        userRoles(newValue,oldValue){
+        userRoles(newValue){
             if(newValue){
                 newValue.forEach(single => {
                     this.list.push({

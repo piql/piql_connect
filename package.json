@@ -42,8 +42,8 @@
   "dependencies": {
     "bootstrap": "^4.5.0",
     "bootstrap-datepicker": "^1.9.0",
-    "bootstrap-select": "^1.13.17",
-    "bootstrap-vue": "^2.15.0",
+    "bootstrap-select": "^1.13.18",
+    "bootstrap-vue": "^2.16.0",
     "bootstrap-vue-treeview": "^1.0.8",
     "chart.js": "^2.9.3",
     "chartjs": "^0.3.24",

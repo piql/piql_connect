@@ -1,6 +1,5 @@
 import { shallowMount } from "@vue/test-utils"
 import UserListing from "@/components/UserListing"
-import { VBTooltip } from 'bootstrap-vue';
 
 
 const fns = {
@@ -55,8 +54,7 @@ describe("UserListing.vue", ()=>{
       'pager':true,
       'b-modal': true,
       'b-button':true,
-      'b-badge':true,
-      'b-tooltip': true
+      'b-badge':true
     },
     propsData:{
       users: users
