@@ -311,8 +311,13 @@
     "settings.roles.assignGroupsToRole": "Assign Groups to Role",
 
     "settings.settings.languagelabel": "Language",
+<<<<<<< HEAD
     "settings.settings.rowslabel": "Results Displayed per Page",
     "settings.settings.logolabel": "Logo",
+=======
+    "settings.settings.rowslabel": "Results Displayed/Page",
+    "settings.settings.profileImagelabel": "Profile Image",
+>>>>>>> releasev0.3/CON-606
     "settings.settings.userInterfaceHeader": "User interface",
     "settings.settings.setPasswordHeader": "Change password",
     "settings.settings.oldPassword.label": "Old password",

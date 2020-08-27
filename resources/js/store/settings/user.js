@@ -14,7 +14,8 @@ const getters = {
     setPasswordData: state => state.password,
     userSettings: state => state.settings,
     userLanguages: state => state.languages,
-    currentUser: state => state.user
+    currentUser: state => state.user,
+    currentLanguage: state => state.settings.interface.language
 
 }
 

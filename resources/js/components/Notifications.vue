@@ -1,6 +1,6 @@
 <template>
     <span>
-    <i @click="toggleShowNotifications()" class="fas fa-bell clickable" ></i>
+    <i @click="toggleShowNotifications()" title='Notifications' class="plistIcon fas fa-bell clickable" ></i>
     <div class="dropdownList" v-if="false">
         <i class="fas fa-times closeNotifications" @click="toggleShowNotifications()" ></i>
         <strong>notifications</strong>

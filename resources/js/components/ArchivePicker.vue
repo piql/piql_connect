@@ -5,12 +5,12 @@
             {{label}}
         </label>
         <select v-model="selection" :id="elementId" class="form-control w-100" v-bind:disabled="selectionDisabled" data-live-search="true">
-            <option v-for="archive in archivesWithWildcard" v-bind:value="archive.uuid">
+            <option v-for="archive in archivesWithWildcard" :key="archive.id" :value="archive.uuid">
                 {{archive.title}}
             </option>
         </select>
     </span>
-    <span v-else="!singleArchive">
+    <span v-else>
         <label class="col-form-label-sm" for="singleArchive">{{$t('Archive')}}</label>
         <select class="form-control text-center" disabled>
             <option selected>
@@ -93,6 +93,8 @@ export default {
             } else {
                 this.updateQueryParams({ archive, page : null, holding: null });
             }
+
+            this.$emit('loadNewHolders')
         },
         archives: function( archives ){
             if( !! archives ) {

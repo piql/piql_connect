@@ -37,15 +37,19 @@
                             </router-link>
                         </li>
 
-                        <li class="pr-2 plistIcon navbar"><notifications/>
+                        <li class="pr-2 navbar">
+                            <notifications/>
                         </li>
+<<<<<<< HEAD
                         <li class="pr-2 plistIcon navbar">
                             <a href="/logout" id="navbarLogout"><i class="fas fa-sign-out-alt signal"></i></a>
+=======
+                        <li class="pr-2 navbar">
+                            <a href="/logout" id="navbarLogout"><i class="fas plistIcon fa-sign-out-alt signal"></i></a>
+>>>>>>> releasev0.3/CON-606
                         </li>
-                        <li class="pr-2 plistIcon navbar">
-                            <div>
-                                <div class="userImgCont"><img :src="userImg" class="userImg"/></div>
-                            </div>
+                        <li class="pr-2 navbar">
+                            <div class="userImgCont"><img :src="userImg" class="userImg"/></div>
                             <div class="userName">{{ userName }}</div>
                         </li>
                     </ul>
