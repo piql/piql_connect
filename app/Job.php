@@ -6,7 +6,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Webpatser\Uuid\Uuid;
 use Illuminate\Support\Facades\Log;
-
+use Illuminate\Support\Facades\Storage;
 
 class Job extends Model
 {
@@ -23,6 +23,7 @@ class Job extends Model
         self::creating( function( $model )
         {
             $model->uuid = Uuid::generate();
+            self::jobStorage()->makeDirectory("{$model->uuid}/visual_files");
         });
     }
 
@@ -49,11 +50,11 @@ class Job extends Model
         $job = \App\Job::where('status', '=', 'created')->where('owner', '=', $owner)->latest()->first();
         Log::info("currentJob() ".$job);
 
-        if($job == null) {
-            $job = new Job();
-            $job->name = "";
-            $job->owner = $owner;
-            $job->save();
+        if(!$job) {
+            $job = Job::create([
+                'name' => '',
+                'owner' => $owner
+            ]);
         }
 
         return $job;
@@ -69,12 +70,27 @@ class Job extends Model
 
     public function getBucketSizeAttribute()
     {
-        return env('APP_INGEST_BUCKET_SIZE', 150*1000*1000*1000);
+        return env('APP_INGEST_BUCKET_SIZE', 120*1000*1000*1000);
     }
 
     public function metadata()
     {
         return $this->morphMany('App\Metadata', 'parent');
+    }
+
+    public function visualFilesDir()
+    {
+        return self::jobStorage()->path("{$this->uuid}/visual_files");
+    }
+
+    public function jobFilesDir()
+    {
+        return self::jobStorage()->path("{$this->uuid}");
+    }
+
+    private static function jobStorage()
+    {
+        return Storage::disk('jobs');
     }
 
 }

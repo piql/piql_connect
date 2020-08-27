@@ -113,15 +113,15 @@
     "ingest.processing.content": "Content",
     "ingest.processing.ingestDate": "Ingest date",
     "ingest.processing.status": "Status",
-    "ingest.processing.status.closed":             "Connecting to Archivematica",
-    "ingest.processing.status.bag_files":       "Preparing files",
-    "ingest.processing.status.move_to_outbox":     "Copying files",
-    "ingest.processing.status.initiate_transfer":  "Handshaking",
-    "ingest.processing.status.approve_transfer":   "Starting transfer",
-    "ingest.processing.status.transferring":       "Transferring",
-    "ingest.processing.status.ingesting":          "Building packages",
-    "ingest.processing.status.complete":           "Package complete",
-    "ingest.processing.status.error":              "Error",
+    "ingest.processing.status.closed": "Connecting to Archivematica",
+    "ingest.processing.status.bag_files": "Preparing files",
+    "ingest.processing.status.move_to_outbox": "Copying files",
+    "ingest.processing.status.initiate_transfer": "Handshaking",
+    "ingest.processing.status.approve_transfer": "Starting transfer",
+    "ingest.processing.status.transferring": "Transferring",
+    "ingest.processing.status.ingesting": "Building packages",
+    "ingest.processing.status.complete": "Package complete",
+    "ingest.processing.status.error": "Error",
     "ingest.processing.creatingStatus": "Creating packages",
     "ingest.processing.noItems": "No packages are currently being processed.",
 
@@ -277,10 +277,7 @@
     "settings.listing.email": "Email",
     "settings.listing.status": "Status",
     "settings.listing.created": "Created",
-
     "settings.settings.actions": "Actions",
-
-
 
     "settings.settings.userGroups": "User Groups",
     "settings.settings.userGroupDesc": "Manage User Groups",
@@ -299,7 +296,6 @@
     "settings.groups.assignUsersToGroup": "Assign Users to Group",
     "settings.groups.assignRolesToGroup": "Assign Roles to Group",
 
-
     "settings.settings.roles": "Access Roles",
     "settings.settings.rolesDesc": "Manage Access Roles",
     "settings.settings.rolePermissions": "Permissions",
@@ -314,10 +310,8 @@
     "settings.roles.deleteRoleWarning": "Do you want to delete this role? if so, click below to proceed",
     "settings.roles.assignGroupsToRole": "Assign Groups to Role",
 
-
-
     "settings.settings.languagelabel": "Language",
-    "settings.settings.rowslabel": "Results Displayed/Page",
+    "settings.settings.rowslabel": "Results Displayed per Page",
     "settings.settings.logolabel": "Logo",
     "settings.settings.userInterfaceHeader": "User interface",
     "settings.settings.setPasswordHeader": "Change password",

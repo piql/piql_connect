@@ -24,11 +24,11 @@
                         <li class="navbar" ref='nav-home' :class="[ routeBelongsTo('stats') ? 'top-active' : 'top-inactive' ]">
                             <router-link :to="{ name: 'stats.dashboard'}"><b>{{$t('Home')}}</b></router-link>
                         </li>
-                        <li class="navbar" ref='nav-ingest' :class="[ routeBelongsTo('ingest') ? 'top-active' : 'top-inactive' ]">
-                            <router-link :to="{ name: 'ingest.uploader' }"><b>{{$t('Ingest')}}</b></router-link>
+                        <li id="ingest" class="navbar" ref='nav-ingest' :class="[ routeBelongsTo('ingest') ? 'top-active' : 'top-inactive' ]">
+                            <router-link :to="{ name: 'ingest.uploader' }" id="navbarIngest"><b>{{$t('Ingest')}}</b></router-link>
                         </li>
                         <li class="navbar" ref='nav-access' :class="[ routeBelongsTo('access') ? 'top-active' : 'top-inactive' ]">
-                            <router-link :to="{ name: 'access.browse' }"><b>{{$t('Access')}}</b></router-link>
+                            <router-link :to="{ name: 'access.browse' }" id="navbarAccess"><b>{{$t('Access')}}</b></router-link>
                         </li>
 
                         <li class="navbar" ref='nav-settings' :class="[ routeBelongsTo('settings') ? 'top-active' : '']" data-toggle="tooltip" :title="$t('sidebar.settings')" >
@@ -40,7 +40,7 @@
                         <li class="pr-2 plistIcon navbar"><notifications/>
                         </li>
                         <li class="pr-2 plistIcon navbar">
-                            <a href="/logout"><i class="fas fa-sign-out-alt signal"></i></a>
+                            <a href="/logout" id="navbarLogout"><i class="fas fa-sign-out-alt signal"></i></a>
                         </li>
                         <li class="pr-2 plistIcon navbar">
                             <div>

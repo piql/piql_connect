@@ -18,6 +18,8 @@ use App\Http\Resources\JobResource;
 use App\Http\Resources\JobCollection;
 use App\Http\Resources\BagCollection;
 use App\Events\BagFilesEvent;
+use App\Events\CommitJobEvent;
+use App\Interfaces\FileArchiveInterface;
 use Response;
 use Log;
 
@@ -61,7 +63,7 @@ class OfflineStorageController extends Controller
         
         // This is a bit nasty because there is no owner validation here
         // Should be safe when used internally e.i when owner is valid
-        $jobs = \App\Job::where('status', '=', 'ingesting');
+        $jobs = \App\Job::whereIn('status', ['transferring', 'preparing', 'writing', 'storing']);
         $limit = $request->limit ? $request->limit : env('DEFAULT_ENTRIES_PER_PAGE');
 
         return new JobCollection( $jobs->paginate( $limit ) );
@@ -108,16 +110,19 @@ class OfflineStorageController extends Controller
                 abort(response()->json(["error" => 400, "message" => "Bucket doesn't have a valid name: {$job->name}"], 400));
             }
             $job->name = $data['name'] ?? "";
+            $job->save();
         }
 
-        if(isset($data['status']) && ($data['status'] == 'ingesting' )) {
+        if(isset($data['status']) && ($data['status'] == 'commit')) {
             if($this->validateFails($job->name))
             {
                 abort(response()->json(["error" => 424, "message" => "Bucket doesn't have a valid name: {$job->name}"], 424));
             }
-            $job->status = "ingesting";
+            $job->status = 'transferring';
+            $job->save();
+            event(new CommitJobEvent($job));
         }
-        $job->save();
+
         return new JobResource( $job );
     }
 

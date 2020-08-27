@@ -58,7 +58,10 @@ class EventServiceProvider extends ServiceProvider
         ],
         \App\Events\PreProcessBagEvent::class => [
             \App\Listeners\PreProcessBagListener::class
-        ]
+        ],
+        \App\Events\CommitJobEvent::class => [
+            \App\Listeners\CommitJobListener::class
+        ],
     ];
 
     /**

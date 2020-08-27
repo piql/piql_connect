@@ -54,9 +54,9 @@
         methods: {
             async piqlIt( job ) {
                 let result = (await axios.patch(this.jobListUrl+"/buckets/"+job.id, {
-                    'status': 'ingesting'
+                    'status': 'commit'
                 }));
-                if(result.data.status == 'ingesting') {
+                if(result.data.status == 'transferring') {
                     this.modal = false; //????
                 }
                 this.infoToast(
