@@ -78,7 +78,7 @@
     "sidebar.retrieve.retrieving": "Under gjenopprettelse",
     "sidebar.retrieve.downloadable": "Klar til nedlasting",
     "sidebar.retrieve.history": "Historikk",
-    "sidebar.admin": "Admin innstillinger",
+    "sidebar.admin": "Administrasjon",
     "sidebar.logo": "Bytt logo",
 
     "dashboard.title": "Oversikt",
@@ -267,11 +267,11 @@
     "settings.settings.disableUser": "Deaktiver bruker",
     "settings.settings.enableUser": "Aktiver bruker",
     "settings.settings.deleteUser": "Slett bruker",
-    "settings.settings.deleteUserWarning": "Er du sikker på att du ønsker å slette denne brukeren?",
-    "settings.settings.disableUserWarning": "Er du sikker på att du ønsker å deaktivere denne brukeren?",
-    "settings.settings.enableUserWarning": "Er du sikker på att du ønsker å aktivere denne brukeren?",
+    "settings.settings.deleteUserWarning": "Er du sikker på at du ønsker å slette denne brukeren?",
+    "settings.settings.disableUserWarning": "Er du sikker på at du ønsker å deaktivere denne brukeren?",
+    "settings.settings.enableUserWarning": "Er du sikker på at du ønsker å aktivere denne brukeren?",
 
-    "settings.listing.fullname": "Fult navn",
+    "settings.listing.fullname": "Fullt navn",
     "settings.listing.username": "Brukernavn",
     "settings.listing.email": "E-post",
     "settings.listing.status": "Status",
@@ -309,7 +309,7 @@
 
     "settings.roles.editRole": "Endre rolle",
     "settings.roles.deleteRole": "Slett rolle",
-    "settings.roles.deleteRoleWarning": "Er du sikker på att du ønsker å slette denne rollen?",
+    "settings.roles.deleteRoleWarning": "Er du sikker på at du ønsker å slette denne rollen?",
     "settings.roles.assignGroupsToRole": "Tildel gruppe til rolle",
 	
 
