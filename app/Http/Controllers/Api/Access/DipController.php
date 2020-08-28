@@ -92,7 +92,8 @@ class DipController extends Controller
     {
         $dip = Dip::find( $request->dipId );
         $file = $this->filter_package_thumbnail($dip);
-        $filePreviewRenderHelper = new FilePreviewRenderHelper($storage, $dip, $file);
+        $filePreviewRenderHelper = new FilePreviewRenderHelper();
+        $filePreviewRenderHelper->storage($storage)->dip($dip)->fileObject($file);
         return response($filePreviewRenderHelper->getContent(true))
         ->header("Content-Type" , $filePreviewRenderHelper->getMimeType());
     }
@@ -169,7 +170,8 @@ class DipController extends Controller
         $dip = Dip::find( $request->dipId );
         $file = $dip->fileObjects->find( $request->fileId );
 
-        $filePreviewRenderHelper = new FilePreviewRenderHelper($storage, $dip, $file);
+        $filePreviewRenderHelper = new FilePreviewRenderHelper();
+        $filePreviewRenderHelper->storage($storage)->dip($dip)->fileObject($file);
 
         return response($filePreviewRenderHelper->getContent())
         ->header("Content-Type" , $filePreviewRenderHelper->getMimeType());
@@ -212,7 +214,8 @@ class DipController extends Controller
         $dip = Dip::find( $request->dipId );
         $file = $dip->fileObjects->find( $request->fileId );
         $thumbnail = $this->filter_file_thumbnail($dip, $file);
-        $filePreviewRenderHelper = new FilePreviewRenderHelper($storage, $dip, $thumbnail);
+        $filePreviewRenderHelper = new FilePreviewRenderHelper();
+        $filePreviewRenderHelper->storage($storage)->dip($dip)->fileObject($thumbnail);
         return response($filePreviewRenderHelper->getContent(true))
         ->header("Content-Type" , $filePreviewRenderHelper->getMimeType());
     }

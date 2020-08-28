@@ -11,7 +11,7 @@ class FilePreviewRenderHelper {
     private $dip;
     private $file;
     private $filePath;
-    private $mimeType = "image/jpeg";
+    private $mimeType;
     private const ICON_EXT_MAP = array(
         'docx'=>'doc',
         'xlsx'=>'xls',
@@ -23,17 +23,27 @@ class FilePreviewRenderHelper {
         'gz'=>'tgz',
         'html'=>'htm');
     private static $extList;
-
-    public function __construct(ArchivalStorageInterface $storage=null, Dip $dip=null, FileObject $file=null) {
+    
+    public function storage(ArchivalStorageInterface $storage) {
         $this->storage = $storage;
-        $this->dip = $dip;
-        $this->file = $file;
+        return $this;
     }
     
-    public function setFile($filePath) {
-    	$this->file = new \stdClass();
-    	$this->file->fullpath = $filePath;
-    	$this->file->mime_type = mime_content_type($filePath);
+    public function dip(Dip $dip) {
+        $this->dip = $dip;
+        return $this;
+    }
+    
+    public function fileObject(FileObject $file) {
+        $this->file = $file;
+        return $this;
+    }
+    
+    public function file($filePath) {
+        $this->file = new \stdClass();
+        $this->file->fullpath = $filePath;
+        $this->file->mime_type = mime_content_type($filePath);
+        return $this;
     }
 
     public function getContent($forThumb=false) {
@@ -51,19 +61,19 @@ class FilePreviewRenderHelper {
     }
     
     private function getRegularContent() {
-    	if ($this->dip != null) {
-    		return $this->storage->stream( $this->dip->storage_location, $this->file->fullpath );
-    	} elseif ($this->file != null) {
-    		return file_get_contents($this->file->fullpath);
-    	}
+        if ($this->dip != null) {
+            return $this->storage->stream( $this->dip->storage_location, $this->file->fullpath );
+        } elseif ($this->file != null) {
+            return file_get_contents($this->file->fullpath);
+        }
     }
     
     private function getPdfContent() {
         $file = 'tmp/'.md5($this->file->fullpath).'.pdf';
         if ($this->dip != null) {
-        	Storage::disk('local')->put($file, $this->storage->stream( $this->dip->storage_location, $this->file->fullpath ));
+            Storage::disk('local')->put($file, $this->storage->stream( $this->dip->storage_location, $this->file->fullpath ));
         } elseif ($this->file != null) {
-        	Storage::disk('local')->put($file, file_get_contents($this->file->fullpath));
+            Storage::disk('local')->put($file, file_get_contents($this->file->fullpath));
         }
         $im = new \Imagick(Storage::path($file).'[0]');
         $im->setImageFormat('jpg');

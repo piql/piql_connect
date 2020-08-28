@@ -60,13 +60,16 @@
                                                 {{Math.ceil(file.size/1000)}} Kb
                                             </td>
                                             <td>
-                                                <a @click="showPreview (file)" data-toggle="tooltip" title="Edit metadata"><i class="fas fa-eye actionIcon text-center mr-2 cursorPointer"></i></a>
+                                                <a @click="showPreview (file)" data-toggle="tooltip" :title="$t('access.browse.header.preview')"><i class="fas fa-eye actionIcon text-center mr-2 cursorPointer"></i></a>
                                                 <a @click="remove (file)" data-toggle="tooltip" :title="$t('upload.remove')"><i class="fas fa-trash-alt actionIcon text-center ml-2 cursorPointer"></i></a>
                                             </td>
                                         </tr>
                                     </tbody>
                                 </table>
                             </div>
+                        </div>
+                        <div class="row mt-3 d-flex flex-row-reverse">
+                            <button class="btn btn-ln btn-default pr-5 pl-5 col-2" @click="$router.go(-1)">{{$t('OK')}}</button>
                         </div>
                     </div>
                 </div>
@@ -104,7 +107,7 @@
             const uploader = new FineUploaderTraditional({
                 options: {
                     request: {
-                        endpoint: '/api/v1/ingest/storage/offline/config/upload',
+                        endpoint: '/api/v1/ingest/storage/offline/' + this.$route.params.bucketId + '/config/upload',
                         params: {
                             base_directory: 'completed',
                             sub_directory: null,
@@ -143,7 +146,7 @@
                 result: null,
                 lbVisible: false,
                 index: 0,
-                dip: null,
+                jobId: 0,
                 previewFileNames: [],
                 previewFileTypes: [],
                 previewImages: [],
@@ -168,8 +171,10 @@
             url() { return this.baseUrl + '/' + this.$route.params.bucketId; },
             success() { return this.result ? ( this.result.status === 200 ) : false; },
             item() { return this.success ? this.result.data.data : null; },
+            jobId() { return this.jobId }
         },
         async mounted() {
+            this.jobId = this.$route.params.bucketId;
             this.update();
             this.loadFiles();
             this.loadAllowedExt();
@@ -179,7 +184,7 @@
                 this.allowedExt = ALLOWED_EXT.join(', ');
              },
             async loadFiles() {
-                await axios.get("/api/v1/ingest/storage/offline/config/showFiles").then( (result) => {
+                await axios.get("/api/v1/ingest/storage/offline/" + this.jobId + "/config/showFiles/").then( (result) => {
                     this.files = result.data;
                 });
             },
@@ -200,7 +205,7 @@
             async update() {
                 this.result = await axios.get( this.url );
             },
-async remove(file) {
+            async remove(file) {
                 let options = {
                     okText: this.$t('OK'),
                     cancelText: this.$t('Cancel')
@@ -212,13 +217,13 @@ async remove(file) {
                 });
             },
             async doRemove(file) {
-                    await axios.post("/api/v1/ingest/storage/offline/config/removeFile/" + file.name).then( (result) => {
+                    await axios.post("/api/v1/ingest/storage/offline/" + this.jobId + "/config/removeFile/" + file.name).then( (result) => {
                         this.loadFiles();
                     });
             },
             async showPreview(file) {
                 this.lbVisible = true;
-                let image = (await axios.get('/api/v1/ingest/storage/offline/config/showFile/'+file.name, { responseType: 'blob' }));
+                let image = (await axios.get("/api/v1/ingest/storage/offline/" + this.jobId + "/config/showFile/" + file.name, { responseType: 'blob' }));
                 let reader = new FileReader();
                 reader.onload = e => this.previewImages.push( reader.result );
                 reader.readAsDataURL( image.data );
