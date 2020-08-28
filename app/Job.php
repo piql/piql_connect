@@ -7,6 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 use Webpatser\Uuid\Uuid;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Auth;
+
+class JobTransitionException extends \Exception {};
 
 class Job extends Model
 {
@@ -15,16 +18,62 @@ class Job extends Model
         'name', 'status', 'owner'
     ];
     protected $appends = ['archive_objects', 'bucket_size', 'size'];
-    protected $attributes = ['status' => 'created'];
+
+    // NOTE: States are not all that complex at the moment, but it will be extended later on to include
+    //          - error handling
+    //          - option to cancel/modify/restart a bucket (probably only relevant before a physical write has been initiated)
+    //          - strict transitions (the current version allows skipping notifications from earlier steps in the last four states)
+
+    protected const smConfig = [
+        'states' => [
+            'created',             // not full, bags can be added
+            'closed',              // full, no more bags can be added
+            'transferring',        // transferring to production facility
+            'preparing',           // preparing data for writing
+            'writing',             // printing/developing/verifying
+            'storing',             // packaging/sending/placing physical reel in vault
+            'stored',              // reels are securely placed in vault
+        ],
+        'transitions' => [
+            'close' => [
+                'from' => ['created'],
+                'to' => 'closed',
+            ],
+            'piql_it' => [
+                'from' => ['created', 'closed'],
+                'to' => 'transferring',
+            ],
+            'transferred' => [
+                'from' => ['transferring'],
+                'to' => 'preparing',
+            ],
+            'prepared' => [
+                'from' => ['transferring', 'preparing'],
+                'to' => 'writing',
+            ],
+            'written' => [
+                'from' => ['transferring', 'preparing', 'writing'],
+                'to' => 'storing',
+            ],
+            'stored' => [
+                'from' => ['transferring', 'preparing', 'writing', 'storing'],
+                'to' => 'stored',
+            ],
+        ],
+    ];
 
     public static function boot()
     {
         parent::boot();
-        self::creating( function( $model )
-        {
-            $model->uuid = Uuid::generate();
-            self::jobStorage()->makeDirectory("{$model->uuid}/visual_files");
-        });
+        self::creating(
+            function( $model )
+            {
+                $model->uuid = Uuid::generate();
+                $model->status = "created";
+                $model->owner = Auth::id();
+                self::jobStorage()->makeDirectory("{$model->uuid}/visual_files");
+            }
+        );
     }
 
     public function owner()
@@ -91,6 +140,36 @@ class Job extends Model
     private static function jobStorage()
     {
         return Storage::disk('jobs');
+    }
+
+    public function canTransition($transition)
+    {
+        return !(array_search($this->status, Job::smConfig["transitions"][$transition]["from"]) === false);
+    }
+
+    public function applyTransition($transition, bool $force = false)
+    {
+        if(!isset(Job::smConfig['transitions'][$transition]))
+        {
+            throw new JobTransitionException("transition '{$transition}' doesn't exist");
+        }
+
+        if(!($this->canTransition($transition) || $force))
+        {
+            throw new JobTransitionException("transition '{$transition}' is not allowed from state '{$this->status}'");
+        }
+
+        if(!isset(Job::smConfig['transitions'][$transition]['to'])) {
+            throw new JobTransitionException("No 'to' state for transition '{$transition}'' is defined");
+        }
+
+        $this->status = Job::smConfig['transitions'][$transition]['to'];
+        return $this;
+    }
+
+    public static function transitions()
+    {
+        return Job::smConfig['transitions'];
     }
 
 }
