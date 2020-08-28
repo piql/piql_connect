@@ -46,5 +46,8 @@ class Archive extends Model
         return $this->hasMany('App\Holding', 'owner_archive_uuid', 'uuid');
     }
 
-
+    public function metadata()
+    {
+        return $this->hasMany(\App\ArchiveMetadata::class, "parent_id");
+    }
 }

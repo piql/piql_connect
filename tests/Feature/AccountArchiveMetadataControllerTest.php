@@ -47,31 +47,32 @@ class AccountArchiveMetadataControllerTest extends TestCase
     {
         $response = $this->actingAs( $this->user )
             ->get( route('api.ingest.account.archive.metadata.index', [$this->account->id, $this->archive->id]) );
-        $response->assertStatus( 200 );
+        $this->assertEquals(1, count($response->json("data")));
+        $response->assertStatus( 200 )->assertJsonFragment($this->metadata->metadata);
 
     }
 
     public function test_given_an_authenticated_user_when_metadata_it_responds_200()
     {
-
         $response = $this->actingAs( $this->user )
             ->get( route('api.ingest.account.archive.metadata.show', [$this->account->id, $this->archive->id, $this->metadata->id]) );
-
-        $response->assertStatus( 200 );
+        $response->assertStatus( 200 )->assertJsonFragment($this->metadata->metadata);
     }
 
     public function test_given_an_authenticated_user_when_storing_metadata_it_responds_200()
     {
-        $this->metadata->parent()->disassociate($this->archive);
+        $this->metadata->parent()->dissociate($this->archive);
         $this->metadata->save();
-
+        $this->assertEquals(0, $this->archive->metadata()->count());
         $metadata = factory(ArchiveMetadata::class)->create([
             "modified_by" => $this->user->id,
+            "metadata" => ["dc" => ["title" => "The best novel ever!"]]
         ]);
         $response = $this->actingAs( $this->user )
             ->json('POST', route('api.ingest.account.archive.metadata.store', [$this->account->id, $this->archive->id]),
                 (new MetadataResource($metadata))->toArray(null));
-        $response->assertStatus( 200 );
+        $this->assertEquals(1, $this->archive->metadata()->count());
+        $response->assertStatus( 200 )->assertJsonFragment($metadata->metadata);
 
     }
 
@@ -79,18 +80,20 @@ class AccountArchiveMetadataControllerTest extends TestCase
     {
         $metadata = factory(ArchiveMetadata::class)->create([
             "modified_by" => $this->user->id,
+            "metadata" => ["dc" => ["title" => "The best novel ever!"]]
         ]);
-        $metadata->metadata = ['dc:title' => "Tøv"];
         $response = $this->actingAs( $this->user )
             ->json('PATCH', route('api.ingest.account.archive.metadata.update', [$this->account->id, $this->archive->id, $this->metadata->id]),
                 (new MetadataResource($metadata))->toArray(null));
-        $response->assertStatus( 200 );
+        $this->assertEquals(1, $this->archive->metadata()->count());
+        $response->assertStatus( 200 )->assertJsonFragment($metadata->metadata);
     }
 
     public function test_given_an_authenticated_user_when_delete_metadata_it_responds_200()
     {
         $response = $this->actingAs( $this->user )
             ->json('DELETE', route('api.ingest.account.archive.metadata.destroy', [$this->account->id, $this->archive->id, $this->metadata->id]));
+        $this->assertEquals(0, $this->archive->metadata()->count());
         $response->assertStatus( 200 );
 
     }

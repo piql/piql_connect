@@ -42,7 +42,7 @@ class AccountArchiveMetadataController extends Controller
      */
     public function index(Request $request, Account $account, Archive $archive)
     {
-        $metadata = $account->metadata();
+        $metadata = $archive->metadata();
         $limit = $request->limit ? $request->limit : env('DEFAULT_ENTRIES_PER_PAGE');
         return MetadataResource::collection( $metadata->paginate( $limit ) );
     }
@@ -59,15 +59,13 @@ class AccountArchiveMetadataController extends Controller
     {
         $requestData = $this->validateRequest($request);
 
-        if(!isset($requestData->dc))
-        {
-            $requestData =["dc" => (object)null];
-        }
-
         $metadata = new ArchiveMetadata([
             "modified_by" => Auth::user()->id,
-            "metadata" => $requestData,
+            "metadata" => []
         ]);
+        if(isset($requestData['metadata'])) {
+            $metadata->metadata = $requestData['metadata'];
+        }
         $metadata->owner()->associate($account->owner());
         $metadata->parent()->associate($archive);
         $metadata->save();
