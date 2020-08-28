@@ -17,7 +17,7 @@
                                 <b-form-input class="w-100"
                                     :id="fieldId(scheme.type, schemeItem.name)"
                                     v-model="metadataObject.metadata.dc[schemeItem.name]"
-                                    v-bind:readOnly=readOnly
+                                    v-bind:readOnly="readOnly"
                                 />
                             </b-col>
                         </b-form-row>

@@ -61,6 +61,7 @@ export default {
         },
         assignTemplate: function(target) {
             target.blur();
+            this.$bvModal.show("assigntemplate");
         },
         cloneTemplate: function( templateId ){
             this.currentTemplate = JSON.parse(JSON.stringify(this.templateById(templateId)));  /* Deep copy the template from the store */

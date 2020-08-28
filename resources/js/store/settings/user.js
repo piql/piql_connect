@@ -5,8 +5,9 @@ const state = {
     settings: null,
     password: null,
     languages: null,
-    user: null
-
+    user: null,
+    metadataTemplate: null,
+    userMetadataTemplates: []
 }
 
 const getters = {
@@ -14,8 +15,11 @@ const getters = {
     setPasswordData: state => state.password,
     userSettings: state => state.settings,
     userLanguages: state => state.languages,
-    currentUser: state => state.user
-
+    currentUser: state => state.user,
+    userMetadataTemplateByUserId:  state => userId => {
+        return state.userMetadataTemplates.find( (t) => t.owner_id == userId );
+    },
+    userMetadataTemplates: state => state.userMetadataTemplates,
 }
 
 const actions = {
@@ -41,8 +45,20 @@ const actions = {
     async setNewPassword({commit},data){
         let response =  await axios.post("/api/v1/system/users/current-user/password", data);
         commit('setPasswordMutation',response)
-    }
+    },
 
+    async setAccountMetadataTemplate( {commit}, data ){
+        //TODO: Api call for associating metadata template to the user account
+        commit( 'setAccountMetadataTemplateMutation', data );
+    },
+
+    async createEmptyTemplateWithUserAsCreator( {commit}, userAccount ) {
+        let ownerId = userAccount.id;
+        let fullName = userAccount.full_name;
+        let m = {"id": "", owner_id: "","created_at": "", "metadata":{"dc":{"title":"","creator":"","subject":"","description":"","publisher":"","contributor":"","date":"","type":"","format":"","identifier":"","source":"","language":"","relation":"","coverage":"","rights":""}}};
+        let template = {...m, owner_id: ownerId, metadata: {...m.metadata, dc: { ...m.metadata.dc, creator: fullName}}};
+        commit( 'setAccountMetadataTemplateMutation', template );
+    }
 }
 
 const mutations = {
@@ -71,7 +87,14 @@ const mutations = {
             message: error.data.message
         }
         
-    }
+    },
+
+    setAccountMetadataTemplateMutation: ( state, payload ) => {
+        state.userMetadataTemplates =
+            state.userMetadataTemplates
+            .filter( t => t.owner_id != payload.owner_id)
+            .concat(payload);
+    },
 
 }
 

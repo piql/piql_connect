@@ -23,19 +23,23 @@
                             <td>
                                 <a class="btn btn-xs btn-primary" title="Assign Role" style="color:white">
                                     <i class="fa fa-user-secret"></i>
-                                    </a>
+                                </a>
                                 <a class="btn btn-xs btn-primary" :title="$t('settings.settings.editUser')" style="color:white" @keydown="showEditModal(staff.id)" @click="showEditModal(staff.id)">
                                     <i class="fa fa-edit"></i>
-                                    </a>
+                                </a>
                                 <a v-if="staff.disabled === true" class="btn btn-xs btn-primary" :title="$t('settings.settings.enableUser')" style="color:white" @keydown="showEnableModal(staff.id)" @click="showEnableModal(staff.id)">
                                     <i class="fa fa-plug"></i>
-                                    </a>
+                                </a>
                                 <a v-else class="btn btn-xs btn-primary" :title="$t('settings.settings.disableUser')" style="color:white" @keydown="showDisableModal(staff.id)" @click="showDisableModal(staff.id)">
                                     <i class="fa fa-ban"></i>
-                                    </a>
+                                </a>
                                 <a class="btn btn-xs btn-primary" :title="$t('settings.settings.deleteUser')" style="color:white" @keydown="showDeleteModal(staff.id)" @click="showDeleteModal(staff.id)">
                                     <i class="fa fa-trash"></i>
-                                    </a>
+                                </a>
+                                <a class="btn btn-xs btn-primary" :title="$t('settings.settings.assignAccountMetadata')" style="color:white" @click="showAccountMetadataModal(staff.id)">
+                                    <i class="fa fa-tags"></i>
+                                </a>
+
                             </td>
                         </tr>
                     
@@ -106,7 +110,9 @@
                     <b-button class="mt-3" block @click="editButtonClicked" @keydown="editButtonClicked">
                         <i class="fa fa-edit"></i> {{$t('settings.settings.editUser')}} </b-button>
                 </b-modal>
-  
+
+                <assign-account-metadata-modal :userAccount="assignMetadataUser" @assignAccountMetadata="assignAccountMetadata" />
+ 
   
   
   </div>
@@ -121,10 +127,19 @@ export default {
                 email:null,
                 username:null,
                 user:null,
+                assignMetadataUserId:null
             };
     },
     props:{
         users: Array
+    },
+    mounted() {
+    },
+    computed: {
+        assignMetadataUser() {
+            if(!this.assignMetadataUserId) return;
+            return this.users.find(user => user.id === this.assignMetadataUserId );
+        },
     },
     
     methods:{
@@ -171,6 +186,19 @@ export default {
             //some data will be passed here before emitting
             this.$emit('editUser');
         },
+        showAccountMetadataModal(userId){
+            this.assignMetadataUserId = userId;
+            Vue.nextTick().then( () => {
+                this.$bvModal.show('assign-account-metadata');
+                Vue.nextTick().then( () => {
+                    $("#templatePicker").selectpicker('refresh');
+                });
+            });
+
+        },
+        assignAccountMetadata(userId, templateId){
+            this.$emit('assignAccountMetadata', 'userId', 'templateId');
+        },
         formatDate(ISOdate){
                 let date = new Date(ISOdate);
                 let year = date.getFullYear();
@@ -189,7 +217,9 @@ export default {
                 
             },
 
-    
+        assignAccountMetadata(assign) {
+            console.log("userlisting assignAccountMetadata: ",assign);
+        }
         
     }
 
