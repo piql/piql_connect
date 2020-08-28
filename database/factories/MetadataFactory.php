@@ -4,6 +4,7 @@
 
 use App\AccountMetadata;
 use App\ArchiveMetadata;
+use App\HoldingMetadata;
 use App\Metadata;
 use App\MetadataTemplate;
 use Faker\Generator as Faker;
@@ -42,6 +43,12 @@ $factory->define(AccountMetadata::class, function (Faker $faker) {
 });
 
 $factory->define(ArchiveMetadata::class, function (Faker $faker) {
+    return [
+        'metadata' => [ "dc:title" => "The greatest story ever told" ],
+    ];
+});
+
+$factory->define(HoldingMetadata::class, function (Faker $faker) {
     return [
         'metadata' => [ "dc:title" => "The greatest story ever told" ],
     ];
