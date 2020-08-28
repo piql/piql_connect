@@ -3,29 +3,18 @@
         <page-heading icon="fa-users" :title="$t('settings.settings.userGroups')" :ingress="$t('settings.settings.userGroupDesc')" />
         <div class="card">
             <div class="card-header">
+                <span v-if="showAddGroup"><i class="fa fa-plus"></i>  {{$t('settings.groups.addGroup').toUpperCase()}} | 
+                <a href="#" class="btn btn-sm" @click="displayGroups">{{$t('settings.groups.backToGroup')}}</a>
+                </span>
         
-                <button type="button" class="btn btn-primary" @click="$bvModal.show('add-group')">
+                <button v-else type="button" class="btn btn-primary" @click="displayAddGroup">
                     <i class="fa fa-plus"></i>  {{$t('settings.groups.addGroup')}}
                 </button>
-                <b-modal id="add-group" hide-footer>
-                    <template v-slot:modal-title>
-                   <h4> {{$t('settings.groups.addGroup')}} </h4>
-                    </template>
-                    <div class="d-block">
-                    <div class="form-group">
-                        <label>{{$t('settings.groups.group')}}</label>
-                        <input type="text" class="form-control" v-model="group" required>
-                    </div>
-                    <div class="form-group">
-                        <label>{{$t('settings.groups.description')}}</label>
-                        <textarea v-model="description" class="form-control" required="required"></textarea>
-                    </div>
-                    </div>
-                    <b-button class="mt-3" block @click="addGroup"><i class="fa fa-users"></i> {{$t('settings.groups.addGroup')}}</b-button>
-                </b-modal>
+                
             </div>
             <div class="card-body">
-                <groups-listing :key="groupkey" @assignGroupToRoles="assignGroupToRoles" @assignGroupToUsers="assignGroupToUsers" />
+                 <add-group v-if="showAddGroup" @addGroup='addGroup'></add-group>
+                <groups-listing v-else :key="groupkey" @assignGroupToRoles="assignGroupToRoles" @assignGroupToUsers="assignGroupToUsers" />
                
             </div>
         </div>
@@ -41,9 +30,8 @@ import { mapGetters, mapActions } from "vuex";
        
         data() {
             return {
-                group:null,
-                description:null,
                 groupkey: 0,
+                showAddGroup: false,
             };
         },
         computed: {
@@ -63,17 +51,25 @@ import { mapGetters, mapActions } from "vuex";
         },
         methods: {
             ...mapActions(['postNewGroup','postRolesToGroup','postUsersToGroup']),
+            displayAddGroup(){
+                this.showAddGroup = true;
+
+            },
+            displayGroups(){
+                this.showAddGroup = false;
+
+            },
             forceRerender(){
                 this.groupkey += 1;
 
             },
-            addGroup(){
-                this.infoToast('Add Group','Adding '+ this.group);
+            addGroup(form){
+                this.infoToast('Add Group','Adding '+ form.group);
 
                 //bundle the data
                 let data = {
-                    name: this.group,
-                    description: this.description
+                    name: form.group,
+                    description: form.description
                 }
                 
                 //access vuex action
@@ -81,7 +77,7 @@ import { mapGetters, mapActions } from "vuex";
 
                 //refresh and hide group modal
                 this.forceRerender();
-                this.$bvModal.hide('add-group');
+                this.displayGroups();
                 
             },
             async assignGroupToRoles(data){

@@ -3,29 +3,18 @@
         <page-heading icon="fa-user-shield" :title="$t('settings.settings.roles')" :ingress="$t('settings.settings.rolesDesc')" />
         <div class="card">
             <div class="card-header">
+                <span v-if="showAddRole"><i class="fa fa-plus"></i>  {{$t('settings.roles.addRole').toUpperCase()}} | 
+                <a href="#" class="btn btn-sm" @click="displayRoles">{{$t('settings.roles.backToRoles')}}</a>
+                </span>
         
-                <button type="button" class="btn btn-primary" @click="$bvModal.show('add-role')">
+                <button v-else type="button" class="btn btn-primary" @click="displayAddRole">
                     <i class="fa fa-plus"></i>  {{$t('settings.roles.addRole')}}
                 </button>
-                <b-modal id="add-role" hide-footer>
-                    <template v-slot:modal-title>
-                    {{$t('settings.roles.addRole')}}
-                    </template>
-                    <div class="d-block">
-                        <div class="form-group">
-                            <label>{{$t('settings.roles.role')}}</label>
-                            <input type="text" class="form-control" v-model="role" >
-                        </div>
-                        <div class="form-group">
-                            <label>{{$t('settings.groups.description')}}</label>
-                            <textarea v-model="description" class="form-control"></textarea>
-                        </div>
-                    </div>
-                    <b-button class="mt-3" block @click="addRole" @keydown="addRole"><i class="fa fa-user-shield"></i> {{$t('settings.roles.addRole')}}</b-button>
-                </b-modal>
             </div>
             <div class="card-body">
-                <role-items :key="rolekey" @assignGroup="assignGroup" @editRole="editRole" @deleteRole='deleteRole' />
+                <new-role v-if="showAddRole" @addRole='addRole'></new-role>
+                <role-items v-else :key="rolekey" @assignGroup="assignGroup" @editRole="editRole" @deleteRole='deleteRole' />
+                
             </div>
         </div>
 
@@ -41,17 +30,16 @@ import { mapActions, mapGetters } from "vuex";
        
         data() {
             return {
-                role:null,
-                description:null,
-                response: null,
                 rolekey: 0,
+                showAddRole: false,
             };
         },
         computed:{
-            ...mapGetters(['rolesApiResponse'])
+            ...mapGetters(['rolesApiResponse']),
+            
         },
         watch:{
-            rolesApiResponse(newValue,prevValue){
+            rolesApiResponse(newValue){
                 //will run on success or failure of any post operation
                 if(newValue && (newValue.status >= 200 && newValue.status <= 299)){
                     this.successToast('Success: ' + newValue.status ,newValue.message);
@@ -64,21 +52,29 @@ import { mapActions, mapGetters } from "vuex";
 
         methods: {
             ...mapActions(['postNewRole','updateRole','removeRole','postRolesToGroup']),
+            displayAddRole(){
+                this.showAddRole = true;
+
+            },
+            displayRoles(){
+                this.showAddRole = false;
+
+            },
             forceRerender(){
                 this.rolekey += 1;
 
             },
-            async addRole(){
-                this.infoToast('Add Role','Adding '+ this.role + ' role');
+            async addRole(form){
+                this.infoToast('Add Role','Adding '+ form.role + ' role');
                 let data = {
-                    name: this.role,
-                    description: this.description
+                    name: form.role,
+                    description: form.description
                 }
 
                 this.postNewRole(data);
                 
                 this.forceRerender();
-                this.$bvModal.hide('add-role')
+                this.displayRoles();
             },
 
             async editRole(data){

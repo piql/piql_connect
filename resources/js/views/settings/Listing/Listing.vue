@@ -3,38 +3,25 @@
         <page-heading icon="fa-user" :title="$t('settings.settings.users')" :ingress="$t('settings.settings.listing')" />
         <div class="card">
             <div class="card-header">
+                <span v-if="showAddUser"><i class="fa fa-user-plus"></i>  {{$t('settings.settings.addUser').toUpperCase()}} | 
+                <a href="#" class="btn btn-sm" @click="displayUsers">{{$t('settings.listing.backToUsers')}}</a>
+                </span>
         
-                <button type="button" class="btn btn-primary btncheck" @click="$bvModal.show('add-user')">
+                <button v-else type="button" class="btn btn-primary btncheck" @click="displayAddUser">
                     <i class="fa fa-user-plus"></i>  {{$t('settings.settings.addUser')}}
                 </button>
-                <b-modal id="add-user" hide-footer>
-                    <template v-slot:modal-title>
-                   <h4>{{$t('settings.settings.addUser')}}</h4>
-                    </template>
-                    <div class="d-block">
-                        <div class="form-group">
-                            <label>{{$t('settings.listing.fullname')}}</label>
-                            <input type="text" class="form-control" v-model="fullname" required>
-                        </div>
-                        <div class="form-group">
-                            <label>{{$t('settings.listing.username')}}</label>
-                            <input type="text" class="form-control" v-model="username" required>
-                        </div>
-                        <div class="form-group">
-                            <label>{{$t('settings.listing.email')}}</label>
-                            <input type="email" class="form-control" v-model="email" required>
-                        </div>
-                    </div>
-                    <b-button class="mt-3" block @click="addUser" @keydown="addUser"><i class="fa fa-user-plus"></i> {{$t('settings.settings.addUser')}}</b-button>
-                </b-modal>
             </div>
             <div class="card-body">
-               <user-listing :key="listingKey" @deleteUser='deleteUser'  @disableUser="disableUser" :users="formattedUsers" @editUser="editUser" @enableUser="enableUser"></user-listing>
-               <div class="row text-center pagerRow">
-                    <div class="col">
-                        <Pager :meta='usersPageMeta' :height='height' />
+                <add-user v-if="showAddUser" @addUser='addUser'></add-user>
+                <div v-else>
+                    <user-listing :key="listingKey" @deleteUser='deleteUser'  @disableUser="disableUser" :users="formattedUsers" @editUser="editUser" @enableUser="enableUser"></user-listing>
+                    <div class="row text-center pagerRow">
+                        <div class="col">
+                            <Pager :meta='usersPageMeta' :height='height' />
+                        </div>
                     </div>
                 </div>
+               
             </div>
         </div>
 
@@ -52,10 +39,8 @@ import { mapGetters, mapActions } from "vuex";
         },
         data() {
             return {
-                fullname:null,
-                email:null,
-                username:null,
                 listingKey: 0,
+                showAddUser: false
             };
         },
         props: {
@@ -101,7 +86,13 @@ import { mapGetters, mapActions } from "vuex";
         },
 
         methods: {
-            ...mapActions(['fetchUsers','postNewUser','disableUserRequest','enableUserRequest']), 
+            ...mapActions(['fetchUsers','postNewUser','disableUserRequest','enableUserRequest']),
+            displayAddUser(){
+                this.showAddUser = true;
+            },
+            displayUsers(){
+                this.showAddUser = false;
+            },
             dispatchRouting() {
                 this.fetchUsers(this.apiQueryString);
             },
@@ -109,18 +100,18 @@ import { mapGetters, mapActions } from "vuex";
                 this.listingKey += 1;
             },
         
-            addUser(){
+            addUser(form){
                 this.infoToast("Adding User", "creating new user in the system");
 
                 //invoke vuex axction postNewUser defined above
                 this.postNewUser({
-                    'name': this.fullname,
-                    'username': this.username,
-                    'email': this.email
+                    'name': form.fullname,
+                    'username': form.username,
+                    'email': form.email
                 });
 
-                this.$bvModal.hide('add-user');
-                this.forceRerender();    
+                this.forceRerender();  
+                this.displayUsers();  
 
             },
             editUser(){

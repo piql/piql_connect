@@ -277,6 +277,7 @@
     "settings.listing.email": "Email",
     "settings.listing.status": "Status",
     "settings.listing.created": "Created",
+    "settings.listing.backToUsers": "return to users page",
     "settings.settings.actions": "Actions",
 
     "settings.settings.userGroups": "User Groups",
@@ -295,6 +296,7 @@
     "settings.groups.noRolesAssignedMessage": "No Roles assigned to group yet",
     "settings.groups.assignUsersToGroup": "Assign Users to Group",
     "settings.groups.assignRolesToGroup": "Assign Roles to Group",
+    "settings.groups.backToGroup": "return to group page",
 
     "settings.settings.roles": "Access Roles",
     "settings.settings.rolesDesc": "Manage Access Roles",
@@ -302,6 +304,7 @@
     "settings.settings.rolePermDesc": "Listing and Management of role permissions",
 
     "settings.roles.addRole": "Add Role",
+    "settings.roles.backToRoles": "return to roles page",
     "settings.roles.role": "Role",
     "settings.roles.confPermissions": "Configure Permissions",
     "settings.roles.assignGroup": "Assign User Group",
@@ -311,13 +314,8 @@
     "settings.roles.assignGroupsToRole": "Assign Groups to Role",
 
     "settings.settings.languagelabel": "Language",
-<<<<<<< HEAD
-    "settings.settings.rowslabel": "Results Displayed per Page",
-    "settings.settings.logolabel": "Logo",
-=======
     "settings.settings.rowslabel": "Results Displayed/Page",
     "settings.settings.profileImagelabel": "Profile Image",
->>>>>>> releasev0.3/CON-606
     "settings.settings.userInterfaceHeader": "User interface",
     "settings.settings.setPasswordHeader": "Change password",
     "settings.settings.oldPassword.label": "Old password",
