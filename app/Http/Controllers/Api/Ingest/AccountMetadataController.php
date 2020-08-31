@@ -58,15 +58,13 @@ class AccountMetadataController extends Controller
     {
         $requestData = $this->validateRequest($request);
 
-        if(!isset($requestData->dc))
-        {
-            $requestData =["dc" => (object)null];
-        }
-
         $metadata = new AccountMetadata([
             "modified_by" => Auth::user()->id,
-            "metadata" => $requestData,
+            "metadata" => [],
         ]);
+        if(isset($requestData['metadata'])) {
+            $metadata->metadata = $requestData['metadata'] + $metadata->metadata;
+        }
         $metadata->owner()->associate($account->owner());
         $metadata->parent()->associate($account);
         $metadata->save();
