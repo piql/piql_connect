@@ -58,6 +58,10 @@ class AccountMetadataController extends Controller
     {
         $requestData = $this->validateRequest($request);
 
+        if($account->metadata()->count() > 0) {
+            abort( response()->json([ 'error' => 409, 'message' => 'Metadata already exists' ], 409 ) );
+        }
+
         $metadata = new AccountMetadata([
             "modified_by" => Auth::user()->id,
             "metadata" => [],

@@ -59,6 +59,10 @@ class AccountArchiveMetadataController extends Controller
     {
         $requestData = $this->validateRequest($request);
 
+        if($archive->metadata()->count() > 0) {
+            abort( response()->json([ 'error' => 409, 'message' => 'Metadata already exists' ], 409 ) );
+        }
+
         $metadata = new ArchiveMetadata([
             "modified_by" => Auth::user()->id,
             "metadata" => []

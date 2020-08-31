@@ -60,6 +60,11 @@ class AccountArchiveHoldingMetadataController extends Controller
     public function store(Request $request, Account $account, Archive $archive, Holding $holding)
     {
         $requestData = $this->validateRequest($request);
+
+        if($holding->metadata()->count() > 0) {
+            abort( response()->json([ 'error' => 409, 'message' => 'Metadata already exists' ], 409 ) );
+        }
+
         $metadata = new HoldingMetadata([
             "modified_by" => Auth::user()->id,
             "metadata" => [],

@@ -58,7 +58,24 @@ class AccountMetadataControllerTest extends TestCase
 
     public function test_given_an_authenticated_user_when_storing_metadata_it_responds_200()
     {
-        $metadata = factory(AccountMetadata::class)->create([
+        $this->metadata->parent()->dissociate();
+        $this->metadata->save();
+        $metadata = factory(AccountMetadata::class)->make([
+            "modified_by" => $this->user->id,
+            "metadata" => ["dc" => ["title" => "Can this account be any better?"]]
+        ]);
+        $this->assertEquals(0, $this->account->metadata()->count());
+        $response = $this->actingAs( $this->user )
+            ->json('POST', route('api.ingest.account.metadata.store', [$this->account->id]),
+                (new MetadataResource($metadata))->toArray(null));
+        $this->assertEquals(1, $this->account->metadata()->count());
+        $response->assertStatus( 200 )->assertJsonFragment($metadata->metadata);
+
+    }
+
+    public function test_given_an_authenticated_user_when_storing_additional_metadata_it_responds_409()
+    {
+        $metadata = factory(AccountMetadata::class)->make([
             "modified_by" => $this->user->id,
             "metadata" => ["dc" => ["title" => "Can this account be any better?"]]
         ]);
@@ -66,8 +83,8 @@ class AccountMetadataControllerTest extends TestCase
         $response = $this->actingAs( $this->user )
             ->json('POST', route('api.ingest.account.metadata.store', [$this->account->id]),
                 (new MetadataResource($metadata))->toArray(null));
-        $this->assertEquals(2, $this->account->metadata()->count());
-        $response->assertStatus( 200 )->assertJsonFragment($metadata->metadata);
+        $this->assertEquals(1, $this->account->metadata()->count());
+        $response->assertStatus( 409 );
 
     }
 

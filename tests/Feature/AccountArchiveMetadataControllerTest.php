@@ -76,6 +76,21 @@ class AccountArchiveMetadataControllerTest extends TestCase
 
     }
 
+    public function test_given_an_authenticated_user_when_storing_additional_metadata_it_responds_409()
+    {
+        $this->assertEquals(1, $this->archive->metadata()->count());
+        $metadata = factory(ArchiveMetadata::class)->create([
+            "modified_by" => $this->user->id,
+            "metadata" => ["dc" => ["title" => "The best novel ever!"]]
+        ]);
+        $response = $this->actingAs( $this->user )
+            ->json('POST', route('api.ingest.account.archive.metadata.store', [$this->account->id, $this->archive->id]),
+                (new MetadataResource($metadata))->toArray(null));
+        $this->assertEquals(1, $this->archive->metadata()->count());
+        $response->assertStatus( 409 );
+
+    }
+
     public function test_given_an_authenticated_user_when_updating_metadata_it_responds_200()
     {
         $metadata = factory(ArchiveMetadata::class)->create([
