@@ -8,7 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Helpers\VideoStreamHelper;
 use App\Dip;
 use App\Interfaces\ArchivalStorageInterface;
-use App\Helpers\FilePreviewRenderHelper;
+use App\Interfaces\FilePreviewInterface;
 use Log;
 
 class MediaController extends Controller {
@@ -26,9 +26,8 @@ class MediaController extends Controller {
         $stream->start();
         return null;
     }
-    public function thumb($fileName) {
-        $pathInfo = pathinfo($fileName);
-        $iconPath = FilePreviewRenderHelper::getCustomIcon(strtolower($pathInfo['extension']));
+    public function thumb($fileName, FilePreviewInterface $filePreview) {
+        $iconPath = $filePreview->getCustomIcon($fileName);
         return response(\File::get($iconPath))->header("Content-Type" , \File::mimeType($iconPath));
     }
 }

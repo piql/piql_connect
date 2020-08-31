@@ -111,7 +111,7 @@ import Lightbox from './lightbox';
                     reader.readAsDataURL( image.data );
                 }
                 this.previewFileTypes.push( fileType );
-                this.previewFileNames.push( file.filename.substring(37, file.filename.length-1) );
+                this.previewFileNames.push( file.filename.substring(37, file.filename.length) );
             });
         },
         hideLightBox: function( e ) {

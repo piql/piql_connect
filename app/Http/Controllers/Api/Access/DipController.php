@@ -11,8 +11,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
 use App\Interfaces\ArchivalStorageInterface;
+use App\Interfaces\FilePreviewInterface;
 use App\FileObject;
-use App\Helpers\FilePreviewRenderHelper;
 use Log;
 
 class DipController extends Controller
@@ -76,11 +76,11 @@ class DipController extends Controller
         );
     }
 
-    private function filter_package_thumbnail($dip) {
-        return $dip->fileObjects->filter( function ($file, $key) {
+    private function filter_package_thumbnail($dip, FilePreviewInterface $filePreview) {
+        return $dip->fileObjects->filter( function ($file, $key) use(&$filePreview) {
             $pathInfo = pathinfo($file->fullpath);
             $ext = strtolower($pathInfo['extension']);
-            if ($ext != 'xml' && !FilePreviewRenderHelper::isPreviwableFile($file->mime_type, true)) {
+            if ($ext != 'xml' && !$filePreview->isPreviwableFile($file->mime_type, true)) {
                 return $file;
             } else {
                 return Str::contains( $file->fullpath, '/thumbnails' );
@@ -88,14 +88,13 @@ class DipController extends Controller
         })->first();
     }
 
-    public function package_thumbnail( Request $request, ArchivalStorageInterface $storage )
+    public function package_thumbnail( Request $request, ArchivalStorageInterface $storage, FilePreviewInterface $filePreview )
     {
         $dip = Dip::find( $request->dipId );
-        $file = $this->filter_package_thumbnail($dip);
-        $filePreviewRenderHelper = new FilePreviewRenderHelper();
-        $filePreviewRenderHelper->storage($storage)->dip($dip)->fileObject($file);
-        return response($filePreviewRenderHelper->getContent(true))
-        ->header("Content-Type" , $filePreviewRenderHelper->getMimeType());
+        $file = $this->filter_package_thumbnail($dip, $filePreview);
+        $filePreview->storage($storage)->dip($dip)->fileObject($file);
+        return response($filePreview->getContent(true))
+        ->header("Content-Type" , $filePreview->getMimeType());
     }
 
     public function package_preview( Request $request, ArchivalStorageInterface $storage )
@@ -165,16 +164,15 @@ class DipController extends Controller
         return response( "File not found - no match in aip {$aip->id} for  {$aipFileObjectPath} ");
     }
 
-    public function file_preview( Request $request, ArchivalStorageInterface $storage )
+    public function file_preview( Request $request, ArchivalStorageInterface $storage, FilePreviewInterface $filePreview )
     {
         $dip = Dip::find( $request->dipId );
         $file = $dip->fileObjects->find( $request->fileId );
 
-        $filePreviewRenderHelper = new FilePreviewRenderHelper();
-        $filePreviewRenderHelper->storage($storage)->dip($dip)->fileObject($file);
+        $filePreview->storage($storage)->dip($dip)->fileObject($file);
 
-        return response($filePreviewRenderHelper->getContent())
-        ->header("Content-Type" , $filePreviewRenderHelper->getMimeType());
+        return response($filePreview->getContent())
+        ->header("Content-Type" , $filePreview->getMimeType());
     }
 
     public function file_download( ArchivalStorageInterface $storage, Request $request )
@@ -190,10 +188,10 @@ class DipController extends Controller
         ]);
     }
 
-    private function filter_file_thumbnail($dip, $file)
+    private function filter_file_thumbnail($dip, $file, FilePreviewInterface $filePreview)
     {
-        return $dip->fileObjects->filter( function ($thumb, $key) use( $file ) {
-                if (!FilePreviewRenderHelper::isPreviwableFile($file->mime_type, true)) {
+        return $dip->fileObjects->filter( function ($thumb, $key) use( $file, &$filePreview ) {
+            if (!$filePreview->isPreviwableFile($file->mime_type, true)) {
                     return $file;
                 } else {
                     return Str::contains( $thumb->path, '/thumbnails' );;
@@ -209,15 +207,14 @@ class DipController extends Controller
         return $dip->fileObjects->find( $fileId )->toArray();
     }
 
-    public function file_thumbnail( ArchivalStorageInterface $storage, Request $request )
+    public function file_thumbnail( ArchivalStorageInterface $storage, Request $request, FilePreviewInterface $filePreview )
     {
         $dip = Dip::find( $request->dipId );
         $file = $dip->fileObjects->find( $request->fileId );
-        $thumbnail = $this->filter_file_thumbnail($dip, $file);
-        $filePreviewRenderHelper = new FilePreviewRenderHelper();
-        $filePreviewRenderHelper->storage($storage)->dip($dip)->fileObject($thumbnail);
-        return response($filePreviewRenderHelper->getContent(true))
-        ->header("Content-Type" , $filePreviewRenderHelper->getMimeType());
+        $thumbnail = $this->filter_file_thumbnail($dip, $file, $filePreview);
+        $filePreview->storage($storage)->dip($dip)->fileObject($thumbnail);
+        return response($filePreview->getContent(true))
+        ->header("Content-Type" , $filePreview->getMimeType());
     }
 
 

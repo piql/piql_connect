@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Api\Storage;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Storage;
-use App\Helpers\FilePreviewRenderHelper;
+use App\Interfaces\FilePreviewInterface;
 use App\Job;
 use Log;
 
@@ -46,11 +46,10 @@ class BucketConfigController extends Controller {
 		return 'true';
 	}
 	
-	public function showFile($jobId, $name) {
+	public function showFile($jobId, $name, FilePreviewInterface $filePreview) {
 		$filePath = $this->getPath($jobId) . $name;
-		$filePreviewRenderHelper = new FilePreviewRenderHelper();
-		$filePreviewRenderHelper->file($filePath);
-        return response($filePreviewRenderHelper->getContent(true))
-        ->header("Content-Type" , $filePreviewRenderHelper->getMimeType());
+		$filePreview->file($filePath);
+		return response($filePreview->getContent(true))
+		->header("Content-Type" , $filePreview->getMimeType());
 	}
 }
