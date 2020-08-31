@@ -56,16 +56,14 @@ class MetadataTemplateController extends Controller
 
         $requestData = $this->validateRequest($request);
 
-        if(!isset($requestData->dc))
-        {
-            $requestData =["dc" => (object)null];
-        }
-
         $metadata = new MetadataTemplate([
-            "uuid" => Uuid::generate()->string,
             "modified_by" => Auth::user()->id,
-            "metadata" => $requestData,
+            "metadata" => [],
         ]);
+        if(isset($requestData['metadata'])) {
+            $metadata->metadata = $requestData['metadata'] + $metadata->metadata;
+        }
+        $metadata->owner()->associate(\auth()->user());
         $metadata->save();
 
         return response()->json([ "data" => new MetadataResource($metadata)]);
@@ -77,9 +75,9 @@ class MetadataTemplateController extends Controller
      * @param  \App\Metadata  $metadata
      * @return \Illuminate\Http\Response
      */
-    public function show(MetadataTemplate $metadata)
+    public function show(MetadataTemplate $metadataTemplate)
     {
-        return response()->json([ "data" => new MetadataResource($metadata)]);
+        return response()->json([ "data" => new MetadataResource($metadataTemplate)]);
     }
 
     /**
@@ -89,17 +87,15 @@ class MetadataTemplateController extends Controller
      * @param  \App\Metadata  $metadata
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, MetadataTemplate $metadata)
+    public function update(Request $request, MetadataTemplate $metadataTemplate)
     {
-        \Log::debug($request);
         $requestData = $this->validateRequest($request);
-        \Log::debug($requestData);
         if(isset($requestData['metadata'])) {
-            $metadata->metadata = $requestData['metadata'] + $metadata->metadata;
-            $metadata->save();
+            $metadataTemplate->metadata = $requestData['metadata'] + $metadataTemplate->metadata;
+            $metadataTemplate->save();
         }
 
-        return response()->json([ "data" => new MetadataResource($metadata)]);
+        return response()->json([ "data" => new MetadataResource($metadataTemplate)]);
     }
 
     /**
@@ -108,12 +104,12 @@ class MetadataTemplateController extends Controller
      * @param  \App\Metadata  $metadata
      * @return \Illuminate\Http\Response
      */
-    public function destroy(MetadataTemplate $metadata)
+    public function destroy(MetadataTemplate $metadataTemplate)
     {
 
-        $metadata->parent()->dissociate();
-        $metadata->owner()->dissociate();
-        $metadata->delete();
+        $metadataTemplate->parent()->dissociate();
+        $metadataTemplate->owner()->dissociate();
+        $metadataTemplate->delete();
         return response()->json([ "data" => new MetadataResource(null)]);
     }
 }
