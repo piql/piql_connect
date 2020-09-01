@@ -29,7 +29,7 @@
                 </b-modal>
             </div>
             <div class="card-body">
-               <user-listing :key="listingKey" @deleteUser='deleteUser'  @disableUser="disableUser" :users="formattedUsers" @editUser="editUser" @enableUser="enableUser"></user-listing>
+               <user-listing :key="listingKey" @deleteUser='deleteUser'  @disableUser="disableUser" :users="formattedUsers" @editUser="editUser" @enableUser="enableUser" @assignAccountMetadata="assignAccountMetadata"></user-listing>
                <div class="row text-center pagerRow">
                     <div class="col">
                         <Pager :meta='usersPageMeta' :height='height' />
@@ -43,7 +43,7 @@
 </template>
 
 <script>
-import Pager from "../../../components/Pager"
+import Pager from "@components/Pager"
 import { mapGetters, mapActions } from "vuex";
 
     export default {
@@ -167,6 +167,9 @@ import { mapGetters, mapActions } from "vuex";
                 this.$bvModal.hide('enable-user');
 
             },
+            assignAccountMetadata( accountMetadata ){
+                console.log("should associate metadata: ",accountMetadata);
+            }
         }
     }
 </script>

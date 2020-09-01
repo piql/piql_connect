@@ -78,8 +78,9 @@
     "sidebar.retrieve.retrieving": "Being retrieved",
     "sidebar.retrieve.downloadable": "Ready for download",
     "sidebar.retrieve.history": "History",
-    "sidebar.admin": "Admin settings",
-    "sidebar.logo": "Change logo",
+    "sidebar.settings.admin": "Admin settings",
+    "sidebar.settings.admin.logo": "Change logo",
+    "sidebar.settings.admin.metadata": "Configure metadata",
 
     "dashboard.title": "Dashboard",
     "dashboard.ingress": "Your stored information",
@@ -338,6 +339,13 @@
     "settings.logo.button": "Select logo file",
     "settings.logo.successful": "Your log has been changed",
     
+    "settings.user.assignAccountMetadata.title": "Assign metadata to account",
+    "settings.admin.accountMetadataUser.fullname": "Full name",
+    "settings.admin.accountMetadataUser.username": "Username",
+    "settings.admin.assignMetadataDropdownLabel": "Select a metadata template",
+    "settings.admin.assignMetadataDropdownPlaceholder": "No template selected",
+
+    
     "timeout.warning": "Inactivity warning. Automatic log out in",
     "timeout.seconds": "seconds",
     "timeout.text1": "You have been inactive for",
@@ -348,5 +356,20 @@
     "datepicker.noDateSelected": "No date selected",
     "datepicker.help": "Cursor keys and enter to select a date",
     "datepicker.toasts.illegalRangeTitle": "Invalid date range",
-    "datepicker.toasts.illegalRangeMessage": "The selected archived from-to date range is invalid. Updating."
+    "datepicker.toasts.illegalRangeMessage": "The selected archived from-to date range is invalid. Updating.",
+
+    "admin.account.metadata.title": "Title",
+    "admin.account.metadata.identifier": "Unique identifier",
+    "admin.account.metadata.creator": "Creator",
+    "admin.account.metadata.subject": "Subject",
+    "admin.account.metadata.created_at": "Creation date",
+    "admin.account.metadata.actions": "Actions",
+    "admin.metadata.createNewTemplate": "Create new metadata template",
+    "admin.metadata.listCurrentAssignments": "List current metadata assignments",
+    "admin.metadata.template.title": "Create metadata templates",
+    "admin.metadata.template.ingress": "Create a metadata template that can then be used on account, archive and holding levels",
+    "admin.metadata.template.edit.title": "Edit metadata fields",
+    "admin.metadata.template.edit.saveButton": "Save",
+    "admin.metadata.template.edit.cancelButton": "Cancel",
+    "admin.metadata.template.edit.schemeName": "Metadata scheme name"
 }
