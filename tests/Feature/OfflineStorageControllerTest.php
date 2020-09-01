@@ -73,7 +73,7 @@ class OfflineStorageControllerTest extends TestCase
 
     public function test_given_an_authenticated_user_when_getting_all_archiving_jobs_it_responds_200()
     {
-        $this->job->update(['status' => 'transferring']);
+        $this->job->applyTransition('piql_it')->save();
         $response = $this->actingAs( $this->user )
             ->json( 'GET', route('api.ingest.buckets.archiving', $this->job->id) );
         $response->assertStatus( 200 )
