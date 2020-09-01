@@ -75,7 +75,7 @@ class BagController extends Controller
 
     public function offline()
     {
-        $jobs = \App\Job::where('status', '=', 'ingesting')->get();
+        $jobs = \App\Job::whereIn('status', ['transferring','preparing','writing','storing'])->get();
         $bags = $jobs->map( function ($job) {
             return $job->bags()->get()->map( function($bag) {
                 return $bag;

@@ -14,8 +14,7 @@
                     <td>{{item.name}}</td>
                     <td>{{fileSize(item)}}</td>
                     <td>{{ formatShortDate( item.created_at ) }}</td>
-                    <td>{{ item.status }}</td>
-                    
+                    <td>{{ translatedStatus( item.status ) }}</td>
                 </tr>
             </tbody>
         </table>
@@ -87,6 +86,10 @@ export default {
                 return this.getFileSizeSI(item.size);
             else
                 return "---";
+        },
+        translatedStatus(status) {
+            let statusKey = `ingest.status.${status}`;
+            return this.$t(statusKey);
         }
     },
      computed:  {

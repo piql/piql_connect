@@ -4,16 +4,23 @@ const state = {
     response: null,
     settings: null,
     password: null,
-    languages: null
-
+    languages: null,
+    user: null,
+    metadataTemplate: null,
+    userMetadataTemplates: []
 }
 
 const getters = {
     settingsApiResponse: state => state.response,
     setPasswordData: state => state.password,
     userSettings: state => state.settings,
-    userLanguages: state => state.languages
-
+    userLanguages: state => state.languages,
+    currentUser: state => state.user,
+    userMetadataTemplateByUserId:  state => userId => {
+        return state.userMetadataTemplates.find( (t) => t.owner_id == userId );
+    },
+    userMetadataTemplates: state => state.userMetadataTemplates,
+    currentLanguage: state => state.settings.interface.language
 }
 
 const actions = {
@@ -39,11 +46,26 @@ const actions = {
     async setNewPassword({commit},data){
         let response =  await axios.post("/api/v1/system/users/current-user/password", data);
         commit('setPasswordMutation',response)
-    }
+    },
 
+    async setAccountMetadataTemplate( {commit}, data ){
+        //TODO: Api call for associating metadata template to the user account
+        commit( 'setAccountMetadataTemplateMutation', data );
+    },
+
+    async createEmptyTemplateWithUserAsCreator( {commit}, userAccount ) {
+        let ownerId = userAccount.id;
+        let fullName = userAccount.full_name;
+        let m = {"id": "", owner_id: "","created_at": "", "metadata":{"dc":{"title":"","creator":"","subject":"","description":"","publisher":"","contributor":"","date":"","type":"","format":"","identifier":"","source":"","language":"","relation":"","coverage":"","rights":""}}};
+        let template = {...m, owner_id: ownerId, metadata: {...m.metadata, dc: { ...m.metadata.dc, creator: fullName}}};
+        commit( 'setAccountMetadataTemplateMutation', template );
+    }
 }
 
 const mutations = {
+    setCurrentUserMutation: (state,payload)=> {
+        state.user = payload.data;
+    },
     setSettingsMutation: (state,payload)=> {
         state.settings = payload.data;
     },
@@ -56,17 +78,24 @@ const mutations = {
     setResponse: (state, response) => {
         state.response = {
             status: response.status,
-            message: response.statusText 
+            message: response.statusText
         }
-        
+
     },
     setErrorResponse: (state, error) => {
         state.response = {
             status:error.status,
             message: error.data.message
         }
-        
-    }
+
+    },
+
+    setAccountMetadataTemplateMutation: ( state, payload ) => {
+        state.userMetadataTemplates =
+            state.userMetadataTemplates
+            .filter( t => t.owner_id != payload.owner_id)
+            .concat(payload);
+    },
 
 }
 

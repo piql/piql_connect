@@ -41,10 +41,7 @@ class OfflineStorageController extends Controller
         
         
         $jobs = Job::where('owner', Auth::id() )
-            ->where(function($query) {
-                $query->where('status', 'created')
-                    ->orWhere('status', 'closed');
-            })
+            ->whereIn('status', ['created','closed'])
             ->withCount('aips')
             ->latest()
             ->paginate($limit);
@@ -118,7 +115,7 @@ class OfflineStorageController extends Controller
             {
                 abort(response()->json(["error" => 424, "message" => "Bucket doesn't have a valid name: {$job->name}"], 424));
             }
-            $job->status = 'transferring';
+            $job->applyTransition('piql_it');
             $job->save();
             event(new CommitJobEvent($job));
         }

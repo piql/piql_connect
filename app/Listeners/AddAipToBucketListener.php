@@ -37,7 +37,7 @@ class AddAipToBucketListener implements ShouldQueue
             $aipSize = $aip->size;
             // close job and create a new one if the Aip don't fit
             if(($job->size + $aipSize) > $job->bucketSize) {
-                $job->status = "closed";
+                $job->applyTransition('close');
                 $job->save();
                 $job = Job::currentJob($event->informationPackage->owner);
             }
