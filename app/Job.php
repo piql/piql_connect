@@ -70,7 +70,6 @@ class Job extends Model
             {
                 $model->uuid = Uuid::generate();
                 $model->status = "created";
-                $model->owner = Auth::id();
                 self::jobStorage()->makeDirectory("{$model->uuid}/visual_files");
             }
         );
