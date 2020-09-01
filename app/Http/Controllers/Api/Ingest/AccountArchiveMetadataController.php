@@ -65,11 +65,8 @@ class AccountArchiveMetadataController extends Controller
 
         $metadata = new ArchiveMetadata([
             "modified_by" => Auth::user()->id,
-            "metadata" => []
+            "metadata" => $requestData['metadata'] ?? [],
         ]);
-        if(isset($requestData['metadata'])) {
-            $metadata->metadata = $requestData['metadata'];
-        }
         $metadata->owner()->associate($account->owner());
         $metadata->parent()->associate($archive);
         $metadata->save();

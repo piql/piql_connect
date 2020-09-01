@@ -67,11 +67,8 @@ class AccountArchiveHoldingMetadataController extends Controller
 
         $metadata = new HoldingMetadata([
             "modified_by" => Auth::user()->id,
-            "metadata" => [],
+            "metadata" => $requestData['metadata'] ?? [],
         ]);
-        if(isset($requestData['metadata'])) {
-            $metadata->metadata = $requestData['metadata'] + $metadata->metadata;
-        }
         $metadata->owner()->associate($account->owner());
         $metadata->parent()->associate($holding);
         $metadata->save();
