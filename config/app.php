@@ -192,6 +192,7 @@ return [
         App\Providers\ArchivematicaStorageClientProvider::class,
         App\Providers\MetadataGeneratorServiceProvider::class,
         App\Providers\PreProcessBagServiceProvider::class,
+        App\Providers\IngestValidationServiceProvider::class,
         App\Providers\FilePreviewProvider::class,
 
 
