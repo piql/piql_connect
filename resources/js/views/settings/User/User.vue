@@ -8,9 +8,10 @@
                         <b-tabs nav-class="toggle-nav" card>
                             <b-tab :title="$t('settings.settings.userInterfaceHeader')" active>
                                 <b-card-text>
-                                    <language-picker v-bind:label="$t('settings.settings.languagelabel')" :initialSelection="selectedLanguage" @selectionChanged="changedLanguage"></language-picker>
+                                    <language-picker v-bind:label="$t('settings.settings.languagelabel')" 
+                                     ></language-picker>
                                     <row-selector :rowlabel="$t('settings.settings.rowslabel')"></row-selector>
-                                    <upload-logo v-bind:logolabel="$t('settings.settings.logolabel')"></upload-logo>
+                                    <upload-logo v-bind:logolabel="$t('settings.settings.profileImagelabel')"></upload-logo>
                                 </b-card-text>
                             </b-tab>
                             <b-tab :title="$t('settings.settings.setPasswordHeader')">
@@ -19,7 +20,14 @@
                                     v-bind:newPasswordLabel1="$t('settings.settings.newPassword1.label')" 
                                     v-bind:newPasswordLabel2="$t('settings.settings.newPassword2.label')" 
                                     v-bind:saveButtonText="$t('settings.settings.passwordSaveButtonText')" 
-                                    @saveButtonClicked="changePassword" ref="passwordPicker"></password-picker>
+                                    @saveButtonClicked="changePassword" ref="passwordPicker">
+                                    </password-picker>
+                                </b-card-text>
+                            </b-tab>
+
+                            <b-tab :title="$t('sidebar.admin')">
+                                <b-card-text>
+                                   <logo />
                                 </b-card-text>
                             </b-tab>
 
@@ -35,11 +43,20 @@
 <script>
 import { mapActions, mapGetters } from "vuex";
     export default {
-        
+        async mounted(){
+             if (localStorage.getItem('reloaded')) {
+                // The page was just reloaded. Clear the value from local storage
+                // so that it will reload the next time this page is visited.
+                localStorage.removeItem('reloaded');
+            } else {
+                // Set a flag so that we know not to reload the page twice.
+                localStorage.setItem('reloaded', '1');
+                location.reload();
+            }
 
-        async mounted() {
-            this.fetchUserSettings();
         },
+        
+    
         watch: {
             setPasswordData(NewPassword,oldPassword){
                 if (NewPassword && NewPassword.status == 0) {
@@ -70,18 +87,12 @@ import { mapActions, mapGetters } from "vuex";
                     );
                 }
 
-            }
+            },
 
         },
 
         methods: {
-            ...mapActions(['fetchUserSettings','changeLanguage','setNewPassword']),
-            changedLanguage(language) {
-                if (language && language != this.selectedLanguage) {
-                    this.changeLanguage(language);
-                    this.$router.go(0);
-                }
-            },
+            ...mapActions(['setNewPassword']),       
             async changePassword(oldPassword, newPassword1, newPassword2) {
                 if (newPassword1 != newPassword2) {
                     this.errorToast(
@@ -101,13 +112,8 @@ import { mapActions, mapGetters } from "vuex";
         },
 
         computed: {
-            ...mapGetters(['userSettings','setPasswordData']),
-            selectedLanguage() {
-                if (this.userSettings && this.userSettings.interface && this.userSettings.interface.language) {
-                    return this.userSettings.interface.language;
-                }
-                return '';
-            }
+            ...mapGetters(['setPasswordData']),
+            
         }
     }
 </script>

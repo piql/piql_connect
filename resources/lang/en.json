@@ -177,7 +177,6 @@
     "ingest.fileList.ingress": "Displays the files included in the submission package",
     "ingest.fileList.fileSize": "File size",
     "ingest.fileList.fileName": "File name",
-
     "ingest.status.from": "From",
     "ingest.status.to": "To",
     "ingest.status.statusFilter": "Status",
@@ -287,8 +286,8 @@
 
     "settings.groups.addGroup": "Add Group",
     "settings.groups.group": "Group",
-    
-    "settings.groups.description": "Description", 
+
+    "settings.groups.description": "Description",
     "settings.groups.assignUsers": "Assign Users",
     "settings.groups.listRolesAndUsers": "List Roles & Users Assigned",
     "settings.groups.assignRoles": "Assign Roles",
@@ -338,14 +337,14 @@
     "settings.logo.ingress": "Upload a new logo image",
     "settings.logo.button": "Select logo file",
     "settings.logo.successful": "Your log has been changed",
-    
+
     "settings.user.assignAccountMetadata.title": "Assign metadata to account",
     "settings.admin.accountMetadataUser.fullname": "Full name",
     "settings.admin.accountMetadataUser.username": "Username",
     "settings.admin.assignMetadataDropdownLabel": "Select a metadata template",
     "settings.admin.assignMetadataDropdownPlaceholder": "No template selected",
 
-    
+
     "timeout.warning": "Inactivity warning. Automatic log out in",
     "timeout.seconds": "seconds",
     "timeout.text1": "You have been inactive for",
