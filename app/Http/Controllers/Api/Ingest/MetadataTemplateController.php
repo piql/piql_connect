@@ -58,11 +58,8 @@ class MetadataTemplateController extends Controller
 
         $metadata = new MetadataTemplate([
             "modified_by" => Auth::user()->id,
-            "metadata" => [],
+            "metadata" => $requestData['metadata'] ?? [],
         ]);
-        if(isset($requestData['metadata'])) {
-            $metadata->metadata = $requestData['metadata'] + $metadata->metadata;
-        }
         $metadata->owner()->associate(\auth()->user());
         $metadata->save();
 

@@ -44,12 +44,14 @@ $factory->define(AccountMetadata::class, function (Faker $faker) {
 
 $factory->define(ArchiveMetadata::class, function (Faker $faker) {
     return [
+        'modified_by' => $faker->uuid,
         'metadata' => [ "dc:title" => "The greatest story ever told" ],
     ];
 });
 
 $factory->define(HoldingMetadata::class, function (Faker $faker) {
     return [
+        'modified_by' => $faker->uuid,
         'metadata' => [ "dc:title" => "The greatest story ever told" ],
     ];
 });
