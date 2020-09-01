@@ -7,10 +7,8 @@ use Illuminate\Database\Eloquent\Builder;
 trait MorphableSelf
 {
 
-    protected static function boot()
+    protected static function bootMorphableSelf()
     {
-        parent::boot();
-
         static::addGlobalScope(static::class, function (Builder $builder) {
             $builder->where("type", static::class);
         });
@@ -19,7 +17,6 @@ trait MorphableSelf
         {
             $model->type = static::class;
         });
-
     }
 
     private function morphSelf()

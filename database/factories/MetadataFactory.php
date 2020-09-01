@@ -3,6 +3,8 @@
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
 
 use App\AccountMetadata;
+use App\ArchiveMetadata;
+use App\HoldingMetadata;
 use App\Metadata;
 use App\MetadataTemplate;
 use Faker\Generator as Faker;
@@ -20,7 +22,6 @@ use Faker\Generator as Faker;
 
 $factory->define(Metadata::class, function (Faker $faker) {
     return [
-        'uuid' => $faker->uuid,
         'modified_by' => $faker->uuid,
         'metadata' => [ "dc:title" => "The greatest story ever told" ],
     ];
@@ -29,7 +30,6 @@ $factory->define(Metadata::class, function (Faker $faker) {
 $factory->define(MetadataTemplate::class, function (Faker $faker) {
 
     return [
-        'uuid' => $faker->uuid,
         'modified_by' => $faker->uuid,
         'metadata' => [ "dc:title" => "The greatest story ever told" ],
     ];
@@ -37,7 +37,20 @@ $factory->define(MetadataTemplate::class, function (Faker $faker) {
 
 $factory->define(AccountMetadata::class, function (Faker $faker) {
     return [
-        'uuid' => $faker->uuid,
+        'modified_by' => $faker->uuid,
+        'metadata' => [ "dc:title" => "The greatest story ever told" ],
+    ];
+});
+
+$factory->define(ArchiveMetadata::class, function (Faker $faker) {
+    return [
+        'modified_by' => $faker->uuid,
+        'metadata' => [ "dc:title" => "The greatest story ever told" ],
+    ];
+});
+
+$factory->define(HoldingMetadata::class, function (Faker $faker) {
+    return [
         'modified_by' => $faker->uuid,
         'metadata' => [ "dc:title" => "The greatest story ever told" ],
     ];

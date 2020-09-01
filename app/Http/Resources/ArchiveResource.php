@@ -14,7 +14,9 @@ class ArchiveResource extends JsonResource
      */
     public function toArray($request)
     {
-        return [ 
+        if(!$this->resource) return [];
+
+        return [
             'id' => $this->id,
             'title' => $this->title,
             'description' => $this->description,

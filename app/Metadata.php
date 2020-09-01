@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Traits\AutoGenerateUuid;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
@@ -9,6 +10,7 @@ use Illuminate\Support\Str;
 class Metadata extends Model
 {
     use SoftDeletes;
+    use AutoGenerateUuid;
 
     protected $table = 'metadata';
     protected $fillable = [

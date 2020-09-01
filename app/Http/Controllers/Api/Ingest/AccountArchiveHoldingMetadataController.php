@@ -3,14 +3,16 @@
 namespace App\Http\Controllers\Api\Ingest;
 
 use App\Account;
+use App\Archive;
+use App\Holding;
+use App\HoldingMetadata;
 use App\Http\Resources\MetadataResource;
 use App\AccountMetadata;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
-use Webpatser\Uuid\Uuid;
 
-class AccountMetadataController extends Controller
+class AccountArchiveHoldingMetadataController extends Controller
 {
     private function validateRequest(Request $request) {
         return $request->validate([
@@ -39,9 +41,9 @@ class AccountMetadataController extends Controller
      * @param Account $account
      * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
      */
-    public function index(Request $request, Account $account)
+    public function index(Request $request, Account $account, Archive $archive, Holding $holding)
     {
-        $metadata = $account->metadata();
+        $metadata = $holding->metadata();
         $limit = $request->limit ? $request->limit : env('DEFAULT_ENTRIES_PER_PAGE');
         return MetadataResource::collection( $metadata->paginate( $limit ) );
     }
@@ -51,25 +53,25 @@ class AccountMetadataController extends Controller
      *
      * @param \Illuminate\Http\Request $request
      * @param Account $account
+     * @param Archive $archive
+     * @param Holding $holding
      * @return void
-     * @throws \Exception
      */
-    public function store(Request $request, Account $account)
+    public function store(Request $request, Account $account, Archive $archive, Holding $holding)
     {
         $requestData = $this->validateRequest($request);
 
-        if($account->metadata()->count() > 0) {
+        if($holding->metadata()->count() > 0) {
             abort( response()->json([ 'error' => 409, 'message' => 'Metadata already exists' ], 409 ) );
         }
 
-        $metadata = new AccountMetadata([
+        $metadata = new HoldingMetadata([
             "modified_by" => Auth::user()->id,
             "metadata" => $requestData['metadata'] ?? [],
         ]);
         $metadata->owner()->associate($account->owner());
-        $metadata->parent()->associate($account);
+        $metadata->parent()->associate($holding);
         $metadata->save();
-
         return response()->json([ "data" => new MetadataResource($metadata)]);
     }
 
@@ -80,9 +82,9 @@ class AccountMetadataController extends Controller
      * @param AccountMetadata $metadata
      * @return \Illuminate\Http\Response
      */
-    public function show(Account $account, AccountMetadata $metadata)
+    public function show(Account $account, Archive $archive, Holding $holding, HoldingMetadata $metadata)
     {
-        if($account->id !== $metadata->parent_id) {
+        if($holding->id !== $metadata->parent_id) {
             abort( response()->json([ 'error' => 404, 'message' => 'Invalid metadata' ], 404 ) );
         }
         return response()->json([ "data" => new MetadataResource($metadata)]);
@@ -96,9 +98,9 @@ class AccountMetadataController extends Controller
      * @param AccountMetadata $metadata
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Account $account, AccountMetadata $metadata)
+    public function update(Request $request, Account $account, Archive $archive, Holding $holding, HoldingMetadata $metadata)
     {
-        if($account->id !== $metadata->parent_id) {
+        if($holding->id !== $metadata->parent_id) {
             abort( response()->json([ 'error' => 404, 'message' => 'Invalid metadata' ], 404 ) );
         }
 
@@ -119,9 +121,9 @@ class AccountMetadataController extends Controller
      * @return \Illuminate\Http\Response
      * @throws \Exception
      */
-    public function destroy(Account $account, AccountMetadata $metadata)
+    public function destroy(Account $account, Archive $archive, Holding $holding, HoldingMetadata $metadata)
     {
-        if($account->id !== $metadata->parent_id) {
+        if($holding->id !== $metadata->parent_id) {
             abort( response()->json([ 'error' => 404, 'message' => 'Invalid metadata' ], 404 ) );
         }
 

@@ -125,7 +125,7 @@ class Holding extends Model
 
 
     /* function ancestor()
-    /* recursively finds the top-level holdings for this holding 
+    /* recursively finds the top-level holdings for this holding
      */
 
     public function ancestor()
@@ -133,4 +133,8 @@ class Holding extends Model
         return $this->parent()->with('ancestor');
     }
 
+    public function metadata()
+    {
+        return $this->hasMany(\App\HoldingMetadata::class, "parent_id");
+    }
 }

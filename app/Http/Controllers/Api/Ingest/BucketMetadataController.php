@@ -63,7 +63,6 @@ class BucketMetadataController extends Controller
         }
 
         $metadata = new Metadata([
-            "uuid" => Uuid::generate()->string,
             "modified_by" => Auth::user()->id,
             "metadata" => $requestData,
         ]);
