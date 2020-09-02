@@ -171,6 +171,14 @@
     "ingest.offlineStorage.contentOptions.reelDescription.buttonText" : "Elija fichero",		
     "ingest.offlineStorage.toasts.piqled.title" :"Preparando para escribir en piqlFilm",
     "ingest.offlineStorage.toasts.piqled.message" :"El paquete %PACKAGENAME% está siendo preparado ahora para escribirlo en piqlFilm",
+    "ingest.offlineStorage.config.imageUploadTitle": "Visual images upload",
+    "ingest.offlineStorage.config.ingress": "Drag your visual images here. Allowed extensions are",
+    "ingest.offlineStorage.config.alert.notAllowedExtensions" :"Please, use only allowed image types",
+    "ingest.offlineStorage.config.toast.fileUploaded.header": "Visual images upload",
+    "ingest.offlineStorage.config.uploadedTitle": "Uploaded images",
+    "ingest.offlineStorage.config.toast.fileUploaded.message": "Your image was sent",
+    "ingest.offlineStorage.config.removeQuestion": "Remove this file?",
+    
     
 	"ingest.fileList.header": "Lista de ficheros",
     "ingest.fileList.ingress": "Muestra los ficheros incluidos en el paquete de entrega",
