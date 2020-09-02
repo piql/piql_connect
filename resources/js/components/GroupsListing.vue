@@ -14,20 +14,20 @@
                             <td>{{group.name}}</td>
                             <td>{{group.description}}</td>
                             <td>
-                                <a class="btn btn-xs btn-primary" :title="$t('settings.groups.editGroup')" style="color:white">
+                                <a class="btn btn-xs btn-primary" data-toggle="tooltip" :title="$t('settings.groups.editGroup')" style="color:white">
                                     <i class="fa fa-edit"></i>
                                     </a>
-                                <a class="btn btn-xs btn-primary" @click="showAssignUsersModal(group.id)" :title="$t('settings.groups.assignUsers')" style="color:white">
+                                <a class="btn btn-xs btn-primary" @click="showAssignUsersModal(group.id)" data-toggle="tooltip" :title="$t('settings.groups.assignUsers')" style="color:white">
                                     <i class="fa fa-users"></i>
                                     </a>
-                                <a class="btn btn-xs btn-primary" @click="showListingModal(group.id)" :title="$t('settings.groups.listRolesAndUsers')" style="color:white">
+                                <a class="btn btn-xs btn-primary" @click="showListingModal(group.id)" data-toggle="tooltip" :title="$t('settings.groups.listRolesAndUsers')" style="color:white">
                                     <i class="fa fa-list"></i>
                                     </a>
-
-                                <a class="btn btn-xs btn-primary" @click="showAssignModal(group.id)" :title="$t('settings.groups.assignRoles')" style="color:white">
+                              
+                                <a class="btn btn-xs btn-primary" @click="showAssignModal(group.id)" data-toggle="tooltip" :title="$t('settings.groups.assignRoles')" style="color:white">
                                     <i class="fa fa-user-shield"></i>
                                     </a>
-                                <a class="btn btn-xs btn-primary" :title="$t('settings.groups.deleteGroup')" style="color:white">
+                                <a class="btn btn-xs btn-primary" data-toggle="tooltip" :title="$t('settings.groups.deleteGroup')" style="color:white">
                                     <i class="fa fa-trash"></i>
                                     </a>
                             </td>

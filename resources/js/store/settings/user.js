@@ -20,6 +20,7 @@ const getters = {
         return state.userMetadataTemplates.find( (t) => t.owner_id == userId );
     },
     userMetadataTemplates: state => state.userMetadataTemplates,
+    currentLanguage: state => state.settings.interface.language
 }
 
 const actions = {
@@ -77,16 +78,16 @@ const mutations = {
     setResponse: (state, response) => {
         state.response = {
             status: response.status,
-            message: response.statusText 
+            message: response.statusText
         }
-        
+
     },
     setErrorResponse: (state, error) => {
         state.response = {
             status:error.status,
             message: error.data.message
         }
-        
+
     },
 
     setAccountMetadataTemplateMutation: ( state, payload ) => {

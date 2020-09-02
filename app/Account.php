@@ -22,6 +22,11 @@ class Account extends Model
         return $this->morphTo();
     }
 
+    public function archives()
+    {
+        return $this->hasMany('App\Archive', 'account_uuid', 'uuid');
+    }
+
     public function metadata()
     {
         return $this->hasMany(AccountMetadata::class, "parent_id");

@@ -4,12 +4,10 @@ import Listing from "@/views/settings/Admin/Account/Users";
 import users from "@/store/settings/users";
 import Pager from "@/components/Pager";
 
-
 const $t = (s)=> s
 const $route = { name: 'test', query:{ page: 1} }
 
 const localVue = createLocalVue();
-
 localVue.use( Vuex );
 
 describe("Listing", ()=>{

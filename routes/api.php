@@ -78,9 +78,13 @@ Route::group(['prefix' => 'v1', 'middleware' => ['auth:api', 'activity']], funct
         Route::patch('files/{file}/metadata/{metadata}', 'Api\Ingest\FileMetadataController@update')->name('api.ingest.files.metadata.update');
         Route::delete('files/{file}/metadata/{metadata}', 'Api\Ingest\FileMetadataController@destroy')->name('api.ingest.files.metadata.destroy');
 
-        Route::apiResource('metadata-template', 'Api\Ingest\MetadataTemplateController', ['as' => 'api.ingest']);
-        Route::apiResource('account',           'Api\Ingest\AccountController',          ['as' => 'api.ingest']);
-        Route::apiResource('account.metadata', 'Api\Ingest\AccountMetadataController',   ['as' => 'api.ingest']);
+        Route::apiResource('metadata-template',                'Api\Ingest\MetadataTemplateController',              ['as' => 'api.ingest']);
+        Route::apiResource('account',                          'Api\Ingest\AccountController',                       ['as' => 'api.ingest']);
+        Route::apiResource('account.metadata',                 'Api\Ingest\AccountMetadataController',               ['as' => 'api.ingest']);
+        Route::apiResource('account.archive',                  'Api\Ingest\AccountArchiveController',                ['as' => 'api.ingest']);
+        Route::apiResource('account.archive.metadata',         'Api\Ingest\AccountArchiveMetadataController',        ['as' => 'api.ingest']);
+        Route::apiResource('account.archive.holding',          'Api\Ingest\AccountArchiveHoldingController',         ['as' => 'api.ingest']);
+        Route::apiResource('account.archive.holding.metadata', 'Api\Ingest\AccountArchiveHoldingMetadataController', ['as' => 'api.ingest']);
 
         Route::get('storage/offline/pending/buckets/{bucket}/metadata', 'Api\Ingest\BucketMetadataController@index')->name('api.ingest.bucket.metadata.index');
         Route::post('storage/offline/pending/buckets/{bucket}/metadata', 'Api\Ingest\BucketMetadataController@store')->name('api.ingest.bucket.metadata.store');
@@ -94,6 +98,11 @@ Route::group(['prefix' => 'v1', 'middleware' => ['auth:api', 'activity']], funct
         Route::delete('storage/offline/pending/buckets/{id}/dips/{dipId}', 'Api\Ingest\OfflineStorageController@detachDip')->name('api.ingest.bucket.detach.dip');
         Route::get('storage/offline/pending/buckets', 'Api\Ingest\OfflineStorageController@jobs')->name('api.ingest.buckets.pending');
         Route::get('storage/offline/archive/buckets', 'Api\Ingest\OfflineStorageController@archiveJobs')->name('api.ingest.buckets.archiving');
+
+        Route::post('storage/offline/{jobId}/config/upload', 'Api\Storage\BucketConfigController@upload')->name('api.ingest.buckets.config');
+        Route::get('storage/offline/{jobId}/config/showFiles', 'Api\Storage\BucketConfigController@showFiles')->name('api.ingest.buckets.config');
+        Route::get('storage/offline/{jobId}/config/showFile/{name}', 'Api\Storage\BucketConfigController@showFile')->name('api.ingest.buckets.config');
+        Route::post('storage/offline/{jobId}/config/removeFile/{name}', 'Api\Storage\BucketConfigController@removeFile')->name('api.ingest.buckets.config');
 
         Route::group(['prefix' => 'triggers'], function () {
             // todo: add middleware

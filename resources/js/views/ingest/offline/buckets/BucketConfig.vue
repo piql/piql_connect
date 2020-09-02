@@ -12,60 +12,145 @@
 
         <Task v-if="item != null" :item="item" :jobListUrl="jobListUrl" :actionIcons="actionIcons" @piqlIt="piqlIt"/>
 
-        <div class="row mt-4">
-            <div class="col">
-                <label class="align-top" for="outputMatching">{{$t('ingest.offlineStorage.contentOptions.outputMatching.label')}}</label>
-                <textarea class="contentOptionsTextinput" id="outputMatching"></textarea>
-            </div>
+        <div class="w-100 bucketConfigForm">
+            <form v-on:submit.prevent>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="card">
+                            <div class="card-header">
+                                <b><i class="far fa-image"></i> {{$t('ingest.offlineStorage.config.imageUploadTitle')}}</b>
+                            </div>
+                            <div class="card-body">
+                                <div class="form-group">
+                                    {{$t('ingest.offlineStorage.config.ingress')}}:<br/>
+                                    {{ allowedExt }}
+                                </div>
+                                <Dropzone
+                                    class="dropzone is-6 has-text-centered"
+                                    :multiple="true"
+                                    :uploader="uploader" style="margin-right: 0px; width:99%; height:1s0vh;">
+                                    <file-input multiple
+                                        :uploader="uploader">
+                                        <p class="dz-text"><i class="fas fa-cloud-upload-alt"></i> {{$t("upload.addFileButton")}}</p>
+                                    </file-input>
+                                </Dropzone>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card">
+                            <div class="card-header">
+                                <b><i class="fa fa-upload"></i> {{$t('ingest.offlineStorage.config.uploadedTitle')}}</b>
+                            </div>
+                            <div class="card-body">
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>{{$t('upload.fileName')}}</th>
+                                            <th>{{$t('upload.fileSize')}}</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr v-for="file in files" :key="file.id">
+                                            <td>
+                                                {{ file.name }}
+                                            </td>
+                                            <td>
+                                                {{Math.ceil(file.size/1000)}} Kb
+                                            </td>
+                                            <td>
+                                                <a @click="showPreview (file)" data-toggle="tooltip" :title="$t('access.browse.header.preview')"><i class="fas fa-eye actionIcon text-center mr-2 cursorPointer"></i></a>
+                                                <a @click="remove (file)" data-toggle="tooltip" :title="$t('upload.remove')"><i class="fas fa-trash-alt actionIcon text-center ml-2 cursorPointer"></i></a>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="row mt-3 d-flex flex-row-reverse">
+                            <button class="btn btn-ln btn-default pr-5 pl-5 col-2" @click="$router.go(-1)">{{$t('OK')}}</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
         </div>
-        <div class="row mt-3">
-            <div class="col">
-                <label class="align-top" for="layout">{{$t('ingest.offlineStorage.contentOptions.layout.label')}}</label>
-                <textarea class="contentOptionsTextinput" id="layout"></textarea>
-            </div>
-        </div>
-        <div class="row mt-3">
-            <div class="col">
-                <label class="align-top" for="reelDef">{{$t('ingest.offlineStorage.contentOptions.reelDefinition.label')}}</label>
-                <textarea class="contentOptionsTextinput" id="reelDef"></textarea>
-            </div>
-        </div>
-
-        <div class="row mt-4">
-            <div class="col">
-                <span class="contentOptionsUploadTag">{{$t('ingest.offlineStorage.contentOptions.clientLogo.title')}}</span>
-                <input type="file" name="file-1[]" id="file-1" class="inputfile inputfile-1" data-multiple-caption="{count} files selected" multiple="">
-                <label for="file-1">
-                    <button title="Choose file" id="chooseFileButton1" class="btn form-control-btn w-70">{{$t('ingest.offlineStorage.contentOptions.clientLogo.buttonText')}}</button>
-                </label>
-            </div>
-        </div>
-
-        <div class="row mt-1">
-            <div class="col">
-                <span class="contentOptionsUploadTag">{{$t('ingest.offlineStorage.contentOptions.reelDescription.title')}}</span>
-                <input type="file" name="file-1[]" id="file-1" class="inputfile inputfile-1" data-multiple-caption="{count} files selected" multiple="">
-                <label for="file-1">
-                    <button title="Choose file" id="chooseFileButton2" class="btn form-control-btn w-70">{{$t('ingest.offlineStorage.contentOptions.reelDescription.buttonText')}}</button>
-                </label>
-            </div>
-        </div>
-
-        <div class="row mt-3 d-flex flex-row-reverse">
-            <button class="btn btn-ln btn-default pr-5 pl-5 col-2" @click="$router.go(-1)">{{$t('OK')}}</button>
-            <button class="btn btn pr-5 pl-5 col-2 mr-2" @click="$router.go(-1)">{{$t('Cancel')}}</button>
-        </div>
-
+        <Lightbox
+            ref="lgbx"
+            :visible="lbVisible"
+            :imgs="previewImages"
+            :fileNames="previewFileNames"
+            :fileTypes="previewFileTypes"
+            :index="index"
+            :hide="hideLightBox"
+        />
     </div>
 </template>
 
 <script>
+    import FineUploader from 'vue-fineuploader';
+    import FineUploaderTraditional from 'fine-uploader-wrappers'
+    import Dropzone from 'vue-fineuploader/dropzone';
     import axios from 'axios';
 
+    import VuejsDialog from 'vuejs-dialog';
+    import Lightbox from '@components/lightbox';
+    Vue.use(VuejsDialog);
+    const ALLOWED_EXT = ['pdf','png','jpg','jpeg','tiff','tif','gif'];
     export default {
+        components: {
+            FineUploader,
+            Dropzone,
+            Lightbox
+        },
         data() {
+            const uploader = new FineUploaderTraditional({
+                options: {
+                    request: {
+                        endpoint: '/api/v1/ingest/storage/offline/' + this.$route.params.bucketId + '/config/upload',
+                        params: {
+                            base_directory: 'completed',
+                            sub_directory: null,
+                            optimus_uploader_allowed_extensions: [],
+                            optimus_uploader_size_limit: 0,
+                            optimus_uploader_thumbnail_height: 100,
+                            optimus_uploader_thumbnail_width: 100,
+                        },
+                        customHeaders: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        }
+                    },
+                    validation: {
+                        allowedExtensions: ALLOWED_EXT
+                    },
+                    callbacks: {
+                        onError: (msg) => {
+                            let options = {
+                                okText: this.$t('OK')
+                            };
+                            this.$dialog.alert(this.$t('ingest.offlineStorage.config.alert.notAllowedExtensions'), options);
+                        },
+                        onComplete: complete => {
+                            this.infoToast(
+                                this.$t('ingest.offlineStorage.config.toast.fileUploaded.header'),
+                                this.$t('ingest.offlineStorage.config.toast.fileUploaded.message')
+                            );
+                            this.loadFiles();
+                        }
+                    }
+                },
+            });
             return {
-                result: null
+                uploader: uploader,
+                files: [],
+                result: null,
+                lbVisible: false,
+                index: 0,
+                jobId: 0,
+                previewFileNames: [],
+                previewFileTypes: [],
+                previewImages: [],
+                allowedExt: null
             }
         },
         props: {
@@ -86,11 +171,23 @@
             url() { return this.baseUrl + '/' + this.$route.params.bucketId; },
             success() { return this.result ? ( this.result.status === 200 ) : false; },
             item() { return this.success ? this.result.data.data : null; },
+            jobId() { return this.jobId }
         },
         async mounted() {
+            this.jobId = this.$route.params.bucketId;
             this.update();
+            this.loadFiles();
+            this.loadAllowedExt();
         },
         methods: {
+            loadAllowedExt() {
+                this.allowedExt = ALLOWED_EXT.join(', ');
+             },
+            async loadFiles() {
+                await axios.get("/api/v1/ingest/storage/offline/" + this.jobId + "/config/showFiles/").then( (result) => {
+                    this.files = result.data;
+                });
+            },
             async piqlIt( job ) {
                 let result = (await axios.patch(this.jobListUrl+"/buckets/"+job.id, {
                     'status': 'commit'
@@ -108,8 +205,44 @@
             async update() {
                 this.result = await axios.get( this.url );
             },
+            async remove(file) {
+                let options = {
+                    okText: this.$t('OK'),
+                    cancelText: this.$t('Cancel')
+                };
+                this.$dialog
+                    .confirm(this.$t('ingest.offlineStorage.config.removeQuestion'), options)
+                    .then(remove => {
+                        this.doRemove(file);
+                });
+            },
+            async doRemove(file) {
+                    await axios.post("/api/v1/ingest/storage/offline/" + this.jobId + "/config/removeFile/" + file.name).then( (result) => {
+                        this.loadFiles();
+                    });
+            },
+            async showPreview(file) {
+                this.lbVisible = true;
+                let image = (await axios.get("/api/v1/ingest/storage/offline/" + this.jobId + "/config/showFile/" + file.name, { responseType: 'blob' }));
+                let reader = new FileReader();
+                reader.onload = e => this.previewImages.push( reader.result );
+                reader.readAsDataURL( image.data );
+                this.previewFileNames.push( file.name );
+                this.previewFileTypes.push( file.type );
+            },
+            hideLightBox: function( e ) {
+                this.lbVisible = false;
+                this.previewImages = [];
+                this.previewFileNames = [];
+                this.previewFileTypes = [];
+            },
         },
     }
 
 </script>
 
+<style scoped>
+.bucketConfigForm {
+    margin-top: 2em;
+}
+</style>
