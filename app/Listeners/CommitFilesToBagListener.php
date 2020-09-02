@@ -17,7 +17,7 @@ use App\Traits\BagOperations;
 class CommitFilesToBagListener implements ShouldQueue
 {
     use BagOperations;
-
+    public const FILE_OBJECT_PATH = 'Account/Archive/Holding/';
     protected $metadataGenerator;
     protected $bagIt;
     /**
@@ -65,15 +65,15 @@ class CommitFilesToBagListener implements ShouldQueue
         foreach ($files as $file)
         {
             if( ($file->filename === "metadata.csv") && $bag->owner()->first()->settings->getIngestMetadataAsFileAttribute() )
-                $this->bagIt->addMetadataFile($file->storagePathCompleted(), $file->filename);
+                $this->bagIt->addMetadataFile($file->storagePathCompleted(), $this::FILE_OBJECT_PATH.$file->filename);
             else
-                $this->bagIt->addFile($file->storagePathCompleted(), $file->filename);
+                $this->bagIt->addFile($file->storagePathCompleted(), $this::FILE_OBJECT_PATH.$file->filename);
 
             if( $bag->owner()->first()->settings->getIngestMetadataAsFileAttribute() !== true ) {
                 if ($file->metadata->count() > 0) {
                     // append metadata to file
                     $retval = $metadataWriter->write([
-                        'object' => $file->filename,
+                        'object' => $this::FILE_OBJECT_PATH.$file->filename,
                         'metadata' => $file->metadata[0]->metadata
                     ]);
                     if (!$retval) {
