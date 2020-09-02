@@ -6,23 +6,8 @@ const localVue = createLocalVue();
 localVue.use( Vuex );
 
 const $t = (s) => s;
-
-// create the Store mock
-const store = new Store({
-    state: { 
-      roles: [{name: 'Test Roles'}],
-      pageMeta: {page: 1},
-      response: {status: 'test response'}
-     },
-    getters: { 
-      userRoles: [{name: 'Test Roles'}] ,
-      rolesPageMeta: {page: 1},
-      rolesApiResponse: {status: 'test response'}
-    },
-  })
-  const $store = store;
-  const errorToast = jest.fn();
-  const successToast = jest.fn()
+const errorToast = jest.fn();
+const successToast = jest.fn()
 
 describe("Roles.vue", ()=> {
     let actions;
