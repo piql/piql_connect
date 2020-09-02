@@ -57,9 +57,10 @@ describe("UserListing.vue", ()=>{
         'pager':true,
         'b-modal': true,
         'b-button':true,
-        'b-badge':true
+        'b-badge':true,
+        'assign-account-metadata-modal': true
       },
-      propsData:{
+        propsData:{
         users: users
       }
     });
@@ -77,7 +78,8 @@ describe("UserListing.vue", ()=>{
         'pager':true,
         'b-modal': true,
         'b-button':true,
-        'b-badge':true
+        'b-badge':true,
+        'assign-account-metadata-modal': true
       },
       propsData:{
         users: users
@@ -102,7 +104,8 @@ describe("UserListing.vue", ()=>{
         'pager':true,
         'b-modal': true,
         'b-button':true,
-        'b-badge':true
+        'b-badge':true,
+        'assign-account-metadata-modal': true
       },
       propsData:{
         users: users

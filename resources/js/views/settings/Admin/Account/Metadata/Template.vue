@@ -51,7 +51,9 @@ export default {
         ...mapGetters(['templates', 'templateById']),
     },
     methods: {
-        ...mapActions(),
+        ...mapActions({
+            template: ['addTemplate']
+        }),
         createTemplate: function(target){
             target.blur();
             this.currentTemplate = JSON.parse(JSON.stringify({ "metadata": {"dc" : {} } }));

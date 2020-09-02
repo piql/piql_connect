@@ -84,7 +84,8 @@ export default {
     },
     watch: {
         initialTemplate: function(value){
-            this.metadataObject.metadata = value.metadata;
+            this.metadataObject.metadata = JSON.parse(JSON.stringify(value.metadata));
+
         },
     },
     methods: {

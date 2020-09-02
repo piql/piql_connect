@@ -1,19 +1,48 @@
-import Roles from '@/views/settings/Roles/Roles'
-import { shallowMount } from "@vue/test-utils"
+import { shallowMount, createLocalVue } from "@vue/test-utils";
+import Vuex from "vuex";
+import Roles from '@/views/settings/Admin/Account/Roles';
+
+const localVue = createLocalVue();
+localVue.use( Vuex );
 
 const $t = (s) => s;
 
 describe("Roles.vue", ()=> {
+    let actions;
+    let getters;
+    let store;
+
+    beforeEach(() => {
+        actions = {
+            fetchUsers: jest.fn(),
+        }
+
+        getters = {
+            rolesApiResponse: () => {},
+            rolesPageMeta: () => {},
+            formattedUsers: () => [ {value: 123, label: 'Test Name'}],
+        }
+
+        store = new Vuex.Store({
+            actions,
+            getters
+        });
+    })
+
+
     //test whether component renders
     test("roles component should render", ()=> {
         let wrapper = shallowMount(Roles, {
+            localVue,
+            store,
             mocks: { $t },
             stubs:{
                 'b-modal': true,
                 'b-button': true,
                 'role-items': true,
-                'page-heading': true
-            } 
+                'page-heading': true,
+                'pager': true,
+            }
         });
 
         expect(wrapper.exists()).toBeTruthy();
@@ -23,13 +52,15 @@ describe("Roles.vue", ()=> {
     //test force Render
     test("role key should increment by 1 for every method call", ()=> {
         let wrapper = shallowMount(Roles, {
+            localVue,
+            store,
             mocks: { $t },
             stubs:{
                 'b-modal': true,
                 'b-button': true,
                 'role-items': true,
                 'page-heading': true
-            } 
+            }
         });
 
         wrapper.vm.forceRerender();
