@@ -34,8 +34,8 @@
                         </li>
                     </router-link>
 
-                    <router-link :to="{ name: 'settings.admin' }">
-                        <li class="list-group-item cursorPointer" :class="{ active: routeBelongsTo('settings.admin') }">
+                    <router-link :to="{ name: 'settings.admin.account.users' }">
+                        <li class="list-group-item cursorPointer" :class="{ active: routeBelongsTo('settings.admin.account.users') }">
                             <i class="fas fa-wrench"></i>
                             <div class="leftMenuItem">
                                 {{$t('sidebar.settings.admin')}}
@@ -44,6 +44,15 @@
                     </router-link>
 
                     <span v-if=" routeBelongsTo('settings.admin') ">
+
+                            <router-link :to="{ name: 'settings.admin.account.users' }">
+                                <li class="list-group-item submenu" :class="{ active: routeBelongsTo('settings.admin.account.users') }" >
+                                    <i class="fas fa-user"></i>
+                                    <div class="leftMenuItem">
+                                        {{$t('sidebar.users')}}
+                                    </div>
+                                </li>
+                            </router-link>
 
                             <router-link :to="{ name: 'settings.admin.logo' }">
                                 <li class="list-group-item submenu" :class="{ active: routeBelongsTo('settings.admin.logo') }" >
@@ -63,14 +72,7 @@
                                 </li>
                             </router-link>
 
-                            <router-link :to="{ name: 'settings.admin.account.users' }">
-                                <li class="list-group-item submenu" :class="{ active: routeBelongsTo('settings.admin.account.users') }" >
-                                    <i class="fas fa-user"></i>
-                                    <div class="leftMenuItem">
-                                        {{$t('sidebar.users')}}
-                                    </div>
-                                </li>
-                            </router-link>
+                            
 
                             <router-link :to="{ name: 'settings.admin.account.groups' }">
                                 <li class="list-group-item submenu" :class="{ active: routeBelongsTo('settings.admin.account.groups') }" >

@@ -201,7 +201,7 @@ export default {
         },
 
         viewPermissions(roleId){
-          this.$router.push({ name:'settings.roles.permissions', params: { roleId: roleId } });
+          this.$router.push({ name:'settings.admmmin.account.roles.permissions', params: { roleId: roleId } });
         },
         
     }
