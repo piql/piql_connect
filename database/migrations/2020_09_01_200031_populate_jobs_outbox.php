@@ -17,7 +17,6 @@ class PopulateJobsOutbox extends Migration
     public function up()
     {
         $user = User::first();
-
         $s3Configuration = S3Configuration::create([
             'url' => 'https://s3.osl1.safedc.net',
             'key_id' => 'A027DQI8VXPIJETYNXZQ',
@@ -42,8 +41,8 @@ class PopulateJobsOutbox extends Migration
     public function down()
     {
         $storageLocation = StorageLocation::where('storable_type', 'App\Jobs')->first();
-        $s3Configuration = S3Configuration::findOrFail($storageLocation->locatable_type);
         $storageLocation->forceDelete();
+        $s3Configuration = S3Configuration::where('bucket', 'jobs-outbox')->first();
         $s3Configuration->forceDelete();
     }
 }
