@@ -2,12 +2,10 @@ import axios from "axios";
 
 const state = {
     templates: [
-        /* TODO: These will go away when we integrate with the api */
-            {"id": "3bdcce12-4fc8-4c07-bada-e1418bff9465", "created_at": "2020-05-22", "metadata":{"dc":{"title":"Svalbard","creator":"a photographer","subject":"cold things","description":"brrr","publisher":"","contributor":"","date":"","type":"","format":"","identifier":"63ff83ef-862e-428f-9cc3-2040693d493e","source":"","language":"","relation":"","coverage":"","rights":""}}},
-            {"id": "870c6012-506f-4e47-8fbd-54c8b0dea6c0", "created_at": "2020-05-23", "metadata":{"dc":{"title":"Drammen","creator":"that guy", "subject": "awesome place", "description": "yay", "publisher": "", "contributor": "", "date": "", "type": "", "format": "", "identifier": "63ff83ef-862e-428f-9cc3-2040693d493e", "source": "", "language": "", "relation": "", "coverage": "", "rights": "" } } }
         ],
     templatePageMeta: null,
     templateResponse: null,
+    templateError: null,
     schemes: null,
     schemesPageMeta: null,
     schemesResponse: null,
@@ -20,16 +18,30 @@ const getters = {
 }
 
 const actions = {
-    async addTemplate( {commit}, template ) {
-        //TODO: axios post to template api goes here
-        commit('addTemplateMutation', JSON.parse(JSON.stringify(template)));    /* Deep copy the fields */
-    }
+    async fetchTemplates( { commit } ){
+        let response = await axios.get("/api/v1/ingest/metadata/metadata-template");
+        console.debug("hello", response);
+        commit('setTemplatesMutation',response.data.metadata)
+    },
+    async addTemplate( { commit }, template ) {
+        return await axios.post("/api/v1/ingest/metadata-template", { 'metadata': template.metadata }).then(response => {
+            commit('addTemplateMutation', response.metadata );
+        }).catch(error => {
+            commit('setTemplateError',error.response)
+        })
+    },
 }
 
 const mutations = {
+
     addTemplateMutation (state,template) {
         state.templates = state.templates.concat(template);
-    }
+    },
+
+    setTemplateError( state, error ){
+        console.debug( error );
+        state.templateError = error
+    },
 }
 
 export default {
