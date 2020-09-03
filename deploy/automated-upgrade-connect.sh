@@ -2,11 +2,11 @@
 export HOST_USERID=333
 export HOST_GROUPID=333
 
-# Environment values
-export UPDATE_AM_SERVICE_CALLBACKS=true
-export CONNECT_HOSTNAME=pc-fmu-test.piql.com
-export LOCALDEV=true
-export STORAGE_LOCATION_ID=c19e5f62-8935-43d2-a948-bcf386c4374a
+# Environment variables
+UPDATE_AM_SERVICE_CALLBACKS=true
+CONNECT_HOSTNAME=pc-fmu-test.piql.com
+LOCALDEV=true
+STORAGE_LOCATION_ID=c19e5f62-8935-43d2-a948-bcf386c4374a
 
 # Check for resources
 if [[ ! -z $UPDATE_AM_SERVICE_CALLBACKS ]] ; then
@@ -35,6 +35,7 @@ else
   ./down.sh
   if [ $? -ne 0 ] ; then
     echo "Failed to shut down connect"
+    exit 1
   fi
 fi
 
