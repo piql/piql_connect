@@ -6,7 +6,7 @@
             <button class="btn" @click="newArchiveForm"><i class="fa fa-plus"></i> {{$t('settings.archives.add')}}</button>
         </div>
         <div class="card-body">
-            <archive-listing></archive-listing>
+            <archives-listing></archives-listing>
         </div>
     </div>
 
@@ -18,7 +18,7 @@
 export default {
     methods: {
         newArchiveForm(){
-            this.$router.push({ name:'settings.admin.archives.newarchive'});
+            this.$router.push({ name:'settings.admin.archives.create'});
         }
     }
 

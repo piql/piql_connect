@@ -71,6 +71,14 @@
                                     </div>
                                 </li>
                             </router-link>
+                             <router-link :to="{ name: 'settings.admin.archives' }">
+                                <li class="list-group-item submenu" :class="{ active: routeBelongsTo('settings.admin.archives') }" >
+                                    <i class="fas fa-archive"></i>
+                                    <div class="leftMenuItem">
+                                        {{$t("sidebar.settings.archives")}}
+                                    </div>
+                                </li>
+                            </router-link>
 
                             
 
