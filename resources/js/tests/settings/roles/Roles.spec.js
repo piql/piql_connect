@@ -1,6 +1,6 @@
 import { shallowMount, createLocalVue } from "@vue/test-utils";
 import Vuex from "vuex";
-import Roles from '@/views/settings/Admin/Account/Roles';
+import Roles from '@/views/settings/Admin/Account/Roles/Roles';
 
 const localVue = createLocalVue();
 localVue.use( Vuex );

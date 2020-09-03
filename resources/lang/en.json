@@ -289,12 +289,24 @@
     "settings.listing.backToUsers": "return to users page",
     "settings.settings.actions": "Actions",
 
+    "settings.archives.title": "Archives",
+    "settings.archives.description": "Archives management and metadata",
+    "settings.archives.add": "Add Archive",
+    "settings.archives.edit": "Edit Archive",
+    "settings.archives.delete": "Delete Archive",
+    "settings.archives.assignMeta": "Assign metadata",
+    "settings.archives.editMeta": "Edit metadata",
+    "settings.archives.archive": "Archive",
+    "settings.archives.createdAt": "Created",
+    "settings.archives.actions": "Actions",
+
+
+
     "settings.settings.userGroups": "User Groups",
     "settings.settings.userGroupDesc": "Manage User Groups",
 
     "settings.groups.addGroup": "Add Group",
     "settings.groups.group": "Group",
-
     "settings.groups.description": "Description",
     "settings.groups.assignUsers": "Assign Users",
     "settings.groups.listRolesAndUsers": "List Roles & Users Assigned",
