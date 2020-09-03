@@ -29,16 +29,8 @@ export default {
 
     data () {
         return {
-            fullname:null,
-            email:null,
-            username:null,
             listingKey: 0,
-
             metadataObject: { "metadata": {"dc": {}} },
-            accounts: [
-                { uuid: "1234", username: "First Userson", type: "user", metadataTemplate: ""},
-                { uuid: "2345", username: "Second Userson", type: "user", metadataTemplate: ""},
-            ]
         }
     },
 
