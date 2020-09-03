@@ -47,7 +47,9 @@ import { mapGetters, mapActions } from "vuex";
             };
         },
         computed: {
-            ...mapGetters(['groupsApiResponse']),
+            ...mapGetters({
+                groups: ['groupsApiResponse']
+            }),
             
         },
         watch:{

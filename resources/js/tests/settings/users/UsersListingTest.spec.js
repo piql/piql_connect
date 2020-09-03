@@ -1,83 +1,72 @@
-import { shallowMount } from "@vue/test-utils"
-import UserListing from "@/components/UserListing"
+import { shallowMount, createLocalVue } from "@vue/test-utils";
+import Vuex from "vuex";
+import Roles from '@/views/settings/Admin/Account/Roles';
+
+const localVue = createLocalVue();
+localVue.use( Vuex );
+
+const $t = (s) => s;
+
+describe("Roles.vue", ()=> {
+    let actions;
+    let getters;
+    let store;
+
+    beforeEach(() => {
+        actions = {
+            fetchUsers: jest.fn(),
+        }
+
+        getters = {
+            rolesApiResponse: () => {},
+            rolesPageMeta: () => {},
+            formattedUsers: () => [ {value: 123, label: 'Test Name'}],
+        }
+
+        store = new Vuex.Store({
+            actions,
+            getters
+        });
+    })
 
 
-const fns = {
-  convertTime:(isoDate)=>{
-    let date = new Date(isoDate);
-    let year = date.getFullYear();
-    let month = date.getMonth()+1;
-    let dt = date.getDate();
-    let time = date.getHours() + ':'+ date.getMinutes();
+    //test whether component renders
+    test("roles component should render", ()=> {
+        let wrapper = shallowMount(Roles, {
+            localVue,
+            store,
+            mocks: { $t },
+            stubs:{
+                'b-modal': true,
+                'b-button': true,
+                'role-items': true,
+                'page-heading': true,
+                'pager': true,
+            }
+        });
 
-    if (dt < 10) {
-    dt = '0' + dt;
-    }
-    if (month < 10) {
-    month = '0' + month;
-    }
-
-    return year+'-' + month + '-'+dt + ' '+time;
-
-    }
-}
+        expect(wrapper.exists()).toBeTruthy();
+    })
 
 
+    //test force Render
+    test("role key should increment by 1 for every method call", ()=> {
+        let wrapper = shallowMount(Roles, {
+            localVue,
+            store,
+            mocks: { $t },
+            stubs:{
+                'b-modal': true,
+                'b-button': true,
+                'role-items': true,
+                'page-heading': true
+            }
+        });
 
-const $t = (s)=>s;
-const users = [
-  {
-    full_name: 'Sewalu Mukasa Steven',
-    username: 'smstoroc',
-    email: 'smstoroc@gmail.com',
-    disabled: false,
-    created_at: '2020-07-17T11:42:17.000000Z'
-  },
-  {
-    full_name: 'Kyobe James',
-    username: 'jkyobe',
-    email: 'jkyobe@gmail.com',
-    disabled: false,
-    created_at: '2020-07-17T11:42:17.000000Z'
-  }
-];
+        wrapper.vm.forceRerender();
 
 
-describe("UserListing.vue", ()=>{
-
-  let wrapper = shallowMount(UserListing, {
-    mocks:{
-      $t
-    
-    },
-    stubs:{
-      'pager':true,
-      'b-modal': true,
-      'b-button':true,
-      'b-badge':true
-    },
-    propsData:{
-      users: users
-    }
-  });
-  
-
-
-  test("should render when users props is passed", ()=> {
-    
-    expect(wrapper.vm.users).toBe(users);
-  })
-
-  test("the component should renders", ()=> {
-   
-    expect(wrapper.exists()).toBeTruthy();
-
-  })
-
-  test("the format date function should work", ()=>{
-    let isoDate = "2020-07-17T11:42:17.000000Z";
-    let returnDate = fns.convertTime(isoDate);
-    expect(wrapper.vm.formatDate(isoDate)).toBe(returnDate);
-  })
+        expect(wrapper.vm.rolekey).toBe(1);
+    })
 
 })
