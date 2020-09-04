@@ -82,7 +82,7 @@
 
                             
 
-                            <router-link :to="{ name: 'settings.admin.account.groups' }">
+                            <router-link :to="{ name: 'settings.admin.account.group' }">
                                 <li class="list-group-item submenu" :class="{ active: routeBelongsTo('settings.admin.account.groups') }" >
                                     <i class="fas fa-users"></i>
                                     <div class="leftMenuItem">

@@ -271,6 +271,12 @@ body {
         }
     }
 }
+
+.columnCenter{
+    text-align: center;
+    vertical-align: middle;
+}
+
 .old_ie_wrapper {
     height: 300px;
     width: 750px;
@@ -1026,6 +1032,9 @@ button {
 }
 .disabledIcon {
     color: $gray !important;
+}
+.buttonIcon{
+    color: $white
 }
 .disabledPiql {
     color: $gray !important;
