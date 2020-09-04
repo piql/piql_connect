@@ -12,8 +12,6 @@ use App\Job;
 class MessageProcess extends Command
 {
     private $pollingInterval = 30;
-    private $storageLocation;
-    private $storage;
 
     /**
      * The name and signature of the console command.
@@ -37,9 +35,6 @@ class MessageProcess extends Command
     public function __construct()
     {
         parent::__construct();
-
-        $this->storageLocation = StorageLocation::where('storable_type', 'App\Message')->first();
-        $this->storage = \App::make(ArchivalStorageInterface::class);
     }
 
     /**
@@ -51,19 +46,22 @@ class MessageProcess extends Command
     {
         $this->info('Listening for messages');
 
+        $storageLocation = StorageLocation::where('storable_type', 'App\Message')->first();
+        $storage = \App::make(ArchivalStorageInterface::class);
+
         while (true) {
             sleep($this->pollingInterval);
 
             // Fetch messages from inbox
-            $messageFiles = $this->storage->ls($this->storageLocation);
+            $messageFiles = $storage->ls($storageLocation);
             foreach ($messageFiles as $messageFile) {
-                $messageFilePath = $this->storage->download($this->storageLocation, $messageFile, $messageFile);
+                $messageFilePath = $storage->download($storageLocation, $messageFile, $messageFile);
 
                 // Give all systems a chance to fetch the message before we delete it
                 // TODO Remove this delay when each instance has it's own inbox
                 sleep($this->pollingInterval);
 
-                if (!$this->storage->delete($this->storageLocation, $messageFile)) {
+                if (!$storage->delete($storageLocation, $messageFile)) {
                     $this->warning('Failed to delete message : ' . $messageFile);
                 }
                 $this->moveMessage('outgoing', 'messages-processing', $messageFile);
