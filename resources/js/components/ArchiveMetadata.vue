@@ -55,7 +55,7 @@ export default {
     data(){
         return {
             form: {
-                "metadata": {}
+                "metadata": {} //where you put the default values
 
             }
         }
