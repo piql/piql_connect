@@ -296,13 +296,16 @@
     "settings.archives.edit": "Edit Archive",
     "settings.archives.delete": "Delete Archive",
     "settings.archives.assignMeta": "Assign metadata",
+    "settings.archives.assignMetaTemplate": "Assign Template",
     "settings.archives.archiveDesc": "Description",
     "settings.archives.editMeta": "Edit metadata",
     "settings.archives.archive": "Archive",
     "settings.archives.createdAt": "Created",
     "settings.archives.actions": "Actions",
     "settings.archives.noArchives": "No archives listed yet",
+    "settings.archives.backToArchives": "Go back to archives",
     "settings.archives.toast.addingArchive":"Adding archive",
+    "settings.archives.toast.addingArchiveMeta":"Adding archive metadata",
 
 
 

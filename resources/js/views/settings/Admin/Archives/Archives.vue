@@ -3,11 +3,11 @@
     <page-heading icon="fa-archive" :title="$t('settings.archives.title')" :ingress="$t('settings.archives.description')" />
     <div class="card">
         <div class="card-header">
-            <span v-if="enableMetaForm"><i class="fa fa-tags"></i> {{ $t('settings.archives.assignMeta').toUpperCase() }}</span>
+            <span v-if="enableMetaForm"><i class="fa fa-tags"></i> {{ $t('settings.archives.assignMeta').toUpperCase() }} | <button class="btn btn-primary" @click="disableMetaForm">{{$t('settings.archives.backToArchives')}}</button></span>
             <button v-else class="btn" @click="newArchiveForm"><i class="fa fa-plus"></i> {{$t('settings.archives.add')}}</button>
         </div>
         <div class="card-body">
-            <archive-metadata v-if="enableMetaForm" :archiveId="archiveId" />
+            <archive-metadata v-if="enableMetaForm" :archiveId="archiveId" @disableMetaForm='disableMetaForm' />
             <archives-listing v-else @assignMeta='assignMeta' />
         </div>
     </div>
@@ -32,6 +32,9 @@ export default {
             this.enableMetaForm = true;
             this.archiveId = archiveId
 
+        },
+        disableMetaForm(){
+            this.enableMetaForm = false;
         }
     }
 

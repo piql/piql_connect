@@ -1,6 +1,6 @@
 <template>
     <div>
-        <b-form>
+        <b-form @submit="addMetadata">
             <b-form-group v-for="schemeItem in schemes[0].fields" 
             :key="schemeItem.id" :id="schemeItem.label.toLowerCase()" 
             :label="schemeItem.label" :label-for="schemeItem.label.toLowerCase()">
@@ -33,7 +33,6 @@ export default {
                         "type": "Dublin Core v1.1",
                         "fields":
                         [
-                            {"name" : "title",       "label" : "Title",       "type": "text"},
                             {"name" : "creator",     "label" : "Creator",     "type": "text"},
                             {"name" : "subject",     "label" : "Subject",     "type": "text"},
                             {"name" : "publisher",   "label" : "Publisher",   "type": "text"},
@@ -54,15 +53,44 @@ export default {
     },
     data(){
         return {
-            form: {
-                "metadata": {} //where you put the default values
-
-            }
+            form: {"metadata": {}}
         }
     },
+    async mounted(){
+        let archive = this.retrievedArchives.filter(single => single.id === this.archiveId)
+        if(archive[0].metadata){
+            this.form.metadata = archive[0].metadata;
+
+        }
+
+    },
+    computed:{
+        ...mapGetters(['retrievedArchives'])
+
+    },
     methods:{
+        ...mapActions(['addArchiveMetadata']),
         fieldId(type, name){
             return `${type}-${name}`.replace(/\s/g,'');     /* Strip all whitespace from fieldId */
+        },
+        addMetadata(e){
+            e.preventDefault();
+
+            let data = {
+                id: this.archiveId,
+                metadata: this.form
+            }
+
+            this.addArchiveMetadata(data)
+
+
+            this.successToast(
+                this.$t('settings.archives.toast.addingArchiveMeta'), 
+                this.$t('settings.archives.toast.addingArchiveMeta') + ' ' + this.archiveId
+            );
+
+            this.$emit('disableMetaForm');
+
         }
     }
 

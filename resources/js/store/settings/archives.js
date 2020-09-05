@@ -16,6 +16,11 @@ const actions = {
 
     async addArchive({commit},data){
         commit('addArchiveMutation',data);
+    },
+
+    async addArchiveMetadata({commit},data){
+        commit('addArchiveMetaMutation',data)
+
     }
 
 }
@@ -26,10 +31,15 @@ const mutations = {
     },
     addArchiveMetaMutation: (state, data) => {
         let archive = state.archives.filter(archive => archive.id === data.id);
-        archive.push(data.metadata);
+        archive[0].metadata = data.metadata.metadata
 
-        state.archives = state.archives.filter(archive => archive.id !== data.id);
-        state.archives.push(archive);
+        state.archives.forEach(a => {
+            if(a.id == data.id){
+                a = archive[0]
+            }
+            
+        });
+        //state.archives.push(archive);
     }
 
 
