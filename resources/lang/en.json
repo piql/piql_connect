@@ -297,6 +297,7 @@
     "settings.archives.delete": "Delete Archive",
     "settings.archives.assignMeta": "Assign metadata",
     "settings.archives.assignMetaTemplate": "Assign Template",
+    "settings.archives.template": "Template",
     "settings.archives.archiveDesc": "Description",
     "settings.archives.editMeta": "Edit metadata",
     "settings.archives.archive": "Archive",
