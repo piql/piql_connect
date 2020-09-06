@@ -19,8 +19,16 @@ const actions = {
     },
 
     async addArchiveMetadata({commit},data){
-        commit('addArchiveMetaMutation',data)
+        commit('addArchiveMetaMutation',data);
 
+    },
+
+    async editArchiveData({commit}, data){
+        commit('editArchiveMutation', data);
+    },
+
+    async deleteArchiveData({commit}, id){
+        commit('deleteArchiveMutation', id);
     }
 
 }
@@ -39,8 +47,24 @@ const mutations = {
             }
             
         });
-        //state.archives.push(archive);
+    },
+    editArchiveMutation: (state, data) => {
+        let archive = state.archives.filter(archive => archive.id === data.id);
+        archive[0].title= data.title;
+        archive[0].description= data.description
+
+        state.archives.forEach(a => {
+            if(a.id == data.id){
+                a = archive[0]
+            }
+            
+        });
+    },
+    deleteArchiveMutation: (state, id) => {
+        state.archives = state.archives.filter(archive => archive.id !== id);
+
     }
+
 
 
 }

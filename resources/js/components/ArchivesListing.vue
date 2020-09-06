@@ -24,16 +24,44 @@
                      <a class="btn" @click="showTemplateBox(archive.id)" data-toggle="tooltip" :title="$t('settings.archives.assignMetaTemplate')">
                         <i class="fa fa-list buttonIcon"></i>
                     </a>
-                    <a class="btn" data-toggle="tooltip" :title="$t('settings.archives.edit')">
+                    <a class="btn" @click="showEditBox(archive.id)" data-toggle="tooltip" :title="$t('settings.archives.edit')">
                         <i class="fa fa-edit buttonIcon"></i>
                     </a>
-                    <a class="btn" data-toggle="tooltip" :title="$t('settings.archives.delete')">
+                    <a class="btn" @click="showDeleteBox(archive.id)" data-toggle="tooltip" :title="$t('settings.archives.delete')">
                         <i class="fa fa-trash buttonIcon"></i>
                     </a>
                 </td>
             </tr>
         </tbody>
     </table>
+
+    <b-modal id="delete-archive" hide-footer>
+        <template v-slot:modal-title>
+            <h4> <b>{{$t('settings.archives.delete').toUpperCase()}}[ {{ archive.title.toUpperCase() }} ]</b></h4>
+        </template>
+        <div class="d-block">
+            <b-alert show variant="warning">{{$t('settings.archives.deleteWarning')}}</b-alert>
+        </div>
+        <b-button class="mt-3" block @click="deleteArchive">
+            <i class="fa fa-trash"></i> {{$t('settings.archives.delete').toUpperCase()}}</b-button>
+    </b-modal>
+
+    <b-modal id="edit-archive" size="lg" hide-footer>
+        <template v-slot:modal-title>
+        <h4> <b>{{$t('settings.archives.edit').toUpperCase()}} [ {{ archive.title.toUpperCase() }} ]</b></h4>
+        </template>
+        <div class="d-block">
+            <div class="form-group">
+                <label>{{$t('settings.archives.archive')}}</label>
+                <input type="text" class="form-control" v-model="edit.title" >
+            </div>
+            <div class="form-group">
+                <label>{{$t('settings.groups.description')}}</label>
+                <textarea v-model="edit.description" class="form-control"></textarea>
+            </div>
+        </div>
+        <b-button class="mt-3" @click="editArchive" block><i class="fa fa-edit"></i> {{$t('settings.archives.edit').toUpperCase()}}</b-button>
+    </b-modal>
 
     <b-modal id="assign-template" hide-footer>
         <template v-slot:modal-title>
@@ -68,7 +96,11 @@ export default {
     data(){
         return {
             selection: '',
-            archive: null
+            archive: null,
+            edit: {
+                title: '',
+                description: ''
+            }
         }
 
     },
@@ -76,7 +108,7 @@ export default {
         ...mapGetters(['retrievedArchives','templates']),
     },
     methods: {
-        ...mapActions(['fetchArchives','addArchiveMetadata']),
+        ...mapActions(['fetchArchives','addArchiveMetadata','editArchiveData','deleteArchiveData']),
         assignMeta(id){
             this.$emit('assignMeta', id);
         },
@@ -84,6 +116,51 @@ export default {
             let archive = this.retrievedArchives.filter(single => single.id === id)
             this.archive = archive[0];
             this.$bvModal.show('assign-template')
+        },
+        showEditBox(id){
+            let archive = this.retrievedArchives.filter(single => single.id === id)
+            this.archive = archive[0];
+            this.edit.title = this.archive.title;
+            this.edit.description = this.archive.description;
+            this.$bvModal.show('edit-archive')
+
+        },
+        showDeleteBox(id){
+            let archive = this.retrievedArchives.filter(single => single.id === id)
+            this.archive = archive[0];
+            this.$bvModal.show('delete-archive')
+
+        },
+        deleteArchive(){
+            this.deleteArchiveData(this.archive.id);
+
+            this.$bvModal.hide('delete-archive')
+
+
+            this.successToast(
+                this.$t('settings.archives.toast.deletingArchive'), 
+                this.$t('settings.archives.toast.deletingArchive') + ' ' + this.archive.title
+            );
+
+
+        },
+        editArchive(){
+            let data = {
+                title: this.edit.title,
+                description: this.edit.description,
+                id: this.archive.id
+            }
+
+            this.editArchiveData(data);
+
+            this.$bvModal.hide('edit-archive')
+
+
+            this.successToast(
+                this.$t('settings.archives.toast.editingArchive'), 
+                this.$t('settings.archives.toast.editingArchive') + ' ' + this.edit.title
+            );
+
         },
         assignTemplate(){
             let template = this.templates.filter(single => single.id === this.selection);
@@ -95,7 +172,7 @@ export default {
             };
 
             this.addArchiveMetadata(data);
-            
+
             this.$bvModal.hide('assign-template')
 
 
