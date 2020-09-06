@@ -80,6 +80,7 @@
     "sidebar.retrieve.history": "History",
     "sidebar.settings.admin": "Admin settings",
     "sidebar.settings.archives": "Archives",
+    "sidebar.settings.holdings": "Holdings",
     "sidebar.settings.admin.logo": "Change logo",
     "sidebar.settings.admin.metadata": "Configure metadata",
 
@@ -310,6 +311,27 @@
     "settings.archives.toast.editingArchive":"Editing archive",
     "settings.archives.toast.deletingArchive":"Deleting Archive",
     "settings.archives.deleteWarning": "Are you sure you want to delete this archive?",
+
+    "settings.holdings.title": "Holdings",
+    "settings.holdings.description": "Holdings management and metadata",
+    "settings.holdings.add": "Add Holding",
+    "settings.holdings.edit": "Edit Holding",
+    "settings.holdings.delete": "Delete Holding",
+    "settings.holdings.assignMeta": "Assign metadata",
+    "settings.holdings.assignMetaTemplate": "Assign Template",
+    "settings.holdings.template": "Template",
+    "settings.holdings.holdingDesc": "Description",
+    "settings.holdings.editMeta": "Edit metadata",
+    "settings.holdings.holding": "Holding",
+    "settings.holdings.createdAt": "Created",
+    "settings.holdings.actions": "Actions",
+    "settings.holdings.noHoldings": "No holdings listed yet",
+    "settings.holdings.backToHoldings": "Go back to holdings",
+    "settings.holdings.toast.addingHolding":"Adding holding",
+    "settings.holdings.toast.addingHoldingMeta":"Adding holding metadata",
+    "settings.holdings.toast.editingHolding":"Editing Holding",
+    "settings.holdings.toast.deletingHolding":"Deleting Holding",
+    "settings.holdings.deleteWarning": "Are you sure you want to delete this holding?",
 
 
 

@@ -8,6 +8,7 @@ import roles from "./settings/roles";
 import user from "./settings/user";
 import template from "./metadata/template";
 import archives from "./settings/archives";
+import holdings from "./settings/holdings";
 
 //load Vuex
 Vue.use(Vuex)
@@ -22,6 +23,7 @@ export const store = new Vuex.Store({
         roles,
         user,
         template,
-        archives
+        archives,
+        holdings
     }
 })
