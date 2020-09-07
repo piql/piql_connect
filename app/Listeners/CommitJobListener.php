@@ -45,7 +45,9 @@ class CommitJobListener implements ShouldQueue
             $basename = "data_{$job->uuid}";
             $dataFilePath = $fileArchiveService->buildTarFromAipCollectionIncrementally($aips, $basename);
 
-            if ($this->storage->upload($this->storageLocation, $basename, $dataFilePath)) {
+            // Send data package to S3
+            $destinationDir = "";
+            if ($this->storage->upload($this->storageLocation, $destinationDir, $dataFilePath)) {
                 unlink($dataFilePath);
             } else {
                 Log::error('Failed to upload '.$job->uuid.' file '.$dataFilePath);
@@ -56,7 +58,9 @@ class CommitJobListener implements ShouldQueue
             $infoFilePath = $this->outgoing->path($basename);
             $this->createInfoPackage($infoFilePath, $job);
 
-            if ($this->storage->upload($this->storageLocation, $basename, $infoFilePath)) {
+            // Send info package to S3
+            $destinationDir = "";
+            if ($this->storage->upload($this->storageLocation, $destinationDir, $infoFilePath)) {
                 unlink($infoFilePath);
             } else {
                 Log::error('Failed to upload '.$job->uuid.' file '.$infoFilePath);
