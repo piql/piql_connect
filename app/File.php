@@ -9,7 +9,7 @@ class File extends Model
 {
     protected $table = 'files';
     protected $fillable = [
-        'fileName', 'uuid', 'bag_id'
+        'filename', 'uuid', 'bag_id'
     ];
 
     public function bag()

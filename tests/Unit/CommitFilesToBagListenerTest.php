@@ -8,30 +8,36 @@ use App\Events\BagFilesEvent;
 use App\Events\ErrorEvent;
 use App\Interfaces\MetadataWriterInterface;
 use App\Listeners\CommitFilesToBagListener;
+use App\Metadata;
 use App\User;
 use App\UserSetting;
 use BagitUtil;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\Event;
+use Laravel\Passport\Passport;
 use Mockery;
 use Tests\TestCase;
 use App\Interfaces\MetadataGeneratorInterface;
+use Webpatser\Uuid\Uuid;
 
 class CommitFilesToBagListenerTest extends TestCase
 {
+    use DatabaseTransactions;
+
     private $bag;
+    private $user;
 
     public function setUp() : void
     {
         parent::setUp();
+        $this->user = $user = factory(User::class)->create();
+        Passport::actingAs( $this->user );
+
         Event::fake();
 
         $userSetting = Mockery::mock(UserSetting::class);
         $userSetting->shouldReceive('getIngestMetadataAsFileAttribute')->andReturn(true);
-
-        $user = Mockery::mock(User::class);
-        $user->shouldReceive('getAttribute' )
-            ->with('settings')->andReturn($userSetting);
 
         $hasOne = Mockery::mock(HasOne::class);
         $hasOne->shouldReceive('first' )->andReturn($user);
@@ -50,7 +56,7 @@ class CommitFilesToBagListenerTest extends TestCase
     public function test_given_a_bag_with_files_when_commiting_files_it_dispatches_bag_complete()
     {
         $bagitUtil = Mockery::mock( BagitUtil::class );
-        $bagitUtil->shouldReceive( 'addFile' )->twice();
+        $bagitUtil->shouldReceive( 'addFile' )->once();
         $bagitUtil
             ->shouldReceive( 'createBag' )
             ->once()
@@ -59,15 +65,38 @@ class CommitFilesToBagListenerTest extends TestCase
         $bag = $this->bag;
         $bag->shouldReceive( 'storagePathCreated' )
              ->once()->andReturn( "" );
+
+        $file = new \App\File([
+            'bag_id' => Uuid::generate()->string,
+            'filename' => "test",
+            'uuid' => Uuid::generate()->string
+        ]);
+        $file->filesize = 1;
+        $file->save();
+
+        $metadata = factory(Metadata::class)->create([
+            "modified_by" => $this->user->id,
+            "uuid" => Uuid::generate()->string,
+            "metadata" => [],
+        ]);
+        $metadata->parent()->associate($file);
+        $metadata->owner()->associate($this->user);
+        $metadata->save();
+
         $bag->shouldReceive( 'getAttribute' )
             ->with( 'files' )
             ->twice()
-            ->andReturn( collect([new \App\File, new \App\File] ));
+            ->andReturn( collect([$file] ));
 
-        $metadataGenerator = Mockery::mock( MetadataGeneratorInterface::class, function( $mock ) {
+        $metadataGenerator = Mockery::mock( MetadataGeneratorInterface::class, function( $mock ) use ($file){
             $mock->shouldReceive('createMetadataWriter')
                 ->once()
-                ->andReturn( Mockery::mock( MetadataWriterInterface::class, function( $mock ) {
+                ->andReturn( Mockery::mock( MetadataWriterInterface::class, function( $mock ) use ($file) {
+                    $mock->shouldReceive('write')->times(1)->with(Mockery::on(function($argument) use ($file) {
+                        $this->assertArrayHasKey("object", $argument);
+                        $this->assertEquals(CommitFilesToBagListener::FILE_OBJECT_PATH.$file->filename, $argument["object"]);
+                        return true;
+                    }))->andReturn(true);
                     $mock->shouldReceive('close')->once()->andReturn(true);
                 }));
         });
