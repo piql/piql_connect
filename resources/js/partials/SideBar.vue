@@ -34,8 +34,8 @@
                         </li>
                     </router-link>
 
-                    <router-link :to="{ name: 'settings.admin' }">
-                        <li class="list-group-item cursorPointer" :class="{ active: routeBelongsTo('settings.admin') }">
+                    <router-link :to="{ name: 'settings.admin.account.users' }">
+                        <li class="list-group-item cursorPointer" :class="{ active: routeBelongsTo('settings.admin.account.users') }">
                             <i class="fas fa-wrench"></i>
                             <div class="leftMenuItem">
                                 {{$t('sidebar.settings.admin')}}
@@ -44,6 +44,15 @@
                     </router-link>
 
                     <span v-if=" routeBelongsTo('settings.admin') ">
+
+                            <router-link :to="{ name: 'settings.admin.account.users' }">
+                                <li class="list-group-item submenu" :class="{ active: routeBelongsTo('settings.admin.account.users') }" >
+                                    <i class="fas fa-user"></i>
+                                    <div class="leftMenuItem">
+                                        {{$t('sidebar.users')}}
+                                    </div>
+                                </li>
+                            </router-link>
 
                             <router-link :to="{ name: 'settings.admin.logo' }">
                                 <li class="list-group-item submenu" :class="{ active: routeBelongsTo('settings.admin.logo') }" >
@@ -62,17 +71,27 @@
                                     </div>
                                 </li>
                             </router-link>
-
-                            <router-link :to="{ name: 'settings.admin.account.users' }">
-                                <li class="list-group-item submenu" :class="{ active: routeBelongsTo('settings.admin.account.users') }" >
-                                    <i class="fas fa-user"></i>
+                             <router-link :to="{ name: 'settings.admin.archives' }">
+                                <li class="list-group-item submenu" :class="{ active: routeBelongsTo('settings.admin.archives') }" >
+                                    <i class="fas fa-archive"></i>
                                     <div class="leftMenuItem">
-                                        {{$t('sidebar.users')}}
+                                        {{$t("sidebar.settings.archives")}}
                                     </div>
                                 </li>
                             </router-link>
 
-                            <router-link :to="{ name: 'settings.admin.account.groups' }">
+                            <router-link :to="{ name: 'settings.admin.holdings' }">
+                                <li class="list-group-item submenu" :class="{ active: routeBelongsTo('settings.admin.holdings') }" >
+                                    <i class="fas fa-folder"></i>
+                                    <div class="leftMenuItem">
+                                        {{$t("sidebar.settings.holdings")}}
+                                    </div>
+                                </li>
+                            </router-link>
+
+                            
+
+                            <router-link :to="{ name: 'settings.admin.account.group' }">
                                 <li class="list-group-item submenu" :class="{ active: routeBelongsTo('settings.admin.account.groups') }" >
                                     <i class="fas fa-users"></i>
                                     <div class="leftMenuItem">
