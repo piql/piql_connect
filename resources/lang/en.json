@@ -417,6 +417,7 @@
     "admin.account.metadata.creator": "Creator",
     "admin.account.metadata.subject": "Subject",
     "admin.account.metadata.created_at": "Creation date",
+    "admin.account.metadata.schema": "Schema",
     "admin.account.metadata.actions": "Actions",
     "admin.metadata.createNewTemplate": "Create new metadata template",
     "admin.metadata.listCurrentAssignments": "List current metadata assignments",

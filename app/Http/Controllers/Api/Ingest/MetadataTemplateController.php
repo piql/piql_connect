@@ -60,7 +60,7 @@ class MetadataTemplateController extends Controller
             "modified_by" => Auth::user()->id,
             "metadata" => $requestData['metadata'] ?? [],
         ]);
-        $metadata->owner()->associate(\auth()->user());
+        $metadata->owner()->associate( Auth::user() );
         $metadata->save();
 
         return response()->json([ "data" => new MetadataResource($metadata)]);

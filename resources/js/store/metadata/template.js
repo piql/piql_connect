@@ -1,46 +1,53 @@
-import axios from "axios";
+import { wrappers } from "@mixins/axiosWrapper";
+
+const ax = wrappers();
 
 const state = {
-    templates: [
-        ],
-    templatePageMeta: null,
-    templateResponse: null,
+    templates: [],
+    pageMeta: null,
     templateError: null,
-    schemes: null,
-    schemesPageMeta: null,
-    schemesResponse: null,
 }
 
 const getters = {
     templates: state => state.templates,
     templatePageMeta: state => state.pageMeta,
-    templateById: (state) => (id) => state.templates.find( template => template.id === id )
+    templateById: state => id => state.templates.find( template => template.id === id )
 }
 
 const actions = {
-    async fetchTemplates( { commit } ){
-        let response = await axios.get("/api/v1/ingest/metadata/metadata-template");
-        console.debug("hello", response);
-        commit('setTemplatesMutation',response.data.metadata)
+    async fetchTemplates( { commit }, queryString = "" ){
+        await ax.get(`/api/v1/ingest/metadata-template/${queryString}`)
+            .then( response =>
+                commit('setTemplatesMutation',response.data)
+            ).catch( error =>
+                commit( 'setTemplateError', error.response )
+            );
     },
     async addTemplate( { commit }, template ) {
-        return await axios.post("/api/v1/ingest/metadata-template", { 'metadata': template.metadata }).then(response => {
-            commit('addTemplateMutation', response.metadata );
-        }).catch(error => {
+        await ax.post("/api/v1/ingest/metadata-template",
+            { 'metadata': template.metadata }
+        ).then( response => {
+            commit('addTemplateMutation', response.data.data )
+        }).catch( error => {
             commit('setTemplateError',error.response)
-        })
+        });
     },
 }
 
 const mutations = {
 
-    addTemplateMutation (state,template) {
-        state.templates = state.templates.concat(template);
+    addTemplateMutation ( state, template ) {
+        state.templates = state.templates.concat( template );
     },
 
-    setTemplateError( state, error ){
-        console.debug( error );
-        state.templateError = error
+    setTemplatesMutation ( state, templates ) {
+        state.templates = templates.data;
+        state.pageMeta = templates.meta;
+    },
+
+    setTemplateError( state, error ) {
+        state.templateError = error;
+        console.error( "Failed to update metadata templates: ", error );
     },
 }
 

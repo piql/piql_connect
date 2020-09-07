@@ -45,9 +45,10 @@ describe("Template store actions", () => {
             "date": "", "type": "", "format": "", "identifier": "63ff83ef-862e-428f-9cc3-2040693d493e", "source": "", "language": "",
             "relation": "", "coverage": "", "rights": "" } } };
 
-    it("can add templates", () => {
-        let result = templateStore.dispatch('addTemplate', newTemplate );
-        expect( templateStore.getters.templates.length ).toBe(beforeAddCount+1);
+    it("can add templates", async () => {
+        let result = await templateStore.dispatch('addTemplate', newTemplate );
+		expect(true).toBe(false);
+        //expect( templateStore.getters.templates.length ).toBe(beforeAddCount+1);
     });
 
 });
