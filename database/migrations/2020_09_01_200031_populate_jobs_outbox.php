@@ -28,7 +28,7 @@ class PopulateJobsOutbox extends Migration
                 'locatable_type' => 'App\S3Configuration',
                 'locatable_id' => $s3Configuration->id,
                 'owner_id' => $user->id,
-                'storable_type' => 'App\Jobs',
+                'storable_type' => 'App\Job',
                 'human_readable_name' => 'Jobs Outbox'
             ]);
         }
@@ -41,7 +41,7 @@ class PopulateJobsOutbox extends Migration
      */
     public function down()
     {
-        $storageLocation = StorageLocation::where('storable_type', 'App\Jobs')->first();
+        $storageLocation = StorageLocation::where('storable_type', 'App\Job')->first();
         if ($storageLocation) {
             $storageLocation->forceDelete();
             $s3Configuration = S3Configuration::where('bucket', 'jobs-outbox')->first();

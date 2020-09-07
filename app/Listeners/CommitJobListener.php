@@ -24,7 +24,7 @@ class CommitJobListener implements ShouldQueue
     public function __construct()
     {
         $this->outgoing = Storage::disk('outgoing');
-        $this->storageLocation = StorageLocation::where('storable_type', 'App\Jobs')->first();
+        $this->storageLocation = StorageLocation::where('storable_type', 'App\Job')->first();
         $this->storage = \App::make(ArchivalStorageInterface::class);
     }
 
