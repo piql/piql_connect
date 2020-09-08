@@ -18,12 +18,12 @@ class BucketConfigController extends Controller {
 	}
 	
     public function upload(Request $request, $jobId) {
-    	$file = $request->file('qqfile');
-    	$path = $this->getPath($jobId) . $file->getClientOriginalName();
+    	$file = storage_path('uploader/bucketImg/'.$request->result["name"]);
+    	$path = $this->getPath($jobId) . $request->fileName;
     	if (file_exists($path)) {
     		unlink($path);
     	}
-    	$file->move($this->getPath($jobId), $file->getClientOriginalName());
+    	rename($file, $path);
         return response()->json(['success' => true]);
     }
 
