@@ -2,8 +2,14 @@
 
 namespace Tests\Feature;
 
+use App\Account;
+use App\AccountMetadata;
+use App\ArchiveMetadata;
 use App\Events\FileUploadedEvent;
 use App\Events\PreProcessBagEvent;
+use App\HoldingMetadata;
+use App\Metadata;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Event;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -29,6 +35,12 @@ class BagApiTest extends TestCase
     private $testHolding2;
     private $otherUser;
     private $otherBag;
+    private $account;
+    private $accountMetadata;
+    private $archiveMetadata1;
+    private $archiveMetadata2;
+    private $holdingMetadata1;
+    private $holdingMetadata2;
 
     public function setUp() : void
     {
@@ -49,16 +61,60 @@ class BagApiTest extends TestCase
             'owner' => $this->testUser->id
         ];
 
-        $this->testArchive1 = Archive::create(['title' => 'testBagArchive1Title']);
-        $this->testArchive2 = Archive::create(['title' => 'testBagArchive2Title']);
+        $this->account = factory(Account::class)->create([
+        ]);
+        $this->account->owner()->associate($this->testUser);
+        $this->account->save();
+        $this->accountMetadata = factory(AccountMetadata::class)->create([
+            "modified_by" => $this->testUser->id,
+        ]);
+        $this->accountMetadata->parent()->associate($this->account);
+        $this->accountMetadata->save();
+        $this->accountMetadata->owner()->associate($this->testUser);
+
+        $this->testArchive1 = Archive::create([
+            'title' => 'testBagArchive1Title',
+            "account_uuid" => $this->account->uuid,
+        ]);
+        $this->archiveMetadata1 = factory(ArchiveMetadata::class)->create([
+            "modified_by" => $this->testUser->id,
+        ]);
+        $this->archiveMetadata1->parent()->associate($this->testArchive1);
+        $this->archiveMetadata1->save();
+        $this->archiveMetadata1->owner()->associate($this->testUser);
+
+        $this->testArchive2 = Archive::create([
+            'title' => 'testBagArchive2Title',
+            "account_uuid" => $this->account->uuid,
+        ]);
+        $this->archiveMetadata2 = factory(ArchiveMetadata::class)->create([
+            "modified_by" => $this->testUser->id,
+        ]);
+        $this->archiveMetadata2->parent()->associate($this->testArchive2);
+        $this->archiveMetadata2->save();
+        $this->archiveMetadata2->owner()->associate($this->testUser);
+
         $this->testHolding1 = Holding::create([
             'title' => "testBagHoldingTitle1",
             'owner_archive_uuid' => $this->testArchive1->uuid
         ]);
+        $this->holdingMetadata1 = factory(HoldingMetadata::class)->create([
+            "modified_by" => $this->testUser->id,
+        ]);
+        $this->holdingMetadata1->parent()->associate($this->testHolding1);
+        $this->holdingMetadata1->save();
+        $this->holdingMetadata1->owner()->associate($this->testUser);
+
         $this->testHolding2 = Holding::create([
             'title' => "testBagHoldingTitle2",
             'owner_archive_uuid' => $this->testArchive2->uuid
         ]);
+        $this->holdingMetadata2 = factory(HoldingMetadata::class)->create([
+            "modified_by" => $this->testUser->id,
+        ]);
+        $this->holdingMetadata2->parent()->associate($this->testHolding2);
+        $this->holdingMetadata2->owner()->associate($this->testUser);
+        $this->holdingMetadata2->save();
 
 
         $this->bagApiResultData = ['data' => [
@@ -68,7 +124,8 @@ class BagApiTest extends TestCase
 
         $this->bagTestDataWithArchiveAndHolding = [
             'archive_uuid' => $this->testArchive1->uuid,
-            'holding_name' => $this->testHolding1->title
+            'holding_name' => $this->testHolding1->title,
+            'holding_uuid' => $this->testHolding1->uuid
         ] + $this->bagTestData;
     }
 
@@ -171,7 +228,7 @@ class BagApiTest extends TestCase
         $response = $this->json( 'POST', route( 'api.ingest.bags.store' ), $this->bagTestDataWithArchiveAndHolding );
         $response->assertStatus(200);
 
-        $response->assertJson(['data' => ['archive_uuid' => $this->testArchive1->uuid, 'holding_name' => $this->testHolding1->title]]);
+        $response->assertJson(['data' => ['archive_uuid' => $this->testArchive1->uuid, 'holding_uuid' => $this->testHolding1->uuid]]);
     }
 
     public function test_when_updating_a_bag_given_storage_properties_are_set_the_response_includes_those_storage_properties()
@@ -182,12 +239,14 @@ class BagApiTest extends TestCase
 
         $response = $this->json( 'PATCH', route( 'api.ingest.bags.update', $bagData->id ), [
             'archive_uuid' => $this->testArchive2->uuid,
-            'holding_name' => $this->testHolding2->title
+            'holding_uuid' => $this->testHolding2->uuid,
+            'holding_name' => $this->testHolding2->title,
         ]);
 
         $response->assertJson(['data' => [
             'archive_uuid' => $this->testArchive2->uuid,
-            'holding_name' => $this->testHolding2->title
+            'holding_uuid' => $this->testHolding2->uuid,
+            'holding_name' => $this->testHolding2->title,
         ] ]);
     }
 
@@ -323,10 +382,27 @@ class BagApiTest extends TestCase
     public function test_commit_bag_and_it_returns_200()
     {
         $createdBag = $this->createOneBag();
+
         Event::fake();
         $response = $this->post( route( 'api.ingest.bags.commit', $createdBag->id ) );
         $response->assertStatus( 200 );
         Event::assertNotDispatched( PreProcessBagEvent::class );
+        $uuid = $createdBag->uuid;
+
+        $query = AccountMetadata::whereHasMorph('parent', [\App\Bag::class], function(Builder $query) use ($uuid) {
+            $query->where("uuid", $uuid);
+        });
+        $this->assertEquals(1, $query->count());
+
+        $query = ArchiveMetadata::whereHasMorph('parent', [\App\Bag::class], function(Builder $query) use ($uuid) {
+            $query->where("uuid", $uuid);
+        });
+        $this->assertEquals(1, $query->count());
+
+        $query = HoldingMetadata::whereHasMorph('parent', [\App\Bag::class], function(Builder $query) use ($uuid) {
+            $query->where("uuid", $uuid);
+        });
+        $this->assertEquals(1, $query->count());
     }
 
     public function test_commit_bag_without_a_empty_name_and_it_returns_424()

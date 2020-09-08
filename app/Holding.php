@@ -2,10 +2,13 @@
 
 namespace App;
 
+use App\Traits\AutoGenerateUuid;
 use Illuminate\Database\Eloquent\Model;
 
 class Holding extends Model
 {
+    use AutoGenerateUuid;
+
     protected $table = 'holdings';
     protected $fillable = [
         'title', 'description', 'owner_archive_uuid', 'parent_id', 'position'
@@ -34,7 +37,7 @@ class Holding extends Model
     /* Section: Relations */
     public function owner_archive()
     {
-        return $this->belongsTo('Archive', 'owner_archive_uuid',  'uuid');
+        return $this->belongsTo(\App\Archive::class, 'owner_archive_uuid',  'uuid');
     }
 
     public function parent()

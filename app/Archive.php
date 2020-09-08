@@ -50,4 +50,8 @@ class Archive extends Model
     {
         return $this->hasMany(\App\ArchiveMetadata::class, "parent_id");
     }
+
+    public function account() {
+        return $this->belongsTo(\App\Account::class, 'account_uuid', 'uuid');
+    }
 }

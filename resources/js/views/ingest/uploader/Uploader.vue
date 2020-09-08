@@ -3,17 +3,17 @@
         <page-heading icon="fa-upload" :title="$t('upload.title')" :ingress="$t('upload.ingress')" />
 
         <form v-on:submit.prevent>
-       
+
 
         <div class="row">
             <div class="col-md-4">
-               
+
                 <div class="card" :title="$t('upload.addFileButtonToolTip')">
                     <div class="card-header">
                         <b><i class="fa fa-upload"></i> INGEST UPLOAD FORM</b>
                     </div>
                     <div class="card-body">
-                        
+
                          <div class="form-group">
                              <div v-show="compoundModeEnabled" class="text-left" >
                                 <label for="bagname" class="col-form-label-sm">{{$t("upload.sipName")}}</label>
@@ -34,7 +34,7 @@
                                 <holding-picker v-bind:label="$t('Holdings')" :useWildCard="true" :key='holderKey' ></holding-picker>
                             </div>
                          </div>
-                         
+
                          <Dropzone
                                 class="dropzone is-6 has-text-centered"
                                 :multiple="true"
@@ -44,8 +44,8 @@
                                         <p class="dz-text"><i class="fas fa-cloud-upload-alt"></i> {{$t("upload.addFileButton")}}</p>
                                     </file-input>
                             </Dropzone>
-                         
-                         
+
+
 
                          <div class="form-group">
                              <div v-show="compoundModeEnabled">
@@ -55,7 +55,7 @@
                             </div>
 
                          </div>
-                        
+
                     </div>
                 </div>
             </div>
@@ -79,14 +79,14 @@
                                             </div>
                                             <input class="form-control" :placeholder="$t('upload.fileNameFilter')" id="fileNameFilter" v-model="fileNameFilter">
                                         </div>
-                                        
+
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="card-body">
-                        <upload-file-item-listing :sortedFilesUploading="sortedFilesUploading"  
+                        <upload-file-item-listing :sortedFilesUploading="sortedFilesUploading"
                         @metadataClicked="metadataClicked" @removeClicked="removeClicked"
                         @retryClicked="retryClicked" @removeFailedClicked="removeFailedClicked" :filesUploadingMeta="filesUploadingMeta"/>
 
@@ -95,7 +95,7 @@
 
             </div>
         </div>
-        
+
     </form>
     </div>
 </template>
@@ -109,7 +109,7 @@ import Dropzone from 'vue-fineuploader/dropzone';
 import axios from 'axios';
 import JQuery from 'jquery';
 let $ = JQuery;
-import filesize from 'filesize'; 
+import filesize from 'filesize';
 
 export default {
     mixins: [ RouterTools, DeferUpdate ],
@@ -305,12 +305,12 @@ export default {
                 .sort( (a,b)  => Number( b.isUploading) - Number( a.isUploading ) );
         },
         processDisabled: function() {
-            return this.invalidBagName | this.numberOfFiles === 0 | this.hasIncompleteFiles | this.setArchive === null | this.setHolding == null;
+            return this.invalidBagName | this.numberOfFiles === 0 | this.hasIncompleteFiles | this.setArchive === null | this.getHolding == null;
         },
         setArchive: function (){
             return this.$route.query.archive;
         },
-        setHolding: function (){
+        getHolding: function (){
             return this.$route.query.holding;
         },
         invalidBagName: function() {
@@ -472,7 +472,7 @@ export default {
                 {'BAGNAME': bagName }
             );
 
-            this.bag = await this.createBag("", this.userId, this.selectedArchive, this.selectedHoldingTitle );
+            this.bag = await this.createBag("", this.userId, this.selectedArchive, this.getHolding );
 
             this.fileInputDisabled = false;
         },
@@ -493,26 +493,26 @@ export default {
                 'name': this.bagName
             });
         },
-        async createBag( bagName, userId, selectedArchive, selectedHoldingTitle ) {
+        async createBag( bagName, userId, selectedArchive, selectedHoldingUuid ) {
             let createdBag = (await axios.post("/api/v1/ingest/bags/", {
                 name: bagName,
                 owner: userId,
                 archive_uuid: selectedArchive,
-                holding_name: selectedHoldingTitle
+                holding_uuid: selectedHoldingUuid
             })).data.data;
             this.files = [];
             this.filesUploading = [];
             return createdBag;
         },
-        async changedArchive(archiveId, holdingTitle) {
-            if( !archiveId || !holdingTitle )
+        async changedArchive(archiveId, holdingUuid) {
+            if( !archiveId || !holdingUuid )
                 return;
             this.selectedArchive = archiveId;
-            this.selectedHolding = holdingTitle;
+            this.selectedHolding = holdingUuid;
             if( this.bag && this.bag.id && this.compoundModeEnabled) {
                 axios.patch("/api/v1/ingest/bags/"+this.bag.id, {
                     archive_uuid: archiveId,
-                    holding_name: holdingTitle
+                    holding_uuid: holdingUuid
                 }).then( (response) => {
                     this.bag = response.data.data;
                 });
@@ -550,7 +550,7 @@ export default {
             this.bag = (await axios.get("/api/v1/ingest/bags/latest")).data.data;
             this.bagName = this.bag.name;
             let archive = this.bag.archive_uuid;
-            let holding = this.bag.holding_name;
+            let holding = this.bag.holding_uuid;
             this.updateQueryParams({ archive, holding });
 
             if(!!this.bag & this.bag.status === "open") {
@@ -569,7 +569,7 @@ export default {
                 }) );
             }
             else {
-                this.bag = (await this.createBag( "", this.userId, this.selectedArchive, this.selectedHoldingTitle ));
+                this.bag = (await this.createBag( "", this.userId, this.selectedArchive, this.selectedHolding ));
             }
         }
     },

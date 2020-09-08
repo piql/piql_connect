@@ -4,7 +4,7 @@
             {{label}}
         </label>
         <select v-model="selection" :id="elementId" class="form-control" data-live-search="true" >
-            <option v-for="holding in holdingsWithWildcard" :key="holding.id" v-bind:value="holding.title">
+            <option v-for="holding in holdingsWithWildcard" :key="holding.id" v-bind:value="holding.uuid">
                 {{holding.title}}
             </option>
         </select>
@@ -84,7 +84,7 @@ export default {
                     //default selection
                     this.selection = this.holdings[0].title;
                 }
-             
+
             })
         },
         selection: function ( holding ) {
@@ -101,7 +101,7 @@ export default {
         },
         holdings: function( holdings ) {
             if( !! holdings ) {
-                let holdingQuery = this.$route.query.holding ?? this.wildCardLabel ?? this.holdings[0].title;;
+                let holdingQuery = this.$route.query.holding ?? this.wildCardLabel ?? this.holdings[0].uuid;
                 Vue.nextTick( () => {
                     this.updatePicker( holdingQuery );
                     this.refreshPicker();
