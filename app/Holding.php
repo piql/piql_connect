@@ -11,7 +11,7 @@ class Holding extends Model
 
     protected $table = 'holdings';
     protected $fillable = [
-        'title', 'description', 'owner_archive_uuid', 'parent_id', 'position'
+        'title', 'description', 'owner_archive_uuid', 'parent_id', 'position', 'uuid'
     ];
 
     protected static function boot()
