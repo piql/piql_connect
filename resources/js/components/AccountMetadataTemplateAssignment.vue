@@ -1,40 +1,36 @@
 <template>
-    <b-modal id="meta" size="xl" :centered=true 
-        :title="$t('admin.metadata.template.edit.title')"
-        :header-class="['d-ruby','text-center']"
-        :no-fade=true title-class="h3"
-        :ok-title="$t('admin.metadata.template.edit.saveButton')"
-        :cancel-title="$t('admin.metadata.template.edit.cancelButton')"
-        @ok="saveTemplate"
-    >
-        <b-container fluid>
-            <b-row v-for="scheme in schemes" :key="scheme.id">
-                <b-form inline>
-                    <b-col class="form-group">
-                        <b-form-row v-for="schemeItem in scheme.fields" :key="schemeItem.id" class="w-100">
-                            <label :for="fieldId(scheme.type, schemeItem.name)" class="small" >{{schemeItem.label}}</label>
-                            <b-col class="m-1 w-100">
-                                <b-form-input class="w-100"
-                                    :id="fieldId(scheme.type, schemeItem.name)"
-                                    v-model="metadataObject.metadata.dc[schemeItem.name]"
-                                    v-bind:readOnly="readOnly"
-                                />
-                            </b-col>
-                        </b-form-row>
-                    </b-col>
-                </b-form>
-            </b-row>
-        </b-container>
-    </b-modal>
+    <div class="w-100">
+        <page-heading icon="fa-user" :title="$t('admin.metadata.account.assign.title')" :ingress="$t('admin.metadata.account.assign.ingress')" />
+        <div class="card">
+            <div class="card-header">
+            </div>
+            <div class="card-body">
+                <user-listing :key="listingKey" @deleteUser='deleteUser'  @disableUser="disableUser" :users="formattedUsers" @editUser="editUser" @enableUser="enableUser"></user-listing>
+                <div class="row text-center pagerRow">
+                    <div class="col">
+                        <Pager :meta='usersPageMeta' :height='height' />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </template>
 
 <script>
 import axios from 'axios';
+import Pager from "@components/Pager"
+import { mapGetters, mapActions } from "vuex";
+
 
 export default {
+    components:{
+        Pager
+    },
+
     data () {
         return {
-            metadataObject: { "metadata": {"dc": {}} }
+            listingKey: 0,
+            metadataObject: { "metadata": {"dc": {}} },
         }
     },
 
@@ -84,8 +80,7 @@ export default {
     },
     watch: {
         initialTemplate: function(value){
-            this.metadataObject.metadata = JSON.parse(JSON.stringify(value.metadata));
-
+            this.metadataObject.metadata = value.metadata;
         },
     },
     methods: {

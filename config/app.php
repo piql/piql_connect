@@ -193,6 +193,7 @@ return [
         App\Providers\MetadataGeneratorServiceProvider::class,
         App\Providers\PreProcessBagServiceProvider::class,
         App\Providers\IngestValidationServiceProvider::class,
+        App\Providers\FilePreviewProvider::class,
 
 
         /*

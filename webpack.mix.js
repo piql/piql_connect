@@ -7,6 +7,7 @@ mix.webpackConfig({
             '@views': path.resolve(__dirname, 'resources/js/views/'),
             '@components': path.resolve(__dirname, 'resources/js/components/'),
             '@mixins': path.resolve(__dirname, 'resources/js/mixins/'),
+            '@store': path.resolve(__dirname, 'resources/js/store/'),
         }
     }
 });

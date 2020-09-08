@@ -47,7 +47,7 @@ export default {
     props: {
         meta: {
             type: Object,
-            default: {}
+            default: () => {}
         },
         visiblePageSelectors: {
             type: Number,
