@@ -13,6 +13,7 @@ class AccountService {
         $account->description = $description;
         $account->owner_type = $ownerType;
         $account->owner_id = $ownerId;
+        $account->save();
         return $account;
     } 
 }

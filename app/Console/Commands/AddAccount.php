@@ -22,7 +22,7 @@ class AddAccount extends Command {
      *
      * @var string
      */
-    protected $description = 'Command description';
+    protected $description = 'Add account';
 
     /**
      * Create a new command instance.
@@ -65,7 +65,7 @@ class AddAccount extends Command {
             if (!$errArr) {
                 try {
                     $user = UserRegistrationService::registerUser($userFullName, $userName, $userEmail, env('APP_URL'));
-                    $this->info("Added user ".$user->id);
+                    $this->info("Added user: ".$user->id);
                 } catch (Throwable $e) {
                     $user = null;
                     $this->error($e->getMessage());
@@ -79,7 +79,7 @@ class AddAccount extends Command {
         }
         if ($user) {
             $account = AccountService::createAccount($uuid, $title, $description, get_class($user), $user->id);
-            $this->info("Teste ae ".$account->title);
+            $this->info("Added account: ".$account->uuid);
             $account->save();
         }
 
