@@ -87,7 +87,7 @@ class AccountControllerTest extends TestCase
     {
         $response = $this->actingAs( $this->user )
             ->json('DELETE', route('api.ingest.account.destroy', [$this->account->id]));
-        $response->assertStatus( 200 );
+        $response->assertStatus( 204 );
 
     }
 

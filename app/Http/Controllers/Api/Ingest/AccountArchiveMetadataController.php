@@ -129,6 +129,6 @@ class AccountArchiveMetadataController extends Controller
         $metadata->parent()->dissociate();
         $metadata->owner()->dissociate();
         $metadata->delete();
-        return response()->json([ "data" => new MetadataResource(null)]);
+        return response( "", 204);
     }
 }

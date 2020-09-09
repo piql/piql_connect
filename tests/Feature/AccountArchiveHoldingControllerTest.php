@@ -100,7 +100,7 @@ class AccountArchiveHoldingControllerTest extends TestCase
     {
         $response = $this->actingAs( $this->user )
             ->json('DELETE', route('api.ingest.account.archive.holding.destroy', [$this->account->id, $this->archive->id, $this->holding->id]));
-        $response->assertStatus( 200 );
+        $response->assertStatus( 204 );
 
     }
 

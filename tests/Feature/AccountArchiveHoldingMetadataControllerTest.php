@@ -121,7 +121,7 @@ class AccountArchiveHoldingMetadataControllerTest extends TestCase
         $response = $this->actingAs( $this->user )
             ->json('DELETE', route('api.ingest.account.archive.holding.metadata.destroy', [$this->account->id, $this->archive->id, $this->holding->id, $this->metadata->id]));
         $this->assertEquals(0, $this->holding->metadata()->count());
-        $response->assertStatus( 200 );
+        $response->assertStatus( 204 );
 
     }
 

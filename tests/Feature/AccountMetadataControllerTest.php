@@ -107,7 +107,7 @@ class AccountMetadataControllerTest extends TestCase
         $response = $this->actingAs( $this->user )
             ->json('DELETE', route('api.ingest.account.metadata.destroy', [$this->account->id, $this->metadata->id]));
         $this->assertEquals(0, $this->account->metadata()->count());
-        $response->assertStatus( 200 );
+        $response->assertStatus( 204 );
 
     }
 

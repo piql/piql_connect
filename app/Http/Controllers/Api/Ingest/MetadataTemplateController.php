@@ -107,6 +107,6 @@ class MetadataTemplateController extends Controller
         $metadataTemplate->parent()->dissociate();
         $metadataTemplate->owner()->dissociate();
         $metadataTemplate->delete();
-        return response()->json([ "data" => new MetadataResource(null)]);
+        return response( "", 204);
     }
 }
