@@ -78,13 +78,25 @@ class CommitJobListener implements ShouldQueue
      */
     private function createInfoPackage($filePath, $job)
     {
+        $user = \App\User::find($job->owner);
+        if ($user === null)
+        {
+            throw new \Exception('Could not find user with id: '.$job->owner);
+        }
+
         // Create job.json
         $jobInfoPath = "{$job->jobFilesDir()}/job.json";
         $content = array(
             'reference_id' => $job->uuid,
             'job_name' => $job->name,
-            'owner' => $job->owner );
-        file_put_contents($jobInfoPath, json_encode($content));
+            'owner' => array(
+                'id'=> $job->owner,
+                'username' => $user->username ?? "",
+                'full_name' => $user->full_name ?? "",
+                'email' => $user->email ?? ""
+            ),
+        );
+        file_put_contents($jobInfoPath, json_encode($content, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));
 
         // Create TAR
         $tar = new \PharData($filePath);
