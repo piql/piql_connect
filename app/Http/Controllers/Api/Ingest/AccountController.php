@@ -97,6 +97,6 @@ class AccountController extends Controller
     public function destroy(Account $account)
     {
         $account->delete();
-        return response()->json([ "data" => new AccountResource(null)]);
+        return response( "", 204);
     }
 }

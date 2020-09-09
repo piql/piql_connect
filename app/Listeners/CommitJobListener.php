@@ -5,12 +5,16 @@ namespace App\Listeners;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Facades\Storage;
+use App\StorageLocation;
+use App\Interfaces\ArchivalStorageInterface;
 use App\Events\CommitJobEvent;
 use Log;
 
 class CommitJobListener implements ShouldQueue
 {
     private $outgoing;
+    private $storageLocation;
+    private $storage;
 
     /**
      * Create the event listener.
@@ -20,6 +24,8 @@ class CommitJobListener implements ShouldQueue
     public function __construct()
     {
         $this->outgoing = Storage::disk('outgoing');
+        $this->storageLocation = StorageLocation::where('storable_type', 'App\Job')->first();
+        $this->storage = \App::make(ArchivalStorageInterface::class);
     }
 
     /**
@@ -40,15 +46,25 @@ class CommitJobListener implements ShouldQueue
             $dataFilePath = $fileArchiveService->buildTarFromAipCollectionIncrementally($aips, $basename);
 
             // Send data package to S3
-            // TODO: Send data package to S3
+            $destinationDir = "";
+            if ($this->storage->upload($this->storageLocation, $destinationDir, $dataFilePath)) {
+                unlink($dataFilePath);
+            } else {
+                Log::error('Failed to upload '.$job->uuid.' file '.$dataFilePath);
+            }
 
             // Build info package
-            $infoFilePath = $this->outgoing->path("info_{$job->uuid}.tar");
+            $basename = "info_{$job->uuid}.tar";
+            $infoFilePath = $this->outgoing->path($basename);
             $this->createInfoPackage($infoFilePath, $job);
 
             // Send info package to S3
-            // TODO: Send info package to S3
-
+            $destinationDir = "";
+            if ($this->storage->upload($this->storageLocation, $destinationDir, $infoFilePath)) {
+                unlink($infoFilePath);
+            } else {
+                Log::error('Failed to upload '.$job->uuid.' file '.$infoFilePath);
+            }
         } catch (Throwable $e) {
             Log::error('Failed to commit job {$job->uuid}');
         }
