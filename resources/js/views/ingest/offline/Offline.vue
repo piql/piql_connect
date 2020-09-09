@@ -1,6 +1,6 @@
 <template>
     <div class="w-100">
-        <page-heading icon="fa-clock" :title="$t('ingest.taskList.title')" :ingress="$t('ingest.taskList.ingress')" />
+        <page-heading icon="fa-clock" :title="$t('ingest.taskList.title')" :ingress="$t('ingest.taskList.ingress')" iconImg="/images/piqlfilm-icon.svg" />
         <div class="card">
             <div class="card-header">
                 <b><i class="fa fa-clock"></i> {{$t('ingest.taskList.title')}}</b>
