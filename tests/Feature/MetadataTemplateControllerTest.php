@@ -82,7 +82,7 @@ class MetadataTemplateControllerTest extends TestCase
         $response = $this->actingAs( $this->user )
             ->json('DELETE', route('api.ingest.metadata-template.destroy', [$this->metadata->id]));
         $this->assertEquals(0, \auth()->user()->morphMany( MetadataTemplate::class,'owner')->count());
-        $response->assertStatus( 200 );
+        $response->assertStatus( 204 );
 
     }
 

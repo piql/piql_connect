@@ -125,6 +125,6 @@ class AccountArchiveController extends Controller
         }
 
         $archive->delete();
-        return response()->json([ "data" => new ArchiveResource(null)]);
+        return response( "", 204);
     }
 }

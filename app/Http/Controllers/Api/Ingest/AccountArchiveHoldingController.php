@@ -126,6 +126,6 @@ class AccountArchiveHoldingController extends Controller
         }
 
         $holding->delete();
-        return response()->json([ "data" => new HoldingResource(null)]);
+        return response( "", 204);
     }
 }
