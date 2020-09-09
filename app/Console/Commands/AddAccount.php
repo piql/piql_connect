@@ -39,8 +39,8 @@ class AddAccount extends Command {
      * @return mixed
      */
     public function handle() {
-    	$uuid = $this->argument('uuid');
-    	$title = $this->option('title', "");
+        $uuid = $this->argument('uuid');
+        $title = $this->option('title', "");
         $description = $this->option('description', "");
         $userId = $this->option('user_id', "");
         if ($userId) {
