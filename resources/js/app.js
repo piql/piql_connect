@@ -122,9 +122,6 @@ Vue.use(VueKeyCloak, {
         url: 'https://auth.piqlconnect.com/auth/', //process.env.AUTH_BASE_URL, (keycloak auth urn)
         clientId: 'piql-connect-frontend',
     },
-    logout: {
-        redirectUri: 'http://192.168.83.141', //process.env.BASE_URL (frontend base url)
-    },
     onReady: () => {
         // Vue.prototype.$keycloak = this;
         interceptToken();
