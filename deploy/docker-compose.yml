@@ -103,7 +103,6 @@ services:
     command: bash -c "composer install && composer dump-autoload"
     stdin_open: true
     tty: true
-    user: ${HOST_USERID}:${HOST_GROUPID}
     volumes:
       - .././:/var/www/html/
 
