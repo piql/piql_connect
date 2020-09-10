@@ -18,7 +18,8 @@ class ArchiveResource extends JsonResource
             'id' => $this->id,
             'title' => $this->title,
             'description' => $this->description,
-            'uuid' => $this->uuid
+            'uuid' => $this->uuid,
+            'metadata' => $this->metadata->last()
         ];
 
     }

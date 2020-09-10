@@ -60,13 +60,14 @@ class AccountArchiveMetadataController extends Controller
         $requestData = $this->validateRequest($request);
 
         if($archive->metadata()->count() > 0) {
-            abort( response()->json([ 'error' => 409, 'message' => 'Metadata already exists' ], 409 ) );
+//            $archive->metadata()->delete(); //Should softdelete/deactivate existing templates
         }
 
         $metadata = new ArchiveMetadata([
             "modified_by" => Auth::user()->id,
             "metadata" => $requestData['metadata'] ?? [],
         ]);
+
         $metadata->owner()->associate($account->owner());
         $metadata->parent()->associate($archive);
         $metadata->save();
