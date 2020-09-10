@@ -80,7 +80,6 @@ class AddAccount extends Command {
         if ($user) {
             $account = AccountService::createAccount($uuid, $title, $description, get_class($user), $user->id);
             $this->info("Added account: ".$account->uuid);
-            $account->save();
         }
 
     }
