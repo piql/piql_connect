@@ -10,10 +10,10 @@
             </tr>
         </thead>
         <tbody>
-            <tr v-if="retrievedArchives.length <= 0">
+            <tr v-if="archives.length == 0">
                 <td colspan="4" class="columnCenter">{{$t('settings.archives.noArchives')}}</td>
             </tr>
-            <tr v-else v-for="archive in retrievedArchives" :key="archive.id">
+            <tr v-for="archive in archives">
                 <td>{{ archive.title }}</td>
                 <td>{{ archive.description }}</td>
                 <td>{{ formatShortDate(archive.created) }}</td>
@@ -53,11 +53,11 @@
         <div class="d-block">
             <div class="form-group">
                 <label>{{$t('settings.archives.archive')}}</label>
-                <input type="text" class="form-control" v-model="edit.title" >
+                <input type="text" class="form-control" v-model="title" >
             </div>
             <div class="form-group">
                 <label>{{$t('settings.groups.description')}}</label>
-                <textarea v-model="edit.description" class="form-control"></textarea>
+                <textarea v-model="description" class="form-control"></textarea>
             </div>
         </div>
         <b-button class="mt-3" @click="editArchive" block><i class="fa fa-edit"></i> {{$t('settings.archives.edit').toUpperCase()}}</b-button>
@@ -65,7 +65,7 @@
 
     <b-modal id="assign-template" hide-footer>
         <template v-slot:modal-title>
-        <h4>{{$t('settings.archives.assignMetaTemplate').toUpperCase()}} | {{ archive.title }}</h4>
+        <h4>{{$t('settings.archives.assignMetaTemplate').toUpperCase()}} | {{ title }}</h4>
         </template>
         <div class="d-block">
             <div class="form-group">
@@ -89,99 +89,89 @@
 <script>
 import { mapGetters, mapActions } from "vuex"
 export default {
-    async mounted(){
-        this.fetchArchives();
-
+    async mounted() {
+        await this.fetchAccounts();
+        await this.fetchArchives( this.firstAccount.id ); //TODO: Actual account handling
     },
     data(){
         return {
             selection: '',
-            archive: null,
-            edit: {
-                title: '',
-                description: ''
-            }
+            editArchiveId: null,
+            title : '',
+            description: '',
         }
 
     },
     computed: {
-        ...mapGetters(['retrievedArchives','templates']),
+        ...mapGetters(['firstAccount', 'archives','templates']),
+        archive: {
+            get: function() {
+                return {
+                    id: this.editArchiveId,
+                    title: this.title,
+                    description: this.description
+                };
+            },
+            set: function( value ) {
+                this.editArchiveId = value.id || "",
+                this.title = value.title || "";
+                this.description = value.description || "";
+            }
+        }
     },
     methods: {
-        ...mapActions(['fetchArchives','addArchiveMetadata','editArchiveData','deleteArchiveData']),
-        assignMeta(id){
+        ...mapActions(['fetchAccounts', 'fetchArchives','addArchive','editArchiveData','deleteArchiveData']),
+        assignMeta(id) {
             this.$emit('assignMeta', id);
         },
-        showTemplateBox(id){
-            let archive = this.retrievedArchives.filter(single => single.id === id)
-            this.archive = archive[0];
-            this.$bvModal.show('assign-template')
+        showTemplateBox( id ){
+            this.archive = this.archives.find( single => single.id === id );
+            this.$bvModal.show( 'assign-template' );
         },
-        showEditBox(id){
-            let archive = this.retrievedArchives.filter(single => single.id === id)
-            this.archive = archive[0];
-            this.edit.title = this.archive.title;
-            this.edit.description = this.archive.description;
+        showEditBox( id ){
+            this.archive = this.archives.find( single => single.id === id );
             this.$bvModal.show('edit-archive')
-
         },
-        showDeleteBox(id){
-            let archive = this.retrievedArchives.filter(single => single.id === id)
-            this.archive = archive[0];
-            this.$bvModal.show('delete-archive')
-
+        showDeleteBox( id ){
+            this.archive = this.archives.find( single => single.id === id )
+            this.$bvModal.show( 'delete-archive' )
         },
         deleteArchive(){
             this.deleteArchiveData(this.archive.id);
-
-            this.$bvModal.hide('delete-archive')
-
-
+            this.$bvModal.hide('delete-archive');
             this.successToast(
                 this.$t('settings.archives.toast.deletingArchive'), 
                 this.$t('settings.archives.toast.deletingArchive') + ' ' + this.archive.title
             );
-
-
         },
-        editArchive(){
-            let data = {
-                title: this.edit.title,
-                description: this.edit.description,
-                id: this.archive.id
-            }
-
-            this.editArchiveData(data);
-
+        async editArchive(){
             this.$bvModal.hide('edit-archive')
-
-
+            await this.editArchiveData( {
+                id: this.editArchiveId,
+                accountId: this.firstAccount.id,
+                title: this.title,
+                description: this.description
+            } );
             this.successToast(
                 this.$t('settings.archives.toast.editingArchive'), 
-                this.$t('settings.archives.toast.editingArchive') + ' ' + this.edit.title
+                this.$t('settings.archives.toast.editingArchive') + ' ' + this.title
             );
 
         },
-        assignTemplate(){
-            let template = this.templates.filter(single => single.id === this.selection);
-            let data = { 
+        async assignTemplate(){
+            this.$bvModal.hide( 'assign-template' )
+            let template = this.templates.find( single => single.id === this.selection );
+            const data = { 
                 id: this.archive.id,
                 metadata:  {
-                    metadata: template[0].metadata.dc
+                    metadata: template.metadata.dc
                 } 
             };
-
-            this.addArchiveMetadata(data);
-
-            this.$bvModal.hide('assign-template')
-
-
+            await this.addArchiveMetadata( data );
             this.successToast(
                 this.$t('settings.archives.toast.addingArchiveMeta'), 
-                this.$t('settings.archives.toast.addingArchiveMeta') + ' ' + this.archive.title
+                this.$t('settings.archives.toast.addingArchiveMeta') + ' ' + this.title
             );
-
-
         }
     }
 
