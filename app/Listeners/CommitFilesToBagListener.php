@@ -8,6 +8,7 @@ use App\Events\ErrorEvent;
 use App\Events\InitiateTransferToArchivematicaEvent;
 use App\Interfaces\MetadataGeneratorInterface;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Log;
@@ -17,7 +18,10 @@ use App\Traits\BagOperations;
 class CommitFilesToBagListener implements ShouldQueue
 {
     use BagOperations;
-    public const FILE_OBJECT_PATH = 'Account/Archive/Holding/';
+    public const ACCOUNT_OBJECT = 'Account';
+    public const ARCHIVE_OBJECT = CommitFilesToBagListener::ACCOUNT_OBJECT.'/Archive';
+    public const HOLDING_OBJECT = CommitFilesToBagListener::ARCHIVE_OBJECT.'/Holding';
+    public const FILE_OBJECT_PATH = CommitFilesToBagListener::HOLDING_OBJECT.'/';
     protected $metadataGenerator;
     protected $bagIt;
     /**
@@ -61,6 +65,48 @@ class CommitFilesToBagListener implements ShouldQueue
             'filename' => $metadataFileName,
             'type' => $metadataType,
         ]);
+
+        if( $bag->owner()->first()->settings->getIngestMetadataAsFileAttribute() !== true ) {
+            $metadataPlaceholders = [
+                (object)[
+                    "class" => \App\AccountMetadata::class,
+                    "object" => $this::ACCOUNT_OBJECT
+                ],
+                (object)[
+                    "class" => \App\ArchiveMetadata::class,
+                    "object" => $this::ARCHIVE_OBJECT
+                ],
+                (object)[
+                    "class" => \App\HoldingMetadata::class,
+                    "object" => $this::HOLDING_OBJECT
+                ]
+            ];
+
+            $uuid = $bag->uuid;
+            $retval = collect($metadataPlaceholders)->map(function($metadataPlaceholder) use($metadataWriter, $uuid){
+
+                $query = $metadataPlaceholder->class::whereHasMorph('parent', [\App\Bag::class], function(Builder $query) use ($uuid) {
+                    $query->where("uuid", $uuid);
+                });
+                // append metadata to file
+                $retval = $metadataWriter->write([
+                    'object' => $metadataPlaceholder->object,
+                    'metadata' => $query->get()->first()->metadata
+                ]);
+
+                if (!$retval) {
+                    Log::error("Generating " . $metadataPlaceholder->class . "metadata for Bag " . $uuid . " failed!");
+                    return 1;
+                }
+
+                return 0;
+            })->sum();
+
+            if ($retval) {
+                Log::error("Generating metadata for Bag " . $bag->uuid . " failed!");
+                event(new ErrorEvent($bag));
+            }
+        }
 
         foreach ($files as $file)
         {
