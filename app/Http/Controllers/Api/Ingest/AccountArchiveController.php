@@ -43,7 +43,7 @@ class AccountArchiveController extends Controller
      * @param \Illuminate\Http\Request $request
      * @param File $file
      * @return void
-,    */
+    */
     public function store(Request $request, Account $account)
     {
         $requestData = $this->validateRequest($request);
