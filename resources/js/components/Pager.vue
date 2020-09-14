@@ -1,5 +1,5 @@
 <template>
-    <div :class="pagerBottom" v-show="hasPages">
+    <div :class="pagerBottom" v-show="hasPages" ref="pagerContainer">
         <nav aria-label="pages" class="d-inline-flex">
             <ul class="pagination justify-content-center">
                 <li class="page-item" v-bind:class="{ disabled: onFirstPage }">
@@ -12,7 +12,7 @@
                         <i class="fas fa-angle-left"></i>
                     </a>
                 </li>
-                <li v-for="page in pages" :key="page.pageNumber" class="page-item" v-bind:class="{ active: isActivePage(page.pageNumber) }">
+                <li v-for="page in pages" :key="page.pageNumber" class="page-item pageNumber" v-bind:class="{ active: isActivePage(page.pageNumber) }">
                     <a @click="goToPage (page.pageNumber) " class="page-link">{{page.pageNumber}}</a>
                 </li>
                 <li class="page-item" v-bind:class="{ disabled: onLastPage }">
@@ -57,6 +57,20 @@ export default {
             type: Number,
             default: 0
         }
+    },
+    data() {
+        return {
+            repaging: false,
+        }
+    },
+    created() {
+        window.addEventListener("resize", this.resizeHandler);
+    },
+    destroyed() {
+        window.removeEventListener("resize", this.resizeHandler);
+    },
+    updated() {
+        this.resizeHandler();
     },
     computed: {
         hasPages: function() {
@@ -109,7 +123,6 @@ export default {
                 if(first < 1)
                     first = 1;
             }
-
             let self = this;
             return Array.from( { length: len }, ( _ , n ) => {
                 let pageNumber = first + n;
@@ -142,6 +155,41 @@ export default {
         goToPage( page ) {
             if( isNaN(page) || page < 2 ) page = null;
             this.updateQueryParams({ page });
+        },
+        isPagerOverflowed() {
+            return this.$refs.pagerContainer.offsetWidth != this.$refs.pagerContainer.scrollWidth;
+        },
+        resizeHandler() {
+            if (this.$refs.pagerContainer != undefined && !this.repaging) {
+                this.repaging = true;
+                let activePage = this.$el.querySelector('.active');
+                let pageArr = this.$el.querySelectorAll('.pageNumber');
+                let forceRebuild = false;
+                if (activePage != null && activePage.style.display == 'none') {
+                    forceRebuild = true;
+                } else if (pageArr.length > 1 && pageArr[1].style.display == 'none' && pageArr[0].style.display == '') {
+                    forceRebuild = true;
+                }
+                if (this.isPagerOverflowed() || forceRebuild) {
+                    if (activePage.style.display == 'none') {
+                        activePage.style.display = '';
+                    }
+                    let pageLen = pageArr.length;
+                    let pageHiddenCount = 0;
+                    for (let i=0;i<pageLen;i++) {
+                        pageArr[i].style.display = '';
+                    }
+                    for (let i=0;i<pageLen;i++) {
+                        if (pageArr[i].style.display != 'none' && pageArr[i] != activePage && this.isPagerOverflowed()) {
+                            pageArr[i].style.display = 'none';
+                            if (!this.isPagerOverflowed()) {
+                                break;
+                            }
+                        }
+                    }
+                }
+                this.repaging = false;
+            }
         }
     }
 }
