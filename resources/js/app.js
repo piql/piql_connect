@@ -108,7 +108,7 @@ import Layout from './views/layout.vue';
 
 function interceptToken() {
     axios.interceptors.request.use(config => {
-        console.log(Vue.prototype.$keycloak);
+        // console.log(Vue.prototype.$keycloak);
         config.headers.Authorization = `Bearer ${Vue.prototype.$keycloak.token}`
         return config
     }, error => {
