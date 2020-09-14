@@ -2,6 +2,7 @@
 
 namespace App\Auth;
 
+use Exception;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Facades\Log;
 
@@ -13,7 +14,7 @@ class User extends Authenticatable
 
     public function getIdAttribute()
     {
-        return $this->token->sub;
+        return isset($this->token) ? $this->token->sub : $this->sub;
     }
 
     public function settings()
@@ -44,5 +45,22 @@ class User extends Authenticatable
     public function storageLocations()
     {
         return $this->hasMany('App\StorageLocation', 'owner_id');
+    }
+
+    public function save(array $options = [])
+    {
+        $id = $this->getIdAttribute();
+        try {
+            file_put_contents(storage_path("app/data/keycloak/users/$id.json"), $this->toJson()['token']);
+        } catch (Exception $e) {
+            return false;
+        }
+        return true;
+    }
+
+    public function withAccessToken($accessToken)
+    {
+        $this->accessToken = $accessToken;
+        return $this;
     }
 }
