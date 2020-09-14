@@ -17,7 +17,7 @@ class TestAccountSeeder extends Seeder
     {
         Account::truncate();
 
-        if($this->seedFromFile(function($param) {
+        if ($this->seedFromFile(function ($param) {
             $account = Account::create($param);
             $metadata = \App\AccountMetadata::create([
                 "modified_by" => "",
@@ -28,9 +28,8 @@ class TestAccountSeeder extends Seeder
             ]);
             $metadata->parent()->associate($account);
             $metadata->save();
-            })) {
+        })) {
             return;
         }
-
     }
 }

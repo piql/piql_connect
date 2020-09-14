@@ -1,0 +1,17 @@
+{
+    "data": [{
+        "type": "App\\Account",
+        "id": "1",
+        "attributes": {
+            "collection": [
+                {
+                    "title": "Test Account",
+                    "description": "Dummy account made for testing purpose only",
+                        "uuid": "32af9410-f43e-11ea-8a3b-a5227e1c2957"
+                }
+            ]
+        }
+    }]
+}
+
+

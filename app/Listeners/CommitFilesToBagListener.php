@@ -18,9 +18,9 @@ use App\Traits\BagOperations;
 class CommitFilesToBagListener implements ShouldQueue
 {
     use BagOperations;
-    public const ACCOUNT_OBJECT = 'Account';
-    public const ARCHIVE_OBJECT = CommitFilesToBagListener::ACCOUNT_OBJECT.'/Archive';
-    public const HOLDING_OBJECT = CommitFilesToBagListener::ARCHIVE_OBJECT.'/Holding';
+    public const ACCOUNT_OBJECT = 'account';
+    public const ARCHIVE_OBJECT = CommitFilesToBagListener::ACCOUNT_OBJECT.'/archive';
+    public const HOLDING_OBJECT = CommitFilesToBagListener::ARCHIVE_OBJECT.'/holding';
     public const FILE_OBJECT_PATH = CommitFilesToBagListener::HOLDING_OBJECT.'/';
     protected $metadataGenerator;
     protected $bagIt;
