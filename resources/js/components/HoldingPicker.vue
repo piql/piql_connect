@@ -93,11 +93,15 @@ export default {
                 this.initComplete = true;
                 return;
             }
-            if( holding === this.wildCardLabel ) {
-                this.updateQueryParams({ holding: null, page : null })
-            } else {
-                this.updateQueryParams({ holding, page : null });
-            }
+             Vue.nextTick( () => {
+                 if( holding === this.wildCardLabel ) {
+                    this.updateQueryParams({ holding: null, page : null })
+                } else {
+                    this.updateQueryParams({ holding, page : null });
+                }
+                   
+            });
+            
         },
         holdings: function( holdings ) {
             if( !! holdings ) {
