@@ -99,6 +99,7 @@ Route::group(['prefix' => 'v1', 'middleware' => ['auth:api', 'activity']], funct
         Route::get('storage/offline/pending/buckets', 'Api\Ingest\OfflineStorageController@jobs')->name('api.ingest.buckets.pending');
         Route::get('storage/offline/archive/buckets', 'Api\Ingest\OfflineStorageController@archiveJobs')->name('api.ingest.buckets.archiving');
 
+        Route::post('storage/offline/files/upload', '\Optimus\FineuploaderServer\Controller\LaravelController@upload');
         Route::post('storage/offline/{jobId}/config/upload', 'Api\Storage\BucketConfigController@upload')->name('api.ingest.buckets.config');
         Route::get('storage/offline/{jobId}/config/showFiles', 'Api\Storage\BucketConfigController@showFiles')->name('api.ingest.buckets.config');
         Route::get('storage/offline/{jobId}/config/showFile/{name}', 'Api\Storage\BucketConfigController@showFile')->name('api.ingest.buckets.config');
