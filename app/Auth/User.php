@@ -2,16 +2,12 @@
 
 namespace App\Auth;
 
+use App\File;
 use Exception;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Support\Facades\Log;
 
 class User extends Authenticatable
 {
-    // protected $fillable = [
-    //     "scope", "email_verified", "name", "preferred_username", "given_name", "family_name", "email", 
-    // ];
-
     public function getIdAttribute()
     {
         return isset($this->token) ? $this->token->sub : $this->sub;
@@ -51,6 +47,8 @@ class User extends Authenticatable
     {
         $id = $this->getIdAttribute();
         try {
+            $dir=storage_path("app/data/keycloak/users/");
+            if(!File::isDirectory($dir))File::makeDirectory($dir, 0777, true, true);
             file_put_contents(storage_path("app/data/keycloak/users/$id.json"), $this->toJson()['token']);
         } catch (Exception $e) {
             return false;

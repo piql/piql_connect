@@ -17,7 +17,7 @@ use Faker\Generator as Faker;
 */
 
 $factory->define(User::class, function (Faker $faker) {
-    $user = json_decode(file_get_contents(storage_path('app/data/keycloak/users/kare.json')));
+    $user = json_decode(file_get_contents(resource_path('data/keycloak/users/token.json')));
     $name = $faker->name;
     $names = explode(" ", $name, 2);
     $user->iat = time();

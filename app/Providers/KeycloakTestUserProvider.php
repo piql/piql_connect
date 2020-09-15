@@ -39,7 +39,7 @@ class KeycloakTestUserProvider implements UserProvider
 
     private function getUser()
     {
-        $user = json_decode(file_get_contents(storage_path('app/data/keycloak/users/kare.json')));
+        $user = json_decode(file_get_contents(resource_path('data/keycloak/users/token.json')));
         return (array) $user;
     }
 }

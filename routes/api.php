@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,16 +18,11 @@ Route::middleware('auth')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-// Route::group(['prefix' => 'v1'], function () {
-//     Route::post('login', 'Auth\ApiLoginController@login')->middleware('user.checkDisabled');
-// });
-
 // todo: mode to whitelist middleware or add token to headers in callback
 Route::group(['prefix' => 'v1'], function () {
 });
 
 Route::group(['prefix' => 'v1', 'middleware' => ['auth']], function () {
-    // Route::post('logout', 'Auth\ApiLoginController@logout');
 
     Route::group(['prefix' => 'system'], function () {
         Route::get('statuses/current-user', 'Api\System\StatusController@currentUser');
