@@ -138,5 +138,7 @@ echo "Update AM service callbacks"
 if [[ ! -z $UPDATE_AM_SERVICE_CALLBACKS ]] ; then
   ./update-service-callbacks.php || exit $?
 fi
+
+./init-auth-client.sh
     
 echo "Finished successfully"
