@@ -52,7 +52,8 @@ describe("GroupsListing.vue", ()=> {
                 'b-modal': true,
                 'b-button': true,
                 'vue-select-sides': true,
-                'pager': true
+                'pager': true,
+                'breadcumb': true
             },
             propsData:{
                 height: 1

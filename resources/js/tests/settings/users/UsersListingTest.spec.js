@@ -42,6 +42,7 @@ describe("Roles.vue", ()=> {
                 'role-items': true,
                 'page-heading': true,
                 'pager': true,
+                'breadcumb': true
             }
         });
 
@@ -59,7 +60,8 @@ describe("Roles.vue", ()=> {
                 'b-modal': true,
                 'b-button': true,
                 'role-items': true,
-                'page-heading': true
+                'page-heading': true,
+                'breadcumb': true
             }
         });
 

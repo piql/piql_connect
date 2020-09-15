@@ -48,7 +48,8 @@ describe("Template", ()=>{
                 MetadataTemplateList
             },
             stubs: {
-                'page-heading': true
+                'page-heading': true,
+                'breadcumb': true
             }
         });
 

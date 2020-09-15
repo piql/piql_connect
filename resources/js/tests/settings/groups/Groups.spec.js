@@ -1,4 +1,4 @@
-import Groups from "@/views/settings/Admin/Account/Groups"
+import Groups from "@/views/settings/Admin/Account/Group"
 import { shallowMount } from "@vue/test-utils"
 
 const $t = (s) => s;
@@ -12,7 +12,8 @@ describe("Groups.vue", ()=> {
                 'b-modal': true,
                 'b-button': true,
                 'groups-listing': true,
-                'page-heading': true
+                'page-heading': true,
+                'breadcumb': true
             } 
         });
 
@@ -28,7 +29,8 @@ describe("Groups.vue", ()=> {
                 'b-modal': true,
                 'b-button': true,
                 'groups-listing': true,
-                'page-heading': true
+                'page-heading': true,
+                'breadcumb': true
             } 
         });
 
