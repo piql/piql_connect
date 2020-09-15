@@ -130,7 +130,7 @@
 
                     <router-link :to="{ name: 'ingest.offline'}">
                         <li class="list-group-item" :class="{ active: routeBelongsTo('ingest.offline') }" >
-                            <i class="fas fa-clock"></i><div class="leftMenuItem">{{$t('sidebar.taskList')}}</div>
+                            <img src="/images/piqlfilm-icon-white.svg" class="sideBarIconImg"/><div class="leftMenuItem">{{$t('sidebar.taskList')}}</div>
                         </li>
                     </router-link>
 

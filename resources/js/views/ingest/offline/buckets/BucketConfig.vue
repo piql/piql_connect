@@ -108,14 +108,15 @@
             const uploader = new FineUploaderTraditional({
                 options: {
                     request: {
-                        endpoint: '/api/v1/ingest/storage/offline/' + this.$route.params.bucketId + '/config/upload',
+                        endpoint: '/api/v1/ingest/storage/offline/files/upload',
                         params: {
-                            base_directory: 'completed',
+                            base_directory: 'bucketImg',
                             sub_directory: null,
                             optimus_uploader_allowed_extensions: [],
                             optimus_uploader_size_limit: 0,
                             optimus_uploader_thumbnail_height: 100,
                             optimus_uploader_thumbnail_width: 100,
+                            qqchunksize: 1024 * 768,
                         },
                         customHeaders: {
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -124,6 +125,14 @@
                     validation: {
                         allowedExtensions: ALLOWED_EXT
                     },
+                    chunking: {
+                        enabled: true,
+                        partSize: 1024*768,
+                        mandatory: true,
+                        concurrent: {
+                            enabled: false
+                        },
+                    },
                     callbacks: {
                         onError: (msg) => {
                             let options = {
@@ -131,12 +140,20 @@
                             };
                             this.$dialog.alert(this.$t('ingest.offlineStorage.config.alert.notAllowedExtensions'), options);
                         },
-                        onComplete: complete => {
-                            this.infoToast(
-                                this.$t('ingest.offlineStorage.config.toast.fileUploaded.header'),
-                                this.$t('ingest.offlineStorage.config.toast.fileUploaded.message')
-                            );
-                            this.loadFiles();
+                        onComplete: async (id, name, response, xhr) => {
+                            if( response.success == false ){
+                                return;
+                            }
+                            axios.post('/api/v1/ingest/storage/offline/' + this.$route.params.bucketId + '/config/upload', {
+                                'fileName' : name,
+                                'result' : response
+                            }).then( async ( file ) => {
+                                this.infoToast(
+                                    this.$t('ingest.offlineStorage.config.toast.fileUploaded.header'),
+                                    this.$t('ingest.offlineStorage.config.toast.fileUploaded.message')
+                                );
+                                this.loadFiles();
+                            });
                         }
                     }
                 },
@@ -172,7 +189,6 @@
             url() { return this.baseUrl + '/' + this.$route.params.bucketId; },
             success() { return this.result ? ( this.result.status === 200 ) : false; },
             item() { return this.success ? this.result.data.data : null; },
-            jobId() { return this.jobId }
         },
         async mounted() {
             this.jobId = this.$route.params.bucketId;

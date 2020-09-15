@@ -30,7 +30,7 @@
                                     <div class="value">{{offlineReelsCount}}</div>
                                     <div class="legend">{{$t('dashboard.cards.reels')}}</div>
                                 </div>
-                                <div class="col-md-3 icon"><i class="fa fa-film"></i></div>
+                                <div class="col-md-3 icon"><img src="/images/piqlfilm-icon-white.svg" class="dashboardIconImg"/></div>
                             </div>
                     </div>
                     <div class="col-md-3">

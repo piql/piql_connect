@@ -1,10 +1,12 @@
 <template>
     <div class="w-100">
+
         <page-heading icon="fa-clock" :title="$t('ingest.taskList.title')" :ingress="$t('ingest.taskList.ingress')" />
         <breadcumb/>
+
         <div class="card">
             <div class="card-header">
-                <b><i class="fa fa-clock"></i> {{$t('ingest.taskList.title')}}</b>
+                <b><img src="/images/piqlfilm-icon-gray-light.svg" class="iconTitle"/> {{$t('ingest.taskList.title')}}</b>
             </div>
             <div class="card-body">
                 <task-table :items="items" :jobListUrl="jobListUrl" :actionIcons="actionIcons" @piqlIt="piqlIt" @onDelete="update" />
@@ -77,3 +79,9 @@
         },
     }
 </script>
+
+<style scoped>
+    .iconTitle {
+        width: 1.2em
+    }
+</style>
