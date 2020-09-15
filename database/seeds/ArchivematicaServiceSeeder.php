@@ -1,5 +1,6 @@
 <?php
 
+use App\Account;
 use App\ArchivematicaService;
 use Illuminate\Database\Seeder;
 use Laravel\Passport\ClientRepository;
@@ -46,7 +47,7 @@ class ArchivematicaServiceSeeder extends Seeder
         }
 
         // Add default Archivematica Client for accessing Piql Connect trigger API
-        $amUser = App\User::firstOrNew(['username' => 'archivematica']);
+        $amUser = App\User::firstOrNew(['username' => 'archivematica', "account" => Account::get()->first()->uuid]);
         $amUser->username = "archivematica";
         $amUser->password = Hash::make(Uuid::generate());
         $amUser->full_name = "Archivematica callback client";
