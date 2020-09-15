@@ -62,7 +62,7 @@ class MessageProcess extends Command
                 sleep($this->pollingInterval);
 
                 if (!$storage->delete($storageLocation, $messageFile)) {
-                    $this->warning('Failed to delete message : ' . $messageFile);
+                    $this->warn('Failed to delete message : ' . $messageFile);
                 }
                 $this->moveMessage('outgoing', 'messages-processing', $messageFile);
                 $this->info('Fetched message: ' . $messageFile);
