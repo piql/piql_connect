@@ -82,7 +82,7 @@ export default {
                 if(response.data.data.length > 0){
                     this.holdings = response.data.data;
                     //default selection
-                    this.selection = this.holdings[0].title;
+                    this.selection = this.holdings[0].uuid;
                 }
 
             })
