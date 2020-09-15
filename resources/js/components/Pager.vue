@@ -1,9 +1,9 @@
 <template>
-    <div :class="pagerBottom" v-show="hasPages" ref="pagerContainer">
+    <div :class="pagerBottom" v-show="hasPages">
         <nav aria-label="pages" class="d-inline-flex">
             <ul class="pagination justify-content-center">
-                <li class="page-item" v-bind:class="{ disabled: onFirstPage }">
-                    <a @click="firstPage" class="page-link">
+                <li class="page-item" v-bind:class="{ disabled: onFirstFfPage }">
+                    <a @click="prevFfPage" class="page-link">
                         <i class="fas fa-angle-double-left"></i>
                     </a>
                 </li>
@@ -12,7 +12,7 @@
                         <i class="fas fa-angle-left"></i>
                     </a>
                 </li>
-                <li v-for="page in pages" :key="page.pageNumber" class="page-item pageNumber" v-bind:class="{ active: isActivePage(page.pageNumber) }">
+                <li v-for="page in pages" :key="page.pageNumber" class="page-item" v-bind:class="{ active: isActivePage(page.pageNumber) }">
                     <a @click="goToPage (page.pageNumber) " class="page-link">{{page.pageNumber}}</a>
                 </li>
                 <li class="page-item" v-bind:class="{ disabled: onLastPage }">
@@ -20,8 +20,8 @@
                         <i class="fas fa-angle-right"></i>
                     </a>
                 </li>
-                <li class="page-item" v-bind:class="{ disabled: onLastPage }">
-                    <a @click="lastPage" class="page-link">
+                <li class="page-item" v-bind:class="{ disabled: onLastFfPage }">
+                    <a @click="nextFfPage" class="page-link">
                         <i class="fas fa-angle-double-right"></i>
                     </a>
                 </li>
@@ -58,20 +58,6 @@ export default {
             default: 0
         }
     },
-    data() {
-        return {
-            repaging: false,
-        }
-    },
-    created() {
-        window.addEventListener("resize", this.resizeHandler);
-    },
-    destroyed() {
-        window.removeEventListener("resize", this.resizeHandler);
-    },
-    updated() {
-        this.resizeHandler();
-    },
     computed: {
         hasPages: function() {
             return this.numberOfPages > 1;
@@ -85,11 +71,23 @@ export default {
         prev: function() {
             return this.meta && this.meta.current_page > 1 ? this.meta.current_page - 1 : null;
         },
+        nextFf: function() {
+            return this.meta && this.meta.current_page < this.meta.last_page ? this.meta.current_page + parseInt(this.visiblePageSelectors) : null;
+        },
+        prevFf: function() {
+            return this.meta && this.meta.current_page > 1 ? this.meta.current_page - this.visiblePageSelectors : null;
+        },
         onFirstPage: function() {
             return this.meta && this.prev === null;
         },
         onLastPage: function() {
             return this.meta && this.next === null;
+        },
+        onFirstFfPage: function() {
+            return this.meta && this.meta.current_page <= this.visiblePageSelectors;
+        },
+        onLastFfPage: function() {
+            return this.meta && this.meta.current_page >= this.meta.last_page - this.visiblePageSelectors;
         },
         numberOfPages: function() {
             return this.meta ? this.meta.last_page : null;
@@ -123,6 +121,7 @@ export default {
                 if(first < 1)
                     first = 1;
             }
+
             let self = this;
             return Array.from( { length: len }, ( _ , n ) => {
                 let pageNumber = first + n;
@@ -146,50 +145,17 @@ export default {
             let page = this.prev > 1 ? this.prev : null;
             this.updateQueryParams({ page });
         },
-        firstPage() {
-            this.updateQueryParams({ page: null });
+        prevFfPage() {
+            let page = this.prevFf > 1 ? this.prevFf : null;
+            this.updateQueryParams({ page });
         },
-        lastPage() {
-            this.updateQueryParams({ page: this.numberOfPages });
+        nextFfPage() {
+            let page = this.nextFf > 1 ? this.nextFf : null;
+            this.updateQueryParams({ page });
         },
         goToPage( page ) {
             if( isNaN(page) || page < 2 ) page = null;
             this.updateQueryParams({ page });
-        },
-        isPagerOverflowed() {
-            return this.$refs.pagerContainer.offsetWidth != this.$refs.pagerContainer.scrollWidth;
-        },
-        resizeHandler() {
-            if (this.$refs.pagerContainer != undefined && !this.repaging) {
-                this.repaging = true;
-                let activePage = this.$el.querySelector('.active');
-                let pageArr = this.$el.querySelectorAll('.pageNumber');
-                let forceRebuild = false;
-                if (activePage != null && activePage.style.display == 'none') {
-                    forceRebuild = true;
-                } else if (pageArr.length > 1 && pageArr[1].style.display == 'none' && pageArr[0].style.display == '') {
-                    forceRebuild = true;
-                }
-                if (this.isPagerOverflowed() || forceRebuild) {
-                    if (activePage.style.display == 'none') {
-                        activePage.style.display = '';
-                    }
-                    let pageLen = pageArr.length;
-                    let pageHiddenCount = 0;
-                    for (let i=0;i<pageLen;i++) {
-                        pageArr[i].style.display = '';
-                    }
-                    for (let i=0;i<pageLen;i++) {
-                        if (pageArr[i].style.display != 'none' && pageArr[i] != activePage && this.isPagerOverflowed()) {
-                            pageArr[i].style.display = 'none';
-                            if (!this.isPagerOverflowed()) {
-                                break;
-                            }
-                        }
-                    }
-                }
-                this.repaging = false;
-            }
         }
     }
 }
