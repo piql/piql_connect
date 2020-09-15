@@ -2,7 +2,8 @@
     <div class="pageHeader">
         <div class="row titleRow">
             <div class="d-inline-flex">
-                <i :class="icon" class="fas titleIcon"></i>
+                <img :src="iconImg" v-if="iconImg != null"/>
+                <i :class="icon" class="fas titleIcon" v-if="iconImg == null"></i>
                 <span class="titleText">{{title}}</span>
             </div>
         </div>
@@ -28,7 +29,12 @@ export default {
         ingress: {
             type: String,
             default: "Page description"
-        }
+        },
+        iconImg: {
+            type: String,
+            default: null
+        },
+
     },
 };
 </script>
