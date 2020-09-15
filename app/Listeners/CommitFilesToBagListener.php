@@ -14,14 +14,11 @@ use Illuminate\Support\Str;
 use Log;
 use BagitUtil;
 use App\Traits\BagOperations;
+use App\MetadataPath;
 
 class CommitFilesToBagListener implements ShouldQueue
 {
     use BagOperations;
-    public const ACCOUNT_OBJECT = 'account';
-    public const ARCHIVE_OBJECT = CommitFilesToBagListener::ACCOUNT_OBJECT.'/archive';
-    public const HOLDING_OBJECT = CommitFilesToBagListener::ARCHIVE_OBJECT.'/holding';
-    public const FILE_OBJECT_PATH = CommitFilesToBagListener::HOLDING_OBJECT.'/';
     protected $metadataGenerator;
     protected $bagIt;
     /**
@@ -70,40 +67,38 @@ class CommitFilesToBagListener implements ShouldQueue
             $metadataPlaceholders = [
                 (object)[
                     "class" => \App\AccountMetadata::class,
-                    "object" => $this::ACCOUNT_OBJECT
+                    "object" => MetadataPath::ACCOUNT_OBJECT
                 ],
                 (object)[
                     "class" => \App\ArchiveMetadata::class,
-                    "object" => $this::ARCHIVE_OBJECT
+                    "object" => MetadataPath::ARCHIVE_OBJECT
                 ],
                 (object)[
                     "class" => \App\HoldingMetadata::class,
-                    "object" => $this::HOLDING_OBJECT
+                    "object" => MetadataPath::HOLDING_OBJECT
                 ]
             ];
 
             $uuid = $bag->uuid;
-            $retval = collect($metadataPlaceholders)->map(function($metadataPlaceholder) use($metadataWriter, $uuid){
+            $metadataGenerated = collect($metadataPlaceholders)->map(function($metadataPlaceholder) use($metadataWriter, $uuid){
 
                 $query = $metadataPlaceholder->class::whereHasMorph('parent', [\App\Bag::class], function(Builder $query) use ($uuid) {
                     $query->where("uuid", $uuid);
                 });
                 // append metadata to file
-                $retval = $metadataWriter->write([
+                $writeSuccess = $metadataWriter->write([
                     'object' => $metadataPlaceholder->object,
                     'metadata' => $query->get()->first()->metadata
                 ]);
 
-                if (!$retval) {
+                if (!$writeSuccess) {
                     Log::error("Generating " . $metadataPlaceholder->class . "metadata for Bag " . $uuid . " failed!");
-                    return 1;
                 }
 
-                return 0;
-            })->sum();
+                return $writeSuccess;
+            })->reduce(function($a, $b) { return $a && $b; }, true);
 
-            if ($retval) {
-                Log::error("Generating metadata for Bag " . $bag->uuid . " failed!");
+            if (!$metadataGenerated) {
                 event(new ErrorEvent($bag));
             }
         }
@@ -111,15 +106,15 @@ class CommitFilesToBagListener implements ShouldQueue
         foreach ($files as $file)
         {
             if( ($file->filename === "metadata.csv") && $bag->owner()->first()->settings->getIngestMetadataAsFileAttribute() )
-                $this->bagIt->addMetadataFile($file->storagePathCompleted(), $this::FILE_OBJECT_PATH.$file->filename);
+                $this->bagIt->addMetadataFile($file->storagePathCompleted(), MetadataPath::FILE_OBJECT_PATH.$file->filename);
             else
-                $this->bagIt->addFile($file->storagePathCompleted(), $this::FILE_OBJECT_PATH.$file->filename);
+                $this->bagIt->addFile($file->storagePathCompleted(), MetadataPath::FILE_OBJECT_PATH.$file->filename);
 
             if( $bag->owner()->first()->settings->getIngestMetadataAsFileAttribute() !== true ) {
                 if ($file->metadata->count() > 0) {
                     // append metadata to file
                     $retval = $metadataWriter->write([
-                        'object' => $this::FILE_OBJECT_PATH.$file->filename,
+                        'object' => MetadataPath::FILE_OBJECT_PATH.$file->filename,
                         'metadata' => $file->metadata[0]->metadata
                     ]);
                     if (!$retval) {

@@ -26,6 +26,7 @@ use Mockery;
 use Tests\TestCase;
 use App\Interfaces\MetadataGeneratorInterface;
 use Webpatser\Uuid\Uuid;
+use App\MetadataPath;
 
 class CommitFilesToBagListenerTest extends TestCase
 {
@@ -118,26 +119,26 @@ class CommitFilesToBagListenerTest extends TestCase
 
                     $mock->shouldReceive('write')->times(1)->with(Mockery::on(function($argument) use ($file) {
                         $this->assertArrayHasKey("object", $argument);
-                        $this->assertEquals(CommitFilesToBagListener::ACCOUNT_OBJECT, $argument["object"]);
+                        $this->assertEquals(MetadataPath::ACCOUNT_OBJECT, $argument["object"]);
                         return true;
                     }))->andReturn(true);
 
                     $mock->shouldReceive('write')->times(1)->with(Mockery::on(function($argument) use ($file) {
                         $this->assertArrayHasKey("object", $argument);
-                        $this->assertEquals(CommitFilesToBagListener::ARCHIVE_OBJECT, $argument["object"]);
+                        $this->assertEquals(MetadataPath::ARCHIVE_OBJECT, $argument["object"]);
                         return true;
                     }))->andReturn(true);
 
                     $mock->shouldReceive('write')->times(1)->with(Mockery::on(function($argument) use ($file) {
                         $this->assertArrayHasKey("object", $argument);
-                        $this->assertEquals(CommitFilesToBagListener::HOLDING_OBJECT, $argument["object"]);
+                        $this->assertEquals(MetadataPath::HOLDING_OBJECT, $argument["object"]);
                         return true;
                     }))->andReturn(true);
 
 
                     $mock->shouldReceive('write')->times(1)->with(Mockery::on(function($argument) use ($file) {
                         $this->assertArrayHasKey("object", $argument);
-                        $this->assertEquals(CommitFilesToBagListener::FILE_OBJECT_PATH.$file->filename, $argument["object"]);
+                        $this->assertEquals(MetadataPath::FILE_OBJECT_PATH.$file->filename, $argument["object"]);
                         return true;
                     }))->andReturn(true);
                     $mock->shouldReceive('close')->once()->andReturn(true);
