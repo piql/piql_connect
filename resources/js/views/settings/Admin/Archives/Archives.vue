@@ -1,6 +1,7 @@
 <template>
 <div class="w-100">
     <page-heading icon="fa-archive" :title="$t('settings.archives.title')" :ingress="$t('settings.archives.description')" />
+    <breadcumb/>
     <div class="card">
         <div class="card-header">
             <span v-if="enableMetaForm"><i class="fa fa-tags"></i> {{ $t('settings.archives.assignMeta').toUpperCase() }} | <button class="btn btn-primary" @click="disableMetaForm">{{$t('settings.archives.backToArchives')}}</button></span>

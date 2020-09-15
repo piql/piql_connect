@@ -1,6 +1,7 @@
 <template>
     <div class="w-100">
         <page-heading icon="fa-folder" :title="$t('settings.holdings.title')" :ingress="$t('settings.holdings.description')" />
+        <breadcumb/>
         <div class="card">
             <div class="card-header">
                <i class="fa fa-plus"></i> {{$t('settings.holdings.add').toUpperCase()}}

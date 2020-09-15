@@ -3,6 +3,7 @@
         <page-heading icon="fa-user-shield" 
         :title="$t('settings.settings.rolePermissions') + ' [ '+ role.name + ' ]'" 
         :ingress="$t('settings.settings.rolePermDesc')" />
+        <breadcumb :subTitle="role.name"/>
         <div class="card">
             <div class="card-header">
                 CONFIGURE PERMISSIONS

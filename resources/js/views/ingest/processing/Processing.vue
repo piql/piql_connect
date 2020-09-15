@@ -2,6 +2,7 @@
     <div class="w-100">
 
         <page-heading icon="fa-hourglass-half" :title="$t('ingest.processing.title')" :ingress="$t('ingest.processing.ingress')" />
+        <breadcumb/>
 
         <div class="row">
             <div class="col-md-12">

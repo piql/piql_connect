@@ -1,6 +1,7 @@
 <template>
     <div class="w-100">
         <page-heading icon="fa-clock" :title="$t('ingest.taskList.title')" :ingress="$t('ingest.taskList.ingress')" />
+        <breadcumb/>
         <div class="card">
             <div class="card-header">
                 <b><i class="fa fa-clock"></i> {{$t('ingest.taskList.title')}}</b>

@@ -1,6 +1,7 @@
 <template>
     <div class="w-100">
         <page-heading icon="fa-cog" :title="$t('settings.settings.header')" :ingress="$t('settings.settings.ingress')" />
+        <breadcumb/>
         <div class="row">
             <div class="col-md-12">
                 <div>

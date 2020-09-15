@@ -3,6 +3,7 @@
 
         <page-heading icon="fa-file-download" :title="$t('access.retrieve.downloadable')"
             :ingress="$t('access.retrieve.downloadable.ingress')" />
+            <breadcumb/>
 
         <div class="row plistHeader" v-show="hasFiles" v-if="done === false">
             <div class="col-sm-8">{{$t('access.ready.aipName')}}</div>

@@ -1,6 +1,7 @@
 <template>
     <div class="w-100">
         <page-heading icon="fa-upload" :title="$t('upload.title')" :ingress="$t('upload.ingress')" />
+        <breadcumb/>
 
         <form v-on:submit.prevent>
 

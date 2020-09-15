@@ -6,6 +6,9 @@
             :title="$t('admin.metadata.template.title')"
             :ingress="$t('admin.metadata.template.ingress')" />
 
+            
+            <breadcumb/>
+
 				<div class="card">
 						<div class="card-header">
 								<div class="row">

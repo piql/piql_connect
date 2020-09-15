@@ -2,6 +2,7 @@
     <div class="w-100">
 
         <page-heading icon="fa-list-ul" :title="$t('ingest.offlineStorage.contentOptions.header')" :ingress="$t('ingest.offlineStorage.contentOptions.ingress')" />
+        <breadcumb/>
 
         <div class="row plistHeader">
             <div class="col-sm-4">{{$t('ingest.offlineStorage.jobName')}}</div>

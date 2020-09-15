@@ -3,6 +3,7 @@
 
         <page-heading icon="fa-file-export" :title="$t('access.retrieve.readyToRetrieve')"
             :ingress="$t('access.ready.ingress')" />
+            <breadcumb/>
 
         <div class="row plistHeader" v-show="hasFiles">
             <div class="col-sm-6">{{$t('access.ready.aipName')}}</div>

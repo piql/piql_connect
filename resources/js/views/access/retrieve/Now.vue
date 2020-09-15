@@ -3,6 +3,7 @@
 
         <page-heading icon="fa-spinner" :title="$t('access.retrieve.nowRetrieving')"
             :ingress="$t('access.retrieve.nowRetrieving.ingress')" />
+            <breadcumb/>
 
         <div class="row plistHeader" v-show="hasFiles" v-if="done === false">
             <div class="col-sm-6">{{$t('access.ready.aipName')}}</div>

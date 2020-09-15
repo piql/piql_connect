@@ -5,6 +5,8 @@
         :title="$t('ingest.offlineStorage.status.title')" 
         :ingress="$t('ingest.offlineStorage.status.ingress')" />
 
+        <breadcumb/>
+
         <div class="card">
             <div class="card-header">
                 <b><i class="fa fa-clipboard-check"></i> {{ $t('ingest.offlineStorage.status.title') }}</b>

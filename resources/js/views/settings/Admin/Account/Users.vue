@@ -1,6 +1,7 @@
 <template>
     <div class="w-100">
         <page-heading icon="fa-user" :title="$t('settings.settings.users')" :ingress="$t('settings.settings.listing')" />
+        <breadcumb/>
         <div class="card">
             <div class="card-header">
                 <span v-if="showAddUser"><i class="fa fa-user-plus"></i>  {{$t('settings.settings.addUser').toUpperCase()}} | 

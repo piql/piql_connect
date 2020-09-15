@@ -1,6 +1,7 @@
 <template>
     <div class="w-100">
         <page-heading icon="fa-hdd" :title="$t('access.browse')" :ingress="$t('access.browse.ingress')" />
+        <breadcumb/>
 
         
 

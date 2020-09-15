@@ -1,6 +1,7 @@
 <template>
     <div class="w-100">
         <page-heading icon="fa-user-shield" :title="$t('settings.settings.roles')" :ingress="$t('settings.settings.rolesDesc')" />
+        <breadcumb/>
         <div class="card">
             <div class="card-header">
                 <span v-if="showAddRole"><i class="fa fa-plus"></i>  {{$t('settings.roles.addRole').toUpperCase()}} | 
