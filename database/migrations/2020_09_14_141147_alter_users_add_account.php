@@ -19,7 +19,7 @@ class AlterUsersAddAccount extends Migration
             $table->uuid("account");
         });
 
-        $account = Account::first();
+        $account = Account::whereTitle("Default Account");
         if(!$account) {
             {
                 $account = Account::create([
