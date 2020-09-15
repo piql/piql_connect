@@ -26,17 +26,6 @@
                 default: null
             },
         },
-        methods:{
-            createLink(crumb){
-                //search path
-                let crumbLocation = this.$route.path.search(crumb);
-                let crumbLength = crumb.length();
-                let totalLength = crumbLocation + crumbLength;
-                return this.$route.path.substring(0, totalLength);
-
-            },
-
-        },
         computed:{
             breadcrumbs(){
                 let crumbs =  this.$route.name.split(".");
