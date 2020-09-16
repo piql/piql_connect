@@ -17,11 +17,11 @@ class UpdateArchiveWithDefaultAccount extends Migration
         $query = Archive::where("account_uuid" , null);
         if($query->count())
         {
-            $account = Account::get()->first();
+            $account = Account::first();
             if(!$account) {
                 $account = Account::create([
                     "title" => "Default Account",
-                    "description" => "Dummy account made for testing purpose only",
+                    "description" => "Default Account",
                     "uuid" => Uuid::generate()->string
                 ]);
                 $metadata = \App\AccountMetadata::create([

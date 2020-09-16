@@ -155,17 +155,16 @@ export default {
                     onValidate: (id, name) => {
                     },
                     onSubmit: (id, name) => {
-                        let originalName = name;
-                        let isDuplicate = true;
-                        let index = 2;
-                        do {
-                            isDuplicate = this.filesUploading.findIndex( (file) => file.filename == name ) != -1;
-                            if (isDuplicate) {
-                                name = this.renameFile(originalName, index);
-                                this.filesRenamed[id] = name;
-
-                            }
-                        } while (isDuplicate);
+                        let isDuplicate = this.filesUploading.some( file => file.filename === name );
+                        if( isDuplicate ){
+                            this.errorToast(
+                                this.$t('upload.toasts.uploadDuplicate.title'),
+                                this.$t('upload.toasts.uploadDuplicate.message'),
+                                { 'FILENAME': name },
+                                0
+                            );
+                            cancel(id);
+                        }
 
                         this.filesUploading.unshift({
                             'id': id,
@@ -212,9 +211,6 @@ export default {
 
                         if( this.compoundModeEnabled ) {
                             let uploadToBagId = this.bag.id;
-                            if (this.filesRenamed[id] != undefined) {
-                                name = this.filesRenamed[id];
-                            }
                             axios.post(`/api/v1/ingest/bags/${uploadToBagId}/files`, {
                                 'fileName' : name,
                                 'result' : response,
@@ -273,7 +269,6 @@ export default {
             bagName: "",
             files: {},
             filesUploading: [],
-            filesRenamed: {},
             userId: '',
             userSettings: {
                 workflow: {
@@ -393,15 +388,6 @@ export default {
         },
         loadNewHolders(){
             this.forceHolderReRender();
-        },
-        renameFile(name, index) {
-            let nameArr = name.split(".");
-            if (nameArr.length == 1) {
-                return name + "-" + index;
-            } else {
-                nameArr[nameArr.length-2] = nameArr[nameArr.length-2] + "-" + index;
-                return nameArr.join(".");
-            }
         },
         metadataClicked( e ) {
             let fileId = e.uploadedFileId;
