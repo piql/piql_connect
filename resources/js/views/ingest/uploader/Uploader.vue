@@ -127,7 +127,8 @@ export default {
                         optimus_uploader_thumbnail_width: 100,
                     },
                     customHeaders: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                        'Authorization': `Bearer ${Vue.prototype.$keycloak.token}`
                     }
                 },
                 deleteFile: {
