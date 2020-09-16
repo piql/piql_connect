@@ -19,7 +19,7 @@ class AlterUsersAddAccount extends Migration
             $table->uuid("account");
         });
 
-        $account = Account::whereTitle("Default Account");
+        $account = Account::whereTitle("Default Account")->first();
         if(!$account) {
             {
                 $account = Account::create([
@@ -38,7 +38,6 @@ class AlterUsersAddAccount extends Migration
                 $metadata->save();
             }
         }
-
         User::query()->update(["account" => $account->uuid]);
     }
 
