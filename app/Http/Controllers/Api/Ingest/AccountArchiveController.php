@@ -19,6 +19,7 @@ class AccountArchiveController extends Controller
         return $request->validate([
             "title" => "string|nullable",
             "description" => "string|nullable",
+            "metadata" => "array|nullable",
         ]);
     }
 
@@ -31,16 +32,9 @@ class AccountArchiveController extends Controller
      */
     public function index(Request $request, Account $account)
     {
-        // todo: the selection needs to be modified when roles and groups gets fully implemented
-        if($account->owner_id !== auth()->user()->id) {
-            abort( response()->json([ 'error' => 404, 'message' => 'Invalid account' ], 404 ) );
-        }
-
-        $archives = $account->archives();
-
+        // TODO: setup guards
         $limit = $request->limit ? $request->limit : env('DEFAULT_ENTRIES_PER_PAGE');
-        return ArchiveResource::collection( $archives->paginate( $limit ) );
-
+        return ArchiveResource::collection( Archive::paginate( $limit ) );
     }
 
     /**
@@ -49,14 +43,9 @@ class AccountArchiveController extends Controller
      * @param \Illuminate\Http\Request $request
      * @param File $file
      * @return void
-     */
+,    */
     public function store(Request $request, Account $account)
     {
-        // todo: the selection needs to be modified when roles and groups gets fully implemented
-        if($account->owner_id !== auth()->user()->id) {
-            abort( response()->json([ 'error' => 404, 'message' => 'Invalid account' ], 404 ) );
-        }
-
         $requestData = $this->validateRequest($request);
         $archive = new Archive(
             array_merge($requestData, [
@@ -82,11 +71,6 @@ class AccountArchiveController extends Controller
      */
     public function show(Account $account, Archive $archive)
     {
-        // todo: the selection needs to be modified when roles and groups gets fully implemented
-        if($account->owner_id !== auth()->user()->id) {
-            abort( response()->json([ 'error' => 404, 'message' => 'Invalid account' ], 404 ) );
-        }
-
         return response()->json([ "data" => new ArchiveResource($archive)]);
     }
 
@@ -94,20 +78,13 @@ class AccountArchiveController extends Controller
      * Update the specified resource in storage.
      *
      * @param \Illuminate\Http\Request $request
-     * @param Account $account
-     * @return \Illuminate\Http\Response
+     * @param Account $ac
      */
     public function update(Request $request, Account $account, Archive $archive)
     {
-        // todo: the selection needs to be modified when roles and groups gets fully implemented
-        if($account->owner_id !== auth()->user()->id) {
-            abort( response()->json([ 'error' => 404, 'message' => 'Invalid account' ], 404 ) );
-        }
-
-        $requestData = $this->validateRequest($request);
-        $archive->update($requestData);
-        $archive->save();
-        return response()->json([ "data" => new ArchiveResource($archive)]);
+        $requestData = $this->validateRequest( $request );
+        $archive->update( $requestData );
+        return new ArchiveResource( $archive );
     }
 
     /**
@@ -119,12 +96,31 @@ class AccountArchiveController extends Controller
      */
     public function destroy(Account $account, Archive $archive)
     {
-        // todo: the selection needs to be modified when roles and groups gets fully implemented
-        if($account->owner_id !== auth()->user()->id) {
-            abort( response()->json([ 'error' => 404, 'message' => 'Invalid account' ], 404 ) );
-        }
-
-        $archive->delete();
-        return response( "", 204);
+        return response( "Archives cannot be deleted in this version", 405 );
     }
+
+    public function test_given_an_authenticated_user_when_getting_an_archives_they_have_metadata()
+    {
+        $response = $this->actingAs( $this->user )
+            ->get( route('api.ingest.account.archive.index', [$this->account->id]) );
+        $response->assertStatus( 200 );
+        $decoded = collect( json_decode( $response->getContent() )->data )->firstWhere('id', $this->archive->id);
+        dump($decoded->metadata);
+        $this->assertNotNull( $decoded->metadata );
+    }
+
+    public function test_given_an_authenticated_user_when_updating_metadata_it_responds_with_updated_data()
+    {
+        $metadata = [
+            "metadata" => ["dc" => ["title" => "The best novel ever!"]]
+        ];
+
+        $response = $this->actingAs( $this->user )
+            ->put( route('api.ingest.account.archive.update', [$this->account->id, $this->archive->id]),
+               $metadata );
+
+        $response->assertStatus( 200 )
+                 ->assertJsonFragment( $metadata->metadata );
+    }
+
 }

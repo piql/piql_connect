@@ -2,14 +2,15 @@
 
 namespace Tests\Feature;
 
-use App\Archive;
-use App\Http\Resources\AccountResource;
-use App\Account;
-use App\Http\Resources\ArchiveResource;
-use App\User;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Laravel\Passport\Passport;
+use Faker\Factory as faker;
+use App\Account;
+use App\Archive;
+use App\User;
+use App\Http\Resources\AccountResource;
+use App\Http\Resources\ArchiveResource;
 
 class AccountArchiveControllerTest extends TestCase
 {
@@ -18,12 +19,15 @@ class AccountArchiveControllerTest extends TestCase
     private $user;
     private $account;
     private $archive;
+    private $archiveContent;
+    private $faker;
 
     public function setUp() : void
     {
         parent::setUp();
         $this->user = factory(User::class)->create();
         Passport::actingAs( $this->user );
+        $this->faker = Faker::create();
 
         $this->account = factory(Account::class)->create([
 
@@ -31,9 +35,9 @@ class AccountArchiveControllerTest extends TestCase
         $this->account->owner()->associate($this->user);
         $this->account->save();
 
-        $this->archive = factory(Archive::class)->create([
-            "account_uuid" => $this->account->uuid,
-        ]);
+        $this->archiveContent = [ "account_uuid" => $this->account->uuid ];
+
+        $this->archive = factory(Archive::class)->create( $this->archiveContent );
 
     }
 
@@ -46,56 +50,95 @@ class AccountArchiveControllerTest extends TestCase
 
     }
 
-    public function test_given_an_authenticated_user_and_archive_it_responds_200()
+    public function test_given_an_authenticated_user_when_requesting_an_archive_it_is_returned()
     {
         $response = $this->actingAs( $this->user )
             ->get( route('api.ingest.account.archive.show', [$this->account->id, $this->archive->id]) );
-        $response->assertStatus( 200 );
+        $response->assertStatus( 200 )
+            ->assertJsonFragment( $this->archiveContent );
     }
 
-    public function test_given_an_authenticated_user_storing_an_archive_it_responds_200()
+    public function test_given_an_authenticated_user_storing_an_archive_it_is_stored()
     {
-        $newArchive = new ArchiveResource(factory(Archive::class)->make([
-            'title' => 'test title',
-            'description' => 'test',
-        ]));
+        $archive = [
+            'title' => $this->faker->slug(3),
+            'description' => $this->faker->slug(6)
+        ];
 
         $response = $this->actingAs( $this->user )
-            ->json('POST', route('api.ingest.account.archive.store', [$this->account->id]),
-                (new ArchiveResource($newArchive))->toArray(null));
+            ->postJson( route('api.ingest.account.archive.store', [$this->account->id]),
+                $archive );
 
-        $response->assertStatus( 200 )->assertJsonStructure(["data" => ["id"]]);
-
+        $response->assertStatus( 200 )
+                 ->assertJsonStructure(["data" => ["id"]])
+                 ->assertJsonFragment( $archive );
         $this->assertEquals(2, $this->account->archives()->count());
-        $archive = $this->account->archives()->where("id", $response->json("data")["id"])->get()->first();
-        $this->assertEquals( $newArchive->title, $archive->title);
-        $this->assertEquals( $newArchive->description, $archive->description);
     }
 
-    public function test_given_an_authenticated_user_updating_archive_it_responds_200()
+    public function test_given_an_authenticated_user_storing_an_archive_with_dublin_core_metadata_the_metadata_is_stored()
     {
-        $archive = factory(Archive::class)->create([
-            'title' => 'test title',
-            'description' => 'test',
-        ]);
+        $metadata = [ "dc" => [
+            'subject' => $this->faker->text()
+        ]];
+
+        $archive = [
+            'title' => $this->faker->slug(3),
+            'description' => $this->faker->slug(6),
+            'metadata' => $metadata
+        ];
 
         $response = $this->actingAs( $this->user )
-            ->json('PATCH', route('api.ingest.account.archive.update', [$this->account->id, $this->archive->id]),
-                (new ArchiveResource($archive))->toArray(null));
+            ->postJson( route('api.ingest.account.archive.store', [$this->account->id]),
+                $archive );
 
-        $response->assertStatus( 200 );
-
-        $this->archive->refresh();
-        $this->assertEquals( $archive->title, $this->archive->title );
-        $this->assertEquals( $archive->description, $this->archive->description );
+        $response->assertStatus( 200 )
+                 ->assertJsonStructure(["data" => ["id"]])
+                 ->assertJsonFragment( ["subject" => $metadata["dc"]["subject"]] );
+        $this->assertEquals(2, $this->account->archives()->count());
     }
 
-    public function test_given_an_authenticated_user_when_deleting_archive_it_responds_200()
+
+    public function test_given_an_authenticated_user_updating_when_updating_an_archive_it_is_updated()
+    {
+        $archive = [
+            'title' => 'updated title',
+            'description' => 'updated description',
+        ];
+
+        $response = $this->actingAs( $this->user )
+                         ->patchJson(
+                             route( 'api.ingest.account.archive.update',
+                             [$this->account->id, $this->archive->id] ),
+                             $archive );
+
+        $response->assertStatus( 200 )
+                 ->assertJsonFragment( $archive );
+    }
+
+    public function test_given_an_archive_when_updating_it_with_dublin_core_metadata_it_is_updated()
+    {
+        $metadata = [ "dc" => [
+            'subject' => $this->faker->text()
+        ]];
+        $existing = Archive::find( $this->archive->id )->metadata["dc"];
+        $expected = ["metadata" => ["dc" => $metadata["dc"] + $existing ]];
+
+        $response = $this->actingAs( $this->user )
+                         ->patchJson(
+                             route( 'api.ingest.account.archive.update',
+                             [$this->account->id, $this->archive->id] ),
+                             ["metadata" => $metadata ] );
+
+        $response->assertStatus( 200 )
+                 ->assertJsonFragment( $expected );
+    }
+
+ 
+    public function test_given_an_authenticated_user_when_deleting_archive_it_responds_405()
     {
         $response = $this->actingAs( $this->user )
-            ->json('DELETE', route('api.ingest.account.archive.destroy', [$this->account->id, $this->archive->id]));
-        $response->assertStatus( 204 );
-
+            ->delete( route('api.ingest.account.archive.destroy', [$this->account->id, $this->archive->id]));
+        $response->assertStatus( 405 );
     }
 
 }
