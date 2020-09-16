@@ -16,6 +16,7 @@ const getters = {
     userSettings: state => state.settings,
     userLanguages: state => state.languages,
     currentUser: state => state.user,
+    userName: () => Vue.prototype.$keycloak.given_name,
     userMetadataTemplateByUserId:  state => userId => {
         return state.userMetadataTemplates.find( (t) => t.owner_id == userId );
     },
@@ -59,7 +60,11 @@ const actions = {
         let m = {"id": "", owner_id: "","created_at": "", "metadata":{"dc":{"title":"","creator":"","subject":"","description":"","publisher":"","contributor":"","date":"","type":"","format":"","identifier":"","source":"","language":"","relation":"","coverage":"","rights":""}}};
         let template = {...m, owner_id: ownerId, metadata: {...m.metadata, dc: { ...m.metadata.dc, creator: fullName}}};
         commit( 'setAccountMetadataTemplateMutation', template );
-    }
+    },
+
+    async logoutUser({commit}){
+        Vue.prototype.$keycloak.logoutFn();
+    },
 }
 
 const mutations = {
