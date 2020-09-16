@@ -2,9 +2,6 @@
     <div class="w-100">
         <page-heading :title="$t('ingest.taskList.title')" :ingress="$t('ingest.taskList.ingress')" iconImg="/images/piqlfilm-icon-gray.svg" />
         <div class="card">
-            <div class="card-header">
-                <b><img src="/images/piqlfilm-icon-gray-light.svg" class="iconTitle"/> {{$t('ingest.taskList.title')}}</b>
-            </div>
             <div class="card-body">
                 <task-table :items="items" :jobListUrl="jobListUrl" :actionIcons="actionIcons" @piqlIt="piqlIt" @onDelete="update" />
             </div>
