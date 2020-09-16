@@ -15,6 +15,7 @@ class FmuDatabaseSeeder extends Seeder
         $this->call(FmuSafeSpringS3ConfigurationSeeder::class);
         $this->call(ArchivematicaServiceSeeder::class);
         $this->call(FmuUsersTableSeeder::class);
+        $this->call(FmuAccountSeeder::class);
         $this->call(FmuArchiveSeeder::class);
         $this->call(FmuHoldingSeeder::class);
     }

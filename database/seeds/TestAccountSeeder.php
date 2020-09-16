@@ -1,10 +1,10 @@
 <?php
 
 use Illuminate\Database\Seeder;
-use App\Archive;
+use App\Account;
 use \App\Traits\SeederOperations;
 
-class FmuArchiveSeeder extends Seeder
+class TestAccountSeeder extends Seeder
 {
     use SeederOperations;
 
@@ -15,22 +15,22 @@ class FmuArchiveSeeder extends Seeder
      */
     public function run()
     {
-        Archive::truncate();
+        Account::truncate();
 
         if($this->seedFromFile(function($param) {
-            $archive = Archive::create($param);
-            $metadata = \App\ArchiveMetadata::create([
+            $account = Account::create($param);
+            $metadata = \App\AccountMetadata::create([
                 "modified_by" => "",
                 "metadata" => ["dc" => [
-                    "title" => $archive->title,
-                    "description" => $archive->description,
+                    "title" => $account->title,
+                    "description" => $account->description,
                 ]]
             ]);
-            $metadata->parent()->associate($archive);
+            $metadata->parent()->associate($account);
             $metadata->save();
-        })){
-
+            })) {
             return;
         }
+
     }
 }

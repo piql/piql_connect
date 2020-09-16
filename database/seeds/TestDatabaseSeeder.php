@@ -15,6 +15,7 @@ class TestDatabaseSeeder extends Seeder
         $this->call(TestSafeSpringS3ConfigurationSeeder::class);
         $this->call(ArchivematicaServiceSeeder::class);
         $this->call(TestUsersTableSeeder::class);
+        $this->call(TestAccountSeeder::class);
         $this->call(TestArchiveSeeder::class);
         $this->call(TestHoldingSeeder::class);
     }

@@ -15,6 +15,7 @@ class DemoDatabaseSeeder extends Seeder
         $this->call(DemoSafeSpringS3ConfigurationSeeder::class);
         $this->call(ArchivematicaServiceSeeder::class);
         $this->call(DemoUsersTableSeeder::class);
+        $this->call(DemoAccountSeeder::class);
         $this->call(DemoArchiveSeeder::class);
         $this->call(DemoHoldingSeeder::class);
     }
