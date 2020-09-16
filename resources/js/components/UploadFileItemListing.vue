@@ -41,7 +41,7 @@
             </tbody>
         </table>
         <div class="col contentCenter">
-            <Pager :meta="meta" :height="20" v-if="totalFilesUploading > 0" visiblePageSelectors="10" />
+            <Pager :meta="meta" :height="20" v-if="totalFilesUploading > 0" :visiblePageSelectors="10" />
         </div>
     </div>
 </template>
