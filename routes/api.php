@@ -39,6 +39,10 @@ Route::group(['prefix' => 'v1', 'middleware' => ['auth:api', 'activity']], funct
         Route::get('languages', 'Api\System\SystemController@languages');
         Route::get('system/session-lifetime', 'Api\System\SystemController@sessionLifetime');
         Route::get('users/me', 'Api\Users\SelfServiceController@me');
+
+        Route::post('profile/imgUpload', '\Optimus\FineuploaderServer\Controller\LaravelController@upload');
+        Route::post('profile/img', 'Api\Users\ProfileController@imgUpload');
+        Route::get('profile/img', 'Api\Users\ProfileController@img');
     });
 
     Route::group(['prefix' => 'ingest'], function () {
@@ -192,12 +196,6 @@ Route::group(['prefix' => 'v1', 'middleware' => ['auth:api', 'activity']], funct
             Route::get('file-formats/ingested', 'Api\Stats\ChartController@onlineFileFormatsIngested')->name('fileFormatsIngested');
         });
         Route::get('user/{userId}', 'Api\Stats\UserStatsController@userStats')->name('userstats');
-    });
-
-    Route::group(['prefix' => 'profile'], function () {
-        Route::post('imgUpload', '\Optimus\FineuploaderServer\Controller\LaravelController@upload');
-        Route::post('img', 'Api\Users\ProfileController@imgUpload');
-        Route::get('img', 'Api\Users\ProfileController@img');
     });
 });
 
