@@ -4,7 +4,7 @@ use Illuminate\Database\Seeder;
 use App\Account;
 use \App\Traits\SeederOperations;
 
-class TestAccountSeeder extends Seeder
+class FmuAccountSeeder extends Seeder
 {
     use SeederOperations;
 

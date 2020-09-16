@@ -17,11 +17,13 @@ class ChartControllerTest extends TestCase
     public function setUp() : void
     {
         parent::setUp();
+        $account = factory(\App\Account::class)->create();
         $this->testUser = \App\User::create([
-            'username' => 'BagApiTestUser', 
+            'username' => 'BagApiTestUser',
             'password' => 'notinuse',
             'full_name' => 'BagApi TestUser',
-            'email' => 'bagapitestuser@localhost'
+            'email' => 'bagapitestuser@localhost',
+            'account' => $account->uuid,
         ]);
 
         Passport::actingAs($this->testUser);
@@ -56,7 +58,7 @@ class ChartControllerTest extends TestCase
         $response = $this->get( route( 'dailyOnlineAIPsIngested' ) );
         $response->assertStatus(200);
     }
-    
+
     public function test_when_requesting_daily_online_data_ingested_it_responds_200()
     {
         $response = $this->get( route( 'dailyOnlineDataIngested' ) );

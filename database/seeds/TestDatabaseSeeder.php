@@ -12,11 +12,11 @@ class TestDatabaseSeeder extends Seeder
     public function run()
     {
         //TODO: env to control which seeders to run
-        $this->call(TestSafeSpringS3ConfigurationSeeder::class);
-        $this->call(ArchivematicaServiceSeeder::class);
-        $this->call(TestUsersTableSeeder::class);
         $this->call(TestAccountSeeder::class);
         $this->call(TestArchiveSeeder::class);
         $this->call(TestHoldingSeeder::class);
+        $this->call(TestUsersTableSeeder::class);
+        $this->call(TestSafeSpringS3ConfigurationSeeder::class);
+        $this->call(ArchivematicaServiceSeeder::class);
     }
 }
