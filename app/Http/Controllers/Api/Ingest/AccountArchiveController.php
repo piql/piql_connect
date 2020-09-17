@@ -78,7 +78,8 @@ class AccountArchiveController extends Controller
      * Update the specified resource in storage.
      *
      * @param \Illuminate\Http\Request $request
-     * @param Account $ac
+     * @param \App\Account $acccount
+     * @param \App\Archive $archive
      */
     public function update(Request $request, Account $account, Archive $archive)
     {
@@ -97,30 +98,6 @@ class AccountArchiveController extends Controller
     public function destroy(Account $account, Archive $archive)
     {
         return response( "Archives cannot be deleted in this version", 405 );
-    }
-
-    public function test_given_an_authenticated_user_when_getting_an_archives_they_have_metadata()
-    {
-        $response = $this->actingAs( $this->user )
-            ->get( route('api.ingest.account.archive.index', [$this->account->id]) );
-        $response->assertStatus( 200 );
-        $decoded = collect( json_decode( $response->getContent() )->data )->firstWhere('id', $this->archive->id);
-        dump($decoded->metadata);
-        $this->assertNotNull( $decoded->metadata );
-    }
-
-    public function test_given_an_authenticated_user_when_updating_metadata_it_responds_with_updated_data()
-    {
-        $metadata = [
-            "metadata" => ["dc" => ["title" => "The best novel ever!"]]
-        ];
-
-        $response = $this->actingAs( $this->user )
-            ->put( route('api.ingest.account.archive.update', [$this->account->id, $this->archive->id]),
-               $metadata );
-
-        $response->assertStatus( 200 )
-                 ->assertJsonFragment( $metadata->metadata );
     }
 
 }
