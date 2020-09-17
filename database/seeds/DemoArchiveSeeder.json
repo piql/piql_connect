@@ -7,12 +7,14 @@
                 {
                     "title": "Cultural",
                     "description": "Cultural",
-                    "uuid": "9ccd7b00-8ebd-11ea-867a-c9bcd3d2b62d"
+                    "uuid": "9ccd7b00-8ebd-11ea-867a-c9bcd3d2b62d",
+                    "account_uuid": "32af9410-f43e-11ea-8a3b-a5227e1c2957"
                 },
                 {
                     "title": "Museum",
                     "description": "Museum",
-                    "uuid": "ec1ae3f0-8ebd-11ea-b377-7bb297e803a2"
+                    "uuid": "ec1ae3f0-8ebd-11ea-b377-7bb297e803a2",
+                    "account_uuid": "32af9410-f43e-11ea-8a3b-a5227e1c2957"
                 }
 
             ]

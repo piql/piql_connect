@@ -130,7 +130,7 @@
 
                     <router-link :to="{ name: 'ingest.offline'}">
                         <li class="list-group-item" :class="{ active: routeBelongsTo('ingest.offline') }" >
-                            <i class="fas fa-clock"></i><div class="leftMenuItem">{{$t('sidebar.taskList')}}</div>
+                            <img src="/images/piqlfilm-icon-white.svg" class="sideBarIconImg"/><div class="leftMenuItem">{{$t('sidebar.taskList')}}</div>
                         </li>
                     </router-link>
 
@@ -153,7 +153,7 @@
                     <span :class="{ collapse: !routeBelongsTo('access.browse') }">
                         <router-link :to="{ name: 'access.retrieve.request' }">
                             <li class="list-group-item" :class="{ active: routeBelongsTo ('access.retrieve') }" >
-                                <i class="fas fa-file-export"></i><div class="leftMenuItem">{{$t('sidebar.retrieve')}}</div>
+                                <img src="/images/retrieval-icon-white.svg" class="sideBarIconImg"/><div class="leftMenuItem">{{$t('sidebar.offlineBrowser')}}</div>
                             </li>
                         </router-link>
                     </span>
@@ -163,7 +163,7 @@
 
                         <router-link :to="{ name: 'access.retrieve.request' }">
                             <li class="list-group-item" :class="{ active: routeBelongsTo('access.retrieve.request') }" >
-                                <i class="fas fa-file-export"></i><div class="leftMenuItem">{{$t('sidebar.retrieve')}}</div>
+                                <img src="/images/retrieval-icon-white.svg" class="sideBarIconImg"/><div class="leftMenuItem">{{$t('sidebar.offlineBrowser')}}</div>
                             </li>
                         </router-link>
 

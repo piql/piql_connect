@@ -72,7 +72,7 @@
     "sidebar.taskList": "Almacenamiento en Film",
     "sidebar.status": "Estado",
     "sidebar.browse": "Explorar",
-    "sidebar.retrieve": "Recuperar",
+    "sidebar.offlineBrowser": "Recuperar",
     "sidebar.reports": "Informes",
     "sidebar.retrieve.readyToRetrieve": "Listo para recuperarse",
     "sidebar.retrieve.retrieving": "Recuperandose",

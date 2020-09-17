@@ -41,7 +41,7 @@
                             <notifications/>
                         </li>
                         <li class="pr-2 navbar">
-                            <a href="/logout" id="navbarLogout"><i class="fas plistIcon fa-sign-out-alt signal"></i></a>
+                            <a href="#logout" id="navbarLogout" @click="logoutUser"><i class="fas plistIcon fa-sign-out-alt signal"></i></a>
                         </li>
                         <li class="pr-2 navbar">
                             <div class="userImgCont"><img :src="userImg" class="userImg"/></div>
@@ -57,6 +57,7 @@
 <script>
 import axios from 'axios';
 import serviceCall from '../mixins/serviceCall';
+import { mapActions, mapGetters } from "vuex";
 export default {
     mixins: [
         serviceCall
@@ -73,15 +74,9 @@ export default {
         };
     },
     computed: {
+        ...mapGetters(["userName"]),
         currentActiveRoute() {
             return this.$route.name;
-        },
-        userName() {
-            this.loadUser();
-            if (this.user != null) {
-                return this.user.first_name;
-            }
-            return "";
         },
         userImg() {
             this.loadUser();
@@ -92,6 +87,7 @@ export default {
         }
     },
     methods: {
+        ...mapActions(["logoutUser"]),
         routeBelongsTo( checkRoute ) {
             return this.$route.name.startsWith( checkRoute );
         },

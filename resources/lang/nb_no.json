@@ -72,7 +72,7 @@
     "sidebar.taskList": "Langtidslagring",
     "sidebar.status": "Status",
     "sidebar.browse": "Utforsk",
-    "sidebar.retrieve": "Gjenopprett",
+    "sidebar.offlineBrowser": "Gjenopprett",
     "sidebar.reports": "Rapporter",
     "sidebar.retrieve.readyToRetrieve": "Klar til gjenoppretting",
     "sidebar.retrieve.retrieving": "Under gjenopprettelse",
