@@ -9,7 +9,7 @@ require('bootstrap-select');
 require('filesize');
 
 window.Vue = require('vue');
-import {BootstrapVue} from 'bootstrap-vue';
+import { BootstrapVue } from 'bootstrap-vue';
 window.Vue.use(BootstrapVue);
 import VueInternationalization from 'vue-i18n';
 import VueResize from 'vue-resize';
@@ -23,7 +23,7 @@ window.Vue.mixin(DateTime);
 import Echo from "laravel-echo";
 window.io = require('socket.io-client');
 if (typeof io !== 'undefined') {
-    window.Echo = new Echo({    broadcaster: 'socket.io',    host: window.location.hostname + ':6001',  });
+    window.Echo = new Echo({ broadcaster: 'socket.io', host: window.location.hostname + ':6001', });
 }
 import vueSelectSides from "vue-select-sides";
 
@@ -75,13 +75,13 @@ const files = require.context('./', true, /\.vue$/i);
 files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default));
 
 let refreshSessionActivity = Vue.mixin({
-    beforeUpdate: function() {
-        if( this.noRefresh !== true ){
+    beforeUpdate: function () {
+        if (this.noRefresh !== true) {
             this.refreshSession();
         }
     },
     methods: {
-        refreshSession: () => { sessionStorage.setItem( "lastActivityTime", Date.now() );}
+        refreshSession: () => { sessionStorage.setItem("lastActivityTime", Date.now()); }
     },
     props: {
         noRefresh: {
@@ -91,8 +91,8 @@ let refreshSessionActivity = Vue.mixin({
     },
 });
 //to handle all multiside select options
-Vue.use(vueSelectSides,{});
-Vue.component("vue-select-sides",vueSelectSides);
+Vue.use(vueSelectSides, {});
+Vue.component("vue-select-sides", vueSelectSides);
 
 
 /**
@@ -103,11 +103,32 @@ import { router } from "./router.js";
 
 //import store
 import { store } from "./store/store";
+import VueKeyCloak from '@dsb-norge/vue-keycloak-js'
+import Layout from './views/layout.vue';
 
-const app = new Vue({
-    el: '#app',
-    store: store,
-    i18n,
-    router,
-    mixins: [refreshSessionActivity],
+function interceptToken() {
+    axios.interceptors.request.use(config => {
+        config.headers.Authorization = `Bearer ${Vue.prototype.$keycloak.token}`
+        return config
+    }, error => {
+        return Promise.reject(error)
+    })
+}
+
+Vue.use(VueKeyCloak, {
+    config: {
+        realm: process.env.AUTH_REALM,
+        url: process.env.AUTH_BASE_URL,
+        clientId: process.env.AUTH_CLIENT,
+    },
+    onReady: () => {
+        interceptToken();
+        new Vue({
+            router,
+            i18n,
+            store,
+            mixins: [refreshSessionActivity],
+            render: h => h(Layout)
+        }).$mount('#app');
+    }
 });

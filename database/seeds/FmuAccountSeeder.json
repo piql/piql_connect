@@ -1,0 +1,17 @@
+{
+    "data": [{
+        "type": "App\\Account",
+        "id": "1",
+        "attributes": {
+            "collection": [
+                {
+                    "title": "FMU Default account",
+                    "description": "Default account",
+                    "uuid": "14048420-f43f-11ea-8bb1-25766b7f5154"
+                }
+            ]
+        }
+    }]
+}
+
+

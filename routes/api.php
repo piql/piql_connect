@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,20 +14,15 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
+Route::middleware('auth')->get('/user', function (Request $request) {
     return $request->user();
-});
-
-Route::group(['prefix' => 'v1'], function () {
-    Route::post('login', 'Auth\ApiLoginController@login')->middleware('user.checkDisabled');
 });
 
 // todo: mode to whitelist middleware or add token to headers in callback
 Route::group(['prefix' => 'v1'], function () {
 });
 
-Route::group(['prefix' => 'v1', 'middleware' => ['auth:api', 'activity']], function () {
-    Route::post('logout', 'Auth\ApiLoginController@logout');
+Route::group(['prefix' => 'v1', 'middleware' => ['auth']], function () {
 
     Route::group(['prefix' => 'system'], function () {
         Route::get('statuses/current-user', 'Api\System\StatusController@currentUser');
@@ -97,6 +93,7 @@ Route::group(['prefix' => 'v1', 'middleware' => ['auth:api', 'activity']], funct
         Route::get('storage/offline/pending/buckets', 'Api\Ingest\OfflineStorageController@jobs')->name('api.ingest.buckets.pending');
         Route::get('storage/offline/archive/buckets', 'Api\Ingest\OfflineStorageController@archiveJobs')->name('api.ingest.buckets.archiving');
 
+        Route::post('storage/offline/files/upload', '\Optimus\FineuploaderServer\Controller\LaravelController@upload');
         Route::post('storage/offline/{jobId}/config/upload', 'Api\Storage\BucketConfigController@upload')->name('api.ingest.buckets.config');
         Route::get('storage/offline/{jobId}/config/showFiles', 'Api\Storage\BucketConfigController@showFiles')->name('api.ingest.buckets.config');
         Route::get('storage/offline/{jobId}/config/showFile/{name}', 'Api\Storage\BucketConfigController@showFile')->name('api.ingest.buckets.config');
@@ -176,7 +173,7 @@ Route::group(['prefix' => 'v1', 'middleware' => ['auth:api', 'activity']], funct
     });
 
 
-    Route::group(['prefix' => 'stats', 'middleware' => 'auth:api'], function () {
+    Route::group(['prefix' => 'stats', 'middleware' => 'auth'], function () {
         Route::group(['prefix' => 'charts'], function () {
             Route::get('aips/online/ingested', 'Api\Stats\ChartController@onlineAIPsIngested');
             Route::get('aips/online/ingested/monthly', 'Api\Stats\ChartController@monthlyOnlineAIPsIngested')->name('monthlyOnlineAIPsIngested');

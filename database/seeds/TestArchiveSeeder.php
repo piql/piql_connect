@@ -18,8 +18,17 @@ class TestArchiveSeeder extends Seeder
         Archive::truncate();
 
         if($this->seedFromFile(function($param) {
-                Archive::create($param);
-            })){
+            $archive = Archive::create($param);
+            $metadata = \App\ArchiveMetadata::create([
+                "modified_by" => "",
+                "metadata" => ["dc" => [
+                    "title" => $archive->title,
+                    "description" => $archive->description,
+                ]]
+            ]);
+            $metadata->parent()->associate($archive);
+            $metadata->save();
+        })){
 
             return;
         }
