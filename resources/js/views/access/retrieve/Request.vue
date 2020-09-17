@@ -1,6 +1,6 @@
 <template>
     <div class="w-100">
-        <page-heading icon="fa-hdd" :title="$t('access.retrieve.request')" :ingress="$t('access.retrieve.request.ingress')" />
+        <page-heading iconImg="/images/retrieval-icon-gray.svg" :title="$t('access.retrieve.request')" :ingress="$t('access.retrieve.request.ingress')" />
 
         <access-browser-filters :singleArchiveTitle="$t('Your archive')"></access-browser-filters>
 

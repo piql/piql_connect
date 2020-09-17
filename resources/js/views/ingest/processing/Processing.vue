@@ -6,9 +6,6 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="card">
-                    <div class="card-header">
-                       <i class="fa fa-hourglass-half"></i> Processing
-                    </div>
                     <div class="card-body">
                         <files-in-process :currentlyIdle="currentlyIdle" :items="items"></files-in-process>
 

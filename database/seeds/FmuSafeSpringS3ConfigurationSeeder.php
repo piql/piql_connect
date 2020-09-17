@@ -31,7 +31,11 @@ class FmuSafeSpringS3ConfigurationSeeder extends Seeder
             'bucket' => $ss_test_bucket
         ]);
 
-        $owner = User::where('username','kare')->first() ?? User::first() ?? factory(App\User::class, 1)->create()->first();
+        $owner = User::where('username','kare')->first()
+            ?? User::first()
+            ?? factory(App\User::class)->create([
+                "account" => Account::get()->first()->uuid
+            ]);
 
         StorageLocation::create([
             'owner_id' => $owner->id,

@@ -12,11 +12,11 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         //TODO: env to control which seeders to run
-        $this->call(SafeSpringS3ConfigurationSeeder::class);
-        $this->call(ArchivematicaServiceSeeder::class);
-        $this->call(UsersTableSeeder::class);
         $this->call(AccountSeeder::class);
         $this->call(ArchiveSeeder::class);
         $this->call(HoldingSeeder::class);
+        $this->call(UsersTableSeeder::class);
+        $this->call(SafeSpringS3ConfigurationSeeder::class);
+        $this->call(ArchivematicaServiceSeeder::class);
     }
 }
