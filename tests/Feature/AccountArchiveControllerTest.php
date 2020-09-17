@@ -120,6 +120,7 @@ class AccountArchiveControllerTest extends TestCase
         $metadata = [ "dc" => [
             'subject' => $this->faker->text()
         ]];
+
         $existing = Archive::find( $this->archive->id )->metadata["dc"];
         $expected = ["metadata" => ["dc" => $metadata["dc"] + $existing ]];
 
@@ -139,6 +140,31 @@ class AccountArchiveControllerTest extends TestCase
         $response = $this->actingAs( $this->user )
             ->delete( route('api.ingest.account.archive.destroy', [$this->account->id, $this->archive->id]));
         $response->assertStatus( 405 );
+    }
+
+    public function test_given_an_authenticated_user_when_getting_archive_metadata_it_is_in_the_response()
+    {
+        $archive = factory(Archive::class)->create(["metadata" => ["dc" => ["subject" => "testing things"]]]);
+        $response = $this->actingAs( $this->user )
+            ->get( route('api.ingest.account.archive.show', [$this->account->id, $archive->id]) );
+        $response->assertStatus( 200 )
+                 ->assertJsonStructure( ["data" => ["id","title","description","uuid","metadata"]] );
+    }
+
+    public function test_given_an_authenticated_user_when_updating_metadata_it_responds_with_updated_data()
+    {
+        $metadata = [
+            "metadata" => ["dc" => ["title" => "The best novel ever!"]]
+        ];
+
+        $response = $this->actingAs( $this->user )
+            ->put( route('api.ingest.account.archive.update', [$this->account->id, $this->archive->id]),
+               $metadata );
+
+        $expected = array_replace_recursive( $response->decodeResponseJson('data'), $metadata );
+
+        $response->assertStatus( 200 )
+                 ->assertJsonFragment( $expected );
     }
 
 }

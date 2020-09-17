@@ -28,7 +28,7 @@ class AddAccountMetadataColumn extends Migration
 
     public function down()
     {
-        Schema::table('Accounts', function (Blueprint $table) {
+        Schema::table('accounts', function (Blueprint $table) {
             $table->dropColumn('defaultMetadataTemplate');
         });
     }
