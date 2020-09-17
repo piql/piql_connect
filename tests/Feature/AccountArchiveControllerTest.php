@@ -134,7 +134,7 @@ class AccountArchiveControllerTest extends TestCase
                  ->assertJsonFragment( $expected );
     }
 
- 
+
     public function test_given_an_authenticated_user_when_deleting_archive_it_responds_405()
     {
         $response = $this->actingAs( $this->user )
@@ -147,7 +147,10 @@ class AccountArchiveControllerTest extends TestCase
         $response = $this->actingAs( $this->user )
             ->get( route('api.ingest.account.archive.index', [$this->account->id]) );
         $response->assertStatus( 200 );
-        $decoded = collect( json_decode( $response->getContent() )->data )->firstWhere('id', $this->archive->id);
+        //$decoded = collect( json_decode( $response->getContent() )->data )->firstWhere('id', $this->archive->id);
+        $archives = collect( json_decode( $response->getContent() )->data );
+        $decoded = $archives->first();
+        $this->assertTrue( $archives->count() > 0 );
         $this->assertNotNull( $decoded->metadata );
     }
 
