@@ -142,13 +142,13 @@ class AccountArchiveControllerTest extends TestCase
         $response->assertStatus( 405 );
     }
 
-    public function test_given_an_authenticated_user_when_getting_an_archives_they_have_metadata()
+    public function test_given_an_authenticated_user_when_getting_archive_metadata_it_is_in_the_response()
     {
+        $archive = factory(Archive::class)->create(["metadata" => ["dc" => ["subject" => "testing things"]]]);
         $response = $this->actingAs( $this->user )
-            ->get( route('api.ingest.account.archive.index', [$this->account->id]) );
-        $response->assertStatus( 200 );
-        $decoded = collect( json_decode( $response->getContent() )->data )->firstWhere('id', $this->archive->id);
-        $this->assertNotNull( $decoded->metadata );
+            ->get( route('api.ingest.account.archive.show', [$this->account->id, $archive->id]) );
+        $response->assertStatus( 200 )
+                 ->assertJsonStructure( ["data" => ["id","title","description","uuid","metadata"]] );
     }
 
     public function test_given_an_authenticated_user_when_updating_metadata_it_responds_with_updated_data()
