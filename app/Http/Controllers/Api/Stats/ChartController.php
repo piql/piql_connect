@@ -25,7 +25,7 @@ class ChartController extends Controller
     public function monthlyOnlineAIPsIngested()
     {
         return $this->onAuthenticated('monthly online aips ingested', function ($user) {
-            $onlineData = $this->stats->monthlyOnlineAIPsIngested($user->getIdAttribute());
+            $onlineData = $this->stats->monthlyOnlineAIPsIngested($user->id);
             $offlineData = array_map(function ($d) {  return round($d * (rand(1, 9) / 10));  }, $onlineData);
             return $this->charts->generate([
                 new Dataset('Online AIPs Ingested', Dataset::LineChart, Colors::LineBgOutside, $onlineData),
@@ -37,7 +37,7 @@ class ChartController extends Controller
     public function monthlyOnlineDataIngested()
     {
         return $this->onAuthenticated('monthly online data ingested', function ($user) {
-            $data = $this->stats->monthlyOnlineDataIngested($user->getIdAttribute());
+            $data = $this->stats->monthlyOnlineDataIngested($user->id);
             $labels = array_map(function ($d) { return $d['month']; }, $data);
             $onlineData = array_map(function ($d) { return Size::convert(Size::GB, $d['size']); }, $data);
             $offlineData = array_map(function ($d) { return round($d*(rand(1, 9)/10), 2); }, $onlineData);
@@ -73,7 +73,7 @@ class ChartController extends Controller
     public function dailyOnlineAIPsIngested()
     {
         return $this->onAuthenticated('daily online aips ingested', function ($user) {
-            $onlineData = $this->stats->dailyOnlineAIPsIngested($user->getIdAttribute());
+            $onlineData = $this->stats->dailyOnlineAIPsIngested($user->id);
             $offlineData = array_map(function ($d) { return round($d * (rand(1, 9) / 10)); }, $onlineData);
             return $this->charts->generate([
                 new Dataset('Online AIPs Ingested', Dataset::LineChart, Colors::LineBgOutside, $onlineData),
@@ -81,11 +81,11 @@ class ChartController extends Controller
             ])->api();
         });
     }
-    
+
     public function dailyOnlineDataIngested()
     {
         return $this->onAuthenticated('daily online data ingested', function ($user) {
-            $onlineData = $this->stats->dailyOnlineDataIngested($user->getIdAttribute());
+            $onlineData = $this->stats->dailyOnlineDataIngested($user->id);
             $offlineData = array_map(function ($d) { return round($d * (rand(1, 9) / 10)); }, $onlineData);
             return $this->charts->generate([
                 new Dataset('Online Data Ingested', Dataset::LineChart, Colors::LineBgOutside, $onlineData),
@@ -117,7 +117,7 @@ class ChartController extends Controller
     public function onlineFileFormatsIngested()
     {
         return $this->onAuthenticated('daily ingested file formats', function ($user) {
-            return $this->stats->fileFormatsIngested($user->getIdAttribute());
+            return $this->stats->fileFormatsIngested($user->id);
         });
     }
 
@@ -134,6 +134,6 @@ class ChartController extends Controller
         } catch (Throwable $e) {
             return response(['message' => $e->getMessage()], 400);
         }
-        
+
     }
 }

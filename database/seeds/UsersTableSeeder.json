@@ -8,55 +8,99 @@
                     "username":  "simen",
                     "password":  "simen",
                     "full_name": "Simen Fjeld-Olsen",
-                    "email":     "simen.fjeldolsen@piql.com"
+                    "email":     "simen.fjeldolsen@piql.com",
+                    "id":        "088e5362-f4ef-4c76-9b65-206dde50002b"
                 },
                 {
                     "username":  "kare",
                     "password":  "kare",
                     "full_name": "Kåre Andersen",
-                    "email":     "kare.andersen@piql.com"
+                    "email":     "kare.andersen@piql.com",
+                    "id":        "f7dfe72e-76da-4196-a1f5-29310b438ef9"
                 },
                 {
                     "username":  "swhl",
                     "password":  "swhl",
                     "full_name": "Håkon Larsson",
-                    "email":     "hakon.larsson@piql.com"
+                    "email":     "hakon.larsson@piql.com",
+                    "id":        "7d5a9e9a-e965-4dec-88d9-0927eaa0284d"
                 },
                 {
                     "username":  "simon",
                     "password":  "simon",
                     "full_name": "Simon Bruce-Cassidy",
-                    "email":     "simon.brucecassidy@piql.com"
+                    "email":     "simon.brucecassidy@piql.com",
+                    "id":        "b82612e5-a0d6-4a28-bf02-df4a54d79c85"
                 },
                 {
                     "username":  "rune",
                     "password":  "rune",
                     "full_name": "Rune Bjerkestrand",
-                    "email":     "rune.bjerkestrand@piql.com"
+                    "email":     "rune.bjerkestrand@piql.com",
+                    "id":        "a1a7f27b-d63e-4045-a863-ff4603024b37"
                 },
                 {
                     "username":  "hilde",
                     "password":  "hilde",
                     "full_name": "Hilde Byrmo",
-                    "email":     "hilde.byrmo@piql.com"
+                    "email":     "hilde.byrmo@piql.com",
+                    "id":        "05d59fdb-1a0f-4ce2-b7aa-fd46c1ccabaf"
                 },
                 {
                     "username":  "bendik",
                     "password":  "bendik",
                     "full_name": "Bendik Bryde",
-                    "email":     "bendik.bryde@piql.com"
+                    "email":     "bendik.bryde@piql.com",
+                    "id":        "0d486cd6-e150-4622-804d-6329bfc4c92b"
                 },
                 {
                     "username":  "matti",
                     "password":  "matti",
                     "full_name": "Matti Wennberg",
-                    "email":     "matti.wennberg@piql.com"
+                    "email":     "matti.wennberg@piql.com",
+                    "id":        "bea8972e-67e8-49dc-ab31-b9d09613cad1"
                 },
                 {
                     "username":  "alfredo",
                     "password":  "alfredo",
                     "full_name": "Alfredo Trujillo",
-                    "email":     "alfredo.trujillo@piql.com"
+                    "email":     "alfredo.trujillo@piql.com",
+                    "id":        "4d7708ba-a0bb-4529-9a32-2b20cb64a039"
+                },
+                {
+                    "username":  "daniel",
+                    "password":  "daniel",
+                    "full_name": "Daniel Stromsnes",
+                    "email":     "daniel.stromsnes@piql.com",
+                    "id":        "6cdbb0b7-fefb-4d01-b0ae-75df5ef2f6cc"
+                },
+                {
+                    "username":  "patrick",
+                    "password":  "patrick",
+                    "full_name": "Patrick Givisiez",
+                    "email":     "patrick@foo.bar.com",
+                    "id":        "85a0cc30-cbca-4fef-98a5-83ea93124153"
+                },
+                {
+                    "username":  "ronald",
+                    "password":  "ronald",
+                    "full_name": "Ronald Kasagga",
+                    "email":     "ronald.kasagga@contango.no",
+                    "id":        "6a990ec5-ef9c-4317-a9b1-34c563b3b08c"
+                },
+                {
+                    "username":  "steven",
+                    "password":  "steven",
+                    "full_name": "Steven Ssewalu",
+                    "email":     "steven.sewalu@contango.no",
+                    "id":        "02f1c66e-efb6-4d0b-87a3-3ec9e7e112d9"
+                },
+                {
+                    "username":  "swut",
+                    "password":  "swut",
+                    "full_name": "Ulf Thorsen",
+                    "email":     "ulf.thorsen@piql.com",
+                    "id":        "8cc59b0c-d820-4a51-91ff-8793dbf64aed"
                 }
             ]
         }

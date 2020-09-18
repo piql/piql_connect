@@ -80,10 +80,10 @@ class AccessControlManagerTest extends TestCase
         $r = AccessControlManager::createPermission($g->id, 'Kill Software', 'Corrupts software');
         $r->save();
         $u = factory(User::class)->create();
-        AccessControlManager::assignAccessControlsToUsers([$r->id], [$u->getIdAttribute()]);
-        $pm = AccessControlManager::userHasAccessControl($u->getIdAttribute(), $r->id);
+        AccessControlManager::assignAccessControlsToUsers([$r->id], [$u->id]);
+        $pm = AccessControlManager::userHasAccessControl($u->id, $r->id);
         $this->assertTrue(count($pm) > 0);
-        $this->assertEquals($u->getIdAttribute(), $pm['user_id']);
+        $this->assertEquals($u->id, $pm['user_id']);
         $this->assertEquals($r->id, $pm['permission_id']);
         $this->assertEquals($g->id, $pm['group_id']);
     }
@@ -95,10 +95,10 @@ class AccessControlManagerTest extends TestCase
         $r = AccessControlManager::createPermission($g->id, 'Kill Software', 'Corrupts software');
         $r->save();
         $u = factory(User::class)->create();
-        AccessControlManager::assignAccessControlsToUsers([$r->id], [$u->getIdAttribute()]);
-        $pm = AccessControlManager::userHasAccessControl($u->getIdAttribute(), $r->id);
+        AccessControlManager::assignAccessControlsToUsers([$r->id], [$u->id]);
+        $pm = AccessControlManager::userHasAccessControl($u->id, $r->id);
         $this->assertTrue(count($pm) > 0);
-        $this->assertEquals($u->getIdAttribute(), $pm['user_id']);
+        $this->assertEquals($u->id, $pm['user_id']);
         $this->assertEquals($r->id, $pm['permission_id']);
         $this->assertEquals($g->id, $pm['group_id']);
     }
@@ -111,13 +111,13 @@ class AccessControlManagerTest extends TestCase
         $r->save();
         
         $u = factory(User::class)->create();
-        AccessControlManager::assignAccessControlsToUsers([$r->id], [$u->getIdAttribute()]);
-        $p1 = AccessControlManager::userHasAccessControl($u->getIdAttribute(), $r->id);
+        AccessControlManager::assignAccessControlsToUsers([$r->id], [$u->id]);
+        $p1 = AccessControlManager::userHasAccessControl($u->id, $r->id);
         $this->assertFalse(empty($p1));
-        $this->assertEquals($p1['user_id'], $u->getIdAttribute());
-        AccessControlManager::removeAccessControlsFromUsers([$r->id], [$u->getIdAttribute()]);
+        $this->assertEquals($p1['user_id'], $u->id);
+        AccessControlManager::removeAccessControlsFromUsers([$r->id], [$u->id]);
 
-        $p2 = AccessControlManager::userHasAccessControl($u->getIdAttribute(), $r->id);
+        $p2 = AccessControlManager::userHasAccessControl($u->id, $r->id);
         $this->assertEmpty($p2);
     }
     
@@ -130,9 +130,9 @@ class AccessControlManagerTest extends TestCase
         $a2 = AccessControlManager::createPermission($g->id, 'Kill Hardware', 'Corrupts hardware');
         $a2->save();
         $u = factory(User::class)->create();
-        AccessControlManager::assignAccessControlsToUsers([$a2->id], [$u->getIdAttribute()]);
-        $this->assertEquals($u->getIdAttribute(), AccessControlManager::userHasAccessControl($u->getIdAttribute(), $a2->id)['user_id']);
+        AccessControlManager::assignAccessControlsToUsers([$a2->id], [$u->id]);
+        $this->assertEquals($u->id, AccessControlManager::userHasAccessControl($u->id, $a2->id)['user_id']);
         AccessControlManager::delete($g->id);
-        $this->assertEmpty(AccessControlManager::userHasAccessControl($u->getIdAttribute(), $a2->id));
+        $this->assertEmpty(AccessControlManager::userHasAccessControl($u->id, $a2->id));
     }
 }
