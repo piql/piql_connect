@@ -6,7 +6,7 @@
                         <div class="card dashboard-card col-md halfStats row">
                                
                                 <div class="col-md-9">
-                                    <div class="value">{{offlineAIPsIngested}}</div>
+                                    <div class="value">{{userStats['offlineAIPsIngested']}}</div>
                                     <div class="legend">{{$t('dashboard.cards.AIPsStoredOnFilm')}}</div>
 
                                 </div>
@@ -17,7 +17,7 @@
                     <div class="col-md-3">
                         <div class="card dashboard-card col-md halfStats row">
                                 <div class="col-md-9">
-                                    <div class="value">{{offlineDataIngested}}</div>
+                                    <div class="value">{{gigabyteString(userStats['offlineDataIngested'])}}</div>
                                     <div class="legend">{{$t('dashboard.cards.dataStoredOnFilm')}}</div>
                                 </div>
                                 <div class="icon col-md-3"><i class="fa fa-download"></i></div>
@@ -27,7 +27,7 @@
                     <div class="col-md-3">
                         <div class="card dashboard-card halfStats col-md row">
                                 <div class="col-md-9">
-                                    <div class="value">{{offlineReelsCount}}</div>
+                                    <div class="value">{{userStats['offlineReelsCount']}}</div>
                                     <div class="legend">{{$t('dashboard.cards.reels')}}</div>
                                 </div>
                                 <div class="col-md-3 icon"><img src="/images/piqlfilm-icon-white.svg" class="dashboardIconImg"/></div>
@@ -36,7 +36,7 @@
                     <div class="col-md-3">
                         <div class="card dashboard-card halfStats col-md row">
                             <div class="col-md-9">
-                                <div class="value">{{offlinePagesCount}}</div>
+                                <div class="value">{{userStats['offlinePagesCount']}}</div>
                                 <div class="legend">{{$t('dashboard.cards.offlinePagesCount')}}</div>
                             </div>
                             <div class="icon col-md-3"><i class="fa fa-file-image"></i></div>
@@ -49,7 +49,7 @@
             <div class="col-md-3">
                         <div class="card dashboard-card col-md halfStats row">
                             <div class="col-md-9">
-                                <div class="value">{{onlineAIPsIngested}}</div>
+                                <div class="value">{{userStats['onlineAIPsIngested']}}</div>
                                 <div class="legend">{{$t('dashboard.cards.onlineAIPsIngested')}}</div>
                             </div>
                             <div class="icon col-md-3"><i class="fa fa-cloud"></i></div>
@@ -59,7 +59,7 @@
                     <div class="col-md-3">
                         <div class="card dashboard-card col-md halfStats row">
                             <div class="col-md-9">
-                                <div class="value">{{onlineDataIngested}}</div>
+                                <div class="value">{{gigabyteString(userStats['onlineDataIngested'])}}</div>
                                 <div class="legend">{{$t('dashboard.cards.onlineDataIngested')}}</div>
                             </div>
                             <div class="icon col-md-3"><i class="fa fa-database"></i></div>
@@ -69,7 +69,7 @@
                     <div class="col-md-3">
                         <div class="card dashboard-card col-md halfStats row">
                             <div class="col-md-9">
-                                <div class="value">{{AIPsRetrievedCount}}</div>
+                                <div class="value">{{userStats['offlineAIPsRetrieved']}}</div>
                                 <div class="legend">{{$t('dashboard.cards.AIPsRetrieved')}}</div>
                             </div>
                             <div class="icon col-md-3"><i class="fa fa-upload"></i></div>
@@ -79,7 +79,7 @@
                     <div class="col-md-3">
                         <div class="card dashboard-card col-md halfStats row">
                             <div class="col-md-9">
-                                <div class="value">{{DataRetrieved}}</div>
+                                <div class="value">{{gigabyteString(userStats['offlineDataRetrieved'])}}</div>
                                 <div class="legend">{{$t('dashboard.cards.filesRetrieved')}}</div>
                             </div>
                             <div class="icon col-md-3"><i class="fa fa-folder-open"></i></div>
@@ -95,49 +95,44 @@
                     <div class="card-header card-background">
                         <ul class="nav nav-tabs card-header-tabs">
                         <li class="nav-item">
-                            <a class="nav-link l1" @click.prevent="displayGraph(1)" href="#">{{$t('dashboard.tab.packageIngested')}}</a>
+                            <a class="nav-link l1" @click.prevent="displayGraph(1)" href="#">{{$t('dashboard.graphs.ingested.aips')}}</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link l2" @click.prevent="displayGraph(2)" href="#">{{$t('dashboard.tab.dataIngested')}}</a>
+                            <a class="nav-link l2" @click.prevent="displayGraph(2)" href="#">{{$t('dashboard.graphs.ingested.data')}}</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link l3" @click.prevent="displayGraph(3)" href="#">{{$t('dashboard.tab.packagesAccessed')}}</a>
+                            <a class="nav-link l3" @click.prevent="displayGraph(3)" href="#">{{$t('dashboard.graphs.accessed.aips')}}</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link l4" @click.prevent="displayGraph(4)" href="#">{{$t('dashboard.tab.dataAccessed')}}</a>
+                            <a class="nav-link l4" @click.prevent="displayGraph(4)" href="#">{{$t('dashboard.graphs.accessed.data')}}</a>
                         </li>
                         </ul>
                     </div>
                     <div class="card-body g1">
-                        <h5 class="card-title">{{$t('dashboard.tab.monthly')}}</h5>
-                    
-                    <line-chart class="graphs" :title="$t('dashboard.graphs.monthlyOnlineAIPsIngested')"
-                    url="/api/v1/stats/charts/aips/online/ingested/monthly"
-                    :labels="monthNames" />
+                        <line-chart class="graphs" :yLabel="$t('dashboard.graphs.label.aips')"
+                            url="/api/v1/stats/charts/monthly/ingested/aips"
+                            :labels="monthNames" />
                     </div>
                     <div class="card-body g2">
-                        <h5 class="card-title">{{$t('dashboard.tab.monthly')}}</h5>
-                        <line-chart class="graphs" :title="$t('dashboard.graphs.monthlyOnlineDataIngested')"
-                    url="/api/v1/stats/charts/data/online/ingested/monthly"
-                    :labels="monthNames" />
+                        <line-chart class="graphs" :yLabel="$t('dashboard.graphs.label.gigabytes')"
+                            url="/api/v1/stats/charts/monthly/ingested/data"
+                            :labels="monthNames" />
                     </div>
                     <div class="card-body g3">
-                        <h5 class="card-title">{{$t('dashboard.tab.monthly')}}</h5>
-                         <line-chart class="graphs" :title="$t('dashboard.graphs.monthlyOnlineAIPsAccessed')"
-                    url="/api/v1/stats/charts/aips/online/accessed/monthly"
-                    :labels="monthNames" />
+                         <line-chart class="graphs" :yLabel="$t('dashboard.graphs.label.aips')"
+                            url="/api/v1/stats/charts/monthly/accessed/aips"
+                            :labels="monthNames" />
                     </div>
                     <div class="card-body g4">
-                        <h5 class="card-title">{{$t('dashboard.tab.monthly')}}</h5>
-                        <line-chart class="graphs" :title="$t('dashboard.graphs.monthlyOnlineDataAccessed')"
-                    url="/api/v1/stats/charts/data/online/accessed/monthly"
-                    :labels="monthNames"/>
+                        <line-chart class="graphs" :yLabel="$t('dashboard.graphs.label.gigabytes')"
+                            url="/api/v1/stats/charts/monthly/accessed/data"
+                            :labels="monthNames"/>
                     </div>
                 </div>
             </div>
             <div class="col-md-5">
                 <pie-chart class="pieChart" :title="$t('dashboard.fileTypes')"
-                    url="api/v1/stats/charts/file-formats/ingested" />
+                    url="api/v1/stats/charts/total/ingested/fileformats" />
                 
             </div>
         </div>
@@ -195,33 +190,11 @@ export default {
              
             }
         },
+        gigabyteString(bytes) {
+            return (bytes/1000000000).toFixed(1)+" GB";
+        }
     },
     computed: {
-        
-        onlineDataIngested: function() {
-            return this.userStats['onlineDataIngested'];
-        },
-        offlineDataIngested: function() {
-            return this.userStats['offlineDataIngested'];
-        },
-        onlineAIPsIngested: function() {
-            return this.userStats['onlineAIPsIngested'];
-        },
-        offlineAIPsIngested: function() {
-            return this.userStats['offlineAIPsIngested'];
-        },
-        offlinePagesCount: function() {
-            return this.userStats['offlinePagesCount'];
-        },
-        offlineReelsCount: function() {
-            return this.userStats['offlineReelsCount'];
-        },
-        AIPsRetrievedCount: function() {
-            return this.userStats['AIPsRetrievedCount'];
-        },
-        DataRetrieved: function() {
-            return this.userStats['DataRetrieved'];
-        },
         monthNames: function() {
             // TODO: Rethink how we represent months in the translation file
             let translated = this.$t('dashboard.month.abbrev.array');

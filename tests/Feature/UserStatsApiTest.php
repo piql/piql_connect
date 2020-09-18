@@ -27,8 +27,8 @@ class UserStatsApiTest extends TestCase
                 "offlineAIPsIngested",
                 "offlineReelsCount",
                 "offlinePagesCount",
-                "AIPsRetrievedCount",
-                "DataRetrieved"
+                "offlineAIPsRetrieved",
+                "offlineDataRetrieved"
                 ]
             ];
 
