@@ -31,13 +31,7 @@ class AccountArchiveHoldingController extends Controller
      */
     public function index(Request $request, Account $account, Archive $archive)
     {
-        // todo: the selection needs to be modified when roles and groups gets fully implemented
-        if($account->owner_id !== auth()->user()->id) {
-            abort( response()->json([ 'error' => 404, 'message' => 'Invalid account' ], 404 ) );
-        }
-
         $holdings = $archive->holdings();
-
         $limit = $request->limit ? $request->limit : env('DEFAULT_ENTRIES_PER_PAGE');
         return HoldingResource::collection( $holdings->paginate( $limit ) );
 
@@ -52,11 +46,6 @@ class AccountArchiveHoldingController extends Controller
      */
     public function store(Request $request, Account $account, Archive $archive)
     {
-        // todo: the selection needs to be modified when roles and groups gets fully implemented
-        if($account->owner_id !== auth()->user()->id) {
-            abort( response()->json([ 'error' => 404, 'message' => 'Invalid account' ], 404 ) );
-        }
-
         $requestData = $this->validateRequest($request);
         $holding = new Holding(
             array_merge($requestData, [
@@ -65,14 +54,7 @@ class AccountArchiveHoldingController extends Controller
         $holding->setOwnerArchiveUuidAttribute($archive->uuid);
         $holding->save();
 
-        $metadata = new HoldingMetadata([
-            "modified_by" => auth()->user()->id,
-            "metadata" => ["dc" => (object)null]
-        ]);
-        $metadata->parent()->associate($holding);
-        $metadata->save();
-
-        return response()->json([ "data" => new HoldingResource($holding)]);
+        return new HoldingResource( $holding );
     }
 
     /**
@@ -83,12 +65,7 @@ class AccountArchiveHoldingController extends Controller
      */
     public function show(Account $account, Archive $archive, Holding $holding)
     {
-        // todo: the selection needs to be modified when roles and groups gets fully implemented
-        if($account->owner_id !== auth()->user()->id) {
-            abort( response()->json([ 'error' => 404, 'message' => 'Invalid account' ], 404 ) );
-        }
-
-        return response()->json([ "data" => new HoldingResource($holding)]);
+        return new HoldingResource( $holding );
     }
 
     /**

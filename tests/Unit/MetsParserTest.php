@@ -13,12 +13,14 @@ class MetsParserTest extends TestCase
     protected static $singleMetsContents;
     protected static $multiMetsContents;
     protected static $noDublinCoreMetsContents;
+    protected static $piqlconnectV1MetsContents;
 
     public static function setupBeforeClass()
     {
         self::$singleMetsContents = file_get_contents( "tests/Data/gotmetadata-METS.8149cfad-2ba1-4ccf-b132-255dd6399ed1.xml" );
         self::$multiMetsContents = file_get_contents( "tests/Data/svalbard-METS.350fbaa1-c664-4ced-9e98-adcb379f998f.xml" );
         self::$noDublinCoreMetsContents = file_get_contents( "tests/Data/no-metadata.METS.9366157d-2066-4ff8-9cb7-744e0f826b58.xml" );
+        self::$piqlconnectV1MetsContents = file_get_contents( "tests/Data/piqlconnect-v1-METS.90d56eb5-9184-4081-a925-2d6fe6581ecd.xml" );
     }
 
     public function test_when_injecting_an_instance_of_MetsParserInterface_it_makes_a_MetsParserService()
@@ -31,6 +33,8 @@ class MetsParserTest extends TestCase
     {
         $this->assertEquals( 145857, strlen( self::$singleMetsContents ) ) ;
         $this->assertEquals( 179370, strlen( self::$multiMetsContents ) );
+        $this->assertEquals( 203200, strlen( self::$noDublinCoreMetsContents ) );
+        $this->assertEquals( 491642, strlen( self::$piqlconnectV1MetsContents ) );
     }
 
     public function test_when_testing_the_mets_parser_the_test_files_can_be_parsed_as_xml()
@@ -40,6 +44,12 @@ class MetsParserTest extends TestCase
         xml_parser_free( $parser );
         $parser = xml_parser_create();
         $this->assertEquals( 1, xml_parse( $parser, self::$multiMetsContents, true ) );
+        xml_parser_free( $parser );
+        $parser = xml_parser_create();
+        $this->assertEquals( 1, xml_parse( $parser, self::$noDublinCoreMetsContents, true ) );
+        xml_parser_free( $parser );
+        $parser = xml_parser_create();
+        $this->assertEquals( 1, xml_parse( $parser, self::$piqlconnectV1MetsContents, true ) );
         xml_parser_free( $parser );
     }
 
@@ -76,11 +86,18 @@ class MetsParserTest extends TestCase
         $this->assertEquals( $expected, $actual );
     }
 
-    public function test_given_a_mets_file_containing_two_ingested_files_when_parsing_it_finds_two_files()
+    public function test_given_a_mets_file_containing_two_ingested_files_when_parsing_it_finds_metadata_for_two_files()
     {
         $service = $this->app->make( MetsParserInterface::class );
         $actual = $service->parseDublinCoreFields( self::$multiMetsContents );
         $this->assertCount( 2, $actual );
+    }
+
+    public function test_given_a_mets_file_containing_four_ingested_files_and_directory_structure_when_parsing_it_finds_metadata_for_four_files()
+    {
+        $service = $this->app->make( MetsParserInterface::class );
+        $actual = $service->parseDublinCoreFields( self::$piqlconnectV1MetsContents );
+        $this->assertCount( 4, $actual );
     }
 
     public function test_given_a_mets_file_containing_no_dublin_core_metadata_it_is_handled_gracefully()
@@ -89,7 +106,6 @@ class MetsParserTest extends TestCase
         $actual = $service->parseDublinCoreFields( self::$noDublinCoreMetsContents );
         $this->assertCount( 0, $actual );
     }
-
 
     public function test_given_a_mets_file_for_multiple_ingested_files_when_parsing_dublin_core_fields_they_are_related_to_their_file()
     {
@@ -134,6 +150,82 @@ class MetsParserTest extends TestCase
         $this->assertEquals( $expected, $actual );
     }
 
+    public function test_given_a_mets_file_for_multiple_ingested_files_and_directory_structure_when_parsing_dublin_core_fields_they_are_related_to_their_file()
+    {
+        $service = $this->app->make( MetsParserInterface::class );
+        $actual = $service->parseDublinCoreFields( self::$piqlconnectV1MetsContents );
+        $expected = [
+            "2020_08_14_The_way_we_work.pdf" => [
+                "title" => "The Way We Work",
+                "creator" => "Piql AS",
+                "subject" => "The way we work",
+                "description" => "A document for working guidelines",
+                "publisher" => "Piql AS",
+                "contributor" => "HR",
+                "date" => "2020-09-16",
+                "type" => "Document",
+                "format" => "PDF",
+                "identifier" => "",
+                "source" => "",
+                "language" => "English",
+                "relation" => "",
+                "coverage" => "",
+                "rights" => ""
+            ],
+            "Archivematica_Dashboard_-_Administration.pdf" => [
+                "title" => "Archivematica dashboard",
+                "creator" => "Artefactual",
+                "subject" => "Archivematica dashboard documentation",
+                "description" => "Documentation of the Archivematica dashboard",
+                "publisher" => "Artefactual",
+                "contributor" => "Piql AS",
+                "date" => "2020-05-06",
+                "type" => "Document",
+                "format" => "PDF",
+                "identifier" => "",
+                "source" => "",
+                "language" => "English",
+                "relation" => "",
+                "coverage" => "",
+                "rights" => ""
+            ],
+	    "build.pri" => [
+                "title" => "Build priority",
+                "creator" => "Piql AS",
+                "subject" => "Build priority file",
+                "description" => "Part of the cmu_112 project",
+                "publisher" => "Piql AS",
+                "contributor" => "Piql AS",
+                "date" => "2020-09-16",
+                "type" => "C++ project file",
+                "format" => "pri",
+                "identifier" => "",
+                "source" => "",
+                "language" => "",
+                "relation" => "",
+                "coverage" => "",
+                "rights" => ""
+            ],
+	    "suncat.jpg" => [
+                "title" => "Sun cat",
+                "creator" => "Piql AS",
+                "subject" => "A sun cat",
+                "description" => "A photo depicting a cat in the sun",
+                "publisher" => "Piql",
+                "contributor" => "Piql AS",
+                "date" => "2020-09-16",
+                "type" => "Image",
+                "format" => "JPEG",
+                "identifier" => "",
+                "source" => "",
+                "language" => "Swedish",
+                "relation" => "",
+                "coverage" => "",
+                "rights" => ""
+            ]
+        ];
+        $this->assertEquals( $expected, $actual );
+    }
 
     public function test_given_mets_file_id_and_search_for_original_file()
     {

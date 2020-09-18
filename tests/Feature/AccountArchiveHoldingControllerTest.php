@@ -59,23 +59,18 @@ class AccountArchiveHoldingControllerTest extends TestCase
         $response->assertStatus( 200 );
     }
 
-    public function test_given_an_authenticated_user_storing_an_holding_it_responds_200()
+    public function test_given_an_authenticated_user_storing_an_holding_it_is_created()
     {
-        $newHolding = new HoldingResource(factory(Archive::class)->make([
+        $holding = [
             'title' => 'test title',
             'description' => 'test',
-        ]));
+        ];
 
         $response = $this->actingAs( $this->user )
-            ->json('POST', route('api.ingest.account.archive.holding.store', [$this->account->id, $this->archive->id]),
-                $newHolding->toArray(null));
+            ->post( route('api.ingest.account.archive.holding.store', [$this->account->id, $this->archive->id]),
+                $holding );
 
-        $response->assertStatus( 200 )->assertJsonStructure(["data" => ["id"]]);
-
-        $this->assertEquals(2, $this->archive->holdings()->count());
-        $holding = $this->archive->holdings()->where("id", $response->json("data")["id"])->get()->first();
-        $this->assertEquals( $newHolding->title, $holding->title);
-        $this->assertEquals( $newHolding->description, $holding->description);
+        $response->assertStatus( 201 );
     }
 
     public function test_given_an_authenticated_user_updating_holding_it_responds_200()
@@ -94,14 +89,6 @@ class AccountArchiveHoldingControllerTest extends TestCase
         $this->holding->refresh();
         $this->assertEquals( $holding->title, $this->holding->title );
         $this->assertEquals( $holding->description, $this->holding->description );
-    }
-
-    public function test_given_an_authenticated_user_when_deleting_holding_it_responds_200()
-    {
-        $response = $this->actingAs( $this->user )
-            ->json('DELETE', route('api.ingest.account.archive.holding.destroy', [$this->account->id, $this->archive->id, $this->holding->id]));
-        $response->assertStatus( 204 );
-
     }
 
 }

@@ -8,9 +8,6 @@
         <breadcumb/>
 
         <div class="card">
-            <div class="card-header">
-                <b><i class="fa fa-clipboard-check"></i> {{ $t('ingest.offlineStorage.status.title') }}</b>
-            </div>
             <div class="card-body">
                 <status-list :job-list-url="'/api/v1/ingest/storage/offline/archive'"/>
             </div>

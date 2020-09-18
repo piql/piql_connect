@@ -1,5 +1,6 @@
 <?php
 
+use App\Account;
 use Illuminate\Database\Seeder;
 use App\S3Configuration;
 use App\StorageLocation;
@@ -31,8 +32,11 @@ class SafeSpringS3ConfigurationSeeder extends Seeder
             'bucket' => $ss_test_bucket
         ]);
 
-        $owner = User::where('username','kare')->first() ?? User::first() ?? factory(App\User::class, 1)->create()->first();
-
+        $owner = User::where('username','kare')->first()
+            ?? User::first()
+            ?? factory(App\User::class)->create([
+                "account" => Account::get()->first()->uuid
+            ]);
         StorageLocation::create([
             'owner_id' => $owner->id,
             'locatable_id' => $s3Config->id,

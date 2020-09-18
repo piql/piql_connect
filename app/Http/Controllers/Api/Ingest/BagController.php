@@ -466,11 +466,10 @@ class BagController extends Controller
             abort(response()->json(["error" => 424, "message" => "No account"], 424));
         }
 
-        $metadata = $holding->metadata()->get()->first()->replicate();
-        //dump($metadata);
+        //TODO: Get the metadata in the bag
+/*        $metadata = $holding->metadata();
         $metadata->parent()->associate($bag);
         $metadata->push();
-
         $metadata = $archive->metadata()->get()->first()->replicate();
         $metadata->parent()->associate($bag);
         $metadata->push();
@@ -478,6 +477,7 @@ class BagController extends Controller
         $metadata = $account->metadata()->get()->first()->replicate();
         $metadata->parent()->associate($bag);
         $metadata->push();
+ */
     }
 
 

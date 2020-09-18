@@ -5,9 +5,6 @@
         <breadcumb/>
 
         <div class="card">
-            <div class="card-header">
-                <b><img src="/images/piqlfilm-icon-gray-light.svg" class="iconTitle"/> {{$t('ingest.taskList.title')}}</b>
-            </div>
             <div class="card-body">
                 <task-table :items="items" :jobListUrl="jobListUrl" :actionIcons="actionIcons" @piqlIt="piqlIt" @onDelete="update" />
             </div>
