@@ -57,51 +57,29 @@ class CommitFilesToBagListener implements ShouldQueue
         }
 
         $metadataType = env( 'APP_AM_INGEST_METADATA_FILE_FORMAT', "csv");
-        $metadataFileName = Str::random(40)."-metadata.".$metadataType;
+        $metadataFileName = Str::uuid()."-metadata.".$metadataType;
         $metadataWriter = $this->metadataGenerator->createMetadataWriter([
             'filename' => $metadataFileName,
             'type' => $metadataType,
         ]);
 
-        if( $bag->owner()->first()->settings->getIngestMetadataAsFileAttribute() !== true ) {
-            $metadataPlaceholders = [
-                (object)[
-                    "class" => \App\AccountMetadata::class,
-                    "object" => MetadataPath::ACCOUNT_OBJECT
-                ],
-                (object)[
-                    "class" => \App\ArchiveMetadata::class,
-                    "object" => MetadataPath::ARCHIVE_OBJECT
-                ],
-                (object)[
-                    "class" => \App\HoldingMetadata::class,
-                    "object" => MetadataPath::HOLDING_OBJECT
-                ]
-            ];
+        // append metadata to file
+        // TODO: For each of $bag->storage_properties->account, archive, holding - do: 
+        /*
+        $writeSuccess = $metadataWriter->write([
+            'object' => $metadataPlaceholder->object,
+            'metadata' => $query->first()->metadata
+        ]);
 
-            $uuid = $bag->uuid;
-            $metadataGenerated = collect($metadataPlaceholders)->map(function($metadataPlaceholder) use($metadataWriter, $uuid){
+        if (!$writeSuccess) {
+            Log::error("Generating " . $metadataPlaceholder->class . "metadata for Bag " . $uuid . " failed!");
+        }
 
-                $query = $metadataPlaceholder->class::whereHasMorph('parent', [\App\Bag::class], function(Builder $query) use ($uuid) {
-                    $query->where("uuid", $uuid);
-                });
-                // append metadata to file
-                $writeSuccess = $metadataWriter->write([
-                    'object' => $metadataPlaceholder->object,
-                    'metadata' => $query->get()->first()->metadata
-                ]);
-
-                if (!$writeSuccess) {
-                    Log::error("Generating " . $metadataPlaceholder->class . "metadata for Bag " . $uuid . " failed!");
-                }
-
-                return $writeSuccess;
-            })->reduce(function($a, $b) { return $a && $b; }, true);
-
-            if (!$metadataGenerated) {
+        if (!$metadataGenerated) {
                 event(new ErrorEvent($bag));
             }
         }
+        */
 
         foreach ($files as $file)
         {
@@ -130,7 +108,7 @@ class CommitFilesToBagListener implements ShouldQueue
         }
 
         // add metadata file to bagit tool
-        if( Storage::exists($metadataFileName) && ( $bag->owner()->first()->settings->getIngestMetadataAsFileAttribute() !== true ) ) {
+        if( Storage::exists( $metadataFileName ) ){
             $this->bagIt->addMetadataFile(Storage::path($metadataFileName), "metadata.".$metadataType);
         }
 

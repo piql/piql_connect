@@ -51,8 +51,11 @@ class User extends Authenticatable
         parent::boot();
         self::creating(function( $model ) /*Create a uuid converted to binary16 */
         {
-            $model->id = Uuid::generate();
-            $model->api_token = Hash::make( Uuid::generate() );
+            if( !$model->id ){
+                $model->id = Uuid::generate();
+            }
+            $model->api_token = Hash::make( Uuid::generate() ); //TODO: do we need this now?
+
             \App\UserSetting::create([ 'user_id' => $model->id ]);
         });
     }
