@@ -4,14 +4,27 @@ namespace App;
 
 use App\Traits\AutoGenerateUuid;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
+use Webpatser\Uuid\Uuid;
 
 class Holding extends Model
 {
     use AutoGenerateUuid;
 
+    const DEFAULT_TEMPLATE = '{ "title": "", "description": "", "dc":  { "identifier": "" } }';
+
     protected $table = 'holdings';
     protected $fillable = [
-        'title', 'description', 'owner_archive_uuid', 'parent_id', 'position', 'uuid'
+        'title', 'description', 'owner_archive_uuid', 'parent_id','position',
+        'uuid', 'defaultMetadataTemplate'
+    ];
+
+    protected $casts = [
+        'defaultMetadataTemplate' => 'array'
+    ];
+
+    protected $attributes = [
+        'defaultMetadataTemplate' => self::DEFAULT_TEMPLATE
     ];
 
     protected static function boot()
@@ -19,6 +32,9 @@ class Holding extends Model
         parent::boot();
         static::creating(function ($model) {
             $model->position = $model->siblings()->count()+1;
+
+            $userSuppliedData = $model->defaultMetadataTemplate["dc"];
+            $model->defaultMetadataTemplate = ["dc" => ["identifier" => Str::uuid() ] + $userSuppliedData ] ;
         });
     }
 
@@ -136,8 +152,20 @@ class Holding extends Model
         return $this->parent()->with('ancestor');
     }
 
-    public function metadata()
+    public function getMetadataAttribute( $value ) /*TODO: Remove after refactoring apis */
     {
-        return $this->hasMany(\App\HoldingMetadata::class, "parent_id");
+        return $this->defaultMetadataTemplate;
+    }
+
+    public function setMetadataAttribute( $value ) /*TODO: Remove after refactoring apis */
+    {
+        if( !is_array( $value ) )
+            return;
+
+        if( array_has( $value, 'dc' ) ) { //TODO: Support other schemas than DC
+            $original = $this->defaultMetadataTemplate ?? json_decode( self::DEFAULT_TEMPLATE );
+            $this->defaultMetadataTemplate = ["dc" => $value["dc"] + $original["dc"] ];
+        }
     }
 }
+

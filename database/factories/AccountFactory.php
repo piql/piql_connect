@@ -21,5 +21,6 @@ $factory->define(Account::class, function (Faker $faker) {
         'uuid' => $faker->uuid,
         'title' => $faker->text,
         'description' => $faker->text,
+        'metadata' => ["dc" => ["relation" => $faker->text(8) ]]
     ];
 });

@@ -55,7 +55,7 @@ class BagController extends Controller
         $userId = $request->query('userId');
         $userIdBytes = Uuid::import( $userId )->bytes;
         $user = User::findOrFail( $userIdBytes );
-            
+
         $bag = null;
         if( $user->bags->count() > 0){
             $bag = $user->bags()->latest()->first();
@@ -476,7 +476,6 @@ class BagController extends Controller
         $metadata = $holding->metadata();
         $metadata->parent()->associate($bag);
         $metadata->push();
-
         $metadata = $archive->metadata()->get()->first()->replicate();
         $metadata->parent()->associate($bag);
         $metadata->push();

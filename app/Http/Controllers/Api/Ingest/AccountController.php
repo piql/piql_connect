@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers\Api\Ingest;
 
-use App\AccountMetadata;
-use App\File;
 use App\Http\Resources\AccountResource;
 use App\Account;
 use Illuminate\Http\Request;
@@ -12,64 +10,48 @@ use Webpatser\Uuid\Uuid;
 
 class AccountController extends Controller
 {
-    private function validateRequest(Request $request) {
-        return $request->validate([
-            "title" => "string|nullable",
-            "description" => "string|nullable",
-        ]);
-    }
     /**
-     * Display a listing of the resource.
+     * Display a paginated listing of Accounts
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index( Request $request )
     {
-        // todo: the selection needs to be modified when roles and groups gets fully implemented
-        $metadata = \auth()->user()->morphMany( 'App\Account','owner');
-
         $limit = $request->limit ? $request->limit : env('DEFAULT_ENTRIES_PER_PAGE');
-        return AccountResource::collection( $metadata->paginate( $limit ) );
-
+        return AccountResource::collection( Account::paginate( $limit ) );
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Validate and persist a new Account.
      *
-     * @param \Illuminate\Http\Request $request
-     * @param File $file
-     * @return void
+     * @param \Illuminate\Http\Request $request title, description (optional), metadata (optional)
+     * @return \Illuminate\Http\Response of AccountResource
      */
-    public function store(Request $request)
+    public function store(Request $request )
     {
-        $requestData = $this->validateRequest($request);
-        $account = new Account(
-            array_merge($requestData, ["uuid" => Uuid::generate()->string])
+        $validatedRequest = $this->validate( $request, [
+                "title" => "string",
+                "description" => "string|nullable",
+                "metadata" => "array|nullable"
+            ]
         );
-
-        // todo: the account needs to be  associated with either user or group
-        $account->owner()->associate(auth()->user());
-        $account->save();
-
-        $metadata = new AccountMetadata([
-            "modified_by" => auth()->user()->id,
-            "metadata" => ["dc" => (object)null]
-        ]);
-        $metadata->parent()->associate($account);
-        $metadata->save();
-
-        return response()->json([ "data" => new AccountResource($account)]);
+        if( array_key_exists( "metadata", $validatedRequest ) ) {
+            $validatedRequest["defaultMetadataTemplate"] = $validatedRequest["metadata"]; //TODO: Fix api
+            unset($validatedRequest["metadata"]);
+        }
+        $account = Account::create( $validatedRequest );
+        return new AccountResource( $account );
     }
 
     /**
-     * Display the specified resource.
+     * Display a specified Account
      *
      * @param Account $account
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\Response of AccountResource
      */
     public function show(Account $account)
     {
-        return response()->json([ "data" => new AccountResource($account)]);
+        return new AccountResource( $account );
     }
 
     /**
@@ -79,16 +61,20 @@ class AccountController extends Controller
      * @param Account $account
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Account $account)
+    public function update( Request $request, Account $account )
     {
-        $requestData = $this->validateRequest($request);
-        $account->update($requestData);
-        $account->save();
-        return response()->json([ "data" => new AccountResource($account)]);
+        $validatedRequest = $this->validate( $request, [
+                "title" => "string",
+                "description" => "string|nullable",
+                "metadata" => "array|nullable"
+            ]
+        );
+        $account->update( $validatedRequest );
+        return new AccountResource( $account );
     }
 
     /**
-     * Remove the specified resource from storage.
+     * In this version, deleting accounts is not supported due to consistency issues
      *
      * @param Account $account
      * @return \Illuminate\Http\Response
@@ -96,7 +82,6 @@ class AccountController extends Controller
      */
     public function destroy(Account $account)
     {
-        $account->delete();
-        return response( "", 204);
+        return response( "Accounts cannot be deleted in this version", 405);
     }
 }
