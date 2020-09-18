@@ -64,7 +64,7 @@ class CommitFilesToBagListener implements ShouldQueue
         ]);
 
         // append metadata to file
-        // TODO: For each of $bag->storage_properties->account, archive, holding - do: 
+        // TODO: For each of $bag->storage_properties->account, archive, holding - do:
         /*
         $writeSuccess = $metadataWriter->write([
             'object' => $metadataPlaceholder->object,
@@ -88,6 +88,7 @@ class CommitFilesToBagListener implements ShouldQueue
             else
                 $this->bagIt->addFile($file->storagePathCompleted(), MetadataPath::FILE_OBJECT_PATH.$file->filename);
 
+            dump($bag->owner()->first()->settings->getIngestMetadataAsFileAttribute());
             if( $bag->owner()->first()->settings->getIngestMetadataAsFileAttribute() !== true ) {
                 if ($file->metadata->count() > 0) {
                     // append metadata to file

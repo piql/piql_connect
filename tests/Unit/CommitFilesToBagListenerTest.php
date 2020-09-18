@@ -117,6 +117,7 @@ class CommitFilesToBagListenerTest extends TestCase
                 ->once()
                 ->andReturn( Mockery::mock( MetadataWriterInterface::class, function( $mock ) use ($file) {
 
+                    /* todo: review this when metadata ingest is up and running again
                     $mock->shouldReceive('write')->times(1)->with(Mockery::on(function($argument) use ($file) {
                         $this->assertArrayHasKey("object", $argument);
                         $this->assertEquals(MetadataPath::ACCOUNT_OBJECT, $argument["object"]);
@@ -134,7 +135,7 @@ class CommitFilesToBagListenerTest extends TestCase
                         $this->assertEquals(MetadataPath::HOLDING_OBJECT, $argument["object"]);
                         return true;
                     }))->andReturn(true);
-
+                    */
 
                     $mock->shouldReceive('write')->times(1)->with(Mockery::on(function($argument) use ($file) {
                         $this->assertArrayHasKey("object", $argument);
@@ -202,7 +203,7 @@ class CommitFilesToBagListenerTest extends TestCase
             $mock->shouldReceive('createMetadataWriter')
                 ->once()
                 ->andReturn( Mockery::mock( MetadataWriterInterface::class, function( $mock ) {
-                    $mock->shouldReceive('write')->times(4)->andReturn(true);
+                    $mock->shouldReceive('write')->times(1)->andReturn(true);
                     $mock->shouldReceive('close')->once()->andReturn(true);
                 }));
         });

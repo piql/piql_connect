@@ -52,9 +52,11 @@ class BagController extends Controller
 
     public function latest(Request $request)
     {
-        $userId = $request->query('userId');
-        $userIdBytes = Uuid::import( $userId )->bytes;
-        $user = User::findOrFail( $userIdBytes );
+        $user = Auth::user();
+        // todo: ask Kare
+        //$userId = $request->query('userId');
+        //$userIdBytes = Uuid::import( $userId )->bytes;
+        //$user = User::findOrFail( $userIdBytes );
 
         $bag = null;
         if( $user->bags->count() > 0){

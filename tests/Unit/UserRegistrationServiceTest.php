@@ -15,7 +15,8 @@ class UserRegistrationServiceTest extends TestCase
 
     public function test_can_initiate_user_regstration()
     {
-        // todo: this test has top be reworked to use Keycloak once it is fully integrated
+        $this->markTestSkipped( 'this test has top be reworked to use Keycloak once it is fully integrated');
+
         return;
 
         Mail::fake();
@@ -34,7 +35,7 @@ class UserRegistrationServiceTest extends TestCase
 
     public function test_cannot_initiate_duplicate_user_regstration()
     {
-        // todo: this test has top be reworked to use Keycloak once it is fully integrated
+        $this->markTestSkipped( 'this test has top be reworked to use Keycloak once it is fully integrated');
         return;
 
         UserRegistrationService::registerUser('John Dane Kikaabi', 'kdoem', 'kdmk123@org.com', 'http://org.com') ;
@@ -44,7 +45,7 @@ class UserRegistrationServiceTest extends TestCase
 
     public function test_can_complete_user_regstration()
     {
-        // todo: this test has top be reworked to use Keycloak once it is fully integrated
+        $this->markTestSkipped( 'this test has top be reworked to use Keycloak once it is fully integrated');
         return;
 
         UserRegistrationService::registerUser('Jane Doess Masaaba', 'jndesm', 'jsdmk123fd@org.com', 'http://org.com') ;
