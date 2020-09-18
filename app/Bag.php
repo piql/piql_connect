@@ -110,8 +110,12 @@ class Bag extends Model
             if(!isset($model->status) || $model->status == "") {
                 $model->status = "open";
             }
-            $settings = UserSetting::where('user_id', $model->owner )->first();
+        });
 
+        self::created( function( \App\Bag $model )
+        {
+            //TODO: Should use relation
+            $settings = \App\UserSetting::where( 'user_id', $model->owner )->first();
             StorageProperties::create([
                 'bag_uuid' => $model->uuid,
                 'aip_initial_online_storage_location' => $settings->defaultAipStorageLocationId,
@@ -119,6 +123,7 @@ class Bag extends Model
                 'archivematica_service_dashboard_uuid' => $settings->defaultArchivematicaServiceDashboardUuid,
                 'archivematica_service_storage_server_uuid' => $settings->defaultArchivematicaServiceStorageServerUuid
             ]);
+
         });
 
         self::deleting( function( $model )
@@ -146,6 +151,12 @@ class Bag extends Model
     {
         return $this->belongsTo('App\User', 'owner_id', 'id');
     }
+
+    public function bagOwner()
+    {
+        return $this->belongsTo('App\User', 'owner_id', 'id');
+    }
+
 
     public function files()
     {
