@@ -65,7 +65,13 @@ class ArchiveController extends Controller
         }
         return new ArchiveResource( $archive );
     }
-
+    
+    public function showByUuid($uuid)
+    {
+    	$archive = Archive::query()->where('uuid', $uuid)->first();
+    	return $archive ? new ArchiveResource($archive) : null;
+    }
+    
     /**
      * Show the form for editing the specified resource.
      *

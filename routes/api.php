@@ -149,6 +149,9 @@ Route::group(['prefix' => 'v1', 'middleware' => ['auth']], function () {
         Route::apiResource('holdings', 'Api\Planning\HoldingController', ['as' => 'planning']);
         Route::apiResource('archives', 'Api\Planning\ArchiveController', ['as' => 'planning']);
         Route::apiResource('archives.holdings', 'Api\Planning\ArchiveHoldingController', ['as' => 'planning']);
+        Route::get('holding/{uuid}', 'Api\Planning\HoldingController@showByUuid');
+        Route::get('archive/{uuid}', 'Api\Planning\ArchiveController@showByUuid');
+        Route::get('account/byUser/{id}', 'Api\Ingest\AccountController@showByUserUuid');
     });
 
     Route::group(['prefix' => 'storage'], function () {

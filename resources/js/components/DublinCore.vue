@@ -1,6 +1,13 @@
 <template>
     <div class="w-100">
         <breadcumb :subTitle="fileName" :subTitleRoute="{ name: 'ingest.uploader' }"/>
+        <div class="row">
+            <div class="col-sm-4">
+                <button class="btn btn mr-2 pr-3 pl-3" @click="showModalData('holding')">{{$t('Holdings')}}</button>
+                <button class="btn btn mr-2 pr-3 pl-3" @click="showModalData('archive')">{{$t('Archive')}}</button>
+                <button class="btn btn mr-2 pr-3 pl-3" @click="showModalData('account')">{{$t('Accounts')}}</button>
+            </div>
+        </div>
         <form>
             <div class="row">
                 <div v-for="scheme in schemes" class="col-sm-4">
@@ -26,19 +33,39 @@
                 <div class="col-8 mr-4"></div>
                 <button class="col-2 pl-3 pr-3 text-center btn btn-ln btn-default" @click="$router.go(-1)">{{$t('Back')}}</button>
             </div>
+            <modal name="modalData" width="90%" height="300">
+                <div class="modalDataTitle">
+                    {{modalDataContent.title}}
+                </div>
+                <div class="modalDataClose">
 
+                    <a @click="hideModalData"><i class="fas fa-times-circle actionIcon text-center mr-2 cursorPointer"></i></a>
+                </div>
+                <div class="modalDataContent">
+                    <ul>
+                        <li v-for="value, name in modalDataContent.content"><b>{{name}}:</b> {{value}}</li>
+                    </ul>
+                </div>
+            </modal>
         </div>
     </template>
 
 <script>
 import axios from 'axios';
-
+import VModal from 'vue-js-modal'
+Vue.use(VModal, { componentName: 'modal'})
 export default {
     data () {
         return {
             metadataObject: {
                 metadata: [{ dc : {} }]
-            }
+            },
+            file: null,
+            archiveMetadata: null,
+            holdingMetadata: null,
+            accountMetadata: null,
+            modalDataType: null,
+            bag: null,
         }
     },
 
@@ -93,16 +120,23 @@ export default {
             return `${this.baseUrl}/${this.idParam}/metadata`;
         },
         fileName: function() {
-            if (!this.file && this.baseFileUrl && this.metadataObject && this.idParam) {
-                let urlTmp = this.baseFileUrl + this.idParam;
-                axios.get(urlTmp).then( async ( resp ) =>  {
-                    this.file = resp.data;
-                });
-            }
+            this.loadFile();
             if (this.file) {
                 return this.file.filename;
             } else {
                 return "";
+            }
+        },
+        modalDataContent: function () {
+            switch (this.modalDataType) {
+                case 'holding':
+                    return {title: this.$t('Holdings'), 'content': this.loadHoldingMetadata()};
+                case 'archive':
+                    return {title: this.$t('Archive'), 'content': this.loadArchiveMetadata()};
+                case 'account':
+                    return {title: this.$t('Accounts'), 'content': this.loadAccountMetadata()};
+                default:
+                    return {title: null, 'content': null};
             }
         }
     },
@@ -135,6 +169,55 @@ export default {
         setValue(key, value) {
             this.metadataObject.metadata.dc[key] = value;
         },
+        loadFile() {
+            if (!this.file && this.baseFileUrl && this.metadataObject && this.idParam) {
+                let urlTmp = this.baseFileUrl + this.idParam;
+                axios.get(urlTmp).then( async ( resp ) =>  {
+                    this.file = resp.data;
+                });
+            }
+        },
+        loadBag() {
+            this.loadFile();
+            if (!this.bag && this.file != null && this.file.bag_id != null) {
+                axios.get('/api/v1/ingest/bags/' + this.file.bag_id).then( async ( resp ) =>  {
+                    this.bag = resp.data.data;
+                });
+            }
+        },
+        loadHoldingMetadata() {
+            this.loadBag();
+            if (this.bag != null) {
+                if (this.holdingMetadata == null) {
+                    axios.get('/api/v1/planning/holding/' + this.bag.holding_uuid).then( async ( resp ) =>  {
+                        this.holdingMetadata = resp.data.data.metadata.dc;
+                    });
+                }
+                return this.holdingMetadata;
+            }
+        },
+        loadArchiveMetadata() {
+            this.loadBag();
+            if (this.bag != null) {
+                if (this.archiveMetadata == null) {
+                    axios.get('/api/v1/planning/archive/' + this.bag.archive_uuid).then( async ( resp ) =>  {
+                        this.archiveMetadata = resp.data.data.metadata.dc;
+                    });
+                }
+                return this.archiveMetadata;
+            }
+        },
+        loadAccountMetadata() {
+            this.loadBag();
+            if (this.bag != null) {
+                if (this.accountMetadata == null) {
+                    axios.get('/api/v1/planning/account/byUser/' + this.bag.user_uuid).then( async ( resp ) =>  {
+                        this.accountMetadata = resp.data.data.metadata.dc;
+                    });
+                }
+                return this.accountMetadata;
+            }
+        },
         async save() {
             if(!this.readOnly) {
                 // save errorToast handler just in case there is an error
@@ -153,7 +236,30 @@ export default {
                 this.$router.go(-1);
             }
         },
+        showModalData(type) {
+            this.modalDataType = type;
+            this.$modal.show('modalData');
+        },
+        hideModalData() {
+            this.$modal.hide('modalData');
+        }
 
     }
 };
 </script>
+<style scoped>
+    .modalDataContent {
+        width: 100%;
+        height: 80%;
+        overflow-y: auto;
+    }
+    .modalDataTitle {
+        float: left;
+        font-weight: bold;
+        margin: 10px;
+    }
+    .modalDataClose {
+        float: right;
+        margin: 10px;
+    }
+</style>

@@ -7,6 +7,8 @@ use App\Account;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Webpatser\Uuid\Uuid;
+use App\User;
+use Log;
 
 class AccountController extends Controller
 {
@@ -53,7 +55,14 @@ class AccountController extends Controller
     {
         return new AccountResource( $account );
     }
-
+    
+    public function showByUserUuid($uuid)
+    {
+    	$user = User::find($uuid);
+    	$account = $user ? Account::query()->where('uuid', $user->account)->first() : null;
+    	return $account ? new AccountResource($account) : null;
+    }
+    
     /**
      * Update the specified resource in storage.
      *

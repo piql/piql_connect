@@ -76,6 +76,13 @@ class HoldingController extends Controller
         return new HoldingResource($holding);
     }
 
+    public function showByUuid($uuid)
+    {
+    	$holding = Holding::query()->where('uuid', $uuid)->first();
+    	return $holding ? new HoldingResource($holding) : null;
+    }
+    
+    
     /**
      * Show the form for editing the specified resource.
      *
