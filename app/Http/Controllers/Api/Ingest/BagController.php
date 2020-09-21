@@ -23,6 +23,7 @@ use App\Http\Resources\FileCollection;
 use Response;
 use App\Events\FileUploadedEvent;
 use Carbon\Carbon;
+use Webpatser\Uuid\Uuid;
 use Log;
 
 class BagController extends Controller
@@ -52,6 +53,11 @@ class BagController extends Controller
     public function latest(Request $request)
     {
         $user = Auth::user();
+        // todo: ask Kare
+        //$userId = $request->query('userId');
+        //$userIdBytes = Uuid::import( $userId )->bytes;
+        //$user = User::findOrFail( $userIdBytes );
+
         $bag = null;
         if( $user->bags->count() > 0){
             $bag = $user->bags()->latest()->first();
@@ -452,6 +458,8 @@ class BagController extends Controller
     }
 
     private function setMetadata( Bag $bag) {
+        //TODO: Get the metadata in the bag
+        /*
         $holding = Holding::where('uuid', $bag->storage_properties->holding_uuid)->get()->first();
         if(!$holding) {
             abort(response()->json(["error" => 424, "message" => "No such Holding: {$bag->storage_properties->holding_uuid}"], 424));
@@ -466,8 +474,8 @@ class BagController extends Controller
             abort(response()->json(["error" => 424, "message" => "No account"], 424));
         }
 
-        //TODO: Get the metadata in the bag
-/*        $metadata = $holding->metadata();
+        $metadata = $holding->metadata()->get()->first()->replicate();
+        $metadata = $holding->metadata();
         $metadata->parent()->associate($bag);
         $metadata->push();
         $metadata = $archive->metadata()->get()->first()->replicate();
@@ -477,7 +485,7 @@ class BagController extends Controller
         $metadata = $account->metadata()->get()->first()->replicate();
         $metadata->parent()->associate($bag);
         $metadata->push();
- */
+         */
     }
 
 

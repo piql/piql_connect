@@ -15,6 +15,9 @@ class User extends Authenticatable
 
     public function settings()
     {
+        //todo: remove this at the point when we can create keycloak users via this client
+        if(!\App\UserSetting::where([ 'user_id' => $this->getIdAttribute()])->exists())
+            \App\UserSetting::create([ 'user_id' => $this->getIdAttribute() ]);
         return $this->hasOne('App\UserSetting', 'user_id');
     }
 

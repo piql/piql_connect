@@ -18,7 +18,7 @@ class FileUploadedEvent
      *
      * @return void
      */
-    public function __construct( \App\File $file, \App\User $owner )
+    public function __construct( \App\File $file, \App\Auth\User $owner )
     {
         $this->file = $file;
         $this->owner = $owner;

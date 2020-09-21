@@ -114,6 +114,8 @@ import filesize from 'filesize';
 export default {
     mixins: [ RouterTools, DeferUpdate ],
     data() {
+        const Authorization = `Bearer ${Vue.prototype.$keycloak.token}`;
+
         const uploader = new FineUploaderTraditional({
             options: {
                 request: {
@@ -127,14 +129,14 @@ export default {
                         optimus_uploader_thumbnail_width: 100,
                     },
                     customHeaders: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        Authorization
                     }
                 },
                 deleteFile: {
                     enabled: true,
                     endpoint: '/api/v1/ingest/file',
                     customHeaders: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        Authorization
                     }
                 },
                 chunking: {
@@ -293,6 +295,12 @@ export default {
     },
 
     computed: {
+        authToken() {
+            if( this.authMode == "CSRF" ) {
+                return {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')};
+            }
+            return {'Authorization': `Bearer ${Vue.prototype.$keycloak.token}`};
+        },
         sortedFilesUploading() {
             return this.filesUploading
                 .filter( f => !f.isHidden )
@@ -322,9 +330,12 @@ export default {
             return this.filesUploading.some( f => f.isFailed );
         },
         compoundModeEnabled: function() {
-            let compoundSetting = this.userSettings.workflow.ingestCompoundModeEnabled;
+            return true;
             /* Compound must explicitly be set to false to be disabled */
+            /* TODO: If we are ito support this mode, we need to get this state from the token / store instead.
+            let compoundSetting = this.userSettings.workflow.ingestCompoundModeEnabled;
             return this.userSettings.workflow.ingestCompoundModeEnabled !== undefined ? this.userSettings.workflow.ingestCompoundModeEnabled : true;
+             */
         },
         uploadInProgress: function() {
             return this.filesUploading.find( (file) => file.isUploading === true ) || false;
@@ -509,6 +520,10 @@ export default {
         }
     },
     props: {
+        authMode: {
+            type: String,
+            default: "keycloak"
+        },
         retryGracetimeMs: {
             type: Number,
             default: 1000
@@ -528,12 +543,15 @@ export default {
         this.pageFrom = 1;
         this.pageTo = this.pageSize;
         this.dispatchRouting();
-        this.userId = (await axios.get("/api/v1/system/statuses/current-user")).data;
-        this.userSettings  = (await axios.get("/api/v1/system/users/current-user/preferences")).data;
+        this.userId = Vue.prototype.$keycloak.idTokenParsed.sub ?? "";
+        if( !this.userId ) {
+            console.error("No user found. Cannot continue!");
+        }
+        this.userSettings  = (await axios.get(`/api/v1/system/users/${this.userId}/preferences`)).data;
 
         if( this.compoundModeEnabled ) {
 
-            this.bag = (await axios.get("/api/v1/ingest/bags/latest")).data.data;
+            this.bag = (await axios.get(`/api/v1/ingest/bags/latest?userId=${this.userId}`)).data.data;
             this.bagName = this.bag.name;
             let archive = this.bag.archive_uuid;
             let holding = this.bag.holding_uuid;
