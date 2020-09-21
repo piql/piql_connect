@@ -82,7 +82,7 @@ export default {
                 if(response.data.data.length > 0){
                     this.holdings = response.data.data;
                     //default selection
-                    this.selection = this.holdings[0].title;
+                    this.selection = this.holdings[0].uuid;
                 }
 
             })
@@ -93,11 +93,15 @@ export default {
                 this.initComplete = true;
                 return;
             }
-            if( holding === this.wildCardLabel ) {
-                this.updateQueryParams({ holding: null, page : null })
-            } else {
-                this.updateQueryParams({ holding, page : null });
-            }
+
+            Vue.nextTick( () => {
+                if( holding === this.wildCardLabel ) {
+                    this.updateQueryParams({ holding: null, page : null })
+                } else {
+                    this.updateQueryParams({ holding, page : null });
+                }
+                   
+            });
         },
         holdings: function( holdings ) {
             if( !! holdings ) {
