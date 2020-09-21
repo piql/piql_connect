@@ -20,7 +20,7 @@ class MediaController extends Controller {
         if (!file_exists($fileFullPath)) {
             $dip = Dip::find( $dipId );
             $fileObj = $dip->fileObjects->find($fileId);
-            Storage::disk('local')->put($filePath, $storage->stream($dip->storage_location, $fileObj->fullpath));
+            Storage::disk('local')->put($filePath, $storage->downloadContent($dip->storage_location, $fileObj->fullpath));
         }
         $stream = new VideoStreamHelper($fileFullPath);
         $stream->start();

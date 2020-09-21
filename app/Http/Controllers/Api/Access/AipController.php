@@ -166,11 +166,12 @@ class AipController extends Controller
     */
     public function fileDownload(ArchivalStorageInterface $storage, Request $request)
     {
-        /*USED FOR SINGLE FILE DOWNLOAD */
+        /* USED FOR SINGLE FILE DOWNLOAD */
         $aip = Aip::find($request->aipId);
         $file = $aip->fileObjects()->findOrFail($request->fileId);
         return response()->streamDownload(function () use( $storage, $aip, $file ) {
-            echo $storage->stream( $aip->online_storage_location, $file->fullpath );
+            echo $storage->downloadStream( $aip->online_storage_location, $file->fullpath );
+            fpassthru($stream);
         }, basename( $file->path ), [
             "Content-Type" => $file->mime_type,
             "Content-Disposition" => "attachment; { $file->filename }"

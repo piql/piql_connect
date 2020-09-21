@@ -104,8 +104,10 @@ class DipController extends Controller
             return Str::contains( $file->fullpath, '/objects' );
         })->first();
 
-        return response($storage->stream( $dip->storage_location, $file->fullpath ))
-            ->header("Content-Type" , "image/jpeg");
+        return response()->stream( function () use( $dip, $file ) {
+            $stream = $storage->downloadStream( $dip->storage_location, $file->fullpath );
+            fpassthru($stream);
+        })->header("Content-Type" , "image/jpeg");
     }
 
     public function files( Request $request )
@@ -140,7 +142,7 @@ class DipController extends Controller
             }
 
             $storage = \App::make(\App\Interfaces\ArchivalStorageInterface::class );
-            $metsFile =  $storage->stream( $dip->storage_location, $metsFileObject->fullpath );
+            $metsFile =  $storage->downloadContent( $dip->storage_location, $metsFileObject->fullpath );
 
             Cache::put($metsFileName, $metsFile, 60);
         }
@@ -181,7 +183,8 @@ class DipController extends Controller
         $file = $dip->fileObjects->find( $request->fileId );
 
         return response()->streamDownload( function () use( $storage, $dip, $file ) {
-            echo $storage->stream( $dip->storage_location, $file->fullpath );
+            echo $storage->downloadStream( $dip->storage_location, $file->fullpath );
+            passthru($stream);
         }, basename( $file->path ), [
             "Content-Type" => "application/octet-stream",
             "Content-Disposition" => "attachment; { $file->filename }"

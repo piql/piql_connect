@@ -56,7 +56,7 @@ class FilePreviewService implements \App\Interfaces\FilePreviewInterface {
     
     private function getRegularContent() {
     	if ($this->dip != null) {
-    		return $this->storage->stream( $this->dip->storage_location, $this->file->fullpath );
+                return $this->storage->downloadContent( $this->dip->storage_location, $this->file->fullpath );
     	} elseif ($this->file != null) {
     		return file_get_contents($this->file->fullpath);
     	}
@@ -65,7 +65,7 @@ class FilePreviewService implements \App\Interfaces\FilePreviewInterface {
     private function getPdfContent() {
     	$file = 'tmp/'.md5($this->file->fullpath).'.pdf';
     	if ($this->dip != null) {
-    		Storage::disk('local')->put($file, $this->storage->stream( $this->dip->storage_location, $this->file->fullpath ));
+                Storage::disk('local')->put($file, $this->storage->downloadContent( $this->dip->storage_location, $this->file->fullpath ));
     	} elseif ($this->file != null) {
     		Storage::disk('local')->put($file, file_get_contents($this->file->fullpath));
     	}
