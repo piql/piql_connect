@@ -25,9 +25,12 @@ class AccountController extends Controller
      */
     public function index(Request $request)
     {
+        // todo: the selection needs to be modified when roles and groups gets fully implemented
+        $metadata = \auth()->user()->morphMany( 'App\Account','owner');
+
         $limit = $request->limit ? $request->limit : env('DEFAULT_ENTRIES_PER_PAGE');
-        $accounts = Account::paginate( $limit );
-        return AccountResource::collection( $accounts );
+        return AccountResource::collection( $metadata->paginate( $limit ) );
+
     }
 
     /**
