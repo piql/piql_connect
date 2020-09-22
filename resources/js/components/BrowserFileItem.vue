@@ -29,6 +29,7 @@
             this.aipFileCancelTokenSource = axios.CancelToken.source();
             axios.get('/api/v1/access/dips/'+this.dipId+'/aipfile/'+this.item.id, { cancelToken: this.aipFileCancelTokenSource.token }).then( (result) => {
                 this.aipItem = result.data.data[0];
+                this.fileName = this.aipItem.filename;
                 this.fileType = this.aipItem.mime_type;
             }).catch(function(exception) {
                 if (!axios.isCancel(exception)) {
@@ -47,7 +48,7 @@
                 }
             });
         },
-	async beforeDestroy() {
+        async beforeDestroy() {
             if (this.thumbnailCancelTokenSource) {
                 this.thumbnailCancelTokenSource.cancel('Thumbnail request was cancelled');
             }
@@ -63,6 +64,7 @@
 
         data() {
             return {
+                fileName: "",
                 fileType: "",
                 thumbnailImage: "",
                 aipItem: Object,
@@ -86,7 +88,7 @@
                 this.$router.push({ name:'access.browse.dips.files.metadata', params: { dipId: this.dipId, fileId: this.aipItem.id, showFileId: this.item.id } });
             },
           preview: function(){
-                this.$emit('showPreview', this.item.storable_id, this.item.id, this.aipItem.filename, this.fileType);
+                this.$emit('showPreview', this.item.storable_id, this.item.id, this.fileName, this.fileType);
             }
         },
         computed: {
@@ -105,10 +107,6 @@
                     metric = "g";
                 }
                 return Math.round(size) + " " + metric + "b";
-            },
-            fileName: function() {
-                // Remove UUID from filename
-                return this.item.filename.substring(37);
             }
         }
 
