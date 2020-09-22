@@ -83,4 +83,42 @@ class MetadataTemplateControllerTest extends TestCase
 
     }
 
+    public function test_given_an_authenticated_user_when_updating_a_template_that_does_not_exist_it_is_upserted()
+    {
+        $data = [
+            "modified_by" => $this->user->id,
+            "metadata" => ["dc" => ["title" => "The best novel ever!"]]
+        ];
+
+        $response = $this->actingAs( $this->user )
+            ->put( route('admin.metadata.templates.upsert' ),
+                $data );
+
+        $expected = array_replace_recursive(
+            $response->decodeResponseJson('data'), $data );
+
+        $response->assertStatus( 201 )
+            ->assertJsonFragment( $expected );
+    }
+
+    public function test_given_an_authenticated_user_when_upserting_a_template_that_exists_it_is_updated()
+    {
+        $existingTemplateId = $this->metadata->id;
+
+        $data = [
+            "id" => $existingTemplateId,
+            "metadata" => ["dc" => ["title" => "The most updated novel ever!"]]
+        ];
+
+        $response = $this->actingAs( $this->user )
+            ->put( route( 'admin.metadata.templates.upsert' ),
+                $data );
+
+        $expected = array_replace_recursive(
+            $response->decodeResponseJson('data'), $data );
+
+        $response->assertStatus( 200 )
+                 ->assertJsonFragment( ["data" => $expected ]);
+    }
+
 }

@@ -97,6 +97,26 @@ class MetadataTemplateController extends Controller
         return new MetadataResource( $metadataTemplate );
     }
 
+    public function upsert( Request $request )
+    {
+        $validatedRequest = $this->validate( $request, [
+            "title" => "string",
+            "description" => "string|nullable",
+            "metadata" => "array|nullable"
+        ]);
+
+        $requestData = array_merge(["modified_by" => Auth::id()], $validatedRequest );
+
+        if( $request->id ) {
+            $metadataTemplate = MetadataTemplate::findOrFail( $request->id );
+            $metadataTemplate->update( $requestData );
+            return new MetadataResource( $metadataTemplate );
+        }
+
+        return new MetadataResource( MetadataTemplate::create( $requestData ) );
+    }
+
+
     /**
      * Remove the specified resource from storage.
      *

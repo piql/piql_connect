@@ -18,7 +18,8 @@ class MetadataResource extends JsonResource
             'id' => $this->id,
             'title' => $this->title,
             'description' => $this->description,
-            'metadata' => (object)$this->metadata
+            'metadata' => (object)$this->metadata,
+            'modified_by' => $this->modified_by
         ];
 
     }
