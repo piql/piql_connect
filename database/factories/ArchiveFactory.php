@@ -13,7 +13,7 @@ $factory->define(Archive::class, function (Faker $faker) {
         'title' => $faker->company(),
         'description' => $faker->text(80),
         'parent_uuid' => null,
-        'metadata' => json_encode(["dc" => ["relation" => $faker->text(8) ] ])
+        'defaultMetadataTemplate' => ["dc" => ["relation" => $faker->text(8) ]]
     ];
 });
 

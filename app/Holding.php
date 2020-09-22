@@ -158,16 +158,8 @@ class Holding extends Model
         return $this->parent()->with('ancestor');
     }
 
-    public function getMetadataAttribute( $value ) /*TODO: Remove after refactoring apis */
+    public function setDefaultMetadataTemplateAttribute( Array $value )
     {
-        return $this->defaultMetadataTemplate;
-    }
-
-    public function setMetadataAttribute( $value ) /*TODO: Remove after refactoring apis */
-    {
-        if( !is_array( $value ) )
-            return;
-
         if( array_has( $value, 'dc' ) ) { //TODO: Support other schemas than DC
             $original = $this->defaultMetadataTemplate ?? json_decode( self::DEFAULT_TEMPLATE );
             $this->defaultMetadataTemplate = ["dc" => $value["dc"] + $original["dc"] ];

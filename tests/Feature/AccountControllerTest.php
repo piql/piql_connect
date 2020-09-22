@@ -57,14 +57,14 @@ class AccountControllerTest extends TestCase
 
     public function test_given_an_authenticated_user_storing_an_account_with_dublin_core_metadata_the_metadata_is_stored()
     {
-        $metadata = [ "dc" => [
+        $metadataTemplate = [ "dc" => [
             'subject' => $this->faker->text()
         ]];
 
         $account = [
             'title' => $this->faker->slug(3),
             'description' => $this->faker->slug(6),
-            'metadata' => $metadata
+            'defaultMetadataTemplate' => $metadataTemplate
         ];
 
         $response = $this->actingAs( $this->user )
@@ -72,8 +72,8 @@ class AccountControllerTest extends TestCase
                 $account );
 
         $response->assertStatus( 201 )
-                 ->assertJsonStructure( ["data" => ["id","title","description","uuid","metadata"]] );
-        $response->assertJsonFragment( ["subject" => $metadata["dc"]["subject"]] );
+                 ->assertJsonStructure( ["data" => ["id","title","description","uuid","defaultMetadataTemplate"]] );
+        $response->assertJsonFragment( ["subject" => $metadataTemplate["dc"]["subject"]] );
     }
 
 
@@ -102,24 +102,23 @@ class AccountControllerTest extends TestCase
 
     public function test_given_an_authenticated_user_when_getting_account_metadata_it_is_in_the_response()
     {
-        $account = factory(Account::class)->create(["metadata" => ["dc" => ["subject" => "testing things"]]]);
+        $account = factory(Account::class)->create(["defaultMetadataTemplate" => ["dc" => ["subject" => "testing things"]]]);
         $response = $this->actingAs( $this->user )
             ->get( route('admin.metadata.accounts.show', [$account->id]) );
         $response->assertStatus( 200 )
-                 ->assertJsonStructure( ["data" => ["id","title","description","uuid","metadata"]] );
+                 ->assertJsonStructure( ["data" => ["id","title","description","uuid","defaultMetadataTemplate"]] );
     }
 
     public function test_given_an_authenticated_user_when_storing_an_account_with_metadata_it_is_returned()
     {
         $title = $this->faker->slug(5);
-        $metadata = ["dc" => ["title" => $title ]];
-        $account = factory(Account::class)->make(["metadata" => $metadata ]);
+        $metadataTemplate = ["dc" => ["title" => $title ]];
         $response = $this->actingAs( $this->user )
-            ->post( route('admin.metadata.accounts.store'), ["metadata" => $metadata ] );
+            ->post( route('admin.metadata.accounts.store'), ["defaultMetadataTemplate" => $metadataTemplate ] );
         $expected = array_replace_recursive( $response->decodeResponseJson('data'),
-            ["metadata" => $metadata ] ); //TODO: There has to be a more elegant way...
+            ["defaultMetadataTemplate" => $metadataTemplate ] ); //TODO: There has to be a more elegant way...
         $response->assertStatus( 201 )
-                 ->assertJsonStructure( ["data" => ["id","title","description","uuid","metadata"]] )
+                 ->assertJsonStructure( ["data" => ["id","title","description","uuid","defaultMetadataTemplate"]] )
                  ->assertJsonFragment( ["data" => $expected ] );
     }
 

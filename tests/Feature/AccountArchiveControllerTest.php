@@ -69,13 +69,13 @@ class AccountArchiveControllerTest extends TestCase
             ->postJson( route('admin.metadata.accounts.archives.store', [$this->account->id]),
                 $archive );
 
-        $response->assertStatus( 200 )
+        $response->assertStatus( 201 )
                  ->assertJsonStructure(["data" => ["id"]])
                  ->assertJsonFragment( $archive );
         $this->assertEquals(2, $this->account->archives()->count());
     }
 
-    public function test_given_an_authenticated_user_storing_an_archive_with_dublin_core_metadata_the_metadata_is_stored()
+    public function test_given_an_authenticated_user_storing_an_archive_with_dublin_core_metadata_the_it_is_stored()
     {
         $metadata = [ "dc" => [
             'subject' => $this->faker->text()
@@ -84,17 +84,16 @@ class AccountArchiveControllerTest extends TestCase
         $archive = [
             'title' => $this->faker->slug(3),
             'description' => $this->faker->slug(6),
-            'metadata' => $metadata
+            'defaultMetadataTemplate' => $metadata
         ];
 
         $response = $this->actingAs( $this->user )
             ->postJson( route('admin.metadata.accounts.archives.store', [$this->account->id]),
                 $archive );
 
-        $response->assertStatus( 200 )
+        $response->assertStatus( 201 )
                  ->assertJsonStructure(["data" => ["id"]])
                  ->assertJsonFragment( ["subject" => $metadata["dc"]["subject"]] );
-        $this->assertEquals(2, $this->account->archives()->count());
     }
 
 
@@ -117,21 +116,21 @@ class AccountArchiveControllerTest extends TestCase
 
     public function test_given_an_archive_when_updating_it_with_dublin_core_metadata_it_is_updated()
     {
-        $metadata = [ "dc" => [
+        $metadataTemplate = [ "dc" => [
             'subject' => $this->faker->text()
         ]];
-
-        $existing = Archive::find( $this->archive->id )->metadata["dc"];
-        $expected = ["metadata" => ["dc" => $metadata["dc"] + $existing ]];
 
         $response = $this->actingAs( $this->user )
                          ->patchJson(
                              route( 'admin.metadata.accounts.archives.update',
                              [$this->account->id, $this->archive->id] ),
-                             ["metadata" => $metadata ] );
+                             ["defaultMetadataTemplate" => $metadataTemplate ] );
+
+        $expected = array_replace_recursive( $response->decodeResponseJson('data'),
+            ["defaultMetadataTemplate" => $metadataTemplate ] );
 
         $response->assertStatus( 200 )
-                 ->assertJsonFragment( $expected );
+                 ->assertJsonFragment( ["data" => $expected ]);
     }
 
  
@@ -144,24 +143,22 @@ class AccountArchiveControllerTest extends TestCase
 
     public function test_given_an_authenticated_user_when_getting_archive_metadata_it_is_in_the_response()
     {
-        $archive = factory(Archive::class)->create(["metadata" => ["dc" => ["subject" => "testing things"]]]);
+        $archive = factory(Archive::class)->create(["defaultMetadataTemplate" => ["dc" => ["subject" => "testing things"]]]);
         $response = $this->actingAs( $this->user )
             ->get( route('admin.metadata.accounts.archives.show', [$this->account->id, $archive->id]) );
         $response->assertStatus( 200 )
-                 ->assertJsonStructure( ["data" => ["id","title","description","uuid","metadata"]] );
+                 ->assertJsonStructure( ["data" => ["id","title","description","uuid","defaultMetadataTemplate"]] );
     }
 
     public function test_given_an_authenticated_user_when_updating_metadata_it_responds_with_updated_data()
     {
-        $metadata = [
-            "metadata" => ["dc" => ["title" => "The best novel ever!"]]
-        ];
+        $metadataTemplate = ["dc" => ["title" => "The best novel ever!"]];
 
         $response = $this->actingAs( $this->user )
             ->put( route('admin.metadata.accounts.archives.update', [$this->account->id, $this->archive->id]),
-               $metadata );
+               ["defaultMetadataTemplate" => $metadataTemplate] );
 
-        $expected = array_replace_recursive( $response->decodeResponseJson('data'), $metadata );
+        $expected = array_replace_recursive( $response->decodeResponseJson('data'), ["defaultMetadataTemplate" => $metadataTemplate] );
 
         $response->assertStatus( 200 )
                  ->assertJsonFragment( $expected );

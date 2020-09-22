@@ -34,15 +34,10 @@ class AccountController extends Controller
         $validatedRequest = $this->validate( $request, [
                 "title" => "string",
                 "description" => "string|nullable",
-                "metadata" => "array|nullable"
+                "defaultMetadataTemplate" => "array|nullable"
             ]
         );
-        if( array_key_exists( "metadata", $validatedRequest ) ) {
-            $validatedRequest["defaultMetadataTemplate"] = $validatedRequest["metadata"]; //TODO: Fix api
-            unset($validatedRequest["metadata"]);
-        }
-        $account = Account::create( $validatedRequest );
-        return new AccountResource( $account );
+        return new AccountResource( Account::create( $validatedRequest ) );
     }
 
     /**

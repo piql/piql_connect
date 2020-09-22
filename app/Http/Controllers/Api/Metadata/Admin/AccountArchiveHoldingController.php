@@ -44,33 +44,19 @@ class AccountArchiveHoldingController extends Controller
      */
     public function store(Request $request, Account $account, Archive $archive)
     {
-        $validator = Validator::make($request->all(), [
+        $validated = $request->validate([
             'title' => 'required|string|max:100',
             'description' => 'string|max:500',
             'lhs' => 'int|exists:holding',
-            'rhs' => 'int|exists:holding'
+            'rhs' => 'int|exists:holding',
+            'defaultMetadataTemplate' => 'array|nullable',
         ]);
 
-        if( $validator->fails() )
-        {
-            $message = $validator->errors();
-            return response($message, 422);
-        }
-        $data = [
-            'title' => $request->title,
-            'owner_archive_uuid' => $request->owner_archive_uuid,
-            'description' => $request->description ?? '',
-        ];
-
-        $lhs = $request->lhs;
-        $rhs = $request->rhs;
-
-        $holding = new Holding(
-            array_merge($data, [
+        $holding = Holding::create(
+            array_merge($validated, [
                 "owner_archive_uuid" => $archive->uuid,
-            ]));
-        $holding->setOwnerArchiveUuidAttribute($archive->uuid);
-        $holding->save();
+            ])
+        );
 
         return new HoldingResource( $holding );
     }
@@ -99,17 +85,16 @@ class AccountArchiveHoldingController extends Controller
      */
     public function update(Request $request, Account $account, Archive $archive, Holding $holding)
     {
-        $validData = $request->validate( [
+        $validated = $request->validate( [
             'title' => 'required|string|max:100',
             'description' => 'string|max:500',
             'lhs' => 'int|exists:holding',
-            'rhs' => 'int|exists:holding'
+            'rhs' => 'int|exists:holding',
+            'defaultMetadataTemplate' => 'array|nullable'
         ]);
 
-
-        $holding->update($validData);
-        $holding->save();
-        return response()->json([ "data" => new HoldingResource($holding)]);
+        $holding->update( $validated );
+        return new HoldingResource( $holding );
     }
 
     /**

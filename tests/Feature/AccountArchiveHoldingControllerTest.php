@@ -59,7 +59,7 @@ class AccountArchiveHoldingControllerTest extends TestCase
         $response->assertStatus( 200 );
     }
 
-    public function test_given_an_authenticated_user_storing_an_holding_it_is_created()
+    public function test_given_an_authenticated_user_when_persisting_a_holding_it_is_stored()
     {
         $holding = [
             'title' => 'test title',
@@ -70,7 +70,62 @@ class AccountArchiveHoldingControllerTest extends TestCase
             ->post( route('admin.metadata.accounts.archives.holdings.store', [$this->account->id, $this->archive->id]),
                 $holding );
 
-        $response->assertStatus( 201 );
+        $response
+            ->assertStatus( 201 )
+            ->assertJsonStructure( ["data" => ["id","title","description","uuid"]] );
+    }
+
+    public function test_given_an_authenticated_user_creating_a_holding_with_dublin_core_metatata_the_metadata_is_stored()
+    {
+        $template = ["dc" => ["subject" => "holding test subject"]];
+        $holding = [
+            'title' => 'test title',
+            'description' => 'test',
+            'defaultMetadataTemplate' =>  $template
+        ];
+
+        $response = $this->actingAs( $this->user )
+            ->post( route('admin.metadata.accounts.archives.holdings.store', [$this->account->id, $this->archive->id]),
+                $holding );
+
+        $expected = array_replace_recursive( $response->decodeResponseJson('data'),
+            ["defaultMetadataTemplate" => $template ] );
+
+        $response
+            ->assertStatus( 201 )
+            ->assertJsonStructure( ["data" => ["id","title","description","uuid","defaultMetadataTemplate"]] )
+            ->assertJsonFragment( $expected );
+    }
+
+    public function test_given_a_holding_without_dublin_core_metatata_when_adding_metadata_it_is_stored()
+    {
+        $template = ["dc" => ["subject" => "holding update test subject"]];
+        $holdingData = [
+            'title' => 'test title',
+            'description' => 'test',
+            'owner_archive_uuid' => $this->archive->uuid
+        ];
+
+         $updateHoldingData = [
+            'title' => 'test title',
+            'description' => 'test',
+            'defaultMetadataTemplate' =>  $template,
+            'owner_archive_uuid' => $this->archive->uuid
+        ];
+
+        $holding = Holding::create( $holdingData );
+
+        $response = $this->actingAs( $this->user )
+            ->put( route('admin.metadata.accounts.archives.holdings.update', [$this->account->id, $this->archive->id, $holding->id]),
+                $updateHoldingData );
+
+        $expected = array_replace_recursive( $response->decodeResponseJson('data'),
+            ["defaultMetadataTemplate" => $template ] );
+
+        $response
+            ->assertStatus( 200 )
+            ->assertJsonStructure( ["data" => ["id","title","description","uuid","defaultMetadataTemplate"]] )
+            ->assertJsonFragment( $expected );
     }
 
     public function test_given_an_authenticated_user_updating_holding_it_responds_200()
