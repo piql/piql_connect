@@ -1,5 +1,5 @@
 {
-"locale": "es",
+    "locale": "es",
     "localePrefix": "ca",
     "shortDateFormat": "dd/MM/yyyy",
     "Upload" : "Carregar",
@@ -22,11 +22,15 @@
 	"Back": "Enrere",
     "All": "Tot",
     "Your archive": "El teu arxiu",
+    "nothingSelected": "Nothing Selected",
 
     "upload.title": "Carregar",
     "upload.ingress" : "Carregar fitxers als seus arxius aquí usant el botó 'Afegir fitxers'.",
     "upload.addFileButton" : "Afegir fitxer",
     "upload.addFileButtonToolTip": "Afegir un fitxer nou a la càrrega",
+    "upload.form.title" : "Ingest upload form",
+    "upload.fileListTitle": "Uploaded",
+    "upload.fileListTitle.files": "files",
     "upload.optionalName": "Nom de Càrrega (opcional)",
     "upload.requiredName": "Si us plau, introdueixi un nom valgut per al SIP: 3 caràcters o mes, lletres i números solament",
     "upload.processButton": "Processar",
@@ -100,6 +104,12 @@
     "dashboard.cards.reels": "Rotllos",
     "dashboard.cards.offlinePagesCount": "Pàgines guardades en film",
     "dashboard.fileTypes": "Formats de fitxer ingestats",
+
+    "dashboard.tab.packageIngested": "Archival Packages Ingested",
+    "dashboard.tab.dataIngested": "Data Ingested",
+    "dashboard.tab.packagesAccessed": "Archival Packages Accessed",
+    "dashboard.tab.dataAccessed": "Data Accessed",
+    "dashboard.tab.monthly": "Monthly",
 
     "ingest.processing.title" : "Processant",
     "ingest.processing.ingress" : "Monitorar els passos del flux d'arxivat.",
@@ -265,6 +275,10 @@
     "access.retrieved.idle": "No hi ha actualment fitxers per a recuperació.",
     "access.download.download": "Descarregar",
     "access.download.takeOffline": "Posar fora de línia",
+    "access.tip.accessContents": "Access contents",
+    "access.tip.editMetadata": "Edit metadata",
+    "access.tip.downloadFile": "Download file",
+    "access.tip.previewImage": "Preview image",
 	"settings.settings.header": "Paràmetres d'Usuari",
     "settings.settings.ingress": "Configurar paràmetres d'usuari",
 
