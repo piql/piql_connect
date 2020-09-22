@@ -3,22 +3,21 @@
 namespace App\Helpers;
 
 class VideoStreamHelper {
-    private $path = "";
     private $stream = "";
     private $buffer = 102400;
     private $start = -1;
     private $end = -1;
     private $size = 0;
  
-    function __construct($filePath) {
-        $this->path = $filePath;
+    function __construct($stream) {
+        $this->stream = $stream;
     }
      
     private function open() {
-        if (!($this->stream = fopen($this->path, 'rb'))) {
+        if (!$this->stream) {
             die('Could not open stream for reading');
         }
-         
+	rewind($this->stream);
     }
      
     private function setHeader() {
@@ -26,9 +25,9 @@ class VideoStreamHelper {
         header("Content-Type: video/mp4");
         header("Cache-Control: max-age=2592000, public");
         header("Expires: ".gmdate('D, d M Y H:i:s', time()+2592000) . ' GMT');
-        header("Last-Modified: ".gmdate('D, d M Y H:i:s', @filemtime($this->path)) . ' GMT' );
+        header("Last-Modified: ".gmdate('D, d M Y H:i:s', @fstat($this->stream)['mtime']) . ' GMT' );
         $this->start = 0;
-        $this->size  = filesize($this->path);
+        $this->size  = fstat($this->stream)['size'];
         $this->end   = $this->size - 1;
         header("Accept-Ranges: 0-".$this->end);
          

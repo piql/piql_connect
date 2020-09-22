@@ -93,8 +93,10 @@ class DipController extends Controller
         $dip = Dip::find( $request->dipId );
         $file = $this->filter_package_thumbnail($dip, $filePreview);
         $filePreview->storage($storage)->dip($dip)->fileObject($file);
-        return response($filePreview->getContent(true))
-        ->header("Content-Type" , $filePreview->getMimeType());
+        return response()->stream( function () use( $filePreview ) {
+            $stream = $filePreview->getContent(true);
+            fpassthru($stream);
+        }, 200, ["Content-Type" , $filePreview->getMimeType()]);
     }
 
     public function package_preview( Request $request, ArchivalStorageInterface $storage )
@@ -107,7 +109,7 @@ class DipController extends Controller
         return response()->stream( function () use( $dip, $file ) {
             $stream = $storage->downloadStream( $dip->storage_location, $file->fullpath );
             fpassthru($stream);
-        })->header("Content-Type" , "image/jpeg");
+        }, 200, ["Content-Type" , "image/jpeg"]);
     }
 
     public function files( Request $request )
@@ -173,8 +175,10 @@ class DipController extends Controller
 
         $filePreview->storage($storage)->dip($dip)->fileObject($file);
 
-        return response($filePreview->getContent())
-        ->header("Content-Type" , $filePreview->getMimeType());
+        return response()->stream( function () use( $filePreview ) {
+            $stream = $filePreview->getContent();
+            fpassthru($stream);
+        }, 200, ["Content-Type" , $filePreview->getMimeType()]);
     }
 
     public function file_download( ArchivalStorageInterface $storage, Request $request )
@@ -216,8 +220,10 @@ class DipController extends Controller
         $file = $dip->fileObjects->find( $request->fileId );
         $thumbnail = $this->filter_file_thumbnail($dip, $file, $filePreview);
         $filePreview->storage($storage)->dip($dip)->fileObject($thumbnail);
-        return response($filePreview->getContent(true))
-        ->header("Content-Type" , $filePreview->getMimeType());
+        return response()->stream( function () use( $filePreview ) {
+            $stream = $filePreview->getContent(true);
+            fpassthru($stream);
+        }, 200, ["Content-Type" , $filePreview->getMimeType()]);
     }
 
 

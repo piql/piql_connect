@@ -49,16 +49,15 @@ class FilePreviewService implements \App\Interfaces\FilePreviewInterface {
     	} elseif ($this->isPreviwableFile($this->file->mime_type, $forThumb)) {
     		return $this->getRegularContent();
     	} else {
-    		$path = $this->getCustomIcon($this->file->fullpath);
-    		return \File::get($path);
+                return $this->getCustomIcon($this->file->fullpath);
     	}
     }
     
     private function getRegularContent() {
     	if ($this->dip != null) {
-                return $this->storage->downloadContent( $this->dip->storage_location, $this->file->fullpath );
+                return $this->storage->downloadStream( $this->dip->storage_location, $this->file->fullpath );
     	} elseif ($this->file != null) {
-    		return file_get_contents($this->file->fullpath);
+                return fopen($this->file->fullpath, 'r');
     	}
     }
     
@@ -76,7 +75,10 @@ class FilePreviewService implements \App\Interfaces\FilePreviewInterface {
     	$im->setImageAlphaChannel(\Imagick::ALPHACHANNEL_REMOVE);
     	$im->borderImage('black', 3, 3);
     	Storage::delete($file);
-    	return $im;
+    	$fileResource = fopen('php://memory', 'w+');
+        fwrite($fileResource, $im);
+        rewind($fileResource);
+        return $fileResource;
     }
     
     public function getPreviwableFileArr($forThumb=false) {
@@ -104,7 +106,7 @@ class FilePreviewService implements \App\Interfaces\FilePreviewInterface {
     	if(!\File::exists($path)) {
     		$path = resource_path() . '/images/file_icon/icon_piql.png';
     	}
-    	return $path;
+    	return fopen($path, 'r');
     }
     
     private function getMimeTypeFromFileName($fileName) {
