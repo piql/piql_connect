@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\Metadata\Admin;
 
 use App\Http\Resources\AccountResource;
+use Illuminate\Support\Facades\Auth;
 use App\Account;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -69,6 +70,33 @@ class AccountController extends Controller
         $account->update( $validatedRequest );
         return new AccountResource( $account );
     }
+
+    /**
+     * Update or create the specified resource in storage.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @param Account $account
+     * @return \Illuminate\Http\Response
+     */
+
+    public function upsert( Request $request )
+    {
+       $validatedRequest = $this->validate( $request, [
+                "title" => "string",
+                "description" => "string|nullable",
+                "defaultMetadataTemplate" => "array|nullable"
+            ]
+        );
+        if( $request->id ) {
+            $account = Account::findOrFail( $request->id );
+            $account->update( $validatedRequest );
+            return new AccountResource( $account );
+        }
+
+        return new AccountResource( Account::create( $validatedRequest ) );
+    }
+
+
 
     /**
      * In this version, deleting accounts is not supported due to consistency issues
