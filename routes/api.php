@@ -144,6 +144,7 @@ Route::group(['prefix' => 'v1', 'middleware' => ['auth']], function () {
 
         Route::group(['prefix' => 'admin'], function() { //TODO: Admin guard must be applied to these routes
             Route::apiResource('templates',                  'Api\Metadata\Admin\MetadataTemplateController',      ['as' => 'admin.metadata']);
+            Route::put('templates', 'Api\Metadata\Admin\MetadataTemplateController@upsert')->name('admin.metadata.templates.upsert');
             Route::apiResource('accounts',                   'Api\Metadata\Admin\AccountController',               ['as' => 'admin.metadata']);
             Route::apiResource('accounts.archives',          'Api\Metadata\Admin\AccountArchiveController',        ['as' => 'admin.metadata']);
             Route::apiResource('accounts.archives.holdings', 'Api\Metadata\Admin\AccountArchiveHoldingController', ['as' => 'admin.metadata']);
