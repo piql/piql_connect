@@ -31,18 +31,34 @@ class StatisticsData
 
     private function monthlyOnlineIngested($date, $userId)
     {
-        $data = IngestedDataOnline::where('owner', $userId)
-                ->whereBetween('ingest_date', [
-                        new DateTime('first day of ' . $date->format('Y-m')),
-                        new DateTime('last day of ' . $date->format('Y-m'))
-                        ])
-                ->orderBy('recorded_at', 'desc')->take(1)->get(['aips', 'bags', 'size']);
+        $monthlyStats=[ 'aips'=>0, 'bags'=>0, 'size'=>0 ];
 
-        if ($data != null && !empty($data) && isset($data[0])) {
-            return [ 'aips'=>$data[0]->aips, 'bags'=>$data[0]->bags, 'size'=>$data[0]->size ];
+        // TODO: Need to sum the stats for all days in the month
+
+        // Ingested size
+        $stats_data = IngestedDataOnline::where('owner', $userId)
+            ->whereBetween('ingest_date', [
+                new DateTime('first day of ' . $date->format('Y-m')),
+                new DateTime('last day of ' . $date->format('Y-m'))])
+            ->orderBy('recorded_at', 'desc')->take(1)->get(['bags', 'size']);
+        
+        if ($stats_data != null && !empty($stats_data) && isset($stats_data[0])) {
+            $monthlyStats['bags']=$stats_data[0]->bags;
+            $monthlyStats['size']=$stats_data[0]->size;
         }
 
-        return [ 'aips'=>0, 'bags'=>0, 'size'=>0 ];
+        // Ingested AIPs
+        $stats_aips = IngestedAIPOnline::where('owner', $userId)
+            ->whereBetween('ingest_date', [
+                new DateTime('first day of ' . $date->format('Y-m')),
+                new DateTime('last day of ' . $date->format('Y-m'))])
+            ->orderBy('recorded_at', 'desc')->take(1)->get(['aips']);
+        
+        if ($stats_aips != null && !empty($stats_aips) && isset($stats_aips[0])) {
+            $monthlyStats['aips']=$stats_aips[0]->aips;
+        }
+
+        return $monthlyStats;
     }
 
     private function monthlyOfflineIngested($date, $userId)

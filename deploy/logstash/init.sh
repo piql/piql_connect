@@ -99,8 +99,8 @@ done
 
 #todo: check if plugin exists first before redownloading
 
-echo "installing plugins";
-logstash-plugin install --version=3.1.5 logstash-output-mongodb 
+echo "installing modified mongodb plugin (with upsert)";
+logstash-plugin install /etc/logstash/logstash-output-mongodb-3.2.0.gem
 
 #start logstash with configuration folder
 echo "starting logstash with pipeline config: '$CONFIG_PATH'";
