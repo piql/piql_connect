@@ -33,10 +33,38 @@ window.Echo = {
         }
 }
 
+import Vuex from "vuex"
+
+
+const localVue = createLocalVue();
+localVue.use( Vuex )
+
 describe( 'TopBar', () => {
+
+    let actions;
+    let getters;
+    let store;
+
+    beforeEach( () => {
+        actions = {
+            logoutUser: jest.fn(),
+            
+        };
+
+        getters = {
+            userName: () => [ {value: 123, label: 'Test Name'}],
+        };
+
+        store = new Vuex.Store({
+            actions,
+            getters
+        });
+    } );
 
     test('it mounts integrated with nested components', () => {
         const wrapper = mount( TopBar, {
+            store,
+            localVue,
             mocks: {
                 $t,
                 get,
@@ -59,7 +87,8 @@ describe( 'TopBar', () => {
         };
 
         const wrapper = shallowMount( TopBar, {
-            localVue: createLocalVue(),
+            store,
+            localVue,
             mocks,
             stubs: {
                 RouterLink: RouterLinkStub,
@@ -77,7 +106,8 @@ describe( 'TopBar', () => {
         };
 
         const wrapper = shallowMount( TopBar, {
-            localVue: createLocalVue(),
+            store,
+            localVue,
             mocks,
             stubs: {
                 RouterLink: RouterLinkStub,
@@ -97,7 +127,8 @@ describe( 'TopBar', () => {
         };
 
         const wrapper = shallowMount( TopBar, {
-            localVue: createLocalVue(),
+            store,
+            localVue,
             mocks,
             stubs: {
                 RouterLink: RouterLinkStub,
@@ -117,7 +148,8 @@ describe( 'TopBar', () => {
         };
 
         const wrapper = shallowMount( TopBar, {
-            localVue: createLocalVue(),
+            store,
+            localVue,
             mocks,
             stubs: {
                 RouterLink: RouterLinkStub,
