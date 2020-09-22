@@ -5,6 +5,7 @@ namespace App;
 use App\Traits\AutoGenerateUuid;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Validator;
 use Webpatser\Uuid\Uuid;
 
 class Holding extends Model
@@ -33,8 +34,13 @@ class Holding extends Model
         static::creating(function ($model) {
             $model->position = $model->siblings()->count()+1;
 
+            $validateIdentifier = Validator::make( ['uuid' => $model->uuid ], ['uuid' => 'uuid'] );
+            if( !$validateIdentifier->passes() ){
+                $model->uuid = Str::uuid();
+            }
+
             $userSuppliedData = $model->defaultMetadataTemplate["dc"];
-            $model->defaultMetadataTemplate = ["dc" => ["identifier" => Str::uuid() ] + $userSuppliedData ] ;
+            $model->defaultMetadataTemplate = ["dc" => ["identifier" => $model->uuid ] + $userSuppliedData ] ;
         });
     }
 

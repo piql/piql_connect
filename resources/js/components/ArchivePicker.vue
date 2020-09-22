@@ -28,7 +28,7 @@ export default {
     mixins: [ RouterTools ],
 
     mounted() {
-        axios.get("/api/v1/planning/archives").then( (response) => {
+        axios.get("/api/v1/metadata/archives").then( (response) => {
             this.archives = response.data.data;
         });
     },

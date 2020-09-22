@@ -28,7 +28,7 @@ class AccountControllerTest extends TestCase
     public function test_given_an_authenticated_user_when_getting_all_accounts_it_responds_200()
     {
         $response = $this->actingAs( $this->user )
-            ->get( route('api.ingest.account.index') );
+            ->get( route('admin.metadata.accounts.index') );
         $response->assertStatus( 200 );
 
     }
@@ -37,7 +37,7 @@ class AccountControllerTest extends TestCase
     {
         $account = factory(Account::class)->create();
         $response = $this->actingAs( $this->user )
-            ->get( route('api.ingest.account.show', [$account->id]) );
+            ->get( route('admin.metadata.accounts.show', [$account->id]) );
         $response->assertStatus( 200 );
     }
 
@@ -49,7 +49,7 @@ class AccountControllerTest extends TestCase
         ]);
 
         $response = $this->actingAs( $this->user )
-            ->post( route('api.ingest.account.store'),
+            ->post( route('admin.metadata.accounts.store'),
                   [ $account ] );
 
         $response->assertStatus( 201 );
@@ -68,7 +68,7 @@ class AccountControllerTest extends TestCase
         ];
 
         $response = $this->actingAs( $this->user )
-            ->postJson( route('api.ingest.account.store'),
+            ->postJson( route('admin.metadata.accounts.store'),
                 $account );
 
         $response->assertStatus( 201 )
@@ -83,7 +83,7 @@ class AccountControllerTest extends TestCase
         $account = factory(Account::class)->create([ 'title' => 'old title']);
 
         $response = $this->actingAs( $this->user )
-            ->patch( route('api.ingest.account.update', [$account->id]), ['title' => 'new title'] );
+            ->patch( route('admin.metadata.accounts.update', [$account->id]), ['title' => 'new title'] );
 
         $response->assertStatus( 200 )->
             assertJsonFragment(["title" => "new title"]);
@@ -95,7 +95,7 @@ class AccountControllerTest extends TestCase
     {
         $account = factory(Account::class)->create();
         $response = $this->actingAs( $this->user )
-            ->delete( route('api.ingest.account.destroy', [$account->id]) );
+            ->delete( route('admin.metadata.accounts.destroy', [$account->id]) );
         $response->assertStatus( 405 );
 
     }
@@ -104,7 +104,7 @@ class AccountControllerTest extends TestCase
     {
         $account = factory(Account::class)->create(["metadata" => ["dc" => ["subject" => "testing things"]]]);
         $response = $this->actingAs( $this->user )
-            ->get( route('api.ingest.account.show', [$account->id]) );
+            ->get( route('admin.metadata.accounts.show', [$account->id]) );
         $response->assertStatus( 200 )
                  ->assertJsonStructure( ["data" => ["id","title","description","uuid","metadata"]] );
     }
@@ -115,7 +115,7 @@ class AccountControllerTest extends TestCase
         $metadata = ["dc" => ["title" => $title ]];
         $account = factory(Account::class)->make(["metadata" => $metadata ]);
         $response = $this->actingAs( $this->user )
-            ->post( route('api.ingest.account.store'), ["metadata" => $metadata ] );
+            ->post( route('admin.metadata.accounts.store'), ["metadata" => $metadata ] );
         $expected = array_replace_recursive( $response->decodeResponseJson('data'),
             ["metadata" => $metadata ] ); //TODO: There has to be a more elegant way...
         $response->assertStatus( 201 )

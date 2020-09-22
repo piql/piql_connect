@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api\Ingest;
+namespace App\Http\Controllers\Api\Metadata\Admin;
 
 use App\File;
 use App\Http\Resources\MetadataResource;
@@ -12,8 +12,11 @@ use Webpatser\Uuid\Uuid;
 
 class MetadataTemplateController extends Controller
 {
+
     private function validateRequest(Request $request) {
         return $request->validate([
+            "title" => "string",
+            "description" => "string|nullable",
             "metadata.dc.title" => "string|nullable",
             "metadata.dc.creator" => "string|nullable",
             "metadata.dc.subject" => "string|nullable",
@@ -48,33 +51,29 @@ class MetadataTemplateController extends Controller
      * Store a newly created resource in storage.
      *
      * @param \Illuminate\Http\Request $request
-     * @param File $file
      * @return void
      */
     public function store(Request $request)
     {
 
-        $requestData = $this->validateRequest($request);
-
-        $metadata = new MetadataTemplate([
-            "modified_by" => Auth::user()->id,
-            "metadata" => $requestData['metadata'] ?? [],
+        $validatedData = $this->validateRequest( $request );
+        $template = MetadataTemplate::create([
+            "metadata" => $validatedData['metadata'],
+            "owner" => Auth::user(),
+            "modified_by" => Auth::id()
         ]);
-        $metadata->owner()->associate(\auth()->user());
-        $metadata->save();
 
-        return response()->json([ "data" => new MetadataResource($metadata)]);
+        return new MetadataResource( $template );
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  \App\Metadata  $metadata
+     * Display a MetadataTemplate
+     * @param string $id MetadataTemplate id
      * @return \Illuminate\Http\Response
      */
-    public function show(MetadataTemplate $metadataTemplate)
+    public function show( $id )
     {
-        return response()->json([ "data" => new MetadataResource($metadataTemplate)]);
+        return new MetadataResource( MetadataTemplate::findOrFail( $id ) );
     }
 
     /**
@@ -84,15 +83,18 @@ class MetadataTemplateController extends Controller
      * @param  \App\Metadata  $metadata
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, MetadataTemplate $metadataTemplate)
+    public function update( Request $request, MetadataTemplate $metadataTemplate )
     {
-        $requestData = $this->validateRequest($request);
-        if(isset($requestData['metadata'])) {
-            $metadataTemplate->metadata = $requestData['metadata'] + $metadataTemplate->metadata;
-            $metadataTemplate->save();
-        }
+        $validatedRequest = $this->validate( $request, [
+                "title" => "string",
+                "description" => "string|nullable",
+                "metadata" => "array|nullable"
+            ]
+        );
 
-        return response()->json([ "data" => new MetadataResource($metadataTemplate)]);
+        $metadataTemplate->update( $validatedRequest );
+
+        return new MetadataResource( $metadataTemplate );
     }
 
     /**

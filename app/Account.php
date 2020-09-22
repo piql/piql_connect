@@ -5,6 +5,7 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 use Webpatser\Uuid\Uuid;
+use Illuminate\Support\Facades\Validator;
 
 class Account extends Model
 {
@@ -36,9 +37,13 @@ class Account extends Model
         parent::boot();
 
         static::creating( function ( $model ) {
-            $model->uuid = Str::uuid();
+            $validateIdentifier = Validator::make( ['uuid' => $model->uuid], ['uuid' => 'uuid'] );
+            if( !$validateIdentifier->passes() ){
+                $model->uuid = Str::uuid();
+            }
+
             $userSuppliedData = $model->defaultMetadataTemplate["dc"];
-            $model->defaultMetadataTemplate = ["dc" => ["identifier" => Str::uuid() ] + $userSuppliedData ] ;
+            $model->defaultMetadataTemplate = ["dc" => ["identifier" => $model->uuid ] + $userSuppliedData ] ;
         });
     }
 

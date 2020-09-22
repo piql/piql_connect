@@ -88,7 +88,6 @@ class CommitFilesToBagListener implements ShouldQueue
             else
                 $this->bagIt->addFile($file->storagePathCompleted(), MetadataPath::FILE_OBJECT_PATH.$file->filename);
 
-            dump($bag->owner()->first()->settings->getIngestMetadataAsFileAttribute());
             if( $bag->owner()->first()->settings->getIngestMetadataAsFileAttribute() !== true ) {
                 if ($file->metadata->count() > 0) {
                     // append metadata to file

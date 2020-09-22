@@ -47,7 +47,7 @@ class AccountArchiveHoldingControllerTest extends TestCase
     {
 
         $response = $this->actingAs( $this->user )
-            ->get( route('api.ingest.account.archive.holding.index', [ $this->account->id, $this->archive->id ]) );
+            ->get( route('admin.metadata.accounts.archives.holdings.index', [ $this->account->id, $this->archive->id ]) );
         $response->assertStatus( 200 );
 
     }
@@ -55,7 +55,7 @@ class AccountArchiveHoldingControllerTest extends TestCase
     public function test_given_an_authenticated_user_and_holding_it_responds_200()
     {
         $response = $this->actingAs( $this->user )
-            ->get( route('api.ingest.account.archive.holding.show', [$this->account->id, $this->archive->id, $this->holding->id]) );
+            ->get( route('admin.metadata.accounts.archives.holdings.show', [$this->account->id, $this->archive->id, $this->holding->id]) );
         $response->assertStatus( 200 );
     }
 
@@ -67,7 +67,7 @@ class AccountArchiveHoldingControllerTest extends TestCase
         ];
 
         $response = $this->actingAs( $this->user )
-            ->post( route('api.ingest.account.archive.holding.store', [$this->account->id, $this->archive->id]),
+            ->post( route('admin.metadata.accounts.archives.holdings.store', [$this->account->id, $this->archive->id]),
                 $holding );
 
         $response->assertStatus( 201 );
@@ -81,7 +81,7 @@ class AccountArchiveHoldingControllerTest extends TestCase
         ]);
 
         $response = $this->actingAs( $this->user )
-            ->json('PATCH', route('api.ingest.account.archive.holding.update', [$this->account->id, $this->archive->id, $this->holding->id]),
+            ->json('PATCH', route('admin.metadata.accounts.archives.holdings.update', [$this->account->id, $this->archive->id, $this->holding->id]),
                 (new HoldingResource($holding))->toArray(null));
 
         $response->assertStatus( 200 );

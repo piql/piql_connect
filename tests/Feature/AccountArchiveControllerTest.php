@@ -45,7 +45,7 @@ class AccountArchiveControllerTest extends TestCase
     {
 
         $response = $this->actingAs( $this->user )
-            ->get( route('api.ingest.account.archive.index', [ $this->account->id ]) );
+            ->get( route('admin.metadata.accounts.archives.index', [ $this->account->id ]) );
         $response->assertStatus( 200 );
 
     }
@@ -53,7 +53,7 @@ class AccountArchiveControllerTest extends TestCase
     public function test_given_an_authenticated_user_when_requesting_an_archive_it_is_returned()
     {
         $response = $this->actingAs( $this->user )
-            ->get( route('api.ingest.account.archive.show', [$this->account->id, $this->archive->id]) );
+            ->get( route('admin.metadata.accounts.archives.show', [$this->account->id, $this->archive->id]) );
         $response->assertStatus( 200 )
             ->assertJsonFragment( $this->archiveContent );
     }
@@ -66,7 +66,7 @@ class AccountArchiveControllerTest extends TestCase
         ];
 
         $response = $this->actingAs( $this->user )
-            ->postJson( route('api.ingest.account.archive.store', [$this->account->id]),
+            ->postJson( route('admin.metadata.accounts.archives.store', [$this->account->id]),
                 $archive );
 
         $response->assertStatus( 200 )
@@ -88,7 +88,7 @@ class AccountArchiveControllerTest extends TestCase
         ];
 
         $response = $this->actingAs( $this->user )
-            ->postJson( route('api.ingest.account.archive.store', [$this->account->id]),
+            ->postJson( route('admin.metadata.accounts.archives.store', [$this->account->id]),
                 $archive );
 
         $response->assertStatus( 200 )
@@ -107,7 +107,7 @@ class AccountArchiveControllerTest extends TestCase
 
         $response = $this->actingAs( $this->user )
                          ->patchJson(
-                             route( 'api.ingest.account.archive.update',
+                             route( 'admin.metadata.accounts.archives.update',
                              [$this->account->id, $this->archive->id] ),
                              $archive );
 
@@ -126,7 +126,7 @@ class AccountArchiveControllerTest extends TestCase
 
         $response = $this->actingAs( $this->user )
                          ->patchJson(
-                             route( 'api.ingest.account.archive.update',
+                             route( 'admin.metadata.accounts.archives.update',
                              [$this->account->id, $this->archive->id] ),
                              ["metadata" => $metadata ] );
 
@@ -138,7 +138,7 @@ class AccountArchiveControllerTest extends TestCase
     public function test_given_an_authenticated_user_when_deleting_archive_it_responds_405()
     {
         $response = $this->actingAs( $this->user )
-            ->delete( route('api.ingest.account.archive.destroy', [$this->account->id, $this->archive->id]));
+            ->delete( route('admin.metadata.accounts.archives.destroy', [$this->account->id, $this->archive->id]));
         $response->assertStatus( 405 );
     }
 
@@ -146,7 +146,7 @@ class AccountArchiveControllerTest extends TestCase
     {
         $archive = factory(Archive::class)->create(["metadata" => ["dc" => ["subject" => "testing things"]]]);
         $response = $this->actingAs( $this->user )
-            ->get( route('api.ingest.account.archive.show', [$this->account->id, $archive->id]) );
+            ->get( route('admin.metadata.accounts.archives.show', [$this->account->id, $archive->id]) );
         $response->assertStatus( 200 )
                  ->assertJsonStructure( ["data" => ["id","title","description","uuid","metadata"]] );
     }
@@ -158,7 +158,7 @@ class AccountArchiveControllerTest extends TestCase
         ];
 
         $response = $this->actingAs( $this->user )
-            ->put( route('api.ingest.account.archive.update', [$this->account->id, $this->archive->id]),
+            ->put( route('admin.metadata.accounts.archives.update', [$this->account->id, $this->archive->id]),
                $metadata );
 
         $expected = array_replace_recursive( $response->decodeResponseJson('data'), $metadata );

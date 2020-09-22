@@ -74,12 +74,6 @@ Route::group(['prefix' => 'v1', 'middleware' => ['auth']], function () {
         Route::patch('files/{file}/metadata/{metadata}', 'Api\Ingest\FileMetadataController@update')->name('api.ingest.files.metadata.update');
         Route::delete('files/{file}/metadata/{metadata}', 'Api\Ingest\FileMetadataController@destroy')->name('api.ingest.files.metadata.destroy');
 
-        Route::apiResource('metadata-template',                'Api\Ingest\MetadataTemplateController',              ['as' => 'api.ingest']);
-
-        Route::apiResource('account',                          'Api\Ingest\AccountController',                       ['as' => 'api.ingest']);
-        Route::apiResource('account.archive',                  'Api\Ingest\AccountArchiveController',                ['as' => 'api.ingest']);
-        Route::apiResource('account.archive.holding',          'Api\Ingest\AccountArchiveHoldingController',         ['as' => 'api.ingest']);
-
         Route::get('storage/offline/pending/buckets/{bucket}/metadata', 'Api\Ingest\BucketMetadataController@index')->name('api.ingest.bucket.metadata.index');
         Route::post('storage/offline/pending/buckets/{bucket}/metadata', 'Api\Ingest\BucketMetadataController@store')->name('api.ingest.bucket.metadata.store');
         Route::patch('storage/offline/pending/buckets/{bucket}/metadata/{metadata}', 'Api\Ingest\BucketMetadataController@update')->name('api.ingest.bucket.metadata.update');
@@ -144,11 +138,16 @@ Route::group(['prefix' => 'v1', 'middleware' => ['auth']], function () {
         Route::get('files/{file}/metadata', 'Api\Access\FileObjectMetadataController@index')->name('api.access.files.metadata.index');
     });
 
+    Route::group(['prefix' => 'metadata'], function () {
+        Route::apiResource('archives', 'Api\Metadata\ArchiveController', ['as' => 'api.metadata']);
+        Route::apiResource('archives.holdings', 'Api\Metadata\ArchiveHoldingController', ['as' => 'api.metadata']);
 
-    Route::group(['prefix' => 'planning'], function () {
-        Route::apiResource('holdings', 'Api\Planning\HoldingController', ['as' => 'planning']);
-        Route::apiResource('archives', 'Api\Planning\ArchiveController', ['as' => 'planning']);
-        Route::apiResource('archives.holdings', 'Api\Planning\ArchiveHoldingController', ['as' => 'planning']);
+        Route::group(['prefix' => 'admin'], function() { //TODO: Admin guard must be applied to these routes
+            Route::apiResource('templates',                  'Api\Metadata\Admin\MetadataTemplateController',      ['as' => 'admin.metadata']);
+            Route::apiResource('accounts',                   'Api\Metadata\Admin\AccountController',               ['as' => 'admin.metadata']);
+            Route::apiResource('accounts.archives',          'Api\Metadata\Admin\AccountArchiveController',        ['as' => 'admin.metadata']);
+            Route::apiResource('accounts.archives.holdings', 'Api\Metadata\Admin\AccountArchiveHoldingController', ['as' => 'admin.metadata']);
+        });
     });
 
     Route::group(['prefix' => 'storage'], function () {

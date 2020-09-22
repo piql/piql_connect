@@ -20,7 +20,6 @@ export default {
     mixins: [ RouterTools ],
     async mounted() {
         this.archive = this.$route.query.archive;
-
     },
     methods: {
         dispatchRouting: function() {
@@ -46,6 +45,7 @@ export default {
     },
     data() {
         return {
+            archives: null,
             archive: null,
             holdings: null,
             selection: null,
@@ -73,12 +73,24 @@ export default {
     watch: {
         '$route': 'dispatchRouting',
 
-        archive: function( archive ) {
+        archive: async function( archive ) {
             this.disableSelection();
             this.holdings = null;
             if( !archive ) return;
+            if( this.archives == null ) {
+                this.archives = ((await(axios.get(`/api/v1/metadata/archives`))).data
+                .data.map( (a) => { return { uuid: a.uuid, id: a.id };} ));
+            }
 
-            axios.get(`/api/v1/planning/archives/${archive}/holdings`).then( (response) => {
+            //This lookup is a workaround for laravel's apiresource routes with automatic model lookup
+            //TODO: Let's look at consequences for using sequential id's rather than uuids in the urls.
+            const archiveId = this.archives.find( ar => ar.uuid === archive ).id;
+            if( !archiveId ){
+                console.error( `No archive with uuid ${archive} was found!` );
+                return;
+            }
+
+            axios.get(`/api/v1/metadata/archives/${archiveId}/holdings`).then( (response) => {
                 if(response.data.data.length > 0){
                     this.holdings = response.data.data;
                     //default selection

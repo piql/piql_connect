@@ -1,13 +1,12 @@
 <?php
 
-namespace App\Http\Controllers\Api\Planning;
+namespace App\Http\Controllers\Api\Metadata;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\Controller;
 use App\Holding;
 use App\Http\Resources\HoldingResource;
-use App\Http\Resources\HoldingCollection;
 
 class HoldingController extends Controller
 {
@@ -18,7 +17,8 @@ class HoldingController extends Controller
      */
     public function index()
     {
-        return new HoldingCollection( Holding::all() );
+        //TODO: Limit access to Holdings per Account (and Archive)
+        return HoldingResource::collection( Holding::all() );
     }
 
     /**
@@ -28,7 +28,7 @@ class HoldingController extends Controller
      */
     public function create()
     {
-        //
+        abort( 403, "Forbidden: Users cannot create Holdings in this version" );
     }
 
     /**
@@ -39,29 +39,7 @@ class HoldingController extends Controller
      */
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'title' => 'required|string|max:100',
-            'owner_archive_uuid' => 'required|uuid|exists:archives,uuid',
-            'description' => 'string|max:500',
-            'lhs' => 'int|exists:holding',
-            'rhs' => 'int|exists:holding'
-        ]);
-
-        if( $validator->fails() )
-        {
-            $message = $validator->errors();
-            return response($message, 422);
-        }
-        $data = [
-            'title' => $request->title,
-            'owner_archive_uuid' => $request->owner_archive_uuid,
-            'description' => $request->description ?? '',
-        ];
-
-        $lhs = $request->lhs;
-        $rhs = $request->rhs;
-
-        return new HoldingResource(Holding::create($data));
+        abort( 403, "Forbidden: Users cannot create Holdings in this version" );
     }
 
     /**
@@ -72,7 +50,7 @@ class HoldingController extends Controller
      */
     public function show(Holding $holding)
     {
-        //
+        //TODO: Limit access to Holdings per Account (and Archive)
         return new HoldingResource($holding);
     }
 
@@ -84,7 +62,7 @@ class HoldingController extends Controller
      */
     public function edit($id)
     {
-        //
+        abort( 403, "Forbidden: Users cannot edit Holdings in this version" );
     }
 
     /**
@@ -96,7 +74,7 @@ class HoldingController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        abort( 403, "Forbidden: Users cannot update Holdings in this version" );
     }
 
     /**
@@ -107,6 +85,6 @@ class HoldingController extends Controller
      */
     public function destroy($id)
     {
-        //
+        abort( 403, "Forbidden: Users cannot delete Holdings" );
     }
 }

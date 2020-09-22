@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Webpatser\Uuid\Uuid;
 use Illuminate\Support\Str;
-
+use Illuminate\Support\Facades\Validator;
 
 class Archive extends Model
 {
@@ -34,18 +34,15 @@ class Archive extends Model
         parent::boot();
 
         static::creating( function ( $model ) {
-            if( $model->defaultMetadataTemplate["dc"] &&
-                $model->defaultMetadataTemplate["dc"]["identifier"] ) {
-                /* if we have an identifier set, validate it */
-                $existingId = $model->defaultMetadataTemplate["dc"]["identifier"];
-                $validateId = Validator::make( ['uuid' => $existingId], ['uuid' => 'uuid'] );
-                if( $validateId->passes() ){
-                    return; /*ok, keep it */
-                }
+
+            $validateIdentifier = Validator::make( ['uuid' => $model->uuid ], ['uuid' => 'uuid'] );
+            if( !$validateIdentifier->passes() ){
+                $model->uuid = Str::uuid();
             }
+
             /* No identifier supplied, create one */
             $userSuppliedData = $model->defaultMetadataTemplate["dc"];
-            $model->defaultMetadataTemplate = ["dc" => ["identifier" => Str::uuid() ] + $userSuppliedData ] ;
+            $model->defaultMetadataTemplate = ["dc" => ["identifier" => $model->uuid ] + $userSuppliedData ] ;
         });
     }
 

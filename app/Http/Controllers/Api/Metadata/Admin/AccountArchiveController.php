@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api\Ingest;
+namespace App\Http\Controllers\Api\Metadata\Admin;
 
 use App\AccountMetadata;
 use App\Archive;
