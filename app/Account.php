@@ -57,7 +57,7 @@ class Account extends Model
         return $this->hasMany('App\Archive', 'account_uuid', 'uuid');
     }
 
-    public function setDefaultMetadataTemplateAttribute( Array $value ) /*TODO: Remove after refactoring apis */
+    public function setDefaultMetadataTemplateAttribute( Array $value )
     {
         if( array_has( $value, 'dc' ) ) { //TODO: Support other schemas than DC
             $original = $this->defaultMetadataTemplate ?? json_decode( self::DEFAULT_TEMPLATE );
