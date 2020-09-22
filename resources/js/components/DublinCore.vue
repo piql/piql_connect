@@ -210,7 +210,7 @@ export default {
             if (this.bag != null) {
                 if (this.archiveMetadata == null) {
                     axios.get('/api/v1/planning/archive/' + this.bag.archive_uuid).then( async ( resp ) =>  {
-                        this.archiveMetadata = resp.data.data.metadata.dc;
+                        this.archiveMetadata = resp.data.data != undefined ? resp.data.data.metadata.dc : null;
                     });
                 }
                 return this.archiveMetadata;
@@ -221,7 +221,7 @@ export default {
             if (this.bag != null) {
                 if (this.accountMetadata == null) {
                     axios.get('/api/v1/planning/account/byUser/' + this.bag.owner).then( async ( resp ) =>  {
-                        this.accountMetadata = resp.data.data.metadata.dc;
+                        this.accountMetadata = resp.data.data != undefined ? resp.data.data.metadata.dc : null;
                     });
                 }
                 return this.accountMetadata;
