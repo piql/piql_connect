@@ -1,33 +1,23 @@
 <?php
 
-namespace App\Http\Controllers\Api\Planning;
+namespace App\Http\Controllers\Api\Metadata;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Archive;
-use App\Http\Resources\HoldingCollection;
+use App\Http\Resources\ArchiveResource;
 
-class ArchiveHoldingController extends Controller
+class ArchiveController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index($archive_uuid)
+    public function index()
     {
-        $archives = Archive::findByUuid($archive_uuid);
-        return $archives != null ? new HoldingCollection($archives->holdings()->get()) : null;
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+        //TODO: Limit access to Archives per Account
+        return ArchiveResource::collection( Archive::all() );
     }
 
     /**
@@ -38,7 +28,7 @@ class ArchiveHoldingController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        abort( 403, "Forbidden: Users cannot persist Archives in this version" );
     }
 
     /**
@@ -49,18 +39,12 @@ class ArchiveHoldingController extends Controller
      */
     public function show($id)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
+        //TODO: Limit access to Archives per Account
+        $archive = Archive::find( $id );
+        if( !isset( $archive ) ) {
+            abort( response()->json(['error' => 404, 'message' => 'No Archive with id '.$id.' was found.'], 404) );
+        }
+        return new ArchiveResource( $archive );
     }
 
     /**
@@ -72,7 +56,7 @@ class ArchiveHoldingController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        abort( 403, "Forbidden: Users cannot edit Archives in this version" );
     }
 
     /**
@@ -83,6 +67,6 @@ class ArchiveHoldingController extends Controller
      */
     public function destroy($id)
     {
-        //
+        abort( 403, "Forbidden: Users cannot delete Archives" );
     }
 }

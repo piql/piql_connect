@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api\Ingest;
+namespace App\Http\Controllers\Api\Metadata\Admin;
 
 use App\Http\Resources\AccountResource;
 use App\Account;
@@ -10,6 +10,8 @@ use Webpatser\Uuid\Uuid;
 
 class AccountController extends Controller
 {
+    //TODO: IMPORTANT! We need a guard here to limit access to the Account API to System Administrators only (no Superusers/local admins here)
+    //
     /**
      * Display a paginated listing of Accounts
      *
@@ -82,6 +84,6 @@ class AccountController extends Controller
      */
     public function destroy(Account $account)
     {
-        return response( "Accounts cannot be deleted in this version", 405);
+        return abort( 405, "Accounts cannot be deleted in this version" );
     }
 }

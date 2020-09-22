@@ -1,23 +1,24 @@
 <?php
 
-namespace App\Http\Controllers\Api\Planning;
+namespace App\Http\Controllers\Api\Metadata;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\HoldingResource;
+use App\Holding;
 use App\Archive;
-use App\Http\Resources\ArchiveResource;
-use App\Http\Resources\ArchiveCollection;
 
-class ArchiveController extends Controller
+class ArchiveHoldingController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index( Request $request, Archive $archive )
     {
-        return new ArchiveCollection(Archive::all());
+        $holdings = $archive->holdings;
+        return HoldingResource::collection( $holdings );
     }
 
     /**
@@ -27,7 +28,7 @@ class ArchiveController extends Controller
      */
     public function create()
     {
-        //
+        abort( 403, "Forbidden: Users cannot create Holdings" );
     }
 
     /**
@@ -38,17 +39,7 @@ class ArchiveController extends Controller
      */
     public function store(Request $request)
     {
-        $data = [
-            'title' => $request->title,
-            'description' => $request->description
-        ];
-
-        if( $request->filled( 'uuid' ) ) {
-            $data += ['uuid' => $request->uuid ] ;
-        }
-
-        $archive = Archive::create( $data )->refresh();
-        return new ArchiveResource( $archive );
+        abort( 403, "Forbidden: Users cannot persist Holdings" );
     }
 
     /**
@@ -57,13 +48,9 @@ class ArchiveController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show( Request $request, Archive $archive , Holding $holding )
     {
-        $archive = Archive::find( $id );
-        if( !isset( $archive ) ) {
-            abort( response()->json(['error' => 404, 'message' => 'No Archive with id '.$id.' was found.'], 404) );
-        }
-        return new ArchiveResource( $archive );
+        return new HoldingResource( $holding );
     }
 
     /**
@@ -74,7 +61,7 @@ class ArchiveController extends Controller
      */
     public function edit($id)
     {
-        //
+        abort( 403, "Forbidden: Users cannot edit Holdings" );
     }
 
     /**
@@ -86,7 +73,7 @@ class ArchiveController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        abort( 403, "Forbidden: Users cannot update Holdings" );
     }
 
     /**
@@ -97,11 +84,6 @@ class ArchiveController extends Controller
      */
     public function destroy($id)
     {
-        $archive = Archive::find($id);
-        if(!isset($archive) ) {
-            abort( response()->json(['error' => 404, 'message' => 'No Archive with id '.$id.' was found.'], 404) );
-        }
-        $archive->delete();
-        return response()->json([], 204 );
+        abort( 403, "Forbidden: Users cannot delete Holdings" );
     }
 }

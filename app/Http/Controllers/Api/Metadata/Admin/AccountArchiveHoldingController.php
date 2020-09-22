@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api\Ingest;
+namespace App\Http\Controllers\Api\Metadata\Admin;
 
 use App\Archive;
 use App\File;
@@ -11,18 +11,12 @@ use App\Http\Resources\HoldingResource;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use phpDocumentor\Reflection\DocBlock\Tags\Author;
+use Illuminate\Support\Facades\Validator;
 
 class AccountArchiveHoldingController extends Controller
 {
-    private function validateRequest(Request $request) {
-        return $request->validate([
-            "title" => "string|nullable",
-            "description" => "string|nullable",
-        ]);
-    }
-
     /**
-     * Display a listing of the resource.
+     * Display a listing of Holdings for the current Archive
      *
      * @param Request $request
      * @param Account $account
@@ -38,17 +32,41 @@ class AccountArchiveHoldingController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Persist a holding
      *
      * @param \Illuminate\Http\Request $request
+     * @param Account $account
+     * @param Archive $archive
+     * @param Holding $holding
+     *
      * @param File $file
      * @return void
      */
     public function store(Request $request, Account $account, Archive $archive)
     {
-        $requestData = $this->validateRequest($request);
+        $validator = Validator::make($request->all(), [
+            'title' => 'required|string|max:100',
+            'description' => 'string|max:500',
+            'lhs' => 'int|exists:holding',
+            'rhs' => 'int|exists:holding'
+        ]);
+
+        if( $validator->fails() )
+        {
+            $message = $validator->errors();
+            return response($message, 422);
+        }
+        $data = [
+            'title' => $request->title,
+            'owner_archive_uuid' => $request->owner_archive_uuid,
+            'description' => $request->description ?? '',
+        ];
+
+        $lhs = $request->lhs;
+        $rhs = $request->rhs;
+
         $holding = new Holding(
-            array_merge($requestData, [
+            array_merge($data, [
                 "owner_archive_uuid" => $archive->uuid,
             ]));
         $holding->setOwnerArchiveUuidAttribute($archive->uuid);
@@ -61,6 +79,8 @@ class AccountArchiveHoldingController extends Controller
      * Display the specified resource.
      *
      * @param Account $account
+     * @param Archive $archive
+     * @param Holding $holding
      * @return \Illuminate\Http\Response
      */
     public function show(Account $account, Archive $archive, Holding $holding)
@@ -69,21 +89,25 @@ class AccountArchiveHoldingController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update the Holding in storage.
      *
      * @param \Illuminate\Http\Request $request
      * @param Account $account
+     * @param Archive $archive
+     * @param Holding $holding
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Account $account, Archive $archive, Holding $holding)
     {
-        // todo: the selection needs to be modified when roles and groups gets fully implemented
-        if($account->owner_id !== auth()->user()->id) {
-            abort( response()->json([ 'error' => 404, 'message' => 'Invalid account' ], 404 ) );
-        }
+        $validData = $request->validate( [
+            'title' => 'required|string|max:100',
+            'description' => 'string|max:500',
+            'lhs' => 'int|exists:holding',
+            'rhs' => 'int|exists:holding'
+        ]);
 
-        $requestData = $this->validateRequest($request);
-        $holding->update($requestData);
+
+        $holding->update($validData);
         $holding->save();
         return response()->json([ "data" => new HoldingResource($holding)]);
     }
@@ -97,12 +121,6 @@ class AccountArchiveHoldingController extends Controller
      */
     public function destroy(Account $account, Archive $archive, Holding $holding)
     {
-        // todo: the selection needs to be modified when roles and groups gets fully implemented
-        if($account->owner_id !== auth()->user()->id) {
-            abort( response()->json([ 'error' => 404, 'message' => 'Invalid account' ], 404 ) );
-        }
-
-        $holding->delete();
-        return response( "", 204);
+        abort(409, "Holdings cannot be deleted in this version");
     }
 }
