@@ -33,7 +33,7 @@
                 <div class="col-8 mr-4"></div>
                 <button class="col-2 pl-3 pr-3 text-center btn btn-ln btn-default" @click="$router.go(-1)">{{$t('Back')}}</button>
             </div>
-            <modal name="modalData" width="90%" height="300">
+            <modal name="modalData" width="1200" height="400">
                 <div class="modalDataTitle">
                     {{modalDataContent.title}}
                 </div>
@@ -42,9 +42,18 @@
                     <a @click="hideModalData"><i class="fas fa-times-circle actionIcon text-center mr-2 cursorPointer"></i></a>
                 </div>
                 <div class="modalDataContent">
-                    <ul>
-                        <li v-for="value, name in modalDataContent.content"><b>{{name}}:</b> {{value}}</li>
-                    </ul>
+                    <div class="row">
+                        <div v-for="scheme in schemes" class="col-sm-4">
+                            <div v-for="schemeItem in scheme" class="row mb-2">
+                                <div class="col-sm-12 input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text" id="basic-addon1">{{schemeItem.label}}</span>
+                                    </div>
+                                    <input type="text" class="form-control" aria-describedby="basic-addon1" readonly v-bind:value="getMetaValue(schemeItem.name)">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </modal>
         </div>
@@ -190,7 +199,7 @@ export default {
             if (this.bag != null) {
                 if (this.holdingMetadata == null) {
                     axios.get('/api/v1/planning/holding/' + this.bag.holding_uuid).then( async ( resp ) =>  {
-                        this.holdingMetadata = resp.data.data.metadata.dc;
+                        this.holdingMetadata = resp.data.data != undefined ? resp.data.data.metadata.dc : null;
                     });
                 }
                 return this.holdingMetadata;
@@ -211,7 +220,7 @@ export default {
             this.loadBag();
             if (this.bag != null) {
                 if (this.accountMetadata == null) {
-                    axios.get('/api/v1/planning/account/byUser/' + this.bag.user_uuid).then( async ( resp ) =>  {
+                    axios.get('/api/v1/planning/account/byUser/' + this.bag.owner).then( async ( resp ) =>  {
                         this.accountMetadata = resp.data.data.metadata.dc;
                     });
                 }
@@ -236,6 +245,13 @@ export default {
                 this.$router.go(-1);
             }
         },
+        getMetaValue(key) {
+            if (this.modalDataContent != null && this.modalDataContent.content != undefined && key in this.modalDataContent.content) {
+                return this.modalDataContent.content[key];
+            } else {
+                return "";
+            }
+        },
         showModalData(type) {
             this.modalDataType = type;
             this.$modal.show('modalData');
@@ -251,7 +267,8 @@ export default {
     .modalDataContent {
         width: 100%;
         height: 80%;
-        overflow-y: auto;
+        overflow: hidden;
+        padding: 10px;
     }
     .modalDataTitle {
         float: left;
