@@ -20,7 +20,7 @@ class ArchiveResource extends JsonResource
             'description' => $this->description,
             'uuid' => $this->uuid,
             'account_uuid' => $this->account_uuid,
-            'metadata' => $this->metadata
+            'defaultMetadataTemplate' => $this->defaultMetadataTemplate
         ];
 
     }

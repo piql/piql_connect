@@ -22,7 +22,7 @@ class HoldingResource extends JsonResource
             'position' => $this->position,
             'parent_id' => $this->parent_id,
             'uuid' => $this->uuid,
-            'metadata' => $this->defaultMetadataTemplate
+            'defaultMetadataTemplate' => $this->defaultMetadataTemplate
         ];
     }
 }

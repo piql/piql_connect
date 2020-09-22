@@ -8,6 +8,7 @@ use App\ArchiveMetadata;
 use App\File;
 use App\Http\Resources\ArchiveResource;
 use App\Account;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use phpDocumentor\Reflection\DocBlock\Tags\Author;
@@ -19,7 +20,7 @@ class AccountArchiveController extends Controller
         return $request->validate([
             "title" => "string|nullable",
             "description" => "string|nullable",
-            "metadata" => "array|nullable",
+            "defaultMetadataTemplate" => "array|nullable",
         ]);
     }
 
@@ -46,21 +47,16 @@ class AccountArchiveController extends Controller
 ,    */
     public function store(Request $request, Account $account)
     {
-        $requestData = $this->validateRequest($request);
-        $archive = new Archive(
-            array_merge($requestData, [
-                "account_uuid" => $account->uuid,
-            ]));
-        $archive->save();
+        $validated = $this->validateRequest($request);
+        $additional = [
+            "modified_by" => Auth::id(),
+            "account_uuid" => $account->uuid
+        ];
 
-        $metadata = new ArchiveMetadata([
-            "modified_by" => auth()->user()->id,
-            "metadata" => ["dc" => (object)null]
-        ]);
-        $metadata->parent()->associate($archive);
-        $metadata->save();
+        $total = array_merge( $validated, $additional );
+        $archive = Archive::create( $total );
 
-        return response()->json([ "data" => new ArchiveResource($archive)]);
+        return new ArchiveResource( $archive );
     }
 
     /**

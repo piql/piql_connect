@@ -18,7 +18,7 @@ class Archive extends Model
 
     protected $table = 'archives';
     protected $fillable = [
-        'title','description','parent_uuid', 'uuid', 'account_uuid', 'metadata'
+        'title','description','parent_uuid', 'uuid', 'account_uuid', 'defaultMetadataTemplate'
     ];
     protected $casts = [
         'defaultMetadataTemplate' => 'array'
@@ -34,7 +34,6 @@ class Archive extends Model
         parent::boot();
 
         static::creating( function ( $model ) {
-
             $validateIdentifier = Validator::make( ['uuid' => $model->uuid ], ['uuid' => 'uuid'] );
             if( !$validateIdentifier->passes() ){
                 $model->uuid = Str::uuid();
@@ -79,16 +78,8 @@ class Archive extends Model
     }
 
 
-    public function getMetadataAttribute( $value ) /*TODO: Remove after refactoring apis */
+    public function setDefaultMetadataTemplateAttribute( Array $value )
     {
-        return $this->defaultMetadataTemplate;
-    }
-
-    public function setMetadataAttribute( $value ) /*TODO: Remove after refactoring apis */
-    {
-        if( !is_array( $value ) )
-            return;
-
         if( array_has( $value, 'dc' ) ) { //TODO: Support other schemas than DC
             $original = $this->defaultMetadataTemplate ?? json_decode( self::DEFAULT_TEMPLATE );
             $this->defaultMetadataTemplate = ["dc" => $value["dc"] + $original["dc"] ];
