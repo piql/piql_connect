@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Validator;
 use Webpatser\Uuid\Uuid;
+use App\Archive;
 
 class Holding extends Model
 {

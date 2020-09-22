@@ -122,5 +122,42 @@ class AccountControllerTest extends TestCase
                  ->assertJsonFragment( ["data" => $expected ] );
     }
 
+    public function test_given_an_authenticated_user_when_updating_an_account_that_does_not_exist_it_is_upserted()
+    {
+        $data = [
+            "defaultMetadataTemplate" => ["dc" => ["title" => "The best novel ever!"]]
+        ];
+
+        $response = $this->actingAs( $this->user )
+            ->put( route('admin.metadata.accounts.upsert' ),
+                $data );
+
+        $expected = array_replace_recursive(
+            $response->decodeResponseJson('data'), $data );
+
+        $response->assertStatus( 201 )
+            ->assertJsonFragment( $expected );
+    }
+
+    public function test_given_an_authenticated_user_when_upserting_an_account_that_exists_it_is_updated()
+    {
+        $account = factory(Account::class)->create();
+
+        $data = [
+            "id" => $account->id,
+            "defaultMetadataTemplate" => ["dc" => ["title" => "The most updated novel ever!"]]
+        ];
+
+        $response = $this->actingAs( $this->user )
+            ->put( route( 'admin.metadata.accounts.upsert' ),
+                $data );
+
+        $expected = array_replace_recursive(
+            $response->decodeResponseJson('data'), $data );
+
+        $response->assertStatus( 200 )
+                 ->assertJsonFragment( ["data" => $expected ]);
+    }
+
 
 }

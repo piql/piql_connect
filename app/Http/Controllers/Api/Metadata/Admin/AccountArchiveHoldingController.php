@@ -98,6 +98,36 @@ class AccountArchiveHoldingController extends Controller
     }
 
     /**
+     * Create or update a Holding.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @param Account $account
+     * @param Archive $archive
+     * @param Holding $holding
+     * @return \Illuminate\Http\Response
+     */
+    public function upsert(Request $request, Account $account, Archive $archive, Holding $holding)
+    {
+        $validated = $request->validate( [
+            'title' => 'required|string|max:100',
+            'description' => 'string|max:500',
+            'lhs' => 'int|exists:holding',
+            'rhs' => 'int|exists:holding',
+            'defaultMetadataTemplate' => 'array|nullable',
+            'owner_archive_uuid' => 'string'
+        ]);
+
+        if( $request->id ) {
+            $holding = Holding::findOrFail( $request->id );
+            $holding->update( $validated );
+            return new HoldingResource( $holding );
+        }
+
+        return new HoldingResource( Holding::create( $validated ) );
+    }
+
+
+    /**
      * Remove the specified resource from storage.
      *
      * @param Account $account

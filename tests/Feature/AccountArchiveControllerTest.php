@@ -164,4 +164,45 @@ class AccountArchiveControllerTest extends TestCase
                  ->assertJsonFragment( $expected );
     }
 
+    public function test_given_an_authenticated_user_when_updating_an_archive_that_does_not_exist_it_is_upserted()
+    {
+        $data = [
+            "title" => "This upsert concept just rocks",
+            "defaultMetadataTemplate" => ["dc" => ["title" => "The best novel ever!"]]
+        ];
+
+        $response = $this->actingAs( $this->user )
+            ->put( route('admin.metadata.accounts.archives.upsert', [$this->account] ),
+                $data );
+
+        $expected = array_replace_recursive(
+            $response->decodeResponseJson('data'), $data );
+
+        $response->assertStatus( 201 )
+            ->assertJsonFragment( $expected );
+    }
+
+    public function test_given_an_authenticated_user_when_upserting_an_archive_that_exists_it_is_updated()
+    {
+        $account = factory(Account::class)->create();
+        $archive = factory(Archive::class)->create(["account_uuid" => $account->uuid]);
+
+        $data = [
+            "id" => $archive->id,
+            "title" => "What a wonderful upsert",
+            "defaultMetadataTemplate" => ["dc" => ["title" => "The most updated novel ever!"]]
+        ];
+
+        $response = $this->actingAs( $this->user )
+            ->put( route('admin.metadata.accounts.archives.upsert', [$this->account] ),
+                $data );
+
+        $expected = array_replace_recursive(
+            $response->decodeResponseJson('data'), $data );
+
+        $response->assertStatus( 200 )
+                 ->assertJsonFragment( ["data" => $expected ]);
+    }
+
+
 }

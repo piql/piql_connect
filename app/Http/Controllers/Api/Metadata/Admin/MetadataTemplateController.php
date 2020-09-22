@@ -97,6 +97,14 @@ class MetadataTemplateController extends Controller
         return new MetadataResource( $metadataTemplate );
     }
 
+    /**
+     * Update or create the specified resource in storage.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @param Account $account
+     * @return \Illuminate\Http\Response
+     */
+
     public function upsert( Request $request )
     {
         $validatedRequest = $this->validate( $request, [

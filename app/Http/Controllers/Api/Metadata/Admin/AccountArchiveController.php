@@ -85,6 +85,36 @@ class AccountArchiveController extends Controller
     }
 
     /**
+     * Update or create the specified resource in storage.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @param Account $account
+     * @return \Illuminate\Http\Response
+     */
+
+    public function upsert( Request $request, Account $account )
+    {
+       $validatedRequest = $this->validate( $request, [
+                "title" => "string",
+                "description" => "string|nullable",
+                "defaultMetadataTemplate" => "array|nullable"
+            ]
+        );
+
+       $data = array_merge( $validatedRequest, ["account_uuid" => $account->uuid] );
+
+        if( $request->id ) {
+            $archive = Archive::findOrFail( $request->id );
+            $archive->update( $validatedRequest );
+            return new ArchiveResource( $archive );
+        }
+
+        return new ArchiveResource( Archive::create( $data ) );
+    }
+
+
+
+    /**
      * Remove the specified resource from storage.
      *
      * @param Account $account

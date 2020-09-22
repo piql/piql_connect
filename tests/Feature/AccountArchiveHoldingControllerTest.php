@@ -20,6 +20,7 @@ class AccountArchiveHoldingControllerTest extends TestCase
     private $user;
     private $account;
     private $archive;
+    private $holding;
 
     public function setUp() : void
     {
@@ -27,20 +28,17 @@ class AccountArchiveHoldingControllerTest extends TestCase
         $this->user = factory(User::class)->create();
         Passport::actingAs( $this->user );
 
-        $this->account = factory(Account::class)->create([
-
-        ]);
+        $this->account = factory(Account::class)->create();
         $this->account->owner()->associate($this->user);
         $this->account->save();
 
         $this->archive = factory(Archive::class)->create([
-            "account_uuid" => $this->account->uuid,
+            "account_uuid" => $this->account->uuid
         ]);
 
         $this->holding = factory(Holding::class)->create([
-            "owner_archive_uuid" => $this->archive->uuid,
+            "owner_archive_uuid" => $this->archive->uuid
         ]);
-
     }
 
     public function test_given_an_authenticated_user_when_getting_all_archives_it_responds_200()
@@ -145,5 +143,46 @@ class AccountArchiveHoldingControllerTest extends TestCase
         $this->assertEquals( $holding->title, $this->holding->title );
         $this->assertEquals( $holding->description, $this->holding->description );
     }
+
+    public function test_given_a_holding_when_upserting_it_is_updated()
+    {
+        $account = factory(Account::class)->create();
+        $archive = Archive::create(["title" => "Sweet Archive title", "account_uuid" => $account->uuid]);
+        $holding = Holding::create(["title" => "Dull Holding title", "owner_archive_uuid" => $archive->uuid ]);
+        $data = [
+            "id" => $holding->id,
+            "title" => "What a wonderful upsert title",
+            "defaultMetadataTemplate" => ["dc" => ["title" => "The most updated novel ever!"]],
+        ];
+        $response = $this->actingAs( $this->user )
+            ->put( route( 'admin.metadata.accounts.archives.holdings.upsert', [$this->account, $this->archive] ),
+                $data );
+
+        $expected = array_replace_recursive(
+            $response->decodeResponseJson('data'), $data );
+
+        $response->assertStatus( 200 )
+                 ->assertJsonFragment( ["data" => $expected ]);
+    }
+
+    public function test_given_no_existing_holding_when_upserting_it_is_created()
+    {
+        $data = [
+            "title" => "What a wonderful upsert title",
+            "defaultMetadataTemplate" => ["dc" => ["title" => "The most anticipated novel ever!"]],
+            "owner_archive_uuid" => $this->archive->uuid
+        ];
+        $response = $this->actingAs( $this->user )
+            ->put( route( 'admin.metadata.accounts.archives.holdings.upsert', [$this->account, $this->archive] ),
+                $data );
+
+        $expected = array_replace_recursive(
+            $response->decodeResponseJson('data'), $data );
+
+        $response->assertStatus( 201 )
+                 ->assertJsonFragment( ["data" => $expected ]);
+    }
+
+
 
 }
