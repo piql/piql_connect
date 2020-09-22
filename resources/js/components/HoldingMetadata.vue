@@ -1,10 +1,29 @@
 <template>
     <div>
         <b-form @submit="addMetadata">
+            <div class="form-group">
+                <label>{{$t('settings.archives.template')}}</label>
+                <select class="form-control" v-model="selection">
+                    <option v-for="template in listTemplates" :key="template.id" :value="template.id">
+                        {{ template.metadata.dc.title }}
+                    </option>
+                </select>
+            </div>
+
             <b-form-group v-for="schemeItem in schemes[0].fields" 
             :key="schemeItem.id" :id="schemeItem.label.toLowerCase()" 
             :label="schemeItem.label" :label-for="schemeItem.label.toLowerCase()">
-                <b-form-input
+
+                <b-form-input v-if="schemeItem.name === 'identifier'"
+                :id="schemeItem.label.toLowerCase()"
+                class="mb-4"
+                v-model="form.metadata[schemeItem.name]"
+                :type="schemeItem.type"
+                :disabled='true'
+                
+                ></b-form-input> 
+
+                <b-form-input v-else
                 :id="schemeItem.label.toLowerCase()"
                 class="mb-4"
                 v-model="form.metadata[schemeItem.name]"
@@ -45,6 +64,7 @@ export default {
                             {"name" : "relation",    "label" : "Relation",    "type": "text"},
                             {"name" : "coverage",    "label" : "Coverage",    "type": "text"},
                             {"name" : "rights",      "label" : "Rights",      "type": "text"},
+                            {"name" : "identifier",  "label" : "Identifier",  "type": "text"},
                         ]
                     }
                 ];
@@ -53,7 +73,8 @@ export default {
     },
     data(){
         return {
-            form: {"metadata": {}}
+            form: {"metadata": {}},
+            selection: ''
         }
     },
     async mounted(){
@@ -64,8 +85,44 @@ export default {
         }
 
     },
+     watch:{
+        selection(val){
+            if(val && val != ''){
+                //when selction changes, we prefill the metadata
+                let template = this.templates.filter(single => single.id === val);
+                let data = { 
+                    id: this.holdingId,
+                    metadata:  {
+                        metadata: template[0].metadata.dc
+                    } 
+                };
+
+                this.addHoldingMetadata(data);
+                //after adding, prefill the  form
+                let holding = this.retrievedHoldings.filter(single => single.id === this.holdingId)
+                if(holding[0].metadata){
+                    this.form.metadata = holding[0].metadata;
+
+                }
+
+
+
+            }else{
+                this.form.metadata = {}
+                
+            }
+     
+
+        }
+
+    },
     computed:{
-        ...mapGetters(['retrievedHoldings'])
+        ...mapGetters(['retrievedHoldings','templates']),
+        listTemplates(){
+            return this.templates
+                ? [{'id' : '', 'metadata':{'dc': {'title':'Nothing Selected'}}}, ...this.templates ]
+                    : null;
+        }
 
     },
     methods:{

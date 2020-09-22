@@ -21,15 +21,12 @@
                     <a class="btn" @click="assignMeta(holding.id)" data-toggle="tooltip" :title="$t('settings.holdings.assignMeta')">
                         <i class="fa fa-tags buttonIcon"></i>
                     </a>
-                     <a class="btn" @click="showTemplateBox(holding.id)" data-toggle="tooltip" :title="$t('settings.holdings.assignMetaTemplate')">
-                        <i class="fa fa-list buttonIcon"></i>
-                    </a>
                     <a class="btn" @click="showEditBox(holding.id)" data-toggle="tooltip" :title="$t('settings.holdings.edit')">
                         <i class="fa fa-edit buttonIcon"></i>
                     </a>
-                    <a class="btn" @click="showDeleteBox(holding.id)" data-toggle="tooltip" :title="$t('settings.holdings.delete')">
+                    <!-- <a class="btn" @click="showDeleteBox(holding.id)" data-toggle="tooltip" :title="$t('settings.holdings.delete')">
                         <i class="fa fa-trash buttonIcon"></i>
-                    </a>
+                    </a> -->
                 </td>
             </tr>
         </tbody>
@@ -66,24 +63,6 @@
         <b-button class="mt-3" @click="editHolding" block><i class="fa fa-edit"></i> {{$t('settings.holdings.edit').toUpperCase()}}</b-button>
     </b-modal>
 
-    <b-modal id="assign-template" hide-footer>
-        <template v-slot:modal-title>
-        <h4>{{$t('settings.holdings.assignMetaTemplate').toUpperCase()}} | {{ holding.title }}</h4>
-        </template>
-        <div class="d-block">
-            <div class="form-group">
-                <label>{{$t('settings.holdings.template')}}</label>
-                <select class="form-control" v-model="selection">
-                    <option v-for="template in templates" :key="template.id" :value="template.id">
-                        {{ template.metadata.dc.title }}
-                    </option>
-                </select>
-            </div>
-        </div>
-        <b-button class="mt-3" block @click="assignTemplate">
-            <i class="fa fa-list"></i> {{$t('settings.holdings.assignMetaTemplate')}} 
-        </b-button>
-    </b-modal>
 
 </div>
   
@@ -121,11 +100,6 @@ export default {
         ...mapActions(['addHoldingMetadata','editHoldingData','deleteHoldingData']),
         assignMeta(id){
             this.$emit('assignMeta', id);
-        },
-        showTemplateBox(id){
-            let holding = this.retrievedHoldings.filter(single => single.id === id)
-            this.holding = holding[0];
-            this.$bvModal.show('assign-template')
         },
         showEditBox(id){
             let holding = this.retrievedHoldings.filter(single => single.id === id)
@@ -174,27 +148,6 @@ export default {
             );
 
         },
-        assignTemplate(){
-            let template = this.templates.filter(single => single.id === this.selection);
-            let data = { 
-                id: this.holding.id,
-                metadata:  {
-                    metadata: template[0].metadata.dc
-                } 
-            };
-
-            this.addHoldingMetadata(data);
-
-            this.$bvModal.hide('assign-template')
-
-
-            this.successToast(
-                this.$t('settings.holdings.toast.addingHoldingMeta'), 
-                this.$t('settings.holdings.toast.addingHoldingMeta') + ' ' + this.holding.title
-            );
-
-
-        }
     }
 
 }
