@@ -23,7 +23,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'username', 'password', 'full_name', 'email', 'api_token', 'confirmation_token', 'disabled_on', 'account'
+        'username', 'password', 'full_name', 'email', 'api_token', 'confirmation_token', 'disabled_on', 'account_uuid'
     ];
 
     /**
@@ -120,5 +120,10 @@ class User extends Authenticatable
     public function storageLocations()
     {
         return $this->hasMany('App\StorageLocation', 'owner_id');
+    }
+
+    public function account()
+    {
+        return $this->hasOne('App\Account', 'uuid', 'account_uuid');
     }
 }
