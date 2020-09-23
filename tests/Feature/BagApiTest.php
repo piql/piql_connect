@@ -55,7 +55,7 @@ class BagApiTest extends TestCase
             'password' => 'notinuse',
             'full_name' => 'BagApi TestUser',
             'email' => 'bagapitestuser@localhost',
-            'account' => $this->account->uuid,
+            'account_uuid' => $this->account->uuid,
         ]);
 
         Passport::actingAs($this->testUser);
@@ -157,7 +157,7 @@ class BagApiTest extends TestCase
             'password' => 'notinuse',
             'full_name' => 'BagApi OtherTestUser',
             'email' => 'bagapiothertestuser@localhost',
-            'account' => $this->account->uuid,
+            'account_uuid' => $this->account->uuid,
         ]);
 
         Passport::actingAs($this->otherUser);
