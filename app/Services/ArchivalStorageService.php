@@ -80,8 +80,25 @@ class ArchivalStorageService implements \App\Interfaces\ArchivalStorageInterface
 
     public function downloadStream( \App\StorageLocation $storage, string $storagePath )
     {
-        $driver = $this->getDriverFromConfig( $storage );
-        return $driver->readStream( $storagePath );
+        // todo: Refactor this function
+        if( $storage->locatableType() == "s3configuration" )
+        {
+            $adapter = Storage::disk('s3')->getAdapter();
+	    $client = $adapter->getClient();
+	    $client->registerStreamWrapper();
+	    $context = stream_context_create(["s3" => ["seekable" => true]]);
+	    if (!($stream = fopen("s3://{$adapter->getBucket()}/{$storagePath}", "rb", false, $context)))
+	    {
+		fseek($stream, 0, SEEK_SET);
+	    }
+	    return $stream;
+        }
+        if( $storage->locatable_type == "fakestorage" )
+        {
+            return fopen(Storage::disk('testdata')->path($storagePath), "rb", false);
+        }
+
+        throw new \Exception("Unsupported filesystem type requested: {$storage->locatableType() }");
     }
 
     public function delete( \App\StorageLocation $storage, string $remotePathToDelete)

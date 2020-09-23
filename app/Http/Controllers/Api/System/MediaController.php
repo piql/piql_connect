@@ -13,10 +13,16 @@ use Log;
 
 class MediaController extends Controller {
     public function showDipFile(Request $request, ArchivalStorageInterface $storage) {
-        $dip = Dip::find($request->dipId);
-        $fileObj = $dip->fileObjects->find($request->fileId);
-        $streamResource = $storage->downloadStream($dip->storage_location, $fileObj->fullpath);
-        $stream = new VideoStreamHelper($streamResource);
+        $dipId = $request->dipId;
+        $fileId = $request->fileId;
+        $filePath = 'tmp/'.$dipId.'-'.$fileId.'-'.md5($dipId.'-'.$fileId).'.media.tmp';
+        $fileFullPath = Storage::path($filePath);
+        if (!file_exists($fileFullPath)) {
+            $dip = Dip::find( $dipId );
+            $fileObj = $dip->fileObjects->find($fileId);
+            Storage::disk('local')->put($filePath, $storage->downloadContent($dip->storage_location, $fileObj->fullpath));
+        }
+        $stream = new VideoStreamHelper($fileFullPath);
         $stream->start();
         return null;
     }

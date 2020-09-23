@@ -170,8 +170,11 @@ class AipController extends Controller
         $aip = Aip::find($request->aipId);
         $file = $aip->fileObjects()->findOrFail($request->fileId);
         return response()->streamDownload(function () use( $storage, $aip, $file ) {
+            // todo: Avoid setting the execution time here - it was done to support large files
+            set_time_limit(10*60);
             $stream = $storage->downloadStream( $aip->online_storage_location, $file->fullpath );
             fpassthru($stream);
+            fclose($stream);
         }, basename( $file->path ), [
             "Content-Type" => $file->mime_type,
             "Content-Disposition" => "attachment; { $file->filename }"
