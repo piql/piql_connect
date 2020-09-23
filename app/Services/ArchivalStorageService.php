@@ -84,14 +84,14 @@ class ArchivalStorageService implements \App\Interfaces\ArchivalStorageInterface
         if( $storage->locatableType() == "s3configuration" )
         {
             $adapter = Storage::disk('s3')->getAdapter();
-	    $client = $adapter->getClient();
-	    $client->registerStreamWrapper();
-	    $context = stream_context_create(["s3" => ["seekable" => true]]);
-	    if (!($stream = fopen("s3://{$adapter->getBucket()}/{$storagePath}", "rb", false, $context)))
-	    {
-		fseek($stream, 0, SEEK_SET);
-	    }
-	    return $stream;
+            $client = $adapter->getClient();
+            $client->registerStreamWrapper();
+            $context = stream_context_create(["s3" => ["seekable" => true]]);
+            if (($stream = fopen("s3://{$adapter->getBucket()}/{$storagePath}", "rb", false, $context)))
+            {
+                fseek($stream, 0, SEEK_SET);
+            }
+            return $stream;
         }
         if( $storage->locatable_type == "fakestorage" )
         {
