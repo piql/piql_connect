@@ -134,6 +134,17 @@ AWS_BUCKET=connect-test
 AWS_URL=https://s3.osl1.safedc.net
 " >> $envfile || exit $?
 
+echo "Configure Keycloak in env file"
+echo '
+KEYCLOAK_REALM_PUBLIC_KEY='$KEYCLOAK_REALM_PUBLIC_KEY'
+KEYCLOAK_LOAD_USER_FROM_DATABASE=false
+KEYCLOAK_USER_PROVIDER_CREDENTIAL=username
+KEYCLOAK_TOKEN_PRINCIPAL_ATTRIBUTE=preferred_username
+KEYCLOAK_APPEND_DECODED_TOKEN=true
+KEYCLOAK_ALLOWED_RESOURCES="piql-connect-api"
+' >> $envfile || exit $?
+
+
 echo "Update AM service callbacks"
 if [[ ! -z $UPDATE_AM_SERVICE_CALLBACKS ]] ; then
   ./update-service-callbacks.php || exit $?
