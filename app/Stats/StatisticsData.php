@@ -31,34 +31,21 @@ class StatisticsData
 
     private function monthlyOnlineIngested($date, $userId)
     {
-        $monthlyStats=[ 'aips'=>0, 'bags'=>0, 'size'=>0 ];
-
-        // TODO: Need to sum the stats for all days in the month
-
-        // Ingested size
         $stats_data = IngestedDataOnline::where('owner', $userId)
             ->whereBetween('ingest_date', [
                 new DateTime('first day of ' . $date->format('Y-m')),
-                new DateTime('last day of ' . $date->format('Y-m'))])
-            ->orderBy('recorded_at', 'desc')->take(1)->get(['bags', 'size']);
-        
-        if ($stats_data != null && !empty($stats_data) && isset($stats_data[0])) {
-            $monthlyStats['bags']=$stats_data[0]->bags;
-            $monthlyStats['size']=$stats_data[0]->size;
-        }
+                new DateTime('last day of ' . $date->format('Y-m'))]);
 
-        // Ingested AIPs
         $stats_aips = IngestedAIPOnline::where('owner', $userId)
             ->whereBetween('ingest_date', [
                 new DateTime('first day of ' . $date->format('Y-m')),
-                new DateTime('last day of ' . $date->format('Y-m'))])
-            ->orderBy('recorded_at', 'desc')->take(1)->get(['aips']);
-        
-        if ($stats_aips != null && !empty($stats_aips) && isset($stats_aips[0])) {
-            $monthlyStats['aips']=$stats_aips[0]->aips;
-        }
-
-        return $monthlyStats;
+                new DateTime('last day of ' . $date->format('Y-m'))]);
+            
+        return [
+            'aips' => $stats_aips->sum('aips'),
+            'bags' => $stats_data->sum('bags'),
+            'size' => $stats_data->sum('size')
+        ];
     }
 
     private function monthlyOfflineIngested($date, $userId)
@@ -161,32 +148,24 @@ class StatisticsData
     //     return ($data == null || empty($data) || !isset($data[0])) ? [] : $data;
     // }
 
-    public function latestOnlineFileFormatsIngested($userId)
-    {
-        $latest = IngestedMimeOnline::orderBy('recorded_at', 'desc')->take(1)->get(['recorded_at']);
-        if ($latest == null || empty($latest) || !isset($latest[0])) return [(object)[
-            'ingested' => 1,
-            'mime_type' => 'none',
-        ]];
-        return IngestedMimeOnline::where([
-            'recorded_at' => new DateTime($latest[0]['recorded_at']),
-            // 'owner'=> $userId, //not yet querry-able
-        ])->orderBy('ingested', 'desc')
-            ->get(['mime_type', 'ingested']);
-    }
-
     public function fileFormatsIngested($userId)
     {
-        $formats = $this->latestOnlineFileFormatsIngested($userId);
-        if ($formats == null || empty($formats) || !isset($formats[0])) return [];
-        $ingested = collect($formats)->sum(function ($f) {
-            return $f->ingested;
-        });
+        $formats=IngestedMimeOnline::where('owner',$userId)->orderBy('ingested','desc')->get(['mime_type','ingested']);
+
+        // Create a dummy if no file formats are registered
+        if ($formats == null || empty($formats) || !isset($formats[0])) {
+            $formats = [ (object)['ingested'=>1, 'mime_type'=>'none'] ];
+        }
+
+        $ingested = collect($formats)->sum(function ($f) { return $f->ingested; } );
+        
         $data = collect($formats)->take(7)->mapWithKeys(function ($f) use (&$ingested) {
             $ingested -= $f->ingested;
             return [$f->mime_type => $f->ingested];
         });
+
         if ($ingested > 0) $data['other'] = $ingested;
+        
         return $data;
     }
 }
