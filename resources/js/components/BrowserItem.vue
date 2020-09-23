@@ -34,11 +34,21 @@ import axios from 'axios';
 export default {
     async mounted() {
         this.isPreparingDownload = false;
-        axios.get('/api/v1/access/dips/'+this.item.id+'/thumbnails', { responseType: 'blob' }).then ( async (thumbnail) => {
+        this.thumbnailCancelTokenSource = axios.CancelToken.source();
+        axios.get('/api/v1/access/dips/'+this.item.id+'/thumbnails', { responseType: 'blob', cancelToken: this.thumbnailCancelTokenSource.token }).then ( async (thumbnail) => {
             let reader = new FileReader();
             reader.onload = e => this.thumbnailImage = reader.result;
             reader.readAsDataURL( thumbnail.data );
+        }).catch(function(exception) {
+            if (!axios.isCancel(exception)) {
+                throw(exception);
+            }
         });
+    },
+    async beforeDestroy() {
+        if (this.thumbnailCancelTokenSource) {
+            this.thumbnailCancelTokenSource.cancel('Thumbnail request was cancelled');
+        }
     },
     props: {
         item: Object,
@@ -51,6 +61,7 @@ export default {
             fileName: "",
             thumbnailImage: "",
             isPreparingDownload: false,
+            thumbnailCancelTokenSource: null
         }
     },
     methods: {

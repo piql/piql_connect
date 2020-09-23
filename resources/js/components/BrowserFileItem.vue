@@ -26,17 +26,35 @@
     export default {
         async mounted() {
             this.isPreparingDownload = false;
-            axios.get( '/api/v1/access/dips/'+this.dipId+'/aipfile/'+this.item.id ).then( (result) => {
+            this.aipFileCancelTokenSource = axios.CancelToken.source();
+            axios.get('/api/v1/access/dips/'+this.dipId+'/aipfile/'+this.item.id, { cancelToken: this.aipFileCancelTokenSource.token }).then( (result) => {
                 this.aipItem = result.data.data[0];
                 this.fileName = this.aipItem.filename;
                 this.fileType = this.aipItem.mime_type;
+            }).catch(function(exception) {
+                if (!axios.isCancel(exception)) {
+                    throw(exception);
+                }
             });
 
-            axios.get('/api/v1/access/dips/'+this.dipId+'/thumbnails/files/'+this.item.id, { responseType: 'blob' }).then( (thumbnail) => {
+            this.thumbnailCancelTokenSource = axios.CancelToken.source();
+            axios.get('/api/v1/access/dips/'+this.dipId+'/thumbnails/files/'+this.item.id, { responseType: 'blob', cancelToken: this.thumbnailCancelTokenSource.token }).then( (thumbnail) => {
                 let reader = new FileReader();
                 reader.onload = e => this.thumbnailImage = reader.result;
                 reader.readAsDataURL( thumbnail.data );
+            }).catch(function(exception) {
+                if (!axios.isCancel(exception)) {
+                    throw(exception);
+                }
             });
+        },
+        async beforeDestroy() {
+            if (this.thumbnailCancelTokenSource) {
+                this.thumbnailCancelTokenSource.cancel('Thumbnail request was cancelled');
+            }
+            if (this.aipFileCancelTokenSource) {
+                this.aipFileCancelTokenSource.cancel('AIP file request was cancelled');
+            }
         },
         props: {
             item: Object,
@@ -50,7 +68,9 @@
                 fileType: "",
                 thumbnailImage: "",
                 aipItem: Object,
-                isPreparingDownload: false
+                isPreparingDownload: false,
+                thumbnailCancelTokenSource: null,
+                aipFileCancelTokenSource: null
             };
         },
         methods: {
@@ -67,7 +87,7 @@
             showMetadata() {
                 this.$router.push({ name:'access.browse.dips.files.metadata', params: { dipId: this.dipId, fileId: this.aipItem.id, showFileId: this.item.id } });
             },
-	          preview: function(){
+          preview: function(){
                 this.$emit('showPreview', this.item.storable_id, this.item.id, this.fileName, this.fileType);
             }
         },
@@ -75,7 +95,7 @@
             dipId: function() {
                 return this.item.storable_id;
             },
-            fileSize: function(){
+            fileSize: function() {
                 let size = this.item.size/1024;
                 let metric = "k";
                 if (size > 1024) {
