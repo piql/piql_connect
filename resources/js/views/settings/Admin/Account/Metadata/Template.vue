@@ -12,19 +12,16 @@
 										<button class="btn form-control-btn ml-3" @click="createTemplate($event.target)">
 												<i class="fas fa-plus mr-2"></i>{{$t('admin.metadata.createNewTemplate')}}
 										</button>
-										<button class="btn form-control-btn ml-3" @click="assignTemplate($event.target)">
-												<i class="fas fa-list-ol mr-2"></i>{{$t('admin.metadata.listCurrentAssignments')}}
-										</button>
 								</div>
 						</div>
 
 						<div class="card-body">
-                            <metadata-template-list @cloneTemplate="cloneTemplate" v-bind:metadataTemplates="templates" />
+                <metadata-template-list @cloneTemplate="cloneTemplate" v-bind:metadataTemplates="templates" />
 						</div>
 
 						<div class="row text-center pagerRow">
 								<div class="col">
-										<!--Pager :meta='templatePageMeta' :height='height' /-->
+                    <Pager :meta='templatePageMeta' />
 								</div>
 						</div>
 				</div>
@@ -47,13 +44,35 @@ export default {
     },
     props: {
     },
+    mounted: function(){
+        this.$store.dispatch( 'fetchTemplates', this.apiQueryString );
+    },
     computed: {
-        ...mapGetters(['templates', 'templateById']),
+        ...mapGetters(['templates', 'templateById', 'templatePageMeta']),
+        apiQueryString: function() {
+            let routeQuery = this.$route.query;
+            let apiQueryItems = [];
+            let filters = [];
+            let page;
+            if( parseInt( routeQuery.page ) ) {
+                filters = filters.concat(`page=${routeQuery.page}`);
+            }
+            return "?".concat( filters.filter( (f) => f ).join( "&" ) );
+            return filter;
+        },
+
+    },
+    watch: {
+        '$route': 'dispatchRouting'
     },
     methods: {
         ...mapActions({
             template: ['addTemplate']
         }),
+        dispatchRouting() {
+            this.$store.dispatch( 'fetchTemplates', this.apiQueryString );
+        },
+
         createTemplate: function(target){
             target.blur();
             this.currentTemplate = JSON.parse(JSON.stringify({ "metadata": {"dc" : {} } }));
@@ -72,7 +91,7 @@ export default {
             this.$bvModal.show("meta");
         },
         saveTemplate: async function( template ){
-            this.$store.dispatch( 'addTemplate', template );
+            await this.$store.dispatch( 'addTemplate', template );
         }
 
     }

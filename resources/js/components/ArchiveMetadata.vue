@@ -28,21 +28,24 @@
                 class="mb-4"
                 v-model="form.metadata[schemeItem.name]"
                 :type="schemeItem.type"
-                
-                ></b-form-input>
+                >
+                </b-form-input>
             </b-form-group>
             <b-button type="submit" variant="primary">{{$t('settings.archives.assignMeta')}}</b-button>
-            
+
         </b-form>
 
-    </div> 
+    </div>
 </template>
 
 <script>
 import {mapGetters, mapActions} from "vuex"
 export default {
     props:{
-        archiveId: Number,
+        archiveId: {
+            type: Number,
+            default: 0,
+        },
         schemes: {
             /* Later on, this should also arrive from an api */
             type: Array,
@@ -101,54 +104,50 @@ export default {
                 this.form.metadata = {}
                 
             }
-     
 
         }
 
+    },
+    watch: {
+        'archiveId': 'initMetadata',
     },
     async mounted(){
-        let archive = this.retrievedArchives.filter(single => single.id === this.archiveId)
-        if(archive[0].metadata){
-            this.form.metadata = archive[0].metadata;
-
-        }
-
+        await this.fetchAccounts();
+        await this.fetchArchives( this.firstAccount.id ); //TODO: Actual account handling
     },
-    computed:{
-        ...mapGetters(['templates','retrievedArchives']),
-        listTemplates(){
-            return this.templates
-                ? [{'id' : '', 'metadata':{'dc': {'title':'Nothing Selected'}}}, ...this.templates ]
-                    : null;
-        }
-
-    },
-    methods:{
-        ...mapActions(['addArchiveMetadata']),
-        fieldId(type, name){
-            return `${type}-${name}`.replace(/\s/g,'');     /* Strip all whitespace from fieldId */
+    computed: {
+        ...mapGetters(['accounts','archives']),
+        firstAccount(){
+            return this.accounts[0] || 0;
         },
-        addMetadata(e){
+    },
+    methods: {
+        ...mapActions(['addArchiveMetadata', 'fetchArchives', 'fetchAccounts']),
+        async initMetadata() {
+            if (!this.archiveId ) return;
+            let archive = this.archives.find( archive => archive.id === this.archiveId );
+            if( !archive || !archive.metadata  || !archive.metadata.metadata.dc ) {
+                this.form = { metadata: { dc: {} } };
+                return;
+            }
+            let dc = JSON.parse( JSON.stringify( archive.metadata.metadata.dc ) );
+            this.form.metadata =  { dc };
+        },
+        async addMetadata(e){
             e.preventDefault();
 
-            let data = {
-                id: this.archiveId,
+            const data = {
+                archiveId: this.archiveId,
+                accountId: this.firstAccount.id,
                 metadata: this.form
-            }
-
-            this.addArchiveMetadata(data)
-
-
+            };
+            await this.addArchiveMetadata( data );
             this.successToast(
-                this.$t('settings.archives.toast.addingArchiveMeta'), 
+                this.$t('settings.archives.toast.addingArchiveMeta'),
                 this.$t('settings.archives.toast.addingArchiveMeta') + ' ' + this.archiveId
             );
-
             this.$emit('disableMetaForm');
-
         }
     }
-
-
 }
 </script>

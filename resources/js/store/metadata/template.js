@@ -1,35 +1,54 @@
-import axios from "axios";
+import { wrappers } from "@mixins/axiosWrapper";
+
+const ax = wrappers();
 
 const state = {
-    templates: [
-        /* TODO: These will go away when we integrate with the api */
-            {"id": "3bdcce12-4fc8-4c07-bada-e1418bff9465", "created_at": "2020-05-22", "metadata":{"dc":{"title":"Svalbard","creator":"a photographer","subject":"cold things","description":"brrr","publisher":"","contributor":"","date":"","type":"","format":"","identifier":"63ff83ef-862e-428f-9cc3-2040693d493e","source":"","language":"","relation":"","coverage":"","rights":""}}},
-            {"id": "870c6012-506f-4e47-8fbd-54c8b0dea6c0", "created_at": "2020-05-23", "metadata":{"dc":{"title":"Drammen","creator":"that guy", "subject": "awesome place", "description": "yay", "publisher": "", "contributor": "", "date": "", "type": "", "format": "", "identifier": "63ff83ef-862e-428f-9cc3-2040693d493e", "source": "", "language": "", "relation": "", "coverage": "", "rights": "" } } }
-        ],
-    templatePageMeta: null,
-    templateResponse: null,
-    schemes: null,
-    schemesPageMeta: null,
-    schemesResponse: null,
+    templates: [],
+    pageMeta: null,
+    templateError: null,
 }
 
 const getters = {
     templates: state => state.templates,
     templatePageMeta: state => state.pageMeta,
-    templateById: (state) => (id) => state.templates.find( template => template.id === id )
+    templateById: state => id => state.templates.find( template => template.id === id )
 }
 
 const actions = {
-    async addTemplate( {commit}, template ) {
-        //TODO: axios post to template api goes here
-        commit('addTemplateMutation', JSON.parse(JSON.stringify(template)));    /* Deep copy the fields */
-    }
+    async fetchTemplates( { commit }, queryString = "" ){
+        await ax.get(`/api/v1/ingest/metadata-template/${queryString}`)
+            .then( response =>
+                commit('setTemplatesMutation',response.data)
+            ).catch( error =>
+                commit( 'setTemplateError', error.response )
+            );
+    },
+    async addTemplate( { commit }, template ) {
+        await ax.post("/api/v1/ingest/metadata-template",
+            { 'metadata': template.metadata }
+        ).then( response => {
+            commit('addTemplateMutation', response.data.data )
+        }).catch( error => {
+            commit('setTemplateError',error.response)
+        });
+    },
 }
 
 const mutations = {
-    addTemplateMutation (state,template) {
-        state.templates = state.templates.concat(template);
-    }
+
+    addTemplateMutation ( state, template ) {
+        state.templates = state.templates.concat( template );
+    },
+
+    setTemplatesMutation ( state, templates ) {
+        state.templates = templates.data;
+        state.pageMeta = templates.meta;
+    },
+
+    setTemplateError( state, error ) {
+        state.templateError = error;
+        console.error( "Failed to update metadata templates: ", error );
+    },
 }
 
 export default {

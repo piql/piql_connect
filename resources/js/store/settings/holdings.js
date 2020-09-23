@@ -1,7 +1,6 @@
 
 const state = {
     holdings: []
-
 }
 
 const getters = {
@@ -35,8 +34,8 @@ const mutations = {
         state.holdings.push(data);
     },
     addHoldingMetaMutation: (state, data) => {
-        let holding = state.holdings.filter(holding => holding.id === data.id);
-        holding[0].metadata = data.metadata.metadata
+        let holding = state.holdings.find(holding => holding.id === data.id) || {};
+        holding.metadata = data.metadata.metadata
 
         state.holdings.forEach(a => {
             if(a.id == data.id){

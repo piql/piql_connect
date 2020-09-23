@@ -62,7 +62,6 @@ class MetadataTemplateController extends Controller
             "owner" => Auth::user(),
             "modified_by" => Auth::id()
         ]);
-
         return new MetadataResource( $template );
     }
 
