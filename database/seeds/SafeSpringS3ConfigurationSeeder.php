@@ -35,7 +35,7 @@ class SafeSpringS3ConfigurationSeeder extends Seeder
         $owner = User::where('username','kare')->first()
             ?? User::first()
             ?? factory(App\User::class)->create([
-                "account" => Account::get()->first()->uuid
+                "account_uuid" => Account::first()->uuid
             ]);
         StorageLocation::create([
             'owner_id' => $owner->id,

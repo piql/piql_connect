@@ -57,6 +57,11 @@ class Account extends Model
         return $this->hasMany('App\Archive', 'account_uuid', 'uuid');
     }
 
+    public function users()
+    {
+        return $this->hasMany('App\User', 'account_uuid', 'uuid');
+    }
+
     public function setDefaultMetadataTemplateAttribute( Array $value )
     {
         if( array_has( $value, 'dc' ) ) { //TODO: Support other schemas than DC

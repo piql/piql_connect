@@ -23,7 +23,7 @@ class ChartControllerTest extends TestCase
             'password' => 'notinuse',
             'full_name' => 'BagApi TestUser',
             'email' => 'bagapitestuser@localhost',
-            'account' => $account->uuid,
+            'account_uuid' => $account->uuid,
         ]);
 
         Passport::actingAs($this->testUser);
