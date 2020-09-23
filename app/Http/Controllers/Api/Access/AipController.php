@@ -170,7 +170,7 @@ class AipController extends Controller
         $aip = Aip::find($request->aipId);
         $file = $aip->fileObjects()->findOrFail($request->fileId);
         return response()->streamDownload(function () use( $storage, $aip, $file ) {
-            echo $storage->downloadStream( $aip->online_storage_location, $file->fullpath );
+            $stream = $storage->downloadStream( $aip->online_storage_location, $file->fullpath );
             fpassthru($stream);
         }, basename( $file->path ), [
             "Content-Type" => $file->mime_type,
