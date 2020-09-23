@@ -12,9 +12,7 @@
 										<button class="btn form-control-btn ml-3" @click="createTemplate($event.target)">
 												<i class="fas fa-plus mr-2"></i>{{$t('admin.metadata.createNewTemplate')}}
 										</button>
-										<button class="btn form-control-btn ml-3" @click="assignTemplate($event.target)">
-												<i class="fas fa-list-ol mr-2"></i>{{$t('admin.metadata.listCurrentAssignments')}}
-										</button>
+										
 								</div>
 						</div>
 
