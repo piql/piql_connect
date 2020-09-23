@@ -11,10 +11,10 @@
                 {{fileSize}}
             </div>
             <div class="col-2 d-inline text-center align-self-center">
-                <a class="m-auto cursorPointer" @click.once="showMetadata" data-toggle="tooltip" title="Edit metadata"><i class="fas fa-tags actionIcon text-center"></i></a>
-                <a v-if="isPreparingDownload" class="m-auto cursorPointer" data-toggle="tooltip" title="Download file"><i class="fa fa-spinner fa-spin actionIcon text-center"></i></a>
-                <a v-else class="m-auto cursorPointer downloadFile" @click.once="download" data-toggle="tooltip" title="Download file"><i class="fas fa-file-download actionIcon text-center"></i></a>
-                <button class="btn-tiny m-auto previewButton" @click="preview" data-toggle="tooltip" title="Preview image"><i class="fas fa-eye actionIcon"></i></button>
+                <a class="m-auto cursorPointer" @click.once="showMetadata" data-toggle="tooltip" :title="$t('access.tip.editMetadata')"><i class="fas fa-tags actionIcon text-center"></i></a>
+                <a v-if="isPreparingDownload" class="m-auto cursorPointer" data-toggle="tooltip" :title="$t('access.tip.downloadFile')"><i class="fa fa-spinner fa-spin actionIcon text-center"></i></a>
+                <a v-else class="m-auto cursorPointer downloadFile" @click.once="download" data-toggle="tooltip" :title="$t('access.tip.downloadFile')"><i class="fas fa-file-download actionIcon text-center"></i></a>
+                <button class="btn-tiny m-auto previewButton" @click="preview" data-toggle="tooltip" :title="$t('access.tip.previewImage')"><i class="fas fa-eye actionIcon"></i></button>
             </div>
             <div class="col-sm-1"></div>
         </div>

@@ -10,7 +10,7 @@
 
                 <div class="card" :title="$t('upload.addFileButtonToolTip')">
                     <div class="card-header">
-                        <b><i class="fa fa-upload"></i> INGEST UPLOAD FORM</b>
+                        <b><i class="fa fa-upload"></i> {{$t('upload.form.title')}}</b>
                     </div>
                     <div class="card-body">
 
@@ -64,7 +64,7 @@
                     <div class="card-header">
                         <div class="row">
                             <div class="col-md-6">
-                                <b><i class="fa fa-folder-open"></i>  UPLOADED ( {{ sortedFilesUploading.length }} files)</b>
+                                <b><i class="fa fa-folder-open"></i>  {{$t('upload.fileListTitle')}} ( {{ sortedFilesUploading.length }} {{$t('upload.fileListTitle.files')}})</b>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">

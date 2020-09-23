@@ -95,40 +95,40 @@
                     <div class="card-header card-background">
                         <ul class="nav nav-tabs card-header-tabs">
                         <li class="nav-item">
-                            <a class="nav-link l1" @click.prevent="displayGraph(1)" href="#">Archival Packages Ingested</a>
+                            <a class="nav-link l1" @click.prevent="displayGraph(1)" href="#">{{$t('dashboard.tab.packageIngested')}}</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link l2" @click.prevent="displayGraph(2)" href="#">Data Ingested</a>
+                            <a class="nav-link l2" @click.prevent="displayGraph(2)" href="#">{{$t('dashboard.tab.dataIngested')}}</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link l3" @click.prevent="displayGraph(3)" href="#">Archival Packages Accessed</a>
+                            <a class="nav-link l3" @click.prevent="displayGraph(3)" href="#">{{$t('dashboard.tab.packagesAccessed')}}</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link l4" @click.prevent="displayGraph(4)" href="#">Data Accessed</a>
+                            <a class="nav-link l4" @click.prevent="displayGraph(4)" href="#">{{$t('dashboard.tab.dataAccessed')}}</a>
                         </li>
                         </ul>
                     </div>
                     <div class="card-body g1">
-                        <h5 class="card-title">Monthly</h5>
+                        <h5 class="card-title">{{$t('dashboard.tab.monthly')}}</h5>
                     
                     <line-chart class="graphs" :title="$t('dashboard.graphs.monthlyOnlineAIPsIngested')"
                     url="/api/v1/stats/charts/aips/online/ingested/monthly"
                     :labels="monthNames" />
                     </div>
                     <div class="card-body g2">
-                        <h5 class="card-title">Monthly</h5>
+                        <h5 class="card-title">{{$t('dashboard.tab.monthly')}}</h5>
                         <line-chart class="graphs" :title="$t('dashboard.graphs.monthlyOnlineDataIngested')"
                     url="/api/v1/stats/charts/data/online/ingested/monthly"
                     :labels="monthNames" />
                     </div>
                     <div class="card-body g3">
-                        <h5 class="card-title">Monthly</h5>
+                        <h5 class="card-title">{{$t('dashboard.tab.monthly')}}</h5>
                          <line-chart class="graphs" :title="$t('dashboard.graphs.monthlyOnlineAIPsAccessed')"
                     url="/api/v1/stats/charts/aips/online/accessed/monthly"
                     :labels="monthNames" />
                     </div>
                     <div class="card-body g4">
-                        <h5 class="card-title">Monthly</h5>
+                        <h5 class="card-title">{{$t('dashboard.tab.monthly')}}</h5>
                         <line-chart class="graphs" :title="$t('dashboard.graphs.monthlyOnlineDataAccessed')"
                     url="/api/v1/stats/charts/data/online/accessed/monthly"
                     :labels="monthNames"/>

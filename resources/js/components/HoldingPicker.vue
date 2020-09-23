@@ -3,7 +3,7 @@
         <label v-if="showLabel" for="holdingPicker" class="col-form-label-sm">
             {{label}}
         </label>
-        <select v-model="selection" :id="elementId" class="form-control" data-live-search="true" >
+        <select v-model="selection" :id="elementId" class="form-control" data-live-search="true" :data-none-selected-text="$t('nothingSelected')">
             <option v-for="holding in holdingsWithWildcard" :key="holding.id" v-bind:value="holding.uuid">
                 {{holding.title}}
             </option>
