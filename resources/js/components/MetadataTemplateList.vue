@@ -20,7 +20,7 @@
 
                     <td class="align-self-center text-center">
                         <a class="ml-2 mr-2 btn btn-xs text-white"
-                            @click="cloneTemplate(template.id)" :title="$t('admin.account.metadata.template.clone')" >
+                            @click="cloneTemplate(template.id)" data-toggle="tooltip" :title="$t('admin.account.metadata.template.clone')" >
                             <i class="fas fa-clone"></i></a>
                         <a class="ml-2 mr-2 btn btn-xs text-white"
                             @click="assignTemplate(template)" :title="$t('admin.account.metadata.template.assign')" >
