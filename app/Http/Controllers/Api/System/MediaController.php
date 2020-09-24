@@ -13,21 +13,18 @@ use Log;
 
 class MediaController extends Controller {
     public function showDipFile(Request $request, ArchivalStorageInterface $storage) {
-        $dipId = $request->dipId;
-        $fileId = $request->fileId;
-        $filePath = 'tmp/'.$dipId.'-'.$fileId.'-'.md5($dipId.'-'.$fileId).'.media.tmp';
-        $fileFullPath = Storage::path($filePath);
-        if (!file_exists($fileFullPath)) {
-            $dip = Dip::find( $dipId );
-            $fileObj = $dip->fileObjects->find($fileId);
-            Storage::disk('local')->put($filePath, $storage->stream($dip->storage_location, $fileObj->fullpath));
-        }
-        $stream = new VideoStreamHelper($fileFullPath);
+        $dip = Dip::find($request->dipId);
+        $fileObj = $dip->fileObjects->find($request->fileId);
+        $streamResource = $storage->downloadStream($dip->storage_location, $fileObj->fullpath);
+        $stream = new VideoStreamHelper($streamResource);
         $stream->start();
         return null;
     }
+
     public function thumb($fileName, FilePreviewInterface $filePreview) {
-        $iconPath = $filePreview->getCustomIcon($fileName);
-        return response(\File::get($iconPath))->header("Content-Type" , \File::mimeType($iconPath));
+        $icon = $filePreview->getCustomIcon($fileName);
+        return response()->stream( function () use( $icon ) {
+            fpassthru($icon);
+        }, 200, ["Content-Type" , $filePreview->getMimeType()]);
     }
 }

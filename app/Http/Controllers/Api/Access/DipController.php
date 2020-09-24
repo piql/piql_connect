@@ -93,8 +93,10 @@ class DipController extends Controller
         $dip = Dip::find( $request->dipId );
         $file = $this->filter_package_thumbnail($dip, $filePreview);
         $filePreview->storage($storage)->dip($dip)->fileObject($file);
-        return response($filePreview->getContent(true))
-        ->header("Content-Type" , $filePreview->getMimeType());
+        return response()->stream( function () use( $filePreview ) {
+            $stream = $filePreview->getContent(true);
+            fpassthru($stream);
+        }, 200, ["Content-Type" , $filePreview->getMimeType()]);
     }
 
     public function package_preview( Request $request, ArchivalStorageInterface $storage )
@@ -104,8 +106,10 @@ class DipController extends Controller
             return Str::contains( $file->fullpath, '/objects' );
         })->first();
 
-        return response($storage->stream( $dip->storage_location, $file->fullpath ))
-            ->header("Content-Type" , "image/jpeg");
+        return response()->stream( function () use( $dip, $file ) {
+            $stream = $storage->downloadStream( $dip->storage_location, $file->fullpath );
+            fpassthru($stream);
+        }, 200, ["Content-Type" , "image/jpeg"]);
     }
 
     public function files( Request $request )
@@ -140,7 +144,7 @@ class DipController extends Controller
             }
 
             $storage = \App::make(\App\Interfaces\ArchivalStorageInterface::class );
-            $metsFile =  $storage->stream( $dip->storage_location, $metsFileObject->fullpath );
+            $metsFile =  $storage->downloadContent( $dip->storage_location, $metsFileObject->fullpath );
 
             Cache::put($metsFileName, $metsFile, 60);
         }
@@ -171,8 +175,10 @@ class DipController extends Controller
 
         $filePreview->storage($storage)->dip($dip)->fileObject($file);
 
-        return response($filePreview->getContent())
-        ->header("Content-Type" , $filePreview->getMimeType());
+        return response()->stream( function () use( $filePreview ) {
+            $stream = $filePreview->getContent();
+            fpassthru($stream);
+        }, 200, ["Content-Type" , $filePreview->getMimeType()]);
     }
 
     public function file_download( ArchivalStorageInterface $storage, Request $request )
@@ -181,7 +187,8 @@ class DipController extends Controller
         $file = $dip->fileObjects->find( $request->fileId );
 
         return response()->streamDownload( function () use( $storage, $dip, $file ) {
-            echo $storage->stream( $dip->storage_location, $file->fullpath );
+            $stream = $storage->downloadStream( $dip->storage_location, $file->fullpath );
+            passthru($stream);
         }, basename( $file->path ), [
             "Content-Type" => "application/octet-stream",
             "Content-Disposition" => "attachment; { $file->filename }"
@@ -213,8 +220,10 @@ class DipController extends Controller
         $file = $dip->fileObjects->find( $request->fileId );
         $thumbnail = $this->filter_file_thumbnail($dip, $file, $filePreview);
         $filePreview->storage($storage)->dip($dip)->fileObject($thumbnail);
-        return response($filePreview->getContent(true))
-        ->header("Content-Type" , $filePreview->getMimeType());
+        return response()->stream( function () use( $filePreview ) {
+            $stream = $filePreview->getContent(true);
+            fpassthru($stream);
+        }, 200, ["Content-Type" , $filePreview->getMimeType()]);
     }
 
 
