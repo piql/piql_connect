@@ -85,6 +85,7 @@ class StatisticsData
 
     private function monthlyOnlineAccessed($date, $userId)
     {
+        // Online access is not logged at the moment, revisit after 1.0 release
         // $data = IngestedDataOnline::where('owner', $userId)
         //         ->whereBetween('ingest_date', [
         //                 new DateTime('first day of ' . $date->format('Y-m')),
@@ -101,6 +102,7 @@ class StatisticsData
 
     private function monthlyOfflineAccessed($date, $userId)
     {
+        // Offline access is not enabled yet
         // $data = IngestedDataOnline::where('owner', $userId)
         //         ->whereBetween('ingest_date', [
         //                 new DateTime('first day of ' . $date->format('Y-m')),

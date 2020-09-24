@@ -11,6 +11,8 @@ use App\Aip;
 use App\FileObject;
 use Log;
 use App\User;
+use App\Stats\IngestedDataOnline;
+use App\Job;
 
 class UserStatsController extends Controller
 {
@@ -32,49 +34,18 @@ class UserStatsController extends Controller
             return response()->json([ 'error' => 401, 'message' => 'Access to user statistics is restricted' ], 401);
         }
 
-        $infoArray['onlineDataIngested'] = $this->onlineDataIngested( $currentUser );
-        $infoArray['offlineDataIngested'] = $this->offlineDataIngested( $currentUser );
-        $infoArray['onlineAIPsIngested'] = $this->onlineAIPsIngested( $currentUser );
-        $infoArray['offlineAIPsIngested'] = $this->offlineAIPsIngested( $currentUser );
-        $infoArray['offlineReelsCount'] = $this->offlineReelsCount( $currentUser );
-        $infoArray['offlinePagesCount'] = 0; //TODO: Visuals on film will not be implemented in 1.0
-        $infoArray['offlineAIPsRetrieved'] = 0; //TODO: Retrieval from film will not be implemented in 1.0
-        $infoArray['offlineDataRetrieved'] = 0;  //TODO: Retrieval from film will not be implemented in 1.0
+        $infoArray = [
+            'onlineDataIngested'   => IngestedDataOnline::where('owner', $currentUser->id)->sum('size'),
+            'offlineDataIngested'  => 0,    //TODO: [DUMMY] Replace with a proper query
+            'onlineAIPsIngested'   => Aip::where('owner',$currentUser->id)->count(),
+            'offlineAIPsIngested'  => 0,    //TODO: [DUMMY] Replace with a proper query
+            'offlineReelsCount'    => Job::where(['owner'=>$currentUser->id,'status'=>'stored'])->count(),
+            'offlinePagesCount'    => 0,    //TODO: Visuals on film will not be implemented in 1.0
+            'offlineAIPsRetrieved' => 0,    //TODO: Retrieval from film will not be implemented in 1.0
+            'offlineDataRetrieved' => 0     //TODO: Retrieval from film will not be implemented in 1.0
+        ];
 
         return new UserStatsResource( $infoArray );
-    }
-
-    //TODO: Potentially expensive query, consider using mongoDB for this
-    private function onlineDataIngested($user)
-    {
-        return FileObject::where("storable_type", 'App\Aip')
-            ->where('path','NOT LIKE','%/data/objects/metadata/%')
-            ->where('path','NOT LIKE','%/data/objects/submissionDocumentation/%')
-            ->where('path','LIKE','%/data/objects%')
-            ->sum('size');
-    }
-
-    private function offlineDataIngested($user)
-    {
-        //TODO: [DUMMY] Replace with a proper query
-        return 0;
-    }
-
-    private function onlineAIPsIngested($user)
-    {
-        return Aip::count();
-    }
-
-    private function offlineAIPsIngested($user)
-    {
-        //TODO: [DUMMY] Replace with a proper query
-        return 0;
-    }
-
-    private function offlineReelsCount($user)
-    {
-        //TODO: [DUMMY] Replace with a proper query
-        return 0;
     }
 
 }
