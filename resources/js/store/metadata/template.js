@@ -16,7 +16,7 @@ const getters = {
 
 const actions = {
     async fetchTemplates( { commit }, queryString = "" ){
-        await ax.get(`/api/v1/ingest/metadata-template/${queryString}`)
+        await ax.get(`/api/v1/metadata/admin/templates/${queryString}`)
             .then( response =>
                 commit('setTemplatesMutation',response.data)
             ).catch( error =>
@@ -24,7 +24,7 @@ const actions = {
             );
     },
     async addTemplate( { commit }, template ) {
-        await ax.post("/api/v1/ingest/metadata-template",
+        await ax.post("/api/v1/metadata/admin/templates",
             { 'metadata': template.metadata }
         ).then( response => {
             commit('addTemplateMutation', response.data.data )

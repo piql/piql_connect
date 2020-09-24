@@ -18,7 +18,7 @@ const getters = {
 
 const actions = {
     async fetchAccounts( { commit }, queryString = "" ) {
-        await ax.get( `/api/v1/ingest/account/${queryString}` )
+        await ax.get( `/api/v1/metadata/admin/accounts/${queryString}` )
             .then( response =>
                 commit('setAccountsMutation',response.data )
             ).catch( error =>

@@ -1,5 +1,6 @@
 <template>
     <div class="w-100">
+        <archive-metadata :archiveId="archiveId"/>
         <page-heading icon="fa-archive" :title="$t('settings.archives.title')" :ingress="$t('settings.archives.description')" />
         <div class="card">
             <div class="card-header">
@@ -7,7 +8,6 @@
                 <button v-else class="btn" @click="newArchiveForm"><i class="fa fa-plus"></i> {{$t('settings.archives.add')}}</button>
             </div>
             <div class="card-body">
-                <archive-metadata v-show="enableMetaForm" :archiveId="archiveId" @disableMetaForm='disableMetaForm' />
                 <archives-listing v-show="!enableMetaForm" @assignMeta='assignMeta' />
             </div>
         </div>
@@ -20,35 +20,36 @@ export default {
     data() {
         return {
             enableMetaForm: false,
-            selectedArchiveId: null,
+            selectedArchiveId: 0,
         }
     },
+    async mounted() {
+        await this.fetchAccounts();
+        await this.fetchArchives( this.firstAccount.id ); //TODO: Actual account handling
+    },
     computed: {
-        ...mapGetters(['templates', 'templateById', 'accountById','metadataByArchiveId']),
+        ...mapGetters(['templates', 'templateById', 'firstAccount']),
         archiveId: {
             get: function(){
-                return this.selectedArchiveId;
+                return this.selectedArchiveId || 0;
             },
             set: function( value ) {
                 this.selectedArchiveId = value;
             }
         },
-        editThisMetadata() {
-            return this.metadataByArchiveId( this.archiveId );
-        },
     },
     methods: {
-        ...mapActions(['fetchArchives']),
+        ...mapActions(['fetchArchives', 'fetchAccounts']),
         newArchiveForm(){
             this.$router.push({ name:'settings.admin.archives.create'});
         },
         async assignMeta( archiveId ){
             this.archiveId = archiveId;
             await Vue.nextTick();
-            this.enableMetaForm = true;
+            this.$bvModal.show( "edit-archive-metadata" );
         },
         disableMetaForm(){
-            this.enableMetaForm = false;
+            this.$bvModal.hide( "edit-archive-metadata" );
         }
     }
 

@@ -1,40 +1,60 @@
 <template>
     <div>
-        <b-form @submit="addMetadata">
-
-            <div class="form-group">
-                <label>{{$t('settings.archives.template')}}</label>
-                <select class="form-control" v-model="selection">
-                    <option v-for="template in listTemplates" :key="template.id" :value="template.id">
+        <b-modal id="edit-archive-metadata"
+            size="xl" :centered=true
+            :title="$t('admin.metadata.template.edit.title')"
+            :header-class="['d-ruby','text-center']"
+            :no-fade=true title-class="h3"
+            :ok-title="$t('settings.archives.assignMeta')"
+            :cancel-title="$t('admin.metadata.template.edit.cancelButton')"
+            @ok="updateDefaultMetadataTemplate"
+            @cancel="cancelUpdate"
+        >
+            <template v-slot:modal-header>
+                <b-dropdown id="templateSelector" ref="templateSelector" text="Select from templates">
+                    <b-dropdown-header>
+                        Replace current fields with fields from template.
+                    </b-dropdown-header>
+                    <b-dropdown-item-button v-for="template in templates" :key="template.id" @click="selectTemplate(template.id)">
                         {{ template.metadata.dc.title }}
-                    </option>
-                </select>
-            </div>
+                    </b-dropdown-item-button>
+                        <!--b-form-group class="w-100" :label="$t('settings.archives.template')" for="templateSelector" >
+                            <b-form-select v-for="template in templates" :key="template.id" :value="template.id">
+                                {{ template.metadata.dc.title }}
+                            </b-form-input>
+                        </b-form-group-->
+                </b-dropdown>
+            </template>
 
-            <b-form-group v-for="schemeItem in schemes[0].fields" 
-            :key="schemeItem.id" :id="schemeItem.label.toLowerCase()" 
-            :label="schemeItem.label" :label-for="schemeItem.label.toLowerCase()">
-                <b-form-input v-if="schemeItem.name === 'identifier'"
-                :id="schemeItem.label.toLowerCase()"
-                class="mb-4"
-                v-model="form.metadata[schemeItem.name]"
-                :type="schemeItem.type"
-                :disabled='true'
-                
-                ></b-form-input>
-
-                <b-form-input v-else
-                :id="schemeItem.label.toLowerCase()"
-                class="mb-4"
-                v-model="form.metadata[schemeItem.name]"
-                :type="schemeItem.type"
-                >
-                </b-form-input>
+        <b-form v-if="archive">
+            <b-form-group
+                key="identifier" id="identifier"
+                label="Identifier" label-for="identifier">
+                <b-form-input
+                    id="identifier"
+                    class="mb-4"
+                    v-model="defaultMetadataTemplate.dc.identifier"
+                    type="text"
+                    :disabled='true' />
             </b-form-group>
-            <b-button type="submit" variant="primary">{{$t('settings.archives.assignMeta')}}</b-button>
+
+
+            <b-form-group v-if="schemeItem.name !== 'identifier'" v-for="schemeItem in schemes[0].fields"
+                :key="schemeItem.id" :id="schemeItem.label.toLowerCase()"
+                :label="schemeItem.label" :label-for="schemeItem.label.toLowerCase()">
+                <b-form-input
+                    :id="schemeItem.label.toLowerCase()"
+                    class="mb-4"
+                    v-model="archive.defaultMetadataTemplate.dc[schemeItem.name]"
+                    :type="schemeItem.type" />
+
+            </b-form-group>
+
+
 
         </b-form>
 
+    </b-modal>
     </div>
 </template>
 
@@ -55,6 +75,8 @@ export default {
                         "type": "Dublin Core v1.1",
                         "fields":
                         [
+                            {"name" : "title",       "label" : "Title",       "type": "text"},
+                            {"name" : "description", "label" : "Description", "type": "text"},
                             {"name" : "creator",     "label" : "Creator",     "type": "text"},
                             {"name" : "subject",     "label" : "Subject",     "type": "text"},
                             {"name" : "publisher",   "label" : "Publisher",   "type": "text"},
@@ -76,78 +98,57 @@ export default {
     },
     data(){
         return {
-            form: {"metadata": {}},
-            selection: ''
+            selectedTemplate: '',
+            archive: { 'defaultMetadataTemplate': {'dc': {}}},
+            backup:  { 'defaultMetadataTemplate': {'dc': {}}},
         }
     },
-    watch:{
-        selection(val){
-            if(val && val != ''){
-                //when selction changes, we prefill the metadata
-                let template = this.templates.filter(single => single.id === val);
-                let data = { 
-                    id: this.archiveId,
-                    metadata:  {
-                        metadata: template[0].metadata.dc
-                    } 
-                };
-
-                this.addArchiveMetadata(data);
-                //after adding, prefill the  form
-                let archive = this.retrievedArchives.filter(single => single.id === this.archiveId)
-                if(archive[0].metadata){
-                    this.form.metadata = archive[0].metadata;
-
-                }
-
-            }else{
-                this.form.metadata = {}
-                
-            }
-
-        }
-
+    async mounted() {
+        await this.fetchTemplates();
     },
     watch: {
-        'archiveId': 'initMetadata',
-    },
-    async mounted(){
-        await this.fetchAccounts();
-        await this.fetchArchives( this.firstAccount.id ); //TODO: Actual account handling
+        archiveId( id ) {
+            this.archive = this.archiveById( this.archiveId );
+            this.backup = JSON.parse(JSON.stringify( this.archive ));
+        }
     },
     computed: {
-        ...mapGetters(['accounts','archives']),
-        firstAccount(){
-            return this.accounts[0] || 0;
+        ...mapGetters(['archives', 'archiveById', 'firstAccount', 'templates', 'templateById']),
+        defaultMetadataTemplate: {
+            get(){
+                return this.archive.defaultMetadataTemplate;
+            },
+            set( template ) {
+                this.archive.defaultMetadataTemplate = template;
+            }
         },
     },
     methods: {
-        ...mapActions(['addArchiveMetadata', 'fetchArchives', 'fetchAccounts']),
-        async initMetadata() {
-            if (!this.archiveId ) return;
-            let archive = this.archives.find( archive => archive.id === this.archiveId );
-            if( !archive || !archive.metadata  || !archive.metadata.metadata.dc ) {
-                this.form = { metadata: { dc: {} } };
-                return;
-            }
-            let dc = JSON.parse( JSON.stringify( archive.metadata.metadata.dc ) );
-            this.form.metadata =  { dc };
-        },
-        async addMetadata(e){
-            e.preventDefault();
+        ...mapActions(['updateArchiveMetadata', 'fetchArchives', 'fetchAccounts', 'fetchTemplates']),
 
-            const data = {
-                archiveId: this.archiveId,
+        selectTemplate( templateId ) {
+            let template = JSON.parse( JSON.stringify( this.templateById( templateId ) ) );
+            this.archive.defaultMetadataTemplate.dc = template.metadata.dc;
+        },
+        async cancelUpdate(){
+            this.archive = JSON.parse(JSON.stringify(this.backup));
+        },
+        async updateDefaultMetadataTemplate(){
+            const payload = {
                 accountId: this.firstAccount.id,
-                metadata: this.form
+                archive: this.archive
             };
-            await this.addArchiveMetadata( data );
-            this.successToast(
-                this.$t('settings.archives.toast.addingArchiveMeta'),
-                this.$t('settings.archives.toast.addingArchiveMeta') + ' ' + this.archiveId
-            );
-            this.$emit('disableMetaForm');
-        }
+            this.updateArchiveMetadata( payload ).then( result => {
+                this.backup = JSON.parse(JSON.stringify( this.archive ));
+                this.successToast(
+                    this.$t('settings.archives.toast.addingArchiveMeta'),
+                    this.$t('settings.archives.toast.addingArchiveMeta') + ' ' + this.archiveId
+                );
+                this.$emit('disableMetaForm');
+            }).catch( error => {
+                console.error(error);
+            });
+        },
     }
 }
 </script>

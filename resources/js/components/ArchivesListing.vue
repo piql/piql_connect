@@ -29,17 +29,6 @@
         </tbody>
     </table>
 
-    <b-modal id="delete-archive" hide-footer>
-        <template v-slot:modal-title>
-            <h4> <b>{{$t('settings.archives.delete').toUpperCase()}}[ {{ archive.title.toUpperCase() }} ]</b></h4>
-        </template>
-        <div class="d-block">
-            <b-alert show variant="warning">{{$t('settings.archives.deleteWarning')}}</b-alert>
-        </div>
-        <b-button class="mt-3" block @click="deleteArchive">
-            <i class="fa fa-trash"></i> {{$t('settings.archives.delete').toUpperCase()}}</b-button>
-    </b-modal>
-
     <b-modal id="edit-archive" size="lg" hide-footer>
         <template v-slot:modal-title>
         <h4> <b>{{$t('settings.archives.edit').toUpperCase()}} [ {{ archive.title.toUpperCase() }} ]</b></h4>
@@ -130,7 +119,7 @@ export default {
         },
     },
     methods: {
-        ...mapActions(['fetchAccounts', 'fetchArchives','addArchive','editArchiveData','deleteArchiveData']),
+        ...mapActions(['fetchAccounts', 'fetchArchives','addArchive','editArchiveData']),
         assignMeta(id) {
             this.$emit('assignMeta', id);
         },

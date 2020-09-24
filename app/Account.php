@@ -62,12 +62,12 @@ class Account extends Model
         return $this->hasMany('App\User', 'account_uuid', 'uuid');
     }
 
-    public function setDefaultMetadataTemplateAttribute( Array $value )
+    public function setDefaultMetadataTemplateAttribute( Array $template )
     {
-        if( array_has( $value, 'dc' ) ) { //TODO: Support other schemas than DC
-            $original = $this->defaultMetadataTemplate ?? json_decode( self::DEFAULT_TEMPLATE );
-            $this->defaultMetadataTemplate = ["dc" => $value["dc"] + $original["dc"] ];
+        if( array_has( $template, 'dc' ) ) { //TODO: Support other schemas than DC, model level validation would be nice
+            $this->attributes['defaultMetadataTemplate'] = json_encode( $template['dc']);
         }
     }
+
 
 }

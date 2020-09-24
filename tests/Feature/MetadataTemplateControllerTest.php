@@ -26,7 +26,7 @@ class MetadataTemplateControllerTest extends TestCase
             "modified_by" => $this->user->id,
             "metadata" => ["dc" => ["title" => "The best show ever!"]]
         ]);
-        $this->metadata->owner()->associate($this->user);
+        $this->metadata->owner()->associate($this->user->account);
         $this->metadata->save();
     }
 

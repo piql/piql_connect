@@ -3,6 +3,13 @@ import axios from 'axios';
 /* Wrap axios in a function that will retry on timouts and handle auth gracefully */
 //TODO: Redirect to the correct auth page on authentication failure.
 
+const defaultOptions = {
+    headers: {
+        'Content-Type': "application/json",
+        'Accept': "application/json",
+    }
+}
+
 const axiosWrapper = async function(call, url, data, options, retries = 5 ) {
     if( !axios[call] ){
         const error = `No method exists for attempted axios call: ${call}`;
@@ -13,7 +20,7 @@ const axiosWrapper = async function(call, url, data, options, retries = 5 ) {
     let response;
     while( retries-- > 0 ){
         try {
-            let params = [url, data, options];
+            let params = [url, data, {...options, ...defaultOptions}];
             return await axios[call](...params);
         } catch( error ) {
             if ( error.code === 'ECONNABORTED' || error.response.status === 408 ) { // Request timed out
