@@ -187,7 +187,7 @@ class DipController extends Controller
         $file = $dip->fileObjects->find( $request->fileId );
 
         return response()->streamDownload( function () use( $storage, $dip, $file ) {
-            echo $storage->downloadStream( $dip->storage_location, $file->fullpath );
+            $stream = $storage->downloadStream( $dip->storage_location, $file->fullpath );
             passthru($stream);
         }, basename( $file->path ), [
             "Content-Type" => "application/octet-stream",
