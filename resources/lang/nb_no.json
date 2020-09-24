@@ -151,7 +151,6 @@
     "ingest.taskList.size": "Størrelse",
 
     "ingest.offlineStorage.status.title": "Status for langtidslagring",
-    "ingest.offlineStorage.ingress": "Send arkivpakker til piqlFilm for langtidslagring",
     "ingest.offlineStorage.status.ingress": "Vis status for arbeidsflyt for lagring på piqlFilm.",
     "ingest.offlineStorage.header": "Offline-lagring",
     "ingest.offlineStorage.ingress": "Vis arkivpakker som kan sendes til lagring på piqlFilm.",

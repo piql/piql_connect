@@ -151,7 +151,6 @@
     "ingest.taskList.ingestDate": "Ingest date",
     "ingest.taskList.size": "Size",
 
-    "ingest.offlineStorage.status.title": "Status for offline storage",
     "ingest.offlineStorage.ingress": "Send packages to piqlFilm for cold storage.",
     "ingest.offlineStorage.status.ingress": "Display the status of the archival workflow on piqlFilm",
     "ingest.offlineStorage.header": "Offline storage",

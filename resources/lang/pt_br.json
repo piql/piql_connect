@@ -151,7 +151,6 @@
     "ingest.taskList.size": "Tamanho",
 
     "ingest.offlineStorage.status.title": "Status para armazenamento no Film",
-    "ingest.offlineStorage.ingress": "Envie pacotes para o piqlFilm para armazenamento frio.",
     "ingest.offlineStorage.status.ingress": "Exibir o status do fluxo de trabalho de arquivamento no piqlFilm",
     "ingest.offlineStorage.header": "Armazenamento no Film",
     "ingest.offlineStorage.ingress": "Exiba os pacotes enviados para o armazenamento no piqlFilm. \n Adicione um nome ao seu pacote offline; esse nome identificará seu piqlFilm e permitirá rastrear esses dados até o armazenamento \n Opcionalmente, você pode adicionar metadados para fornecer contexto e descrever o pacote offline. No final, clique no botão 'Piql' para iniciar o processo de arquivamento no piqlFilm. \n",
