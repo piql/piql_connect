@@ -8,6 +8,7 @@ use App\Account;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Webpatser\Uuid\Uuid;
+use App\User;
 
 class AccountController extends Controller
 {
@@ -50,6 +51,19 @@ class AccountController extends Controller
     public function show(Account $account)
     {
         return new AccountResource( $account );
+    }
+
+    /**
+     * Display a specified Account by User uuuid
+     *
+     * @param string $uuid
+     * @return \Illuminate\Http\Response of AccountResource
+     */
+    public function showByUserUuid($uuid)
+    {
+        $user = User::find($uuid);
+        $account = $user ? Account::query()->where('uuid', $user->account)->first() : null;
+        return $account ? new AccountResource($account) : null;
     }
 
     /**

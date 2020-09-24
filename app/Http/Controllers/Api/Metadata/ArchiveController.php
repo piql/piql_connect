@@ -48,6 +48,18 @@ class ArchiveController extends Controller
     }
 
     /**
+     * Display the specified resource by uuid.
+     *
+     * @param  string  $uuid
+     * @return \Illuminate\Http\Response
+     */
+    public function showByUuid($uuid)
+    {
+        $archive = Archive::query()->where('uuid', $uuid)->first();
+        return $archive ? new ArchiveResource($archive) : null;
+    }
+
+    /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
