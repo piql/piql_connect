@@ -145,6 +145,9 @@ Route::group(['prefix' => 'v1', 'middleware' => ['auth']], function () {
     Route::group(['prefix' => 'metadata'], function () {
         Route::apiResource('archives', 'Api\Metadata\ArchiveController', ['as' => 'api.metadata']);
         Route::apiResource('archives.holdings', 'Api\Metadata\ArchiveHoldingController', ['as' => 'api.metadata']);
+        Route::get('holding/{uuid}', 'Api\Metadata\HoldingController@showByUuid');
+        Route::get('archive/{uuid}', 'Api\Metadata\ArchiveController@showByUuid');
+        Route::get('account/byUser/{id}', 'Api\Metadata\Admin\AccountController@showByUserUuid');
 
         Route::group(['prefix' => 'admin'], function() { //TODO: Admin guard must be applied to these routes
             Route::apiResource('templates',                  'Api\Metadata\Admin\MetadataTemplateController',      ['as' => 'admin.metadata']);
