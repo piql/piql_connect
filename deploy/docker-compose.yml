@@ -126,6 +126,7 @@ services:
       - ./logstash/java/libs:/etc/logstash/libs
       - ./logstash/conf.d:/etc/logstash/config-templates
       - ./logstash/init.sh:/etc/logstash/init.sh:ro
+      - ./logstash/logstash-output-mongodb-3.2.0.gem:/etc/logstash/logstash-output-mongodb-3.2.0.gem
       - ./logstash/config/logstash.yml:/usr/share/logstash/config/logstash.yml:ro
       - ./logstash/config/pipelines.yml:/usr/share/logstash/config/pipelines.yml:ro
     environment:
