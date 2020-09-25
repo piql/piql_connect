@@ -1,4 +1,4 @@
-import { wrappers } from "@mixins/axiosWrapper";
+import { wrappers } from "../../mixins/axiosWrapper";
 
 const ax = wrappers();
 
