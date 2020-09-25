@@ -81,8 +81,8 @@ class User extends Authenticatable
 
 
 	public function account()
-	{
-       return $this->hasOne('App\Account', 'uuid', 'account_uuid');
+    {
+		return \App\User::find( auth()->id() )->account();
     }
 
 }

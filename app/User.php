@@ -124,6 +124,6 @@ class User extends Authenticatable
 
     public function account()
     {
-        return $this->hasOne('App\Account', 'uuid', 'account_uuid');
+        return $this->belongsTo('App\Account', 'account_uuid');
     }
 }

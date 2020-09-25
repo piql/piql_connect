@@ -41,10 +41,9 @@ class MetadataTemplateController extends Controller
      */
     public function index(Request $request)
     {
-		$account = auth()->user()->account;
-        $metadata = MetadataTemplate::where('owner_id', $account->uuid );
+        //TODO: Fix the ownership stuff
         $limit = $request->limit ? $request->limit : env('DEFAULT_ENTRIES_PER_PAGE');
-        return MetadataResource::collection( $metadata->paginate( $limit ) );
+        return MetadataResource::collection( MetadataTemplate::paginate( $limit ) );
 
     }
 

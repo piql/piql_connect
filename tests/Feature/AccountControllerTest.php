@@ -14,13 +14,16 @@ class AccountControllerTest extends TestCase
 {
     use DatabaseTransactions;
 
+    private $account;
     private $user;
     private $faker;
 
     public function setUp() : void
     {
         parent::setUp();
+        $this->account = factory(Account::class)->create();
         $this->user = factory(User::class)->create();
+        $this->user->account()->associate( $this->account );
         Passport::actingAs( $this->user );
         $this->faker = Faker::create();
     }

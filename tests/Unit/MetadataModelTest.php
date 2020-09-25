@@ -7,6 +7,7 @@ use App\EventLogEntry;
 use App\File;
 use App\Metadata;
 use App\User;
+use App\Account;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Laravel\Passport\Passport;
 use Tests\TestCase;
@@ -14,6 +15,8 @@ use App\UserSetting;
 
 class MetadataModelTest extends TestCase
 {
+    private $account;
+    private $user;
 
     public function setUp() : void
     {
@@ -24,7 +27,9 @@ class MetadataModelTest extends TestCase
 
     public function test_associating_file_model_to_a_metadata_model()
     {
+        $this->account = factory(Account::class)->create();
         $this->user = factory(User::class)->create();
+        $this->user->account()->associate( $this->account );
         Passport::actingAs( $this->user );
 
         $bag = factory(Bag::class)->create([

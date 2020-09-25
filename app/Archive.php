@@ -84,11 +84,12 @@ class Archive extends Model
         }
 
         if(isset( $ar["dc"] ) && !isset( $ar["dc"]["title"] ) ) {
-            $ar["dc"]["title"] = $this->attributes["title"]; //The default is to use the uuid for the Archive as the identifier (as per spec.)
+            $ar["dc"]["title"] = $this->attributes["title"];    //Grab the title from the model if not present in metadata template
         }
 
         if(isset( $ar["dc"] ) && !isset( $ar["dc"]["description"] ) ) {
-            $ar["dc"]["description"] = $this->attributes["description"]; //The default is to use the uuid for the Archive as the identifier (as per spec.)
+            $ar["dc"]["description"] = $this->attributes["description"] ?? ""; //Grab the description from the model if not present in metadata template
+
         }
         return $ar;
     }

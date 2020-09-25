@@ -40,7 +40,7 @@ class Holding extends Model
                 $model->uuid = Str::uuid();
             }
 
-            $userSuppliedData = $model->defaultMetadataTemplate["dc"];
+            $userSuppliedData = $model->defaultMetadataTemplate["dc"] ?? [];
             $model->defaultMetadataTemplate = ["dc" => ["identifier" => $model->uuid ] + $userSuppliedData ] ;
         });
     }
@@ -159,11 +159,28 @@ class Holding extends Model
         return $this->parent()->with('ancestor');
     }
 
-    public function setDefaultMetadataTemplateAttribute( Array $value )
-    {
+    public function getDefaultMetadataTemplateAttribute( string $template ) {
+        $ar = json_decode( $template, true );
+        if(isset( $ar["dc"] ) && !isset( $ar["dc"]["identifier"] ) ) {
+            $ar["dc"]["identifier"] = $this->attributes["uuid"]; //The default is to use the uuid for the Archive as the identifier (as per spec.)
+        }
+
+        if(isset( $ar["dc"] ) && !isset( $ar["dc"]["title"] ) ) {
+            $ar["dc"]["title"] = $this->attributes["title"];    //Grab the title from the model if not present in metadata template
+
+        }
+
+        if(isset( $ar["dc"] ) && !isset( $ar["dc"]["description"] ) ) {
+            $ar["dc"]["description"] = $this->attributes["description"] ?? ""; //Grab the description from the model if not present in metadata template
+        }
+        return $ar;
+    }
+
+    public function setDefaultMetadataTemplateAttribute( Array $template ) {
         if( array_has( $template, 'dc' ) ) { //TODO: Support other schemas than DC, model level validation would be nice
-            $this->attributes['defaultMetadataTemplate'] = json_encode( $template['dc']);
+            $this->attributes['defaultMetadataTemplate'] = json_encode( $template );
         }
     }
+
 }
 
