@@ -22,6 +22,7 @@ class UserResource extends JsonResource
             "created_at" => $this->created_at,
             "updated_at" => $this->updated_at,
             "disabled" => $this->disabled_on != null,
+            "account_uuid" => $this->account_uuid,
         ];
     }
 }

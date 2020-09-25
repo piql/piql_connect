@@ -59,11 +59,13 @@ class AccountController extends Controller
      * @param string $uuid
      * @return \Illuminate\Http\Response of AccountResource
      */
-    public function showByUserUuid($uuid)
+    public function showByUuid($uuid)
     {
-        $user = User::find($uuid);
-        $account = $user ? Account::query()->where('uuid', $user->account)->first() : null;
-        return $account ? new AccountResource($account) : null;
+        $account = Account::query()->where('uuid', $uuid)->first();
+        if ($account == null) {
+            return response(['message' => __('No accounts found')], 404);
+        }
+        return new AccountResource($account);
     }
 
     /**
