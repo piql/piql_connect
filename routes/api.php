@@ -35,6 +35,10 @@ Route::group(['prefix' => 'v1', 'middleware' => ['auth']], function () {
         Route::get('languages', 'Api\System\SystemController@languages');
         Route::get('system/session-lifetime', 'Api\System\SystemController@sessionLifetime');
         Route::get('users/me', 'Api\Users\SelfServiceController@me');
+
+        Route::post('profile/imgUpload', '\Optimus\FineuploaderServer\Controller\LaravelController@upload');
+        Route::post('profile/img', 'Api\Users\ProfileController@imgUpload');
+        Route::get('profile/img', 'Api\Users\ProfileController@img');
     });
 
     Route::group(['prefix' => 'ingest'], function () {
@@ -178,18 +182,18 @@ Route::group(['prefix' => 'v1', 'middleware' => ['auth']], function () {
 
     Route::group(['prefix' => 'stats', 'middleware' => 'auth'], function () {
         Route::group(['prefix' => 'charts'], function () {
-            Route::get('aips/online/ingested', 'Api\Stats\ChartController@onlineAIPsIngested');
-            Route::get('aips/online/ingested/monthly', 'Api\Stats\ChartController@monthlyOnlineAIPsIngested')->name('monthlyOnlineAIPsIngested');
-            Route::get('data/online/ingested/monthly', 'Api\Stats\ChartController@monthlyOnlineDataIngested')->name('monthlyOnlineDataIngested');
-            Route::get('aips/online/accessed/monthly', 'Api\Stats\ChartController@monthlyOnlineAIPsAccessed')->name('monthlyOnlineAIPsAccessed');
-            Route::get('data/online/accessed/monthly', 'Api\Stats\ChartController@monthlyOnlineDataAccessed')->name('monthlyOnlineDataAccessed');
-            Route::get('aips/online/ingested/daily', 'Api\Stats\ChartController@dailyOnlineAIPsIngested')->name('dailyOnlineAIPsIngested');
-            Route::get('data/online/ingested/daily', 'Api\Stats\ChartController@dailyOnlineDataIngested')->name('dailyOnlineDataIngested');
-            Route::get('aips/online/accessed/daily', 'Api\Stats\ChartController@dailyOnlineAIPsAccessed')->name('dailyOnlineAIPsAccessed');
-            Route::get('data/online/accessed/daily', 'Api\Stats\ChartController@dailyOnlineDataAccessed')->name('dailyOnlineDataAccessed');
-            Route::get('file-formats/ingested', 'Api\Stats\ChartController@onlineFileFormatsIngested')->name('fileFormatsIngested');
+            Route::get('monthly/ingested/aips', 'Api\Stats\ChartController@monthlyIngestedAIPs')->name('monthlyIngestedAIPs');
+            Route::get('monthly/ingested/data', 'Api\Stats\ChartController@monthlyIngestedData')->name('monthlyIngestedData');
+            Route::get('monthly/accessed/aips', 'Api\Stats\ChartController@monthlyAccessedAIPs')->name('monthlyAccessedAIPs');
+            Route::get('monthly/accessed/data', 'Api\Stats\ChartController@monthlyAccessedData')->name('monthlyAccessedData');
+            // Daily statistics will be enabled after the 1.0 release (ref CON-748)
+            // Route::get('daily/ingested/aips', 'Api\Stats\ChartController@dailyOnlineAIPsIngested')->name('dailyOnlineAIPsIngested');
+            // Route::get('daily/ingested/data', 'Api\Stats\ChartController@dailyOnlineDataIngested')->name('dailyOnlineDataIngested');
+            // Route::get('daily/accessed/aips', 'Api\Stats\ChartController@dailyOnlineAIPsAccessed')->name('dailyOnlineAIPsAccessed');
+            // Route::get('daily/accessed/data', 'Api\Stats\ChartController@dailyOnlineDataAccessed')->name('dailyOnlineDataAccessed');
+            Route::get('total/ingested/fileformats', 'Api\Stats\ChartController@onlineFileFormatsIngested')->name('fileFormatsIngested');
         });
-        Route::get('user/{userId}', 'Api\Stats\UserStatsController@userStats')->name('userstats');
+        Route::get('user/{userId}', Api\Stats\UserStatsController::class)->name('userstats');
     });
 });
 
