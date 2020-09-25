@@ -17,6 +17,7 @@ const getters = {
     userLanguages: state => state.languages,
     currentUser: state => state.user,
     userName: () => Vue.prototype.$keycloak.given_name,
+    userIsAdmin: () => Vue.prototype.$keycloak.resourceAccess['piql-connect-api'].roles.includes('admin'),
     userMetadataTemplateByUserId:  state => userId => {
         return state.userMetadataTemplates.find( (t) => t.owner_id == userId );
     },
