@@ -63,7 +63,10 @@ class HoldingController extends Controller
     public function showByUuid($uuid)
     {
         $holding = Holding::query()->where('uuid', $uuid)->first();
-        return $holding ? new HoldingResource($holding) : null;
+        if ($holding == null) {
+            return response(['message' => __('No holdings found')], 404);
+        }
+        return new HoldingResource($holding);
     }
 
     /**

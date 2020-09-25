@@ -2,10 +2,10 @@
     <div class="w-100">
         <breadcumb :subTitle="fileName" :subTitleRoute="{ name: 'ingest.uploader' }"/>
         <div class="row">
-            <div class="col-sm-4">
-                <button class="btn btn mr-2 pr-3 pl-3" @click="showModalData('holding')">{{$t('Holdings')}}</button>
-                <button class="btn btn mr-2 pr-3 pl-3" @click="showModalData('archive')">{{$t('Archive')}}</button>
-                <button class="btn btn mr-2 pr-3 pl-3" @click="showModalData('account')">{{$t('Accounts')}}</button>
+            <div class="w-100 p-3">
+                <button class="btn btn mr-2 pr-3 pl-3" @click="showModalDataHolding()">{{$t('Holdings')}}</button>
+                <button class="btn btn mr-2 pr-3 pl-3" @click="showModalDataArchive()">{{$t('Archive')}}</button>
+                <button class="btn btn mr-2 pr-3 pl-3" @click="showModalDataAccount()">{{$t('Accounts')}}</button>
             </div>
         </div>
         <form>
@@ -25,10 +25,9 @@
                 </div>
                 <modal name="modalData" width="1200" height="400">
                     <div class="modalDataTitle">
-                        {{modalDataContent.title}}
+                        {{modalDataContentTitle}}
                     </div>
                     <div class="modalDataClose">
-
                         <a @click="hideModalData"><i class="fas fa-times-circle actionIcon text-center mr-2 cursorPointer"></i></a>
                     </div>
                     <div class="modalDataContent">
@@ -75,7 +74,8 @@ export default {
             archiveMetadata: null,
             holdingMetadata: null,
             accountMetadata: null,
-            modalDataType: null,
+            modalDataContentTitle: null,
+            modalDataContent: {},
             bag: null,
         }
     },
@@ -138,18 +138,6 @@ export default {
                 return "";
             }
         },
-        modalDataContent: function () {
-            switch (this.modalDataType) {
-                case 'holding':
-                    return {title: this.$t('Holdings'), 'content': this.loadHoldingMetadata()};
-                case 'archive':
-                    return {title: this.$t('Archive'), 'content': this.loadArchiveMetadata()};
-                case 'account':
-                    return {title: this.$t('Accounts'), 'content': this.loadAccountMetadata()};
-                default:
-                    return {title: null, 'content': null};
-            }
-        }
     },
     async mounted () {
         let response = (await this.get(this.url)).data.data;
@@ -188,45 +176,46 @@ export default {
                 });
             }
         },
-        loadBag() {
+        async loadBag() {
             this.loadFile();
             if (!this.bag && this.file != null && this.file.bag_id != null) {
-                axios.get('/api/v1/ingest/bags/' + this.file.bag_id).then( async ( resp ) =>  {
+                await axios.get('/api/v1/ingest/bags/' + this.file.bag_id).then( async ( resp ) =>  {
                     this.bag = resp.data.data;
                 });
             }
         },
-        loadHoldingMetadata() {
-            this.loadBag();
+        async loadHoldingMetadata() {
+            await this.loadBag();
             if (this.bag != null) {
                 if (this.holdingMetadata == null) {
-                    axios.get('/api/v1/metadata/holding/' + this.bag.holding_uuid).then( async ( resp ) =>  {
+                    await axios.get('/api/v1/metadata/holding/' + this.bag.holding_uuid).then( async ( resp ) =>  {
                         this.holdingMetadata = resp.data.data != undefined ? resp.data.data.defaultMetadataTemplate.dc : null;
                     });
                 }
-                return this.holdingMetadata;
             }
         },
-        loadArchiveMetadata() {
-            this.loadBag();
+        async loadArchiveMetadata() {
+            await this.loadBag();
             if (this.bag != null) {
                 if (this.archiveMetadata == null) {
-                    axios.get('/api/v1/metadata/archive/' + this.bag.archive_uuid).then( async ( resp ) =>  {
+                    await axios.get('/api/v1/metadata/archive/' + this.bag.archive_uuid).then( async ( resp ) =>  {
                         this.archiveMetadata = resp.data.data != undefined ? resp.data.data.defaultMetadataTemplate.dc : null;
                     });
                 }
-                return this.archiveMetadata;
             }
         },
-        loadAccountMetadata() {
-            this.loadBag();
+        async loadAccountMetadata() {
+            await this.loadBag();
             if (this.bag != null) {
                 if (this.accountMetadata == null) {
-                    axios.get('/api/v1/metadata/account/byUser/' + this.bag.owner).then( async ( resp ) =>  {
-                        this.accountMetadata = resp.data.data != undefined ? resp.data.data.defaultMetadataTemplate.dc : null;
+                    await axios.get('/api/v1/admin/users/' + this.bag.owner).then( async ( userResp ) =>  {
+                        if (userResp.data.data != undefined) {
+                            await axios.get('/api/v1/metadata/account/' + userResp.data.data.account_uuid).then( async ( accResp ) =>  {
+                                this.accountMetadata = accResp.data.data != undefined ? accResp.data.data.defaultMetadataTemplate.dc : null;
+                            });
+                        }
                     });
                 }
-                return this.accountMetadata;
             }
         },
         async save() {
@@ -248,14 +237,25 @@ export default {
             }
         },
         getMetaValue(key) {
-            if (this.modalDataContent != null && this.modalDataContent.content != undefined && key in this.modalDataContent.content) {
-                return this.modalDataContent.content[key];
+            if (this.modalDataContent != null && this.modalDataContent != undefined && key in this.modalDataContent) {
+                return this.modalDataContent[key];
             } else {
                 return "";
             }
         },
-        showModalData(type) {
-            this.modalDataType = type;
+        async showModalDataHolding() {
+            this.modalDataContentTitle = this.$t('Holdings');
+            await this.loadHoldingMetadata().then((res) => { this.modalDataContent = this.holdingMetadata });
+            this.$modal.show('modalData');
+        },
+        async showModalDataArchive() {
+            this.modalDataContentTitle = this.$t('Archive');
+            await this.loadArchiveMetadata().then((res) => { this.modalDataContent = this.archiveMetadata });
+            this.$modal.show('modalData');
+        },
+        async showModalDataAccount() {
+            this.modalDataContentTitle = this.$t('Accounts');
+            await this.loadAccountMetadata().then((res) => { this.modalDataContent = this.accountMetadata });
             this.$modal.show('modalData');
         },
         hideModalData() {

@@ -56,6 +56,9 @@ class ArchiveController extends Controller
     public function showByUuid($uuid)
     {
         $archive = Archive::query()->where('uuid', $uuid)->first();
+        if ($archive == null) {
+            return response(['message' => __('No archives found')], 404);
+        }
         return $archive ? new ArchiveResource($archive) : null;
     }
 
