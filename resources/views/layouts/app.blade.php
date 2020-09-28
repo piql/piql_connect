@@ -12,7 +12,7 @@
 
     <script type="text/javascript">
         Window.locale = '{{\App::getLocale()}}';
-    </script>
+    </script defer>
     <script type="text/javascript" src="{{ mix('js/manifest.js') }}" defer></script>
     <script type="text/javascript" src="{{ mix('js/vendor.js') }}" defer></script>
     <script type="text/javascript" src="{{ mix('js/app.js') }}" defer></script>

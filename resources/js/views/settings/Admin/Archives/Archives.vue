@@ -8,9 +8,34 @@
                 <button v-else class="btn" @click="newArchiveForm"><i class="fa fa-plus"></i> {{$t('settings.archives.add')}}</button>
             </div>
             <div class="card-body">
-                <archives-listing v-show="!enableMetaForm" @assignMeta='assignMeta' />
+                <archives-listing v-show="!enableMetaForm" @assignMeta='assignMeta' :accountId='1' :archives='archives' />
             </div>
         </div>
+        <b-modal id="create-archive" size="lg" hide-footer>
+            <template v-slot:modal-title>
+                <h4> <b>{{$t('settings.archives.create').toUpperCase()}}</b></h4>
+            </template>
+            <b-form v-on:submit.prevent='makeArchive'>
+                <b-form-group id="input-group-2" :label="$t('settings.archives.title')" label-for="input-1">
+                    <b-form-input
+                        id="input-1"
+                        v-model="createForm.title"
+                        required
+                        :placeholder="$t('settings.archives.title')" />
+                </b-form-group>
+
+                <b-form-group id="input-group-2" :label="$t('settings.archives.description')" label-for="input-2">
+                    <b-form-textarea
+                        id="input-2"
+                        v-model="createForm.description"
+                        :placeholder="$t('settings.archives.description')"
+                        rows="5"
+                        max-rows="6"
+                        required />
+                </b-form-group>
+                <b-button type="submit" variant="primary">{{$t('settings.archives.add')}}</b-button>
+            </b-form>
+        </b-modal>
     </div>
 </template>
 
@@ -21,6 +46,11 @@ export default {
         return {
             enableMetaForm: false,
             selectedArchiveId: 0,
+            createForm: {
+                title: '',
+                description: ''
+            },
+
         }
     },
     async mounted() {
@@ -28,7 +58,7 @@ export default {
         await this.fetchArchives( this.firstAccount.id ); //TODO: Actual account handling
     },
     computed: {
-        ...mapGetters(['templates', 'templateById', 'firstAccount']),
+        ...mapGetters(['templates', 'templateById', 'firstAccount', 'archives']),
         archiveId: {
             get: function(){
                 return this.selectedArchiveId || 0;
@@ -39,10 +69,26 @@ export default {
         },
     },
     methods: {
-        ...mapActions(['fetchArchives', 'fetchAccounts']),
+        ...mapActions(['fetchArchives', 'fetchAccounts','createArchive']),
         newArchiveForm(){
-            this.$router.push({ name:'settings.admin.archives.create'});
+            this.$bvModal.show('create-archive');
         },
+        async makeArchive() {
+            const accountId = 1;
+            this.createArchive( {
+                title: this.createForm.title,
+                description: this.createForm.description,
+                accountId,
+            } );
+            this.$bvModal.hide('create-archive');
+            this.successToast(
+                this.$t('settings.archives.toast.createdArchiveHeading'),
+                this.$t('settings.archives.toast.createdArchive') + ' ' + this.createForm.title
+            );
+            await this.fetchArchives( accountId );
+            this.createForm = { title: '', description: '' };
+        },
+
         async assignMeta( archiveId ){
             this.archiveId = archiveId;
             await Vue.nextTick();

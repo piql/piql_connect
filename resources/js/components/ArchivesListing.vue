@@ -21,9 +21,13 @@
                     <a class="btn" @click="assignMeta(archive.id)" data-toggle="tooltip" :title="$t('settings.archives.assignMeta')">
                         <i class="fa fa-tags buttonIcon"></i>
                     </a>
-                    <a class="btn" @click="showEditBox(archive.id)" data-toggle="tooltip" :title="$t('settings.archives.edit')">
+                    <a class="btn" @click="showEditBox(archive)" data-toggle="tooltip" :title="$t('settings.archives.edit')">
                         <i class="fa fa-edit buttonIcon"></i>
                     </a>
+                    <a class="btn" @click="navigateToHoldingsFor(archive.id)" :title="$t('sidebar.settings.holdings')">
+                        <i class="fa fa-folder buttonIcon"></i>
+                    </a>
+
                 </td>
             </tr>
         </tbody>
@@ -31,16 +35,16 @@
 
     <b-modal id="edit-archive" size="lg" hide-footer>
         <template v-slot:modal-title>
-        <h4> <b>{{$t('settings.archives.edit').toUpperCase()}} [ {{ archive.title.toUpperCase() }} ]</b></h4>
+        <h4> <b>{{$t('settings.archives.edit').toUpperCase()}} [ {{ edit.title.toUpperCase() }} ]</b></h4>
         </template>
         <div class="d-block">
             <div class="form-group">
                 <label>{{$t('settings.archives.archive')}}</label>
-                <input type="text" class="form-control" v-model="title" >
+                <input type="text" class="form-control" v-model="edit.title" >
             </div>
             <div class="form-group">
                 <label>{{$t('settings.groups.description')}}</label>
-                <textarea v-model="description" class="form-control"></textarea>
+                <textarea v-model="edit.description" class="form-control"></textarea>
             </div>
         </div>
         <b-button class="mt-3" @click="editArchive" block><i class="fa fa-edit"></i> {{$t('settings.archives.edit').toUpperCase()}}</b-button>
@@ -72,54 +76,30 @@
 <script>
 import { mapGetters, mapActions } from "vuex"
 export default {
-    async mounted() {
-        await this.fetchAccounts();
-        await this.fetchArchives( this.firstAccount.id ); //TODO: Actual account handling
-    },
     data(){
         return {
             selection: '',
-            _id: '',
-            _title: '',
-            _description: ''
+            edit: {},
         }
-
+    },
+    props: {
+        accountId: {
+            type: Number,
+            default: 1
+        },
+        archives: {
+            type: Array,
+            default: () => []
+        },
     },
     computed: {
-        ...mapGetters(['firstAccount', 'archives','templates']),
-        archive: {
-            get: function() {
-                return {
-                    id: this._id,
-                    title: this._title,
-                    description: this._description
-                };
-            },
-            set: function( value ) {
-                this._id = value.id || "",
-                this._title = value.title || "";
-                this._description = value.description || "";
-            }
-        },
-        title: {
-            get: function( ) {
-                return this._title;
-            },
-            set: function( value ) {
-                this._title = value;
-            }
-        },
-        description: {
-            get: function( ) {
-                return this._description;
-            },
-            set: function( value ) {
-                this._description = value;
-            }
-        },
+        ...mapGetters(['templates']),
     },
     methods: {
-        ...mapActions(['fetchAccounts', 'fetchArchives','addArchive','editArchiveData']),
+        ...mapActions(['addArchive','editArchiveData']),
+        navigateToHoldingsFor( archiveId ) {
+            this.$router.push({path: `/settings/admin/archives/${archiveId}/holdings` });
+        },
         assignMeta(id) {
             this.$emit('assignMeta', id);
         },
@@ -127,17 +107,21 @@ export default {
             this.archive = this.archives.find( single => single.id === id );
             this.$bvModal.show( 'assign-template' );
         },
-        showEditBox( id ){
-            this.archive = this.archives.find( single => single.id === id );
+        showEditBox( archive ){
+            this.edit = {
+                id: archive.id,
+                title: archive.title ?? "",
+                description: archive.description ?? "",
+            };
             this.$bvModal.show('edit-archive')
         },
         async editArchive(){
             this.$bvModal.hide('edit-archive')
             await this.editArchiveData( {
-                id: this.editArchiveId,
-                accountId: this.firstAccount.id,
-                title: this.title,
-                description: this.description
+                id: this.edit.id,
+                accountId: this.accountId,
+                title: this.edit.title,
+                description: this.edit.description
             } );
             this.successToast(
                 this.$t('settings.archives.toast.editingArchive'), 

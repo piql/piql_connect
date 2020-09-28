@@ -15,22 +15,23 @@ const getters = {
 
 const actions = {
     async fetchArchives( { commit }, account, queryString = "" ){
-        await ax.get(`/api/v1/metadata/admin/accounts/${account}/archives/${queryString}`)
+        await ax.get(`/api/v1/metadata/admin/accounts/${account}/archives${queryString}`)
             .then( response =>
                 commit('setArchivesMutation',response.data)
             ).catch( error =>
                 commit( 'setArchiveErrorMutation', error.response )
             );
     },
-    async addArchive( {commit}, request ) {
-        let account = request.account;
-        await ax.put( `/api/v1/metadata/admin/accounts/${account}/archives/`,
+    async createArchive( {commit}, request ) {
+        let accountId = request.accountId;
+        await ax.put( `/api/v1/metadata/admin/accounts/${accountId}/archives/`,
             {
                 title: request.title,
-                description: request.description
+                description: request.description,
+                accountId
             }
         ).then( response =>
-            commit( 'addArchiveMutation', response.data )
+            commit( 'createArchiveMutation', response.data )
         ).catch( error =>
             commit( 'setArchiveErrorMutation', error.response )
         );
@@ -49,10 +50,11 @@ const actions = {
     },
 
     async editArchiveData({commit}, request ){
-        let account = request.accountId;
+        let accountId = request.accountId;
         let archiveId = request.id;
-        await ax.put( `/api/v1/metadata/admin/accounts/${account}/archives/${archiveId}`,
+        await ax.put( `/api/v1/metadata/admin/accounts/${accountId}/archives`,
             {
+                id: archiveId,
                 title: request.title,
                 description: request.description
             }
@@ -66,21 +68,15 @@ const actions = {
 }
 
 const mutations = {
-    addArchiveMutation ( state, archive ) {
-        state.archives = state.archives.concat( archive );
+    createArchiveMutation ( state, payload ){
+        state.archives = state.archives.concat( payload.data );
     },
     setArchivesMutation( state, archives ) {
         state.archives = archives.data;
     },
     addArchiveMetadataMutation (state, payload) {
-        let updatedArchive = state.archives.find(archive => archive.metadata.id === payload.data.id);
-        //TODO: Fix the API, it should replace the template, not add another one
-        updatedArchive.metadata.metadata = payload.data.metadata;
-        let archiveIndex = state.archives.findIndex( archive => archive.id === updatedArchive.id );
-        let end = state.archives.length;
-        let before = state.archives.slice( 0, archiveIndex );
-        let after = state.archives.slice( archiveIndex+1, end );
-        state.archives = before.concat( updatedArchive ).concat( after );
+        let archiveToUpdate = state.archives.find(archive => archive.metadata.id === payload.data.id);
+        archiveToUpdate.defaultMetadataTemplate = payload.data.defaultMetadataTemplate;
     },
     editArchiveMutation( state, response ) {
         let archiveIndex = state.archives.findIndex( archive => archive.id === response.data.id );
