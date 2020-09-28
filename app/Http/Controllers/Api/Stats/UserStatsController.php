@@ -12,6 +12,7 @@ use App\FileObject;
 use Log;
 use App\User;
 use App\Stats\IngestedDataOnline;
+use App\Stats\IngestedStatsOffline;
 use App\Job;
 
 class UserStatsController extends Controller
@@ -36,9 +37,9 @@ class UserStatsController extends Controller
 
         $infoArray = [
             'onlineDataIngested'   => IngestedDataOnline::where('owner', $currentUser->id)->sum('size'),
-            'offlineDataIngested'  => 0,    //TODO: [DUMMY] Replace with a proper query
+            'offlineDataIngested'  => IngestedStatsOffline::where('owner', $currentUser->id)->sum('size'),
             'onlineAIPsIngested'   => Aip::where('owner',$currentUser->id)->count(),
-            'offlineAIPsIngested'  => 0,    //TODO: [DUMMY] Replace with a proper query
+            'offlineAIPsIngested'  => IngestedStatsOffline::where('owner', $currentUser->id)->sum('aips'),
             'offlineReelsCount'    => Job::where('owner',$currentUser->id)
                                         ->whereIn('status', ['transferring', 'preparing', 'writing', 'storing'])->count(),
             'offlinePagesCount'    => 0,    //TODO: Visuals on film will not be implemented in 1.0
