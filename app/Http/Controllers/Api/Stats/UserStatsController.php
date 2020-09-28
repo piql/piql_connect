@@ -39,7 +39,8 @@ class UserStatsController extends Controller
             'offlineDataIngested'  => 0,    //TODO: [DUMMY] Replace with a proper query
             'onlineAIPsIngested'   => Aip::where('owner',$currentUser->id)->count(),
             'offlineAIPsIngested'  => 0,    //TODO: [DUMMY] Replace with a proper query
-            'offlineReelsCount'    => Job::where(['owner'=>$currentUser->id,'status'=>'stored'])->count(),
+            'offlineReelsCount'    => Job::where('owner',$currentUser->id)
+                                        ->whereIn('status', ['transferring', 'preparing', 'writing', 'storing'])->count(),
             'offlinePagesCount'    => 0,    //TODO: Visuals on film will not be implemented in 1.0
             'offlineAIPsRetrieved' => 0,    //TODO: Retrieval from film will not be implemented in 1.0
             'offlineDataRetrieved' => 0     //TODO: Retrieval from film will not be implemented in 1.0
