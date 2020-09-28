@@ -300,7 +300,7 @@
     "settings.listing.email": "E-mail",
     "settings.listing.status": "Status",
     "settings.listing.created": "Criado em",
-    "settings.listing.backToUsers": "retorna para página de usuários",
+    "settings.listing.backToUsers": "Retorna para página de usuários",
     "settings.settings.actions": "Ações",
 
     "settings.archives.title": "Arquivos",
@@ -425,7 +425,7 @@
     "datepicker.noDateSelected": "Nenhuma data selecionada",
     "datepicker.help": "Teclas do cursor e digite enter para selecionar uma data",
     "datepicker.toasts.illegalRangeTitle": "Período inválido",
-    "datepicker.toasts.illegalRangeMessage": "O período de arquivamento selecionado de-até a data é inválido. Atualizando."
+    "datepicker.toasts.illegalRangeMessage": "O período de arquivamento selecionado de-até a data é inválido. Atualizando.",
 
     "admin.account.metadata.title": "Título",
     "admin.account.metadata.identifier": "Identificador único",

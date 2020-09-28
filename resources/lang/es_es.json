@@ -81,10 +81,10 @@
     "sidebar.retrieve.retrieving": "Recuperandose",
     "sidebar.retrieve.downloadable": "Listo para descarga",
     "sidebar.retrieve.history": "Historial",
-    "sidebar.settings.admin": "Admin settings",
+    "sidebar.settings.admin": "Parámetros de admin",
     "sidebar.settings.archives": "Archives",
     "sidebar.settings.holdings": "Holdings",
-    "sidebar.settings.admin.logo": "Change logo",
+    "sidebar.settings.admin.logo": "Cambio de logo",
     "sidebar.settings.admin.metadata": "Configure metadata",
 
     "dashboard.title": "Tablero",
@@ -153,7 +153,7 @@
     "ingest.offlineStorage.status.title": "Estado para almacenamiento en Film",
     "ingest.offlineStorage.status.ingress": "Mostrar el estado del flujo de trabajo de archivo en piqlFilm",
     "ingest.offlineStorage.header": "Almacenamiento en Film",
-    "ingest.offlineStorage.ingress": "Visualice los paquetes enviados al almacenamiento en piqlFilm.\n Añada un nombre a su paquete fuera de línea; este nombre identificará su piqlFilm y permitirá rastrear esos datos hasta el almacenamiento \n Opcionalmente, puede agregar metadatos para proporcionar contexto y describir el paquete fuera de línea. Al final, haga clic en el botón 'Piql' para iniciar el proceso de archivo en piqlFilm.\n",
+    "ingest.offlineStorage.ingress": "Envia paquetes a piqlFilm para almacenamiento frío",
     "ingest.offlineStorage.jobName": "Paquete fuera de línea",
     "ingest.offlineStorage.package.header": "Lista de paquetes de archivo",
     "ingest.offlineStorage.package.ingress" : "Mostrar los paquetes de archivo incluidos en el paquete fuera de línea",
@@ -300,7 +300,7 @@
     "settings.listing.email": "Email",
     "settings.listing.status": "Status",
     "settings.listing.created": "Creado",
-    "settings.listing.backToUsers": "return to users page",
+    "settings.listing.backToUsers": "Return to users page",
     "settings.settings.actions": "Acciones",
 
     "settings.archives.title": "Archives",
@@ -347,8 +347,8 @@
 
 
 
-    "settings.settings.userGroups": "User Groups",
-    "settings.settings.userGroupDesc": "Manage User Groups",
+    "settings.settings.userGroups": "Grupos de usuario",
+    "settings.settings.userGroupDesc": "Gestionar Grupos de usuario",
 
     "settings.groups.addGroup": "Añadir Grupo",
     "settings.groups.group": "Grupo",
@@ -425,7 +425,7 @@
     "datepicker.noDateSelected": "No hay fecha seleccionada",
     "datepicker.help": "Teclas Cursor e introduzca para seleccionar una fecha",
     "datepicker.toasts.illegalRangeTitle": "Rango de Fecha no válido",
-    "datepicker.toasts.illegalRangeMessage": "El rango de fechas seleccionado desde-hasta para el archivado es incorrecto. Actualizando."
+    "datepicker.toasts.illegalRangeMessage": "El rango de fechas seleccionado desde-hasta para el archivado es incorrecto. Actualizando.",
 
     "admin.account.metadata.title": "Title",
     "admin.account.metadata.identifier": "Unique identifier",

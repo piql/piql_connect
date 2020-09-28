@@ -81,10 +81,10 @@
     "sidebar.retrieve.retrieving": "Under gjenopprettelse",
     "sidebar.retrieve.downloadable": "Klar til nedlasting",
     "sidebar.retrieve.history": "Historikk",
-    "sidebar.settings.admin": "Admin settings",
+    "sidebar.settings.admin": "Administrasjon",
     "sidebar.settings.archives": "Archives",
     "sidebar.settings.holdings": "Holdings",
-    "sidebar.settings.admin.logo": "Change logo",
+    "sidebar.settings.admin.logo": "Bytt logo",
     "sidebar.settings.admin.metadata": "Configure metadata",
 
     "dashboard.title": "Oversikt",
@@ -300,7 +300,7 @@
     "settings.listing.email": "E-post",
     "settings.listing.status": "Status",
     "settings.listing.created": "Opprettet",
-    "settings.listing.backToUsers": "return to users page",
+    "settings.listing.backToUsers": "Return to users page",
     "settings.settings.actions": "Handlinger",
 
     "settings.archives.title": "Archives",
@@ -347,8 +347,8 @@
 
 
 
-    "settings.settings.userGroups": "User Groups",
-    "settings.settings.userGroupDesc": "Manage User Groups",
+    "settings.settings.userGroups": "Brukergrupper",
+    "settings.settings.userGroupDesc": "Brukergruppeadministrasjon",
 
     "settings.groups.addGroup": "Legg til gruppe",
     "settings.groups.group": "Gruppe",
@@ -425,7 +425,7 @@
     "datepicker.noDateSelected": "Ingen dato valgt",
     "datepicker.help": "Bruk piltastene og enter til å velge en dato",
     "datepicker.toasts.illegalRangeTitle": "Ugyldig datoområde",
-    "datepicker.toasts.illegalRangeMessage": "Du har valgt en ugyldig rekkevidde for arkivert fra-til. Oppdaterer."
+    "datepicker.toasts.illegalRangeMessage": "Du har valgt en ugyldig rekkevidde for arkivert fra-til. Oppdaterer.",
 
     "admin.account.metadata.title": "Title",
     "admin.account.metadata.identifier": "Unique identifier",

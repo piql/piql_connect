@@ -81,10 +81,10 @@
     "sidebar.retrieve.retrieving": "Recuperandose",
     "sidebar.retrieve.downloadable": "Llest per a descàrrega",
     "sidebar.retrieve.history": "Historial",
-    "sidebar.settings.admin": "Admin settings",
+    "sidebar.settings.admin": "Paràmetres d'admin",
     "sidebar.settings.archives": "Archives",
     "sidebar.settings.holdings": "Holdings",
-    "sidebar.settings.admin.logo": "Change logo",
+    "sidebar.settings.admin.logo": "Canvi de logo",
     "sidebar.settings.admin.metadata": "Configure metadata",
 
     "dashboard.title": "Tauler",
@@ -153,7 +153,7 @@
     "ingest.offlineStorage.status.title": "Estat per a emmagatzematge en Film",
 	"ingest.offlineStorage.status.ingress": "Mostrar l'estat del flux de treball d'arxiu en piqlFilm",
     "ingest.offlineStorage.header": "Emmagatzematge en Film",
-    "ingest.offlineStorage.ingress": "Visualitzi els paquets enviats a l'emmagatzematge en piqlFilm.\n Anyada un nom al seu paquet fora de línia; aquest nom identificarà el seu piqlFilm i permetrà rastrejar aquestes dades fins a l'emmagatzematge \n Opcionalment, pot agregar metadades per a proporcionar context i descriure el paquet fora de línia. Al final, faci clic en el botó 'Piql' per a iniciar el procés d'arxiu en piqlFilm.\n",
+    "ingest.offlineStorage.ingress": "Envia paquets a piqlFilm per a emmagatzematge fred",
     "ingest.offlineStorage.jobName": "Paquet fora de línia",
     "ingest.offlineStorage.package.header": "Llista de paquets d'arxiu",
     "ingest.offlineStorage.package.ingress" : "Mostrar els paquets d'arxiu inclosos en el paquet fora de línia",
@@ -300,7 +300,7 @@
     "settings.listing.email": "Email",
     "settings.listing.status": "Status",
     "settings.listing.created": "Creat",
-    "settings.listing.backToUsers": "return to users page",
+    "settings.listing.backToUsers": "Return to users page",
     "settings.settings.actions": "Accions",
 
     "settings.archives.title": "Archives",
@@ -347,8 +347,8 @@
 
 
 
-    "settings.settings.userGroups": "User Groups",
-    "settings.settings.userGroupDesc": "Manage User Groups",
+    "settings.settings.userGroups": "Grups d'usuari",
+    "settings.settings.userGroupDesc": "Gestiona Grups d'usuari",
 
     "settings.groups.addGroup": "Afegeix Grup",
     "settings.groups.group": "Grup",   
@@ -425,7 +425,7 @@
     "datepicker.noDateSelected": "No hi ha data seleccionada",
     "datepicker.help": "Tecles Cursor i introdueixi per a seleccionar una data",
     "datepicker.toasts.illegalRangeTitle": "Rang de Data no vàlid",
-    "datepicker.toasts.illegalRangeMessage": "El rang de dates Des de-Fins per a l'arxivat és incorrecte. Actualitzant."
+    "datepicker.toasts.illegalRangeMessage": "El rang de dates Des de-Fins per a l'arxivat és incorrecte. Actualitzant.",
 
     "admin.account.metadata.title": "Title",
     "admin.account.metadata.identifier": "Unique identifier",
