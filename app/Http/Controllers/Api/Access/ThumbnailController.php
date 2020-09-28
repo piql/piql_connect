@@ -21,8 +21,10 @@ class ThumbnailController extends Controller
             ->where('path', 'LIKE', "%.jpg" )
             ->first();
 
-        return response($storage->stream( $dip->storage_location, $file->path ))
-            ->header("Content-Type" , "image/jpeg");
+        return response()->stream( function () use( $dip, $file ) {
+            $stream = $storage->downloadStream( $dip->storage_location, $file->fullpath );
+            fpassthru($stream);
+        })->header("Content-Type" , "image/jpeg");
     }
 
     public function testPreview( ArchivalStorageInterface $storage, Request $request )
@@ -35,8 +37,10 @@ class ThumbnailController extends Controller
             ->where('path', 'LIKE', "%.jpg" )
             ->first();
 
-        return response($storage->stream( $dip->storage_location, $file->path ))
-            ->header("Content-Type" , "image/jpeg");
+        return response()->stream( function () use( $dip, $file ) {
+            $stream = $storage->downloadStream( $dip->storage_location, $file->fullpath );
+            fpassthru($stream);
+        })->header("Content-Type" , "image/jpeg");
     }
 
 }
