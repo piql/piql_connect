@@ -9,6 +9,7 @@ use App\S3Configuration;
 use App\Services\ArchivalStorageService;
 use App\Services\ArchivematicaConnectionService;
 use App\StorageLocation;
+use App\Account;
 use App\Aip;
 use App\Dip;
 use App\Bag;
@@ -36,6 +37,7 @@ class TransferPackageToStorageTest extends TestCase
     private $storageService;
     private $testUser;
     private $faker;
+    private $account;
     private $aip;
     private $dip;
     private $bag;
@@ -47,7 +49,9 @@ class TransferPackageToStorageTest extends TestCase
     {
         parent::setUp();
 
+        $this->account = factory( Account::class )->create();
         $this->testUser = factory( \App\User::class )->create();
+        $this->testUser->account()->associate( $this->account );
         Passport::actingAs( $this->testUser );
         $this->faker = Faker::create();
 

@@ -1,0 +1,113 @@
+<template>
+    <div class="w-100">
+        <page-heading icon="fa-folder" :title="$t('settings.holdings.title')" :ingress="$t('settings.holdings.description')" />
+        <div class="card">
+            <div class="card-header">
+                <span v-if="enableHoldingMetadataForm"><i class="fa fa-tags"></i> {{ $t('settings.holdings.assignMeta').toUpperCase() }}
+                    <button class="btn btn-primary" @click="disableMetaForm">{{$t('settings.holdings.backToHoldings')}}</button>
+                </span>
+                <button v-else class="btn" @click="newHoldingForm"><i class="fa fa-plus"></i> {{$t('settings.holdings.add')}}</button>
+            </div>
+            <div class="card-body">
+                <holding-metadata :originalHolding="holdingForMetadataEdit" :accountId='firstAccountId' :archiveId='archiveId' @disableMetaForm='disableMetaForm' />
+                <holdings-listing @assignHoldingMetadata='assignHoldingMetadata' :accountId='firstAccountId' :parentArchiveId='archiveId' :holdings='holdings' />
+            </div>
+        </div>
+        <b-modal id="create-holding" size="lg" hide-footer>
+            <template v-slot:modal-title>
+                <h4> <b>{{$t('settings.holdings.create').toUpperCase()}}</b></h4>
+            </template>
+            <b-form v-on:submit.prevent='makeHolding'>
+                <b-form-group id="input-group-2" :label="$t('settings.holdings.holding')" label-for="input-1">
+                    <b-form-input
+                        id="input-1"
+                        v-model="createForm.title"
+                        required
+                        :placeholder="$t('settings.holdings.holding')" />
+                </b-form-group>
+
+                <b-form-group id="input-group-2" :label="$t('settings.groups.description')" label-for="input-2">
+                    <b-form-textarea
+                        id="input-2"
+                        v-model="createForm.description"
+                        :placeholder="$t('settings.groups.description')"
+                        rows="5"
+                        max-rows="6"
+                        required />
+                </b-form-group>
+                <b-button type="submit" variant="primary">{{$t('settings.holdings.add')}}</b-button>
+            </b-form>
+        </b-modal>
+    </div>
+</template>
+
+<script>
+import {mapGetters, mapActions} from "vuex";
+import VueRouter from 'vue-router';
+import RouterTools from '@mixins/RouterTools.js';
+export default {
+
+    mixins: [ RouterTools ],
+
+    data() {
+        return {
+            enableHoldingMetadataForm: false,
+            archiveId: 0,
+            selectedHoldingId: 0,
+            firstAccountId: 1,
+            holdingForMetadataEdit : null,
+            createForm: {
+                title: '',
+                description: ''
+            },
+        }
+    },
+    async mounted() {
+        await this.fetchAccounts();
+        await this.fetchArchives( this.firstAccount.id ); //TODO: Actual account handling
+        const accountId = this.firstAccount.id;
+        this.archiveId = Number.parseInt( this.$route.params.archiveId ) ?? 0;
+        await this.fetchHoldingsForArchive( {accountId, archiveId: this.archiveId } );
+    },
+    watch: {
+        '$route': 'dispatchRouting'
+    },
+    computed: {
+        ...mapGetters(['templates', 'templateById', 'firstAccount', 'archives', 'archiveById','holdings','holdingById']),
+    },
+    methods: {
+        ...mapActions(['fetchAccounts', 'fetchArchives', 'fetchHoldingsForArchive', 'addHoldingMetadata','editHoldingData','createHolding']),
+        async dispatchRouting() {
+            this.archiveId = $route.params.archiveId;
+            await Vue.nextTick();
+        },
+        newHoldingForm(){
+            this.$bvModal.show('create-holding');
+        },
+        async makeHolding() {
+            let accountId = 1;
+            this.createHolding( {
+                title: this.createForm.title,
+                description: this.createForm.description,
+                accountId,
+                archiveId: this.archiveId
+            } );
+            this.$bvModal.hide('create-holding');
+            this.successToast(
+                this.$t('settings.archives.toast.createdHoldingHeading'),
+                this.$t('settings.archives.toast.createdHolding') + ' ' + this.createForm.title
+            );
+            await this.fetchHoldingsForArchive( {accountId, archiveId: this.archiveId } );
+            this.createForm = { title: '', description: '' };
+        },
+        assignHoldingMetadata( holding ) {
+            this.holdingForMetadataEdit = holding;
+            this.$bvModal.show('edit-holding-metadata');
+        },
+        disableMetaForm(){
+            this.enableHoldingMetadataForm = false;
+            this.holdingForMetadataEdit = null;
+        }
+    }
+}
+</script>

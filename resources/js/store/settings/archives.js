@@ -1,72 +1,93 @@
+import { wrappers } from "@mixins/axiosWrapper";
+
+const ax = wrappers();
+
 
 const state = {
-    archives: []
-
+    archives: [],
+    archiveError: null,
 }
 
 const getters = {
-    retrievedArchives: state => state.archives
-
+    archives: state => state.archives,
+    archiveById: state => id => state.archives.find( archive => archive.id === id )
 }
 
 const actions = {
-    async fetchArchives({commit}){
-        
+    async fetchArchives( { commit }, account, queryString = "" ){
+        await ax.get(`/api/v1/metadata/admin/accounts/${account}/archives${queryString}`)
+            .then( response =>
+                commit('setArchivesMutation',response.data)
+            ).catch( error =>
+                commit( 'setArchiveErrorMutation', error.response )
+            );
+    },
+    async createArchive( {commit}, request ) {
+        let accountId = request.accountId;
+        await ax.put( `/api/v1/metadata/admin/accounts/${accountId}/archives/`,
+            {
+                title: request.title,
+                description: request.description,
+                accountId
+            }
+        ).then( response =>
+            commit( 'createArchiveMutation', response.data )
+        ).catch( error =>
+            commit( 'setArchiveErrorMutation', error.response )
+        );
     },
 
-    async addArchive({commit},data){
-        commit('addArchiveMutation',data);
+    async updateArchiveMetadata( {commit}, payload ) {
+        const url = `/api/v1/metadata/admin/accounts/${payload.accountId}/archives`;
+        const archive = payload.archive;
+
+        await ax.put( url, archive )
+            .then( response => {
+                commit( 'addArchiveMetadataMutation', response.data )
+            }).catch( error =>
+                commit( 'setArchiveErrorMutation', error.response )
+            );
     },
 
-    async addArchiveMetadata({commit},data){
-        commit('addArchiveMetaMutation',data);
+    async editArchiveData({commit}, request ){
+        let accountId = request.accountId;
+        let archiveId = request.id;
+        await ax.put( `/api/v1/metadata/admin/accounts/${accountId}/archives`,
+            {
+                id: archiveId,
+                title: request.title,
+                description: request.description
+            }
+        ).then( response =>
+            commit( 'editArchiveMutation', response.data )
+        ).catch( error =>
+            commit( 'setArchiveErrorMutation', error.response )
+        );
 
     },
-
-    async editArchiveData({commit}, data){
-        commit('editArchiveMutation', data);
-    },
-
-    async deleteArchiveData({commit}, id){
-        commit('deleteArchiveMutation', id);
-    }
-
 }
 
 const mutations = {
-    addArchiveMutation:(state, data) => {
-        state.archives.push(data);
+    createArchiveMutation ( state, payload ){
+        state.archives = state.archives.concat( payload.data );
     },
-    addArchiveMetaMutation: (state, data) => {
-        let archive = state.archives.filter(archive => archive.id === data.id);
-        archive[0].metadata = data.metadata.metadata
-
-        state.archives.forEach(a => {
-            if(a.id == data.id){
-                a = archive[0]
-            }
-            
-        });
+    setArchivesMutation( state, archives ) {
+        state.archives = archives.data;
     },
-    editArchiveMutation: (state, data) => {
-        let archive = state.archives.filter(archive => archive.id === data.id);
-        archive[0].title= data.title;
-        archive[0].description= data.description
-
-        state.archives.forEach(a => {
-            if(a.id == data.id){
-                a = archive[0]
-            }
-            
-        });
+    addArchiveMetadataMutation (state, payload) {
+        let archiveToUpdate = state.archives.find(archive => archive.metadata.id === payload.data.id);
+        archiveToUpdate.defaultMetadataTemplate = payload.data.defaultMetadataTemplate;
     },
-    deleteArchiveMutation: (state, id) => {
-        state.archives = state.archives.filter(archive => archive.id !== id);
-
-    }
-
-
-
+    editArchiveMutation( state, response ) {
+        let archiveIndex = state.archives.findIndex( archive => archive.id === response.data.id );
+        let end = state.archives.length;
+        let before = state.archives.slice( 0, archiveIndex );
+        let after = state.archives.slice( archiveIndex+1, end );
+        state.archives = before.concat( response.data ).concat( after );
+    },
+    setArchiveErrorMutation( state, error ) {
+        state.archiveError = error;
+    },
 }
 
 export default {

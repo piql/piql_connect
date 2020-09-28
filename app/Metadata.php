@@ -6,6 +6,8 @@ use App\Traits\AutoGenerateUuid;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 
 class Metadata extends Model
 {
@@ -27,6 +29,23 @@ class Metadata extends Model
     protected $casts = [
         'metadata' => 'array',
     ];
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating( function ( $model ) {
+            if( !auth()->check() ){
+                throw new \Exception("User must be authenticated to create Metadata");
+            }
+            if( !auth()->user()->account() ) {
+                throw new \Exception("User must belong to an account to create Metadata");
+            }
+            $model->owner_id = auth()->user()->account->uuid;
+            $model->owner_type = "App\Account";
+        });
+    }
+
 
     public function parent()
     {
