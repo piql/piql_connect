@@ -104,6 +104,8 @@
             Lightbox
         },
         data() {
+            const Authorization = `Bearer ${Vue.prototype.$keycloak.token}`;
+
             const uploader = new FineUploaderTraditional({
                 options: {
                     request: {
@@ -118,7 +120,7 @@
                             qqchunksize: 1024 * 768,
                         },
                         customHeaders: {
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                            Authorization
                         }
                     },
                     validation: {
