@@ -67,7 +67,7 @@
     "sidebar.dashboard": "Dashboard",
     "sidebar.settings": "Settings",
     "sidebar.userProfile": "User Settings",
-    "sidebar.roles": "Access Roles",
+    "sidebar.roles": "Roles",
     "sidebar.userGroups": "User Groups",
     "sidebar.permissions": "Permissions",
     "sidebar.users": "Users",
@@ -368,8 +368,8 @@
     "settings.groups.assignRolesToGroup": "Assign Roles to Group",
     "settings.groups.backToGroup": "return to group page",
 
-    "settings.settings.roles": "Access Roles",
-    "settings.settings.rolesDesc": "Manage Access Roles",
+    "settings.settings.roles": "Roles",
+    "settings.settings.rolesDesc": "Manage Roles",
     "settings.settings.rolePermissions": "Permissions",
     "settings.settings.rolePermDesc": "Listing and Management of role permissions",
 
