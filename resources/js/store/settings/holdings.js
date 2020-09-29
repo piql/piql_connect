@@ -5,15 +5,18 @@ const ax = wrappers();
 const state = {
     holdings: [],
     holdingError: null,
+    pageMeta: null
 }
 
 const getters = {
     holdings: state => state.holdings,
-    holdingById: state => id => state.holdings.find( holding => holding.id === id )
+    holdingById: state => id => state.holdings.find( holding => holding.id === id ),
+    holdingPageMeta: state => state.pageMeta,
 }
 
 const actions = {
-    async fetchHoldingsForArchive( { commit }, { accountId, archiveId }, queryString = "" ){
+    async fetchHoldingsForArchive( { commit }, { accountId, archiveId, query} ){
+        let queryString = query ?? "";
         await ax.get(`/api/v1/metadata/admin/accounts/${accountId}/archives/${archiveId}/holdings${queryString}`)
             .then( response =>
                 commit('setHoldingsMutation',response.data )
@@ -75,6 +78,7 @@ const mutations = {
     },
     setHoldingsMutation( state, holdings ) {
         state.holdings = holdings.data;
+        state.pageMeta = holdings.meta;
     },
     addHoldingMetadataMutation (state, payload) {
         let holdingToUpdate = state.holdings.find( holding => holding.id === payload.data.id );
