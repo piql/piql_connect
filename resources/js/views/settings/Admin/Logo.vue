@@ -1,6 +1,6 @@
 <template>
     <div class="w-100">
-        <page-heading icon="fa-lightbulb" :title="$t('settings.logo.header')" :ingress="$t('settings.logo.ingress')" />
+        <page-heading icon="fa-shapes" :title="$t('settings.logo.header')" :ingress="$t('settings.logo.ingress')" />
 
         <form>
             <div class="col-10">
