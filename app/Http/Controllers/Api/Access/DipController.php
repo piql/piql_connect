@@ -57,8 +57,7 @@ class DipController extends Controller
         if($archiveUuid) {
             $q->where('archive_uuid', $archiveUuid);
             if($holdingUUID) {
-                $holding = Holding::where('uuid', $holdingUUID)->first();
-                $q->where('holding_name', ($holding != null) ? $holding->title : $holdingUUID);
+                $q->where('holding_uuid', $holdingUUID);
             }
         }
 
