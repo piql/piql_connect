@@ -58,7 +58,6 @@ export default {
                 filters = filters.concat(`page=${routeQuery.page}`);
             }
             return "?".concat( filters.filter( (f) => f ).join( "&" ) );
-            return filter;
         },
 
     },

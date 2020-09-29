@@ -13,6 +13,14 @@
                 <holdings-listing @assignHoldingMetadata='assignHoldingMetadata' :accountId='firstAccountId' :parentArchiveId='archiveId' :holdings='holdings' />
             </div>
         </div>
+
+        <div class="row text-center pagerRow">
+            <div class="col">
+                <Pager :meta='holdingPageMeta' />
+            </div>
+        </div>
+
+
         <b-modal id="create-holding" size="lg" hide-footer>
             <template v-slot:modal-title>
                 <h4> <b>{{$t('settings.holdings.create').toUpperCase()}}</b></h4>
@@ -63,22 +71,29 @@ export default {
         }
     },
     async mounted() {
-        await this.fetchAccounts();
-        await this.fetchArchives( this.firstAccount.id ); //TODO: Actual account handling
-        const accountId = this.firstAccount.id;
-        this.archiveId = Number.parseInt( this.$route.params.archiveId ) ?? 0;
-        await this.fetchHoldingsForArchive( {accountId, archiveId: this.archiveId } );
+        await this.dispatchRouting();
     },
     watch: {
         '$route': 'dispatchRouting'
     },
     computed: {
-        ...mapGetters(['templates', 'templateById', 'firstAccount', 'archives', 'archiveById','holdings','holdingById']),
+        ...mapGetters(['templates', 'templateById', 'firstAccount', 'archives', 'archiveById','holdings','holdingById','holdingPageMeta']),
+        apiQueryString: function() {
+            let routeQuery = this.$route.query;
+            let apiQueryItems = [];
+            let filters = [];
+            let page;
+            if( parseInt( routeQuery.page ) ) {
+                filters = filters.concat(`page=${routeQuery.page}`);
+            }
+            return "?".concat( filters.filter( (f) => f ).join( "&" ) );
+        },
     },
     methods: {
         ...mapActions(['fetchAccounts', 'fetchArchives', 'fetchHoldingsForArchive', 'addHoldingMetadata','editHoldingData','createHolding']),
         async dispatchRouting() {
-            this.archiveId = $route.params.archiveId;
+            this.archiveId = parseInt( this.$route.params.archiveId );
+            this.fetchHoldingsForArchive({ accountId: 1, archiveId: this.archiveId, query: this.apiQueryString });
             await Vue.nextTick();
         },
         newHoldingForm(){
@@ -97,7 +112,7 @@ export default {
                 this.$t('settings.archives.toast.createdHoldingHeading'),
                 this.$t('settings.archives.toast.createdHolding') + ' ' + this.createForm.title
             );
-            await this.fetchHoldingsForArchive( {accountId, archiveId: this.archiveId } );
+            await this.fetchHoldingsForArchive( {accountId, archiveId: this.archiveId, query: this.apiQueryString } );
             this.createForm = { title: '', description: '' };
         },
         assignHoldingMetadata( holding ) {
