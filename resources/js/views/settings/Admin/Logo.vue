@@ -42,7 +42,7 @@
                             let options = {
                                 okText: this.$t('OK')
                             };
-                            this.$dialog.alert(this.$t('settings.log.alert.notAllowedExtensions'), options);
+                            this.$dialog.alert(errorReason, options);
                         },
                         onComplete: complete => {
                             this.infoToast(
