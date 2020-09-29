@@ -86,7 +86,7 @@
     "sidebar.settings.archives": "Archives",
     "sidebar.settings.holdings": "Holdings",
     "sidebar.settings.admin.logo": "Change logo",
-    "sidebar.settings.admin.metadata": "Configure metadata",
+    "sidebar.settings.admin.metadata": "Metadata templates",
 
     "dashboard.title": "Dashboard",
     "dashboard.ingress": "Your stored information",
@@ -442,7 +442,7 @@
     "admin.account.metadata.actions": "Actions",
     "admin.metadata.createNewTemplate": "Create new metadata template",
     "admin.metadata.listCurrentAssignments": "List current metadata assignments",
-    "admin.metadata.template.title": "Create metadata templates",
+    "admin.metadata.template.title": "Metadata templates",
     "admin.metadata.template.ingress": "Create a metadata template that can then be used on account, archive and holding levels",
     "admin.metadata.template.edit.title": "Edit metadata fields",
     "admin.metadata.template.edit.saveButton": "Save",
