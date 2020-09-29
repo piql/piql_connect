@@ -49,7 +49,9 @@ class BucketConfigController extends Controller {
     public function showFile($jobId, $name, FilePreviewInterface $filePreview) {
         $filePath = $this->getPath($jobId) . $name;
         $filePreview->file($filePath);
-        return response($filePreview->getContent(true))
-        ->header("Content-Type" , $filePreview->getMimeType());
+        return response()->stream( function() use( $filePreview ) {
+            $stream = $filePreview->getContent(true);
+            fpassthru($stream);
+        }, 200, ["Content-Type", $filePreview->getMimeType()]);
     }
 }
