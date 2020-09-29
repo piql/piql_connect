@@ -1,4 +1,4 @@
-FROM php:7.4-fpm
+FROM php:7.3-fpm
 
 RUN apt-get update && apt-get upgrade -y && apt-get install -y supervisor procps vim-tiny wget iputils-ping libmcrypt-dev libmagickwand-dev mariadb-client libxml2-dev libssh-dev libzip-dev zip zsh lynx git && apt-get autoremove -y
 RUN docker-php-ext-install bcmath soap pdo_mysql sockets mbstring exif zip
