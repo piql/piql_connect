@@ -65,7 +65,7 @@
 
                             <router-link :to="{ name: 'settings.admin.account.metadata.template' }">
                                 <li class="list-group-item submenu" :class="{ active: routeBelongsTo('settings.admin.account.metadata.template') }" >
-                                    <i class="fas fa-list"></i>
+                                    <i class="fas fa-tags"></i>
                                     <div class="leftMenuItem">
                                         {{$t('sidebar.settings.admin.metadata')}}
                                     </div>
