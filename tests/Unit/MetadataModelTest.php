@@ -35,7 +35,6 @@ class MetadataModelTest extends TestCase
         $bag = factory(Bag::class)->create([
             "status" => "open"
         ]);
-
         $metadata = factory(Metadata::class)->create([
             "modified_by" => $this->user->id,
         ]);
@@ -53,6 +52,21 @@ class MetadataModelTest extends TestCase
         $this->assertEquals($this->file->metadata[0]->id, $metadata->id);
     }
 
+    public function test_creating_metadata_model_where_owner_and_owner_type_are_provided()
+    {
+        $this->account = factory(Account::class)->create();
+        $this->user = factory(User::class)->create();
+        $this->user->account()->associate( $this->account );
+        Passport::actingAs( $this->user );
+
+        $metadata = factory(Metadata::class)->create([
+            "modified_by" => $this->user->id,
+            "owner_id" => $this->user->account->uuid,
+            "owner_type" => 'App\Account',
+        ]);
+
+        $this->assertNotEquals(null, $metadata);
+    }
 
     public function test_dissociating_file_model_from_a_metadata_model()
     {

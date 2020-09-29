@@ -35,14 +35,16 @@ class Metadata extends Model
         parent::boot();
 
         static::creating( function ( $model ) {
-            if( !auth()->check() ){
-                throw new \Exception("User must be authenticated to create Metadata");
+            if(!$model->owner_id || !$model->owner_type) {
+                if (!auth()->check()) {
+                    throw new \Exception("User must be authenticated to create Metadata");
+                }
+                if (!auth()->user()->account()) {
+                    throw new \Exception("User must belong to an account to create Metadata");
+                }
+                $model->owner_id = auth()->user()->account->uuid;
+                $model->owner_type = "App\Account";
             }
-            if( !auth()->user()->account() ) {
-                throw new \Exception("User must belong to an account to create Metadata");
-            }
-            $model->owner_id = auth()->user()->account->uuid;
-            $model->owner_type = "App\Account";
         });
     }
 
