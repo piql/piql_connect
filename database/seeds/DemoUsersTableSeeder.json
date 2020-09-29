@@ -1,87 +1,19 @@
 {
-    "data":
-    [
-        {
-            "type": "Users",
-            "id": "1",
-            "attributes":
-            {
-                "collection":
-                [
-                    {
-                        "username" : "piqlbrazil",
-                        "password" : "piqlbrazil",
-                        "full_name" : "piqlbrazil",
-                        "email" : "piqlbrazil@piql.com"
-                    },
-                    {
-                        "username" : "piqlitaly",
-                        "password" : "piqlitaly",
-                        "full_name" : "piqlitaly",
-                        "email" : "piqlitaly@piql.com"
-                    },
-                    {
-                        "username" : "piqlspain",
-                        "password" : "piqlspain",
-                        "full_name" : "piqlspain",
-                        "email" : "piqlspain@piql.com"
-                    },
-                    {
-                        "username" : "piqlswiss",
-                        "password" : "piqlswiss",
-                        "full_name" : "piqlswiss",
-                        "email" : "piqlswiss@piql.com"
-                    },
-                    {
-                        "username" : "piqlnorway",
-                        "password" : "piqlnorway",
-                        "full_name" : "piqlnorway",
-                        "email" : "piqlnorway@piql.com"
-                    },
-                    {
-                        "username" : "piqlindia",
-                        "password" : "piqlindia",
-                        "full_name" : "piqlindia",
-                        "email" : "piqlindia@piql.com"
-                    },
-                    {
-                        "username" : "piqlpoland",
-                        "password" : "piqlpoland",
-                        "full_name" : "piqlpoland",
-                        "email" : "piqlpoland@piql.com"
-                    },
-                    {
-                        "username" : "piqlslovakia",
-                        "password" : "piqlslovakia",
-                        "full_name" : "piqlslovakia",
-                        "email" : "piqlslovakia@piql.com"
-                    },
-                    {
-                        "username" : "piqlgermany",
-                        "password" : "piqlgermany",
-                        "full_name" : "piqlgermany",
-                        "email" : "piqlgermany@piql.com"
-                    },
-                    {
-                        "username" : "piqlindonesia",
-                        "password" : "piqlindonesia",
-                        "full_name" : "piqlindonesia",
-                        "email" : "piqlindonesia@piql.com"
-                    },
-                    {
-                        "username" : "piqlthailand",
-                        "password" : "piqlthailand",
-                        "full_name" : "piqlthailand",
-                        "email" : "piqlthailand@piql.com"
-                    },
-                    {
-                        "username" : "piqlmexico",
-                        "password" : "piqlmexico",
-                        "full_name" : "piqlmexico",
-                        "email" : "piqlmexico@piql.com"
-                    }
-                ]
-            }
+    "data": [{
+        "type": "Users",
+        "id": "1",
+        "attributes": {
+            "collection": [
+                {
+                    "username":  "demo",
+                    "password":  "demo",
+                    "full_name": "Demo User",
+                    "email":     "none@piql.com",
+                    "id":        "71c445a7-892c-4b37-bca8-7e20e1c9cf4a"
+                }
+            ]
         }
-    ]
+    }]
 }
+
+
