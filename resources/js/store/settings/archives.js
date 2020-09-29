@@ -6,16 +6,19 @@ const ax = wrappers();
 const state = {
     archives: [],
     archiveError: null,
+    pageMeta: null
 }
 
 const getters = {
     archives: state => state.archives,
-    archiveById: state => id => state.archives.find( archive => archive.id === id )
+    archiveById: state => id => state.archives.find( archive => archive.id === id ),
+    archivePageMeta: state => state.pageMeta,
 }
 
 const actions = {
-    async fetchArchives( { commit }, account, queryString = "" ){
-        await ax.get(`/api/v1/metadata/admin/accounts/${account}/archives${queryString}`)
+    async fetchArchives( { commit }, { accountId, query } ){
+        let queryString = query ?? "";
+        await ax.get(`/api/v1/metadata/admin/accounts/${accountId}/archives${queryString}`)
             .then( response =>
                 commit('setArchivesMutation',response.data)
             ).catch( error =>
@@ -73,6 +76,7 @@ const mutations = {
     },
     setArchivesMutation( state, archives ) {
         state.archives = archives.data;
+        state.pageMeta = archives.meta;
     },
     addArchiveMetadataMutation (state, payload) {
         let archiveToUpdate = state.archives.find(archive => archive.metadata.id === payload.data.id);
