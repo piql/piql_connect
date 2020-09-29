@@ -35,14 +35,11 @@
                         endpoint: '/api/v1/admin/logo/upload',
                     },
                     validation: {
-                        allowedExtensions: ['png']
+                        allowedExtensions: ['png','jpg']
                     },
                     callbacks: {
-                        onError: showError => {
-                            let options = {
-                                okText: this.$t('OK')
-                            };
-                            this.$dialog.alert(this.$t('settings.log.alert.notAllowedExtensions'), options);
+                         onError: (id, name, errorReason, xhrOrXdr) => {
+                            alert(uploader.format("Error on file number {} - {}.  Reason: {}", id, name, errorReason));
                         },
                         onComplete: complete => {
                             this.infoToast(

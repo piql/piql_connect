@@ -32,7 +32,11 @@ const actions = {
     },
 
     async fetchLanguages({commit}){
-        let response = await axios.get("/api/v1/system/languages");
+        let response = await axios.get("/api/v1/system/languages",{
+            headers: {
+                Authorization: `Bearer ${Vue.prototype.$keycloak.token}`
+            }
+        });
         commit('setLanguagesMutation',response)
     },
 
