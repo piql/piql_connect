@@ -14,6 +14,7 @@ use App\Interfaces\ArchivalStorageInterface;
 use App\Interfaces\FilePreviewInterface;
 use App\FileObject;
 use Log;
+use App\Holding;
 
 class DipController extends Controller
 {
@@ -28,7 +29,7 @@ class DipController extends Controller
         $q = StorageProperties::query()->whereHas("dip");
         $terms = collect(explode(" ", $request->query('search')))->reject("");
         $archiveUuid = $request->query('archive');
-        $holdingTitle = $request->query('holding');
+        $holdingUUID = $request->query('holding');
         $fromDate = $request->query('archived_from');
         $toDate = $request->query('archived_to');
 
@@ -53,12 +54,11 @@ class DipController extends Controller
             }
         }
 
-
-
         if($archiveUuid) {
             $q->where('archive_uuid', $archiveUuid);
-            if($holdingTitle) {
-                $q->where('holding_name', $holdingTitle);
+            if($holdingUUID) {
+                $holding = Holding::where('uuid', $holdingUUID)->first();
+                $q->where('holding_name', ($holding != null) ? $holding->title : $holdingUUID);
             }
         }
 
