@@ -293,8 +293,6 @@
     "settings.settings.viewUser": "Viure",
     "settings.settings.disableUser": "Desactiva Usuari",
     "settings.settings.enableUser": "Activa Usuari",
-    "settings.settings.deleteUser": "Elimina Usuari",
-    "settings.settings.deleteUserWarning": "Està segur que desitja eliminar aquest usuari? Si és així, procedeixi a eliminar",
     "settings.settings.disableUserWarning": "Està segur que desitja desactivar aquest usuari? Si és així, procedeixi a desactivar",
     "settings.settings.enableUserWarning": "Està segur que desitja activar aquest usuari? Si és així, procedeixi a activar",
 

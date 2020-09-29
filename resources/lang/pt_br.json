@@ -297,8 +297,6 @@
     "settings.settings.viewUser": "Ver usuário",
     "settings.settings.disableUser": "Desativar usuário",
     "settings.settings.enableUser": "Ativar usuário",
-    "settings.settings.deleteUser": "Apagar usuário",
-    "settings.settings.deleteUserWarning": "Você tem certeza que deseja apagar este usuário?",
     "settings.settings.disableUserWarning": "Você tem certeza que deseja desativar este usuário?",
     "settings.settings.enableUserWarning": "Você tem certeza que deseja ativar este usuário?",
     

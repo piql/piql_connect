@@ -292,8 +292,6 @@
     "settings.settings.viewUser": "Vis",
     "settings.settings.disableUser": "Deaktiver bruker",
     "settings.settings.enableUser": "Aktiver bruker",
-    "settings.settings.deleteUser": "Slett bruker",
-    "settings.settings.deleteUserWarning": "Er du sikker på at du ønsker å slette denne brukeren?",
     "settings.settings.disableUserWarning": "Er du sikker på at du ønsker å deaktivere denne brukeren?",
     "settings.settings.enableUserWarning": "Er du sikker på at du ønsker å aktivere denne brukeren?",
 
