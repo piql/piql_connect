@@ -61,9 +61,7 @@ export default {
         }
     },
     async mounted() {
-        await this.fetchAccounts();
-        this.fetchArchives({ accountId: 1 });
-        await Vue.nextTick();
+        await this.dispatchRouting();
     },
     watch: {
         '$route': 'dispatchRouting'
