@@ -2,6 +2,7 @@
     <div class="w-100">
         <archive-metadata :archiveId="archiveId"/>
         <page-heading icon="fa-archive" :title="$t('settings.archives.title')" :ingress="$t('settings.archives.description')" />
+
         <div class="card">
             <div class="card-header">
                 <span v-if="enableMetaForm"><i class="fa fa-tags"></i> {{ $t('settings.archives.assignMeta').toUpperCase() }} | <button class="btn btn-primary" @click="disableMetaForm">{{$t('settings.archives.backToArchives')}}</button></span>
@@ -11,6 +12,13 @@
                 <archives-listing v-show="!enableMetaForm" @assignMeta='assignMeta' :accountId='1' :archives='archives' />
             </div>
         </div>
+
+        <div class="row text-center pagerRow">
+            <div class="col">
+                <Pager :meta='archivePageMeta' />
+            </div>
+        </div>
+
         <b-modal id="create-archive" size="lg" hide-footer>
             <template v-slot:modal-title>
                 <h4> <b>{{$t('settings.archives.create').toUpperCase()}}</b></h4>
@@ -50,15 +58,26 @@ export default {
                 title: '',
                 description: ''
             },
-
         }
     },
     async mounted() {
-        await this.fetchAccounts();
-        await this.fetchArchives( this.firstAccount.id ); //TODO: Actual account handling
+        await this.dispatchRouting();
+    },
+    watch: {
+        '$route': 'dispatchRouting'
     },
     computed: {
-        ...mapGetters(['templates', 'templateById', 'firstAccount', 'archives']),
+        ...mapGetters(['templates', 'templateById', 'firstAccount', 'archives', 'archivePageMeta']),
+        apiQueryString: function() {
+            let routeQuery = this.$route.query;
+            let apiQueryItems = [];
+            let filters = [];
+            let page;
+            if( parseInt( routeQuery.page ) ) {
+                filters = filters.concat(`page=${routeQuery.page}`);
+            }
+            return "?".concat( filters.filter( (f) => f ).join( "&" ) );
+        },
         archiveId: {
             get: function(){
                 return this.selectedArchiveId || 0;
@@ -70,6 +89,9 @@ export default {
     },
     methods: {
         ...mapActions(['fetchArchives', 'fetchAccounts','createArchive']),
+        async dispatchRouting() {
+            await this.fetchArchives({ accountId: 1, query: this.apiQueryString });
+        },
         newArchiveForm(){
             this.$bvModal.show('create-archive');
         },
@@ -85,7 +107,7 @@ export default {
                 this.$t('settings.archives.toast.createdArchiveHeading'),
                 this.$t('settings.archives.toast.createdArchive') + ' ' + this.createForm.title
             );
-            await this.fetchArchives( accountId );
+            await this.fetchArchives({ accountId: 1, query: this.apiQueryString });
             this.createForm = { title: '', description: '' };
         },
 
