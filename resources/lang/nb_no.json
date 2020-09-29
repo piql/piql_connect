@@ -321,7 +321,7 @@
     "settings.groups.assignUsersToGroup": "Tildel bruker til gruppe",
     "settings.groups.assignRolesToGroup": "Tildel rolle til gruppe",
 
-	"settings.settings.roles": "Roller",
+    "settings.settings.roles": "Roller",
     "settings.settings.rolesDesc": "Rolleadministrasjon",
 
     "settings.settings.rolePermissions": "Tilganger",

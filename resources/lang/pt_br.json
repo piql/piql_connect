@@ -67,7 +67,7 @@
     "sidebar.dashboard": "Painel de controle",
     "sidebar.settings": "Configurações",
     "sidebar.userProfile": "Configurações de usuário",
-    "sidebar.roles": "Políticas de acesso",
+    "sidebar.roles": "Políticas",
     "sidebar.userGroups": "Grupos de usuário",
     "sidebar.permissions": "Permissões",
     "sidebar.users": "Usuários",
@@ -326,8 +326,8 @@
     "settings.groups.assignUsersToGroup": "Adicione usuários ao grupo",
     "settings.groups.assignRolesToGroup": "Adicione regras ao grupo",
 
-    "settings.settings.roles": "Políticas de acesso",
-    "settings.settings.rolesDesc": "Gerencie as políticas de acesso",
+    "settings.settings.roles": "Políticas",
+    "settings.settings.rolesDesc": "Gerencie as políticas",
     "settings.settings.rolePermissions": "Permissões",
     "settings.settings.rolePermDesc": "Listar e gerenciar as permissões",
 

@@ -67,7 +67,7 @@
     "sidebar.dashboard": "Tablero",
     "sidebar.settings": "Configuración",
 	"sidebar.userProfile": "Parámetros de usuario",
-    "sidebar.roles": "Roles de acceso",
+    "sidebar.roles": "Roles",
     "sidebar.userGroups": "Grupos de usuario",
     "sidebar.permissions": "Permisos",
     "sidebar.users": "Usuarios",	
@@ -322,8 +322,8 @@
     "settings.groups.assignUsersToGroup": "Asignar Usuarios a Grupo",
     "settings.groups.assignRolesToGroup": "Asignar Roles a Grupo",
 
-    "settings.settings.roles": "Roles de Acceso",
-    "settings.settings.rolesDesc": "Gestión Roles de Acceso",
+    "settings.settings.roles": "Roles",
+    "settings.settings.rolesDesc": "Gestión Roles",
     "settings.settings.rolePermissions": "Permisos",
     "settings.settings.rolePermDesc": "Listar y Gestionar permisos de rol",
 

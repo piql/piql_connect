@@ -67,7 +67,7 @@
     "sidebar.dashboard": "Tauler",
     "sidebar.settings": "Configuració",
 	"sidebar.userProfile": "Paràmetres d'usuari",
-    "sidebar.roles": "Rols d'accés",
+    "sidebar.roles": "Rols",
     "sidebar.userGroups": "Grups d'usuari",
     "sidebar.permissions": "Permisos",
     "sidebar.users": "Usuaris",	
@@ -322,8 +322,8 @@
     "settings.groups.assignUsersToGroup": "Assigna Usuaris a Grup",
     "settings.groups.assignRolesToGroup": "Assigna Roles a Grup",
 
-    "settings.settings.roles": "Roles d'Accés",
-    "settings.settings.rolesDesc": "Gestió Roles d'Accés",
+    "settings.settings.roles": "Roles",
+    "settings.settings.rolesDesc": "Gestió Roles",
     "settings.settings.rolePermissions": "Permisos",
     "settings.settings.rolePermDesc": "Llistat i Gestió de permisos de rol",
 
