@@ -1,24 +1,66 @@
 <template>
-  <div class="ml-3">
-        <div class="form-group row">
-            <label v-if="showLabel" for="logo" class="col-form-label-sm">
-                {{logolabel}}
-            </label>
-            <input id="logo" class="col-3 form-control" type="file"> 
-            &nbsp;
-            <button class="col-1 btn-xs btn" style="color:white"><i class="fa fa-upload"></i></button>
-        </div>
+  <div>
+      <form>
+            <div class="col-10">
+                <FileInputComponent
+                    id="uploadbutton"
+                    :multiple="false"
+                    :uploader="uploader"
+                    :disabled="false">
+                    <div>
+                        <i class="fas fa-upload"></i> {{logolabel}}
+                    </div>
+                </FileInputComponent>
+            </div>
+        </form>
+
     </div>
 </template>
 
 <script>
+import FineUploader from 'vue-fineuploader';
+import FineUploaderTraditional from 'fine-uploader-wrappers'
+import VuejsDialog from 'vuejs-dialog';
+import 'vuejs-dialog/dist/vuejs-dialog.min.css';
+Vue.use(VuejsDialog)
+
 export default {
-     methods: {
-        
+    components: {
+        FineUploader
     },
     data() {
-        return {
-        };
+        const uploader = new FineUploaderTraditional({
+                options: {
+                    request: {
+                        endpoint: '', //some endpoint
+                    },
+                    validation: {
+                        allowedExtensions: ['png','jpg']
+                    },
+                    callbacks: {
+                        onError: (id, name, errorReason, xhrOrXdr) => {
+                            let options = {
+                                okText: this.$t('OK')
+                            };
+                            this.$dialog.alert(errorReason, options);
+                        },
+                        onComplete: complete => {
+                            this.infoToast(
+                                this.$t('settings.logo.header'),
+                                this.$t('settings.logo.successful')
+                            );
+                            setTimeout(
+                                reload => {
+                                    this.$router.go();
+                                }, 2000
+                            )
+                        }
+                    }
+                },
+            });
+            return {
+                uploader: uploader,
+            };
     },
     props: {
         logolabel: {

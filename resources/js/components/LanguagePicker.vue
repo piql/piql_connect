@@ -19,9 +19,9 @@ import { mapGetters, mapActions } from "vuex";
 let $ = JQuery;
 
 export default {
-    async mounted() {
-        this.fetchUserSettings();
-        this.fetchLanguages(); // Populate language when user settings are empty, should not be needed
+    mounted() {
+        // this.fetchUserSettings();
+        // this.fetchLanguages(); // Populate language when user settings are empty, should not be needed
         
          $('#languagePicker').selectpicker('refresh');
 
@@ -46,7 +46,7 @@ export default {
 
     },
     methods: {
-        ...mapActions(['fetchLanguages','fetchUserSettings','changeLanguage']),
+        ...mapActions(['changeLanguage']),
         selectionChanged: function () {
            
             this.changeLanguage(this.selection);

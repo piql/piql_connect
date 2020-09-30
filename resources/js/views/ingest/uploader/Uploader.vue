@@ -116,6 +116,8 @@ export default {
     data() {
         const Authorization = `Bearer ${Vue.prototype.$keycloak.token}`;
 
+        
+
         const uploader = new FineUploaderTraditional({
             options: {
                 request: {
@@ -153,6 +155,7 @@ export default {
                 retry: {
                     enableAuto: false, /* this didn't work very well, so we have our own logic for it */
                 },
+            
                 callbacks: {
                     onValidate: (id, name) => {
                     },
@@ -394,6 +397,52 @@ export default {
     },
 
     methods: {
+        addFiles(e){
+            e.stopPropagation();
+            e.preventDefault();
+
+            console.log("hey")
+
+            // if directory support is available
+            if(e.dataTransfer && e.dataTransfer.items)
+            {
+                var items = e.dataTransfer.items;
+                for (var i=0; i<items.length; i++) {
+                    var item = items[i].webkitGetAsEntry();
+
+                    if (item) {
+                    this.addDirectory(item);
+                    }
+                }
+                return;
+            }
+
+            // Fallback
+            var files = e.target.files || e.dataTransfer.files;
+            if (!files.length)
+            {
+                alert('File type not accepted');
+                return;
+            }
+
+            this.uploader.addFiles(files);
+    },
+
+    addDirectory(item) {
+        var _this = this;
+        if (item.isDirectory) {
+            var directoryReader = item.createReader();
+            directoryReader.readEntries(entries => {
+            entries.forEach(entry => {
+                    _this.addDirectory(entry);
+                });
+            });
+        } else {
+            item.file(file =>{
+                this.uploader.addFiles([file],0);
+            });
+        }
+    },
         forceHolderReRender(){
             this.holderKey += 1;
         },

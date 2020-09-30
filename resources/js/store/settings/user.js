@@ -13,7 +13,10 @@ const state = {
 const getters = {
     settingsApiResponse: state => state.response,
     setPasswordData: state => state.password,
-    userSettings: state => state.settings,
+    userSettings: state => {
+        console.log('call state')
+        return state.settings
+    },
     userLanguages: state => state.languages,
     currentUser: state => state.user,
     userName: () => Vue.prototype.$keycloak.given_name,
@@ -21,13 +24,15 @@ const getters = {
         return state.userMetadataTemplates.find( (t) => t.owner_id == userId );
     },
     userMetadataTemplates: state => state.userMetadataTemplates,
-    currentLanguage: state => state.settings.interface.language
+    currentLanguage: state => state.settings.interface.language,
+   
 }
 
 const actions = {
 
     async fetchUserSettings({commit}){
         let response = await axios.get("/api/v1/system/users/current-user/preferences");
+        console.log('action takes place')
         commit('setSettingsMutation',response)
     },
 
@@ -72,6 +77,7 @@ const mutations = {
         state.user = payload.data;
     },
     setSettingsMutation: (state,payload)=> {
+        console.log("the second, mutate state")
         state.settings = payload.data;
     },
     setPasswordMutation: (state,payload)=> {
