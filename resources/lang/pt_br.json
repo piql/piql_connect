@@ -360,6 +360,7 @@
     "settings.settings.toasts.failedSetPassword.title": "Erro ao alterar a senha",
     "settings.settings.toasts.failedSetPassword.message": "Houve um erro ao alterar a senha",
     "settings.settings.alert.changedPassword": "A senha foi alterada, você precisará logar novamente no sistema",
+    "settings.settings.imageProfile.message": "Envie a imagem do seu perfil arrastando o arquivo aqui. O formato permitido é",
     "settings.logo.alert.notAllowedExtensions": "Por favor, use imagens no formato PNG",
     "settings.logo.header": "Alterar logo",
     "settings.logo.ingress": "Envie uma nova imagem para o logo",

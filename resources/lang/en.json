@@ -405,6 +405,7 @@
     "settings.settings.toasts.failedSetPassword.title": "Password update failed",
     "settings.settings.toasts.failedSetPassword.message": "Failed to update password",
     "settings.settings.alert.changedPassword": "The password has been changed, you will need to log in again",
+    "settings.settings.imageProfile.message": "Upload you profile image dragging the file here. Allowed extension is",
     "settings.logo.alert.notAllowedExtensions": "Please, use PNG images",
     "settings.logo.header": "Change logo",
     "settings.logo.ingress": "Upload a new logo image",

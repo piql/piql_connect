@@ -359,6 +359,7 @@
     "settings.settings.toasts.failedSetPassword.title": "Passordoppdatering mislyktes",
     "settings.settings.toasts.failedSetPassword.message": "Kunne ikke oppdatere passordet",
     "settings.settings.alert.changedPassword": "Passordet er endret, du må logge inn på nytt",
+    "settings.settings.imageProfile.message": "Upload you profile image dragging the file here. Allowed extension is",
     "settings.logo.alert.notAllowedExtensions": "Bildeformat må være PNG.",
     "settings.logo.header": "Bytt logo",
     "settings.logo.ingress": "Last opp ny logo",

@@ -26,7 +26,7 @@
                             </b-tab>
                             <b-tab :title="$t('settings.settings.profileImagelabel')">
                                 <b-card-text>
-                                    <upload-logo v-bind:logolabel="$t('settings.settings.profileImagelabel')"></upload-logo>
+                                    <upload-profile-image v-bind:logolabel="$t('settings.settings.profileImagelabel')"></upload-profile-image>
                                     
                                 </b-card-text>
                             </b-tab>
