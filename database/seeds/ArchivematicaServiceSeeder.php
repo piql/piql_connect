@@ -80,11 +80,11 @@ class ArchivematicaServiceSeeder extends Seeder
             'http_errors' => false
         ]);
 
-        $response = $client->post('/auth/realms/development/protocol/openid-connect/token', [
+        $response = $client->post('/auth/realms/Demo/protocol/openid-connect/token', [
             'form_params' => [
                 'client_id' => 'piql-service-callback',
                 'grant_type' => 'password',
-                'client_secret' => '65b244cc-7a91-42cb-b997-5c22e7a3daa0',
+                'client_secret' => 'bd4240b7-de4b-4c14-99e6-ee79583221c3',
                 'scope' => 'openid',
                 'username' => $user->username,
                 'password' => '1234',
