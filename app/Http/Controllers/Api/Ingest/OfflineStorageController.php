@@ -8,6 +8,7 @@ use App\Http\Resources\AipToDipResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Mail;
 use Carbon\Carbon;
 use App\Http\Controllers\Controller;
 use App\Job;
@@ -20,6 +21,7 @@ use App\Http\Resources\BagCollection;
 use App\Events\BagFilesEvent;
 use App\Events\CommitJobEvent;
 use App\Interfaces\FileArchiveInterface;
+use App\Mail\PiqlIt;
 use Response;
 use Log;
 
@@ -117,6 +119,7 @@ class OfflineStorageController extends Controller
             }
             $job->applyTransition('piql_it');
             $job->save();
+            Mail::to(env('PIQLIT_NOTIFY_EMAIL_TO'))->send(new PiqlIt($job, ));
             event(new CommitJobEvent($job));
         }
 
