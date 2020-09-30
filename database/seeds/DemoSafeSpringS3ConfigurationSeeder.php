@@ -6,7 +6,7 @@ use App\S3Configuration;
 use App\StorageLocation;
 use App\User;
 
-class SafeSpringS3ConfigurationSeeder extends Seeder
+class DemoSafeSpringS3ConfigurationSeeder extends Seeder
 {
     /**
      * Run the database seeds.
