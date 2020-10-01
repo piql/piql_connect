@@ -156,10 +156,9 @@
     "ingest.taskList.size": "Size",
 
     "ingest.offlineStorage.status.title": "Status for offline storage",
-    "ingest.offlineStorage.ingress": "Send packages to piqlFilm for cold storage.",
     "ingest.offlineStorage.status.ingress": "Display the status of the archival workflow on piqlFilm",
     "ingest.offlineStorage.header": "Offline storage",
-    "ingest.offlineStorage.ingress.old": "Display the packages sent to offline storage in piqlFilm.\nAdd a name to your offline package; this name will identify your piqlFilm and allow to track that data until storage\nOptionally, you can add metadata to provide context and describe the offline package. At the end click the “Piql” button to start the archival process on piqlFilm. \n",
+    "ingest.offlineStorage.ingress": "Send packages to piqlFilm for cold storage.",
     "ingest.offlineStorage.jobName": "Offline package",
     "ingest.offlineStorage.package.header": "Archival package list",
     "ingest.offlineStorage.package.ingress" : "Display the archival packages included in the offline package",
@@ -304,7 +303,7 @@
     "settings.listing.email": "Email",
     "settings.listing.status": "Status",
     "settings.listing.created": "Created",
-    "settings.listing.backToUsers": "return to users page",
+    "settings.listing.backToUsers": "Return to users page",
     "settings.settings.actions": "Actions",
 
     "settings.archives.title": "Archives",
