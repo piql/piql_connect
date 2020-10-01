@@ -31,7 +31,7 @@ import VuejsDialog from 'vuejs-dialog';
 import Dropzone from 'vue-fineuploader/dropzone';
 import 'vuejs-dialog/dist/vuejs-dialog.min.css';
 Vue.use(VuejsDialog)
-const ALLOWED_EXT = ['png'];
+const ALLOWED_EXT = ['png','jpg','jpeg'];
 export default {
     components: {
         FineUploader,
