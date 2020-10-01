@@ -5,15 +5,14 @@ namespace App\Stats;
 use DateInterval;
 use DatePeriod;
 use DateTime;
-use Illuminate\Support\Facades\Log;
 
 class StatisticsData
 {
 
     public function monthlyIngested($userId)
     {
-        $first = new \DateTime('-11 months');
-        $last = new \DateTime('+1 month');
+        $first = new \DateTime('-12 months');
+        $last = new \DateTime();
 
         $interval = DateInterval::createFromDateString('1 month');
         $period = new DatePeriod($first, $interval, $last);
@@ -50,24 +49,21 @@ class StatisticsData
 
     private function monthlyOfflineIngested($date, $userId)
     {
-        // $data = IngestedDataOnline::where('owner', $userId)
-        //         ->whereBetween('ingest_date', [
-        //                 new DateTime('first day of ' . $date->format('Y-m')),
-        //                 new DateTime('last day of ' . $date->format('Y-m'))
-        //                 ])
-        //         ->orderBy('recorded_at', 'desc')->take(1)->get(['aips', 'bags', 'size']);
-        //
-        // if ($data != null && !empty($data) && isset($data[0])) {
-        //     return [ 'aips'=>$data[0]->aips, 'bags'=>$data[0]->bags, 'size'=>$data[0]->size ];
-        // }
+        $stats = IngestedStatsOffline::where('owner', $userId)
+            ->whereBetween('ingest_date', [
+                new DateTime('first day of ' . $date->format('Y-m')),
+                new DateTime('last day of ' . $date->format('Y-m'))]);
 
-        return [ 'aips'=>0, 'bags'=>0, 'size'=>0 ];
+        return [
+            'aips'=>$stats->sum('aips'),
+            'size'=>$stats->sum('size')
+        ];
     }
 
     public function monthlyAccessed($userId)
     {
-        $first = new \DateTime('-11 months');
-        $last = new \DateTime('+1 month');
+        $first = new \DateTime('-12 months');
+        $last = new \DateTime();
 
         $interval = DateInterval::createFromDateString('1 month');
         $period = new DatePeriod($first, $interval, $last);

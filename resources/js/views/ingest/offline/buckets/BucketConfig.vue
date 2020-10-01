@@ -105,6 +105,7 @@
         },
         data() {
             const Authorization = `Bearer ${Vue.prototype.$keycloak.token}`;
+
             const uploader = new FineUploaderTraditional({
                 options: {
                     request: {

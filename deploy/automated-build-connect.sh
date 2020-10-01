@@ -123,6 +123,9 @@ echo "Set file permissions for docker volumes"
 sudo chown 333:root /var/lib/docker/volumes/ss-location-data/_data || exit $?
 sudo chown 333:root /var/lib/docker/volumes/ss-location-data/_data/archivematica || exit $?
 
+echo "Purge the mongodb statistics"
+docker-compose -p piqlConnect exec mongodb mongo -u connectuser -p Fw86TQZrJ5 --authenticationDatabase admin connectstats -eval "printjson(db.dropDatabase())"
+
 echo "Configure S3 in env file"
 envfile="../.env"
 sed -i "s/AWS_/#AWS_/g" $envfile

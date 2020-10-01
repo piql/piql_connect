@@ -116,10 +116,13 @@ function interceptToken() {
 }
 
 Vue.use(VueKeyCloak, {
+    init: {
+        onLoad: 'login-required'
+    },
     config: {
-        realm: process.env.AUTH_REALM,
-        url: process.env.AUTH_BASE_URL,
-        clientId: process.env.AUTH_CLIENT,
+        realm: 'development',
+        url: 'https://auth.piqlconnect.com/auth/',
+        clientId: 'piql-connect-frontend',
     },
     onReady: () => {
         interceptToken();
