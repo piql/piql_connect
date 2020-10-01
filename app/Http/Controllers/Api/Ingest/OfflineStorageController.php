@@ -93,7 +93,7 @@ class OfflineStorageController extends Controller
     }
 
 
-    public function update($jobId)
+    public function update(Request $request, $jobId)
     {
         $job = Job::findOrFail($jobId);
         // This is a bit nasty because there is no owner validation here
@@ -119,7 +119,10 @@ class OfflineStorageController extends Controller
             }
             $job->applyTransition('piql_it');
             $job->save();
-            Mail::to(env('PIQLIT_NOTIFY_EMAIL_TO'))->send(new PiqlIt($job, ));
+            $emailTo = env('PIQLIT_NOTIFY_EMAIL_TO');
+            if ($emailTo) {
+            	Mail::to($emailTo)->send(new PiqlIt($job, $request->getSchemeAndHttpHost()));
+            }
             event(new CommitJobEvent($job));
         }
 

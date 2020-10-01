@@ -13,16 +13,18 @@ class PiqlIt extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $job;
+    private $job;
+    private $host;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct(Job $job)
+    public function __construct(Job $job, string $host)
     {
         $this->job = $job;
+        $this->host = $host;
     }
 
     /**
@@ -37,6 +39,7 @@ class PiqlIt extends Mailable
             ->with([
             		'jobName' => $this->job->name,
             		'userName' => $user->full_name,
+                    'host' => $this->host,
             ]);
     }
 }
