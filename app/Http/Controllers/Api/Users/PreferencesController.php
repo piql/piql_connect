@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\Controller;
 use App\Interfaces\SettingsInterface;
+use Illuminate\Support\Facades\Validator;
 
 class PreferencesController extends Controller
 {
@@ -14,7 +15,7 @@ class PreferencesController extends Controller
     /* preferences - mapped to GET
      * Get the user preference settings  (User interface setttings, language etc)
      */
-    public function preferences( Request $request )
+    public function preferences(Request $request)
     {
         $user = Auth::user();  //TODO: Pick up the userid from the user_id parameter, validate against Auth::user
         return $user->settings;
@@ -25,14 +26,20 @@ class PreferencesController extends Controller
      */
     public function updatePreferences(Request $request, SettingsInterface $settingsProvider)
     {
-        $interfaceLanguage = $request->interface['language'];
+        $validator = Validator::make($request->all(), ['interface' => 'required']);
+        if ($validator->fails())
+            return response(['message' => '"interface" is required', 'errors' => $validator->errors(),], 400);
+
+        $params = collect($request->interface)->only(['language', 'tableRowCount'])->all();
+        if (empty($params))
+            return response(['message' => 'no valid settings found in request'], 400);
 
         $settings = $settingsProvider->forAuthUser();
-        $settings->interfaceLanguage = $interfaceLanguage; //todo: validate form fields
+        if (isset($params['language'])) $settings->interfaceLanguage = $params['language']; //todo: validate form fields
+        if (isset($params['tableRowCount'])) $settings->interfaceTableRowCount = $params['tableRowCount']; //todo: validate form fields
 
         // TODO: storage locations, compound mode (if we ever want to use that), metadata prefs
         $settings->save();
         return $settings;
     }
-
 }
