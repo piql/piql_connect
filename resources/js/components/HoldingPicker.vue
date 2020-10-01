@@ -3,11 +3,13 @@
         <label v-if="showLabel" for="holdingPicker" class="col-form-label-sm">
             {{label}}
         </label>
-        <select v-model="selection" :id="elementId" class="form-control" data-live-search="true" :data-none-selected-text="$t('nothingSelected')">
-            <option v-for="holding in holdingsWithWildcard" :key="holding.id" v-bind:value="holding.uuid">
-                {{holding.title}}
-            </option>
-        </select>
+        <div :class="inputValidation">
+            <select v-model="selection" :id="elementId" class="form-control" data-live-search="true" :data-none-selected-text="$t('nothingSelected')" @change="selChange">
+                <option v-for="holding in holdingsWithWildcard" :key="holding.id" v-bind:value="holding.uuid">
+                    {{holding.title}}
+                </option>
+            </select>
+        </div>
     </div>
 </template>
 
@@ -41,6 +43,9 @@ export default {
         },
         updatePicker: function( value ) {
             $(`#${this.elementId}`).selectpicker( 'val', value );
+        },
+        selChange: function () {
+            this.inputValidation = $(`#${this.elementId}`).val() ? '' : 'mustFill'; 
         }
     },
     data() {
@@ -49,7 +54,8 @@ export default {
             archive: null,
             holdings: null,
             selection: null,
-            initComplete: false
+            initComplete: false,
+            inputValidation: '',
         };
     },
     props: {
@@ -122,6 +128,7 @@ export default {
                     this.updatePicker( holdingQuery );
                     this.refreshPicker();
                     this.enableSelection();
+                    this.selChange();
                 });
             } else {
                 this.disableSelection();
