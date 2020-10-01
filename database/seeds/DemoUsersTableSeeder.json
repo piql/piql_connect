@@ -10,10 +10,171 @@
                     "full_name": "Demo User",
                     "email":     "none@piql.com",
                     "id":        "71c445a7-892c-4b37-bca8-7e20e1c9cf4a"
+                },
+                {
+                    "username":  "simon",
+                    "password":  "simon",
+                    "full_name": "Simon Bruce-Cassidy",
+                    "email":     "simon.brucecassidy@piql.com",
+                    "id":        "6161a520-363e-4eb1-acaf-1a46ffeda330"
+                },
+                {
+                    "username":  "rune",
+                    "password":  "rune",
+                    "full_name": "Rune Bjerkestrand",
+                    "email":     "rune.bjerkestrand@piql.com",
+                    "id":        "0bf2a9ee-64f1-4328-ac44-48715852221d"
+                },
+                {
+                    "username":  "hilde",
+                    "password":  "hilde",
+                    "full_name": "Hilde Byrmo",
+                    "email":     "hilde.byrmo@piql.com",
+                    "id":        "6fcd6bb2-a64b-4840-991d-ac31cb1e5e45"
+                },
+                {
+                    "username":  "bendik",
+                    "password":  "bendik",
+                    "full_name": "Bendik Bryde",
+                    "email":     "bendik.bryde@piql.com",
+                    "id":        "313c11ee-6eb7-4357-9cb3-ff8d94abc446"
+                },
+                {
+                    "username":  "alfredo",
+                    "password":  "alfredo",
+                    "full_name": "Alfredo Trujillo",
+                    "email":     "alfredo.trujillo@piql.com",
+                    "id":        "ed78c8c3-711c-4d95-aac1-797a1bf09c46"
+                },
+                {
+                    "username":  "stephen",
+                    "password":  "stephen",
+                    "full_name": "Stephen Mackey",
+                    "email":     "stephen.mackey@piql.com",
+                    "id":        "2504f053-9410-4ca9-9484-6c0a0229f6ee"
+                },
+                {
+                    "username":  "patricia",
+                    "password":  "patricia",
+                    "full_name": "Patricia Alfheim",
+                    "email":     "patricia.alfheim@piql.com",
+                    "id":        "f8941fba-17da-4228-9f74-ca302d942302"
+                },
+                {
+                    "username":  "chris",
+                    "password":  "chris",
+                    "full_name": "Chris Brasøygård",
+                    "email":     "chris.brasoygard@piql.com",
+                    "id":        "ce4ef738-8076-4be5-9eb8-3c3ad0996ce5"
+                },
+                {
+                    "username" : "piqlbrazil",
+                    "password" : "piqlbrazil",
+                    "full_name" : "piqlbrazil",
+                    "email" : "piqlbrazil@piql.com",
+                    "id":        "82a01f11-491b-4225-b85f-0233605a1bfb"
+                },
+                {
+                    "username" : "piqlitaly",
+                    "password" : "piqlitaly",
+                    "full_name" : "piqlitaly",
+                    "email" : "piqlitaly@piql.com",
+                    "id":        "720da288-2464-4871-9e6b-486dcd3b5a03"
+                },
+                {
+                    "username" : "piqlspain",
+                    "password" : "piqlspain",
+                    "full_name" : "piqlspain",
+                    "email" : "piqlspain@piql.com",
+                    "id":        "7077652a-2c57-4a7d-99e0-1785190b557b"
+                },
+                {
+                    "username" : "piqlswiss",
+                    "password" : "piqlswiss",
+                    "full_name" : "piqlswiss",
+                    "email" : "piqlswiss@piql.com",
+                    "id":        "bf78105f-146a-4e4a-a80d-e91379754252"
+                },
+                {
+                    "username" : "piqlnorway",
+                    "password" : "piqlnorway",
+                    "full_name" : "piqlnorway",
+                    "email" : "piqlnorway@piql.com",
+                    "id":        "fe34f1db-8ded-435b-bd82-bea81ce10f87"
+                },
+                {
+                    "username" : "piqlindia",
+                    "password" : "piqlindia",
+                    "full_name" : "piqlindia",
+                    "email" : "piqlindia@piql.com",
+                    "id":        "44ca5e5a-6868-48ff-a25f-747878cc2590"
+                },
+                {
+                    "username" : "piqlpoland",
+                    "password" : "piqlpoland",
+                    "full_name" : "piqlpoland",
+                    "email" : "piqlpoland@piql.com",
+                    "id":        "09cad154-6823-4b55-ac3c-985c98b2ca2f"
+                },
+                {
+                    "username" : "piqlslovakia",
+                    "password" : "piqlslovakia",
+                    "full_name" : "piqlslovakia",
+                    "email" : "piqlslovakia@piql.com",
+                    "id":        "b5f20eb7-f36b-49d3-a30a-8377d680dae8"
+                },
+                {
+                    "username" : "piqlgermany",
+                    "password" : "piqlgermany",
+                    "full_name" : "piqlgermany",
+                    "email" : "piqlgermany@piql.com",
+                    "id":        "8ea9d9ad-0039-4030-b293-adfd8e5dc87c"
+                },
+                {
+                    "username" : "piqlindonesia",
+                    "password" : "piqlindonesia",
+                    "full_name" : "piqlindonesia",
+                    "email" : "piqlindonesia@piql.com",
+                    "id":        "a77ffb86-3313-49c9-b97d-954a9bba7576"
+                },
+                {
+                    "username" : "piqlthailand",
+                    "password" : "piqlthailand",
+                    "full_name" : "piqlthailand",
+                    "email" : "piqlthailand@piql.com",
+                    "id":        "0bf2a9ee-64f1-4328-ac44-48715852221d"
+                },
+                {
+                    "username" : "piqlmexico",
+                    "password" : "piqlmexico",
+                    "full_name" : "piqlmexico",
+                    "email" : "piqlmexico@piql.com",
+                    "id":        "0514daac-6665-4c99-827e-ac4207a71712"
+                },
+                {
+                    "username" : "piqlfinland",
+                    "password" : "piqlfinland",
+                    "full_name" : "piqlfinland",
+                    "email" : "piqlfinland@piql.com",
+                    "id":        "55a53570-014c-45cc-9312-d433cb8e000c"
+                },
+                {
+                    "username" : "piqlrussia",
+                    "password" : "piqlrussia",
+                    "full_name" : "piqlrussia",
+                    "email" : "piqlrussia@piql.com",
+                    "id":        "fb0ad39b-cc5d-4d63-8216-8b7aec538bb2"
+                },
+                {
+                    "username" : "piqlbaltics",
+                    "password" : "piqlbaltics",
+                    "full_name" : "piqlbaltics",
+                    "email" : "piqlbaltics@piql.com",
+                    "id":        "31354a1a-bdc1-4c36-afe6-8e9b093fd45b"
                 }
-            ]
+                ]
+            }
         }
-    }]
+    ]
 }
-
 
