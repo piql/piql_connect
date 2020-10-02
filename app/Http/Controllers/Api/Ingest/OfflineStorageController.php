@@ -121,7 +121,12 @@ class OfflineStorageController extends Controller
             $job->save();
             $emailTo = env('PIQLIT_NOTIFY_EMAIL_TO');
             if ($emailTo) {
-            	Mail::to($emailTo)->send(new PiqlIt($job, $request->getSchemeAndHttpHost()));
+                try {
+                    Mail::to($emailTo)->send(new PiqlIt($job, $request->getSchemeAndHttpHost()));
+                } catch (\Throwable $e) {
+                    Log::error("Error on sending e-mail to: " . $emailTo);
+                    Log::error($e->getMessage());
+                }
             }
             event(new CommitJobEvent($job));
         }
