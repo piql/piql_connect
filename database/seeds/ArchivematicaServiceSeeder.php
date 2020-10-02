@@ -76,18 +76,17 @@ class ArchivematicaServiceSeeder extends Seeder
 
         $client = new GuzzleHttp\Client([
             // Base URI is used with relative requests
-            'base_uri' => 'https://auth.piqlconnect.com',
+            'base_uri' => env('APP_AUTH_SERVICE_BASE_URL'),
             'http_errors' => false
         ]);
 
-        $response = $client->post('/auth/realms/Demo/protocol/openid-connect/token', [
+        $response = $client->post('/auth/realms/'.env('APP_AUTH_SERVICE_REALM').'/protocol/openid-connect/token', [
             'form_params' => [
-                'client_id' => 'piql-service-callback',
+                'client_id' => env('APP_AUTH_SERVICE_CALLBACK_CLIENT'),
                 'grant_type' => 'password',
-                'client_secret' => 'bd4240b7-de4b-4c14-99e6-ee79583221c3',
+                'client_secret' => env('APP_AUTH_SERVICE_CALLBACK_CLIENT_SECRET'),
                 'scope' => 'openid',
                 'username' => $user->username,
-                'password' => '1234',
             ],
         ]);
         if($response->getStatusCode() >= 400) {
