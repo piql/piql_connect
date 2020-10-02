@@ -5,21 +5,30 @@
         "attributes": {
             "collection": [
                 {
-                    "title": "Cultural",
-                    "description": "Cultural",
-                    "uuid": "9ccd7b00-8ebd-11ea-867a-c9bcd3d2b62d",
+                    "title": "Gallery",
+                    "description": "A gallery",
+                    "uuid": "9aae5540-d3ec-11e9-9a0b-ddd5a3958760",
+                    "account_uuid": "32af9410-f43e-11ea-8a3b-a5227e1c2957"
+                },
+                {
+                    "title": "Library",
+                    "description": "A library",
+                    "uuid": "a3623760-1740-11ea-8a5e-95b238123342",
+                    "account_uuid": "32af9410-f43e-11ea-8a3b-a5227e1c2957"
+                },
+                {
+                    "title": "Archive",
+                    "description": "An archive",
+                    "uuid": "c2b5fdc0-1740-11ea-87bf-d723a360b912",
                     "account_uuid": "32af9410-f43e-11ea-8a3b-a5227e1c2957"
                 },
                 {
                     "title": "Museum",
-                    "description": "Museum",
-                    "uuid": "ec1ae3f0-8ebd-11ea-b377-7bb297e803a2",
+                    "description": "A museum",
+                    "uuid": "2133cda0-1741-11ea-ad92-bb0c4fe72b88",
                     "account_uuid": "32af9410-f43e-11ea-8a3b-a5227e1c2957"
                 }
-
             ]
         }
     }]
 }
-
-
