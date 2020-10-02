@@ -51,7 +51,7 @@ export default {
         },
         selChange: function () {
             let val = $(`#${this.elementId}`).val();
-            this.inputValidation = !val || val == '0' ? 'mustFill' : '';
+            this.inputValidation = this.required && (!val || val == '0') ? 'mustFill' : '';
         }
     },
     data() {
@@ -90,7 +90,11 @@ export default {
         elementId: {
             type: String,
             default: "archivePicker"
-        }
+        },
+        required: {
+            type: Boolean,
+            default: false
+        },
     },
     watch: {
         '$route': 'dispatchRouting',

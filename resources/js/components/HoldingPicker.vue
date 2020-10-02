@@ -45,7 +45,7 @@ export default {
             $(`#${this.elementId}`).selectpicker( 'val', value );
         },
         selChange: function () {
-            this.inputValidation = $(`#${this.elementId}`).val() ? '' : 'mustFill'; 
+            this.inputValidation = !this.required || $(`#${this.elementId}`).val() ? '' : 'mustFill'; 
         }
     },
     data() {
@@ -74,7 +74,11 @@ export default {
         elementId: {
             type: String,
             default: "holdingPicker"
-        }
+        },
+        required: {
+            type: Boolean,
+            default: false
+        },
     },
     watch: {
         '$route': 'dispatchRouting',

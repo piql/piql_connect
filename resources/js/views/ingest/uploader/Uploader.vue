@@ -26,12 +26,12 @@
                          </div>
                          <div class="form-group">
                              <div :title="$t('upload.archiveToolTip')">
-                                <archive-picker v-bind:label="$t('Archive')" @loadNewHolders="loadNewHolders"></archive-picker>
+                                <archive-picker v-bind:label="$t('Archive')" @loadNewHolders="loadNewHolders" required="true"/>
                             </div>
                          </div>
                          <div class="form-group">
                              <div :title="$t('upload.holdingToolTip')">
-                                <holding-picker v-bind:label="$t('Holdings')" :useWildCard="true" :key='holderKey' ></holding-picker>
+                                <holding-picker v-bind:label="$t('Holdings')" :useWildCard="true" :key='holderKey' required="true"/>
                             </div>
                          </div>
 
