@@ -169,7 +169,14 @@ class AipController extends Controller
         /* USED FOR SINGLE FILE DOWNLOAD */
         $aip = Aip::findOrFail($request->aipId);
         $file = $aip->fileObjects()->findOrFail($request->fileId);
-        $stream = $storage->downloadStream( $aip->online_storage_location, $file->fullpath );
+        try {
+            $stream = $storage->downloadStream( $aip->online_storage_location, $file->fullpath );
+        } catch (\Exception $e) {
+            Log::error("Failed to download preview for aip '{$aip->id}'");
+            return response([
+                "message" => "Failed to download preview"
+            ], 400);
+        }
         if (!is_resource($stream)) {
             Log::error("Failed to read preview for aip '{$aip->id}'");
             return response([

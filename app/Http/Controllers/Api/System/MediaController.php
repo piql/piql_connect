@@ -15,7 +15,14 @@ class MediaController extends Controller {
     public function showDipFile(Request $request, ArchivalStorageInterface $storage) {
         $dip = Dip::findOrFail($request->dipId);
         $fileObj = $dip->fileObjects->find($request->fileId);
-        $stream = $storage->downloadStream($dip->storage_location, $fileObj->fullpath);
+        try {
+            $stream = $storage->downloadStream($dip->storage_location, $fileObj->fullpath);
+        } catch (\Exception $e) {
+            Log::error("Failed to download preview for file '{$fileObj->fullpath}'");
+            return response([
+                "message" => "Failed to download preview"
+            ], 400);
+        }
         if (!is_resource($stream)) {
             Log::error("Failed to read preview for file '{$fileObj->fullpath}'");
             return response([
@@ -28,7 +35,14 @@ class MediaController extends Controller {
     }
 
     public function thumb($fileName, FilePreviewInterface $filePreview) {
-        $stream = $filePreview->getCustomIcon($fileName);
+        try {
+            $stream = $filePreview->getCustomIcon($fileName);
+        } catch (\Exception $e) {
+            Log::error("Failed to read thumbnail for file '{$fileName}'");
+            return response([
+                "message" => "Failed to read thumbnail"
+            ], 400);
+        }
         if (!is_resource($stream)) {
             Log::error("Failed to read thumbnail for file '{$fileName}'");
             return response([

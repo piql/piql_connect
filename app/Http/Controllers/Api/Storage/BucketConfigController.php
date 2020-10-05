@@ -49,7 +49,14 @@ class BucketConfigController extends Controller {
     public function showFile($jobId, $name, FilePreviewInterface $filePreview) {
         $filePath = $this->getPath($jobId) . $name;
         $filePreview->file($filePath);
-        $stream = $filePreview->getContent(true);
+        try {
+            $stream = $filePreview->getContent(true);
+        } catch (\Exception $e) {
+            Log::error("Failed to download preview for file '{$filePath}'");
+            return response([
+                "message" => "Failed to download preview"
+            ], 400);
+        }
         if (!is_resource($stream)) {
             Log::error("Failed to read preview for file '{$filePath}'");
             return response([

@@ -33,11 +33,18 @@ class ThumbnailController extends Controller
             ], 400);
         }
 
-        $stream = $storage->downloadStream( $dip->storage_location, $file->fullpath );
-        if (!is_resource($stream)) {
-            Log::error("Failed to read preview for file '{$file->fullpath}'");
+        try {
+            $stream = $storage->downloadStream( $dip->storage_location, $file->fullpath );
+        } catch (\Exception $e) {
+            Log::error("Failed to download thumbnail for file '{$file->fullpath}'");
             return response([
-                "message" => "Failed to read preview"
+                "message" => "Failed to download thumbnail"
+            ], 400);
+        }
+        if (!is_resource($stream)) {
+            Log::error("Failed to read thumbnail for file '{$file->fullpath}'");
+            return response([
+                "message" => "Failed to read thumbnail"
             ], 400);
         }
         return response()->stream( function () use( $stream ) {
@@ -68,7 +75,14 @@ class ThumbnailController extends Controller
             ], 400);
         }
 
-        $stream = $storage->downloadStream( $dip->storage_location, $file->fullpath );
+        try {
+            $stream = $storage->downloadStream( $dip->storage_location, $file->fullpath );
+        } catch (\Exception $e) {
+            Log::error("Failed to download preview for file '{$file->fullpath}'");
+            return response([
+                "message" => "Failed to download preview"
+            ], 400);
+        }
         if (!is_resource($stream)) {
             Log::error("Failed to read preview for file '{$file->fullpath}'");
             return response([

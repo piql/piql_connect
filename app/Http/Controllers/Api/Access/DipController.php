@@ -98,7 +98,14 @@ class DipController extends Controller
             ], 400);
         }
         $filePreview->storage($storage)->dip($dip)->fileObject($file);
-        $stream = $filePreview->getContent(true);
+        try {
+            $stream = $filePreview->getContent(true);
+        } catch (\Exception $e) {
+            Log::error("Failed to download thumbnail for file '{$file->fullpath}'");
+            return response([
+                "message" => "Failed to download thumbnail"
+            ], 400);
+        }
         if (!is_resource($stream)) {
             Log::error("Failed to read thumbnail for file '{$file->fullpath}'");
             return response([
@@ -124,7 +131,14 @@ class DipController extends Controller
             ], 400);
         }
 
-        $stream = $storage->downloadStream( $dip->storage_location, $file->fullpath );
+        try {
+            $stream = $storage->downloadStream( $dip->storage_location, $file->fullpath );
+        } catch (\Exception $e) {
+            Log::error("Failed to download preview for file '{$file->fullpath}'");
+            return response([
+                "message" => "Failed to download preview"
+            ], 400);
+        }
         if (!is_resource($stream)) {
             Log::error("Failed to read preview for file '{$file->fullpath}'");
             return response([
@@ -199,7 +213,14 @@ class DipController extends Controller
         $file = $dip->fileObjects->find( $request->fileId );
         $filePreview->storage($storage)->dip($dip)->fileObject($file);
 
-        $stream = $filePreview->getContent();
+        try {
+            $stream = $filePreview->getContent();
+        } catch (\Exception $e) {
+            Log::error("Failed to download preview for file '{$file->fullpath}'");
+            return response([
+                "message" => "Failed to download preview"
+            ], 400);
+        }
         if (!is_resource($stream)) {
             Log::error("Failed to read preview for file '{$file->fullpath}'");
             return response([
@@ -217,7 +238,14 @@ class DipController extends Controller
         $dip = Dip::findOrFail( $request->dipId );
         $file = $dip->fileObjects->findOrFail( $request->fileId );
 
-        $stream = $storage->downloadStream( $dip->storage_location, $file->fullpath );
+        try {
+            $stream = $storage->downloadStream( $dip->storage_location, $file->fullpath );
+        } catch (\Exception $e) {
+            Log::error("Failed to download preview for file '{$file->fullpath}'");
+            return response([
+                "message" => "Failed to download preview"
+            ], 400);
+        }
         if (!is_resource($stream)) {
             Log::error("Failed to read preview for file '{$file->fullpath}'");
             return response([
@@ -258,7 +286,14 @@ class DipController extends Controller
         $file = $dip->fileObjects->find( $request->fileId );
         $thumbnail = $this->filter_file_thumbnail($dip, $file, $filePreview);
         $filePreview->storage($storage)->dip($dip)->fileObject($thumbnail);
-        $stream = $filePreview->getContent(true);
+        try {
+            $stream = $filePreview->getContent(true);
+        } catch (\Exception $e) {
+            Log::error("Failed to download thumbnail for file '{$file->fullpath}'");
+            return response([
+                "message" => "Failed to download thumbnail"
+            ], 400);
+        }
         if (!is_resource($stream)) {
             Log::error("Failed to read thumbnail for file '{$file->fullpath}'");
             return response([
