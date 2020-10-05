@@ -35,7 +35,7 @@
                     </router-link>
 
                     <router-link :to="{ name: 'settings.admin.account.users' }">
-                        <li class="list-group-item cursorPointer" :class="{ active: routeBelongsTo('settings.admin.account.users') }">
+                        <li class="list-group-item cursorPointer" >
                             <i class="fas fa-wrench"></i>
                             <div class="leftMenuItem">
                                 {{$t('sidebar.settings.admin')}}
