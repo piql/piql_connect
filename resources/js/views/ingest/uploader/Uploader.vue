@@ -26,12 +26,18 @@
                          </div>
                          <div class="form-group">
                              <div :title="$t('upload.archiveToolTip')">
-                                <archive-picker v-bind:label="$t('Archive')" @loadNewHolders="loadNewHolders"></archive-picker>
+                                <archive-picker 
+                                v-bind:label="$t('Archive')" 
+                                @loadNewHolders="loadNewHolders"
+                                ></archive-picker>
                             </div>
                          </div>
                          <div class="form-group">
                              <div :title="$t('upload.holdingToolTip')">
-                                <holding-picker v-bind:label="$t('Holdings')" :useWildCard="true" :key='holderKey' ></holding-picker>
+                                <holding-picker  
+                                @selectedHolder="selectedHolder"
+                                v-bind:label="$t('Holdings')" 
+                                :useWildCard="true" :key='holderKey' ></holding-picker>
                             </div>
                          </div>
 
@@ -399,6 +405,15 @@ export default {
         },
         loadNewHolders(){
             this.forceHolderReRender();
+        },
+        selectedHolder(holding){
+            Vue.nextTick(() => {
+                if( holding === this.wildCardLabel ) {
+                    this.updateQueryParams({ holding: null, page : null })
+                } else {
+                    this.updateQueryParams({ holding, page : null });
+                }
+            })
         },
         metadataClicked( e ) {
             let fileId = e.uploadedFileId;

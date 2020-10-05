@@ -105,17 +105,10 @@ export default {
                 this.initComplete = true;
                 return;
             }
+            
+            this.$emit('selectedHolder',holding)
 
-            Vue.nextTick( () => {
-                Vue.nextTick(() => {
-                    if( holding === this.wildCardLabel ) {
-                        this.updateQueryParams({ holding: null, page : null })
-                    } else {
-                        this.updateQueryParams({ holding, page : null });
-                    }
-                })
-                   
-            });
+        
         },
         holdings: function( holdings ) {
             if( !! holdings ) {
