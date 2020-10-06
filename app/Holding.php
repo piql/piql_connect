@@ -6,7 +6,6 @@ use App\Traits\AutoGenerateUuid;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Validator;
-use Webpatser\Uuid\Uuid;
 use App\Archive;
 
 class Holding extends Model
@@ -180,6 +179,10 @@ class Holding extends Model
         if( array_has( $template, 'dc' ) ) { //TODO: Support other schemas than DC, model level validation would be nice
             $this->attributes['defaultMetadataTemplate'] = json_encode( $template );
         }
+    }
+
+    public function metadata() {
+        return json_decode($this->defaultMetadataTemplate, true);
     }
 
 }

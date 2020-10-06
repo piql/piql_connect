@@ -78,5 +78,9 @@ class Account extends Model
         return $ar;
     }
 
+    public function metadata() {
+        return json_decode($this->defaultMetadataTemplate, true);
+    }
+
 
 }
