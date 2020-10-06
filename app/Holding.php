@@ -180,10 +180,5 @@ class Holding extends Model
             $this->attributes['defaultMetadataTemplate'] = json_encode( $template );
         }
     }
-
-    public function metadata() {
-        return json_decode($this->defaultMetadataTemplate, true);
-    }
-
 }
 
