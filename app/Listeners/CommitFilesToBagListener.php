@@ -5,16 +5,14 @@ namespace App\Listeners;
 use App\Events\BagFilesEvent;
 use App\Events\BagCompleteEvent;
 use App\Events\ErrorEvent;
-use App\Events\InitiateTransferToArchivematicaEvent;
 use App\Interfaces\MetadataGeneratorInterface;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
-use Log;
 use BagitUtil;
 use App\Traits\BagOperations;
 use App\MetadataPath;
+use Illuminate\Support\Facades\Log;
 
 class CommitFilesToBagListener implements ShouldQueue
 {
@@ -81,6 +79,13 @@ class CommitFilesToBagListener implements ShouldQueue
         }
         */
 
+        $metadata = json_decode($bag->metadata);
+        $metadataStorage = [
+            'account' => MetadataPath::ACCOUNT_OBJECT,
+            'holding' => MetadataPath::HOLDING_OBJECT,
+            'archive' => MetadataPath::ARCHIVE_OBJECT,
+        ];
+
         foreach ($files as $file)
         {
             if( ($file->filename === "metadata.csv") && $bag->owner()->first()->settings->getIngestMetadataAsFileAttribute() )
@@ -95,6 +100,12 @@ class CommitFilesToBagListener implements ShouldQueue
                         'object' => MetadataPath::FILE_OBJECT_PATH.$file->filename,
                         'metadata' => $file->metadata[0]->metadata
                     ]);
+                    foreach($metadataStorage as $metaType => $path) {
+                        $retval = $metadataWriter->write([
+                            'object' => $path.$file->filename,
+                            'metadata' => $metadata->$metaType
+                        ]);
+                    }
                     if (!$retval) {
                         Log::error("Generating metadata for Bag " . $bag->id . " failed!");
                         event(new ErrorEvent($bag));
