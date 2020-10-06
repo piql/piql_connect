@@ -387,6 +387,7 @@
 
     "settings.settings.languagelabel": "Language",
     "settings.settings.rowslabel": "Results Displayed/Page",
+    "settings.settings.rowslabel.updatedTo": "updated to",
     "settings.settings.profileImagelabel": "Profile Image",
     "settings.settings.userInterfaceHeader": "User interface",
     "settings.settings.setPasswordHeader": "Change password",

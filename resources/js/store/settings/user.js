@@ -56,13 +56,18 @@ const actions = {
     },
 
     async updateTableRowCount({ commit }, count) {
-        axios.post("/api/v1/system/users/current-user/preferences", { "interface": { "tableRowCount": count } })
-        .then(response => {
-            commit('setResponse', response)
-            commit('setSettingsMutation', response)
-        }).catch(error => {
-            commit('setErrorResponse', error.response)
+        return new Promise((resolve, reject) => {
+            axios.post("/api/v1/system/users/current-user/preferences", { "interface": { "tableRowCount": count } })
+            .then(response => {
+                commit('setResponse', response)
+                commit('setSettingsMutation', response)
+                resolve(response.data)
+            }).catch(error => {
+                commit('setErrorResponse', error.response);
+                reject(error.response)
+            })
         })
+        
     },
 
     async createEmptyTemplateWithUserAsCreator({ commit }, userAccount) {
