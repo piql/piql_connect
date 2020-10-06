@@ -3,8 +3,8 @@
         <label v-if="showLabel" for="holdingPicker" class="col-form-label-sm">
             {{label}}
         </label>
-        <select v-model="selection" :id="elementId" class="form-control" data-live-search="true" :data-none-selected-text="$t('nothingSelected')">
-            <option v-for="holding in holdingsWithWildcard" :key="holding.id" v-bind:value="holding.uuid">
+        <select v-model="selection" @change="changeHolding(selection)"  :id="elementId" class="form-control" data-live-search="true" :data-none-selected-text="$t('nothingSelected')">
+            <option v-for="holding in holdingsWithWildcard"   :key="holding.id" v-bind:value="holding.uuid">
                 {{holding.title}}
             </option>
         </select>
@@ -22,6 +22,9 @@ export default {
         this.archive = this.$route.query.archive;
     },
     methods: {
+        changeHolding(uuid){
+            this.$emit('selectedHolder',uuid)
+        },
         dispatchRouting: function() {
             let query = this.$route.query;
             this.archive = query.archive;
@@ -49,7 +52,7 @@ export default {
             archive: null,
             holdings: null,
             selection: null,
-            initComplete: false
+            initComplete: false,
         };
     },
     props: {
@@ -94,19 +97,27 @@ export default {
                 if(response.data.data.length > 0){
                     this.holdings = response.data.data;
                     //default selection
-                    this.selection = this.holdings[0].uuid;
+                    //this.selection = this.holdings[0].uuid;
                 }
 
             })
         },
-        selection: function ( holding ) {
+        selection: function ( holding) {
             if( !this.initComplete ) {
                 /* don't change query params when setting selection from page load */
                 this.initComplete = true;
                 return;
             }
+
+            Vue.nextTick(() => {
+                if( holding === this.wildCardLabel ) {
+                    this.updateQueryParams({ holding: null, page : null })
+                } else {
+                    this.updateQueryParams({ holding, page : null });
+                }
+            })
             
-            this.$emit('selectedHolder',holding)
+            //this.$emit('selectedHolder',holding)
 
         
         },
@@ -130,6 +141,7 @@ export default {
         holdingsWithWildcard: function() {
             /* If it has elements, push a wildcard element ("All") at the start of the list */
             if( this.useWildCard ) {
+                //this.selection = wild;
             return this.holdings
                 ? [{'id' : 0, 'title': this.wildCardLabel}, ...this.holdings ]
                     : null;
