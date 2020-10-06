@@ -3,7 +3,7 @@
       <table class="table table-hover">
           <thead>
               <tr>
-                  <th><i class="fas fa-trash-alt actionIcon text-center ml-2 cursorPointer" @click="batchRemove"></i> {{$t('upload.fileName')}}</th>
+                  <th><input type="checkbox" v-model="selectAll"/> <i class="fas fa-trash-alt actionIcon text-center ml-2 cursorPointer" @click="batchRemove"></i> {{$t('upload.fileName')}}</th>
                   <th>{{$t('upload.fileSize')}}</th>
                   <th>{{$t('upload.fileActions')}}</th>
               </tr>
@@ -19,7 +19,7 @@
                             <div v-else>
                                 <span class="d-inline" tabindex="0" data-toggle="tooltip" :title="file.filename">
                                     <div class="text-left">
-                                        <label><input type="checkbox" class="fileSel" :value="idx"/> {{file.filename}}</label>
+                                        <label><input type="checkbox" class="fileSel fileChk" :value="idx" v-model="selected"/> {{file.filename}}</label>
                                     </div>
                                 </span>
                             </div>
@@ -62,7 +62,8 @@ export default {
             file: null,
             perPage: 8,
             pages:[],
-            page: 1
+            page: 1,
+            selected: []
         }
     },
     async mounted(){
@@ -94,6 +95,7 @@ export default {
                         for (let i=0;i<fileToRemoveArr.length;i++) {
                             this.$emit("removeClicked", fileToRemoveArr[i] );
                         }
+                        this.selected = [];
                     });
             } else {
                 this.$dialog.alert(this.$t('upload.remove.batch.noFiles'), options);
@@ -108,6 +110,7 @@ export default {
                 .confirm(this.$t('upload.remove.question'), options)
                 .then(remove => {
                     this.$emit("removeClicked", file );
+                    this.selected = [];
                 });
         },
         metadataClicked: function (file ) {
@@ -152,7 +155,7 @@ export default {
             let from = (page * perPage) - perPage;
             let to = (page * perPage);
             return  files.slice(from, to);
-        }
+        },
     },
     computed: {
         displayedfiles () {
@@ -163,6 +166,21 @@ export default {
         },
         meta: function() {
             return this.filesUploadingMeta;
+        },
+        selectAll: {
+            get: function () {
+                return this.displayedfiles ? this.selected.length == this.displayedfiles.length : false;
+            },
+            set: function (value) {
+                var selected = [];
+
+                if (value) {
+                    for (let i=0; i<this.displayedfiles.length; i++) {
+                        selected.push(i);
+                    }
+                }
+                this.selected = selected;
+            }
         }
     },
     watch: {
@@ -197,5 +215,8 @@ export default {
         border-color: #cc5d33;
         color: #ffffff;
         background-color: #cc5d33;
+    }
+    .fileChk {
+        margin-right: 0.4em;
     }
 </style>
