@@ -21,3 +21,6 @@ RUN chown www-data:www-data /var/log/supervisor
 RUN mkdir -p /var/run/supervisor
 RUN chown www-data:www-data /var/run/supervisor
 CMD ["/usr/local/bin/bootstrap.sh"]
+
+COPY ./app/policy.xml /etc/ImageMagick-6/
+
