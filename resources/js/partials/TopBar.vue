@@ -95,7 +95,6 @@ export default {
             if (this.user == null) {
                 axios.get("/api/v1/system/users/me").then( async ( resp ) =>  {
                     this.user = resp.data;
-                    this.$i18n.locale = this.user.language;
                 });
             }
         }
