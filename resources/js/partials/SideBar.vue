@@ -154,7 +154,8 @@
                     <span :class="{ collapse: !routeBelongsTo('access.browse') }">
                         <router-link :to="{ name: 'access.retrieve.request' }">
                             <li class="list-group-item" :class="{ active: routeBelongsTo ('access.retrieve') }" >
-                                <img src="/images/retrieval-icon-white.svg" class="sideBarIconImg"/><div class="leftMenuItem">{{$t('sidebar.offlineBrowser')}}</div>
+                                <img src="/images/retrieval-icon-white.svg" class="sideBarIconImg"/>
+                                <div class="leftMenuItem1">{{$t('sidebar.offlineBrowser')}}</div>
                             </li>
                         </router-link>
                     </span>
