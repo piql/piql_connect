@@ -79,33 +79,27 @@ class CommitFilesToBagListener implements ShouldQueue
         }
         */
 
-        $metadata = json_decode($bag->metadata);
-        $metadataStorage = [
-            'account' => MetadataPath::ACCOUNT_OBJECT,
-            'holding' => MetadataPath::HOLDING_OBJECT,
-            'archive' => MetadataPath::ARCHIVE_OBJECT,
-        ];
+        $bagMetadata = json_decode($bag->metadata);
+        foreach (['account', 'holding', 'archive'] as $type) {
+            $retval = $metadataWriter->write([
+                'object' => MetadataPath::of($type),
+                'metadata' => $bagMetadata->$type
+            ]);
+        }
 
-        foreach ($files as $file)
-        {
-            if( ($file->filename === "metadata.csv") && $bag->owner()->first()->settings->getIngestMetadataAsFileAttribute() )
-                $this->bagIt->addMetadataFile($file->storagePathCompleted(), MetadataPath::FILE_OBJECT_PATH.$file->filename);
+        foreach ($files as $file) {
+            if(($file->filename === "metadata.csv") && $bag->owner()->first()->settings->getIngestMetadataAsFileAttribute())
+                $this->bagIt->addMetadataFile($file->storagePathCompleted(), MetadataPath::FILE_OBJECT_PATH . $file->filename);
             else
-                $this->bagIt->addFile($file->storagePathCompleted(), MetadataPath::FILE_OBJECT_PATH.$file->filename);
+                $this->bagIt->addFile($file->storagePathCompleted(), MetadataPath::FILE_OBJECT_PATH . $file->filename);
 
-            if( $bag->owner()->first()->settings->getIngestMetadataAsFileAttribute() !== true ) {
+            if($bag->owner()->first()->settings->getIngestMetadataAsFileAttribute() !== true) {
                 if ($file->metadata->count() > 0) {
                     // append metadata to file
                     $retval = $metadataWriter->write([
-                        'object' => MetadataPath::FILE_OBJECT_PATH.$file->filename,
+                        'object' => MetadataPath::FILE_OBJECT_PATH . $file->filename,
                         'metadata' => $file->metadata[0]->metadata
                     ]);
-                    foreach($metadataStorage as $metaType => $path) {
-                        $retval = $metadataWriter->write([
-                            'object' => $path.$file->filename,
-                            'metadata' => $metadata->$metaType
-                        ]);
-                    }
                     if (!$retval) {
                         Log::error("Generating metadata for Bag " . $bag->id . " failed!");
                         event(new ErrorEvent($bag));
