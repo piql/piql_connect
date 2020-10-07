@@ -25,8 +25,7 @@ export default {
                 });
             }
             if (this.file) {
-                let fileArr = this.file.filename.split('-');
-                return fileArr[fileArr.length-1];
+                return this.file.filename;
             }
             return "";
         }
