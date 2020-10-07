@@ -64,7 +64,7 @@
                     <div class="card-header">
                         <div class="row">
                             <div class="col-md-6">
-                                <b><i class="fa fa-folder-open"></i>  {{$t('upload.fileListTitle')}} ( {{ sortedFilesUploading.length }} {{$t('upload.fileListTitle.files')}})</b>
+                                <b><i class="fa fa-folder-open"></i>  {{$t('upload.fileListTitle')}} ({{ sortedFilesUploading.length }} {{$t('upload.fileListTitle.files')}}, {{totalSize}} mb)</b>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
@@ -378,6 +378,15 @@ export default {
         customerSelectsArchives: function() {
             return !!this.archives;
         },
+        totalSize: function() {
+            let size = 0;
+            if (this.files != null) {
+                this.files.forEach(file => {
+                    size += file.filesize * 1;
+                });
+            }
+            return Math.round(size / (1024 * 1024));
+        }
     },
 
     watch: {
