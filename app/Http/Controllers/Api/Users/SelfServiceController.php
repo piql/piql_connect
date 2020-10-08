@@ -125,7 +125,7 @@ class SelfServiceController extends Controller
             $file = 'custom-files/user/avatar.png';
         }
         $userSess['img'] = base64_encode(Storage::disk('local')->get($file));
-        $userSess['language'] = $user->settings->interface['language'];
+        $userSess['language'] = $user->settings->interfaceLanguage;
         return response()->json($userSess, 200);
     }
 

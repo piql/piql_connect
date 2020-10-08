@@ -118,6 +118,12 @@ function interceptToken() {
     })
 }
 
+function loadLanguage() {
+    axios.get("/api/v1/system/users/me").then( async ( resp ) =>  {
+        i18n.locale = resp.data.language;
+    });
+}
+
 Vue.use(VueKeyCloak, {
     config: {
         realm: process.env.AUTH_REALM,
@@ -133,5 +139,6 @@ Vue.use(VueKeyCloak, {
             mixins: [refreshSessionActivity],
             render: h => h(Layout)
         }).$mount('#app');
+        loadLanguage();
     }
 });
