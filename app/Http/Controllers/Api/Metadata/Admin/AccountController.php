@@ -64,7 +64,7 @@ class AccountController extends Controller
         $validatedRequest = $this->validate( $request, [
                 "title" => "string",
                 "description" => "string|nullable",
-                "metadata" => "array|nullable"
+                "defaultMetadataTemplate" => "array|nullable"
             ]
         );
         $account->update( $validatedRequest );

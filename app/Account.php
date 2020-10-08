@@ -42,7 +42,7 @@ class Account extends Model
                 $model->uuid = Str::uuid();
             }
 
-            $userSuppliedData = $model->defaultMetadataTemplate["dc"];
+            $userSuppliedData = $model->defaultMetadataTemplate["dc"] ?? [];
             $model->defaultMetadataTemplate = ["dc" => ["identifier" => $model->uuid ] + $userSuppliedData ] ;
         });
     }
@@ -62,12 +62,21 @@ class Account extends Model
         return $this->hasMany('App\User', 'account_uuid', 'uuid');
     }
 
-    public function setDefaultMetadataTemplateAttribute( Array $value )
-    {
-        if( array_has( $value, 'dc' ) ) { //TODO: Support other schemas than DC
-            $original = $this->defaultMetadataTemplate ?? json_decode( self::DEFAULT_TEMPLATE );
-            $this->defaultMetadataTemplate = ["dc" => $value["dc"] + $original["dc"] ];
+    public function getDefaultMetadataTemplateAttribute( string $template ) {
+        $ar = json_decode( $template, true );
+        if(isset( $ar["dc"] ) && !isset( $ar["dc"]["identifier"] ) ) {
+            $ar["dc"]["identifier"] = $this->attributes["uuid"]; //The default is to use the uuid for the Archive as the identifier (as per spec.)
         }
+
+        if(isset( $ar["dc"] ) && !isset( $ar["dc"]["title"] ) ) {
+            $ar["dc"]["title"] = $this->attributes["title"] ?? "";  //TODO: accounts.title is nullable, not sure if this is ok?
+        }
+
+        if(isset( $ar["dc"] ) && !isset( $ar["dc"]["description"] ) ) {
+            $ar["dc"]["description"] = $this->attributes["description"] ?? ""; //Grab the description from the model if not present in metadata template
+        }
+        return $ar;
     }
+
 
 }
