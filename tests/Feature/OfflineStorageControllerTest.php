@@ -10,9 +10,11 @@ use App\User;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Illuminate\Support\Facades\Mail;
 use Faker\Factory as faker;
 use Laravel\Passport\Passport;
 use Webpatser\Uuid\Uuid;
+use App\Mail\PiqlIt;
 
 class OfflineStorageControllerTest extends TestCase
 {
@@ -205,4 +207,26 @@ class OfflineStorageControllerTest extends TestCase
         $this->assertEquals( $aipCount, \DB::table("archivables")->where("archive_id", $this->job->id)->count());
     }
 
+    public function test_send_a_email_when_piql_button_is_pressed()
+    {
+        putenv('PIQLIT_NOTIFY_EMAIL_TO=fakemail@piql.com');
+        \Mail::fake();
+        $response = $this->actingAs( $this->user )
+            ->json('PATCH',
+                route('api.ingest.bucket.update', [$this->job->id]),
+                ['name' => "bucket name"]);
+        $response->assertStatus( 200 )
+            ->assertJsonFragment(['name' => "bucket name"]);
+
+        \Event::fake();
+
+        $response = $this->actingAs( $this->user )
+            ->json('PATCH',
+                route('api.ingest.bucket.update', [$this->job->id]),
+                ['status' => "commit"]);
+        $response->assertStatus( 200 )
+            ->assertJsonFragment(['status' => "transferring"]);
+        \Event::assertDispatched(\App\Events\CommitJobEvent::class, 1);
+        Mail::assertSent(PiqlIt::class);
+    }
 }

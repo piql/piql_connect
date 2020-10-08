@@ -20,11 +20,11 @@
             </div>
 
             <div class="col-sm-2 text-nowrap text-right" title="Total file size of all archival packages in this piqlFilm">
-                {{ fileSize }}
+                {{ item.size | prettyBytes }}
             </div>
 
             <div class="col-sm">
-                <div v-if="fileSize !== '---'" class="progress bucket-progress bg-fill">
+                <div v-if="item.size !== undefined" class="progress bucket-progress bg-fill">
                     <div class="progress-bar bg-brand" role="progressbar" aria-valuenow="usage" aria-valuemin="0" aria-valuemax="100" :style="usagePercentage">
                         <div class="fg-white bucket-text justify-content-center d-flex position-absolute w-50" >{{usage}}%</div>
                     </div>
@@ -107,33 +107,9 @@
                     job = result.data;
                 });
                 return job;
-            },
-            getFileSizeIEC(bytes) {
-                let value = 0;
-                let exp = 0;
-                if (bytes) {
-                    exp = Math.floor(Math.log(bytes) / Math.log(1024));
-                    value = (bytes / Math.pow(1024, exp)).toFixed(2);
-                }
-                return value + " " + (exp ? 'KMGTPEZY'[exp - 1] + 'iB' : 'Bytes')
-            },
-            getFileSizeSI(bytes) {
-                let value = 0;
-                let exp = 0;
-                if (bytes) {
-                    exp = Math.floor(Math.log(bytes) / Math.log(1000));
-                    value = (bytes / Math.pow(1000, exp)).toFixed(2);
-                }
-                return value + " " + (exp ? 'KMGTPEZY'[exp - 1] + 'B' : 'Bytes')
-            },
+            }
         },
         computed: {
-            fileSize: function() {
-                if(this.item.size !== undefined)
-                    return this.getFileSizeSI(this.item.size);
-                else
-                    return "---";
-            },
             usage: function() {
                 if((this.item.bucket_size === undefined) || this.item.bucket_size === 0) {
                     return 0;

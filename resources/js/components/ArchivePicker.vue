@@ -4,11 +4,13 @@
             <label v-if="showLabel" for="archivePicker" class="col-form-label-sm">
             {{label}}
         </label>
-        <select v-model="selection" :id="elementId" class="form-control w-100" v-bind:disabled="selectionDisabled" data-live-search="true">
-            <option v-for="archive in archivesWithWildcard" :key="archive.id" :value="archive.uuid">
-                {{archive.title}}
-            </option>
-        </select>
+        <div :class="inputValidation">
+            <select v-model="selection" :id="elementId" class="form-control w-100" v-bind:disabled="selectionDisabled" data-live-search="true" @change="selChange">
+                <option v-for="archive in archivesWithWildcard" :key="archive.id" :value="archive.uuid">
+                    {{archive.title}}
+                </option>
+            </select>
+        </div>
     </span>
     <span v-else>
         <label class="col-form-label-sm" for="singleArchive">{{$t('Archive')}}</label>
@@ -45,6 +47,11 @@ export default {
         updatePicker: function( archive ) {
             $(`#${this.elementId}`).selectpicker('val', archive);
             this.refreshPicker();
+            this.selChange();
+        },
+        selChange: function () {
+            let val = $(`#${this.elementId}`).val();
+            this.inputValidation = this.required && (!val || val == '0') ? 'mustFill' : '';
         }
     },
     data() {
@@ -52,6 +59,7 @@ export default {
             selection: null,
             archives: [],
             initComplete: false,
+            inputValidation: '',
         };
     },
     props: {
@@ -82,7 +90,11 @@ export default {
         elementId: {
             type: String,
             default: "archivePicker"
-        }
+        },
+        required: {
+            type: Boolean,
+            default: false
+        },
     },
     watch: {
         '$route': 'dispatchRouting',
