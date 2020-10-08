@@ -22,6 +22,7 @@ use App\Http\Resources\BagCollection;
 use App\Http\Resources\FileCollection;
 use Response;
 use App\Events\FileUploadedEvent;
+use App\Traits\UserSettingRequest;
 use Carbon\Carbon;
 use Webpatser\Uuid\Uuid;
 use Log;
@@ -29,6 +30,7 @@ use Log;
 class BagController extends Controller
 {
 
+    use UserSettingRequest;
     private $nameValidationRule = '/(^[^:\\<>"\/?*|]{3,64}$)/';
     private $newBagNameValidationRule = '/(^[^:\\<>"\/?*|]{0,64}$)/';
 
@@ -200,12 +202,13 @@ class BagController extends Controller
         }
 
         $files = $bag->files()->latest()->get();
-/*TODO: Move to AIP        $result = $files->map( function ($file) {
+        /*TODO: Move to AIP        
+            $result = $files->map( function ($file) {
             $ext = pathinfo($file->filename, PATHINFO_EXTENSION);
             return collect(["fupath" => $file->uuid.".".$ext])->merge($file);
-});
- */
-        return new FileCollection( $files );
+        });
+        */
+        return new FileCollection($files);
     }
 
     public function showFile(File $file)

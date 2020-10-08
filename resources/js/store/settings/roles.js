@@ -14,13 +14,13 @@ const getters = {
 }
 
 const actions = {
-    async fetchSelectedRoles({commit},data =  {limit : 100}){
-        let response  = await axios.get("/api/v1/admin/access-control/permission-groups",{ params: data });
+    async fetchSelectedRoles({commit}){
+        let response  = await axios.get("/api/v1/admin/access-control/permission-groups");
         commit('setRolesMutation', response.data)
     },
 
-    async fetchRoles({commit},query, data =  {limit : 10}){
-        let response  = await axios.get("/api/v1/admin/access-control/permission-groups"+ query,{ params: data });
+    async fetchRoles({commit},query){
+        let response  = await axios.get("/api/v1/admin/access-control/permission-groups"+ query);
         commit('setRolesMutation', response.data)
     },
 
