@@ -215,7 +215,7 @@ class DipController extends Controller
 
     public function showFileObject($fileId)
     {
-        return FileObject::find($fileId);
+        return FileObjectResource::unique(FileObject::findOrFail($fileId));
     }
 
     public function file_thumbnail( ArchivalStorageInterface $storage, Request $request, FilePreviewInterface $filePreview )

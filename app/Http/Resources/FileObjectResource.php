@@ -31,4 +31,16 @@ class FileObjectResource extends JsonResource
             'metadata' => $metadata
         ];
     }
+    /**
+     * Transform the resource into a object.
+     *
+     * @param  \App\FileObject $fileObject
+     * @return array
+     */
+    public static function unique( $fileObject )
+    {
+        return [
+        'filename' => $fileObject->filename
+        ];
+    }
 }
