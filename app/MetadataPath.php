@@ -22,4 +22,8 @@ class MetadataPath
                 return self::FILE_OBJECT_PATH;
         }
     }
+
+    public static function count() {
+        return 4;
+    } 
 }

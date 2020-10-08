@@ -80,10 +80,11 @@ class CommitFilesToBagListener implements ShouldQueue
         */
 
         $bagMetadata = json_decode($bag->metadata);
-        foreach (['account', 'holding', 'archive'] as $type) {
+        foreach (['account', 'archive', 'holding'] as $type) {
+            $meta = (!isset($bagMetadata->$type)) ? [] : $bagMetadata->$type;
             $retval = $metadataWriter->write([
                 'object' => MetadataPath::of($type),
-                'metadata' => $bagMetadata->$type
+                'metadata' => $meta
             ]);
         }
 
