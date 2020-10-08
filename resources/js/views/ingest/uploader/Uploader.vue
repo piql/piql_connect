@@ -26,12 +26,17 @@
                          </div>
                          <div class="form-group">
                              <div :title="$t('upload.archiveToolTip')">
-                                <archive-picker v-bind:label="$t('Archive')" @loadNewHolders="loadNewHolders"></archive-picker>
+                                <archive-picker 
+                                v-bind:label="$t('Archive')" 
+                                ></archive-picker>
                             </div>
                          </div>
                          <div class="form-group">
                              <div :title="$t('upload.holdingToolTip')">
-                                <holding-picker v-bind:label="$t('Holdings')" :useWildCard="true" :key='holderKey' ></holding-picker>
+                                <holding-picker  
+                                @selectedHolder="selectedHolder"
+                                v-bind:label="$t('Holdings')" 
+                                :useWildCard="true" ></holding-picker>
                             </div>
                          </div>
 
@@ -116,8 +121,6 @@ export default {
     data() {
         const Authorization = `Bearer ${Vue.prototype.$keycloak.token}`;
 
-        
-
         const uploader = new FineUploaderTraditional({
             options: {
                 request: {
@@ -155,7 +158,6 @@ export default {
                 retry: {
                     enableAuto: false, /* this didn't work very well, so we have our own logic for it */
                 },
-            
                 callbacks: {
                     onValidate: (id, name) => {
                     },
@@ -288,7 +290,6 @@ export default {
             pageFrom: 1,
             pageTo: 4,
             fileNameFilter: "",
-            holderKey: 0
         };
     },
 
@@ -397,57 +398,14 @@ export default {
     },
 
     methods: {
-        addFiles(e){
-            e.stopPropagation();
-            e.preventDefault();
-
-            console.log("hey")
-
-            // if directory support is available
-            if(e.dataTransfer && e.dataTransfer.items)
-            {
-                var items = e.dataTransfer.items;
-                for (var i=0; i<items.length; i++) {
-                    var item = items[i].webkitGetAsEntry();
-
-                    if (item) {
-                    this.addDirectory(item);
-                    }
+        selectedHolder(holding){
+            Vue.nextTick(() => {
+                if( !holding ) {
+                    this.updateQueryParams({ holding: null, page : null })
+                } else {
+                    this.updateQueryParams({ holding, page : null });
                 }
-                return;
-            }
-
-            // Fallback
-            var files = e.target.files || e.dataTransfer.files;
-            if (!files.length)
-            {
-                alert('File type not accepted');
-                return;
-            }
-
-            this.uploader.addFiles(files);
-    },
-
-    addDirectory(item) {
-        var _this = this;
-        if (item.isDirectory) {
-            var directoryReader = item.createReader();
-            directoryReader.readEntries(entries => {
-            entries.forEach(entry => {
-                    _this.addDirectory(entry);
-                });
-            });
-        } else {
-            item.file(file =>{
-                this.uploader.addFiles([file],0);
-            });
-        }
-    },
-        forceHolderReRender(){
-            this.holderKey += 1;
-        },
-        loadNewHolders(){
-            this.forceHolderReRender();
+            })
         },
         metadataClicked( e ) {
             let fileId = e.uploadedFileId;

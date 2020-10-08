@@ -48,7 +48,7 @@ import { mapActions, mapGetters } from "vuex";
 
         created(){
              this.fetchUserSettings();
-             this.fetchLanguages(); // Populate language when user settings are empty, should not be needed
+             this.fetchLanguages(); 
 
         },
         

@@ -20,8 +20,7 @@ let $ = JQuery;
 
 export default {
     mounted() {
-        // this.fetchUserSettings();
-        // this.fetchLanguages(); // Populate language when user settings are empty, should not be needed
+        
         
          $('#languagePicker').selectpicker('refresh');
 
