@@ -18,69 +18,94 @@ const getters = {
     currentUser: state => state.user,
     userName: () => Vue.prototype.$keycloak.given_name,
     userIsAdmin: () => Vue.prototype.$keycloak.resourceAccess['piql-connect-api'].roles.includes('admin'),
-    userMetadataTemplateByUserId:  state => userId => {
-        return state.userMetadataTemplates.find( (t) => t.owner_id == userId );
+    userMetadataTemplateByUserId: state => userId => {
+        return state.userMetadataTemplates.find((t) => t.owner_id == userId);
     },
     userMetadataTemplates: state => state.userMetadataTemplates,
-    currentLanguage: state => state.settings.interface.language
+    currentLanguage: state => state.settings.interface.language,
+    userTableRowCount: state => state.settings.interface.tableRowCount,
 }
 
 const actions = {
 
-    async fetchUserSettings({commit}){
-        let response = await axios.get("/api/v1/system/users/current-user/preferences");
-        commit('setSettingsMutation',response)
-    },
-
-    async fetchLanguages({commit}){
-        let response = await axios.get("/api/v1/system/languages");
-        commit('setLanguagesMutation',response)
-    },
-
-    async changeLanguage({commit}, language){
-        axios.post("/api/v1/system/users/current-user/preferences", {"interface": { "language": language }}).then(response => {
-            commit('setResponse',response)
-        }).catch(error => {
-            commit('setErrorResponse',error.response)
+    async fetchUserSettings({ commit }) {
+        return new Promise((resolve, reject) => {
+            axios.get("/api/v1/system/users/current-user/preferences")
+            .then(response =>{
+                commit('setSettingsMutation', response)
+                resolve(response.data)
+            })
+            .catch(error => {
+                reject(error.response)
+            })
         })
     },
 
-    async setNewPassword({commit},data){
-        let response =  await axios.post("/api/v1/system/users/current-user/password", data);
-        commit('setPasswordMutation',response)
+    async fetchLanguages({ commit }) {
+        let response = await axios.get("/api/v1/system/languages");
+        commit('setLanguagesMutation', response)
     },
 
-    async setAccountMetadataTemplate( {commit}, data ){
+    async changeLanguage({ commit }, language) {
+        axios.post("/api/v1/system/users/current-user/preferences", { "interface": { "language": language } }).then(response => {
+            commit('setResponse', response)
+        }).catch(error => {
+            commit('setErrorResponse', error.response)
+        })
+    },
+
+    async setNewPassword({ commit }, data) {
+        let response = await axios.post("/api/v1/system/users/current-user/password", data);
+        commit('setPasswordMutation', response)
+    },
+
+    async setAccountMetadataTemplate({ commit }, data) {
         //TODO: Api call for associating metadata template to the user account
-        commit( 'setAccountMetadataTemplateMutation', data );
+        commit('setAccountMetadataTemplateMutation', data);
     },
 
-    async createEmptyTemplateWithUserAsCreator( {commit}, userAccount ) {
+    async updateTableRowCount({ commit }, count) {
+        return new Promise((resolve, reject) => {
+            axios.post("/api/v1/system/users/current-user/preferences", { "interface": { "tableRowCount": count } })
+            .then(response => {
+                commit('setResponse', response)
+                commit('setSettingsMutation', response)
+                resolve(response.data)
+            }).catch(error => {
+                commit('setErrorResponse', error.response);
+                reject(error.response)
+            })
+        })
+        
+    },
+
+    async createEmptyTemplateWithUserAsCreator({ commit }, userAccount) {
         let ownerId = userAccount.id;
         let fullName = userAccount.full_name;
-        let m = {"id": "", owner_id: "","created_at": "", "metadata":{"dc":{"title":"","creator":"","subject":"","description":"","publisher":"","contributor":"","date":"","type":"","format":"","identifier":"","source":"","language":"","relation":"","coverage":"","rights":""}}};
-        let template = {...m, owner_id: ownerId, metadata: {...m.metadata, dc: { ...m.metadata.dc, creator: fullName}}};
-        commit( 'setAccountMetadataTemplateMutation', template );
+        let m = { "id": "", owner_id: "", "created_at": "", "metadata": { "dc": { "title": "", "creator": "", "subject": "", "description": "", "publisher": "", "contributor": "", "date": "", "type": "", "format": "", "identifier": "", "source": "", "language": "", "relation": "", "coverage": "", "rights": "" } } };
+        let template = { ...m, owner_id: ownerId, metadata: { ...m.metadata, dc: { ...m.metadata.dc, creator: fullName } } };
+        commit('setAccountMetadataTemplateMutation', template);
     },
 
-    async logoutUser({commit}){
+    async logoutUser({ commit }) {
         Vue.prototype.$keycloak.logoutFn();
     },
 }
 
 const mutations = {
-    setCurrentUserMutation: (state,payload)=> {
+    setCurrentUserMutation: (state, payload) => {
         state.user = payload.data;
     },
-    setSettingsMutation: (state,payload)=> {
+    setSettingsMutation: (state, payload) => {
         state.settings = payload.data;
     },
-    setPasswordMutation: (state,payload)=> {
+    setPasswordMutation: (state, payload) => {
         state.password = payload.data;
     },
-    setLanguagesMutation: (state,payload)=> {
+    setLanguagesMutation: (state, payload) => {
         state.languages = payload.data;
     },
+    
     setResponse: (state, response) => {
         state.response = {
             status: response.status,
@@ -90,17 +115,17 @@ const mutations = {
     },
     setErrorResponse: (state, error) => {
         state.response = {
-            status:error.status,
+            status: error.status,
             message: error.data.message
         }
 
     },
 
-    setAccountMetadataTemplateMutation: ( state, payload ) => {
+    setAccountMetadataTemplateMutation: (state, payload) => {
         state.userMetadataTemplates =
             state.userMetadataTemplates
-            .filter( t => t.owner_id != payload.owner_id)
-            .concat(payload);
+                .filter(t => t.owner_id != payload.owner_id)
+                .concat(payload);
     },
 
 }

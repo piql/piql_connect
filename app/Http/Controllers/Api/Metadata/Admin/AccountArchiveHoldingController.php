@@ -123,7 +123,9 @@ class AccountArchiveHoldingController extends Controller
             return new HoldingResource( $holding );
         }
 
-        return new HoldingResource( Holding::create( $validated ) );
+        $data = array_merge( $validated, [ 'owner_archive_uuid' => $archive->uuid ] );
+
+        return new HoldingResource( Holding::create( $data ) );
     }
 
 

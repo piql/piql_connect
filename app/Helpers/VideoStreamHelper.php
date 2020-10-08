@@ -77,7 +77,7 @@ class VideoStreamHelper {
             ob_end_flush();
         }
         $i = $this->start;
-        set_time_limit(0);
+        set_time_limit(5*60);
         while(!feof($this->stream) && $i <= $this->end) {
             $bytesToRead = $this->buffer;
             if(($i+$bytesToRead) > $this->end) {

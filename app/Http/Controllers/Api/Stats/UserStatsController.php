@@ -12,6 +12,7 @@ use App\FileObject;
 use Log;
 use App\User;
 use App\Stats\IngestedDataOnline;
+use App\Stats\IngestedStatsOffline;
 use App\Job;
 
 class UserStatsController extends Controller
@@ -24,22 +25,12 @@ class UserStatsController extends Controller
      */
     public function __invoke( $userId )
     {
-        //TODO: This should probably gather stats based on account rather than user.
-        //      Revisit when the keycloak authentication has settled.
-        $currentUser = Auth::user();
-        if( $currentUser == null ) {
-            return response()->json([ 'error' => 401, 'message' => 'Must authenticate to access per-user statistics' ], 401);
-        }
-        if( $userId !== "current" && $currentUser->id != $userId ) {
-            return response()->json([ 'error' => 401, 'message' => 'Access to user statistics is restricted' ], 401);
-        }
-
         $infoArray = [
-            'onlineDataIngested'   => IngestedDataOnline::where('owner', $currentUser->id)->sum('size'),
-            'offlineDataIngested'  => 0,    //TODO: [DUMMY] Replace with a proper query
-            'onlineAIPsIngested'   => Aip::where('owner',$currentUser->id)->count(),
-            'offlineAIPsIngested'  => 0,    //TODO: [DUMMY] Replace with a proper query
-            'offlineReelsCount'    => Job::where(['owner'=>$currentUser->id,'status'=>'stored'])->count(),
+            'onlineDataIngested'   => IngestedDataOnline::select()->sum('size'),
+            'offlineDataIngested'  => IngestedStatsOffline::select()->sum('size'),
+            'onlineAIPsIngested'   => Aip::count(),
+            'offlineAIPsIngested'  => IngestedStatsOffline::select()->sum('aips'),
+            'offlineReelsCount'    => Job::whereIn('status', ['transferring', 'preparing', 'writing', 'storing'])->count(),
             'offlinePagesCount'    => 0,    //TODO: Visuals on film will not be implemented in 1.0
             'offlineAIPsRetrieved' => 0,    //TODO: Retrieval from film will not be implemented in 1.0
             'offlineDataRetrieved' => 0     //TODO: Retrieval from film will not be implemented in 1.0

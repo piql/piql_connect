@@ -21,22 +21,10 @@ class AlterUsersAddAccount extends Migration
 
         $account = Account::whereTitle("Default Account")->first();
         if(!$account) {
-            {
-                $account = Account::create([
-                    "title" => "Default Account",
-                    "description" => "Default Account",
-                    "uuid" => Uuid::generate()->string
-                ]);
-                $metadata = \App\AccountMetadata::create([
-                    "modified_by" => "",
-                    "metadata" => ["dc" => [
-                        "title" => $account->title,
-                        "description" => $account->description,
-                    ]]
-                ]);
-                $metadata->parent()->associate($account);
-                $metadata->save();
-            }
+            $account = Account::create([
+                "title" => "Default Account",
+                "description" => "Default Account",
+            ]);
         }
         User::query()->update(["account" => $account->uuid]);
     }
