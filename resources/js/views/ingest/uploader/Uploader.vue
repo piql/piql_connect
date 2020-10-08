@@ -400,7 +400,7 @@ export default {
     methods: {
         selectedHolder(holding){
             Vue.nextTick(() => {
-                if( holding === "Nothing Selected" ) {
+                if( !holding ) {
                     this.updateQueryParams({ holding: null, page : null })
                 } else {
                     this.updateQueryParams({ holding, page : null });

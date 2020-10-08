@@ -96,8 +96,6 @@ export default {
             axios.get(`/api/v1/metadata/archives/${archiveId}/holdings`).then( (response) => {
                 if(response.data.data.length > 0){
                     this.holdings = response.data.data;
-                    //default selection
-                    //this.selection = this.holdings[0].uuid;
                 }
 
             })
@@ -116,8 +114,6 @@ export default {
                     this.updateQueryParams({ holding, page : null });
                 }
             })
-            
-            //this.$emit('selectedHolder',holding)
 
         
         },
@@ -141,7 +137,6 @@ export default {
         holdingsWithWildcard: function() {
             /* If it has elements, push a wildcard element ("All") at the start of the list */
             if( this.useWildCard ) {
-                //this.selection = wild;
             return this.holdings
                 ? [{'id' : 0, 'title': this.wildCardLabel}, ...this.holdings ]
                     : null;
