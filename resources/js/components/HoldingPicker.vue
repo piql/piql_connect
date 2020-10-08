@@ -3,11 +3,13 @@
         <label v-if="showLabel" for="holdingPicker" class="col-form-label-sm">
             {{label}}
         </label>
-        <select v-model="selection" @change="changeHolding(selection)"  :id="elementId" class="form-control" data-live-search="true" :data-none-selected-text="$t('nothingSelected')">
-            <option v-for="holding in holdingsWithWildcard"   :key="holding.id" v-bind:value="holding.uuid">
-                {{holding.title}}
-            </option>
-        </select>
+        <div :class="inputValidation">
+            <select v-model="selection" :id="elementId" class="form-control" data-live-search="true" :data-none-selected-text="$t('nothingSelected')" @change="selChange">
+                <option v-for="holding in holdingsWithWildcard" :key="holding.id" v-bind:value="holding.uuid">
+                    {{holding.title}}
+                </option>
+            </select>
+        </div>
     </div>
 </template>
 
@@ -22,9 +24,6 @@ export default {
         this.archive = this.$route.query.archive;
     },
     methods: {
-        changeHolding(uuid){
-            this.$emit('selectedHolder',uuid)
-        },
         dispatchRouting: function() {
             let query = this.$route.query;
             this.archive = query.archive;
@@ -44,6 +43,11 @@ export default {
         },
         updatePicker: function( value ) {
             $(`#${this.elementId}`).selectpicker( 'val', value );
+        },
+        selChange: function () {
+            let uuid = $(`#${this.elementId}`).val();
+            this.$emit('selectedHolder',uuid);
+            this.inputValidation = !this.required || uuid ? '' : 'mustFill';
         }
     },
     data() {
@@ -53,6 +57,7 @@ export default {
             holdings: null,
             selection: null,
             initComplete: false,
+            inputValidation: '',
         };
     },
     props: {
@@ -71,7 +76,11 @@ export default {
         elementId: {
             type: String,
             default: "holdingPicker"
-        }
+        },
+        required: {
+            type: Boolean,
+            default: false
+        },
     },
     watch: {
         '$route': 'dispatchRouting',
@@ -115,7 +124,7 @@ export default {
                 }
             })
 
-        
+
         },
         holdings: function( holdings ) {
             if( !! holdings ) {
@@ -124,6 +133,7 @@ export default {
                     this.updatePicker( holdingQuery );
                     this.refreshPicker();
                     this.enableSelection();
+                    this.selChange();
                 });
             } else {
                 this.disableSelection();
