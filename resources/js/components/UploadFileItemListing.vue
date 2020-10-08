@@ -154,7 +154,14 @@ export default {
             let perPage = this.perPage;
             let from = (page * perPage) - perPage;
             let to = (page * perPage);
-            return  files.slice(from, to);
+            this.selected = [];
+            if (from >= files.length && page > 1) {
+                page--;
+                from -= this.perPage;
+                to -= this.perPage;
+                this.$router.replace({ query: { page: page } });
+            }
+            return files.slice(from, to);
         },
     },
     computed: {
@@ -169,7 +176,7 @@ export default {
         },
         selectAll: {
             get: function () {
-                return this.displayedfiles ? this.selected.length == this.displayedfiles.length : false;
+                return this.displayedfiles ? this.selected.length > 0 && this.selected.length == this.displayedfiles.length : false;
             },
             set: function (value) {
                 var selected = [];
