@@ -13,7 +13,7 @@
             {{formatShortDate(item.archived_at)}}
         </div>
         <div class="col-sm-1 p-0 text-truncate align-self-center text-center">
-            {{formatShortDate(item.archived_at)}}
+            {{item.storage_properties.bag.holding_name}}
         </div>
         <div class="col-sm-1 align-self-center text-center">
             {{fileCount}}
