@@ -58,7 +58,7 @@ export default {
         }
     },
     async mounted(){
-        this.options = this.retrievedArchives.map(archive => {
+        this.options = this.archives.map(archive => {
             return {
                 text: archive.title,
                 value: archive.id
@@ -90,7 +90,7 @@ export default {
         }
     },
     computed: {
-        ...mapGetters(['retrievedArchives']),
+        ...mapGetters(['archives']),
         uniqueID(){
             return Date.now();
         }

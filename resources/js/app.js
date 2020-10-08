@@ -26,6 +26,7 @@ if (typeof io !== 'undefined') {
     window.Echo = new Echo({ broadcaster: 'socket.io', host: window.location.hostname + ':6001', });
 }
 import vueSelectSides from "vue-select-sides";
+import vueFilterPrettyBytes from 'vue-filter-pretty-bytes';
 
 /**
  * We'll load the axios HTTP library which allows us to easily issue requests
@@ -94,6 +95,8 @@ let refreshSessionActivity = Vue.mixin({
 Vue.use(vueSelectSides, {});
 Vue.component("vue-select-sides", vueSelectSides);
 
+// Pretty-print file sizes
+Vue.use(vueFilterPrettyBytes);
 
 /**
  * Finally, create the Vue application instance

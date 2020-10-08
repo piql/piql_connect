@@ -41,9 +41,9 @@ class MetadataTemplateController extends Controller
      */
     public function index(Request $request)
     {
-        $metadata = \auth()->user()->morphMany( MetadataTemplate::class,'owner');
+        //TODO: Fix the ownership stuff
         $limit = $request->limit ? $request->limit : env('DEFAULT_ENTRIES_PER_PAGE');
-        return MetadataResource::collection( $metadata->paginate( $limit ) );
+        return MetadataResource::collection( MetadataTemplate::paginate( $limit ) );
 
     }
 
@@ -59,10 +59,8 @@ class MetadataTemplateController extends Controller
         $validatedData = $this->validateRequest( $request );
         $template = MetadataTemplate::create([
             "metadata" => $validatedData['metadata'],
-            "owner" => Auth::user(),
-            "modified_by" => Auth::id()
+            "modified_by" => Auth::id(),
         ]);
-
         return new MetadataResource( $template );
     }
 
@@ -120,6 +118,8 @@ class MetadataTemplateController extends Controller
             $metadataTemplate->update( $requestData );
             return new MetadataResource( $metadataTemplate );
         }
+
+        $account = Auth::user()->account;
 
         return new MetadataResource( MetadataTemplate::create( $requestData ) );
     }

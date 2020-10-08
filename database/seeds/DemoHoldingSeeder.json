@@ -5,34 +5,84 @@
         "attributes": {
             "collection": [
                 {
+                    "title": "Video",
+                    "description": "Video",
+                    "owner_archive_uuid": "9aae5540-d3ec-11e9-9a0b-ddd5a3958760"
+                },
+                {
+                    "title": "Audio",
+                    "description": "Audio",
+                    "owner_archive_uuid": "9aae5540-d3ec-11e9-9a0b-ddd5a3958760"
+                },
+                {
+                    "title": "Image",
+                    "description": "Image",
+                    "owner_archive_uuid": "9aae5540-d3ec-11e9-9a0b-ddd5a3958760"
+                },
+                {
                     "title": "Documents",
                     "description": "Documents",
-                    "owner_archive_uuid": "9ccd7b00-8ebd-11ea-867a-c9bcd3d2b62d"
+                    "owner_archive_uuid": "9aae5540-d3ec-11e9-9a0b-ddd5a3958760"
                 },
                 {
-                    "title": "Photographs",
-                    "description": "Photographs",
-                    "owner_archive_uuid": "9ccd7b00-8ebd-11ea-867a-c9bcd3d2b62d"
+                    "title": "Video",
+                    "description": "Video",
+                    "owner_archive_uuid": "a3623760-1740-11ea-8a5e-95b238123342"
                 },
                 {
-                    "title": "Landscapes",
-                    "description": "Landscapes",
-                    "owner_archive_uuid": "9ccd7b00-8ebd-11ea-867a-c9bcd3d2b62d"
+                    "title": "Audio",
+                    "description": "Audio",
+                    "owner_archive_uuid": "a3623760-1740-11ea-8a5e-95b238123342"
+                },
+                {
+                    "title": "Image",
+                    "description": "Foto",
+                    "owner_archive_uuid": "a3623760-1740-11ea-8a5e-95b238123342"
                 },
                 {
                     "title": "Documents",
                     "description": "Documents",
-                    "owner_archive_uuid": "ec1ae3f0-8ebd-11ea-b377-7bb297e803a2"
+                    "owner_archive_uuid": "a3623760-1740-11ea-8a5e-95b238123342"
                 },
                 {
-                    "title": "Photographs",
-                    "description": "Photographs",
-                    "owner_archive_uuid": "ec1ae3f0-8ebd-11ea-b377-7bb297e803a2"
+                    "title": "Video",
+                    "description": "Video",
+                    "owner_archive_uuid": "2133cda0-1741-11ea-ad92-bb0c4fe72b88"
                 },
                 {
-                    "title": "Landscapes",
-                    "description": "Landscapes",
-                    "owner_archive_uuid": "ec1ae3f0-8ebd-11ea-b377-7bb297e803a2"
+                    "title": "Audio",
+                    "description": "Audio",
+                    "owner_archive_uuid": "2133cda0-1741-11ea-ad92-bb0c4fe72b88"
+                },
+                {
+                    "title": "Image",
+                    "description": "Image",
+                    "owner_archive_uuid": "2133cda0-1741-11ea-ad92-bb0c4fe72b88"
+                },
+                {
+                    "title": "Documents",
+                    "description": "Documents",
+                    "owner_archive_uuid": "2133cda0-1741-11ea-ad92-bb0c4fe72b88"
+                },
+                {
+                    "title": "Video",
+                    "description": "Video",
+                    "owner_archive_uuid": "c2b5fdc0-1740-11ea-87bf-d723a360b912"
+                },
+                {
+                    "title": "Audio",
+                    "description": "Audio",
+                    "owner_archive_uuid": "c2b5fdc0-1740-11ea-87bf-d723a360b912"
+                },
+                {
+                    "title": "Image",
+                    "description": "Image",
+                    "owner_archive_uuid": "c2b5fdc0-1740-11ea-87bf-d723a360b912"
+                },
+                {
+                    "title": "Documents",
+                    "description": "Documents",
+                    "owner_archive_uuid": "c2b5fdc0-1740-11ea-87bf-d723a360b912"
                 }
             ]
         }

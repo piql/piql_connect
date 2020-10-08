@@ -14,7 +14,7 @@
             <div class="card-body">
                 <add-user v-if="showAddUser" @addUser='addUser'></add-user>
                 <div v-else>
-                    <user-listing :key="listingKey" @deleteUser='deleteUser'  @disableUser="disableUser" :users="formattedUsers" @editUser="editUser" @enableUser="enableUser"></user-listing>
+                    <user-listing :key="listingKey" @disableUser="disableUser" :users="formattedUsers" @editUser="editUser" @enableUser="enableUser"></user-listing>
                     <div class="row text-center pagerRow">
                         <div class="col">
                             <Pager :meta='usersPageMeta' :height='height' />
@@ -135,15 +135,6 @@ import { mapGetters, mapActions } from "vuex";
 
                 this.$bvModal.hide('disable-user');
                
-            },
-            
-            deleteUser(data){
-                this.infoToast("Delete User", "deleting a user from listing");
-
-                //delete request goes here
-                this.forceRerender();
-                
-                this.$bvModal.hide('delete-user');
             },
             enableUser(data){
                 this.infoToast("Enable User", "enabling a user in listing");
