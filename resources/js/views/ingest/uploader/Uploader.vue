@@ -64,7 +64,7 @@
                     <div class="card-header">
                         <div class="row">
                             <div class="col-md-6">
-                                <b><i class="fa fa-folder-open"></i>  {{$t('upload.fileListTitle')}} ({{ sortedFilesUploading.length }} {{$t('upload.fileListTitle.files')}}, {{totalSize}} mb)</b>
+                                <b><i class="fa fa-folder-open"></i>  {{$t('upload.fileListTitle')}} ({{ sortedFilesUploading.length }} {{$t('upload.fileListTitle.files')}}, {{totalSize | prettyBytes}})</b>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
@@ -385,7 +385,7 @@ export default {
                     size += file.filesize * 1;
                 });
             }
-            return Math.round(size / (1024 * 1024));
+            return size;
         }
     },
 
