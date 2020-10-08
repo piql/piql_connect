@@ -89,12 +89,12 @@ class CommitFilesToBagListener implements ShouldQueue
         }
 
         foreach ($files as $file) {
-            if(($file->filename === "metadata.csv") && $bag->owner()->first()->settings->getIngestMetadataAsFileAttribute())
+            if(($file->filename === "metadata.csv") && $bag->owner()->first()->settings->ingestMetadataAsFile)
                 $this->bagIt->addMetadataFile($file->storagePathCompleted(), MetadataPath::FILE_OBJECT_PATH . $file->filename);
             else
                 $this->bagIt->addFile($file->storagePathCompleted(), MetadataPath::FILE_OBJECT_PATH . $file->filename);
 
-            if($bag->owner()->first()->settings->getIngestMetadataAsFileAttribute() !== true) {
+            if($bag->owner()->first()->settings->ingestMetadataAsFile) !== true) {
                 if ($file->metadata->count() > 0) {
                     // append metadata to file
                     $retval = $metadataWriter->write([
