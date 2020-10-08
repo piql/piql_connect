@@ -8,6 +8,7 @@ use App\Http\Resources\AipToDipResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Mail;
 use Carbon\Carbon;
 use App\Http\Controllers\Controller;
 use App\Job;
@@ -20,6 +21,7 @@ use App\Http\Resources\BagCollection;
 use App\Events\BagFilesEvent;
 use App\Events\CommitJobEvent;
 use App\Interfaces\FileArchiveInterface;
+use App\Mail\PiqlIt;
 use Response;
 use Log;
 
@@ -91,7 +93,7 @@ class OfflineStorageController extends Controller
     }
 
 
-    public function update($jobId)
+    public function update(Request $request, $jobId)
     {
         $job = Job::findOrFail($jobId);
         // This is a bit nasty because there is no owner validation here
@@ -117,6 +119,15 @@ class OfflineStorageController extends Controller
             }
             $job->applyTransition('piql_it');
             $job->save();
+            $emailTo = env('PIQLIT_NOTIFY_EMAIL_TO');
+            if ($emailTo) {
+                try {
+                    Mail::to($emailTo)->send(new PiqlIt($job, $request->getSchemeAndHttpHost()));
+                } catch (\Throwable $e) {
+                    Log::error("Error on sending e-mail to: " . $emailTo);
+                    Log::error($e->getMessage());
+                }
+            }
             event(new CommitJobEvent($job));
         }
 
