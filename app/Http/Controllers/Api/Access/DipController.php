@@ -89,25 +89,65 @@ class DipController extends Controller
 
     public function package_thumbnail( Request $request, ArchivalStorageInterface $storage, FilePreviewInterface $filePreview )
     {
-        $dip = Dip::find( $request->dipId );
+        $dip = Dip::findOrFail( $request->dipId );
         $file = $this->filter_package_thumbnail($dip, $filePreview);
+        if ($file === null) {
+            Log::error("Failed to find file");
+            return response([
+                "message" => "Failed to find file"
+            ], 400);
+        }
         $filePreview->storage($storage)->dip($dip)->fileObject($file);
-        return response()->stream( function () use( $filePreview ) {
+        try {
             $stream = $filePreview->getContent(true);
+        } catch (\Exception $e) {
+            Log::error("Failed to download thumbnail for file '{$file->fullpath}'");
+            return response([
+                "message" => "Failed to download thumbnail"
+            ], 400);
+        }
+        if (!is_resource($stream)) {
+            Log::error("Failed to read thumbnail for file '{$file->fullpath}'");
+            return response([
+                "message" => "Failed to read thumbnail"
+            ], 400);
+        }
+        return response()->stream( function () use( $stream ) {
             fpassthru($stream);
+            fclose($stream);
         }, 200, ["Content-Type" , $filePreview->getMimeType()]);
     }
 
     public function package_preview( Request $request, ArchivalStorageInterface $storage )
     {
-        $dip = Dip::find( $request->dipId );
+        $dip = Dip::findOrFail( $request->dipId );
         $file = $dip->fileObjects->filter( function ($file, $key) {
             return Str::contains( $file->fullpath, '/objects' );
         })->first();
+        if ($file === null) {
+            Log::error("Failed to find file");
+            return response([
+                "message" => "Failed to find file"
+            ], 400);
+        }
 
-        return response()->stream( function () use( $dip, $file ) {
+        try {
             $stream = $storage->downloadStream( $dip->storage_location, $file->fullpath );
+        } catch (\Exception $e) {
+            Log::error("Failed to download preview for file '{$file->fullpath}'");
+            return response([
+                "message" => "Failed to download preview"
+            ], 400);
+        }
+        if (!is_resource($stream)) {
+            Log::error("Failed to read preview for file '{$file->fullpath}'");
+            return response([
+                "message" => "Failed to read preview"
+            ], 400);
+        }
+        return response()->stream( function () use( $stream) {
             fpassthru($stream);
+            fclose($stream);
         }, 200, ["Content-Type" , "image/jpeg"]);
     }
 
@@ -169,25 +209,52 @@ class DipController extends Controller
 
     public function file_preview( Request $request, ArchivalStorageInterface $storage, FilePreviewInterface $filePreview )
     {
-        $dip = Dip::find( $request->dipId );
+        $dip = Dip::findOrFail( $request->dipId );
         $file = $dip->fileObjects->find( $request->fileId );
-
         $filePreview->storage($storage)->dip($dip)->fileObject($file);
 
-        return response()->stream( function () use( $filePreview ) {
+        try {
             $stream = $filePreview->getContent();
+        } catch (\Exception $e) {
+            Log::error("Failed to download preview for file '{$file->fullpath}'");
+            return response([
+                "message" => "Failed to download preview"
+            ], 400);
+        }
+        if (!is_resource($stream)) {
+            Log::error("Failed to read preview for file '{$file->fullpath}'");
+            return response([
+                "message" => "Failed to read preview"
+            ], 400);
+        }
+        return response()->stream( function () use( $stream ) {
             fpassthru($stream);
+            fclose($stream);
         }, 200, ["Content-Type" , $filePreview->getMimeType()]);
     }
 
     public function file_download( ArchivalStorageInterface $storage, Request $request )
     {
-        $dip = Dip::find( $request->dipId );
-        $file = $dip->fileObjects->find( $request->fileId );
+        $dip = Dip::findOrFail( $request->dipId );
+        $file = $dip->fileObjects->findOrFail( $request->fileId );
 
-        return response()->streamDownload( function () use( $storage, $dip, $file ) {
+        try {
             $stream = $storage->downloadStream( $dip->storage_location, $file->fullpath );
+        } catch (\Exception $e) {
+            Log::error("Failed to download preview for file '{$file->fullpath}'");
+            return response([
+                "message" => "Failed to download preview"
+            ], 400);
+        }
+        if (!is_resource($stream)) {
+            Log::error("Failed to read preview for file '{$file->fullpath}'");
+            return response([
+                "message" => "Failed to read preview"
+            ], 400);
+        }
+        return response()->streamDownload( function () use( $stream ) {
             passthru($stream);
+            fclose($stream);
         }, basename( $file->path ), [
             "Content-Type" => "application/octet-stream",
             "Content-Disposition" => "attachment; { $file->filename }"
@@ -215,13 +282,27 @@ class DipController extends Controller
 
     public function file_thumbnail( ArchivalStorageInterface $storage, Request $request, FilePreviewInterface $filePreview )
     {
-        $dip = Dip::find( $request->dipId );
+        $dip = Dip::findOrFail( $request->dipId );
         $file = $dip->fileObjects->find( $request->fileId );
         $thumbnail = $this->filter_file_thumbnail($dip, $file, $filePreview);
         $filePreview->storage($storage)->dip($dip)->fileObject($thumbnail);
-        return response()->stream( function () use( $filePreview ) {
+        try {
             $stream = $filePreview->getContent(true);
+        } catch (\Exception $e) {
+            Log::error("Failed to download thumbnail for file '{$file->fullpath}'");
+            return response([
+                "message" => "Failed to download thumbnail"
+            ], 400);
+        }
+        if (!is_resource($stream)) {
+            Log::error("Failed to read thumbnail for file '{$file->fullpath}'");
+            return response([
+                "message" => "Failed to read thumbnail"
+            ], 400);
+        }
+        return response()->stream( function () use( $stream ) {
             fpassthru($stream);
+            fclose($stream);
         }, 200, ["Content-Type" , $filePreview->getMimeType()]);
     }
 

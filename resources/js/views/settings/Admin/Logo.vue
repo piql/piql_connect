@@ -38,7 +38,8 @@
                         allowedExtensions: ['png','jpg','jpeg']
                     },
                     callbacks: {
-                         onError: (id, name, errorReason, xhrOrXdr) => {
+                    onError: (id, name, errorReason, xhrOrXdr) => {
+
                             let options = {
                                 okText: this.$t('OK')
                             };

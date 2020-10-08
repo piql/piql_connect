@@ -21,13 +21,15 @@ const getters = {
         return state.userMetadataTemplates.find( (t) => t.owner_id == userId );
     },
     userMetadataTemplates: state => state.userMetadataTemplates,
-    currentLanguage: state => state.settings.interface.language
+    currentLanguage: state => state.settings.interface.language,
+   
 }
 
 const actions = {
 
     async fetchUserSettings({commit}){
         let response = await axios.get("/api/v1/system/users/current-user/preferences");
+       
         commit('setSettingsMutation',response)
     },
 
