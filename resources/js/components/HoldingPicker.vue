@@ -45,7 +45,9 @@ export default {
             $(`#${this.elementId}`).selectpicker( 'val', value );
         },
         selChange: function () {
-            this.inputValidation = !this.required || $(`#${this.elementId}`).val() ? '' : 'mustFill'; 
+            let uuid = $(`#${this.elementId}`).val();
+            this.$emit('selectedHolder',uuid);
+            this.inputValidation = !this.required || uuid ? '' : 'mustFill';
         }
     },
     data() {
@@ -103,27 +105,26 @@ export default {
             axios.get(`/api/v1/metadata/archives/${archiveId}/holdings`).then( (response) => {
                 if(response.data.data.length > 0){
                     this.holdings = response.data.data;
-                    //default selection
-                    this.selection = this.holdings[0].uuid;
                 }
 
             })
         },
-        selection: function ( holding ) {
+        selection: function ( holding) {
             if( !this.initComplete ) {
                 /* don't change query params when setting selection from page load */
                 this.initComplete = true;
                 return;
             }
 
-            Vue.nextTick( () => {
+            Vue.nextTick(() => {
                 if( holding === this.wildCardLabel ) {
                     this.updateQueryParams({ holding: null, page : null })
                 } else {
                     this.updateQueryParams({ holding, page : null });
                 }
-                   
-            });
+            })
+
+
         },
         holdings: function( holdings ) {
             if( !! holdings ) {

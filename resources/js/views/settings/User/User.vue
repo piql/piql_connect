@@ -11,7 +11,7 @@
                                     <language-picker v-bind:label="$t('settings.settings.languagelabel')" 
                                      ></language-picker>
                                     <row-selector :rowlabel="$t('settings.settings.rowslabel')"></row-selector>
-                                    <upload-logo v-bind:logolabel="$t('settings.settings.profileImagelabel')"></upload-logo>
+                                    
                                 </b-card-text>
                             </b-tab>
                             <b-tab :title="$t('settings.settings.setPasswordHeader')">
@@ -22,6 +22,12 @@
                                     v-bind:saveButtonText="$t('settings.settings.passwordSaveButtonText')" 
                                     @saveButtonClicked="changePassword" ref="passwordPicker">
                                     </password-picker>
+                                </b-card-text>
+                            </b-tab>
+                            <b-tab :title="$t('settings.settings.profileImagelabel')">
+                                <b-card-text>
+                                    <upload-profile-image v-bind:logolabel="$t('settings.settings.profileImagelabel')"></upload-profile-image>
+                                    
                                 </b-card-text>
                             </b-tab>
 
@@ -39,6 +45,12 @@
 <script>
 import { mapActions, mapGetters } from "vuex";
     export default {
+
+        created(){
+             this.fetchUserSettings();
+             this.fetchLanguages(); 
+
+        },
         
         
     
@@ -77,7 +89,7 @@ import { mapActions, mapGetters } from "vuex";
         },
 
         methods: {
-            ...mapActions(['setNewPassword']),       
+            ...mapActions(['setNewPassword','fetchLanguages','fetchUserSettings']),       
             async changePassword(oldPassword, newPassword1, newPassword2) {
                 if (newPassword1 != newPassword2) {
                     this.errorToast(

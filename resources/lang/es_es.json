@@ -401,6 +401,7 @@
     "settings.settings.toasts.failedSetPassword.title": "Fallo la actualización de clave",
     "settings.settings.toasts.failedSetPassword.message": "Fallo la actualización de clave",
     "settings.settings.alert.changedPassword": "La clave se ha actualizado, debe iniciar sesión de nuevo",
+    "settings.settings.imageProfile.message": "Upload you profile image dragging the file here. Allowed extension is",
     "settings.logo.alert.notAllowedExtensions": "Por favor, use images PNG",
     "settings.logo.header": "Cambiar logo",
     "settings.logo.ingress": "Cargar una nueva imagen de logo",

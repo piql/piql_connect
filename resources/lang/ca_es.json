@@ -401,6 +401,7 @@
     "settings.settings.toasts.failedSetPassword.title": "Actualització de clau va fallar",
     "settings.settings.toasts.failedSetPassword.message": "Actualització de clau va fallar",
     "settings.settings.alert.changedPassword": "La clau ha estat canviada, haurà d'iniciar sessió novament",
+    "settings.settings.imageProfile.message": "Upload you profile image dragging the file here. Allowed extension is",
     "settings.logo.alert.notAllowedExtensions": "Si us plau, usi imatges PNG",
     "settings.logo.header": "Canviar logo",
     "settings.logo.ingress": "Carrega una nova imatge de logotip",
