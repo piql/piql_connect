@@ -126,6 +126,7 @@
     "ingest.processing.uploadingFilter": "Uploading",
     "ingest.processing.processingFilter": "Processing",
     "ingest.processing.bag": "Bag",
+    "ingest.processing.bagSize": "Bag Size",
     "ingest.processing.sip": "Package name",
     "ingest.processing.content": "Content",
     "ingest.processing.ingestDate": "Ingest date",
