@@ -269,7 +269,7 @@ export default {
                             let fileId = id;
                             setTimeout( ()  => {
                                 this.uploader.methods.retry(fileId);
-                            }, this.sleepRetryGracetimeMs );
+                            }, this.retryGracetimeMs );
                         }
                         else {
                             this.filesUploading[filesIndex].retryCount = 0;
@@ -557,7 +557,7 @@ export default {
         },
         retryGracetimeMs: {
             type: Number,
-            default: 1000
+            default: 3000
         },
         uploadDelayMs: {
             type: Number,
