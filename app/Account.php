@@ -78,5 +78,4 @@ class Account extends Model
         return $ar;
     }
 
-
 }
