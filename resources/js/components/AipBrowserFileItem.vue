@@ -8,7 +8,7 @@
                 {{fileName}}
             </div>
             <div class="col-2 text-left align-self-center text-truncate">
-               {{Math.ceil(aipItem.size/1000)}} Kb
+               {{aipItem.size | prettyBytes}}
             </div>
             <div class="col-2 d-inline text-center align-self-center">
                 <a class="m-auto" @click.once="showMetadata" data-toggle="tooltip" title="Edit metadata"><i class="fas fa-tags actionIcon text-center"></i></a>
