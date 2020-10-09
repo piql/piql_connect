@@ -269,7 +269,7 @@ export default {
             uploader: uploader,
             bag: {},
             bagName: "",
-            files: {},
+            files: [],
             filesUploading: [],
             userId: '',
             userSettings: {
@@ -285,6 +285,7 @@ export default {
             pageFrom: 1,
             pageTo: 4,
             fileNameFilter: "",
+            holderKey: 0
         };
     },
 
@@ -402,6 +403,12 @@ export default {
     },
 
     methods: {
+        forceHolderReRender(){
+            this.holderKey += 1;
+        },
+        loadNewHolders(){
+            this.forceHolderReRender();
+        },
         selectedHolder(holding){
             Vue.nextTick(() => {
                 if( !holding ) {
