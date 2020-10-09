@@ -4,9 +4,8 @@
             <label v-if="showLabel" for="rowselect" class="col-form-label-sm">
                 {{rowlabel}}
             </label>
-            <input id="rowselect" class="col-3 form-control" type="number" v-model="rowselection" required > 
+            <input id="rowselect" @change="rowCountUpdated" @keypress="rowCountUpdated" class="col-3 form-control" type="number" v-model="rowselection" required > 
             &nbsp;
-            <button class="col-1 btn-xs btn" style="color:white" @click="rowCountChanged"><i class="fa fa-check"></i></button>
         </div>
     </div>
 </template>
@@ -16,13 +15,30 @@ import { mapGetters, mapActions } from "vuex";
 export default {
     methods: {
         ...mapActions(['updateTableRowCount', 'fetchUserSettings']),
-        rowCountChanged: function() {
-            this.updateTableRowCount(this.rowselection);
+        rowCountUpdated() {
+            this.clearDeferFunc();
+            this.defer.func = setTimeout(() => {
+                this.updateTableRowCount(this.rowselection).then(() => {
+                    this.successToast(this.$t('settings.settings.rowslabel'), this.$t('settings.settings.rowslabel.updatedTo') + ' ' + this.rowselection);
+                })
+                .catch(error => {
+                    this.errorToast(this.$t('settings.settings.rowslabel'), JSON.stringify(error));
+                    this.rowselection = this.userTableRowCount;
+                })
+            }, this.defer.timeout);
         },
+        clearDeferFunc() {
+            if(this.defer.func != null) clearTimeout(this.defer.func);
+            this.defer.func = null;
+        }
     },
     data() {
         return {
-            rowselection: 8 //default is 8
+            rowselection: 8, //default is 8
+            defer: {
+                func: null,
+                timeout: 700
+            },
         };
     },
     mounted() {

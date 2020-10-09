@@ -19,17 +19,7 @@ class ArchiveSeeder extends Seeder
 
         if($this->seedFromFile(function($param) {
             $archive = Archive::create($param);
-            $metadata = \App\ArchiveMetadata::create([
-                "modified_by" => "",
-                "metadata" => ["dc" => [
-                    "title" => $archive->title,
-                    "description" => $archive->description,
-                ]]
-            ]);
-            $metadata->parent()->associate($archive);
-            $metadata->save();
         })){
-
             return;
         }
 

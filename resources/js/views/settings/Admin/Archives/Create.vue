@@ -38,7 +38,7 @@
 </template>
 
 <script>
-import { mapActions } from "vuex"
+import { mapGetters, mapActions } from "vuex"
 export default {
     data(){
         return {
@@ -50,16 +50,15 @@ export default {
         }
     },
     methods: {
-        ...mapActions(['addArchive']),
+        ...mapActions(['addArchive', 'fetchAccounts']),
         async submitForm(e){
             e.preventDefault();
             //add archive
             this.addArchive({
                 title: this.form.name,
                 description: this.form.description,
-                created: new Date(),
-                id: this.uniqueID      
-            })
+                account: this.firstAccountId
+            });
 
             this.successToast(
                 this.$t('settings.archives.toast.addingArchive'), 
@@ -71,9 +70,13 @@ export default {
 
         }
     },
+    async mounted() {
+        await this.fetchAccounts();
+    },
     computed: {
-        uniqueID(){
-            return Date.now();
+        ...mapGetters(['firstAccount']),
+        firstAccountId() {
+            return this.firstAccount.id;
         }
     }
 

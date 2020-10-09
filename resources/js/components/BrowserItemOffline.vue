@@ -8,7 +8,7 @@
                 {{item.title}}
             </div>
             <div class="col-sm-1 text-truncate align-self-center">
-                {{item.size_on_disk}}
+                {{item.size_on_disk | prettyBytes}}
             </div>
             <div class="col-sm-2 p-0 text-truncate align-self-center text-center">
                 {{ formatShortDate( item.archived_at ) }}

@@ -11,8 +11,8 @@
             </thead>
             <tbody>
                 <tr v-for="item in items" v-bind:key="item.id">
-                    <td>{{item.name}}</td>
-                    <td>{{fileSize(item)}}</td>
+                    <td>{{ item.name }}</td>
+                    <td>{{ item.size | prettyBytes }}</td>
                     <td>{{ formatShortDate( item.created_at ) }}</td>
                     <td>{{ translatedStatus( item.status ) }}</td>
                 </tr>
@@ -61,15 +61,6 @@ export default {
         '$route': 'dispatchRouting'
     },
     methods: {
-        getFileSizeSI(bytes) {
-            let value = 0;
-            let exp = 0;
-            if (bytes) {
-                exp = Math.floor(Math.log(bytes) / Math.log(1000));
-                value = (bytes / Math.pow(1000, exp))
-            }
-            return Math.ceil(value) + " " + (exp ? 'KMGTPEZY'[exp - 1] + 'B' : 'Bytes')
-        },
         async update(query){
             await axios.get(this.jobListUrl+"/buckets" + query, { params: { limit : 8}}).then( (response) => {
                 this.items = response.data.data;
@@ -80,12 +71,6 @@ export default {
         },
         dispatchRouting() {
             this.update( this.apiQueryString);
-        },
-        fileSize(item) {
-            if(item.size !== undefined)
-                return this.getFileSizeSI(item.size);
-            else
-                return "---";
         },
         translatedStatus(status) {
             let statusKey = `ingest.status.${status}`;
