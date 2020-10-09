@@ -116,7 +116,7 @@ class SelfServiceController extends Controller
     public function me(Request $request) {
         $user = Auth::user();
         $userSess = array();
-        $userSess['given_name'] = $user->givenName();
+        $userSess['given_name'] = $user->getGivenName();
         $userSess['email'] = $user->email;
         $nameArr = explode(' ', $user->full_name);
         $userSess['first_name'] = $nameArr[0];
