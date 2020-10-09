@@ -7,7 +7,7 @@
             <div class="col-5 text-left align-self-center text-truncate">
                 {{fileName}}
             </div>
-            <div class="col-2 text-left align-self-center text-truncate">
+            <div class="col-2 text-right align-self-center text-truncate">
                {{aipItem.size | prettyBytes}}
             </div>
             <div class="col-2 d-inline text-center align-self-center">

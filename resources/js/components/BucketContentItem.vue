@@ -15,7 +15,7 @@
         <div class="col-sm-1 align-self-center text-center">
             {{fileCount}}
         </div>
-        <div class="col-sm-1 align-self-center text-center">
+        <div class="col-sm-1 align-self-center text-right">
             {{item.storage_properties.bag.bagSize | prettyBytes}}
         </div>
         <div class="col-sm-2 d-inline-block align-self-center text-center">

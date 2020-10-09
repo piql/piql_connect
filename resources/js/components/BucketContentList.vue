@@ -6,7 +6,7 @@
             <div class="col-sm-1 text-center">{{$t("access.browse.header.ingestDate")}}</div>
             <div class="col-sm-2 text-center">{{$t("access.browse.header.holding")}}</div>
             <div class="col-sm-1 text-center">{{$t("access.browse.header.files")}}</div>
-            <div class="col-sm-1 text-center">{{$t("access.browse.header.size")}}</div>
+            <div class="col-sm-1 text-right">{{$t("access.browse.header.size")}}</div>
             <div class="col-sm-2 text-center">{{$t("access.browse.header.actions")}}</div>
         </div>
 
