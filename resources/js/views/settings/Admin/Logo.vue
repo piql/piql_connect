@@ -1,6 +1,6 @@
 <template>
     <div class="w-100">
-        <page-heading icon="fa-lightbulb" :title="$t('settings.logo.header')" :ingress="$t('settings.logo.ingress')" />
+        <page-heading icon="fa-shapes" :title="$t('settings.logo.header')" :ingress="$t('settings.logo.ingress')" />
 
         <form>
             <div class="col-10">
@@ -35,14 +35,15 @@
                         endpoint: '/api/v1/admin/logo/upload',
                     },
                     validation: {
-                        allowedExtensions: ['png']
+                        allowedExtensions: ['png','jpg','jpeg']
                     },
                     callbacks: {
-                        onError: showError => {
+                    onError: (id, name, errorReason, xhrOrXdr) => {
+
                             let options = {
                                 okText: this.$t('OK')
                             };
-                            this.$dialog.alert(this.$t('settings.log.alert.notAllowedExtensions'), options);
+                            this.$dialog.alert(errorReason, options);
                         },
                         onComplete: complete => {
                             this.infoToast(

@@ -99,6 +99,7 @@ export default {
                         "type": "Dublin Core v1.1",
                         "fields":
                         [
+                            {"name" : "identifier",  "label" : "Identifier",  "type": "text"},
                             {"name" : "title",       "label" : "Title",       "type": "text"},
                             {"name" : "creator",     "label" : "Creator",     "type": "text"},
                             {"name" : "subject",     "label" : "Subject",     "type": "text"},
@@ -108,7 +109,6 @@ export default {
                             {"name" : "date",        "label" : "Date",        "type": "text"},
                             {"name" : "type",        "label" : "Type",        "type": "text"},
                             {"name" : "format",      "label" : "Format",      "type": "text"},
-                            {"name" : "identifier",  "label" : "Identifier",  "type": "text"},
                             {"name" : "source",      "label" : "Source",      "type": "text"},
                             {"name" : "language",    "label" : "Language",    "type": "text"},
                             {"name" : "relation",    "label" : "Relation",    "type": "text"},

@@ -19,14 +19,14 @@ import { mapGetters, mapActions } from "vuex";
 let $ = JQuery;
 
 export default {
-    async mounted() {
-        await this.fetchUserSettings();
-        await this.fetchLanguages();
-        this.selection = this.currentLanguage;
-        $('#languagePicker').selectpicker('val', this.selection);
+    mounted() {
+        this.fetchLanguages();
+        this.fetchUserSettings().then(() => {
+            this.selection = this.currentLanguage;  
+        });
     },
     methods: {
-        ...mapActions(['fetchLanguages','fetchUserSettings','changeLanguage']),
+        ...mapActions(['changeLanguage', 'fetchUserSettings', 'fetchLanguages']),
         selectionChanged: function () {
             this.$i18n.locale = this.selection;
             this.changeLanguage(this.selection);

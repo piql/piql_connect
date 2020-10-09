@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use phpDocumentor\Reflection\DocBlock\Tags\Author;
 use Webpatser\Uuid\Uuid;
+use Log;
 
 class AccountArchiveController extends Controller
 {
@@ -79,8 +80,14 @@ class AccountArchiveController extends Controller
      */
     public function update(Request $request, Account $account, Archive $archive)
     {
-        $requestData = $this->validateRequest( $request );
-        $archive->update( $requestData );
+       $validatedRequest = $this->validate( $request, [
+                "title" => "string",
+                "description" => "string|nullable",
+                "defaultMetadataTemplate" => "array|nullable"
+            ]
+        );
+
+        $archive->update( $request->all() );
         return new ArchiveResource( $archive );
     }
 
@@ -94,18 +101,22 @@ class AccountArchiveController extends Controller
 
     public function upsert( Request $request, Account $account )
     {
-       $validatedRequest = $this->validate( $request, [
-                "title" => "string",
-                "description" => "string|nullable",
-                "defaultMetadataTemplate" => "array|nullable"
-            ]
-        );
+        if( $account->id != auth()->user()->account->id ) {
+            //TODO: Admin access
+            abort( 403, "User with id ".auth()->id()." does not have the neccesary permissions to update archives for this account" );
+        }
 
-       $data = array_merge( $validatedRequest, ["account_uuid" => $account->uuid] );
+        $validatedRequest = $this->validate( $request, [
+            "title" => "string",
+            "description" => "string|nullable",
+            "defaultMetadataTemplate" => "array|nullable"
+        ]);
 
-        if( $request->id ) {
+        $data = array_merge( $validatedRequest, ["account_uuid" => $account->uuid] );
+
+        if( isset($request->id) ) {
             $archive = Archive::findOrFail( $request->id );
-            $archive->update( $validatedRequest );
+            $archive->update( $data );
             return new ArchiveResource( $archive );
         }
 

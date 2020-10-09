@@ -25,15 +25,12 @@ class AccountArchiveControllerTest extends TestCase
     public function setUp() : void
     {
         parent::setUp();
+
+        $this->account = factory( Account::class )->create();
         $this->user = factory(User::class)->create();
+        $this->user->account()->associate( $this->account );
         Passport::actingAs( $this->user );
         $this->faker = Faker::create();
-
-        $this->account = factory(Account::class)->create([
-
-        ]);
-        $this->account->owner()->associate($this->user);
-        $this->account->save();
 
         $this->archiveContent = [ "account_uuid" => $this->account->uuid ];
 
@@ -168,7 +165,7 @@ class AccountArchiveControllerTest extends TestCase
     {
         $data = [
             "title" => "This upsert concept just rocks",
-            "defaultMetadataTemplate" => ["dc" => ["title" => "The best novel ever!"]]
+            "defaultMetadataTemplate" => ["dc" => ["title" => "The best novel ever!"]],
         ];
 
         $response = $this->actingAs( $this->user )
