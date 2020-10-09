@@ -32,7 +32,7 @@ class Kernel extends HttpKernel
         ],
 
         'api' => [
-            'throttle:500,1',
+            'throttle:1000,1',
             'bindings',
             \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
         ],
