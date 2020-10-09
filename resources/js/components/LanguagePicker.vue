@@ -20,41 +20,16 @@ let $ = JQuery;
 
 export default {
     mounted() {
-        
-        
-         $('#languagePicker').selectpicker('refresh');
-
-        Vue.nextTick( () => { 
-           Vue.nextTick(()=> {
-                this.selection = this.currentLanguage;
-                $('#languagePicker').selectpicker('val', this.selection);
-           })
+        this.fetchLanguages();
+        this.fetchUserSettings().then(() => {
+            this.selection = this.currentLanguage;  
         });
-   
-
-    },
-    updated(){
-        
-        $('#languagePicker').selectpicker('refresh');
-
-        Vue.nextTick( () => { 
-            this.selection = this.currentLanguage;
-            $('#languagePicker').selectpicker('val', this.selection);
-        });
-
-
     },
     methods: {
-        ...mapActions(['changeLanguage']),
+        ...mapActions(['changeLanguage', 'fetchUserSettings', 'fetchLanguages']),
         selectionChanged: function () {
-           
+            this.$i18n.locale = this.selection;
             this.changeLanguage(this.selection);
-            Vue.nextTick(() => {
-                Vue.nextTick(()=> {
-                    this.$router.go(0);
-                })     
-            })
-            
         },
     },
     data() {
@@ -66,23 +41,6 @@ export default {
         label: {
             type: String,
             default: ""
-        }
-    },
-    watch: {
-        currentLanguage(value, oldvalue) {
-
-            if(value){
-                this.fetchLanguages();
-                this.selection = value;
-
-                $('#languagePicker').selectpicker('refresh');
-
-                Vue.nextTick( () => { 
-                    $('#languagePicker').selectpicker('val', value);
-                });
-            }else {
-                this.selection = oldvalue
-            }
         }
     },
     computed: {

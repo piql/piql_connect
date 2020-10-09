@@ -1904,3 +1904,9 @@ input:invalid {
 .dashboardIconImg {
     width: 1em;
 }
+
+.mustFill {
+    border: 1px solid #ff194d60 !important;
+    box-shadow: 0 0 0 0.2rem #ff194d60 !important;
+    border-radius: 5px;
+}
