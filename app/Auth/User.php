@@ -64,4 +64,8 @@ class User extends Authenticatable
         $this->accessToken = $accessToken;
         return $this;
     }
+
+    public function givenName() {
+        return isset($this->token) ? $this->token->given_name : null;
+    }
 }
