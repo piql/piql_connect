@@ -16,7 +16,7 @@
             {{fileCount}}
         </div>
         <div class="col-sm-1 align-self-center text-center">
-            {{Math.ceil(item.storage_properties.bag.bagSize/1000)}} Kb
+            {{item.storage_properties.bag.bagSize | prettyBytes}}
         </div>
         <div class="col-sm-2 d-inline-block align-self-center text-center">
             <button class="btn-tiny m-auto" @click="openObject" data-toggle="tooltip" title="Access contents"> <i class="fas fa-folder-open actionIcon"></i> </button>
