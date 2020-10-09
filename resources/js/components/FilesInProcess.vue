@@ -15,7 +15,7 @@
                <tr v-else v-for="item in items" :key="item.id">
                         <td class="processingPackageName">{{item.name}}</td>
                         <td>{{item.fileCount}}</td>
-                        <td>{{Math.ceil(item.bagSize/1000)}} Kb</td>
+                        <td>{{item.bagSize|prettyBytes}}</td>
                     <td>
                         {{formatShortDate( item.created_at )}}
                     </td>
