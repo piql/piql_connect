@@ -53,3 +53,4 @@ composer.phar
 piql_connect.code-workspace
 resources/js/app.jse
 
+.vscode/settings.json

@@ -17,18 +17,7 @@ class HoldingSeeder extends Seeder
             $param["position"] = $index;
             $holding = Holding::create($param);
             $index++;
-
-            $metadata = \App\HoldingMetadata::create([
-                "modified_by" => "",
-                "metadata" => ["dc" => [
-                    "title" => $holding->title,
-                    "description" => $holding->description,
-                ]]
-            ]);
-            $metadata->parent()->associate($holding);
-            $metadata->save();
         })){
-
             return;
         }
 

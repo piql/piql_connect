@@ -89,13 +89,14 @@ export default {
     methods: {
         ...mapActions(["logoutUser"]),
         routeBelongsTo( checkRoute ) {
+            if( !this.$route.name ) return false;
             return this.$route.name.startsWith( checkRoute );
+
         },
         loadUser() {
             if (this.user == null) {
                 axios.get("/api/v1/system/users/me").then( async ( resp ) =>  {
                     this.user = resp.data;
-                    this.$i18n.locale = this.user.language;
                 });
             }
         }

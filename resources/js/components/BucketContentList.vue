@@ -6,7 +6,8 @@
             <div class="col-sm-1 text-center">{{$t("access.browse.header.ingestDate")}}</div>
             <div class="col-sm-2 text-center">{{$t("access.browse.header.holding")}}</div>
             <div class="col-sm-1 text-center">{{$t("access.browse.header.files")}}</div>
-            <div class="col-sm-3 text-center">{{$t("access.browse.header.actions")}}</div>
+            <div class="col-sm-1 text-right">{{$t("access.browse.header.size")}}</div>
+            <div class="col-sm-2 text-center">{{$t("access.browse.header.actions")}}</div>
         </div>
 
         <bucket-content-item  v-for="item in dataObjects" :item="item" :key="item.id" @onDelete="onDelete" @openObject="openObject"  @showPreview="showPreview"/>

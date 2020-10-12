@@ -8,7 +8,7 @@
                 {{fileName}}
             </div>
             <div class="col-2 text-left align-self-center text-truncate">
-                {{fileSize}}
+                {{item.size | prettyBytes}}
             </div>
             <div class="col-2 d-inline text-center align-self-center">
                 <a class="m-auto cursorPointer" @click.once="showMetadata" data-toggle="tooltip" :title="$t('access.tip.editMetadata')"><i class="fas fa-tags actionIcon text-center"></i></a>
@@ -94,19 +94,6 @@
         computed: {
             dipId: function() {
                 return this.item.storable_id;
-            },
-            fileSize: function() {
-                let size = this.item.size/1024;
-                let metric = "k";
-                if (size > 1024) {
-                    size /= 1024;
-                    metric = "m";
-                }
-                if (size > 1024) {
-                    size /= 1024;
-                    metric = "g";
-                }
-                return Math.round(size) + " " + metric + "b";
             }
         }
 

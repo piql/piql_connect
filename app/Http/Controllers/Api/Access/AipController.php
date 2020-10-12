@@ -165,12 +165,25 @@ class AipController extends Controller
     public function fileDownload(ArchivalStorageInterface $storage, Request $request)
     {
         /* USED FOR SINGLE FILE DOWNLOAD */
-        $aip = Aip::find($request->aipId);
+        $aip = Aip::findOrFail($request->aipId);
         $file = $aip->fileObjects()->findOrFail($request->fileId);
-        return response()->streamDownload(function () use( $storage, $aip, $file ) {
+        try {
+            $stream = $storage->downloadStream( $aip->online_storage_location, $file->fullpath );
+        } catch (\Exception $e) {
+            Log::error("Failed to download preview for aip '{$aip->id}'");
+            return response([
+                "message" => "Failed to download preview"
+            ], 400);
+        }
+        if (!is_resource($stream)) {
+            Log::error("Failed to read preview for aip '{$aip->id}'");
+            return response([
+                "message" => "Failed to read preview"
+            ], 400);
+        }
+        return response()->streamDownload(function () use( $stream ) {
             // todo: Avoid setting the execution time here - it was done to support large files
             set_time_limit(10*60);
-            $stream = $storage->downloadStream( $aip->online_storage_location, $file->fullpath );
             fpassthru($stream);
             fclose($stream);
         }, basename( $file->path ), [

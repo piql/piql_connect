@@ -5,16 +5,14 @@ namespace App\Listeners;
 use App\Events\BagFilesEvent;
 use App\Events\BagCompleteEvent;
 use App\Events\ErrorEvent;
-use App\Events\InitiateTransferToArchivematicaEvent;
 use App\Interfaces\MetadataGeneratorInterface;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
-use Log;
 use BagitUtil;
 use App\Traits\BagOperations;
 use App\MetadataPath;
+use Illuminate\Support\Facades\Log;
 
 class CommitFilesToBagListener implements ShouldQueue
 {
@@ -81,18 +79,26 @@ class CommitFilesToBagListener implements ShouldQueue
         }
         */
 
-        foreach ($files as $file)
-        {
-            if( ($file->filename === "metadata.csv") && $bag->owner()->first()->settings->getIngestMetadataAsFileAttribute() )
-                $this->bagIt->addMetadataFile($file->storagePathCompleted(), MetadataPath::FILE_OBJECT_PATH.$file->filename);
-            else
-                $this->bagIt->addFile($file->storagePathCompleted(), MetadataPath::FILE_OBJECT_PATH.$file->filename);
+        $bagMetadata = json_decode($bag->metadata);
+        foreach (['account', 'archive', 'holding'] as $type) {
+            $meta = (!isset($bagMetadata->$type)) ? [] : $bagMetadata->$type;
+            $retval = $metadataWriter->write([
+                'object' => MetadataPath::of($type),
+                'metadata' => $meta
+            ]);
+        }
 
-            if( $bag->owner()->first()->settings->getIngestMetadataAsFileAttribute() !== true ) {
+        foreach ($files as $file) {
+            if(($file->filename === "metadata.csv") && $bag->owner()->first()->settings->ingestMetadataAsFile)
+                $this->bagIt->addMetadataFile($file->storagePathCompleted(), MetadataPath::FILE_OBJECT_PATH . $file->filename);
+            else
+                $this->bagIt->addFile($file->storagePathCompleted(), MetadataPath::FILE_OBJECT_PATH . $file->filename);
+
+            if($bag->owner()->first()->settings->ingestMetadataAsFile !== true) {
                 if ($file->metadata->count() > 0) {
                     // append metadata to file
                     $retval = $metadataWriter->write([
-                        'object' => MetadataPath::FILE_OBJECT_PATH.$file->filename,
+                        'object' => MetadataPath::FILE_OBJECT_PATH . $file->filename,
                         'metadata' => $file->metadata[0]->metadata
                     ]);
                     if (!$retval) {
