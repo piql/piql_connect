@@ -294,7 +294,6 @@ export default {
         Dropzone
     },
     mounted() {
-        console.log('mounted')
         this.fetchUserSettings().then(data => {
             this.pageSize = data.interface.tableRowCount;
         })

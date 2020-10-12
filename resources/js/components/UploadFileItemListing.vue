@@ -4,12 +4,7 @@
       <thead>
         <tr>
           <th>
-            <i
-              class="fas fa-trash-alt actionIcon text-center ml-2 cursorPointer"
-              @click="batchRemove"
-            ></i>
-            {{ $t("upload.fileName") }}
-          </th>
+            <i class="fas fa-trash-alt actionIcon text-center ml-2 cursorPointer" @click="batchRemove"></i> {{ $t("upload.fileName") }} </th>
           <th>{{ $t("upload.fileSize") }}</th>
           <th>{{ $t("upload.fileActions") }}</th>
         </tr>
@@ -17,33 +12,16 @@
       <tbody>
         <tr v-for="(file, idx) in displayedfiles" :key="file.id">
           <td>
-            <div
-              v-if="file.isUploading"
-              class="progress upload-progress bg-fill"
-            >
+            <div v-if="file.isUploading" class="progress upload-progress bg-fill" >
               <div
-                class="progress-bar bg-brand text-left"
-                role="progressbar"
-                v-bind:style="file.progressBarStyle"
-                v-bind:aria-valuenow="file.progressPercentage"
-                aria-valuemin="0"
-                aria-valuemax="100"
-              >
+                class="progress-bar bg-brand text-left" role="progressbar" v-bind:style="file.progressBarStyle" v-bind:aria-valuenow="file.progressPercentage" aria-valuemin="0" aria-valuemax="100"  >
                 <span class="upload-text">{{ file.filename }}</span>
               </div>
             </div>
             <div v-else>
-              <span
-                class="d-inline"
-                tabindex="0"
-                data-toggle="tooltip"
-                :title="file.filename"
-              >
+              <span class="d-inline" tabindex="0" data-toggle="tooltip" title="file.filename" >
                 <div class="text-left">
-                  <label
-                    ><input type="checkbox" class="fileSel" :value="idx" />
-                    {{ file.filename }}</label
-                  >
+                  <label><input type="checkbox" class="fileSel" :value="idx" /> {{ file.filename }}</label>
                 </div>
               </span>
             </div>
@@ -51,52 +29,19 @@
           <td>{{ Math.ceil(file.fileSize / 1000) }} Kb</td>
           <td>
             <span v-if="file.isComplete">
-              <a
-                @click="metadataClicked(file)"
-                data-toggle="tooltip"
-                title="Edit metadata"
-                ><i
-                  class="fas fa-tags actionIcon text-center mr-2 cursorPointer"
-                ></i
-              ></a>
-              <a
-                @click="removeClicked(file)"
-                data-toggle="tooltip"
-                :title="$t('upload.remove')"
-                ><i
-                  class="fas fa-trash-alt actionIcon text-center ml-2 cursorPointer"
-                ></i
-              ></a>
+              <a @click="metadataClicked(file)" data-toggle="tooltip" title="Edit metadata"><i class="fas fa-tags actionIcon text-center mr-2 cursorPointer"></i></a>
+              <a @click="removeClicked(file)" data-toggle="tooltip" :title="$t('upload.remove')"><i class="fas fa-trash-alt actionIcon text-center ml-2 cursorPointer"></i></a>
             </span>
             <span v-if="file.isFailed">
-              <a
-                @click="retryClicked(file)"
-                data-toggle="tooltip"
-                :title="$t('upload.resumeOne')"
-                ><i
-                  class="fas fa-redo-alt actionIcon text-center mr-2 cursorPointer"
-                ></i
-              ></a>
-              <a
-                @click="removeFailedClicked(file)"
-                data-toggle="tooltip"
-                :title="$t('upload.remove')"
-                ><i
-                  class="fas fa-trash-alt actionIcon text-center ml-2 cursorPointer"
-                ></i
-              ></a>
+              <a @click="retryClicked(file)" data-toggle="tooltip" :title="$t('upload.resumeOne')"   ><i class="fas fa-redo-alt actionIcon text-center mr-2 cursorPointer"></i></a>
+              <a @click="removeFailedClicked(file)"  data-toggle="tooltip" :title="$t('upload.remove')"  ><i class="fas fa-trash-alt actionIcon text-center ml-2 cursorPointer"></i></a>
             </span>
           </td>
         </tr>
       </tbody>
     </table>
     <div class="col contentCenter">
-      <Pager
-        :meta="meta"
-        :height="20"
-        v-if="totalFilesUploading > 0"
-        :visiblePageSelectors="10"
-      />
+      <Pager :meta="meta" height="20" v-if="totalFilesUploading > 0" visiblePageSelectors="10" />
     </div>
   </div>
 </template>
