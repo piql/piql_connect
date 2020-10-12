@@ -26,12 +26,12 @@
                          </div>
                          <div class="form-group">
                              <div :title="$t('upload.archiveToolTip')">
-                                <archive-picker v-bind:label="$t('Archive')" @loadNewHolders="loadNewHolders" :required="true"/>
+                                <archive-picker v-bind:label="$t('Archive')" :required="true"/>
                             </div>
                          </div>
                          <div class="form-group">
                              <div :title="$t('upload.holdingToolTip')">
-                                <holding-picker v-bind:label="$t('Holdings')" :useWildCard="true" @selectedHolder="selectedHolder" :key='holderKey' :required="true"/>
+                                <holding-picker v-bind:label="$t('Holdings')" :useWildCard="true" @selectedHolder="selectedHolder" :required="true"/>
                             </div>
                          </div>
 
@@ -284,8 +284,7 @@ export default {
             pageSize: 8,
             pageFrom: 1,
             pageTo: 4,
-            fileNameFilter: "",
-            holderKey: 0
+            fileNameFilter: ""
         };
     },
 
@@ -403,12 +402,6 @@ export default {
     },
 
     methods: {
-        forceHolderReRender(){
-            this.holderKey += 1;
-        },
-        loadNewHolders(){
-            this.forceHolderReRender();
-        },
         selectedHolder(holding){
             Vue.nextTick(() => {
                 if( !holding ) {
