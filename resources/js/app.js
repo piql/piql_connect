@@ -100,7 +100,7 @@ Vue.component("vue-select-sides", vueSelectSides);
  */
 
 import { router } from "./router.js";
-import env from "./env"
+import env from "./environment"
 
 //import store
 import { store } from "./store/store";
