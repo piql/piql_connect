@@ -100,6 +100,7 @@ Vue.component("vue-select-sides", vueSelectSides);
  */
 
 import { router } from "./router.js";
+import env from "./env"
 
 //import store
 import { store } from "./store/store";
@@ -116,11 +117,7 @@ function interceptToken() {
 }
 
 Vue.use(VueKeyCloak, {
-    config: {
-        realm: process.env.AUTH_REALM,
-        url: process.env.AUTH_BASE_URL,
-        clientId: process.env.AUTH_CLIENT,
-    },
+    config: env.keyCloakConfig,
     onReady: () => {
         interceptToken();
         new Vue({
