@@ -15,7 +15,10 @@
         <div class="col-sm-1 align-self-center text-center">
             {{fileCount}}
         </div>
-        <div class="col-sm-3 d-inline-block align-self-center text-center">
+        <div class="col-sm-1 align-self-center text-right">
+            {{item.storage_properties.bag.bagSize | prettyBytes}}
+        </div>
+        <div class="col-sm-2 d-inline-block align-self-center text-center">
             <button class="btn-tiny m-auto" @click="openObject" data-toggle="tooltip" title="Access contents"> <i class="fas fa-folder-open actionIcon"></i> </button>
             <button class="btn-tiny m-auto" @click="preview" href="" data-toggle="tooltip" title="Preview image"><i class="fas fa-eye actionIcon"></i></button>
             <button class="btn-tiny m-auto" @click="removeAip" href="" data-toggle="tooltip" title="Remove AIP from bucket"><i class="fas fas fa-trash-alt actionIcon"></i></button>

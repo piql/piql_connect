@@ -10,6 +10,7 @@ use Faker\Factory as faker;
 use Laravel\Passport\Passport;
 use Webpatser\Uuid\Uuid;
 use App\Metadata;
+use App\Account;
 use App\User;
 use App\Job;
 use App\Aip;
@@ -21,6 +22,7 @@ class RetrievalJobsControllerTest extends TestCase
 {
     use DatabaseTransactions;
 
+    private $account;
     private $user;
     private $jobs;
     private $firstJob;
@@ -32,7 +34,9 @@ class RetrievalJobsControllerTest extends TestCase
     public function setUp() : void
     {
         parent::setUp();
+        $this->account = factory( Account::class )->create();
         $this->user = factory( User::class )->create();
+        $this->user->account()->associate( $this->account );
         Passport::actingAs( $this->user );
 
         $this->jobs = factory( Job::class, self::JOBS_CREATED )

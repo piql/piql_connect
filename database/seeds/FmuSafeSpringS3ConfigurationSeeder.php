@@ -94,7 +94,7 @@ class FmuSafeSpringS3ConfigurationSeeder extends Seeder
         $ss_test_key_id = "NDQV8ABQWMMTM6CYNMUS";
         $ss_test_secret = "vGZDrB93VMo9mT1vLLPVK1W94wftKcxcBD5KwbVZ";
         $ss_test_url = "https://s3.osl1.safedc.net";
-        $ss_test_bucket = "jobs-outbox";
+        $ss_test_bucket = "piqlfilm";
 
         $s3Config = S3Configuration::create([
             'url' => $ss_test_url,

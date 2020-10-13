@@ -94,7 +94,7 @@ class SafeSpringS3ConfigurationSeeder extends Seeder
         $ss_test_key_id = "A027DQI8VXPIJETYNXZQ";
         $ss_test_secret = "OOE4owN4uin0ctQQ6VAqsDmsHnGh4AUjgrsbEFtg";
         $ss_test_url = "https://s3.osl1.safedc.net";
-        $ss_test_bucket = "jobs-outbox";
+        $ss_test_bucket = "piqlfilm";
 
         $s3Config = S3Configuration::create([
             'url' => $ss_test_url,

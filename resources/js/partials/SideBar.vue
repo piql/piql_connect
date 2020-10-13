@@ -35,7 +35,7 @@
                     </router-link>
 
                     <router-link :to="{ name: 'settings.admin.account.users' }">
-                        <li class="list-group-item cursorPointer" :class="{ active: routeBelongsTo('settings.admin.account.users') }">
+                        <li class="list-group-item cursorPointer" >
                             <i class="fas fa-wrench"></i>
                             <div class="leftMenuItem">
                                 {{$t('sidebar.settings.admin')}}
@@ -65,7 +65,7 @@
 
                             <router-link :to="{ name: 'settings.admin.account.metadata.template' }">
                                 <li class="list-group-item submenu" :class="{ active: routeBelongsTo('settings.admin.account.metadata.template') }" >
-                                    <i class="fas fa-list"></i>
+                                    <i class="fas fa-tags"></i>
                                     <div class="leftMenuItem">
                                         {{$t('sidebar.settings.admin.metadata')}}
                                     </div>
@@ -80,14 +80,15 @@
                                 </li>
                             </router-link>
 
-                            <router-link :to="{ name: 'settings.admin.holdings' }">
+                            <!--router-link :to="{ name: 'settings.admin.holdings' }">
                                 <li class="list-group-item submenu" :class="{ active: routeBelongsTo('settings.admin.holdings') }" >
                                     <i class="fas fa-folder"></i>
                                     <div class="leftMenuItem">
                                         {{$t("sidebar.settings.holdings")}}
                                     </div>
                                 </li>
-                            </router-link>
+                            </router-link-->
+
 
                             
 
@@ -243,6 +244,7 @@ export default {
     },
     methods: {
         routeBelongsTo( checkRoute ) {
+            if( !this.$route.name ) return false;
             return this.$route.name.startsWith( checkRoute );
         },
     }

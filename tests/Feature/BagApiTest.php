@@ -47,8 +47,7 @@ class BagApiTest extends TestCase
         parent::setUp();
         $this->createdBagIds = collect([]);
         $this->testBagName1 = "TestBagName1";
-        $this->account = factory(Account::class)->create([
-        ]);
+        $this->account = factory(Account::class)->create();
 
         $this->testUser = User::create([
             'username' => 'BagApiTestUser',
@@ -57,6 +56,7 @@ class BagApiTest extends TestCase
             'email' => 'bagapitestuser@localhost',
             'account_uuid' => $this->account->uuid,
         ]);
+        $this->testUser->account()->associate( $this->account );
 
         Passport::actingAs($this->testUser);
 
@@ -65,8 +65,6 @@ class BagApiTest extends TestCase
             'owner' => $this->testUser->id
         ];
 
-        $this->account->owner()->associate($this->testUser);
-        $this->account->save();
         $this->accountMetadata = factory(AccountMetadata::class)->create([
             "modified_by" => $this->testUser->id,
         ]);
