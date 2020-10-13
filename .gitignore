@@ -52,4 +52,5 @@ composer.phar
 .rnd
 piql_connect.code-workspace
 resources/js/app.jse
+resources/js/env.js
 
