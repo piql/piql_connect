@@ -1898,7 +1898,9 @@ input:invalid {
 }
 
 .sideBarIconImg {
-    width: 2em;
+    width: 2rem;
+    min-height: 2rem;
+    vertical-align: bottom;
 }
 
 .dashboardIconImg {
