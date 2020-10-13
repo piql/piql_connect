@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,20 +14,15 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
+Route::middleware('auth')->get('/user', function (Request $request) {
     return $request->user();
-});
-
-Route::group(['prefix' => 'v1'], function () {
-    Route::post('login', 'Auth\ApiLoginController@login')->middleware('user.checkDisabled');
 });
 
 // todo: mode to whitelist middleware or add token to headers in callback
 Route::group(['prefix' => 'v1'], function () {
 });
 
-Route::group(['prefix' => 'v1', 'middleware' => ['auth:api', 'activity']], function () {
-    Route::post('logout', 'Auth\ApiLoginController@logout');
+Route::group(['prefix' => 'v1', 'middleware' => ['auth']], function () {
 
     Route::group(['prefix' => 'system'], function () {
         Route::get('statuses/current-user', 'Api\System\StatusController@currentUser');
@@ -39,6 +35,10 @@ Route::group(['prefix' => 'v1', 'middleware' => ['auth:api', 'activity']], funct
         Route::get('languages', 'Api\System\SystemController@languages');
         Route::get('system/session-lifetime', 'Api\System\SystemController@sessionLifetime');
         Route::get('users/me', 'Api\Users\SelfServiceController@me');
+
+        Route::post('profile/imgUpload', '\Optimus\FineuploaderServer\Controller\LaravelController@upload');
+        Route::post('profile/img', 'Api\Users\ProfileController@imgUpload');
+        Route::get('profile/img', 'Api\Users\ProfileController@img');
     });
 
     Route::group(['prefix' => 'ingest'], function () {
@@ -91,6 +91,12 @@ Route::group(['prefix' => 'v1', 'middleware' => ['auth:api', 'activity']], funct
         Route::get('storage/offline/pending/buckets', 'Api\Ingest\OfflineStorageController@jobs')->name('api.ingest.buckets.pending');
         Route::get('storage/offline/archive/buckets', 'Api\Ingest\OfflineStorageController@archiveJobs')->name('api.ingest.buckets.archiving');
 
+        Route::post('storage/offline/files/upload', '\Optimus\FineuploaderServer\Controller\LaravelController@upload');
+        Route::post('storage/offline/{jobId}/config/upload', 'Api\Storage\BucketConfigController@upload')->name('api.ingest.buckets.config');
+        Route::get('storage/offline/{jobId}/config/showFiles', 'Api\Storage\BucketConfigController@showFiles')->name('api.ingest.buckets.config');
+        Route::get('storage/offline/{jobId}/config/showFile/{name}', 'Api\Storage\BucketConfigController@showFile')->name('api.ingest.buckets.config');
+        Route::post('storage/offline/{jobId}/config/removeFile/{name}', 'Api\Storage\BucketConfigController@removeFile')->name('api.ingest.buckets.config');
+
         Route::group(['prefix' => 'triggers'], function () {
             // todo: add middleware
             Route::group(['prefix' => 'am'], function () {
@@ -136,11 +142,20 @@ Route::group(['prefix' => 'v1', 'middleware' => ['auth:api', 'activity']], funct
         Route::get('files/{file}/metadata', 'Api\Access\FileObjectMetadataController@index')->name('api.access.files.metadata.index');
     });
 
+    Route::group(['prefix' => 'metadata'], function () {
+        Route::apiResource('archives', 'Api\Metadata\ArchiveController', ['as' => 'api.metadata']);
+        Route::apiResource('archives.holdings', 'Api\Metadata\ArchiveHoldingController', ['as' => 'api.metadata']);
 
-    Route::group(['prefix' => 'planning'], function () {
-        Route::apiResource('holdings', 'Api\Planning\HoldingController', ['as' => 'planning']);
-        Route::apiResource('archives', 'Api\Planning\ArchiveController', ['as' => 'planning']);
-        Route::apiResource('archives.holdings', 'Api\Planning\ArchiveHoldingController', ['as' => 'planning']);
+        Route::group(['prefix' => 'admin'], function() { //TODO: Admin guard must be applied to these routes
+            Route::apiResource('templates',                  'Api\Metadata\Admin\MetadataTemplateController',      ['as' => 'admin.metadata']);
+            Route::put('templates', 'Api\Metadata\Admin\MetadataTemplateController@upsert')->name('admin.metadata.templates.upsert');
+            Route::apiResource('accounts',                   'Api\Metadata\Admin\AccountController',               ['as' => 'admin.metadata']);
+            Route::put('accounts', 'Api\Metadata\Admin\AccountController@upsert')->name('admin.metadata.accounts.upsert');
+            Route::apiResource('accounts.archives',          'Api\Metadata\Admin\AccountArchiveController',        ['as' => 'admin.metadata']);
+            Route::put('accounts/{account}/archives',         'Api\Metadata\Admin\AccountArchiveController@upsert')->name('admin.metadata.accounts.archives.upsert');
+            Route::apiResource('accounts.archives.holdings', 'Api\Metadata\Admin\AccountArchiveHoldingController', ['as' => 'admin.metadata']);
+            Route::put('accounts/{account}/archives/{archive}/holdings',       'Api\Metadata\Admin\AccountArchiveHoldingController@upsert')->name('admin.metadata.accounts.archives.holdings.upsert');
+        });
     });
 
     Route::group(['prefix' => 'storage'], function () {
@@ -165,20 +180,20 @@ Route::group(['prefix' => 'v1', 'middleware' => ['auth:api', 'activity']], funct
     });
 
 
-    Route::group(['prefix' => 'stats', 'middleware' => 'auth:api'], function () {
+    Route::group(['prefix' => 'stats', 'middleware' => 'auth'], function () {
         Route::group(['prefix' => 'charts'], function () {
-            Route::get('aips/online/ingested', 'Api\Stats\ChartController@onlineAIPsIngested');
-            Route::get('aips/online/ingested/monthly', 'Api\Stats\ChartController@monthlyOnlineAIPsIngested')->name('monthlyOnlineAIPsIngested');
-            Route::get('data/online/ingested/monthly', 'Api\Stats\ChartController@monthlyOnlineDataIngested')->name('monthlyOnlineDataIngested');
-            Route::get('aips/online/accessed/monthly', 'Api\Stats\ChartController@monthlyOnlineAIPsAccessed')->name('monthlyOnlineAIPsAccessed');
-            Route::get('data/online/accessed/monthly', 'Api\Stats\ChartController@monthlyOnlineDataAccessed')->name('monthlyOnlineDataAccessed');
-            Route::get('aips/online/ingested/daily', 'Api\Stats\ChartController@dailyOnlineAIPsIngested')->name('dailyOnlineAIPsIngested');
-            Route::get('data/online/ingested/daily', 'Api\Stats\ChartController@dailyOnlineDataIngested')->name('dailyOnlineDataIngested');
-            Route::get('aips/online/accessed/daily', 'Api\Stats\ChartController@dailyOnlineAIPsAccessed')->name('dailyOnlineAIPsAccessed');
-            Route::get('data/online/accessed/daily', 'Api\Stats\ChartController@dailyOnlineDataAccessed')->name('dailyOnlineDataAccessed');
-            Route::get('file-formats/ingested', 'Api\Stats\ChartController@onlineFileFormatsIngested')->name('fileFormatsIngested');
+            Route::get('monthly/ingested/aips', 'Api\Stats\ChartController@monthlyIngestedAIPs')->name('monthlyIngestedAIPs');
+            Route::get('monthly/ingested/data', 'Api\Stats\ChartController@monthlyIngestedData')->name('monthlyIngestedData');
+            Route::get('monthly/accessed/aips', 'Api\Stats\ChartController@monthlyAccessedAIPs')->name('monthlyAccessedAIPs');
+            Route::get('monthly/accessed/data', 'Api\Stats\ChartController@monthlyAccessedData')->name('monthlyAccessedData');
+            // Daily statistics will be enabled after the 1.0 release (ref CON-748)
+            // Route::get('daily/ingested/aips', 'Api\Stats\ChartController@dailyOnlineAIPsIngested')->name('dailyOnlineAIPsIngested');
+            // Route::get('daily/ingested/data', 'Api\Stats\ChartController@dailyOnlineDataIngested')->name('dailyOnlineDataIngested');
+            // Route::get('daily/accessed/aips', 'Api\Stats\ChartController@dailyOnlineAIPsAccessed')->name('dailyOnlineAIPsAccessed');
+            // Route::get('daily/accessed/data', 'Api\Stats\ChartController@dailyOnlineDataAccessed')->name('dailyOnlineDataAccessed');
+            Route::get('total/ingested/fileformats', 'Api\Stats\ChartController@onlineFileFormatsIngested')->name('fileFormatsIngested');
         });
-        Route::get('user/{userId}', 'Api\Stats\UserStatsController@userStats')->name('userstats');
+        Route::get('user/{userId}', Api\Stats\UserStatsController::class)->name('userstats');
     });
 });
 
@@ -239,4 +254,3 @@ Route::group(['prefix' => 'v1/media'], function () {
     Route::get('thumb/{fileName}', 'Api\System\MediaController@thumb');
     Route::get('dips/{dipId}/previews/files/{fileId}', 'Api\System\MediaController@showDipFile');
 });
-        

@@ -1,5 +1,6 @@
 <?php
 
+use App\Account;
 use Illuminate\Database\Seeder;
 use App\S3Configuration;
 use App\StorageLocation;
@@ -31,8 +32,11 @@ class SafeSpringS3ConfigurationSeeder extends Seeder
             'bucket' => $ss_test_bucket
         ]);
 
-        $owner = User::where('username','kare')->first() ?? User::first() ?? factory(App\User::class, 1)->create()->first();
-
+        $owner = User::where('username','kare')->first()
+            ?? User::first()
+            ?? factory(App\User::class)->create([
+                "account_uuid" => Account::first()->uuid
+            ]);
         StorageLocation::create([
             'owner_id' => $owner->id,
             'locatable_id' => $s3Config->id,
@@ -65,6 +69,46 @@ class SafeSpringS3ConfigurationSeeder extends Seeder
             'human_readable_name' => "Other Dip Store"
         ]);
 
+        // Messages
+        $ss_test_key_id = "A027DQI8VXPIJETYNXZQ";
+        $ss_test_secret = "OOE4owN4uin0ctQQ6VAqsDmsHnGh4AUjgrsbEFtg";
+        $ss_test_url = "https://s3.osl1.safedc.net";
+        $ss_test_bucket = "connect-test-messages-inbox";
 
+        $s3Config = S3Configuration::create([
+            'url' => $ss_test_url,
+            'key_id' => $ss_test_key_id,
+            'secret' => $ss_test_secret,
+            'bucket' => $ss_test_bucket
+        ]);
+
+        StorageLocation::create([
+            'owner_id' => $owner->id,
+            'locatable_id' => $s3Config->id,
+            'locatable_type' => 'App\S3Configuration',
+            'storable_type' => 'App\Message',
+            'human_readable_name' => "Safespring S3 Message Inbox"
+        ]);
+
+        // Jobs
+        $ss_test_key_id = "A027DQI8VXPIJETYNXZQ";
+        $ss_test_secret = "OOE4owN4uin0ctQQ6VAqsDmsHnGh4AUjgrsbEFtg";
+        $ss_test_url = "https://s3.osl1.safedc.net";
+        $ss_test_bucket = "piqlfilm";
+
+        $s3Config = S3Configuration::create([
+            'url' => $ss_test_url,
+            'key_id' => $ss_test_key_id,
+            'secret' => $ss_test_secret,
+            'bucket' => $ss_test_bucket
+        ]);
+
+        StorageLocation::create([
+            'owner_id' => $owner->id,
+            'locatable_id' => $s3Config->id,
+            'locatable_type' => 'App\S3Configuration',
+            'storable_type' => 'App\Job',
+            'human_readable_name' => "Safespring S3 Job Outbox"
+        ]);
     }
 }

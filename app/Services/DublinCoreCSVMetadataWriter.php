@@ -5,6 +5,7 @@ namespace App\Services;
 
 use Illuminate\Support\Facades\Storage;
 use App\Interfaces\MetadataWriterInterface;
+use App\Helpers\MetadataHelper;
 
 class DublinCoreCSVMetadataWriter implements MetadataWriterInterface
 {
@@ -54,7 +55,7 @@ class DublinCoreCSVMetadataWriter implements MetadataWriterInterface
         Storage::append(
             $this->filename,
             'data/'.$parameter['object'].','.collect($this->header)->map(function($col, $key) use ($metadata) {
-                return ($metadata[$key] ?? '');
+                return (MetadataHelper::csvEscape($metadata[$key] ?? ''));
             })->implode(',')
         );
         return true;

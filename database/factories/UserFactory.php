@@ -1,6 +1,8 @@
 <?php
 
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
+
+use App\Account;
 use App\User;
 use Illuminate\Support\Str;
 use Faker\Generator as Faker;
@@ -17,6 +19,10 @@ use Faker\Generator as Faker;
 */
 
 $factory->define(User::class, function (Faker $faker) {
+    if(Account::count() == 0){
+        throw new Exception("User factory failed: You need to create at least one Account before creating a user.");
+    }
+
     return [
         'full_name' => $faker->name,
         'username' => $faker->userName,
@@ -24,5 +30,6 @@ $factory->define(User::class, function (Faker $faker) {
         'email_verified_at' => now(),
         'password' => bcrypt("secret"),
         'remember_token' => Str::random(10),
+        'account_uuid' => Account::pluck('uuid')->random(),
     ];
 });

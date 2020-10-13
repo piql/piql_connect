@@ -103,7 +103,6 @@ services:
     command: bash -c "composer install && composer dump-autoload"
     stdin_open: true
     tty: true
-    user: ${HOST_USERID}:${HOST_GROUPID}
     volumes:
       - .././:/var/www/html/
 
@@ -127,6 +126,7 @@ services:
       - ./logstash/java/libs:/etc/logstash/libs
       - ./logstash/conf.d:/etc/logstash/config-templates
       - ./logstash/init.sh:/etc/logstash/init.sh:ro
+      - ./logstash/logstash-output-mongodb-3.2.0.gem:/etc/logstash/logstash-output-mongodb-3.2.0.gem
       - ./logstash/config/logstash.yml:/usr/share/logstash/config/logstash.yml:ro
       - ./logstash/config/pipelines.yml:/usr/share/logstash/config/pipelines.yml:ro
     environment:
@@ -159,6 +159,14 @@ services:
       piqlConnect-net:
         aliases:
           - piqlConnectMongoDB
+
+  selenium-chrome:
+    image: selenium/standalone-chrome
+    ports:
+      - "4444:4444"
+      - "5900:5900"
+    networks:
+      piqlConnect-net:
 
 networks:
   piqlConnect-net:

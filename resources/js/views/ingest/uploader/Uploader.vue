@@ -3,17 +3,17 @@
         <page-heading icon="fa-upload" :title="$t('upload.title')" :ingress="$t('upload.ingress')" />
 
         <form v-on:submit.prevent>
-       
+
 
         <div class="row">
             <div class="col-md-4">
-               
+
                 <div class="card" :title="$t('upload.addFileButtonToolTip')">
                     <div class="card-header">
-                        <b><i class="fa fa-upload"></i> INGEST UPLOAD FORM</b>
+                        <b><i class="fa fa-upload"></i> {{$t('upload.form.title')}}</b>
                     </div>
                     <div class="card-body">
-                        
+
                          <div class="form-group">
                              <div v-show="compoundModeEnabled" class="text-left" >
                                 <label for="bagname" class="col-form-label-sm">{{$t("upload.sipName")}}</label>
@@ -26,15 +26,15 @@
                          </div>
                          <div class="form-group">
                              <div :title="$t('upload.archiveToolTip')">
-                                <archive-picker v-bind:label="$t('Archive')" @loadNewHolders="loadNewHolders"></archive-picker>
+                                <archive-picker v-bind:label="$t('Archive')" :required="true"/>
                             </div>
                          </div>
                          <div class="form-group">
                              <div :title="$t('upload.holdingToolTip')">
-                                <holding-picker v-bind:label="$t('Holdings')" :useWildCard="true" :key='holderKey' ></holding-picker>
+                                <holding-picker v-bind:label="$t('Holdings')" :useWildCard="true" @selectedHolder="selectedHolder" :required="true"/>
                             </div>
                          </div>
-                         
+
                          <Dropzone
                                 class="dropzone is-6 has-text-centered"
                                 :multiple="true"
@@ -44,8 +44,8 @@
                                         <p class="dz-text"><i class="fas fa-cloud-upload-alt"></i> {{$t("upload.addFileButton")}}</p>
                                     </file-input>
                             </Dropzone>
-                         
-                         
+
+
 
                          <div class="form-group">
                              <div v-show="compoundModeEnabled">
@@ -55,7 +55,7 @@
                             </div>
 
                          </div>
-                        
+
                     </div>
                 </div>
             </div>
@@ -64,7 +64,7 @@
                     <div class="card-header">
                         <div class="row">
                             <div class="col-md-6">
-                                <b><i class="fa fa-folder-open"></i>  UPLOADED ( {{ sortedFilesUploading.length }} files)</b>
+                                <b><i class="fa fa-folder-open"></i>  {{$t('upload.fileListTitle')}} ({{ sortedFilesUploading.length }} {{$t('upload.fileListTitle.files')}}, {{totalSize | prettyBytes}})</b>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
@@ -79,14 +79,14 @@
                                             </div>
                                             <input class="form-control" :placeholder="$t('upload.fileNameFilter')" id="fileNameFilter" v-model="fileNameFilter">
                                         </div>
-                                        
+
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="card-body">
-                        <upload-file-item-listing :sortedFilesUploading="sortedFilesUploading"  
+                        <upload-file-item-listing :sortedFilesUploading="sortedFilesUploading"
                         @metadataClicked="metadataClicked" @removeClicked="removeClicked"
                         @retryClicked="retryClicked" @removeFailedClicked="removeFailedClicked" :filesUploadingMeta="filesUploadingMeta"/>
 
@@ -95,7 +95,7 @@
 
             </div>
         </div>
-        
+
     </form>
     </div>
 </template>
@@ -109,11 +109,13 @@ import Dropzone from 'vue-fineuploader/dropzone';
 import axios from 'axios';
 import JQuery from 'jquery';
 let $ = JQuery;
-import filesize from 'filesize'; 
+import filesize from 'filesize';
 
 export default {
     mixins: [ RouterTools, DeferUpdate ],
     data() {
+        const Authorization = `Bearer ${Vue.prototype.$keycloak.token}`;
+
         const uploader = new FineUploaderTraditional({
             options: {
                 request: {
@@ -127,14 +129,14 @@ export default {
                         optimus_uploader_thumbnail_width: 100,
                     },
                     customHeaders: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        Authorization
                     }
                 },
                 deleteFile: {
                     enabled: true,
                     endpoint: '/api/v1/ingest/file',
                     customHeaders: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        Authorization
                     }
                 },
                 chunking: {
@@ -155,17 +157,16 @@ export default {
                     onValidate: (id, name) => {
                     },
                     onSubmit: (id, name) => {
-                        let originalName = name;
-                        let isDuplicate = true;
-                        let index = 2;
-                        do {
-                            isDuplicate = this.filesUploading.findIndex( (file) => file.filename == name ) != -1;
-                            if (isDuplicate) {
-                                name = this.renameFile(originalName, index);
-                                this.filesRenamed[id] = name;
-
-                            }
-                        } while (isDuplicate);
+                        let isDuplicate = this.filesUploading.some( file => file.filename === name );
+                        if( isDuplicate ){
+                            this.errorToast(
+                                this.$t('upload.toasts.uploadDuplicate.title'),
+                                this.$t('upload.toasts.uploadDuplicate.message'),
+                                { 'FILENAME': name },
+                                0
+                            );
+                            cancel(id);
+                        }
 
                         this.filesUploading.unshift({
                             'id': id,
@@ -212,9 +213,6 @@ export default {
 
                         if( this.compoundModeEnabled ) {
                             let uploadToBagId = this.bag.id;
-                            if (this.filesRenamed[id] != undefined) {
-                                name = this.filesRenamed[id];
-                            }
                             axios.post(`/api/v1/ingest/bags/${uploadToBagId}/files`, {
                                 'fileName' : name,
                                 'result' : response,
@@ -271,9 +269,8 @@ export default {
             uploader: uploader,
             bag: {},
             bagName: "",
-            files: {},
+            files: [],
             filesUploading: [],
-            filesRenamed: {},
             userId: '',
             userSettings: {
                 workflow: {
@@ -287,8 +284,7 @@ export default {
             pageSize: 8,
             pageFrom: 1,
             pageTo: 4,
-            fileNameFilter: "",
-            holderKey: 0
+            fileNameFilter: ""
         };
     },
 
@@ -298,6 +294,12 @@ export default {
     },
 
     computed: {
+        authToken() {
+            if( this.authMode == "CSRF" ) {
+                return {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')};
+            }
+            return {'Authorization': `Bearer ${Vue.prototype.$keycloak.token}`};
+        },
         sortedFilesUploading() {
             return this.filesUploading
                 .filter( f => !f.isHidden )
@@ -305,12 +307,12 @@ export default {
                 .sort( (a,b)  => Number( b.isUploading) - Number( a.isUploading ) );
         },
         processDisabled: function() {
-            return this.invalidBagName | this.numberOfFiles === 0 | this.hasIncompleteFiles | this.setArchive === null | this.setHolding == null;
+            return this.invalidBagName | this.numberOfFiles === 0 | this.hasIncompleteFiles | this.setArchive === null | this.getHolding == null;
         },
         setArchive: function (){
             return this.$route.query.archive;
         },
-        setHolding: function (){
+        getHolding: function (){
             return this.$route.query.holding;
         },
         invalidBagName: function() {
@@ -327,9 +329,12 @@ export default {
             return this.filesUploading.some( f => f.isFailed );
         },
         compoundModeEnabled: function() {
-            let compoundSetting = this.userSettings.workflow.ingestCompoundModeEnabled;
+            return true;
             /* Compound must explicitly be set to false to be disabled */
+            /* TODO: If we are ito support this mode, we need to get this state from the token / store instead.
+            let compoundSetting = this.userSettings.workflow.ingestCompoundModeEnabled;
             return this.userSettings.workflow.ingestCompoundModeEnabled !== undefined ? this.userSettings.workflow.ingestCompoundModeEnabled : true;
+             */
         },
         uploadInProgress: function() {
             return this.filesUploading.find( (file) => file.isUploading === true ) || false;
@@ -372,6 +377,15 @@ export default {
         customerSelectsArchives: function() {
             return !!this.archives;
         },
+        totalSize: function() {
+            let size = 0;
+            if (this.files != null) {
+                this.files.forEach(file => {
+                    size += file.filesize * 1;
+                });
+            }
+            return size;
+        }
     },
 
     watch: {
@@ -388,20 +402,14 @@ export default {
     },
 
     methods: {
-        forceHolderReRender(){
-            this.holderKey += 1;
-        },
-        loadNewHolders(){
-            this.forceHolderReRender();
-        },
-        renameFile(name, index) {
-            let nameArr = name.split(".");
-            if (nameArr.length == 1) {
-                return name + "-" + index;
-            } else {
-                nameArr[nameArr.length-2] = nameArr[nameArr.length-2] + "-" + index;
-                return nameArr.join(".");
-            }
+        selectedHolder(holding){
+            Vue.nextTick(() => {
+                if( !holding ) {
+                    this.updateQueryParams({ holding: null, page : null })
+                } else {
+                    this.updateQueryParams({ holding, page : null });
+                }
+            })
         },
         metadataClicked( e ) {
             let fileId = e.uploadedFileId;
@@ -472,7 +480,7 @@ export default {
                 {'BAGNAME': bagName }
             );
 
-            this.bag = await this.createBag("", this.userId, this.selectedArchive, this.selectedHoldingTitle );
+            this.bag = await this.createBag("", this.userId, this.selectedArchive, this.getHolding );
 
             this.fileInputDisabled = false;
         },
@@ -493,26 +501,26 @@ export default {
                 'name': this.bagName
             });
         },
-        async createBag( bagName, userId, selectedArchive, selectedHoldingTitle ) {
+        async createBag( bagName, userId, selectedArchive, selectedHoldingUuid ) {
             let createdBag = (await axios.post("/api/v1/ingest/bags/", {
                 name: bagName,
                 owner: userId,
                 archive_uuid: selectedArchive,
-                holding_name: selectedHoldingTitle
+                holding_uuid: selectedHoldingUuid
             })).data.data;
             this.files = [];
             this.filesUploading = [];
             return createdBag;
         },
-        async changedArchive(archiveId, holdingTitle) {
-            if( !archiveId || !holdingTitle )
+        async changedArchive(archiveId, holdingUuid) {
+            if( !archiveId || !holdingUuid )
                 return;
             this.selectedArchive = archiveId;
-            this.selectedHolding = holdingTitle;
+            this.selectedHolding = holdingUuid;
             if( this.bag && this.bag.id && this.compoundModeEnabled) {
                 axios.patch("/api/v1/ingest/bags/"+this.bag.id, {
                     archive_uuid: archiveId,
-                    holding_name: holdingTitle
+                    holding_uuid: holdingUuid
                 }).then( (response) => {
                     this.bag = response.data.data;
                 });
@@ -523,6 +531,10 @@ export default {
         }
     },
     props: {
+        authMode: {
+            type: String,
+            default: "keycloak"
+        },
         retryGracetimeMs: {
             type: Number,
             default: 1000
@@ -542,15 +554,18 @@ export default {
         this.pageFrom = 1;
         this.pageTo = this.pageSize;
         this.dispatchRouting();
-        this.userId = (await axios.get("/api/v1/system/statuses/current-user")).data;
-        this.userSettings  = (await axios.get("/api/v1/system/users/current-user/preferences")).data;
+        this.userId = Vue.prototype.$keycloak.idTokenParsed.sub ?? "";
+        if( !this.userId ) {
+            console.error("No user found. Cannot continue!");
+        }
+        this.userSettings  = (await axios.get(`/api/v1/system/users/${this.userId}/preferences`)).data;
 
         if( this.compoundModeEnabled ) {
 
-            this.bag = (await axios.get("/api/v1/ingest/bags/latest")).data.data;
+            this.bag = (await axios.get(`/api/v1/ingest/bags/latest?userId=${this.userId}`)).data.data;
             this.bagName = this.bag.name;
             let archive = this.bag.archive_uuid;
-            let holding = this.bag.holding_name;
+            let holding = this.bag.holding_uuid;
             this.updateQueryParams({ archive, holding });
 
             if(!!this.bag & this.bag.status === "open") {
@@ -569,7 +584,7 @@ export default {
                 }) );
             }
             else {
-                this.bag = (await this.createBag( "", this.userId, this.selectedArchive, this.selectedHoldingTitle ));
+                this.bag = (await this.createBag( "", this.userId, this.selectedArchive, this.selectedHolding ));
             }
         }
     },

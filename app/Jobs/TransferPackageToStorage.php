@@ -6,6 +6,7 @@ use App\Events\InformationPackageUploaded;
 use App\Interfaces\ArchivalStorageInterface;
 use App\StorageLocation;
 use App\FileObject;
+use App\MetadataPath;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
@@ -111,7 +112,7 @@ class TransferPackageToStorage implements ShouldQueue
             {
                 Log::error("Failed to create file object for file at {$this->storageLocation}:{$uploadPath}");
             }
-            if( $dublinCoreMetadata && Str::endsWith( $fileObject->path, "/data/objects" ) && isset( $dublinCoreMetadata[$fileObject->filename] ) ) {
+            if( $dublinCoreMetadata && Str::endsWith( rtrim($fileObject->path, "/") . "/", "/data/objects/" . MetadataPath::FILE_OBJECT_PATH ) && isset( $dublinCoreMetadata[$fileObject->filename] ) ) {
                 $fileObject->populateMetadataFromArray( ["dc" => $dublinCoreMetadata[$fileObject->filename]], "mets" );
             }
 

@@ -26,5 +26,5 @@ $factory->state( Job::class, 'ingesting', function() {
 });
 
 $factory->afterCreatingState(Job::class, 'ingesting', function ($job) {
-    $job->update(['status' => 'ingesting']);
+    $job->applyTransition('piql_it')->save();
 });

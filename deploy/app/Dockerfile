@@ -13,7 +13,10 @@ WORKDIR /var/www
 RUN groupmod -g 333 www-data
 RUN usermod -u 333 -g 333 www-data
 #RUN chown -R 333:333 /var/www/storage
+RUN rm -f "$PHP_INI_DIR/php.ini-production"
+RUN rm -f "$PHP_INI_DIR/php.ini-development"
 COPY ./app/bootstrap.sh /usr/local/bin
+COPY ./app/php.ini "$PHP_INI_DIR/php.ini"
 EXPOSE 9000
 
 RUN mkdir -p /var/log/supervisor
@@ -21,3 +24,6 @@ RUN chown www-data:www-data /var/log/supervisor
 RUN mkdir -p /var/run/supervisor
 RUN chown www-data:www-data /var/run/supervisor
 CMD ["/usr/local/bin/bootstrap.sh"]
+
+COPY ./app/policy.xml /etc/ImageMagick-6/
+

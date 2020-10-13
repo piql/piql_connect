@@ -5,19 +5,18 @@ namespace App\Listeners;
 use App\Events\BagFilesEvent;
 use App\Events\BagCompleteEvent;
 use App\Events\ErrorEvent;
-use App\Events\InitiateTransferToArchivematicaEvent;
 use App\Interfaces\MetadataGeneratorInterface;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
-use Log;
 use BagitUtil;
 use App\Traits\BagOperations;
+use App\MetadataPath;
+use Illuminate\Support\Facades\Log;
 
 class CommitFilesToBagListener implements ShouldQueue
 {
     use BagOperations;
-
     protected $metadataGenerator;
     protected $bagIt;
     /**
@@ -56,24 +55,49 @@ class CommitFilesToBagListener implements ShouldQueue
         }
 
         $metadataType = env( 'APP_AM_INGEST_METADATA_FILE_FORMAT', "csv");
-        $metadataFileName = Str::random(40)."-metadata.".$metadataType;
+        $metadataFileName = Str::uuid()."-metadata.".$metadataType;
         $metadataWriter = $this->metadataGenerator->createMetadataWriter([
             'filename' => $metadataFileName,
             'type' => $metadataType,
         ]);
 
-        foreach ($files as $file)
-        {
-            if( ($file->filename === "metadata.csv") && $bag->owner()->first()->settings->getIngestMetadataAsFileAttribute() )
-                $this->bagIt->addMetadataFile($file->storagePathCompleted(), $file->filename);
-            else
-                $this->bagIt->addFile($file->storagePathCompleted(), $file->filename);
+        // append metadata to file
+        // TODO: For each of $bag->storage_properties->account, archive, holding - do:
+        /*
+        $writeSuccess = $metadataWriter->write([
+            'object' => $metadataPlaceholder->object,
+            'metadata' => $query->first()->metadata
+        ]);
 
-            if( $bag->owner()->first()->settings->getIngestMetadataAsFileAttribute() !== true ) {
+        if (!$writeSuccess) {
+            Log::error("Generating " . $metadataPlaceholder->class . "metadata for Bag " . $uuid . " failed!");
+        }
+
+        if (!$metadataGenerated) {
+                event(new ErrorEvent($bag));
+            }
+        }
+        */
+
+        foreach (['account', 'archive', 'holding'] as $type) {
+            $meta = (!isset($bag->metadata[$type])) ? [] : $bag->metadata[$type];
+            $retval = $metadataWriter->write([
+                'object' => MetadataPath::of($type),
+                'metadata' => $meta
+            ]);
+        }
+
+        foreach ($files as $file) {
+            if(($file->filename === "metadata.csv") && $bag->owner()->first()->settings->ingestMetadataAsFile)
+                $this->bagIt->addMetadataFile($file->storagePathCompleted(), MetadataPath::FILE_OBJECT_PATH . $file->filename);
+            else
+                $this->bagIt->addFile($file->storagePathCompleted(), MetadataPath::FILE_OBJECT_PATH . $file->filename);
+
+            if($bag->owner()->first()->settings->ingestMetadataAsFile !== true) {
                 if ($file->metadata->count() > 0) {
                     // append metadata to file
                     $retval = $metadataWriter->write([
-                        'object' => $file->filename,
+                        'object' => MetadataPath::FILE_OBJECT_PATH . $file->filename,
                         'metadata' => $file->metadata[0]->metadata
                     ]);
                     if (!$retval) {
@@ -89,7 +113,7 @@ class CommitFilesToBagListener implements ShouldQueue
         }
 
         // add metadata file to bagit tool
-        if( Storage::exists($metadataFileName) && ( $bag->owner()->first()->settings->getIngestMetadataAsFileAttribute() !== true ) ) {
+        if( Storage::exists( $metadataFileName ) ){
             $this->bagIt->addMetadataFile(Storage::path($metadataFileName), "metadata.".$metadataType);
         }
 

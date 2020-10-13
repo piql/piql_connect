@@ -12,10 +12,11 @@ class FmuDatabaseSeeder extends Seeder
     public function run()
     {
         //TODO: env to control which seeders to run
-        $this->call(FmuSafeSpringS3ConfigurationSeeder::class);
-        $this->call(ArchivematicaServiceSeeder::class);
-        $this->call(FmuUsersTableSeeder::class);
+        $this->call(FmuAccountSeeder::class);
         $this->call(FmuArchiveSeeder::class);
         $this->call(FmuHoldingSeeder::class);
+        $this->call(FmuUsersTableSeeder::class);
+        $this->call(FmuSafeSpringS3ConfigurationSeeder::class);
+        $this->call(ArchivematicaServiceSeeder::class);
     }
 }

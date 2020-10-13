@@ -2,13 +2,30 @@
 
 namespace App;
 
+use App\Traits\AutoGenerateUuid;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Validator;
+use App\Archive;
 
 class Holding extends Model
 {
+    use AutoGenerateUuid;
+
+    const DEFAULT_TEMPLATE = '{ "title": "", "description": "", "dc":  { "identifier": "" } }';
+
     protected $table = 'holdings';
     protected $fillable = [
-        'title', 'description', 'owner_archive_uuid', 'parent_id', 'position'
+        'title', 'description', 'owner_archive_uuid', 'parent_id','position',
+        'uuid', 'defaultMetadataTemplate'
+    ];
+
+    protected $casts = [
+        'defaultMetadataTemplate' => 'array'
+    ];
+
+    protected $attributes = [
+        'defaultMetadataTemplate' => self::DEFAULT_TEMPLATE
     ];
 
     protected static function boot()
@@ -16,6 +33,14 @@ class Holding extends Model
         parent::boot();
         static::creating(function ($model) {
             $model->position = $model->siblings()->count()+1;
+
+            $validateIdentifier = Validator::make( ['uuid' => $model->uuid ], ['uuid' => 'uuid'] );
+            if( !$validateIdentifier->passes() ){
+                $model->uuid = Str::uuid();
+            }
+
+            $userSuppliedData = $model->defaultMetadataTemplate["dc"] ?? [];
+            $model->defaultMetadataTemplate = ["dc" => ["identifier" => $model->uuid ] + $userSuppliedData ] ;
         });
     }
 
@@ -34,7 +59,7 @@ class Holding extends Model
     /* Section: Relations */
     public function owner_archive()
     {
-        return $this->belongsTo('Archive', 'owner_archive_uuid',  'uuid');
+        return $this->belongsTo(\App\Archive::class, 'owner_archive_uuid',  'uuid');
     }
 
     public function parent()
@@ -125,7 +150,7 @@ class Holding extends Model
 
 
     /* function ancestor()
-    /* recursively finds the top-level holdings for this holding 
+    /* recursively finds the top-level holdings for this holding
      */
 
     public function ancestor()
@@ -133,4 +158,27 @@ class Holding extends Model
         return $this->parent()->with('ancestor');
     }
 
+    public function getDefaultMetadataTemplateAttribute( string $template ) {
+        $ar = json_decode( $template, true );
+        if(isset( $ar["dc"] ) && !isset( $ar["dc"]["identifier"] ) ) {
+            $ar["dc"]["identifier"] = $this->attributes["uuid"]; //The default is to use the uuid for the Archive as the identifier (as per spec.)
+        }
+
+        if(isset( $ar["dc"] ) && !isset( $ar["dc"]["title"] ) ) {
+            $ar["dc"]["title"] = $this->attributes["title"];    //Grab the title from the model if not present in metadata template
+
+        }
+
+        if(isset( $ar["dc"] ) && !isset( $ar["dc"]["description"] ) ) {
+            $ar["dc"]["description"] = $this->attributes["description"] ?? ""; //Grab the description from the model if not present in metadata template
+        }
+        return $ar;
+    }
+
+    public function setDefaultMetadataTemplateAttribute( Array $template ) {
+        if( array_has( $template, 'dc' ) ) { //TODO: Support other schemas than DC, model level validation would be nice
+            $this->attributes['defaultMetadataTemplate'] = json_encode( $template );
+        }
+    }
 }
+

@@ -18,9 +18,8 @@ class ArchiveSeeder extends Seeder
         Archive::truncate();
 
         if($this->seedFromFile(function($param) {
-                Archive::create($param);
-            })){
-
+            $archive = Archive::create($param);
+        })){
             return;
         }
 

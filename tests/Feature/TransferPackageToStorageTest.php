@@ -9,10 +9,12 @@ use App\S3Configuration;
 use App\Services\ArchivalStorageService;
 use App\Services\ArchivematicaConnectionService;
 use App\StorageLocation;
+use App\Account;
 use App\Aip;
 use App\Dip;
 use App\Bag;
 use App\FileObject;
+use App\MetadataPath;
 use Faker\Factory as faker;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\Storage;
@@ -35,6 +37,7 @@ class TransferPackageToStorageTest extends TestCase
     private $storageService;
     private $testUser;
     private $faker;
+    private $account;
     private $aip;
     private $dip;
     private $bag;
@@ -46,7 +49,9 @@ class TransferPackageToStorageTest extends TestCase
     {
         parent::setUp();
 
+        $this->account = factory( Account::class )->create();
         $this->testUser = factory( \App\User::class )->create();
+        $this->testUser->account()->associate( $this->account );
         Passport::actingAs( $this->testUser );
         $this->faker = Faker::create();
 
@@ -172,13 +177,13 @@ class TransferPackageToStorageTest extends TestCase
         $storageService = $this->app->make('App\Interfaces\ArchivalStorageInterface');
         $basePath = $this->aip->external_uuid."/";
         $this->sourceStorage->makeDirectory( $basePath );
-        $this->sourceStorage->makeDirectory( "{$basePath}data/objects" );
-        $mets = file_get_contents( "tests/Data/gotmetadata-METS.8149cfad-2ba1-4ccf-b132-255dd6399ed1.xml" );
+        $this->sourceStorage->makeDirectory( "{$basePath}data/objects/" . MetadataPath::FILE_OBJECT_PATH );
+        $mets = file_get_contents( "tests/Data/piqlconnect-v1-METS.90d56eb5-9184-4081-a925-2d6fe6581ecd.xml" );
         $metsPath = "{$basePath}data/METS.{$this->aip->external_uuid}.xml";
         $this->sourceStorage->put( $metsPath, $mets );
 
         $testFile = $this->faker->file( "/tmp", $this->sourceStorage->path($basePath), false );
-        $fileFromMets = "{$basePath}data/objects/FMU.420001.tif";
+        $fileFromMets = "{$basePath}data/objects/" . MetadataPath::FILE_OBJECT_PATH . "build.pri";
         $this->sourceStorage->move( "{$basePath}{$testFile}", $fileFromMets );
         $this->assertFileExists( $this->sourceStorage->path( $fileFromMets ) );
 
@@ -190,21 +195,21 @@ class TransferPackageToStorageTest extends TestCase
         $expected =
             ["mets" =>
                 [ "dc" => [
-                    "title" => "Krigsskip",
-                    "creator" => "Forsvarsmuseet",
-                    "subject" => "Skip",
-                    "description" => "Et skip som kjører fort",
-                    "publisher" => "En eller annen veteran",
-                    "contributor" => "Noen folk",
-                    "date" => "03.23.2020",
-                    "type" => "Image",
-                    "format" => "TIF",
-                    "identifier" => "FMU.420001",
-                    "source" => "Scanning",
-                    "language" => "Norsk",
-                    "relation" => "Ingen",
-                    "coverage" => "Bra",
-                    "rights" => "Public Domain"
+                    "title" => "Build priority",
+                    "creator" => "Piql AS",
+                    "subject" => "Build priority file",
+                    "description" => "Part of the cmu_112 project",
+                    "publisher" => "Piql AS",
+                    "contributor" => "Piql AS",
+                    "date" => "2020-09-16",
+                    "type" => "C++ project file",
+                    "format" => "pri",
+                    "identifier" => "",
+                    "source" => "",
+                    "language" => "",
+                    "relation" => "",
+                    "coverage" => "",
+                    "rights" => ""
                 ]
             ]
         ];
@@ -212,7 +217,7 @@ class TransferPackageToStorageTest extends TestCase
         $actual = FileObject::whereHasMorph("storable", ["App\Aip"],
             function ( $q) {
                 $q->where('external_uuid', $this->aip->external_uuid);
-            } )->where("filename","FMU.420001.tif")
+            } )->where("filename","build.pri")
                ->first()
                ->metadata->first()->metadata;
         $this->assertEquals( $expected, $actual );

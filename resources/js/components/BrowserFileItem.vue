@@ -8,13 +8,13 @@
                 {{fileName}}
             </div>
             <div class="col-2 text-left align-self-center text-truncate">
-                {{fileSize}}
+                {{item.size | prettyBytes}}
             </div>
             <div class="col-2 d-inline text-center align-self-center">
-                <a class="m-auto cursorPointer" @click.once="showMetadata" data-toggle="tooltip" title="Edit metadata"><i class="fas fa-tags actionIcon text-center"></i></a>
-                <a v-if="isPreparingDownload" class="m-auto cursorPointer" data-toggle="tooltip" title="Download file"><i class="fa fa-spinner fa-spin actionIcon text-center"></i></a>
-                <a v-else class="m-auto cursorPointer" @click.once="download" data-toggle="tooltip" title="Download file"><i class="fas fa-file-download actionIcon text-center"></i></a>
-                <button class="btn-tiny m-auto " @click="preview" data-toggle="tooltip" title="Preview image"><i class="fas fa-eye actionIcon"></i></button>
+                <a class="m-auto cursorPointer" @click.once="showMetadata" data-toggle="tooltip" :title="$t('access.tip.editMetadata')"><i class="fas fa-tags actionIcon text-center"></i></a>
+                <a v-if="isPreparingDownload" class="m-auto cursorPointer" data-toggle="tooltip" :title="$t('access.tip.downloadFile')"><i class="fa fa-spinner fa-spin actionIcon text-center"></i></a>
+                <a v-else class="m-auto cursorPointer downloadFile" @click.once="download" data-toggle="tooltip" :title="$t('access.tip.downloadFile')"><i class="fas fa-file-download actionIcon text-center"></i></a>
+                <button class="btn-tiny m-auto previewButton" @click="preview" data-toggle="tooltip" :title="$t('access.tip.previewImage')"><i class="fas fa-eye actionIcon"></i></button>
             </div>
             <div class="col-sm-1"></div>
         </div>
@@ -26,17 +26,35 @@
     export default {
         async mounted() {
             this.isPreparingDownload = false;
-            axios.get( '/api/v1/access/dips/'+this.dipId+'/aipfile/'+this.item.id ).then( (result) => {
+            this.aipFileCancelTokenSource = axios.CancelToken.source();
+            axios.get('/api/v1/access/dips/'+this.dipId+'/aipfile/'+this.item.id, { cancelToken: this.aipFileCancelTokenSource.token }).then( (result) => {
                 this.aipItem = result.data.data[0];
                 this.fileName = this.aipItem.filename;
                 this.fileType = this.aipItem.mime_type;
+            }).catch(function(exception) {
+                if (!axios.isCancel(exception)) {
+                    throw(exception);
+                }
             });
 
-            axios.get('/api/v1/access/dips/'+this.dipId+'/thumbnails/files/'+this.item.id, { responseType: 'blob' }).then( (thumbnail) => {
+            this.thumbnailCancelTokenSource = axios.CancelToken.source();
+            axios.get('/api/v1/access/dips/'+this.dipId+'/thumbnails/files/'+this.item.id, { responseType: 'blob', cancelToken: this.thumbnailCancelTokenSource.token }).then( (thumbnail) => {
                 let reader = new FileReader();
                 reader.onload = e => this.thumbnailImage = reader.result;
                 reader.readAsDataURL( thumbnail.data );
+            }).catch(function(exception) {
+                if (!axios.isCancel(exception)) {
+                    throw(exception);
+                }
             });
+        },
+        async beforeDestroy() {
+            if (this.thumbnailCancelTokenSource) {
+                this.thumbnailCancelTokenSource.cancel('Thumbnail request was cancelled');
+            }
+            if (this.aipFileCancelTokenSource) {
+                this.aipFileCancelTokenSource.cancel('AIP file request was cancelled');
+            }
         },
         props: {
             item: Object,
@@ -50,7 +68,9 @@
                 fileType: "",
                 thumbnailImage: "",
                 aipItem: Object,
-                isPreparingDownload: false
+                isPreparingDownload: false,
+                thumbnailCancelTokenSource: null,
+                aipFileCancelTokenSource: null
             };
         },
         methods: {
@@ -67,26 +87,13 @@
             showMetadata() {
                 this.$router.push({ name:'access.browse.dips.files.metadata', params: { dipId: this.dipId, fileId: this.aipItem.id, showFileId: this.item.id } });
             },
-	          preview: function(){
+          preview: function(){
                 this.$emit('showPreview', this.item.storable_id, this.item.id, this.fileName, this.fileType);
             }
         },
         computed: {
             dipId: function() {
                 return this.item.storable_id;
-            },
-            fileSize: function(){
-                let size = this.item.size/1024;
-                let metric = "k";
-                if (size > 1024) {
-                    size /= 1024;
-                    metric = "m";
-                }
-                if (size > 1024) {
-                    size /= 1024;
-                    metric = "g";
-                }
-                return Math.round(size) + " " + metric + "b";
             }
         }
 

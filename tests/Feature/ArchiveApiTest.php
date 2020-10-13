@@ -58,60 +58,48 @@ class ArchiveApiTest extends TestCase
 
     public function test_it_can_get_a_list_of_archives()
     {
-        $response = $this->get( route( 'planning.archives.index' ) );
+        $response = $this->get( route( 'api.metadata.archives.index' ) );
         $response->assertStatus( 200 );
     }
 
     public function test_when_requesting_a_list_of_archives_it_returns_a_valid_json_array()
     {
-        $response = $this->get(route('planning.archives.index'));
+        $response = $this->get(route('api.metadata.archives.index'));
         $response->assertJsonStructure(['data' => []]);
     }
 
-    public function test_when_creating_an_archive_given_valid_data_it_responds_with_201()
+    public function test_when_creating_an_archive_it_responds_with_403()
     {
         $response = $this->json('POST',
-            route('planning.archives.store'),
+            route('api.metadata.archives.store'),
             $this->validArchiveData);
-        $response->assertStatus(201);
+        $response->assertStatus(403);
     }
 
-    public function test_when_creating_an_archive_given_valid_data_it_returns_a_valid_json_object()
-    {
-        $response = $this->json( 'POST',
-            route( 'planning.archives.store' ),
-            $this->validArchiveData );
-
-        $response->assertJson([ 'data' => $this->validArchiveData ]);
-    }
-
-    public function test_given_an_archive_exists_when_deleting_it_it_is_soft_deleted()
+    public function test_given_an_archive_exists_when_deleting_it_it_is_forbidden()
     {
         $archiveId = $this->createdTestArchive->id;
         $response = $this->json( 'DELETE',
-            route( 'planning.archives.destroy', ['id' => $archiveId] )
+            route( 'api.metadata.archives.destroy', ['id' => $archiveId] )
         );
-        $response->assertStatus(204);
-        $model = Archive::withTrashed()->find($archiveId);
-        $this->assertNotNull($model->deleted_at);
+        $response->assertStatus(403);
     }
 
-    public function test_given_an_archive_does_not_exist_when_deleting_it_responds_with_404_and_error_message()
+    public function test_given_an_archive_does_not_exist_when_deleting_it_responds_with_403()
     {
         $archiveId = PHP_INT_MAX;
         $response = $this->json( 'DELETE',
-            route( 'planning.archives.destroy', ['id' => $archiveId] )
+            route( 'api.metadata.archives.destroy', ['id' => $archiveId] )
         );
 
-        $response->assertStatus(404);
-        $response->assertJson(['error' => 404, 'message' => 'No Archive with id '.$archiveId.' was found.']); 
+        $response->assertStatus(403);
     }
 
     public function test_given_an_archive_exists_when_requesting_it_it_is_returned()
     {
         $archiveId = $this->createdTestArchive->id;
         $response = $this->json( 'GET',
-            route( 'planning.archives.show', ['id' => $archiveId] )
+            route( 'api.metadata.archives.show', ['id' => $archiveId] )
         );
 
         $response->assertStatus(200);
@@ -122,7 +110,7 @@ class ArchiveApiTest extends TestCase
     {
         $archiveId = PHP_INT_MAX;
         $response = $this->json( 'GET',
-            route( 'planning.archives.show', ['id' => $archiveId] )
+            route( 'api.metadata.archives.show', ['id' => $archiveId] )
         );
 
         $response->assertStatus(404);

@@ -23,7 +23,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'id', 'username', 'password', 'full_name', 'email', 'api_token', 'confirmation_token', 'disabled_on'
+        'username', 'password', 'full_name', 'email', 'api_token', 'confirmation_token', 'disabled_on', 'account_uuid'
     ];
 
     /**
@@ -49,12 +49,21 @@ class User extends Authenticatable
     public static function boot()
     {
         parent::boot();
-        self::creating(function( $model ) /*Create a uuid converted to binary16 */
+
+        self::creating(function( \App\User $model ) /*Create a uuid converted to binary16 */
         {
-            $model->id = Uuid::generate();
-            $model->api_token = Hash::make( Uuid::generate() );
+            $suppliedId = Uuid::import( $model->id );
+            $model->id = $suppliedId->bytes  /* If a valid uuid was supplied, use it */
+                ? $suppliedId->string
+                : Uuid::generate();
+            $model->api_token = Hash::make( Uuid::generate() ); //TODO: do we need this now?
+         });
+
+        self::created( function( \App\User $model )
+        {
             \App\UserSetting::create([ 'user_id' => $model->id ]);
         });
+
     }
 
     public function setIdAttribute($value)
@@ -62,9 +71,10 @@ class User extends Authenticatable
         return $this->attributes['id'] = $this->uuid2Bin($value);
     }
 
-    public function getIdAttribute()
+    public function getIdAttribute( $value )
     {
-        return $this->bin2Uuid($this->attributes['id']);
+        if( !$value ) return null;
+        return $this->bin2Uuid( $value );
     }
 
     public static function find($id)
@@ -110,5 +120,10 @@ class User extends Authenticatable
     public function storageLocations()
     {
         return $this->hasMany('App\StorageLocation', 'owner_id');
+    }
+
+    public function account()
+    {
+        return $this->belongsTo('App\Account', 'account_uuid', 'uuid');
     }
 }

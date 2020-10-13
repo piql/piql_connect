@@ -1,10 +1,7 @@
 <template>
     <div class="w-100">
-        <page-heading icon="fa-clock" :title="$t('ingest.taskList.title')" :ingress="$t('ingest.taskList.ingress')" />
+        <page-heading :title="$t('ingest.taskList.title')" :ingress="$t('ingest.taskList.ingress')" iconImg="/images/piqlfilm-icon-gray.svg" />
         <div class="card">
-            <div class="card-header">
-                <b><i class="fa fa-clock"></i> {{$t('ingest.taskList.title')}}</b>
-            </div>
             <div class="card-body">
                 <task-table :items="items" :jobListUrl="jobListUrl" :actionIcons="actionIcons" @piqlIt="piqlIt" @onDelete="update" />
             </div>
@@ -54,9 +51,9 @@
         methods: {
             async piqlIt( job ) {
                 let result = (await axios.patch(this.jobListUrl+"/buckets/"+job.id, {
-                    'status': 'ingesting'
+                    'status': 'commit'
                 }));
-                if(result.data.status == 'ingesting') {
+                if(result.data.status == 'transferring') {
                     this.modal = false; //????
                 }
                 this.infoToast(
@@ -76,3 +73,9 @@
         },
     }
 </script>
+
+<style scoped>
+    .iconTitle {
+        width: 1.2em
+    }
+</style>

@@ -1,6 +1,6 @@
 <template>
   <div class="table-responsive">
-      
+
        <table class="table table-hover table-sm table-bordered">
                     <thead>
                         <tr>
@@ -23,7 +23,7 @@
                                 <a class="btn btn-xs btn-primary" @click="showListingModal(group.id)" data-toggle="tooltip" :title="$t('settings.groups.listRolesAndUsers')" style="color:white">
                                     <i class="fa fa-list"></i>
                                     </a>
-                                
+                              
                                 <a class="btn btn-xs btn-primary" @click="showAssignModal(group.id)" data-toggle="tooltip" :title="$t('settings.groups.assignRoles')" style="color:white">
                                     <i class="fa fa-user-shield"></i>
                                     </a>
@@ -31,10 +31,10 @@
                                     <i class="fa fa-trash"></i>
                                     </a>
                             </td>
-                        
+
                         </tr>
-                    
-                       
+
+
                     </tbody>
                 </table>
                 <div class="row text-center pagerRow">
@@ -65,9 +65,9 @@
                                     <td>{{role.name}}</td>
                                 </tr>
                              </table>
-                            
+
                         </div>
-                    
+
                     </div>
                 </b-modal>
 
@@ -81,7 +81,7 @@
                         v-model="selectedUsers"
                         :list="ulist"
                         ></vue-select-sides>
-                    
+
                     </div>
                     <b-button class="mt-3" @click="assignUserButtonClicked(group[0].id)" block>
                         <i class="fa fa-users"></i> {{$t('settings.groups.assignUsers').toUpperCase()}}
@@ -98,20 +98,18 @@
                         v-model="selectedRoles"
                         :list="list"
                         ></vue-select-sides>
-                    
+
                     </div>
-                    <b-button class="mt-3" @click="assignButtonClicked(group[0].id)" block><i class="fa fa-user-shield"></i> 
+                    <b-button class="mt-3" @click="assignButtonClicked(group[0].id)" block><i class="fa fa-user-shield"></i>
                     {{$t('settings.groups.assignRoles').toUpperCase()}}</b-button>
                 </b-modal>
 
-
-  
   </div>
 </template>
 
 <script>
-import Pager from "./Pager"
 import { mapActions, mapGetters } from "vuex";
+import Pager from "./Pager";
 export default {
     components: {
         Pager
@@ -119,8 +117,6 @@ export default {
     data() {
         return {
             group: null,
-            list: [],
-            ulist: [],
             selectedRoles: [],
             selectedUsers: [],
         };
@@ -134,8 +130,21 @@ export default {
     },
 
     computed:{
-        ...mapGetters(['groupsApiResponse','userGroups','groupPageMeta','userGroupUsers','userGroupRoles','formattedUsers','userRoles']),
-      apiQueryString: function() {
+        ...mapGetters(
+            ['groupsApiResponse','userGroups','groupPageMeta','userGroupUsers','userGroupRoles','formattedUsers','userRoles']
+        ),
+        ulist: async function() {
+            let users = await this.formattedUsers;
+            if( !users ) return [];
+            return users.map( u => { return { value: u.id, label: u.full_name } } );
+        },
+        list: async function() {
+            let roles = await this.userRoles;
+            if( !roles ) return [];
+            return roles.map( u => { return { value: u.id, label: u.name } } );
+        },
+
+        apiQueryString: function() {
             let query = this.$route.query;
             let filter = '';
 
@@ -149,42 +158,22 @@ export default {
     },
      watch: {
         '$route': 'dispatchRouting',
-        //watching vuex state change and tying them to actions
-        formattedUsers(newValue){
-            if(newValue){
-                newValue.forEach(single => {
-                    this.ulist.push({
-                        label: single.full_name,
-                        value: single.id
-                        })
-                });
-            }
-        },
-        userRoles(newValue){
-            if(newValue){
-                newValue.forEach(single => {
-                    this.list.push({
-                        label: single.name,
-                        value: single.id
-                        })
-                });
-            }
-        }
     },
     async mounted() {
        let page = this.$route.query.page;
         if( isNaN( page ) || parseInt( page ) < 2 ) {
             this.$route.query.page = 1;
         }
-        this.fetchGroups( this.apiQueryString);  
+        this.fetchGroups( this.apiQueryString);
         this.fetchSelectUsers()
         this.fetchSelectedRoles();
 
 
     },
     methods:{
-        ...mapActions(['fetchGroups','fetchGroupUsers','fetchGroupRoles','fetchSelectUsers','fetchSelectedRoles']),
-  
+        ...mapActions(
+            ['fetchGroups','fetchGroupUsers','fetchGroupRoles','fetchSelectUsers','fetchSelectedRoles']
+        ),
        dispatchRouting() {
             this.fetchGroups( this.apiQueryString);
         },
@@ -227,7 +216,6 @@ export default {
             this.$bvModal.show('assign-users');
 
         },
-        
     }
 
 }

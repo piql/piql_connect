@@ -8,27 +8,50 @@ use App\Http\Controllers\Controller;
 use App\Helpers\VideoStreamHelper;
 use App\Dip;
 use App\Interfaces\ArchivalStorageInterface;
-use App\Helpers\FilePreviewRenderHelper;
+use App\Interfaces\FilePreviewInterface;
 use Log;
 
 class MediaController extends Controller {
     public function showDipFile(Request $request, ArchivalStorageInterface $storage) {
-        $dipId = $request->dipId;
-        $fileId = $request->fileId;
-        $filePath = 'tmp/'.$dipId.'-'.$fileId.'-'.md5($dipId.'-'.$fileId).'.media.tmp';
-        $fileFullPath = Storage::path($filePath);
-        if (!file_exists($fileFullPath)) {
-            $dip = Dip::find( $dipId );
-            $fileObj = $dip->fileObjects->find($fileId);
-            Storage::disk('local')->put($filePath, $storage->stream($dip->storage_location, $fileObj->fullpath));
+        $dip = Dip::findOrFail($request->dipId);
+        $fileObj = $dip->fileObjects->find($request->fileId);
+        try {
+            $stream = $storage->downloadStream($dip->storage_location, $fileObj->fullpath);
+        } catch (\Exception $e) {
+            Log::error("Failed to download preview for file '{$fileObj->fullpath}'");
+            return response([
+                "message" => "Failed to download preview"
+            ], 400);
         }
-        $stream = new VideoStreamHelper($fileFullPath);
-        $stream->start();
+        if (!is_resource($stream)) {
+            Log::error("Failed to read preview for file '{$fileObj->fullpath}'");
+            return response([
+                "message" => "Failed to read preview"
+            ], 400);
+        }
+        $streamHelper = new VideoStreamHelper($stream);
+        $streamHelper->start();
         return null;
     }
-    public function thumb($fileName) {
-        $pathInfo = pathinfo($fileName);
-        $iconPath = FilePreviewRenderHelper::getCustomIcon(strtolower($pathInfo['extension']));
-        return response(\File::get($iconPath))->header("Content-Type" , \File::mimeType($iconPath));
+
+    public function thumb($fileName, FilePreviewInterface $filePreview) {
+        try {
+            $stream = $filePreview->getCustomIcon($fileName);
+        } catch (\Exception $e) {
+            Log::error("Failed to read thumbnail for file '{$fileName}'");
+            return response([
+                "message" => "Failed to read thumbnail"
+            ], 400);
+        }
+        if (!is_resource($stream)) {
+            Log::error("Failed to read thumbnail for file '{$fileName}'");
+            return response([
+                "message" => "Failed to read thumbnail"
+            ], 400);
+        }
+        return response()->stream( function () use( $stream ) {
+            fpassthru($stream);
+            fclose($stream);
+        }, 200, ["Content-Type" , $filePreview->getMimeType()]);
     }
 }

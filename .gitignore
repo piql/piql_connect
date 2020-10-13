@@ -49,3 +49,8 @@ package-lock.json
 
 .composer
 composer.phar
+.rnd
+piql_connect.code-workspace
+resources/js/app.jse
+
+.vscode/settings.json

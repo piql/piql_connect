@@ -7,23 +7,23 @@
             <router-link :to="{ name: 'access.browse.dips.files', params: { dipId: item.id } }" data-toggle="tooltip" title="Access contents" class="fakeLink">{{item.storage_properties.bag.name}}</router-link>
         </div>
         <div class="col-sm-1 text-truncate align-self-center text-center">
-            {{bagSize}}
+            {{this.item.storage_properties.bag.bagSize | prettyBytes}}
         </div>
         <div class="col-sm-1 p-0 text-truncate align-self-center text-center">
             {{formatShortDate(item.archived_at)}}
         </div>
         <div class="col-sm-1 p-0 text-truncate align-self-center text-center">
-            {{formatShortDate(item.archived_at)}}
+            {{item.storage_properties.bag.holding_name}}
         </div>
         <div class="col-sm-1 align-self-center text-center">
             {{fileCount}}
         </div>
         <div class="col-sm-3 d-inline-block align-self-center text-center">
-            <router-link :to="{ name: 'access.browse.dips.files', params: { dipId: item.id } }" data-toggle="tooltip" title="Access contents" ><i class="fas fa-folder-open actionIcon"></i></router-link>
-            <a v-bind:class="{ collapse: !isPreparingDownload }" class="m-auto" href="" data-toggle="tooltip" title="Download file"><i class="fa fa-spinner fa-spin actionIcon"></i></a>
-            <a v-bind:class="{ collapse: isPreparingDownload }" class="m-auto" @click="download" data-toggle="tooltip" title="Download file"><i class="fas fa-file-download actionIcon"></i></a>
+            <router-link :to="{ name: 'access.browse.dips.files', params: { dipId: item.id } }" data-toggle="tooltip" :title="$t('access.tip.accessContents')" class="openFiles"><i class="fas fa-folder-open actionIcon"></i></router-link>
+            <a v-bind:class="{ collapse: !isPreparingDownload }" class="m-auto cursorPointer" href="" data-toggle="tooltip" :title="$t('access.tip.downloadFile')"><i class="fa fa-spinner fa-spin actionIcon"></i></a>
+            <a v-bind:class="{ collapse: isPreparingDownload }" class="m-auto cursorPointer" @click="download" data-toggle="tooltip" :title="$t('access.tip.downloadFile')"><i class="fas fa-file-download actionIcon"></i></a>
 
-            <button class="btn-tiny m-auto" @click="preview" data-toggle="tooltip" title="Preview image"><i class="fas fa-eye actionIcon"></i></button>
+            <button class="btn-tiny m-auto previewButton" @click="preview" data-toggle="tooltip" :title="$t('access.tip.previewImage')"><i class="fas fa-eye actionIcon"></i></button>
         </div>
 
     </div>
@@ -34,11 +34,21 @@ import axios from 'axios';
 export default {
     async mounted() {
         this.isPreparingDownload = false;
-        axios.get('/api/v1/access/dips/'+this.item.id+'/thumbnails', { responseType: 'blob' }).then ( async (thumbnail) => {
+        this.thumbnailCancelTokenSource = axios.CancelToken.source();
+        axios.get('/api/v1/access/dips/'+this.item.id+'/thumbnails', { responseType: 'blob', cancelToken: this.thumbnailCancelTokenSource.token }).then ( async (thumbnail) => {
             let reader = new FileReader();
             reader.onload = e => this.thumbnailImage = reader.result;
             reader.readAsDataURL( thumbnail.data );
+        }).catch(function(exception) {
+            if (!axios.isCancel(exception)) {
+                throw(exception);
+            }
         });
+    },
+    async beforeDestroy() {
+        if (this.thumbnailCancelTokenSource) {
+            this.thumbnailCancelTokenSource.cancel('Thumbnail request was cancelled');
+        }
     },
     props: {
         item: Object,
@@ -51,6 +61,7 @@ export default {
             fileName: "",
             thumbnailImage: "",
             isPreparingDownload: false,
+            thumbnailCancelTokenSource: null
         }
     },
     methods: {
@@ -81,19 +92,6 @@ export default {
         },
         fileCount: function(){
             return this.item.storage_properties.bag.fileCount;
-        },
-        bagSize: function(){
-            let size = this.item.storage_properties.bag.bagSize/1024;
-            let metric = "k";
-            if (size > 1024) {
-                size /= 1024;
-                metric = "m";
-            }
-            if (size > 1024) {
-                size /= 1024;
-                metric = "g";
-            }
-            return Math.round(size) + " " + metric + "b";
         }
     }
 

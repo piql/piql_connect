@@ -52,6 +52,22 @@ return [
             'driver' => 'local',
             'root' => storage_path(env('STORAGE_BAGS_PATH')),
         ],
+        'jobs' => [
+            'driver' => 'local',
+            'root' => storage_path(env('STORAGE_JOBS_PATH')),
+        ],
+        'messages-processing' => [
+            'driver' => 'local',
+            'root' => storage_path(env('STORAGE_MESSAGES_PROCESSING_PATH')),
+        ],
+        'messages-processed' => [
+            'driver' => 'local',
+            'root' => storage_path(env('STORAGE_MESSAGES_PROCESSED_PATH')),
+        ],
+        'messages-failed' => [
+            'driver' => 'local',
+            'root' => storage_path(env('STORAGE_MESSAGES_FAILED_PATH')),
+        ],
         'archivematica' => [
             'driver' => 'local',
             'root' => storage_path(env('STORAGE_TRANSFER_PATH')),

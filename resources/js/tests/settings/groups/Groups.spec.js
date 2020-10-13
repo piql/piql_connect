@@ -1,4 +1,4 @@
-import Groups from "@/views/settings/Groups/Groups"
+import Groups from "@/views/settings/Admin/Account/Group"
 import { shallowMount } from "@vue/test-utils"
 
 const $t = (s) => s;

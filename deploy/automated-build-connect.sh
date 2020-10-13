@@ -123,6 +123,9 @@ echo "Set file permissions for docker volumes"
 sudo chown 333:root /var/lib/docker/volumes/ss-location-data/_data || exit $?
 sudo chown 333:root /var/lib/docker/volumes/ss-location-data/_data/archivematica || exit $?
 
+echo "Purge the mongodb statistics"
+docker-compose -p piqlConnect exec mongodb mongo -u connectuser -p Fw86TQZrJ5 --authenticationDatabase admin connectstats -eval "printjson(db.dropDatabase())"
+
 echo "Configure S3 in env file"
 envfile="../.env"
 sed -i "s/AWS_/#AWS_/g" $envfile
@@ -134,9 +137,22 @@ AWS_BUCKET=connect-test
 AWS_URL=https://s3.osl1.safedc.net
 " >> $envfile || exit $?
 
+echo "Configure Keycloak in env file"
+echo '
+KEYCLOAK_REALM_PUBLIC_KEY='$KEYCLOAK_REALM_PUBLIC_KEY'
+KEYCLOAK_LOAD_USER_FROM_DATABASE=false
+KEYCLOAK_USER_PROVIDER_CREDENTIAL=username
+KEYCLOAK_TOKEN_PRINCIPAL_ATTRIBUTE=preferred_username
+KEYCLOAK_APPEND_DECODED_TOKEN=true
+KEYCLOAK_ALLOWED_RESOURCES="piql-connect-api"
+' >> $envfile || exit $?
+
+
 echo "Update AM service callbacks"
 if [[ ! -z $UPDATE_AM_SERVICE_CALLBACKS ]] ; then
   ./update-service-callbacks.php || exit $?
 fi
+
+./init-auth-client.sh
     
 echo "Finished successfully"

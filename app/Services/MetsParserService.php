@@ -30,23 +30,19 @@ class MetsParserService implements \App\Interfaces\MetsParserInterface
         return $dc->toArray();
     }
 
-
     private function parseDublinCoreFieldsForFile( string $mets, string $filename ) : array
     {
         return [$filename => $this->parseDublinCoreFields( $mets, $filename )];
     }
 
-    public function parseStructMapFiles( \SimpleXMLElement $xml ): array
+    private function parseStructMapFiles( \SimpleXMLElement $xml ): array
     {
-
-
         $filenames = collect( $xml->xpath(
             "//mets:mets/mets:structMap[@TYPE='physical']".
             "/mets:div[@TYPE='Directory']".
             "/mets:div[@LABEL='objects'][@TYPE='Directory']".
-            "/mets:div[@TYPE='Item']/@LABEL"
+            "//mets:div[@TYPE='Item']/@LABEL"
         ))->map( function( $label ) { return (string)$label; } );
-
 
         $dmdIds = collect(
             $filenames->flatMap( function ( $file ) use ( $xml ) {
@@ -54,7 +50,7 @@ class MetsParserService implements \App\Interfaces\MetsParserInterface
                     "//mets:mets/mets:structMap[@TYPE='physical']".
                     "/mets:div[@TYPE='Directory']".
                     "/mets:div[@LABEL='objects'][@TYPE='Directory']".
-                    "/mets:div[@TYPE='Item'][@LABEL='{$file}']".
+                    "//mets:div[@TYPE='Item'][@LABEL='{$file}']".
                     "/@DMDID"
                 ) )->flatMap( function ($f) use ( $file )  {
                     return [ $file => [ "dmdId" => (string)$f ] ];
@@ -68,7 +64,7 @@ class MetsParserService implements \App\Interfaces\MetsParserInterface
                     "//mets:mets/mets:structMap[@TYPE='physical']".
                     "/mets:div[@TYPE='Directory']".
                     "/mets:div[@LABEL='objects'][@TYPE='Directory']".
-                    "/mets:div[@TYPE='Item'][@LABEL='{$file}']".
+                    "//mets:div[@TYPE='Item'][@LABEL='{$file}']".
                     "/mets:fptr/@FILEID"
                 ) )->flatMap( function ( $f ) use ( $file ) {
                     return [ $file => [ "fileId" => (string)$f ] ];

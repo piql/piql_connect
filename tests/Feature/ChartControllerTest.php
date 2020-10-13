@@ -17,63 +17,67 @@ class ChartControllerTest extends TestCase
     public function setUp() : void
     {
         parent::setUp();
+        $account = factory(\App\Account::class)->create();
         $this->testUser = \App\User::create([
-            'username' => 'BagApiTestUser', 
+            'username' => 'BagApiTestUser',
             'password' => 'notinuse',
             'full_name' => 'BagApi TestUser',
-            'email' => 'bagapitestuser@localhost'
+            'email' => 'bagapitestuser@localhost',
+            'account_uuid' => $account->uuid,
         ]);
 
         Passport::actingAs($this->testUser);
     }
 
-    public function test_when_requesting_monthly_online_aips_ingested_it_responds_200()
+    public function test_when_requesting_monthly_ingested_aips_it_responds_200()
     {
-        $response = $this->get( route( 'monthlyOnlineAIPsIngested' ) );
+        $response = $this->get( route( 'monthlyIngestedAIPs' ) );
         $response->assertStatus(200);
     }
 
-    public function test_when_requesting_monthly_online_data_ingested_it_responds_200()
+    public function test_when_requesting_monthly_ingested_data_it_responds_200()
     {
-        $response = $this->get( route( 'monthlyOnlineDataIngested' ) );
+        $response = $this->get( route( 'monthlyIngestedData' ) );
         $response->assertStatus(200);
     }
 
-    public function test_when_requesting_monthly_online_aips_accessed_it_responds_200()
+    public function test_when_requesting_monthly_accessed_aips_it_responds_200()
     {
-        $response = $this->get( route( 'monthlyOnlineAIPsAccessed' ) );
+        $response = $this->get( route( 'monthlyAccessedAIPs' ) );
         $response->assertStatus(200);
     }
 
-    public function test_when_requesting_monthly_online_data_accessed_it_responds_200()
+    public function test_when_requesting_monthly_accessed_data_it_responds_200()
     {
-        $response = $this->get( route( 'monthlyOnlineDataAccessed' ) );
+        $response = $this->get( route( 'monthlyAccessedData' ) );
         $response->assertStatus(200);
     }
 
-    public function test_when_requesting_daily_online_aips_ingested_it_responds_200()
-    {
-        $response = $this->get( route( 'dailyOnlineAIPsIngested' ) );
-        $response->assertStatus(200);
-    }
+    // Daily statistics will be enabled after the 1.0 release (ref CON-748)
+
+    // public function test_when_requesting_daily_online_aips_ingested_it_responds_200()
+    // {
+    //     $response = $this->get( route( 'dailyOnlineAIPsIngested' ) );
+    //     $response->assertStatus(200);
+    // }
     
-    public function test_when_requesting_daily_online_data_ingested_it_responds_200()
-    {
-        $response = $this->get( route( 'dailyOnlineDataIngested' ) );
-        $response->assertStatus(200);
-    }
+    // public function test_when_requesting_daily_online_data_ingested_it_responds_200()
+    // {
+    //     $response = $this->get( route( 'dailyOnlineDataIngested' ) );
+    //     $response->assertStatus(200);
+    // }
 
-    public function test_when_requesting_daily_online_aips_accessed_it_responds_200()
-    {
-        $response = $this->get( route( 'dailyOnlineAIPsAccessed' ) );
-        $response->assertStatus(200);
-    }
+    // public function test_when_requesting_daily_online_aips_accessed_it_responds_200()
+    // {
+    //     $response = $this->get( route( 'dailyOnlineAIPsAccessed' ) );
+    //     $response->assertStatus(200);
+    // }
 
-    public function test_when_requesting_daily_online_data_accessed_it_responds_200()
-    {
-        $response = $this->get( route( 'dailyOnlineDataAccessed' ) );
-        $response->assertStatus(200);
-    }
+    // public function test_when_requesting_daily_online_data_accessed_it_responds_200()
+    // {
+    //     $response = $this->get( route( 'dailyOnlineDataAccessed' ) );
+    //     $response->assertStatus(200);
+    // }
 
     public function test_when_requesting_daily_fileformats_ingested_it_responds_200()
     {

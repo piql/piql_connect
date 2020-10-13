@@ -10,9 +10,11 @@ use App\User;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Illuminate\Support\Facades\Mail;
 use Faker\Factory as faker;
 use Laravel\Passport\Passport;
 use Webpatser\Uuid\Uuid;
+use App\Mail\PiqlIt;
 
 class OfflineStorageControllerTest extends TestCase
 {
@@ -47,6 +49,7 @@ class OfflineStorageControllerTest extends TestCase
             $file = factory(\App\FileObject::class)->state("dummyData")->create([
                 "size" => $this->job->bucketSize,
             ]);
+
             $aip->fileObjects()->save($file);
             $aip->update(["size" => $aip->fileObjects()->sum("size")]);
             $this->job->aips()->save($aip);
@@ -72,11 +75,11 @@ class OfflineStorageControllerTest extends TestCase
 
     public function test_given_an_authenticated_user_when_getting_all_archiving_jobs_it_responds_200()
     {
-        $this->job->update(['status' => 'ingesting']);
+        $this->job->applyTransition('piql_it')->save();
         $response = $this->actingAs( $this->user )
             ->json( 'GET', route('api.ingest.buckets.archiving', $this->job->id) );
         $response->assertStatus( 200 )
-            ->assertJsonFragment(['status' => 'ingesting', 'archive_objects' => 2]);
+            ->assertJsonFragment(['status' => 'transferring', 'archive_objects' => 2]);
     }
 
     public function test_given_an_authenticated_user_when_getting_all_content_from_a_given_jobs_it_responds_200()
@@ -117,12 +120,16 @@ class OfflineStorageControllerTest extends TestCase
         $response->assertStatus( 200 )
             ->assertJsonFragment(['name' => "bucket name"]);
 
+        \Event::fake();
+
         $response = $this->actingAs( $this->user )
             ->json('PATCH',
                 route('api.ingest.bucket.update', [$this->job->id]),
-                ['status' => "ingesting"]);
+                ['status' => "commit"]);
         $response->assertStatus( 200 )
-            ->assertJsonFragment(['status' => "ingesting"]);
+            ->assertJsonFragment(['status' => "transferring"]);
+
+        \Event::assertDispatched(\App\Events\CommitJobEvent::class, 1);
     }
 
     public function test_given_an_authenticated_user_when_updating_a_created_bucket_with_invalid_name_and_with_status_ingesting_it_responds_400()
@@ -200,4 +207,26 @@ class OfflineStorageControllerTest extends TestCase
         $this->assertEquals( $aipCount, \DB::table("archivables")->where("archive_id", $this->job->id)->count());
     }
 
+    public function test_send_a_email_when_piql_button_is_pressed()
+    {
+        putenv('PIQLIT_NOTIFY_EMAIL_TO=fakemail@piql.com');
+        \Mail::fake();
+        $response = $this->actingAs( $this->user )
+            ->json('PATCH',
+                route('api.ingest.bucket.update', [$this->job->id]),
+                ['name' => "bucket name"]);
+        $response->assertStatus( 200 )
+            ->assertJsonFragment(['name' => "bucket name"]);
+
+        \Event::fake();
+
+        $response = $this->actingAs( $this->user )
+            ->json('PATCH',
+                route('api.ingest.bucket.update', [$this->job->id]),
+                ['status' => "commit"]);
+        $response->assertStatus( 200 )
+            ->assertJsonFragment(['status' => "transferring"]);
+        \Event::assertDispatched(\App\Events\CommitJobEvent::class, 1);
+        Mail::assertSent(PiqlIt::class);
+    }
 }

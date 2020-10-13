@@ -12,7 +12,8 @@ $factory->define(Archive::class, function (Faker $faker) {
         'uuid' => $faker->uuid(),
         'title' => $faker->company(),
         'description' => $faker->text(80),
-        'parent_uuid' => null
+        'parent_uuid' => null,
+        'defaultMetadataTemplate' => ["dc" => ["relation" => $faker->text(8) ]]
     ];
 });
 

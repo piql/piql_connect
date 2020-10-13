@@ -14,11 +14,13 @@ class ArchiveResource extends JsonResource
      */
     public function toArray($request)
     {
-        return [ 
+        return [
             'id' => $this->id,
             'title' => $this->title,
             'description' => $this->description,
-            'uuid' => $this->uuid
+            'uuid' => $this->uuid,
+            'account_uuid' => $this->account_uuid,
+            'defaultMetadataTemplate' => $this->defaultMetadataTemplate
         ];
 
     }

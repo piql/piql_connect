@@ -3,11 +3,13 @@
         <label v-if="showLabel" for="holdingPicker" class="col-form-label-sm">
             {{label}}
         </label>
-        <select v-model="selection" :id="elementId" class="form-control" data-live-search="true" >
-            <option v-for="holding in holdingsWithWildcard" :key="holding.id" v-bind:value="holding.title">
-                {{holding.title}}
-            </option>
-        </select>
+        <div :class="inputValidation">
+            <select v-model="selection" :id="elementId" class="form-control" data-live-search="true" :data-none-selected-text="$t('nothingSelected')" @change="selChange">
+                <option v-for="holding in holdingsWithWildcard" :key="holding.id" v-bind:value="holding.uuid">
+                    {{holding.title}}
+                </option>
+            </select>
+        </div>
     </div>
 </template>
 
@@ -20,7 +22,6 @@ export default {
     mixins: [ RouterTools ],
     async mounted() {
         this.archive = this.$route.query.archive;
-
     },
     methods: {
         dispatchRouting: function() {
@@ -42,14 +43,21 @@ export default {
         },
         updatePicker: function( value ) {
             $(`#${this.elementId}`).selectpicker( 'val', value );
+        },
+        selChange: function () {
+            let uuid = $(`#${this.elementId}`).val();
+            this.$emit('selectedHolder',uuid);
+            this.inputValidation = !this.required || uuid ? '' : 'mustFill';
         }
     },
     data() {
         return {
+            archives: null,
             archive: null,
             holdings: null,
             selection: null,
-            initComplete: false
+            initComplete: false,
+            inputValidation: '',
         };
     },
     props: {
@@ -68,44 +76,64 @@ export default {
         elementId: {
             type: String,
             default: "holdingPicker"
-        }
+        },
+        required: {
+            type: Boolean,
+            default: false
+        },
     },
     watch: {
         '$route': 'dispatchRouting',
 
-        archive: function( archive ) {
+        archive: async function( archive ) {
             this.disableSelection();
             this.holdings = null;
             if( !archive ) return;
+            if( this.archives == null ) {
+                this.archives = ((await(axios.get(`/api/v1/metadata/archives`))).data
+                .data.map( (a) => { return { uuid: a.uuid, id: a.id };} ));
+            }
 
-            axios.get(`/api/v1/planning/archives/${archive}/holdings`).then( (response) => {
+            //This lookup is a workaround for laravel's apiresource routes with automatic model lookup
+            //TODO: Let's look at consequences for using sequential id's rather than uuids in the urls.
+            const archiveId = this.archives.find( ar => ar.uuid === archive ).id;
+            if( !archiveId ){
+                console.error( `No archive with uuid ${archive} was found!` );
+                return;
+            }
+
+            axios.get(`/api/v1/metadata/archives/${archiveId}/holdings`).then( (response) => {
                 if(response.data.data.length > 0){
                     this.holdings = response.data.data;
-                    //default selection
-                    this.selection = this.holdings[0].title;
                 }
-             
+
             })
         },
-        selection: function ( holding ) {
+        selection: function ( holding) {
             if( !this.initComplete ) {
                 /* don't change query params when setting selection from page load */
                 this.initComplete = true;
                 return;
             }
-            if( holding === this.wildCardLabel ) {
-                this.updateQueryParams({ holding: null, page : null })
-            } else {
-                this.updateQueryParams({ holding, page : null });
-            }
+
+            Vue.nextTick(() => {
+                if( holding === this.wildCardLabel ) {
+                    this.updateQueryParams({ holding: null, page : null })
+                } else {
+                    this.updateQueryParams({ holding, page : null });
+                }
+            })
+
+
         },
         holdings: function( holdings ) {
             if( !! holdings ) {
-                let holdingQuery = this.$route.query.holding ?? this.wildCardLabel ?? this.holdings[0].title;;
+                let holdingQuery = this.$route.query.holding ?? this.wildCardLabel ?? this.holdings[0].uuid;
                 Vue.nextTick( () => {
                     this.updatePicker( holdingQuery );
                     this.refreshPicker();
                     this.enableSelection();
+                    this.selChange();
                 });
             } else {
                 this.disableSelection();

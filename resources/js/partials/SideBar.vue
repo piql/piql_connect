@@ -34,35 +34,83 @@
                         </li>
                     </router-link>
 
-                   
-
-                    <router-link :to="{ name: 'settings.listing' }">
-                        <li class="list-group-item" :class="{ active: routeBelongsTo('settings.listing') }" >
-                            <i class="fas fa-user"></i>
+                    <router-link :to="{ name: 'settings.admin.account.users' }">
+                        <li class="list-group-item cursorPointer" >
+                            <i class="fas fa-wrench"></i>
                             <div class="leftMenuItem">
-                                {{$t('sidebar.users')}}
-                            </div>
-                        </li>
-                    </router-link>
-                    <router-link :to="{ name: 'settings.groups' }">
-                        <li class="list-group-item" :class="{ active: routeBelongsTo('settings.groups') }" >
-                            <i class="fas fa-users"></i>
-                            <div class="leftMenuItem">
-                                {{$t('sidebar.userGroups')}}
+                                {{$t('sidebar.settings.admin')}}
                             </div>
                         </li>
                     </router-link>
 
-                    <router-link :to="{ name: 'settings.roles' }">
-                        <li class="list-group-item" :class="{ active: routeBelongsTo('settings.roles') }" >
-                            <i class="fas fa-user-shield"></i>
-                            <div class="leftMenuItem">
-                                {{$t('sidebar.roles')}}
-                            </div>
-                        </li>
-                    </router-link>
+                    <span v-if=" routeBelongsTo('settings.admin') ">
 
-                    
+                            <router-link :to="{ name: 'settings.admin.account.users' }">
+                                <li class="list-group-item submenu" :class="{ active: routeBelongsTo('settings.admin.account.users') }" >
+                                    <i class="fas fa-user"></i>
+                                    <div class="leftMenuItem">
+                                        {{$t('sidebar.users')}}
+                                    </div>
+                                </li>
+                            </router-link>
+
+                            <router-link :to="{ name: 'settings.admin.logo' }">
+                                <li class="list-group-item submenu" :class="{ active: routeBelongsTo('settings.admin.logo') }" >
+                                    <i class="fas fa-shapes"></i>
+                                    <div class="leftMenuItem">
+                                        {{$t('sidebar.settings.admin.logo')}}
+                                    </div>
+                                </li>
+                            </router-link>
+
+                            <router-link :to="{ name: 'settings.admin.account.metadata.template' }">
+                                <li class="list-group-item submenu" :class="{ active: routeBelongsTo('settings.admin.account.metadata.template') }" >
+                                    <i class="fas fa-tags"></i>
+                                    <div class="leftMenuItem">
+                                        {{$t('sidebar.settings.admin.metadata')}}
+                                    </div>
+                                </li>
+                            </router-link>
+                             <router-link :to="{ name: 'settings.admin.archives' }">
+                                <li class="list-group-item submenu" :class="{ active: routeBelongsTo('settings.admin.archives') }" >
+                                    <i class="fas fa-archive"></i>
+                                    <div class="leftMenuItem">
+                                        {{$t("sidebar.settings.archives")}}
+                                    </div>
+                                </li>
+                            </router-link>
+
+                            <!--router-link :to="{ name: 'settings.admin.holdings' }">
+                                <li class="list-group-item submenu" :class="{ active: routeBelongsTo('settings.admin.holdings') }" >
+                                    <i class="fas fa-folder"></i>
+                                    <div class="leftMenuItem">
+                                        {{$t("sidebar.settings.holdings")}}
+                                    </div>
+                                </li>
+                            </router-link-->
+
+
+                            
+
+                            <router-link :to="{ name: 'settings.admin.account.group' }">
+                                <li class="list-group-item submenu" :class="{ active: routeBelongsTo('settings.admin.account.groups') }" >
+                                    <i class="fas fa-users"></i>
+                                    <div class="leftMenuItem">
+                                        {{$t('sidebar.userGroups')}}
+                                    </div>
+                                </li>
+                            </router-link>
+
+                            <router-link :to="{ name: 'settings.admin.account.roles' }">
+                                <li class="list-group-item submenu" :class="{ active: routeBelongsTo('settings.admin.account.roles') }" >
+                                    <i class="fas fa-user-shield"></i>
+                                    <div class="leftMenuItem">
+                                        {{$t('sidebar.roles')}}
+                                    </div>
+                                </li>
+                            </router-link>
+
+                        </span>
 
                 </span>
 
@@ -75,7 +123,7 @@
                         </li>
                     </router-link>
 
-                    <router-link :to="{ name: 'ingest.processing' }">
+                    <router-link :to="{ name: 'ingest.processing' }" id="sideBarProcessing">
                         <li class="list-group-item" :class="{ active: routeBelongsTo('ingest.processing') }" >
                             <i class="fas fa-hourglass-half"></i><div class="leftMenuItem">{{$t('sidebar.processing')}}</div>
                         </li>
@@ -83,7 +131,7 @@
 
                     <router-link :to="{ name: 'ingest.offline'}">
                         <li class="list-group-item" :class="{ active: routeBelongsTo('ingest.offline') }" >
-                            <i class="fas fa-clock"></i><div class="leftMenuItem">{{$t('sidebar.taskList')}}</div>
+                            <img src="/images/piqlfilm-icon-white.svg" class="sideBarIconImg"/><div class="leftMenuItem">{{$t('sidebar.taskList')}}</div>
                         </li>
                     </router-link>
 
@@ -106,7 +154,7 @@
                     <span :class="{ collapse: !routeBelongsTo('access.browse') }">
                         <router-link :to="{ name: 'access.retrieve.request' }">
                             <li class="list-group-item" :class="{ active: routeBelongsTo ('access.retrieve') }" >
-                                <i class="fas fa-file-export"></i><div class="leftMenuItem">{{$t('sidebar.retrieve')}}</div>
+                                <img src="/images/retrieval-icon-white.svg" class="sideBarIconImg"/><div class="leftMenuItem">{{$t('sidebar.offlineBrowser')}}</div>
                             </li>
                         </router-link>
                     </span>
@@ -116,7 +164,7 @@
 
                         <router-link :to="{ name: 'access.retrieve.request' }">
                             <li class="list-group-item" :class="{ active: routeBelongsTo('access.retrieve.request') }" >
-                                <i class="fas fa-file-export"></i><div class="leftMenuItem">{{$t('sidebar.retrieve')}}</div>
+                                <img src="/images/retrieval-icon-white.svg" class="sideBarIconImg"/><div class="leftMenuItem">{{$t('sidebar.offlineBrowser')}}</div>
                             </li>
                         </router-link>
 
@@ -164,6 +212,10 @@
 import axios from 'axios';
 
 export default {
+    data() {
+        return {
+        };
+    },
     mounted() {
     },
     props: {
@@ -189,15 +241,12 @@ export default {
         invisibleIfNarrow() {
             return this.width > 1000 ? "" : "invisible";
         },
-        isLogoShown() {
-            return this.logoShown;
-        }
     },
     methods: {
         routeBelongsTo( checkRoute ) {
+            if( !this.$route.name ) return false;
             return this.$route.name.startsWith( checkRoute );
         },
-        
     }
 }
 </script>

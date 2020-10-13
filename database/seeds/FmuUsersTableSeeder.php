@@ -1,5 +1,6 @@
 <?php
 
+use App\Account;
 use App\Traits\SeederOperations;
 use App\User;
 use Illuminate\Database\Seeder;
@@ -15,9 +16,12 @@ class FmuUsersTableSeeder extends Seeder
 
     public function run()
     {
-        $seedSuccess = $this->seedFromFile(function($param) {
+        $account = Account::first();
+
+        $seedSuccess = $this->seedFromFile(function($param) use($account) {
             // assume plaintext passwords
             $param["password"] = Hash::make($param["password"] ?? Uuid::generate());
+            $param["account_uuid"] = $account->uuid;
             // add user if it doesn't exists
             User::where('username', $param["username"])->first() ?? User::create($param);
         });

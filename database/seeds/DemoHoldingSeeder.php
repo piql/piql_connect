@@ -15,10 +15,9 @@ class DemoHoldingSeeder extends Seeder
         $index = 0;
         if($this->seedFromFile(function($param) use ($index) {
             $param["position"] = $index;
-            Holding::create($param);
+            $holding = Holding::create($param);
             $index++;
         })){
-
             return;
         }
 

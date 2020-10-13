@@ -14,6 +14,15 @@ class HoldingResource extends JsonResource
      */
     public function toArray($request)
     {
-        return parent::toArray($request);
+        return [
+            'id' => $this->id,
+            'title' => $this->title,
+            'description' => $this->description,
+            'owner_archive_uuid' => $this->owner_archive_uuid,
+            'position' => $this->position,
+            'parent_id' => $this->parent_id,
+            'uuid' => $this->uuid,
+            'defaultMetadataTemplate' => $this->defaultMetadataTemplate
+        ];
     }
 }

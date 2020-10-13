@@ -2,8 +2,8 @@
     <div :class="pagerBottom" v-show="hasPages">
         <nav aria-label="pages" class="d-inline-flex">
             <ul class="pagination justify-content-center">
-                <li class="page-item" v-bind:class="{ disabled: onFirstPage }">
-                    <a @click="firstPage" class="page-link">
+                <li class="page-item" v-bind:class="{ disabled: onFirstFfPage }">
+                    <a @click="prevFfPage" class="page-link">
                         <i class="fas fa-angle-double-left"></i>
                     </a>
                 </li>
@@ -20,8 +20,8 @@
                         <i class="fas fa-angle-right"></i>
                     </a>
                 </li>
-                <li class="page-item" v-bind:class="{ disabled: onLastPage }">
-                    <a @click="lastPage" class="page-link">
+                <li class="page-item" v-bind:class="{ disabled: onLastFfPage }">
+                    <a @click="nextFfPage" class="page-link">
                         <i class="fas fa-angle-double-right"></i>
                     </a>
                 </li>
@@ -47,7 +47,7 @@ export default {
     props: {
         meta: {
             type: Object,
-            default: {}
+            default: () => {}
         },
         visiblePageSelectors: {
             type: Number,
@@ -71,11 +71,23 @@ export default {
         prev: function() {
             return this.meta && this.meta.current_page > 1 ? this.meta.current_page - 1 : null;
         },
+        nextFf: function() {
+            return this.meta && this.meta.current_page < this.meta.last_page ? this.meta.current_page + parseInt(this.visiblePageSelectors) : null;
+        },
+        prevFf: function() {
+            return this.meta && this.meta.current_page > 1 ? this.meta.current_page - this.visiblePageSelectors : null;
+        },
         onFirstPage: function() {
             return this.meta && this.prev === null;
         },
         onLastPage: function() {
             return this.meta && this.next === null;
+        },
+        onFirstFfPage: function() {
+            return this.meta && this.meta.current_page <= this.visiblePageSelectors;
+        },
+        onLastFfPage: function() {
+            return this.meta && this.meta.current_page >= this.meta.last_page - this.visiblePageSelectors;
         },
         numberOfPages: function() {
             return this.meta ? this.meta.last_page : null;
@@ -133,11 +145,13 @@ export default {
             let page = this.prev > 1 ? this.prev : null;
             this.updateQueryParams({ page });
         },
-        firstPage() {
-            this.updateQueryParams({ page: null });
+        prevFfPage() {
+            let page = this.prevFf > 1 ? this.prevFf : null;
+            this.updateQueryParams({ page });
         },
-        lastPage() {
-            this.updateQueryParams({ page: this.numberOfPages });
+        nextFfPage() {
+            let page = this.nextFf > 1 ? this.nextFf : null;
+            this.updateQueryParams({ page });
         },
         goToPage( page ) {
             if( isNaN(page) || page < 2 ) page = null;

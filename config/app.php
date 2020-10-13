@@ -178,8 +178,8 @@ return [
         App\Providers\AuthServiceProvider::class,
         App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
+        // App\Providers\TelescopeServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
-        App\Providers\PiqlAuthProvider::class,
         App\Providers\CustomInflectionServiceProvider::class,
         App\Providers\ArchivalStorageServiceProvider::class,
         App\Providers\FileArchiveProvider::class,
@@ -193,6 +193,7 @@ return [
         App\Providers\MetadataGeneratorServiceProvider::class,
         App\Providers\PreProcessBagServiceProvider::class,
         App\Providers\IngestValidationServiceProvider::class,
+        App\Providers\FilePreviewProvider::class,
 
 
         /*
