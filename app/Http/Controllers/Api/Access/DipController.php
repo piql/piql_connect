@@ -213,9 +213,10 @@ class DipController extends Controller
         return $dip->fileObjects->find( $fileId )->toArray();
     }
 
-    public function showFileObject($fileId)
+    public function showFileObject(Request $request, $fileId)
     {
-        return FileObjectResource::unique(FileObject::findOrFail($fileId));
+    	$fileRes = new FileObjectResource(FileObject::findOrFail($fileId));
+    	return $fileRes->toArray($request);
     }
 
     public function file_thumbnail( ArchivalStorageInterface $storage, Request $request, FilePreviewInterface $filePreview )
