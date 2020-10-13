@@ -450,7 +450,7 @@ class BagController extends Controller
 
     private function setMetadata( Bag $bag) {
         //TODO: Get the metadata in the bag
-        
+
         $holding = Holding::where('uuid', $bag->storage_properties->holding_uuid)->get()->first();
         if(!$holding) {
             abort(response()->json(["error" => 424, "message" => "No such Holding: {$bag->storage_properties->holding_uuid}"], 424));
@@ -468,7 +468,7 @@ class BagController extends Controller
             'archive' => $archive->defaultMetadataTemplate,
             'holding' => $holding->defaultMetadataTemplate,
         ];
-        $bag->metadata = json_encode($metadata);
+        $bag->metadata = $metadata;
         if(!$bag->save())
             abort(response()->json(["error" => 424, "message" => "Failed to save bag metadata"], 424));
     }
