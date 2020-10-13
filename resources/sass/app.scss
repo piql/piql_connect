@@ -1898,9 +1898,17 @@ input:invalid {
 }
 
 .sideBarIconImg {
-    width: 2em;
+    width: 2rem;
+    min-height: 2rem;
+    vertical-align: bottom;
 }
 
 .dashboardIconImg {
     width: 1em;
+}
+
+.mustFill {
+    border: 1px solid #ff194d60 !important;
+    box-shadow: 0 0 0 0.2rem #ff194d60 !important;
+    border-radius: 5px;
 }

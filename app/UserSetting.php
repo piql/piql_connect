@@ -117,6 +117,16 @@ class UserSetting extends Model
     public function setInterfaceLanguageAttribute( $value )
     {
         $this->set( 'interface.language', $value );
+    }    
+    
+    public function getInterfaceTableRowCountAttribute()
+    {
+        return $this->get( 'interface.tableRowCount' );
+    }
+
+    public function setInterfaceTableRowCountAttribute( $value )
+    {
+        $this->set( 'interface.tableRowCount', $value );
     }
 
     public function getDefaultAipStorageLocationIdAttribute()

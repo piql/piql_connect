@@ -21,9 +21,6 @@
                             <td v-else > <b-badge variant="success"> Active</b-badge></td>
                             <td>{{formatDate(staff.created_at)}}</td>
                             <td>
-                                <a class="btn btn-xs btn-primary" data-toggle="tooltip" title="Assign Role" style="color:white">
-                                    <i class="fa fa-user-secret"></i>
-                                </a>
                                 <a class="btn btn-xs btn-primary" data-toggle="tooltip" :title="$t('settings.settings.editUser')" style="color:white" @keydown="showEditModal(staff.id)" @click="showEditModal(staff.id)">
                                     <i class="fa fa-edit"></i>
                                 </a>
@@ -33,32 +30,12 @@
                                 <a v-else class="btn btn-xs btn-primary" data-toggle="tooltip" :title="$t('settings.settings.disableUser')" style="color:white" @keydown="showDisableModal(staff.id)" @click="showDisableModal(staff.id)">
                                     <i class="fa fa-ban"></i>
                                 </a>
-                                <a class="btn btn-xs btn-primary" data-toggle="tooltip" :title="$t('settings.settings.deleteUser')" style="color:white" @keydown="showDeleteModal(staff.id)" @click="showDeleteModal(staff.id)">
-                                    <i class="fa fa-trash"></i>
-                                </a>
-                                <a class="btn btn-xs btn-primary" :title="$t('settings.settings.assignAccountMetadata')" style="color:white" @click="showAccountMetadataModal(staff.id)">
-                                    <i class="fa fa-tags"></i>
-                                </a>
-
                             </td>
                         </tr>
 
 
                     </tbody>
                 </table>
-
-                <b-modal id="delete-user" hide-footer>
-                    <template v-slot:modal-title>
-                    <h3><b> {{$t('settings.settings.deleteUser').toUpperCase()}} : {{ user[0].full_name }} </b></h3>
-                    </template>
-                    <div class="d-block">
-                        <div class="alert alert-warning">
-                            {{$t('settings.settings.deleteUserWarning')}}
-                        </div>
-                    </div>
-                    <b-button class="mt-3" block @click="deleteButtonClicked(user[0].id)" @keydown="deleteButtonClicked(user[0].id)"><i class="fa fa-trash"></i> {{ $t('settings.settings.deleteUser') }} </b-button>
-                </b-modal>
-
 
                 <b-modal id="disable-user" hide-footer>
                     <template v-slot:modal-title>
@@ -111,10 +88,6 @@
                         <i class="fa fa-edit"></i> {{$t('settings.settings.editUser')}} </b-button>
                 </b-modal>
 
-                <assign-account-metadata-modal :userAccount="assignMetadataUser" @assignAccountMetadata="assignAccountMetadata" />
-
-
-
   </div>
 
 </template>
@@ -126,8 +99,7 @@ export default {
                 fullname:null,
                 email:null,
                 username:null,
-                user:null,
-                assignMetadataUserId:null
+                user:null
             };
     },
     props:{
@@ -136,20 +108,12 @@ export default {
     mounted() {
     },
     computed: {
-        assignMetadataUser() {
-            if(!this.assignMetadataUserId) return;
-            return this.users.find(user => user.id === this.assignMetadataUserId );
-        },
     },
 
     methods:{
         showDisableModal(id){
             this.user = this.users.filter(user => user.id === id);
             this.$bvModal.show('disable-user');
-        },
-        showDeleteModal(id){
-            this.user = this.users.filter(user => user.id === id);
-            this.$bvModal.show('delete-user');
         },
         showEnableModal(id){
             this.user = this.users.filter(user => user.id === id);
@@ -176,28 +140,9 @@ export default {
             };
             this.$emit('enableUser', data);
         },
-        deleteButtonClicked(id){
-            let data = {
-                users: [id]
-            };
-            this.$emit('deleteUser', data);
-        },
         editButtonClicked(){
             //some data will be passed here before emitting
             this.$emit('editUser');
-        },
-        showAccountMetadataModal(userId){
-            this.assignMetadataUserId = userId;
-            Vue.nextTick().then( () => {
-                this.$bvModal.show('assign-account-metadata');
-                Vue.nextTick().then( () => {
-                    $("#templatePicker").selectpicker('refresh');
-                });
-            });
-
-        },
-        assignAccountMetadata(userId, templateId){
-            this.$emit('assignAccountMetadata', 'userId', 'templateId');
         },
         formatDate(ISOdate){
                 let date = new Date(ISOdate);

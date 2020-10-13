@@ -3,15 +3,10 @@
 namespace Tests\Unit;
 
 use App\Account;
-use App\AccountMetadata;
-use App\Archive;
-use App\ArchiveMetadata;
 use App\Bag;
 use App\Events\BagCompleteEvent;
 use App\Events\BagFilesEvent;
 use App\Events\ErrorEvent;
-use App\Holding;
-use App\HoldingMetadata;
 use App\Interfaces\MetadataWriterInterface;
 use App\Listeners\CommitFilesToBagListener;
 use App\Metadata;
@@ -34,11 +29,14 @@ class CommitFilesToBagListenerTest extends TestCase
 
     private $bag;
     private $user;
+    private $account;
 
     public function setUp() : void
     {
         parent::setUp();
+        $this->account = factory(Account::class)->create();
         $this->user = $user = factory(User::class)->create();
+        $this->user->account()->associate( $this->account );
         Passport::actingAs( $this->user );
 
 
@@ -54,30 +52,6 @@ class CommitFilesToBagListenerTest extends TestCase
             'owner' => $this->user->id
         ]);
 
-
-        // Account
-        $this->accountMetadata = factory(AccountMetadata::class)->create([
-            "modified_by" => $this->user->id,
-        ]);
-        $this->accountMetadata->parent()->associate($this->bag);
-        $this->accountMetadata->owner()->associate($this->user);
-        $this->accountMetadata->save();
-
-        // Archive
-        $this->archiveMetadata1 = factory(ArchiveMetadata::class)->create([
-            "modified_by" => $this->user->id,
-        ]);
-        $this->archiveMetadata1->parent()->associate($this->bag);
-        $this->archiveMetadata1->owner()->associate($this->user);
-        $this->archiveMetadata1->save();
-
-        // Holding
-        $this->holdingMetadata1 = factory(HoldingMetadata::class)->create([
-            "modified_by" => $this->user->id,
-        ]);
-        $this->holdingMetadata1->parent()->associate($this->bag);
-        $this->holdingMetadata1->owner()->associate($this->user);
-        $this->holdingMetadata1->save();
 
         Event::fake();
 
@@ -117,30 +91,19 @@ class CommitFilesToBagListenerTest extends TestCase
                 ->once()
                 ->andReturn( Mockery::mock( MetadataWriterInterface::class, function( $mock ) use ($file) {
 
-                    /* todo: review this when metadata ingest is up and running again
-                    $mock->shouldReceive('write')->times(1)->with(Mockery::on(function($argument) use ($file) {
+                    // TODO: review this when metadata ingest is up and running again
+                    $mock->shouldReceive('write')->times(MetadataPath::count())->with(Mockery::on(function ($argument) use ($file) {
                         $this->assertArrayHasKey("object", $argument);
-                        $this->assertEquals(MetadataPath::ACCOUNT_OBJECT, $argument["object"]);
-                        return true;
-                    }))->andReturn(true);
-
-                    $mock->shouldReceive('write')->times(1)->with(Mockery::on(function($argument) use ($file) {
-                        $this->assertArrayHasKey("object", $argument);
-                        $this->assertEquals(MetadataPath::ARCHIVE_OBJECT, $argument["object"]);
-                        return true;
-                    }))->andReturn(true);
-
-                    $mock->shouldReceive('write')->times(1)->with(Mockery::on(function($argument) use ($file) {
-                        $this->assertArrayHasKey("object", $argument);
-                        $this->assertEquals(MetadataPath::HOLDING_OBJECT, $argument["object"]);
-                        return true;
-                    }))->andReturn(true);
-                    */
-
-                    $mock->shouldReceive('write')->times(1)->with(Mockery::on(function($argument) use ($file) {
-                        $this->assertArrayHasKey("object", $argument);
-                        $this->assertEquals(MetadataPath::FILE_OBJECT_PATH.$file->filename, $argument["object"]);
-                        return true;
+                        switch ($argument['object']) {
+                            case MetadataPath::ACCOUNT_OBJECT:
+                            case MetadataPath::ARCHIVE_OBJECT:
+                            case MetadataPath::HOLDING_OBJECT:
+                                return true;
+                            default:
+                                $this->assertEquals(MetadataPath::FILE_OBJECT_PATH.$file->filename, $argument["object"]);
+                                return true;
+                        }
+                        return false;
                     }))->andReturn(true);
                     $mock->shouldReceive('close')->once()->andReturn(true);
                 }));
@@ -169,7 +132,6 @@ class CommitFilesToBagListenerTest extends TestCase
         $event = new BagFilesEvent($bag);
         $listener = new CommitFilesToBagListener($bagitUtil, $metadataGenerator);
         $listener->handle($event);
-
         Event::assertNotDispatched( BagCompleteEvent::class );
         Event::assertDispatched( ErrorEvent::class );
     }
@@ -203,7 +165,7 @@ class CommitFilesToBagListenerTest extends TestCase
             $mock->shouldReceive('createMetadataWriter')
                 ->once()
                 ->andReturn( Mockery::mock( MetadataWriterInterface::class, function( $mock ) {
-                    $mock->shouldReceive('write')->times(1)->andReturn(true);
+                    $mock->shouldReceive('write')->times(MetadataPath::count())->andReturn(true);
                     $mock->shouldReceive('close')->once()->andReturn(true);
                 }));
         });
