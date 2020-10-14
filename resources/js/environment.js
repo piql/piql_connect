@@ -2,9 +2,9 @@
 //AND ADD THEM TO THE EXPORTED OBJECT TO BE USED IN APP.JS
 
 const keyCloakConfig = {
-    realm: 'development',
-    url: 'https://auth.piqlconnect.com/auth/',
-    clientId: 'piql-connect-frontend',
+    realm: process.env.AUTH_REALM,
+    url: process.env.AUTH_BASE_URL,
+    clientId: process.env.AUTH_CLIENT,
 }
 
 
