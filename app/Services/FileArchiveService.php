@@ -54,16 +54,18 @@ class FileArchiveService implements \App\Interfaces\FileArchiveInterface
     {
         $prefix = ($prefix == null) ? Str::uuid()."-" : $prefix;
         $destinationFilePath = "{$this->destinationPath( $aip, $prefix )}.tar";
-        $aip->fileObjects->map( function ( $file ) use ( $aip, $destinationFilePath, $prefix ) {
+        $downloadedFiles = [];
+        $aip->fileObjects->map( function ( $file ) use ( $aip, $destinationFilePath, $prefix, &$downloadedFiles ) {
             $downloadedFileSourcePath = $this->downloadFile( $aip, $file, $prefix );
             $downloadedFileCollectionPath = Str::after( $file->fullpath, "{$aip->online_storage_path}/" );
-            $this->collector->collectSingleFile(
-                $downloadedFileSourcePath,
-                $downloadedFileCollectionPath,
-                $destinationFilePath,
-                true
-            );
+	    $downloadedFiles[$downloadedFileCollectionPath] = $downloadedFileSourcePath;
         });
+
+        $this->collector->collectMultipleFiles(
+            $downloadedFiles,
+            $destinationFilePath,
+            true
+        );
 
         try {
             /* Current implementation leaves a bunch of empty directories behind that we need to delete */
@@ -79,15 +81,17 @@ class FileArchiveService implements \App\Interfaces\FileArchiveInterface
     {
         $basename = ($basename == null) ? Str::uuid() : $basename;
         $destinationFilePath = "{$this->collectionDestinationPath( $basename )}.tar";
+        $aipFiles = [];
         foreach ($aips as $aip) {
-            $downloadedFileSourcePath = $this->buildTarFromAipIncrementally($aip);
-            $this->collector->collectSingleFile(
-                $downloadedFileSourcePath,
-                basename($downloadedFileSourcePath),
-                $destinationFilePath,
-                true
-            );
+            $aipFileSourcePath = $this->buildTarFromAipIncrementally($aip);
+            $aipFiles[basename($aipFileSourcePath)] = $aipFileSourcePath;
         }
+
+        $this->collector->collectMultipleFiles(
+            $aipFiles,
+            $destinationFilePath,
+            true
+        );
 
         return $destinationFilePath;
     }

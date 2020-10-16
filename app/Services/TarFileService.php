@@ -39,4 +39,21 @@ class TarFileService implements \App\Interfaces\FileCollectorInterface
         }
         return true;
     }
+
+    public function collectMultipleFiles( array $sourceFilePaths, string $destinationFilePath, bool $deleteWhenCollected ) : bool
+    {
+        try {
+            $tar = new \PharData( $destinationFilePath );
+            $tar->buildFromIterator( new \ArrayIterator($sourceFilePaths) );
+            if( $deleteWhenCollected ) {
+                foreach($sourceFilePaths as $sourceFilePath) {
+                    unlink( $sourceFilePath );
+                }
+            }
+        } catch ( \Exception $ex ) {
+            Log::error( "Failed to collect the files into tarball {$destinationFilePath}: {$ex->getMessage()}" );
+            throw $ex;
+        }
+        return true;
+    }
 }
