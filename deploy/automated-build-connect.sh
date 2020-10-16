@@ -147,7 +147,6 @@ KEYCLOAK_APPEND_DECODED_TOKEN=true
 KEYCLOAK_ALLOWED_RESOURCES="piql-connect-api"
 ' >> $envfile || exit $?
 
-
 echo "Update AM service callbacks"
 if [[ ! -z $UPDATE_AM_SERVICE_CALLBACKS ]] ; then
   ./update-service-callbacks.php || exit $?
@@ -156,3 +155,5 @@ fi
 ./init-auth-client.sh
     
 echo "Finished successfully"
+
+echo "\nRemember to update key KEYCLOAK_REALM_PUBLIC_KEY in .env file"
