@@ -216,7 +216,8 @@ export default {
                             return;
                         }
                         let filesIndex = this.filesUploading.findIndex( (file) => file.id == id );
-                        if( filesIndex === null || !this.filesUploading[filesIndex] || this.filesUploading[filesIndex].isFailed ) {
+                        if( filesIndex == -1 || !this.filesUploading[filesIndex] || this.filesUploading[filesIndex].isFailed ) {
+                            console.error("Failed to find file on complete");
                             return;
                         }
                         this.filesUploading[filesIndex].isUploading = false;
@@ -256,7 +257,7 @@ export default {
                     },
                     onError: async (id, name, errorReason, xhr ) => {
                         let filesIndex = this.filesUploading.findIndex( (file) => file.id == id );
-                        if( filesIndex === null) {
+                        if( filesIndex == -1) {
                             console.error("Failed to find file on error");
                             return;
                         }
