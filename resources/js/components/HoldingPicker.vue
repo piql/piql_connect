@@ -4,7 +4,7 @@
             {{label}}
         </label>
         <div :class="inputValidation">
-            <select v-model="selection" :id="elementId" v-if="archive" class="form-control" data-live-search="true" :data-none-selected-text="$t('nothingSelected')" @change="selChange">
+            <select v-model="selection" :id="elementId" v-if="computeArchive" class="form-control" data-live-search="true" :data-none-selected-text="$t('nothingSelected')" @change="selChange">
                 <option v-for="holding in holdingsWithWildcard" :key="holding.id" v-bind:value="holding.uuid">
                     {{holding.title}}
                 </option>
@@ -90,7 +90,7 @@ export default {
     watch: {
         '$route': 'dispatchRouting',
 
-        archive: async function( archive ) {
+        async archive( archive ) {
             this.disableSelection();
             this.holdings = null;
             if( !archive ) return;
@@ -141,7 +141,10 @@ export default {
                     this.selChange();
                 });
             } else {
-                this.disableSelection();
+                Vue.nextTick(()=> {
+                    this.disableSelection();
+                    this.archive = null
+                })
             }
         },
     },
@@ -158,6 +161,18 @@ export default {
             }
             return this.holdings;
         },
+        computeArchive(){
+            if(!this.$route.query.archive){
+                this.archive = null
+                Vue.nextTick(()=> {
+                    this.disableSelection()
+                })
+                return false;
+            }else{
+                this.archive = this.$route.query.archive
+                return true;
+            }
+        }
     }
 }
 
