@@ -153,7 +153,23 @@ export default {
                 retry: {
                     enableAuto: false, /* this didn't work very well, so we have our own logic for it */
                 },
+                autoUpload: false,
                 callbacks: {
+                    onStatusChange: (id, oldStatus, newStatus) => {
+                        if (newStatus == 'submitted') {
+                            // Manually start upload with a delay to avoid flooding the server
+                            let filesIndex = this.filesUploading.findIndex( (file) => file.id == id );
+                            if( filesIndex == -1) {
+                                console.error("Failed to find file when starting upload");
+                                return;
+                            }
+                            let delay = this.filesUploading[filesIndex].uploadStartTime - (new Date().getTime());
+                            setTimeout( ()  => {
+                                // TODO: Find a better suited method than retry to start the upload
+                                this.uploader.methods.retry(id);
+                            }, delay );
+                        }
+                    },
                     onValidate: (id, name) => {
                     },
                     onSubmit: (id, name) => {
@@ -180,7 +196,9 @@ export default {
                             'isFailed': false,
                             'isComplete': false,
                             'retryCount' : 0,
-                            'isHidden': false
+                            'isHidden': false,
+                            'uploadStartTime': (this.filesUploading.length && (this.filesUploading[0].uploadStartTime + this.uploadDelayMs) > (new Date().getTime())) ?
+                                (this.filesUploading[0].uploadStartTime + this.uploadDelayMs) : (new Date().getTime())
                         });
                     },
                     onProgress: (id, name, uploadedBytes, totalBytes) => {
@@ -239,6 +257,7 @@ export default {
                     onError: async (id, name, errorReason, xhr ) => {
                         let filesIndex = this.filesUploading.findIndex( (file) => file.id == id );
                         if( filesIndex === null) {
+                            console.error("Failed to find file on error");
                             return;
                         }
 
@@ -539,6 +558,10 @@ export default {
             type: Number,
             default: 1000
         },
+        uploadDelayMs: {
+            type: Number,
+            default: 250
+        },
         maxAutoRetries: {
             type: Number,
             default: 5
@@ -580,7 +603,8 @@ export default {
                     fileSize: file.filesize,
                     uploadedFileSize: file.filesize,
                     isUploading: false,
-                    isComplete: true
+                    isComplete: true,
+                    uploadStartTime: (new Date().getTime())
                 }) );
             }
             else {
