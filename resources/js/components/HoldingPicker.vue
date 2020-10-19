@@ -165,11 +165,12 @@ export default {
             if(!this.$route.query.archive){
                 this.archive = null
                 Vue.nextTick(()=> {
-                    this.disableSelection()
+                    this.refreshPicker();
                 })
                 return false;
             }else{
                 this.archive = this.$route.query.archive
+                
                 return true;
             }
         }
