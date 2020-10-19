@@ -157,7 +157,6 @@
     "ingest.taskList.size": "Tamanho",
 
     "ingest.offlineStorage.status.title": "Status para armazenamento no Film",
-    "ingest.offlineStorage.ingress": "Envie pacotes para o piqlFilm para armazenamento frio.",
     "ingest.offlineStorage.status.ingress": "Exibir o status do fluxo de trabalho de arquivamento no piqlFilm",
     "ingest.offlineStorage.header": "Armazenamento no Film",
     "ingest.offlineStorage.ingress.old": "Exiba os pacotes enviados para o armazenamento no piqlFilm. \n Adicione um nome ao seu pacote offline; esse nome identificará seu piqlFilm e permitirá rastrear esses dados até o armazenamento \n Opcionalmente, você pode adicionar metadados para fornecer contexto e descrever o pacote offline. No final, clique no botão 'Piql' para iniciar o processo de arquivamento no piqlFilm. \n",
@@ -196,7 +195,7 @@
     "ingest.offlineStorage.config.uploadedTitle": "Uploaded images",
     "ingest.offlineStorage.config.toast.fileUploaded.message": "A imagem foi enviada com sucesso",
     "ingest.offlineStorage.config.removeQuestion": "Deseja remover esta imagem?",
-    
+
     "ingest.fileList.header": "Lista de arquivos",
     "ingest.fileList.ingress": "Exibe os arquivos incluídos no pacote de envio",
     "ingest.fileList.fileSize": "Tamanho do arquivo",
@@ -272,7 +271,7 @@
     "access.retrieve.history": "Histórico de recuperação",
     "access.retrieve.history.ingress": "Informações recuperadas anteriormente",
     "access.retrieve.toasts.added.title" : "Pacotes adicionados",
-    "access.retrieve.toasts.added.message": "O pacote %ITEMTITLE% foi adicionado para a lista de recuperação",	
+    "access.retrieve.toasts.added.message": "O pacote %ITEMTITLE% foi adicionado para a lista de recuperação",
     "access.ready.aipName": "Nome do pacote offline",
     "access.ready.ingestDate": "Data de submissão",
     "access.ready.filesize": "Tamanho do arquivo",
@@ -287,10 +286,9 @@
     "access.tip.editMetadata": "Editar metadata",
     "access.tip.downloadFile": "Baixar arquivo",
     "access.tip.previewImage": "Ver imagem",
-
     "settings.settings.header": "Configurações do Usuário",
     "settings.settings.ingress": "Definir configurações do usuário",
-    
+
     "settings.settings.users": "Usuários",
     "settings.settings.listing": "Gerenciamento de usuários",
     "settings.settings.addUser": "Adicionar usuário",
@@ -300,20 +298,64 @@
     "settings.settings.enableUser": "Ativar usuário",
     "settings.settings.disableUserWarning": "Você tem certeza que deseja desativar este usuário?",
     "settings.settings.enableUserWarning": "Você tem certeza que deseja ativar este usuário?",
-    
+
     "settings.listing.fullname": "Nome completo",
     "settings.listing.username": "Nome de usuário",
     "settings.listing.email": "E-mail",
     "settings.listing.status": "Status",
     "settings.listing.created": "Criado em",
+    "settings.listing.backToUsers": "Retorna para página de usuários",
     "settings.settings.actions": "Ações",
-		
+
+    "settings.archives.title": "Arquivos",
+    "settings.archives.description": "Gerenciamento de arquivos e metadata",
+    "settings.archives.add": "Adicionar arquivo",
+    "settings.archives.edit": "Editar arquivo",
+    "settings.archives.delete": "Apagar arquivo",
+    "settings.archives.assignMeta": "Definir metadata",
+    "settings.archives.assignMetaTemplate": "Definir Template",
+    "settings.archives.template": "Template",
+    "settings.archives.archiveDesc": "Descrição",
+    "settings.archives.editMeta": "Editar metadata",
+    "settings.archives.archive": "Arquivar",
+    "settings.archives.createdAt": "Criado",
+    "settings.archives.actions": "Ações",
+    "settings.archives.noArchives": "Nenhum arquivo listado ainda",
+    "settings.archives.backToArchives": "Volte para os arquivos",
+    "settings.archives.toast.addingArchive":"Adicionando arquivo",
+    "settings.archives.toast.addingArchiveMeta":"Adicionando metadata de arquivo",
+    "settings.archives.toast.editingArchive":"Editando arquivo",
+    "settings.archives.toast.deletingArchive":"Apagando arquivo",
+    "settings.archives.deleteWarning": "Você tem certeza que deseja apagar este arquivo?",
+
+    "settings.holdings.title": "Fundos",
+    "settings.holdings.description": "Gerenciamento de fundos e metadata",
+    "settings.holdings.add": "Adicionar fundo",
+    "settings.holdings.edit": "Editar fundo",
+    "settings.holdings.delete": "Apagar fundo",
+    "settings.holdings.assignMeta": "Definir metadata",
+    "settings.holdings.assignMetaTemplate": "Definir Template",
+    "settings.holdings.template": "Template",
+    "settings.holdings.holdingDesc": "Descrição",
+    "settings.holdings.editMeta": "Editar metadata",
+    "settings.holdings.holding": "Fundo",
+    "settings.holdings.createdAt": "Criado",
+    "settings.holdings.actions": "Ações",
+    "settings.holdings.noHoldings": "Nenhum fundo listado ainda",
+    "settings.holdings.backToHoldings": "Voltar para os fundos",
+    "settings.holdings.toast.addingHolding":"Adicionando fundo",
+    "settings.holdings.toast.addingHoldingMeta":"Adicionando metadata de fundo",
+    "settings.holdings.toast.editingHolding":"Editando fundo",
+    "settings.holdings.toast.deletingHolding":"Apagando fundo",
+    "settings.holdings.deleteWarning": "Você tem certeza que deseja apagar este fundo?",
+
+
+
     "settings.settings.userGroups": "Grupos de usuários",
     "settings.settings.userGroupDesc": "Gerencie de grupo de usuários",
 
     "settings.groups.addGroup": "Adicionar grupo",
     "settings.groups.group": "Grupo",
-    
     "settings.groups.description": "Descrição",
     "settings.groups.assignUsers": "Adicionar usuários",
     "settings.groups.listRolesAndUsers": "Lista de regras e usuários",
@@ -324,6 +366,7 @@
     "settings.groups.noRolesAssignedMessage": "Nenhuma regra foi adicionada ao grupo",
     "settings.groups.assignUsersToGroup": "Adicione usuários ao grupo",
     "settings.groups.assignRolesToGroup": "Adicione regras ao grupo",
+    "settings.groups.backToGroup": "retornar para página de grupos",
 
     "settings.settings.roles": "Políticas",
     "settings.settings.rolesDesc": "Gerencie as políticas",
@@ -331,6 +374,7 @@
     "settings.settings.rolePermDesc": "Listar e gerenciar as permissões",
 
     "settings.roles.addRole": "Adicionar regra",
+    "settings.roles.backToRoles": "retornar para páginas de regras",
     "settings.roles.role": "Regra",
     "settings.roles.confPermissions": "Editar permissões",
     "settings.roles.assignGroup": "Adicionar grupo de usuários",
@@ -341,7 +385,7 @@
 
     "settings.settings.languagelabel": "Idioma",
     "settings.settings.rowslabel": "Resultados por Página",
-    "settings.settings.logolabel": "Logo",
+    "settings.settings.profileImagelabel": "Imagem do perfil",
     "settings.settings.userInterfaceHeader": "Interface do usuário",
     "settings.settings.setPasswordHeader": "Alterar senha",
     "settings.settings.oldPassword.label": "Senha atual",
@@ -359,11 +403,22 @@
     "settings.settings.toasts.failedSetPassword.title": "Erro ao alterar a senha",
     "settings.settings.toasts.failedSetPassword.message": "Houve um erro ao alterar a senha",
     "settings.settings.alert.changedPassword": "A senha foi alterada, você precisará logar novamente no sistema",
+    "settings.settings.imageProfile.message": "Envie a imagem do seu perfil arrastando o arquivo aqui. O formato permitido é",
     "settings.logo.alert.notAllowedExtensions": "Por favor, use imagens no formato PNG",
     "settings.logo.header": "Alterar logo",
     "settings.logo.ingress": "Envie uma nova imagem para o logo",
     "settings.logo.button": "Selecionar arquivo de logo",
     "settings.logo.successful": "Seu logo foi alterado",
+
+    "settings.user.assignAccountMetadata.title": "Definir metadada da conta",
+    "settings.admin.accountMetadataUser.fullname": "Nome completo",
+    "settings.admin.accountMetadataUser.username": "Nome de usuário",
+    "settings.admin.assignMetadataDropdownLabel": "Selecione um template de metadata",
+    "settings.admin.assignMetadataDropdownPlaceholder": "Nenhum template selecionado",
+
+    "admin.account.metadata.template.clone": "Clonar Template",
+    "admin.account.metadata.template.assign": "Definir Template",
+
 
     "timeout.warning": "Aviso de inatividade. Logout automático",
     "timeout.seconds": "segundos",
@@ -375,6 +430,20 @@
     "datepicker.noDateSelected": "Nenhuma data selecionada",
     "datepicker.help": "Teclas do cursor e digite enter para selecionar uma data",
     "datepicker.toasts.illegalRangeTitle": "Período inválido",
-    "datepicker.toasts.illegalRangeMessage": "O período de arquivamento selecionado de-até a data é inválido. Atualizando."
-}
+    "datepicker.toasts.illegalRangeMessage": "O período de arquivamento selecionado de-até a data é inválido. Atualizando.",
 
+    "admin.account.metadata.title": "Título",
+    "admin.account.metadata.identifier": "Identificador único",
+    "admin.account.metadata.creator": "Criador",
+    "admin.account.metadata.subject": "Assunto",
+    "admin.account.metadata.created_at": "Data de criação",
+    "admin.account.metadata.actions": "Ações",
+    "admin.metadata.createNewTemplate": "Template de metadata criado",
+    "admin.metadata.listCurrentAssignments": "Listar definições de metadata atuais",
+    "admin.metadata.template.title": "Criar template de metadata",
+    "admin.metadata.template.ingress": "Cria um template de metadata que pode ser usado na conta, arquivo e fundos",
+    "admin.metadata.template.edit.title": "Editar campos de metadata",
+    "admin.metadata.template.edit.saveButton": "Salvar",
+    "admin.metadata.template.edit.cancelButton": "Cancelar",
+    "admin.metadata.template.edit.schemeName": "Nome do esquema de metadata"
+}
