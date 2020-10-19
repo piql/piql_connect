@@ -91,7 +91,7 @@ export default {
             let query = this.$route.query;
             let page = parseInt(query.page);
             let filter = query.search ? "&search=" + query.search : "";
-            return (page && page > 0 ? `?page=${page}` : "") + (page && page > 0 ? "" : "?") + filter;
+            return "?" + (page && page > 1 ? "page=" + page : "") + filter;
         },
         openDip() {
             axios.get("/api/v1/access/dips/" + this.dipId + "/files" + this.apiQueryString()).then( async ( dipFilesResponse ) =>  {
