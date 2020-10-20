@@ -11,8 +11,8 @@ class StatisticsData
 
     public function monthlyIngested($userId)
     {
-        $first = new \DateTime('-12 months');
-        $last = new \DateTime();
+        $first = new \DateTime('-11 months');
+        $last = new \DateTime('+1 months');
 
         $interval = DateInterval::createFromDateString('1 month');
         $period = new DatePeriod($first, $interval, $last);
@@ -59,8 +59,8 @@ class StatisticsData
 
     public function monthlyAccessed($userId)
     {
-        $first = new \DateTime('-12 months');
-        $last = new \DateTime();
+        $first = new \DateTime('-11 months');
+        $last = new \DateTime('+1 months');
 
         $interval = DateInterval::createFromDateString('1 month');
         $period = new DatePeriod($first, $interval, $last);
