@@ -146,7 +146,7 @@ export default {
             } else {
                 Vue.nextTick(()=> {
                     this.disableSelection();
-                    this.archive = null
+                    this.archive = null;
                 })
             }
         },
