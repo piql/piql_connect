@@ -90,7 +90,7 @@
                             </router-link-->
 
 
-                            
+
 
                             <router-link :to="{ name: 'settings.admin.account.group' }">
                                 <li class="list-group-item submenu" :class="{ active: routeBelongsTo('settings.admin.account.groups') }" >
@@ -201,10 +201,12 @@
 
             <div class="poweredBy" :class="invisibleIfNarrow">
                 <div class="poweredByText">Powered by </div>
-                <span class="poweredByImg"><img src="/images/piql_logo_white.png">
-                    </span>
-                </div>
+                <span class="poweredByImg">
+                    <img src="/images/piql_logo_white.png">
+                </span>
+                <div class="version">v1.0.0</div>
             </div>
+        </div>
     </div>
 </template>
 <script>
