@@ -4,12 +4,13 @@
             {{label}}
         </label>
         <div :class="inputValidation">
-            <select v-model="selection" :id="elementId" v-if="computeArchive" class="form-control" data-live-search="true" :data-none-selected-text="$t('nothingSelected')" @change="selChange">
+            
+            <select v-model="selection" :id="elementId" v-if="showDisabled" disabled class="form-control" data-live-search="true" :data-none-selected-text="$t('nothingSelected')" @change="selChange">
                 <option v-for="holding in holdingsWithWildcard" :key="holding.id" v-bind:value="holding.uuid">
                     {{holding.title}}
                 </option>
             </select>
-            <select v-model="selection" :id="elementId" v-else disabled class="form-control" data-live-search="true" :data-none-selected-text="$t('nothingSelected')" @change="selChange">
+            <select v-model="selection" :id="elementId" v-else class="form-control" data-live-search="true" :data-none-selected-text="$t('nothingSelected')" @change="selChange">
                 <option v-for="holding in holdingsWithWildcard" :key="holding.id" v-bind:value="holding.uuid">
                     {{holding.title}}
                 </option>
@@ -63,6 +64,7 @@ export default {
             selection: null,
             initComplete: false,
             inputValidation: '',
+            selectDisabled: false
         };
     },
     props: {
@@ -91,7 +93,7 @@ export default {
         '$route': 'dispatchRouting',
 
         async archive( archive ) {
-            this.disableSelection();
+            this.disableSelection();         
             this.holdings = null;
             if( !archive ) return;
             if( this.archives == null ) {
@@ -132,6 +134,7 @@ export default {
 
         },
         holdings: function( holdings ) {
+            this.selectDisabled = holdings?false:true;
             if( !! holdings ) {
                 let holdingQuery = this.$route.query.holding ?? this.wildCardLabel ?? this.holdings[0].uuid;
                 Vue.nextTick( () => {
@@ -161,19 +164,13 @@ export default {
             }
             return this.holdings;
         },
-        computeArchive(){
-            if(!this.$route.query.archive){
-                this.archive = null
-                Vue.nextTick(()=> {
-                    this.refreshPicker();
-                })
-                return false;
-            }else{
-                this.archive = this.$route.query.archive
-                
-                return true;
-            }
+        showDisabled(){
+            Vue.nextTick(()=> {
+                this.refreshPicker();
+            })
+            return (this.selectDisabled)?true:false;
         }
+        
     }
 }
 
