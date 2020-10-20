@@ -7,13 +7,13 @@
             <router-link :to="{ name: 'access.browse.dips.files', params: { dipId: item.id } }" data-toggle="tooltip" title="Access contents" class="fakeLink">{{item.storage_properties.bag.name}}</router-link>
         </div>
         <div class="col-sm-1 text-truncate align-self-center text-center">
-            {{bagSize}}
+            {{this.item.storage_properties.bag.bagSize | prettyBytes}}
         </div>
         <div class="col-sm-1 p-0 text-truncate align-self-center text-center">
             {{formatShortDate(item.archived_at)}}
         </div>
         <div class="col-sm-1 p-0 text-truncate align-self-center text-center">
-            {{formatShortDate(item.archived_at)}}
+            {{item.storage_properties.bag.holding_name}}
         </div>
         <div class="col-sm-1 align-self-center text-center">
             {{fileCount}}
@@ -92,19 +92,6 @@ export default {
         },
         fileCount: function(){
             return this.item.storage_properties.bag.fileCount;
-        },
-        bagSize: function(){
-            let size = this.item.storage_properties.bag.bagSize/1024;
-            let metric = "k";
-            if (size > 1024) {
-                size /= 1024;
-                metric = "m";
-            }
-            if (size > 1024) {
-                size /= 1024;
-                metric = "g";
-            }
-            return Math.round(size) + " " + metric + "b";
         }
     }
 

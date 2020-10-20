@@ -1,48 +1,68 @@
 <template>
     <div>
-        <b-form @submit="addMetadata">
-            <div class="form-group">
-                <label>{{$t('settings.archives.template')}}</label>
-                <select class="form-control" v-model="selection">
-                    <option v-for="template in listTemplates" :key="template.id" :value="template.id">
+        <b-modal id="edit-holding-metadata"
+            size="xl" :centered=true
+            :title="$t('admin.metadata.template.edit.title')"
+            :header-class="['d-ruby','text-center']"
+            :no-fade=true title-class="h3"
+            :ok-title="$t('settings.archives.assignMeta')"
+            :cancel-title="$t('admin.metadata.template.edit.cancelButton')"
+            @ok="updateHoldingDefaultMetadataTemplate"
+            @cancel="cancelUpdate" >
+
+            <template v-slot:modal-header>
+                <b-dropdown id="templateSelector" ref="templateSelector" text="Select from templates">
+                    <b-dropdown-header>
+                        Replace current fields with fields from template.
+                    </b-dropdown-header>
+                    <b-dropdown-item-button v-for="template in templates" :key="template.id" @click="selectTemplate(template.id)">
                         {{ template.metadata.dc.title }}
-                    </option>
-                </select>
-            </div>
+                    </b-dropdown-item-button>
+                </b-dropdown>
+            </template>
 
-            <b-form-group v-for="schemeItem in schemes[0].fields" 
-            :key="schemeItem.id" :id="schemeItem.label.toLowerCase()" 
-            :label="schemeItem.label" :label-for="schemeItem.label.toLowerCase()">
+            <b-form v-if="holding">
+                <b-form-group
+                    key="identifier" id="identifier"
+                    label="Identifier" label-for="identifier">
+                    <b-form-input
+                        id="identifier"
+                        class="mb-4"
+                        v-model="defaultMetadataTemplate.dc.identifier"
+                        type="text"
+                        :disabled='true' />
+                </b-form-group>
 
-                <b-form-input v-if="schemeItem.name === 'identifier'"
-                :id="schemeItem.label.toLowerCase()"
-                class="mb-4"
-                v-model="form.metadata[schemeItem.name]"
-                :type="schemeItem.type"
-                :disabled='true'
-                
-                ></b-form-input> 
-
-                <b-form-input v-else
-                :id="schemeItem.label.toLowerCase()"
-                class="mb-4"
-                v-model="form.metadata[schemeItem.name]"
-                :type="schemeItem.type"
-                
-                ></b-form-input>
-            </b-form-group>
-            <b-button type="submit" variant="primary">{{$t('settings.holdings.assignMeta')}}</b-button>
-            
-        </b-form>
-
-    </div> 
+                <b-form-group v-if="schemeItem.name !== 'identifier'" v-for="schemeItem in schemes[0].fields"
+                    :key="schemeItem.id" :id="schemeItem.label.toLowerCase()"
+                    :label="schemeItem.label" :label-for="schemeItem.label.toLowerCase()">
+                    <b-form-input
+                        :id="schemeItem.label.toLowerCase()"
+                        class="mb-4"
+                        v-model="holding.defaultMetadataTemplate.dc[schemeItem.name]"
+                        :type="schemeItem.type" />
+                </b-form-group>
+            </b-form>
+        </b-modal>
+    </div>
 </template>
 
 <script>
 import {mapGetters, mapActions} from "vuex"
 export default {
     props:{
-        holdingId: Number,
+        accountId: {
+            type: Number,
+            default: 0
+        },
+        archiveId: {
+            type: Number,
+            default: 0,
+        },
+        originalHolding: {
+            type: Object,
+            value: null
+        },
         schemes: {
             /* Later on, this should also arrive from an api */
             type: Array,
@@ -52,6 +72,8 @@ export default {
                         "type": "Dublin Core v1.1",
                         "fields":
                         [
+                            {"name" : "title",       "label" : "Title",       "type": "text"},
+                            {"name" : "description", "label" : "Description", "type": "text"},
                             {"name" : "creator",     "label" : "Creator",     "type": "text"},
                             {"name" : "subject",     "label" : "Subject",     "type": "text"},
                             {"name" : "publisher",   "label" : "Publisher",   "type": "text"},
@@ -73,84 +95,56 @@ export default {
     },
     data(){
         return {
-            form: {"metadata": {}},
-            selection: ''
+            holding: { 'defaultMetadataTemplate': {'dc': {}}},
+            backup:  { 'defaultMetadataTemplate': {'dc': {}}},
         }
     },
-    async mounted(){
-        let holding = this.retrievedHoldings.filter(single => single.id === this.holdingId)
-        if(holding[0].metadata){
-            this.form.metadata = holding[0].metadata;
-
-        }
-
+    async mounted() {
+        await this.fetchTemplates();
     },
-     watch:{
-        selection(val){
-            if(val && val != ''){
-                //when selction changes, we prefill the metadata
-                let template = this.templates.filter(single => single.id === val);
-                let data = { 
-                    id: this.holdingId,
-                    metadata:  {
-                        metadata: template[0].metadata.dc
-                    } 
-                };
-
-                this.addHoldingMetadata(data);
-                //after adding, prefill the  form
-                let holding = this.retrievedHoldings.filter(single => single.id === this.holdingId)
-                if(holding[0].metadata){
-                    this.form.metadata = holding[0].metadata;
-
-                }
-
-
-
-            }else{
-                this.form.metadata = {}
-                
+    watch: {
+        originalHolding( value ) {
+            this.holding = JSON.parse( JSON.stringify( this.originalHolding ) );
+        }
+    },
+    computed: {
+        ...mapGetters(['templates', 'templateById', 'archiveById']),
+        defaultMetadataTemplate: {
+            get(){
+                return this.holding.defaultMetadataTemplate;
+            },
+            set( template ) {
+                this.holding.defaultMetadataTemplate = template;
             }
-     
-
-        }
-
-    },
-    computed:{
-        ...mapGetters(['retrievedHoldings','templates']),
-        listTemplates(){
-            return this.templates
-                ? [{'id' : '', 'metadata':{'dc': {'title':'Nothing Selected'}}}, ...this.templates ]
-                    : null;
-        }
-
-    },
-    methods:{
-        ...mapActions(['addHoldingMetadata']),
-        fieldId(type, name){
-            return `${type}-${name}`.replace(/\s/g,'');     /* Strip all whitespace from fieldId */
         },
-        addMetadata(e){
-            e.preventDefault();
+    },
+    methods: {
+        ...mapActions(['updateHoldingMetadata', 'fetchArchives', 'fetchAccounts', 'fetchTemplates']),
 
-            let data = {
-                id: this.holdingId,
-                metadata: this.form
-            }
-
-            this.addHoldingMetadata(data)
-
-
-            this.successToast(
-                this.$t('settings.holdings.toast.addingHoldingMeta'), 
-                this.$t('settings.holdings.toast.addingHoldingMeta') + ' ' + this.holdingId
-            );
-
-            this.$emit('disableMetaForm');
-
-        }
+        selectTemplate( templateId ) {
+            let template = JSON.parse( JSON.stringify( this.templateById( templateId ) ) );
+            this.holding.defaultMetadataTemplate.dc = template.metadata.dc;
+        },
+        async cancelUpdate(){
+            this.holding = JSON.parse(JSON.stringify(this.backup));
+        },
+        async updateHoldingDefaultMetadataTemplate(){
+            const payload = {
+                accountId: this.accountId,
+                archiveId: this.archiveId,
+                holding: this.holding
+            };
+            this.updateHoldingMetadata( payload ).then( result => {
+                this.backup = JSON.parse(JSON.stringify( this.holding ));
+                this.successToast(
+                    this.$t('settings.holdings.toast.addingArchiveMeta'),
+                    this.$t('settings.holdings.toast.addingArchiveMeta') + ' ' + this.holding.id
+                );
+                this.$emit('disableMetaForm');
+            }).catch( error => {
+                console.error(error);
+            });
+        },
     }
-
-
 }
 </script>

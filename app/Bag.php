@@ -20,6 +20,10 @@ class Bag extends Model
         'name', 'status', 'owner'
     ];
 
+    protected $casts = [
+        'metadata' => 'array',
+    ];
+
     protected const smConfig = [
         'states' => [
             'empty',               // empty
