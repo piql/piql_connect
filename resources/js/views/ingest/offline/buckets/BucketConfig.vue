@@ -52,6 +52,15 @@
                                         </tr>
                                     </thead>
                                     <tbody>
+                                        <tr v-for="file in uploadingFiles" v-if="file.pc < 100">
+                                            <td>
+                                                <div class="progress upload-progress bg-fill">
+                                                    <div class="progress-bar bg-brand text-left" role="progressbar" :style="{ width: file.pc + '%' }" v-bind:aria-valuenow="file.pc" aria-valuemin="0" aria-valuemax="100">
+                                                        <span class="upload-text">{{file.name}} / {{ file.pc }}</span>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
                                         <tr v-for="file in files" :key="file.id">
                                             <td>
                                                 {{ file.name }}
@@ -155,7 +164,14 @@
                                 );
                                 this.loadFiles();
                             });
-                        }
+                        },
+                        onSubmit: (id, name) => {
+                            this.uploadingFiles.unshift({id: id, name: name, pc: 0});
+                        },
+                        onProgress: (id, name, uploadedBytes, totalBytes) => {
+                            let idx = this.uploadingFiles.findIndex( (file) => file.id == id );
+                            this.uploadingFiles[idx].pc = Math.round(uploadedBytes * 100 / totalBytes);
+                        },
                     }
                 },
             });
@@ -169,7 +185,8 @@
                 previewFileNames: [],
                 previewFileTypes: [],
                 previewImages: [],
-                allowedExt: null
+                allowedExt: null,
+                uploadingFiles: []
             }
         },
         props: {
