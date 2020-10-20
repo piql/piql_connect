@@ -34,8 +34,8 @@
                         </li>
                     </router-link>
 
-                    <router-link :to="{ name: 'settings.admin.account.users' }">
-                        <li class="list-group-item cursorPointer" >
+                    <router-link v-if="userIsAdmin" :to="{ name: 'settings.admin.account.users' }">
+                        <li class="list-group-item cursorPointer" :class="{ active: routeBelongsTo('settings.admin.account.users') }">
                             <i class="fas fa-wrench"></i>
                             <div class="leftMenuItem">
                                 {{$t('sidebar.settings.admin')}}
@@ -43,7 +43,7 @@
                         </li>
                     </router-link>
 
-                    <span v-if=" routeBelongsTo('settings.admin') ">
+                    <span v-if=" routeBelongsTo('settings.admin') && userIsAdmin ">
 
                             <router-link :to="{ name: 'settings.admin.account.users' }">
                                 <li class="list-group-item submenu" :class="{ active: routeBelongsTo('settings.admin.account.users') }" >
@@ -90,7 +90,7 @@
                             </router-link-->
 
 
-                            
+
 
                             <router-link :to="{ name: 'settings.admin.account.group' }">
                                 <li class="list-group-item submenu" :class="{ active: routeBelongsTo('settings.admin.account.groups') }" >
@@ -212,7 +212,7 @@
 <script>
 
 import axios from 'axios';
-
+import { mapGetters } from "vuex";
 export default {
     data() {
         return {
@@ -228,6 +228,7 @@ export default {
         }
     },
     computed: {
+        ...mapGetters(['userIsAdmin']),
         responsiveSidebarColumns() {
             return this.width > 1100 ? "sideMenuOuter" : "sideMenuOuterCollapsed";
         },
