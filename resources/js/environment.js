@@ -1,0 +1,13 @@
+//CREATE ENVIRONMENT VARIABLES AS OBJECTS OR VARIABLES 
+//AND ADD THEM TO THE EXPORTED OBJECT TO BE USED IN APP.JS
+
+const keyCloakConfig = {
+    realm: process.env.AUTH_REALM,
+    url: process.env.AUTH_BASE_URL,
+    clientId: process.env.AUTH_CLIENT,
+}
+
+
+export default {
+    keyCloakConfig
+}
