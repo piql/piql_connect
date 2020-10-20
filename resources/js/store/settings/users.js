@@ -22,13 +22,14 @@ const getters = {
 
 //actions
 const actions = {
-    async fetchUsers({commit},query, data = { limit:10 }){
-        let response  = await axios.get('/api/v1/admin/users' + query, { params: data });
+    async fetchUsers({commit }, query){
+        console.log(root)
+        let response  = await axios.get('/api/v1/admin/users' + query);
         commit('setUsersMutation', response.data)
     },
 
-    async fetchSelectUsers({commit},data = { limit:100 }){
-        let response = await axios.get('/api/v1/admin/users', { params: data });
+    async fetchSelectUsers({commit}){
+        let response = await axios.get('/api/v1/admin/users');
         commit('setUsersMutation', response.data)
     },
 

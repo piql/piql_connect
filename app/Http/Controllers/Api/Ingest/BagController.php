@@ -3,32 +3,25 @@
 namespace App\Http\Controllers\Api\Ingest;
 
 use App\Holding;
-use App\HoldingMetadata;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Filesystem\Filesystem;
 use App\Http\Controllers\Controller;
 use App\Bag;
 use App\File;
-use App\User;
-use App\Job;
 use App\Archive;
-use App\StorageProperties;
+use App\BagTransitionException;
 use App\Http\Resources\BagResource;
 use App\Http\Resources\BagCollection;
 use App\Http\Resources\FileCollection;
-use Response;
 use App\Events\FileUploadedEvent;
-use Carbon\Carbon;
-use Webpatser\Uuid\Uuid;
+use App\Traits\UserSettingRequest;
 use Log;
 
 class BagController extends Controller
 {
 
+    use UserSettingRequest;
     private $nameValidationRule = '/(^[^:\\<>"\/?*|]{3,64}$)/';
     private $newBagNameValidationRule = '/(^[^:\\<>"\/?*|]{0,64}$)/';
 
@@ -200,12 +193,13 @@ class BagController extends Controller
         }
 
         $files = $bag->files()->latest()->get();
-/*TODO: Move to AIP        $result = $files->map( function ($file) {
+        /*TODO: Move to AIP        
+            $result = $files->map( function ($file) {
             $ext = pathinfo($file->filename, PATHINFO_EXTENSION);
             return collect(["fupath" => $file->uuid.".".$ext])->merge($file);
-});
- */
-        return new FileCollection( $files );
+        });
+        */
+        return new FileCollection($files);
     }
 
     public function showFile(File $file)
@@ -459,7 +453,7 @@ class BagController extends Controller
 
     private function setMetadata( Bag $bag) {
         //TODO: Get the metadata in the bag
-        /*
+
         $holding = Holding::where('uuid', $bag->storage_properties->holding_uuid)->get()->first();
         if(!$holding) {
             abort(response()->json(["error" => 424, "message" => "No such Holding: {$bag->storage_properties->holding_uuid}"], 424));
@@ -468,24 +462,18 @@ class BagController extends Controller
         if(!$archive) {
             abort(response()->json(["error" => 424, "message" => "No archive"], 424));
         }
-
         $account = $archive->account;
         if(!$account) {
             abort(response()->json(["error" => 424, "message" => "No account"], 424));
         }
-
-        $metadata = $holding->metadata()->get()->first()->replicate();
-        $metadata = $holding->metadata();
-        $metadata->parent()->associate($bag);
-        $metadata->push();
-        $metadata = $archive->metadata()->get()->first()->replicate();
-        $metadata->parent()->associate($bag);
-        $metadata->push();
-
-        $metadata = $account->metadata()->get()->first()->replicate();
-        $metadata->parent()->associate($bag);
-        $metadata->push();
-         */
+        $metadata = [
+            'account' => $account->defaultMetadataTemplate,
+            'archive' => $archive->defaultMetadataTemplate,
+            'holding' => $holding->defaultMetadataTemplate,
+        ];
+        $bag->metadata = $metadata;
+        if(!$bag->save())
+            abort(response()->json(["error" => 424, "message" => "Failed to save bag metadata"], 424));
     }
 
 

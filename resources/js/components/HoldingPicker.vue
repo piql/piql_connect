@@ -4,7 +4,7 @@
             {{label}}
         </label>
         <div :class="inputValidation">
-            <select v-model="selection" :id="elementId" class="form-control" data-live-search="true" :data-none-selected-text="$t('nothingSelected')" @change="selChange">
+            <select v-model="selection" :id="elementId" class="form-control" data-live-search="true" :data-none-selected-text="wildCardLabel" @change="selChange">
                 <option v-for="holding in holdingsWithWildcard" :key="holding.id" v-bind:value="holding.uuid">
                     {{holding.title}}
                 </option>
@@ -66,8 +66,7 @@ export default {
             default: true
         },
         wildCardLabel: {
-            type: String,
-            default: 'Nothing Selected'
+            type: String
         },
         label: {
             type: String,
@@ -88,7 +87,10 @@ export default {
         archive: async function( archive ) {
             this.disableSelection();
             this.holdings = null;
-            if( !archive ) return;
+            if( !archive ) {
+                this.holdings = null
+                return;
+            }
             if( this.archives == null ) {
                 this.archives = ((await(axios.get(`/api/v1/metadata/archives`))).data
                 .data.map( (a) => { return { uuid: a.uuid, id: a.id };} ));
