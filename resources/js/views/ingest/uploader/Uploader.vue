@@ -115,7 +115,7 @@ import axios from 'axios';
 import JQuery from 'jquery';
 let $ = JQuery;
 import filesize from 'filesize';
-
+import {mapActions} from 'vuex'; 
 export default {
     mixins: [ RouterTools, DeferUpdate ],
     data() {
@@ -297,7 +297,11 @@ export default {
         FineUploader,
         Dropzone
     },
-
+    mounted() {
+        this.fetchUserSettings().then(data => {
+            this.pageSize = data.interface.tableRowCount;
+        })
+    },
     computed: {
         authToken() {
             if( this.authMode == "CSRF" ) {
@@ -407,6 +411,13 @@ export default {
     },
 
     methods: {
+        ...mapActions(['fetchUserSettings']),
+        forceHolderReRender(){
+            this.holderKey += 1;
+        },
+        loadNewHolders(){
+            this.forceHolderReRender();
+        },
         selectedHolder(holding){
             Vue.nextTick(() => {
                 if( !holding ) {

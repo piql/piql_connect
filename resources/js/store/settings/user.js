@@ -31,15 +31,16 @@ const actions = {
     async fetchUserSettings({ commit }) {
         return new Promise((resolve, reject) => {
             axios.get("/api/v1/system/users/current-user/preferences")
-            .then(response =>{
+            .then(response => {
                 commit('setSettingsMutation', response)
                 resolve(response.data)
-            })
-            .catch(error => {
+            }).catch(error => {
+                commit('setErrorResponse', error.response);
                 reject(error.response)
             })
-        })
+        });
     },
+    
 
     async fetchLanguages({ commit }) {
         let response = await axios.get("/api/v1/system/languages");

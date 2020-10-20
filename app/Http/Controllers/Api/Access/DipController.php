@@ -13,11 +13,15 @@ use Illuminate\Support\Str;
 use App\Interfaces\ArchivalStorageInterface;
 use App\Interfaces\FilePreviewInterface;
 use App\FileObject;
+use App\Traits\UserSettingRequest;
+use Illuminate\Support\Facades\Auth;
 use Log;
 use App\Holding;
 
 class DipController extends Controller
 {
+    use UserSettingRequest;
+    
     /**
      * Display a listing of the resource.
      *
@@ -43,6 +47,7 @@ class DipController extends Controller
                 $q->whereDate('created_at', '>=', $cq->toDateString() );
             }
         }
+
         if( $toDate ) {
             try {
                 $cq = new \Carbon\Carbon( $toDate );
@@ -69,9 +74,8 @@ class DipController extends Controller
             });
         }
 
-        $limit = $request->limit ? $request->limit : env('DEFAULT_ENTRIES_PER_PAGE');
         return StoragePropertiesToDipResource::collection(
-            $q->paginate( $limit )
+            $q->paginate($this->rowLimit(Auth::user(), $request))
         );
     }
 
@@ -153,14 +157,12 @@ class DipController extends Controller
 
     public function files( Request $request )
     {
-        $limit = $request->limit ? $request->limit : env('DEFAULT_ENTRIES_PER_PAGE');
-
         $dip = Dip::find( $request->dipId );
         $q = $dip->fileObjects()->where( 'path', 'LIKE', "%/objects" );
         if ($search = $request->query('search')) {
             $q->where('filename', 'LIKE', '%' . $search . '%');
         }
-        $files = $q->paginate( $limit );
+        $files = $q->paginate($this->rowLimit(Auth::user(), $request));
         return FileObjectResource::collection( $files );
     }
 

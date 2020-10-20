@@ -52,18 +52,18 @@ const actions = {
     },
 
     //get actions
-    async fetchGroups({commit},query, data = { limit:10 }){
-        let response =  await axios.get('/api/v1/admin/access-control/roles' + query,{ params: data });
+    async fetchGroups({commit},query){
+        let response =  await axios.get('/api/v1/admin/access-control/roles' + query);
         commit('setGroupsMutation', response.data)
     },
 
-    async fetchGroupUsers({commit},groupId, data = { limit:100 }){
-        let response = await axios.get('/api/v1/admin/access-control/roles/' + groupId +'/users',{ params: data });
+    async fetchGroupUsers({commit},groupId){
+        let response = await axios.get('/api/v1/admin/access-control/roles/' + groupId +'/users');
         commit('setGroupUsersMutation', response.data)
     },
 
-    async fetchGroupRoles({commit},groupId, data = { limit:100 }){
-        let response = await axios.get('/api/v1/admin/access-control/roles/'+ groupId +'/permissions',{ params: data });
+    async fetchGroupRoles({commit},groupId){
+        let response = await axios.get('/api/v1/admin/access-control/roles/'+ groupId +'/permissions');
         commit('setGroupRolesMutation', response.data)
     }
 
