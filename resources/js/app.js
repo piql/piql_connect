@@ -103,6 +103,7 @@ Vue.use(vueFilterPrettyBytes);
  */
 
 import { router } from "./router.js";
+import env from "./environment"
 
 //import store
 import { store } from "./store/store";
@@ -125,11 +126,7 @@ function loadLanguage() {
 }
 
 Vue.use(VueKeyCloak, {
-    config: {
-        realm: process.env.AUTH_REALM,
-        url: process.env.AUTH_BASE_URL,
-        clientId: process.env.AUTH_CLIENT
-    },
+    config: env.keyCloakConfig,
     onReady: () => {
         interceptToken();
         new Vue({
