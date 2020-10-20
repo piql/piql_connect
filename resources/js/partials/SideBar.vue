@@ -201,10 +201,12 @@
 
             <div class="poweredBy" :class="invisibleIfNarrow">
                 <div class="poweredByText">Powered by </div>
-                <span class="poweredByImg"><img src="/images/piql_logo_white.png">
-                    </span>
-                </div>
+                <span class="poweredByImg">
+                    <img src="/images/piql_logo_white.png">
+                </span>
+                <div class="version">v1.0.0</div>
             </div>
+        </div>
     </div>
 </template>
 <script>
