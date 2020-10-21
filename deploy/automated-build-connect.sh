@@ -156,4 +156,7 @@ fi
     
 echo "Finished successfully"
 
-echo "\nRemember to update key KEYCLOAK_REALM_PUBLIC_KEY in .env file"
+if [ -z "$KEYCLOAK_REALM_PUBLIC_KEY" ] ; then
+    echo "\nRemember to update key KEYCLOAK_REALM_PUBLIC_KEY in .env file"
+    echo "Also consider setting it permanently in your ~/.xxxshrc file"
+fi
