@@ -158,6 +158,7 @@ export default {
                     onStatusChange: (id, oldStatus, newStatus) => {
                         if (newStatus == 'submitted') {
                             // Manually start upload with a delay to avoid flooding the server
+                            // TODO The delay is strictly only needed when uploading many small files. Tweak for special cases.
                             let filesIndex = this.filesUploading.findIndex( (file) => file.id == id );
                             if( filesIndex == -1) {
                                 console.error("Failed to find file when starting upload");
@@ -197,8 +198,7 @@ export default {
                             'isComplete': false,
                             'retryCount' : 0,
                             'isHidden': false,
-                            'uploadStartTime': (this.filesUploading.length && (this.filesUploading[0].uploadStartTime + this.uploadDelayMs) > (new Date().getTime())) ?
-                                (this.filesUploading[0].uploadStartTime + this.uploadDelayMs) : (new Date().getTime())
+                            'uploadStartTime': this.uploadStartTime()
                         });
                     },
                     onProgress: (id, name, uploadedBytes, totalBytes) => {
@@ -548,22 +548,28 @@ export default {
         },
         activeUploads() {
             return this.filesUploading.filter( (file) => file.isUploading ).length > 0;
+        },
+        uploadStartTime() {
+            // Calculate the nearest time it's safe to start the next upload to avoid throttling issues.
+            // If a previous upload was very recently started we add a delay, otherwise it can be started right away.
+            return (this.filesUploading.length && (this.filesUploading[0].uploadStartTime + this.uploadDelayMs) > (new Date().getTime())) ?
+                (this.filesUploading[0].uploadStartTime + this.uploadDelayMs) : (new Date().getTime());
         }
     },
     props: {
-        authMode: {
+        authMode: { // Mode for authenticating to API
             type: String,
             default: "keycloak"
         },
-        retryGracetimeMs: {
+        retryGracetimeMs: { // Delay before retrying a failed upload
             type: Number,
             default: 3000
         },
-        uploadDelayMs: {
+        uploadDelayMs: { // Delay before between file uploads
             type: Number,
             default: 250
         },
-        maxAutoRetries: {
+        maxAutoRetries: { // Maximum number of automatic upload retries before giving up
             type: Number,
             default: 5
         },
