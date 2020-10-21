@@ -212,7 +212,6 @@ class OfflineStorageControllerTest extends TestCase
         $this->assertTrue((bool)env('PIQLIT_NOTIFY_EMAIL_TO'),
             "Environment variable 'PIQLIT_NOTIFY_EMAIL_TO' not set. Can't execute test");
 
-        putenv('PIQLIT_NOTIFY_EMAIL_TO=fakemail@piql.com');
         \Mail::fake();
         $response = $this->actingAs( $this->user )
             ->json('PATCH',
