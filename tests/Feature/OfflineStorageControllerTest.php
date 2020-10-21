@@ -209,6 +209,9 @@ class OfflineStorageControllerTest extends TestCase
 
     public function test_send_a_email_when_piql_button_is_pressed()
     {
+        $this->assertTrue((bool)env('PIQLIT_NOTIFY_EMAIL_TO'),
+            "Environment variable 'PIQLIT_NOTIFY_EMAIL_TO' not set. Can't execute test");
+
         putenv('PIQLIT_NOTIFY_EMAIL_TO=fakemail@piql.com');
         \Mail::fake();
         $response = $this->actingAs( $this->user )
@@ -227,6 +230,6 @@ class OfflineStorageControllerTest extends TestCase
         $response->assertStatus( 200 )
             ->assertJsonFragment(['status' => "transferring"]);
         \Event::assertDispatched(\App\Events\CommitJobEvent::class, 1);
-        Mail::assertSent(PiqlIt::class);
+        \Mail::assertSent(PiqlIt::class);
     }
 }
