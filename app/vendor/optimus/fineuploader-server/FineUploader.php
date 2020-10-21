@@ -165,7 +165,6 @@ class FineUploader {
         # non-chunked upload
 
             $target = join(DIRECTORY_SEPARATOR, array($uploadDirectory, $uuid, $name));
-            //$target = $this->getUniqueTargetPath($uploadDirectory, $name);
 
             if ($target){
                 $this->uploadName = basename($target);
@@ -181,103 +180,6 @@ class FineUploader {
             return array('error'=> 'Could not save uploaded file.' .
                 'The upload was cancelled, or server error encountered');
         }
-    }
-
-    /**
-     * Process a delete.
-     * @param string $uploadDirectory Target directory.
-     * @params string $name Overwrites the name of the file.
-     *
-     */
-    public function handleDelete($uploadDirectory, $name=null)
-    {
-        if ($this->isInaccessible($uploadDirectory)) {
-            return array('error' => "Server error. Uploads directory isn't writable" . ((!$isWin) ? " or executable." : "."));
-        }
-
-        $targetFolder = $uploadDirectory;
-        $url = parse_url($_SERVER['REQUEST_URI']);
-        $uuid = $_POST['qquuid'];
-
-        $target = join(DIRECTORY_SEPARATOR, array($targetFolder, $uuid));
-
-        //print_r($target);
-        if (is_dir($target)){
-            $this->removeDir($target);
-            return array("success" => true, "uuid" => $uuid);
-        } else {
-            return array("success" => false,
-                "error" => "File not found! Unable to delete.",
-                "path" => $uuid
-            );
-        }
-
-    }
-
-    /**
-     * Returns a path to use with this upload. Check that the name does not exist,
-     * and appends a suffix otherwise.
-     * @param string $uploadDirectory Target directory
-     * @param string $filename The name of the file to use.
-     */
-    protected function getUniqueTargetPath($uploadDirectory, $filename)
-    {
-        // Allow only one process at the time to get a unique file name, otherwise
-        // if multiple people would upload a file with the same name at the same time
-        // only the latest would be saved.
-
-        if (function_exists('sem_acquire')){
-            $lock = sem_get(ftok(__FILE__, 'u'));
-            sem_acquire($lock);
-        }
-
-        $pathinfo = pathinfo($filename);
-        $base = $pathinfo['filename'];
-        $ext = isset($pathinfo['extension']) ? $pathinfo['extension'] : '';
-        $ext = $ext == '' ? $ext : '.' . $ext;
-
-        $unique = $base;
-        $suffix = 0;
-
-        // Get unique file name for the file, by appending random suffix.
-
-        while (file_exists($uploadDirectory . DIRECTORY_SEPARATOR . $unique . $ext)){
-            $suffix += rand(1, 999);
-            $unique = $base.'-'.$suffix;
-        }
-
-        $result =  $uploadDirectory . DIRECTORY_SEPARATOR . $unique . $ext;
-
-        // Create an empty target file
-        if (!touch($result)){
-            // Failed
-            $result = false;
-        }
-
-        if (function_exists('sem_acquire')){
-            sem_release($lock);
-        }
-
-        return $result;
-    }
-
-    /**
-     * Removes a directory and all files contained inside
-     * @param string $dir
-     */
-    protected function removeDir($dir){
-        foreach (scandir($dir) as $item){
-            if ($item == "." || $item == "..")
-                continue;
-
-            if (is_dir($item)){
-                removeDir($item);
-            } else {
-                unlink(join(DIRECTORY_SEPARATOR, array($dir, $item)));
-            }
-
-        }
-        rmdir($dir);
     }
 
     /**
