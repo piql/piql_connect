@@ -11,7 +11,6 @@ Homestead.yaml
 npm-debug.log
 yarn-error.log
 /resources/js/vue-i18n-locales.generated.js
-/resources/js/environment.jse
 package-lock.json
 composer.lock
 laravel-echo-server.json
