@@ -5,7 +5,7 @@
         </label>
         <div :class="inputValidation">
             
-            <select v-model="selection" :id="elementId" v-if="showDisabled" disabled class="form-control" data-live-search="true" :data-none-selected-text="$t('nothingSelected')" @change="selChange">
+            <select v-model="selection" :id="elementId" v-if="!holdings" disabled class="form-control" data-live-search="true" :data-none-selected-text="$t('nothingSelected')" @change="selChange">
                 <option v-for="holding in holdingsWithWildcard" :key="holding.id" v-bind:value="holding.uuid">
                     {{holding.title}}
                 </option>
@@ -64,7 +64,6 @@ export default {
             selection: null,
             initComplete: false,
             inputValidation: '',
-            selectDisabled: false
         };
     },
     props: {
@@ -134,7 +133,9 @@ export default {
 
         },
         holdings: function( holdings ) {
-            this.selectDisabled = holdings?false:true;
+            Vue.nextTick(()=> {
+                this.refreshPicker();
+            })
             if( !! holdings ) {
                 let holdingQuery = this.$route.query.holding ?? this.wildCardLabel ?? this.holdings[0].uuid;
                 Vue.nextTick( () => {
@@ -163,12 +164,6 @@ export default {
                     : null;
             }
             return this.holdings;
-        },
-        showDisabled(){
-            Vue.nextTick(()=> {
-                this.refreshPicker();
-            })
-            return (this.selectDisabled)?true:false;
         }
         
     }
