@@ -26,12 +26,12 @@
                          </div>
                          <div class="form-group">
                              <div :title="$t('upload.archiveToolTip')">
-                                <archive-picker v-bind:label="$t('Archive')" @loadNewHolders="loadNewHolders"></archive-picker>
+                                <archive-picker v-bind:label="$t('Archive')" :required="true"/>
                             </div>
                          </div>
                          <div class="form-group">
                              <div :title="$t('upload.holdingToolTip')">
-                                <holding-picker v-bind:label="$t('Holdings')" :useWildCard="true" :key='holderKey' ></holding-picker>
+                                <holding-picker v-bind:label="$t('Holdings')" :useWildCard="true" @selectedHolder="selectedHolder" :required="true"/>
                             </div>
                          </div>
 
@@ -64,7 +64,7 @@
                     <div class="card-header">
                         <div class="row">
                             <div class="col-md-6">
-                                <b><i class="fa fa-folder-open"></i>  {{$t('upload.fileListTitle')}} ( {{ sortedFilesUploading.length }} {{$t('upload.fileListTitle.files')}})</b>
+                                <b><i class="fa fa-folder-open"></i>  {{$t('upload.fileListTitle')}} ({{ sortedFilesUploading.length }} {{$t('upload.fileListTitle.files')}}, {{totalSize | prettyBytes}})</b>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
@@ -269,7 +269,7 @@ export default {
             uploader: uploader,
             bag: {},
             bagName: "",
-            files: {},
+            files: [],
             filesUploading: [],
             userId: '',
             userSettings: {
@@ -284,8 +284,7 @@ export default {
             pageSize: 8,
             pageFrom: 1,
             pageTo: 4,
-            fileNameFilter: "",
-            holderKey: 0
+            fileNameFilter: ""
         };
     },
 
@@ -378,6 +377,15 @@ export default {
         customerSelectsArchives: function() {
             return !!this.archives;
         },
+        totalSize: function() {
+            let size = 0;
+            if (this.files != null) {
+                this.files.forEach(file => {
+                    size += file.filesize * 1;
+                });
+            }
+            return size;
+        }
     },
 
     watch: {
@@ -394,11 +402,14 @@ export default {
     },
 
     methods: {
-        forceHolderReRender(){
-            this.holderKey += 1;
-        },
-        loadNewHolders(){
-            this.forceHolderReRender();
+        selectedHolder(holding){
+            Vue.nextTick(() => {
+                if( !holding ) {
+                    this.updateQueryParams({ holding: null, page : null })
+                } else {
+                    this.updateQueryParams({ holding, page : null });
+                }
+            })
         },
         metadataClicked( e ) {
             let fileId = e.uploadedFileId;

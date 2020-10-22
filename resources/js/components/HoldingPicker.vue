@@ -3,11 +3,13 @@
         <label v-if="showLabel" for="holdingPicker" class="col-form-label-sm">
             {{label}}
         </label>
-        <select v-model="selection" :id="elementId" class="form-control" data-live-search="true" :data-none-selected-text="$t('nothingSelected')">
-            <option v-for="holding in holdingsWithWildcard" :key="holding.id" v-bind:value="holding.uuid">
-                {{holding.title}}
-            </option>
-        </select>
+        <div :class="inputValidation">
+            <select v-model="selection" :id="elementId" class="form-control" data-live-search="true" :data-none-selected-text="$t('nothingSelected')" @change="selChange">
+                <option v-for="holding in holdingsWithWildcard" :key="holding.id" v-bind:value="holding.uuid">
+                    {{holding.title}}
+                </option>
+            </select>
+        </div>
     </div>
 </template>
 
@@ -41,6 +43,11 @@ export default {
         },
         updatePicker: function( value ) {
             $(`#${this.elementId}`).selectpicker( 'val', value );
+        },
+        selChange: function () {
+            let uuid = $(`#${this.elementId}`).val();
+            this.$emit('selectedHolder',uuid);
+            this.inputValidation = !this.required || uuid ? '' : 'mustFill';
         }
     },
     data() {
@@ -49,7 +56,8 @@ export default {
             archive: null,
             holdings: null,
             selection: null,
-            initComplete: false
+            initComplete: false,
+            inputValidation: '',
         };
     },
     props: {
@@ -68,7 +76,11 @@ export default {
         elementId: {
             type: String,
             default: "holdingPicker"
-        }
+        },
+        required: {
+            type: Boolean,
+            default: false
+        },
     },
     watch: {
         '$route': 'dispatchRouting',
@@ -93,27 +105,26 @@ export default {
             axios.get(`/api/v1/metadata/archives/${archiveId}/holdings`).then( (response) => {
                 if(response.data.data.length > 0){
                     this.holdings = response.data.data;
-                    //default selection
-                    this.selection = this.holdings[0].uuid;
                 }
 
             })
         },
-        selection: function ( holding ) {
+        selection: function ( holding) {
             if( !this.initComplete ) {
                 /* don't change query params when setting selection from page load */
                 this.initComplete = true;
                 return;
             }
 
-            Vue.nextTick( () => {
+            Vue.nextTick(() => {
                 if( holding === this.wildCardLabel ) {
                     this.updateQueryParams({ holding: null, page : null })
                 } else {
                     this.updateQueryParams({ holding, page : null });
                 }
-                   
-            });
+            })
+
+
         },
         holdings: function( holdings ) {
             if( !! holdings ) {
@@ -122,6 +133,7 @@ export default {
                     this.updatePicker( holdingQuery );
                     this.refreshPicker();
                     this.enableSelection();
+                    this.selChange();
                 });
             } else {
                 this.disableSelection();

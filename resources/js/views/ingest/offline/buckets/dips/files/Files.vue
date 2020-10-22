@@ -4,7 +4,8 @@
         <breadcumb :subTitle="subTitle"/>
         <div class="row plistHeader text-truncate text-center mt-2">
           <div class="col-sm-2">{{$t("access.browse.header.preview")}}</div>
-            <div class="col-sm-7 text-left">{{$t('access.browse.header.files')}}</div>
+            <div class="col-sm-5 text-left">{{$t('access.browse.header.files')}}</div>
+            <div class="col-sm-2 text-right">{{$t("access.browse.header.size")}}</div>
             <div class="col-sm-2 text-center">{{$t('access.browse.header.actions')}}</div>
         </div>
 

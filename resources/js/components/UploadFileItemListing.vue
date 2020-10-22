@@ -10,7 +10,7 @@
           </thead>
           <tbody>
                <tr v-for="(file,idx) in displayedfiles" :key="file.id">
-                        <td>
+                    <td>
                             <div v-if="file.isUploading" class="progress upload-progress bg-fill">
                                 <div class="progress-bar bg-brand text-left" role="progressbar" v-bind:style="file.progressBarStyle" v-bind:aria-valuenow="file.progressPercentage" aria-valuemin="0" aria-valuemax="100">
                                     <span class="upload-text">{{file.filename}}</span>
@@ -25,7 +25,7 @@
                             </div>
                     </td>
                     <td>
-                        {{Math.ceil(file.fileSize/1000)}} Kb
+                        {{file.fileSize | prettyBytes}}
                     </td>
                     <td>
                         <span v-if="file.isComplete">

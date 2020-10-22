@@ -5,7 +5,7 @@
             <div class="card-header">
             </div>
             <div class="card-body">
-                <user-listing :key="listingKey" @deleteUser='deleteUser'  @disableUser="disableUser" :users="formattedUsers" @editUser="editUser" @enableUser="enableUser"></user-listing>
+                <user-listing :key="listingKey" @disableUser="disableUser" :users="formattedUsers" @editUser="editUser" @enableUser="enableUser"></user-listing>
                 <div class="row text-center pagerRow">
                     <div class="col">
                         <Pager :meta='usersPageMeta' :height='height' />

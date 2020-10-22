@@ -89,7 +89,9 @@ export default {
     methods: {
         ...mapActions(["logoutUser"]),
         routeBelongsTo( checkRoute ) {
+            if( !this.$route.name ) return false;
             return this.$route.name.startsWith( checkRoute );
+
         },
         loadUser() {
             if (this.user == null) {

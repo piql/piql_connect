@@ -57,7 +57,7 @@
                                                 {{ file.name }}
                                             </td>
                                             <td>
-                                                {{Math.ceil(file.size/1000)}} Kb
+                                                {{ file.size | prettyBytes }}
                                             </td>
                                             <td>
                                                 <a @click="showPreview (file)" data-toggle="tooltip" :title="$t('access.browse.header.preview')"><i class="fas fa-eye actionIcon text-center mr-2 cursorPointer"></i></a>
@@ -104,6 +104,8 @@
             Lightbox
         },
         data() {
+            const Authorization = `Bearer ${Vue.prototype.$keycloak.token}`;
+
             const uploader = new FineUploaderTraditional({
                 options: {
                     request: {
@@ -118,7 +120,7 @@
                             qqchunksize: 1024 * 768,
                         },
                         customHeaders: {
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                            Authorization
                         }
                     },
                     validation: {
