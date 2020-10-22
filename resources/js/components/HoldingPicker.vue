@@ -4,7 +4,13 @@
             {{label}}
         </label>
         <div :class="inputValidation">
-            <select v-model="selection" :id="elementId" class="form-control" data-live-search="true" :data-none-selected-text="wildCardLabel" @change="selChange">
+            <select v-model="selection" :id="elementId" v-if="!holdings" disabled class="form-control" data-live-search="true" :data-none-selected-text="$t('nothingSelected')" @change="selChange">
+                <option v-for="holding in holdingsWithWildcard" :key="holding.id" v-bind:value="holding.uuid">
+                    {{holding.title}}
+                </option>
+            </select>
+            <select v-model="selection" :id="elementId" v-else class="form-control" data-live-search="true" :data-none-selected-text="$t('nothingSelected')" @change="selChange">
+
                 <option v-for="holding in holdingsWithWildcard" :key="holding.id" v-bind:value="holding.uuid">
                     {{holding.title}}
                 </option>
@@ -84,8 +90,8 @@ export default {
     watch: {
         '$route': 'dispatchRouting',
 
-        archive: async function( archive ) {
-            this.disableSelection();
+        async archive( archive ) {
+            this.disableSelection();         
             this.holdings = null;
             if( !archive ) {
                 this.holdings = null
@@ -129,6 +135,9 @@ export default {
 
         },
         holdings: function( holdings ) {
+            Vue.nextTick(()=> {
+                this.refreshPicker();
+            })
             if( !! holdings ) {
                 let holdingQuery = this.$route.query.holding ?? this.wildCardLabel ?? this.holdings[0].uuid;
                 Vue.nextTick( () => {
@@ -138,7 +147,10 @@ export default {
                     this.selChange();
                 });
             } else {
-                this.disableSelection();
+                Vue.nextTick(()=> {
+                    this.disableSelection();
+                    this.archive = null;
+                })
             }
         },
     },
@@ -155,6 +167,7 @@ export default {
             }
             return this.holdings;
         }
+        
     }
 }
 
