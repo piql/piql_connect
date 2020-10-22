@@ -58,11 +58,15 @@
     },
     "autoload": {
         "psr-4": {
-            "App\\": "app/"
+            "App\\": "app/",
+            "Optimus\\": "app/vendor/optimus/fineuploader-server/"
         },
         "classmap": [
             "database/seeds",
             "database/factories"
+        ],
+        "exclude-from-classmap": [
+            "vendor/optimus/fineuploader-server/src/Vendor/FineUploader.php"
         ],
         "files": [
             "bootstrap/bagitutil.php"

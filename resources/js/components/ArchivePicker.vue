@@ -5,7 +5,7 @@
             {{label}}
         </label>
         <div :class="inputValidation">
-            <select v-model="selection" :id="elementId" class="form-control w-100" v-bind:disabled="selectionDisabled" data-live-search="true" @change="selChange">
+            <select v-model="selection" :id="elementId" class="form-control w-100" v-bind:disabled="selectionDisabled" :data-none-selected-text="wildCardLabel" data-live-search="true" @change="selChange">
                 <option v-for="archive in archivesWithWildcard" :key="archive.id" :value="archive.uuid">
                     {{archive.title}}
                 </option>
@@ -80,8 +80,7 @@ export default {
             default: true
         },
         wildCardLabel: {
-            type: String,
-            default: "All"
+            type: String
         },
         label: {
             type: String,

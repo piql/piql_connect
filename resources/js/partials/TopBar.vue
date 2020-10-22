@@ -74,7 +74,9 @@ export default {
         };
     },
     computed: {
-        ...mapGetters(["userName"]),
+        userName() {
+            return this.user != null ? this.user.given_name : "";
+        },
         currentActiveRoute() {
             return this.$route.name;
         },

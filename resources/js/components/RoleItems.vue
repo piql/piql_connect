@@ -147,7 +147,7 @@ export default {
         }
         this.fetchRoles(this.apiQueryString );
 
-        this.fetchGroups('',{limit: 100});
+        this.fetchGroups('',{});
         
 
         
