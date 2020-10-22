@@ -4,7 +4,7 @@
 const keyCloakConfig = {
     realm: process.env.AUTH_REALM,
     url: process.env.AUTH_BASE_URL,
-    clientId: process.env.AUTH_CLIENT,  
+    clientId: process.env.AUTH_CLIENT,
 }
 
 
