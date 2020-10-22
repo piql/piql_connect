@@ -10,12 +10,15 @@ use App\Http\Resources\UserResource;
 use App\AccessControl;
 use App\RolePermission;
 use App\Services\AccessControlManager;
+use App\Traits\UserSettingRequest;
 use App\User;
+use Illuminate\Support\Facades\Auth;
 use Throwable;
 
 
 class AccessControlController extends Controller
 {
+    use UserSettingRequest;
     /**
      * Display a listing of the resource.
      *
@@ -24,7 +27,7 @@ class AccessControlController extends Controller
     public function index(Request $request)
     {
         try {
-            $limit = $request->limit ? $request->limit : env('DEFAULT_ENTRIES_PER_PAGE', 10);
+            $limit = $this->rowLimit(Auth::user(), $request);
             $accessControls = AccessControl::paginate($limit, ['*'], 'page');
             return AccessControlResource::collection($accessControls);
         } catch (Throwable $e) {

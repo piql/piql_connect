@@ -25,6 +25,7 @@ import RouterTools from '@mixins/RouterTools.js';
 
 import axios from 'axios';
 import JQuery from 'jquery';
+import {mapActions} from 'vuex';
 let $ = JQuery;
 
 export default {
@@ -110,14 +111,18 @@ export default {
          *
          * Use it to update API queries with pagination, filters etc.
          */
+        ...mapActions(['fetchUserSettings']),
         dispatchRouting() {
             this.refreshObjects( this.apiQueryString );
         },
         refreshObjects( apiQueryString ){
-            axios.get("/api/v1/access/dips"+apiQueryString, { params: { limit: 8 } }).then( (dips ) => {
-                this.dataObjects = dips.data.data;
-                this.packagePageMeta = dips.data.meta;
-            });
+            this.fetchUserSettings().then(settings => {
+                axios.get("/api/v1/access/dips"+apiQueryString, { params: { limit: settings.interface.tableRowCount } })
+                .then(dips => {
+                    this.dataObjects = dips.data.data;
+                    this.packagePageMeta = dips.data.meta;
+                });
+            })
         },
         openObject: function( dipId ) {
             this.$router.push({ name: 'access.browse.dip', params: { dipId }, query: {} });
