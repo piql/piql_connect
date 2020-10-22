@@ -158,7 +158,24 @@ export default {
                 retry: {
                     enableAuto: false, /* this didn't work very well, so we have our own logic for it */
                 },
+                autoUpload: false,
                 callbacks: {
+                    onStatusChange: (id, oldStatus, newStatus) => {
+                        if (newStatus == 'submitted') {
+                            // Manually start upload with a delay to avoid flooding the server
+                            // TODO The delay is strictly only needed when uploading many small files. Tweak for special cases.
+                            let filesIndex = this.filesUploading.findIndex( (file) => file.id == id );
+                            if( filesIndex == -1) {
+                                console.error("Failed to find file when starting upload");
+                                return;
+                            }
+                            let delay = this.filesUploading[filesIndex].uploadStartTime - (new Date().getTime());
+                            setTimeout( ()  => {
+                                // TODO: Find a better suited method than retry to start the upload
+                                this.uploader.methods.retry(id);
+                            }, delay );
+                        }
+                    },
                     onValidate: (id, name) => {
                     },
                     onSubmit: (id, name) => {
@@ -185,7 +202,8 @@ export default {
                             'isFailed': false,
                             'isComplete': false,
                             'retryCount' : 0,
-                            'isHidden': false
+                            'isHidden': false,
+                            'uploadStartTime': this.uploadStartTime()
                         });
                     },
                     onProgress: (id, name, uploadedBytes, totalBytes) => {
@@ -203,7 +221,8 @@ export default {
                             return;
                         }
                         let filesIndex = this.filesUploading.findIndex( (file) => file.id == id );
-                        if( filesIndex === null || !this.filesUploading[filesIndex] || this.filesUploading[filesIndex].isFailed ) {
+                        if( filesIndex == -1 || !this.filesUploading[filesIndex] || this.filesUploading[filesIndex].isFailed ) {
+                            console.error("Failed to find file on complete");
                             return;
                         }
                         this.filesUploading[filesIndex].isUploading = false;
@@ -243,7 +262,8 @@ export default {
                     },
                     onError: async (id, name, errorReason, xhr ) => {
                         let filesIndex = this.filesUploading.findIndex( (file) => file.id == id );
-                        if( filesIndex === null) {
+                        if( filesIndex == -1) {
+                            console.error("Failed to find file on error");
                             return;
                         }
 
@@ -254,7 +274,7 @@ export default {
                             let fileId = id;
                             setTimeout( ()  => {
                                 this.uploader.methods.retry(fileId);
-                            }, this.sleepRetryGracetimeMs );
+                            }, this.retryGracetimeMs );
                         }
                         else {
                             this.filesUploading[filesIndex].retryCount = 0;
@@ -544,18 +564,28 @@ export default {
         },
         activeUploads() {
             return this.filesUploading.filter( (file) => file.isUploading ).length > 0;
+        },
+        uploadStartTime() {
+            // Calculate the nearest time it's safe to start the next upload to avoid throttling issues.
+            // If a previous upload was very recently started we add a delay, otherwise it can be started right away.
+            return (this.filesUploading.length && (this.filesUploading[0].uploadStartTime + this.uploadDelayMs) > (new Date().getTime())) ?
+                (this.filesUploading[0].uploadStartTime + this.uploadDelayMs) : (new Date().getTime());
         }
     },
     props: {
-        authMode: {
+        authMode: { // Mode for authenticating to API
             type: String,
             default: "keycloak"
         },
-        retryGracetimeMs: {
+        retryGracetimeMs: { // Delay before retrying a failed upload
             type: Number,
-            default: 1000
+            default: 3000
         },
-        maxAutoRetries: {
+        uploadDelayMs: { // Delay before between file uploads
+            type: Number,
+            default: 250
+        },
+        maxAutoRetries: { // Maximum number of automatic upload retries before giving up
             type: Number,
             default: 5
         },
@@ -596,7 +626,8 @@ export default {
                     fileSize: file.filesize,
                     uploadedFileSize: file.filesize,
                     isUploading: false,
-                    isComplete: true
+                    isComplete: true,
+                    uploadStartTime: (new Date().getTime())
                 }) );
             }
             else {
