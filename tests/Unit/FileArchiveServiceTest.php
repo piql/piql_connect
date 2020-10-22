@@ -312,7 +312,7 @@ class FileArchiveServiceTest extends TestCase
             $this->app->make( FileCollectorInterface::class)
         );
 
-        $actualFilePath = $service->buildTarFromAipCollectionIncrementally( [$this->aip, $this->aip] );
+        $actualFilePath = $service->buildTarFromAipCollectionIncrementally( collect([$this->aip, $this->aip]) );
     }
 
 }

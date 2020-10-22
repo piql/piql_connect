@@ -4,6 +4,7 @@ namespace App\Services;
 
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Illuminate\Support\Collection;
 use App\Aip;
 use App\FileObject;
 use App\Interfaces\FileCollectorInterface;
@@ -54,11 +55,11 @@ class FileArchiveService implements \App\Interfaces\FileArchiveInterface
     {
         $prefix = ($prefix == null) ? Str::uuid()."-" : $prefix;
         $destinationFilePath = "{$this->destinationPath( $aip, $prefix )}.tar";
-        $downloadedFiles = [];
-        $aip->fileObjects->map( function ( $file ) use ( $aip, $destinationFilePath, $prefix, &$downloadedFiles ) {
+        $downloadedFiles = $aip->fileObjects->reduce( function ( $filePathMap, $file ) use ( $aip, $destinationFilePath, $prefix ) {
             $downloadedFileSourcePath = $this->downloadFile( $aip, $file, $prefix );
             $downloadedFileCollectionPath = Str::after( $file->fullpath, "{$aip->online_storage_path}/" );
-	    $downloadedFiles[$downloadedFileCollectionPath] = $downloadedFileSourcePath;
+            $filePathMap[$downloadedFileCollectionPath] = $downloadedFileSourcePath;
+            return $filePathMap;
         });
 
         $this->collector->collectMultipleFiles(
@@ -77,15 +78,16 @@ class FileArchiveService implements \App\Interfaces\FileArchiveInterface
         return $destinationFilePath;
     }
 
-    public function buildTarFromAipCollectionIncrementally( Array $aips, $basename = null ) : string
+    public function buildTarFromAipCollectionIncrementally( Collection $aips, $basename = null ) : string
     {
         $basename = ($basename == null) ? Str::uuid() : $basename;
         $destinationFilePath = "{$this->collectionDestinationPath( $basename )}.tar";
-        $aipFiles = [];
-        foreach ($aips as $aip) {
+
+        $aipFiles = $aips->reduce( function ( $aipPathMap, $aip ) {
             $aipFileSourcePath = $this->buildTarFromAipIncrementally($aip);
-            $aipFiles[basename($aipFileSourcePath)] = $aipFileSourcePath;
-        }
+            $aipPathMap[basename($aipFileSourcePath)] = $aipFileSourcePath;
+            return $aipPathMap;
+        });
 
         $this->collector->collectMultipleFiles(
             $aipFiles,
