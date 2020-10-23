@@ -45,6 +45,9 @@ if [[ ! -z $STORAGE_LOCATION_ID ]] ; then
   sed -i "s/$replaceString/STORAGE_LOCATION_ID=$STORAGE_LOCATION_ID/g" .env || exit $?
 fi
 
+#generate environment.js
+./init-auth-client.sh || exit $?
+
 echo "Composer"
 composer install || exit $?
 
@@ -152,8 +155,7 @@ if [[ ! -z $UPDATE_AM_SERVICE_CALLBACKS ]] ; then
   ./update-service-callbacks.php || exit $?
 fi
 
-./init-auth-client.sh
-    
+
 echo "Finished successfully"
 
 if [ -z "$KEYCLOAK_REALM_PUBLIC_KEY" ] ; then
