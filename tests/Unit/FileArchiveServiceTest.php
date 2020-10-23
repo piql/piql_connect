@@ -227,13 +227,15 @@ class FileArchiveServiceTest extends TestCase
 
         $this->instance( FileCollectorInterface::class, Mockery::mock(
             TarFileService::class, function ( $mock ) use ( $filesWithTexts ) {
-                $mock->shouldReceive( 'collectSingleFile' )
-                     ->times(3)
-                     ->with( Mockery::type('string'), Mockery::type('string'), Mockery::type('string'), Mockery::type('bool') )
-                     ->andReturnUsing( function ( $downloadPath, $tarlocalPath, $tarfile, $delete ) use ( $filesWithTexts ) {
-                         $dPath = Str::after( $downloadPath , "/" );
+                $mock->shouldReceive( 'collectMultipleFiles' )
+                     ->times(1)
+                     ->with( Mockery::type('array'), Mockery::type('string'), Mockery::type('bool') )
+                     ->andReturnUsing( function ( $files, $tarfile, $delete ) use ( $filesWithTexts ) {
                          $tar = new \PharData( $tarfile );
-                         $tar->addFromString(  $tarlocalPath, $filesWithTexts[$dPath] );
+                         foreach ($files as $tarPath => $filePath) {
+                             $dPath = Str::after( $filePath , "/" );
+                             $tar->addFromString(  $tarPath, $filesWithTexts[$dPath] );
+                         }
                          return true;
                      } );
             }
@@ -284,9 +286,9 @@ class FileArchiveServiceTest extends TestCase
 
         $this->instance( FileCollectorInterface::class, Mockery::mock(
             TarFileService::class, function ( $mock ) use ( $filesWithTexts ) {
-                $mock->shouldReceive( 'collectSingleFile' )
-                     ->times(8)
-		     ->with( Mockery::type('string'), Mockery::type('string'), Mockery::type('string'), Mockery::type('bool') );
+                $mock->shouldReceive( 'collectMultipleFiles' )
+                     ->times(3)
+		     ->with( Mockery::type('array'), Mockery::type('string'), Mockery::type('bool') );
             } )
         );
 
@@ -310,7 +312,7 @@ class FileArchiveServiceTest extends TestCase
             $this->app->make( FileCollectorInterface::class)
         );
 
-        $actualFilePath = $service->buildTarFromAipCollectionIncrementally( [$this->aip, $this->aip] );
+        $actualFilePath = $service->buildTarFromAipCollectionIncrementally( collect([$this->aip, $this->aip]) );
     }
 
 }
