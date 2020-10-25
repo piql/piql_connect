@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use Illuminate\Support\Facades\Storage;
+use splitbrain\PHPArchive\Tar;
 use Log;
 
 class TarFileService implements \App\Interfaces\FileCollectorInterface
@@ -28,8 +29,10 @@ class TarFileService implements \App\Interfaces\FileCollectorInterface
     public function collectSingleFile( string $sourceFilePath, string $collectionPath, string $destinationFilePath, bool $deleteWhenCollected ) : bool
     {
         try {
-            $tar = new \PharData( $destinationFilePath );
+            $tar = new Tar();
+            $tar->create($destinationFilePath);
             $tar->addFile( $sourceFilePath, $collectionPath );
+            $tar->close();
             if( $deleteWhenCollected ) {
                 unlink( $sourceFilePath );
             }
