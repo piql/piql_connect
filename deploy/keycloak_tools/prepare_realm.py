@@ -4,7 +4,7 @@ import uuid
 
 # If any of the required command line arguments are missing, display a semi-helpful 
 # text and then halt execution
-usage = "Usage: python3 randomize_UUID.py <input file> <output file> <realm name> <realm display name (in quotes)>"
+usage = "Usage: python3 prepare_realm.py <input file> <output file> <realm name> <realm display name (in quotes)>"
 if len(sys.argv) != 5:
     print(usage)
     quit()
