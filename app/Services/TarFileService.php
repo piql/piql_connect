@@ -16,9 +16,7 @@ class TarFileService implements \App\Interfaces\FileCollectorInterface
     public function collectDirectory( string $sourceDirectoryPath, string $destinationFilePath ) : bool
     {
         try {
-            $tar = new Tar();
-            $tar->create( $destinationFilePath );
-            $this->buildFromDirectory($tar, $sourceDirectoryPath );
+            $this->buildFromDirectory($destinationFilePath, $sourceDirectoryPath );
         } catch ( \Exception $ex ) {
             Log::error( "Failed to collect files from {$sourceDirectoryPath} into tarball {$destinationFilePath}: {$ex->getMessage()}" );
             throw $ex;
@@ -29,9 +27,7 @@ class TarFileService implements \App\Interfaces\FileCollectorInterface
     public function collectMultipleFiles( array $sourceFilePaths, string $destinationFilePath, bool $deleteWhenCollected ) : bool
     {
         try {
-            $tar = new Tar();
-            $tar->create( $destinationFilePath );
-            $this->buildFromIterator($tar, new \ArrayIterator($sourceFilePaths) );
+            $this->buildFromIterator($destinationFilePath, $sourceFilePaths );
         } catch ( \Exception $ex ) {
             Log::error( "Failed to collect the files into tarball {$destinationFilePath}: {$ex->getMessage()}" );
             throw $ex;
@@ -48,24 +44,23 @@ class TarFileService implements \App\Interfaces\FileCollectorInterface
         return true;
     }
 
-    private function buildFromIterator(&$tar, $array) {
-        foreach ($array as $fileName=>$file) {
+    private function buildFromIterator($destinationFilePath, array $sourceFilePaths) {
+        $tar = new Tar();
+        $tar->create( $destinationFilePath );
+        foreach ($sourceFilePaths as $fileName=>$file) {
             if (is_file($file)){
                 $tar->addFile($file, $fileName);
             }
         }
     }
 
-    private function buildFromDirectory(&$tar, $dir) {
-        $rii = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($dir));
-        $dirLen = strlen($dir);
-        if (substr($dir, -1) != '/') {
-            $dirLen++;
-        }
+    private function buildFromDirectory($destinationFilePath, $dir) {
+        $tar = new Tar();
+        $tar->create( $destinationFilePath );
+        $dirLen = strlen(realpath($dir));
         foreach ($rii as $file) {
             if ($file->isFile()){
-                $path = $file->getPathname();
-                $tar->addFile($path, substr($path, $dirLen - strlen($path)));
+                $tar->addFile($path, substr($path, $dirLen - strlen($path) + 1));
             }
         }
     }
