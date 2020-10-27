@@ -146,7 +146,7 @@ export default {
                 },
                 chunking: {
                     enabled: true,
-                    partSize: 1024*768,
+                    partSize: 1024*1024*5,
                     mandatory: true,
                     concurrent: {
                         enabled: false
