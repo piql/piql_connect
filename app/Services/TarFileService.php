@@ -57,10 +57,12 @@ class TarFileService implements \App\Interfaces\FileCollectorInterface
     private function buildFromDirectory($destinationFilePath, $dir) {
         $tar = new Tar();
         $tar->create( $destinationFilePath );
+        $rii = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($dir));
         $dirLen = strlen(realpath($dir));
         foreach ($rii as $file) {
             if ($file->isFile()){
-                $tar->addFile($path, substr($path, $dirLen - strlen($path) + 1));
+            	$path = realpath($file->getPathname());
+            	$tar->addFile($path, substr($path, $dirLen - strlen($path) + 1));
             }
         }
     }
