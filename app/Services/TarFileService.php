@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use Illuminate\Support\Facades\Storage;
+use splitbrain\PHPArchive\Tar;
 use Log;
 
 class TarFileService implements \App\Interfaces\FileCollectorInterface
@@ -15,8 +16,9 @@ class TarFileService implements \App\Interfaces\FileCollectorInterface
     public function collectDirectory( string $sourceDirectoryPath, string $destinationFilePath ) : bool
     {
         try {
-            $tar = new \PharData( $destinationFilePath );
-            $tar->buildFromDirectory( $sourceDirectoryPath );
+            $tar = new Tar();
+            $tar->create( $destinationFilePath );
+            $this->buildFromDirectory($tar, $sourceDirectoryPath );
         } catch ( \Exception $ex ) {
             Log::error( "Failed to collect files from {$sourceDirectoryPath} into tarball {$destinationFilePath}: {$ex->getMessage()}" );
             throw $ex;
@@ -27,8 +29,9 @@ class TarFileService implements \App\Interfaces\FileCollectorInterface
     public function collectMultipleFiles( array $sourceFilePaths, string $destinationFilePath, bool $deleteWhenCollected ) : bool
     {
         try {
-            $tar = new \PharData( $destinationFilePath );
-            $tar->buildFromIterator( new \ArrayIterator($sourceFilePaths) );
+            $tar = new Tar();
+            $tar->create( $destinationFilePath );
+            $this->buildFromIterator($tar, new \ArrayIterator($sourceFilePaths) );
         } catch ( \Exception $ex ) {
             Log::error( "Failed to collect the files into tarball {$destinationFilePath}: {$ex->getMessage()}" );
             throw $ex;
@@ -43,5 +46,27 @@ class TarFileService implements \App\Interfaces\FileCollectorInterface
         }
 
         return true;
+    }
+
+    private function buildFromIterator(&$tar, $array) {
+        foreach ($array as $fileName=>$file) {
+            if (is_file($file)){
+                $tar->addFile($file, $fileName);
+            }
+        }
+    }
+
+    private function buildFromDirectory(&$tar, $dir) {
+        $rii = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($dir));
+        $dirLen = strlen($dir);
+        if (substr($dir, -1) != '/') {
+            $dirLen++;
+        }
+        foreach ($rii as $file) {
+            if ($file->isFile()){
+                $path = $file->getPathname();
+                $tar->addFile($path, substr($path, $dirLen - strlen($path)));
+            }
+        }
     }
 }
