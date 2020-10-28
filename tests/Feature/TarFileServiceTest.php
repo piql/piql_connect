@@ -18,7 +18,7 @@ class TarFileServiceTest extends TestCase
     {
         $bigFileName = str_repeat('a', 240) . '.txt';
         $storage = Storage::fake('tar1');
-        $storage->put($bigFileName, "Hello world");
+        $storage->put($bigFileName, "fake file");
         $tarFile = $storage->path(time() . '.tar');
         $bigFileNamePath = $storage->path($bigFileName);
         $this->tarFileService->collectMultipleFiles(array(basename($bigFileName) => $bigFileNamePath), $tarFile, false);
@@ -38,12 +38,11 @@ class TarFileServiceTest extends TestCase
         $bigFileName = str_repeat('a', 240) . '.txt';
         $pathTmp = 'tmp/';
         $storage = Storage::fake('tar2');
-        $storage->put($pathTmp . $bigFileName, "Hello world");
+        $storage->put($pathTmp . $bigFileName, "fake file");
         $testPath = $storage->path($pathTmp);
         $bigFileName = str_repeat('a', 240) . '.txt';
         $bigFileNamePath = $testPath . str_repeat('a', 240) . '.txt';
         $tarFile = $storage->path(time() . '.tar');
-        $storage->put($bigFileNamePath, "fake file");
         $this->tarFileService->collectDirectory($testPath, $tarFile);
         $this->assertEquals(true, file_exists($tarFile));
         $tar = new Tar();
