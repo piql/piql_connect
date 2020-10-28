@@ -29,6 +29,7 @@ class TarFileServiceTest extends TestCase
         mkdir($outPath);
         $tar->extract($outPath);
         $this->assertEquals(true, file_exists($outPath . '/' . $bigFileName));
+        $this->assertStringContainsString('POSIX', exec('file ' . $tarFile));
         unlink($bigFileNamePath);
         unlink($tarFile);
     }
@@ -51,6 +52,7 @@ class TarFileServiceTest extends TestCase
         mkdir($outPath);
         $tar->extract($outPath);
         $this->assertEquals(true, file_exists($outPath . '/' . $bigFileName));
+        $this->assertStringContainsString('POSIX', exec('file ' . $tarFile));
         unlink($bigFileNamePath);
         unlink($tarFile);
     }
