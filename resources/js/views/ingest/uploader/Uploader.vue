@@ -317,11 +317,6 @@ export default {
         FineUploader,
         Dropzone
     },
-    mounted() {
-        this.fetchUserSettings().then(data => {
-            this.pageSize = data.interface.tableRowCount;
-        })
-    },
     computed: {
         authToken() {
             if( this.authMode == "CSRF" ) {
@@ -595,6 +590,9 @@ export default {
         }
     },
     async mounted() {
+        this.fetchUserSettings().then(data => {
+            this.pageSize = data.interface.tableRowCount;
+        })
         let queryPage = parseInt(this.$route.query.page ?? "1");
         this.currentPage = queryPage;
         this.pageFrom = 1;
