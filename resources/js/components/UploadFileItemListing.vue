@@ -19,7 +19,10 @@
                           <div v-else>
                               <span class="d-inline" tabindex="0" data-toggle="tooltip" :title="file.filename">
                                   <div class="text-left">
-                                      <label><input type="checkbox" class="fileSel fileChk" :value="idx" v-model="selected"/> {{file.filename}}</label>
+                                      <label>
+                                          <input type="checkbox" class="fileSel fileChk" :value="idx" v-model="selected"/> 
+                                          <span class='fileName'>{{file.filename}}</span>
+                                        </label>
                                   </div>
                               </span>
                           </div>

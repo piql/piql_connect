@@ -11,7 +11,7 @@
             </thead>
             <tbody>
                 <tr v-for="item in items" v-bind:key="item.id">
-                    <td>{{ item.name }}</td>
+                    <td><span :class="item.name">{{ item.name }}</span></td>
                     <td>{{ item.size | prettyBytes }}</td>
                     <td>{{ formatShortDate( item.created_at ) }}</td>
                     <td>{{ translatedStatus( item.status ) }}</td>
@@ -86,7 +86,7 @@ export default {
                     filter += "?page=" + query.page;
                 }
                 return filter;
-            }
+            },
 
         }
 }

@@ -45,6 +45,7 @@
                                 :multiple="true"
                                 :uploader="uploader" style="margin-right: 0px; width:99%; height:1s0vh;">
                                     <file-input multiple
+                                        id="fileUpload"
                                         :uploader="uploader">
                                         <p class="dz-text"><i class="fas fa-cloud-upload-alt"></i> {{$t("upload.addFileButton")}}</p>
                                     </file-input>

@@ -3,8 +3,8 @@
             failures="0"
             tests="0">
 
-  <testsuite name="login"
-    errors="1" failures="0" hostname="" id="" package="login" skipped="1"
+  <testsuite name="ingest"
+    errors="1" failures="0" hostname="" id="" package="ingest" skipped="2"
     tests="0" time="0.000" timestamp="">
   
 
@@ -34,7 +34,12 @@
   
     
     <testcase
-      name="Test Login" classname="login">
+      name="Step One: Login into piql_connect" classname="ingest">
+      <skipped />
+    </testcase>
+    
+    <testcase
+      name="Step Two: Ingest Upload" classname="ingest">
       <skipped />
     </testcase>
     
