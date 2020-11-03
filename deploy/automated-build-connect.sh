@@ -150,6 +150,16 @@ KEYCLOAK_APPEND_DECODED_TOKEN=true
 KEYCLOAK_ALLOWED_RESOURCES="piql-connect-api"
 ' >> $envfile || exit $?
 
+if [[ ! -z $APP_AUTH_SERVICE_USERNAME ]] ; then
+  replaceString=$(cat .env | grep APP_AUTH_SERVICE_USERNAME)
+  sed -i "s/$replaceString/APP_AUTH_SERVICE_USERNAME=$APP_AUTH_SERVICE_USERNAME/g" .env || exit $?
+fi
+
+if [[ ! -z $APP_AUTH_SERVICE_PASSWORD ]] ; then
+  replaceString=$(cat .env | grep APP_AUTH_SERVICE_PASSWORD)
+  sed -i "s/$replaceString/APP_AUTH_SERVICE_PASSWORD=$APP_AUTH_SERVICE_PASSWORD/g" .env || exit $?
+fi
+
 echo "Update AM service callbacks"
 if [[ ! -z $UPDATE_AM_SERVICE_CALLBACKS ]] ; then
   ./update-service-callbacks.php || exit $?
