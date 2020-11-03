@@ -13,6 +13,11 @@ fi
 
 # Select hostname
 currHostname=$CONNECT_HOSTNAME
+if [[ -z $CONNECT_HOSTNAME ]] ; then
+  echo "CONNECT_HOSTNAME is not set"
+  exit 1
+fi
+
 echo "Hostname to be used: $currHostname"
 ping -c4 $currHostname
 if [ $? -ne 0 ] ; then
@@ -45,8 +50,8 @@ if [[ ! -z $STORAGE_LOCATION_ID ]] ; then
   sed -i "s/$replaceString/STORAGE_LOCATION_ID=$STORAGE_LOCATION_ID/g" .env || exit $?
 fi
 
-#generate environment.js
-./init-auth-client.sh || exit $?
+echo "Generate environment.js"
+./deploy/init-auth-client.sh || exit $?
 
 echo "Composer"
 composer install || exit $?
