@@ -6,7 +6,7 @@ use App\Bag;
 use App\Job;
 use App\Http\Resources\MetadataResource;
 use App\Metadata;
-use App\User;
+use App\Auth\User;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
