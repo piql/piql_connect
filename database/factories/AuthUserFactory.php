@@ -28,5 +28,6 @@ $factory->define(User::class, function (Faker $faker) {
     $user->email = $user->preferred_username.'@example.com';
     $user->given_name = $names[0];
     $user->family_name = $names[1];
+    \App\UserSetting::create([ 'user_id' => $user->sub ]);
     return (array) $user;
 });
