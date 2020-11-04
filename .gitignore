@@ -2,6 +2,7 @@
 /public
 /storage/
 /vendor
+/tests_output
 .env
 .env.testing
 .phpunit.result.cache
@@ -53,5 +54,8 @@ composer.phar
 piql_connect.code-workspace
 resources/js/app.jse
 resources/js/environment.js
+
+geckodriver.log
+chromedriver.log
 
 .vscode/settings.json
