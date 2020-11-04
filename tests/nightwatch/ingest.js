@@ -1,4 +1,5 @@
 module.exports = {
+  '@disabled': true,
     'Step One: Login into piql_connect' : function(browser) {
       browser
         .url('http://localhost/')
