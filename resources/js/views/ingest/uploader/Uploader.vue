@@ -146,7 +146,7 @@ export default {
                 },
                 chunking: {
                     enabled: true,
-                    partSize: 1024*768,
+                    partSize: 1024*1024*5,
                     mandatory: true,
                     concurrent: {
                         enabled: false
@@ -316,11 +316,6 @@ export default {
     components: {
         FineUploader,
         Dropzone
-    },
-    mounted() {
-        this.fetchUserSettings().then(data => {
-            this.pageSize = data.interface.tableRowCount;
-        })
     },
     computed: {
         authToken() {
@@ -595,6 +590,9 @@ export default {
         }
     },
     async mounted() {
+        this.fetchUserSettings().then(data => {
+            this.pageSize = data.interface.tableRowCount;
+        })
         let queryPage = parseInt(this.$route.query.page ?? "1");
         this.currentPage = queryPage;
         this.pageFrom = 1;
