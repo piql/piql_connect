@@ -53,6 +53,7 @@ class User extends Authenticatable
             $dir=storage_path("app/data/keycloak/users/");
             if(!File::isDirectory($dir))File::makeDirectory($dir, 0777, true, true);
             file_put_contents(storage_path("app/data/keycloak/users/$id.json"), $this->toJson()['token']);
+            // \App\UserSetting::create([ 'user_id' => $id ]);
         } catch (Exception $e) {
             return false;
         }
@@ -65,27 +66,24 @@ class User extends Authenticatable
         return $this;
     }
 
-    public function getGivenNameAttribute() {
-        return isset($this->token) ? $this->token->given_name : null;
-    }
-
     public function getAccountUuidAttribute()
     {
 		/* TODO: Get rid of this hacky workaround -
 			the auth user model must support everything the eloquent user model does! */
-		    return \App\User::find( auth()->id() )->account->uuid;
-	  }
+		return \App\User::find( auth()->id() )->account->uuid;
+	}
 
     public function getUsernameAttribute()
     {
 		/* TODO: Get rid of this hacky workaround -
 			the auth user model must support everything the eloquent user model does! */
-		    return \App\User::find( auth()->id() )->username;
-    }
+		return \App\User::find( auth()->id() )->username;
+	}
 
 
-    public function account()
+	public function account()
     {
-	    return \App\User::find( auth()->id() )->account();
+		return \App\User::find( auth()->id() )->account();
     }
+
 }
