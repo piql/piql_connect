@@ -78,9 +78,9 @@ export default {
       file.progressPercentage = this.progressPercentage;
       file.isUploading = this.isUploading;
     });
-    // this.fetchUserSettings().then(data => {
-    //   this.perPage = data.interface.tableRowCount;
-    // }); there is no tableRowCount at this object key
+    this.fetchUserSettings().then(data => {
+      this.perPage = data.interface.tableRowCount;
+    }); //there is no tableRowCount at this object key
   },
   methods: {
     ...mapActions(['fetchUserSettings']),    
@@ -247,9 +247,9 @@ export default {
     },
     userSettings() {
         if(this.userSettings === undefined || this.userSettings == null ) return;
-       // this.perPage = this.userSettings.interface.tableRowCount; //it is not coming with the per page value
+        this.perPage = this.userSettings.interface.tableRowCount; //it is not coming with the per page value
     }
-  },
+  }
 };
 </script>
 
