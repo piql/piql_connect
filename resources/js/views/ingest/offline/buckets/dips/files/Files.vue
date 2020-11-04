@@ -56,7 +56,7 @@ export default {
     },
 
     mounted () {
-        this.openDip( this.dipId );
+        this.openDip();
     },
 
     computed: {
@@ -87,8 +87,14 @@ export default {
                 params: { bucketId: this.bucketId, dipId: this.dipId, fileId }
             });
         },
-        openDip( dipId ) {
-            axios.get("/api/v1/access/dips/"+dipId+"/files").then( async ( dipFilesResponse ) =>  {
+        apiQueryString: function() {
+            let query = this.$route.query;
+            let page = parseInt(query.page);
+            let filter = query.search ? "&search=" + query.search : "";
+            return "?" + (page && page > 1 ? "page=" + page : "") + filter;
+        },
+        openDip() {
+            axios.get("/api/v1/access/dips/" + this.dipId + "/files" + this.apiQueryString()).then( async ( dipFilesResponse ) =>  {
                 this.dipFiles = dipFilesResponse.data.data;
                 this.meta = dipFilesResponse.data.meta;
             });
@@ -115,6 +121,9 @@ export default {
             this.previewFileTypes = [];
             this.previewFileNames = [];
         }
-    }
+    },
+    watch: {
+        '$route': 'openDip'
+    },
 };
 </script>
