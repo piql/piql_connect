@@ -52,6 +52,7 @@ class TarFileService implements \App\Interfaces\FileCollectorInterface
                 $tar->addFile($file, $fileName);
             }
         }
+        $tar->close();
     }
 
     private function buildFromDirectory($destinationFilePath, $dir) {
@@ -65,5 +66,6 @@ class TarFileService implements \App\Interfaces\FileCollectorInterface
             	$tar->addFile($path, substr($path, $dirLen - strlen($path) + 1));
             }
         }
+        $tar->close();
     }
 }
