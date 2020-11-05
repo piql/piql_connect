@@ -23,4 +23,9 @@ class KeycloakClientService implements KeycloakClientInterface
     {
         return $this->client->getUsers();
     }
+
+    public function getUserById($id)
+    {
+        return $this->client->getUser(['id'=>$id]);
+    }
 }

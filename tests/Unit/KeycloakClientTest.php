@@ -27,4 +27,17 @@ class KeycloakClientTest extends TestCase
 
         $users = $service->getUsers();
     }
+
+    public function test_when_requesting_user_by_id_a_user__mathcing_id_is_returned()
+    {
+        $this->instance( KeycloakClientInterface::class, Mockery::mock(
+            KeycloakClientService::class, function ( $mock ) {
+                $mock->shouldReceive( 'getUserById' )->times(1);
+            } )
+        );
+
+        $service = $this->app->make( KeycloakClientInterface::class );
+
+        $users = $service->getUserById("user-id");
+    }
 }
