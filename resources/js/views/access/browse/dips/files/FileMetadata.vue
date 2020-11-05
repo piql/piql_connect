@@ -28,8 +28,7 @@ export default {
                 });
             }
             if (this.file) {
-                let fileArr = this.file.filename.split('-');
-                return fileArr[fileArr.length-1];
+                return this.file.filename.replace(/^(\w{8}-\w{4}-\w{4}-\w{4}-\w{12}-)/, '');
             }
             return "";
         }

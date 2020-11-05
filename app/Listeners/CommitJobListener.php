@@ -41,11 +41,13 @@ class CommitJobListener implements ShouldQueue
             $fileArchiveService = \App::make( \App\Interfaces\FileArchiveInterface::class );
 
             // Build data package
-            $aips = $job->aips()->get()->all();
+            $aips = $job->aips()->get();
             $basename = "data_{$job->uuid}";
+            Log::info('Building job data package (job id=' . $job->uuid . ', number of AIPs=' . $aips->count() . ')');
             $dataFilePath = $fileArchiveService->buildTarFromAipCollectionIncrementally($aips, $basename);
 
             // Send data package to S3
+            Log::info('Sending job data package to outbox (job id=' . $job->uuid . ', source=' . $dataFilePath . ')');
             $destinationDir = "";
             if ($this->storage->upload($this->storageLocation, $destinationDir, $dataFilePath)) {
                 unlink($dataFilePath);
@@ -56,9 +58,11 @@ class CommitJobListener implements ShouldQueue
             // Build info package
             $basename = "info_{$job->uuid}.tar";
             $infoFilePath = $this->outgoing->path($basename);
+            Log::info('Building job info package for job (job id=' . $job->uuid . ')');
             $this->createInfoPackage($infoFilePath, $job);
 
             // Send info package to S3
+            Log::info('Sending job info package to outbox (job id=' . $job->uuid . ', source=' . $infoFilePath . ')');
             $destinationDir = "";
             if ($this->storage->upload($this->storageLocation, $destinationDir, $infoFilePath)) {
                 unlink($infoFilePath);

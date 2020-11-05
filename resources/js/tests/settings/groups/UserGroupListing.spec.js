@@ -82,7 +82,8 @@ describe("GroupsListing.vue", ()=> {
             }
         })
 
-        let list = await wrapper.vm.list;
+
+        let list = await wrapper.vm.userRoles;
         expect(list.length).toBe(1);
     })
 
@@ -105,7 +106,7 @@ describe("GroupsListing.vue", ()=> {
             }
         });
 
-        let ulist = await wrapper.vm.ulist;
+        let ulist = await wrapper.vm.formattedUsers;
         expect(ulist.length).toBe(1);
     });
 })

@@ -4,6 +4,7 @@ namespace App\Services;
 
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Illuminate\Support\Collection;
 use App\Aip;
 use App\FileObject;
 use App\Interfaces\FileCollectorInterface;
@@ -54,16 +55,18 @@ class FileArchiveService implements \App\Interfaces\FileArchiveInterface
     {
         $prefix = ($prefix == null) ? Str::uuid()."-" : $prefix;
         $destinationFilePath = "{$this->destinationPath( $aip, $prefix )}.tar";
-        $aip->fileObjects->map( function ( $file ) use ( $aip, $destinationFilePath, $prefix ) {
+        $downloadedFiles = $aip->fileObjects->reduce( function ( $filePathMap, $file ) use ( $aip, $destinationFilePath, $prefix ) {
             $downloadedFileSourcePath = $this->downloadFile( $aip, $file, $prefix );
             $downloadedFileCollectionPath = Str::after( $file->fullpath, "{$aip->online_storage_path}/" );
-            $this->collector->collectSingleFile(
-                $downloadedFileSourcePath,
-                $downloadedFileCollectionPath,
-                $destinationFilePath,
-                true
-            );
+            $filePathMap[$downloadedFileCollectionPath] = $downloadedFileSourcePath;
+            return $filePathMap;
         });
+
+        $this->collector->collectMultipleFiles(
+            $downloadedFiles,
+            $destinationFilePath,
+            true
+        );
 
         try {
             /* Current implementation leaves a bunch of empty directories behind that we need to delete */
@@ -75,19 +78,22 @@ class FileArchiveService implements \App\Interfaces\FileArchiveInterface
         return $destinationFilePath;
     }
 
-    public function buildTarFromAipCollectionIncrementally( Array $aips, $basename = null ) : string
+    public function buildTarFromAipCollectionIncrementally( Collection $aips, $basename = null ) : string
     {
         $basename = ($basename == null) ? Str::uuid() : $basename;
         $destinationFilePath = "{$this->collectionDestinationPath( $basename )}.tar";
-        foreach ($aips as $aip) {
-            $downloadedFileSourcePath = $this->buildTarFromAipIncrementally($aip);
-            $this->collector->collectSingleFile(
-                $downloadedFileSourcePath,
-                basename($downloadedFileSourcePath),
-                $destinationFilePath,
-                true
-            );
-        }
+
+        $aipFiles = $aips->reduce( function ( $aipPathMap, $aip ) {
+            $aipFileSourcePath = $this->buildTarFromAipIncrementally($aip);
+            $aipPathMap[basename($aipFileSourcePath)] = $aipFileSourcePath;
+            return $aipPathMap;
+        });
+
+        $this->collector->collectMultipleFiles(
+            $aipFiles,
+            $destinationFilePath,
+            true
+        );
 
         return $destinationFilePath;
     }
