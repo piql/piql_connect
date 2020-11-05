@@ -28,7 +28,7 @@ class KeycloakClientTest extends TestCase
         $users = $service->getUsers();
     }
 
-    public function test_when_requesting_user_by_id_a_user__mathcing_id_is_returned()
+    public function test_when_requesting_user_by_id_a_user__matching_id_is_returned()
     {
         $this->instance( KeycloakClientInterface::class, Mockery::mock(
             KeycloakClientService::class, function ( $mock ) {
@@ -38,6 +38,19 @@ class KeycloakClientTest extends TestCase
 
         $service = $this->app->make( KeycloakClientInterface::class );
 
-        $users = $service->getUserById("user-id");
+        $users = $service->getUserById("user-uuid");
+    }
+
+    public function test_when_searchilg_organisation_users_only_user_with_org_id_are_returned()
+    {
+        $this->instance( KeycloakClientInterface::class, Mockery::mock(
+            KeycloakClientService::class, function ( $mock ) {
+                $mock->shouldReceive( 'searchOrganizationUsers' )->times(1);
+            } )
+        );
+
+        $service = $this->app->make( KeycloakClientInterface::class );
+
+        $users = $service->searchOrganizationUsers("org-uuid");
     }
 }
