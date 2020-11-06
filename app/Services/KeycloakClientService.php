@@ -20,9 +20,16 @@ class KeycloakClientService implements KeycloakClientInterface
         ]);
     }
 
-    public function getUsers()
+    public function getUsers() : array
     {
-        return $this->client->getUsers();
+        $response = $this->client->getUsers();
+
+        if (!is_array($response) || (count($response) != 0 && !isset($response[0]['id']))) {
+            $message = 'Keycloak: ' . 'Keycloak: Failed to get users';
+            throw new \Exception($message);
+        }
+
+        return $response;
     }
 
     public function createUser(string $accountId, User $user) : User
@@ -31,7 +38,7 @@ class KeycloakClientService implements KeycloakClientInterface
         $lastName = $this->lastName($user->full_name);
 
         // Add user to keycloak server
-        $res = $this->client->createUser([
+        $response = $this->client->createUser([
             'id' => $user->id,
             'username' => $user->username,
             'email' => $user->email,
@@ -40,11 +47,10 @@ class KeycloakClientService implements KeycloakClientInterface
             'enabled' => true,
             'attributes' => ['organization' => $accountId]
         ]);
+        $this->validateKeycloakResponse($response);
 
-        if (!isset($res['content'])) {
-            $message = isset($res['errorMessage']) ? 'Keycloak: ' . $res['errorMessage'] : 'Keycloak: Unknown error';
-            throw new \Exception($message);
-        }
+        // Get user id from keycloak
+        $user->id = $this->userId($user->username);
 
         return $user;
     }
@@ -54,7 +60,7 @@ class KeycloakClientService implements KeycloakClientInterface
         $firstName = $this->firstName($user->full_name);
         $lastName = $this->lastName($user->full_name);
 
-        $res = $this->client->updateUser([
+        $response = $this->client->updateUser([
             'id' => $userId,
             'username' => $user->username,
             'email' => $user->email,
@@ -62,35 +68,49 @@ class KeycloakClientService implements KeycloakClientInterface
             'lastName' => $lastName,
             'attributes' => ['organization' => $user->account_uuid]
         ]);
-
-        if (!isset($res['content'])) {
-            $message = isset($res['errorMessage']) ? 'Keycloak: ' . $res['errorMessage'] : 'Keycloak: Unknown error';
-            throw new \Exception($message);
-        }
+        $this->validateKeycloakResponse($response);
 
         return $user;
     }
 
     public function deleteUser(string $userId) : void
     {
-        $res = $this->client->deleteUser([
+        $response = $this->client->deleteUser([
             'id' => $userId
         ]);
-
-        if (!isset($res['content'])) {
-            $message = isset($res['errorMessage']) ? 'Keycloak: ' . $res['errorMessage'] : 'Keycloak: Unknown error';
-            throw new \Exception($message);
-        }
+        $this->validateKeycloakResponse($response);
     }
 
-    private function firstName($fullName) {
+    private function firstName($fullName) : string
+    {
         $names = explode(' ', $fullName);
         return count($names) > 0 ? $names[0] : '';
     }
 
-    private function lastName($fullName) {
+    private function lastName($fullName) : string
+    {
         // Use all names except for the first as lastname
         $names = explode(' ', $fullName);
         return count($names) > 1 ? implode(' ', array_slice($names, 1)) : '';
+    }
+
+    private function userId($username) : string
+    {
+        $users = $this->getUsers($username);
+        foreach ($users as $user) {
+            if ($user['username'] == $username) {
+                return $user['id'];
+            }
+        }
+
+        throw new \Exception('Keycloak: User with username ' . $username . ' was not found');
+    }
+
+    private function validateKeycloakResponse($response) : void
+    {
+        if (!isset($response['content']) || isset($response['errorMessage'])) {
+            $message = isset($response['errorMessage']) ? 'Keycloak: ' . $response['errorMessage'] : 'Keycloak: Unknown error';
+            throw new \Exception($message);
+        }
     }
 }

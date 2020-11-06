@@ -13,7 +13,7 @@ class KeycloakAdduser extends Command
      *
      * @var string
      */
-    protected $signature = 'keycloak:adduser {id}';
+    protected $signature = 'keycloak:adduser {id} {--update-id}';
 
     /**
      * The console command description.
@@ -41,6 +41,7 @@ class KeycloakAdduser extends Command
     public function handle()
     {
         $userId = $this->argument('id');
+        $updateId = $this->option('update-id', false);
 
         // Find user
         $user = User::find($userId);
@@ -53,6 +54,11 @@ class KeycloakAdduser extends Command
         try {
             $addedUser = $this->keycloakClient->createUser($user->account_uuid, $user);
             echo 'Added user with id ' . $addedUser->id . ' to keycloak server' . PHP_EOL;
+
+            if ($updateId) {
+                $user->update(['id' => $addedUser->id]);
+                echo 'Updated user id in piqlConnect database' . PHP_EOL;
+            }
         } catch (\Throwable $e) {
             echo 'Failed to add user' . PHP_EOL;
             echo $e->getMessage() . PHP_EOL;
