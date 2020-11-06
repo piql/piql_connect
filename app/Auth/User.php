@@ -53,7 +53,6 @@ class User extends Authenticatable
             $dir=storage_path("app/data/keycloak/users/");
             if(!File::isDirectory($dir))File::makeDirectory($dir, 0777, true, true);
             file_put_contents(storage_path("app/data/keycloak/users/$id.json"), $this->toJson()['token']);
-            // \App\UserSetting::create([ 'user_id' => $id ]);
         } catch (Exception $e) {
             return false;
         }
