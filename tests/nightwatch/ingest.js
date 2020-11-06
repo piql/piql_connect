@@ -1,7 +1,6 @@
 import env from "../../resources/js/environment";
 
 module.exports = {
-  '@disabled': true,
     'Step One: Login into piql_connect' : function(browser) {
       browser
         .url(env.url)
