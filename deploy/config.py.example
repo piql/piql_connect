@@ -1,0 +1,61 @@
+## PiqlConnect build config file
+# This file contains the configuration variables needed to set up PiqlConnect.
+#
+# Usage: Change the variables in this file to match the environment you are setting up.
+# Rename the file to config.py before you run the build.py script.
+
+# The full path to the folder where PIqlConnect resides
+piqlconnect_root_dir = '/home/piqlconnect/src/piql_connect/'
+
+# This setting will allow the update of Archivematicas service callbacks.
+# These callbaks are needed for Archivematica to notify PiqlConnect of the
+# creation of new AIPs and DIPs. In almost all cases, this should be set to True.
+# Check the readme.MD file for more important information about first-time setup
+# of these callbacks.
+update_AM_service_callbacks = True
+
+# If you are running PiqlConnect in development mode, set this to True. This will
+# set PiqlConnect to use HTTP instead of HTTPS.
+dev_environment = True
+
+# The FQDN of the host server running PiqlConnect.
+hostname = 'pc-simon-test.piql.com'
+
+# The UUID of the folder used for data exchange with Archivematica. This UUID can
+# be found in the Archivematica Storage Service console. Check readme.MD for more
+# information.
+storage_location_ID = '80677435-afa7-4d25-86e5-619eb46d0a34'
+
+# The credentials for the PiqlConnect MariaDB database.
+connect_db_username = 'connectdbuser'
+connect_db_password = 'AeJua4le'
+
+# The credentials for the MongoDB database used to store dashboard statistics.
+mongo_db_username = 'connectuser'
+mongo_db_password = 'Fw86TQZrJ5'
+
+# S3 storage configuration. These settings are provided by your storage vendor.
+S3_access_key = 'A027DQI8VXPIJETYNXZQ'
+S3_secret_key = 'OOE4owN4uin0ctQQ6VAqsDmsHnGh4AUjgrsbEFtg'
+S3_region = ''
+S3_bucket_name = 'connect-test'
+S3_URL = 'https://s3.osl1.safedc.net'
+
+# PiqlConnect authentication settings.
+keycloak_realm_public_key = 'MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAtCgLohHtEl47wJ4sW4qd7zY3Ga/HxHtMWMfvrMjy2OkM/B5Bpy3yi80pS1UUABaNqJFYvTUieA8T5s6gBaxmX3x41QERRyvkvmieyhB6AGQdRFUW1goatd1aPe+hQwroxsr25Apxg6yIUK+FaMrMj0OkwhJbmrDgvwNxGbYF3x61weFF2OOrie3t4JsWC+sJ4ZuU/d/HPEfLtesqUWbcb8lxhH7wi6UFvbwt8MUlTKOd7ZeLyR+slFCHs+Du78sEs5TK1w/ZihSc62MlUhQI87exkFJ/oCWWyMdqOnUM2TWGTISaNUN9PO0j42F9+ituXc6orshrxdi3+ixwr3z9aQIDAQAB'
+keycloak_realm_name = 'development'
+keycloak_callback_client_secret = '65b244cc-7a91-42cb-b997-5c22e7a3daa0'
+keycloak_service_username = ''
+keycloak_service_password = ''
+
+# This setting will wipe the PiqlConnect database, effectively a "factory reset" of the system.
+# WARNING: Setting this value to True will delete all data in the database. This action can only 
+# be reversed by performing a restore of the database from backup. 
+# Usually this setting should be True the first time you are setting up the system, then changed 
+# to false for subsequent updates.
+# Proceed with caution.
+complete_database_wipe = True
+
+# This setting must be set to True in order for the build process to run. The default value is 
+# False.
+config_OK = True

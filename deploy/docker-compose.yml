@@ -46,7 +46,7 @@ services:
       - ../public:/var/www/public
       - ./../storage:/var/www/storage
       - ./../storage:/var/www/public/storage
-      - ${NGINX_CONF:-./nginx/conf.d/}:/etc/nginx/conf.d/
+      - ${NGINX_CONF}:/etc/nginx/conf.d/
       - ./nginx/ssl/:/etc/nginx/ssl/
     links:
       - app
@@ -171,3 +171,4 @@ services:
 networks:
   piqlConnect-net:
     driver: bridge
+    external: true
