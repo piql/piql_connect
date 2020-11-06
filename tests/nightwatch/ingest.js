@@ -1,8 +1,10 @@
+import env from "../../resources/js/environment";
+
 module.exports = {
   '@disabled': true,
     'Step One: Login into piql_connect' : function(browser) {
       browser
-        .url('http://localhost/')
+        .url(env.url)
         .assert.urlContains('https://auth.piqlconnect.com')
         .waitForElementVisible('#kc-page-title')
         .assert.containsText('#kc-page-title','Log In')
@@ -17,7 +19,7 @@ module.exports = {
     },
     "Step Two: Ingest Upload": function (browser){
         browser
-        .url('http://localhost/ingest/uploader')
+        .url(env.url +'ingest/uploader')
         .waitForElementVisible('.titleText')
         .assert.containsText('.titleText','UPLOAD')
         .assert.visible('select[id=archivePicker]')
@@ -40,7 +42,7 @@ module.exports = {
     },
     "Step Three: Check Processing": function (browser){
         browser
-        .url('http://localhost/ingest/processing')
+        .url(env.url + 'ingest/processing')
         .waitForElementVisible('.titleText')
         .assert.containsText('.titleText','PROCESSING')
         .pause(5000)
@@ -53,7 +55,7 @@ module.exports = {
     },
     "Step Four: PiqlIT": function (browser) {
       browser
-      .url('http://localhost/ingest/offline')
+      .url(env.url + 'ingest/offline')
       .waitForElementVisible('.titleText')
       .assert.containsText('.titleText','OFFLINE STORAGE')
       .assert.visible('input[type=text]')
@@ -65,7 +67,7 @@ module.exports = {
     },
     "Step Five: Confirm Package in Status": function (browser){
       browser
-      .url('http://localhost/ingest/status')
+      .url(env.url +'ingest/status')
       .waitForElementVisible('.titleText')
       .assert.containsText('.titleText','STATUS FOR OFFLINE STORAGE')
       .waitForElementVisible('.test')
