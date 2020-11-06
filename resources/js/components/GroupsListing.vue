@@ -14,9 +14,7 @@
                             <td>{{group.name}}</td>
                             <td>{{group.description}}</td>
                             <td>
-                                <a class="btn btn-xs btn-primary" data-toggle="tooltip" :title="$t('settings.groups.editGroup')" style="color:white">
-                                    <i class="fa fa-edit"></i>
-                                    </a>
+                                
                                 <a class="btn btn-xs btn-primary" @click="showAssignUsersModal(group.id)" data-toggle="tooltip" :title="$t('settings.groups.assignUsers')" style="color:white">
                                     <i class="fa fa-users"></i>
                                     </a>
@@ -27,9 +25,7 @@
                                 <a class="btn btn-xs btn-primary" @click="showAssignModal(group.id)" data-toggle="tooltip" :title="$t('settings.groups.assignRoles')" style="color:white">
                                     <i class="fa fa-user-shield"></i>
                                     </a>
-                                <a class="btn btn-xs btn-primary" data-toggle="tooltip" :title="$t('settings.groups.deleteGroup')" style="color:white">
-                                    <i class="fa fa-trash"></i>
-                                    </a>
+                                
                             </td>
 
                         </tr>
@@ -119,6 +115,8 @@ export default {
             group: null,
             selectedRoles: [],
             selectedUsers: [],
+            ulist:[],
+            list:[]
         };
     },
 
@@ -133,17 +131,7 @@ export default {
         ...mapGetters(
             ['groupsApiResponse','userGroups','groupPageMeta','userGroupUsers','userGroupRoles','formattedUsers','userRoles']
         ),
-        ulist: async function() {
-            let users = await this.formattedUsers;
-            if( !users ) return [];
-            return users.map( u => { return { value: u.id, label: u.full_name } } );
-        },
-        list: async function() {
-            let roles = await this.userRoles;
-            if( !roles ) return [];
-            return roles.map( u => { return { value: u.id, label: u.name } } );
-        },
-
+       
         apiQueryString: function() {
             let query = this.$route.query;
             let filter = '';
@@ -158,6 +146,16 @@ export default {
     },
      watch: {
         '$route': 'dispatchRouting',
+        formattedUsers(val){
+            if(val){
+                this.ulist = val.map( u => { return { value: u.id, label: u.full_name } } );
+            }
+        },
+        userRoles(val){
+            if(val){
+                this.list = val.map( u => { return { value: u.id, label: u.name } } );
+            }
+        }
     },
     async mounted() {
        let page = this.$route.query.page;
