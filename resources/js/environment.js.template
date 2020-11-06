@@ -8,6 +8,9 @@ const keyCloakConfig = {
 }
 
 
+const url = process.env.APP_FE_URL
+
 export default {
-    keyCloakConfig
+    keyCloakConfig,
+    url
 }
