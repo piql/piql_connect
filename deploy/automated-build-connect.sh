@@ -13,6 +13,11 @@ fi
 
 # Select hostname
 currHostname=$CONNECT_HOSTNAME
+if [[ -z $CONNECT_HOSTNAME ]] ; then
+  echo "CONNECT_HOSTNAME is not set"
+  exit 1
+fi
+
 echo "Hostname to be used: $currHostname"
 ping -c4 $currHostname
 if [ $? -ne 0 ] ; then
@@ -45,8 +50,8 @@ if [[ ! -z $STORAGE_LOCATION_ID ]] ; then
   sed -i "s/$replaceString/STORAGE_LOCATION_ID=$STORAGE_LOCATION_ID/g" .env || exit $?
 fi
 
-#generate environment.js
-./init-auth-client.sh || exit $?
+echo "Generate environment.js"
+./deploy/init-auth-client.sh || exit $?
 
 echo "Composer"
 composer install || exit $?
@@ -149,6 +154,16 @@ KEYCLOAK_TOKEN_PRINCIPAL_ATTRIBUTE=preferred_username
 KEYCLOAK_APPEND_DECODED_TOKEN=true
 KEYCLOAK_ALLOWED_RESOURCES="piql-connect-api"
 ' >> $envfile || exit $?
+
+if [[ ! -z $APP_AUTH_SERVICE_USERNAME ]] ; then
+  replaceString=$(cat .env | grep APP_AUTH_SERVICE_USERNAME)
+  sed -i "s/$replaceString/APP_AUTH_SERVICE_USERNAME=$APP_AUTH_SERVICE_USERNAME/g" .env || exit $?
+fi
+
+if [[ ! -z $APP_AUTH_SERVICE_PASSWORD ]] ; then
+  replaceString=$(cat .env | grep APP_AUTH_SERVICE_PASSWORD)
+  sed -i "s/$replaceString/APP_AUTH_SERVICE_PASSWORD=$APP_AUTH_SERVICE_PASSWORD/g" .env || exit $?
+fi
 
 echo "Update AM service callbacks"
 if [[ ! -z $UPDATE_AM_SERVICE_CALLBACKS ]] ; then
