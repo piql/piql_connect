@@ -59,3 +59,8 @@ geckodriver.log
 chromedriver.log
 
 .vscode/settings.json
+.vscode/
+.env.backup
+deploy/__pycache__/
+deploy/config.py
+
