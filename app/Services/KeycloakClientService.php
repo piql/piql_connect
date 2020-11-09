@@ -32,7 +32,7 @@ class KeycloakClientService implements KeycloakClientInterface
         return $response;
     }
 
-    public function createUser(string $accountId, User $user) : User
+    public function createUser(string $organizationId, User $user) : User
     {
         $firstName = $this->firstName($user->full_name);
         $lastName = $this->lastName($user->full_name);
@@ -45,7 +45,7 @@ class KeycloakClientService implements KeycloakClientInterface
             'firstName' => $firstName,
             'lastName' => $lastName,
             'enabled' => true,
-            'attributes' => ['organization' => $accountId]
+            'attributes' => ['organization' => $organizationId]
         ]);
         $this->validateKeycloakResponse($response);
 
@@ -55,18 +55,18 @@ class KeycloakClientService implements KeycloakClientInterface
         return $user;
     }
 
-    public function editUser(string $userId, User $user) : User
+    public function editUser(string $organizationId, User $user) : User
     {
         $firstName = $this->firstName($user->full_name);
         $lastName = $this->lastName($user->full_name);
 
         $response = $this->client->updateUser([
-            'id' => $userId,
+            'id' => $user->id,
             'username' => $user->username,
             'email' => $user->email,
             'firstName' => $firstName,
             'lastName' => $lastName,
-            'attributes' => ['organization' => $user->account_uuid]
+            'attributes' => ['organization' => $organizationId]
         ]);
         $this->validateKeycloakResponse($response);
 
