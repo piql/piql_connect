@@ -21,6 +21,7 @@ Ubuntu 18.04 or similar operating system. Run the following to get prerequisites
 ```
 $ sudo apt-get install php7.4-cli php7.4-xml php7.4-mbstring php7.4-bcmath php7.4-mysql php7.4-zip \
   php7.4-dev php7.4-mongodb composer npm docker.io docker-compose python3
+$ docker network create piqlConnect-net
 ```
 An installation of Archivematica ( https://github.com/artefactual/archivematica ) set up using docker-compose (See Archivematica Documentation)
 
