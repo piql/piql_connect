@@ -54,7 +54,7 @@ class KeycloakClientTest extends TestCase
 
         $service = $this->app->make( KeycloakClientInterface::class );
 
-        $retUser = $service->addUser($this->user->account_uuid, $this->user);
+        $service->addUser($this->user->account_uuid, $this->user);
     }
 
     public function test_when_updating_a_user_the_user_is_updated()
@@ -67,7 +67,7 @@ class KeycloakClientTest extends TestCase
 
         $service = $this->app->make( KeycloakClientInterface::class );
 
-        $retUser = $service->editUser(strval($this->user->id), $this->user);
+        $service->editUser(strval($this->user->id), $this->user);
     }
 
     public function test_when_deleting_a_user_the_user_is_deleted()
@@ -80,6 +80,6 @@ class KeycloakClientTest extends TestCase
 
         $service = $this->app->make( KeycloakClientInterface::class );
 
-        $retUser = $service->deleteUser(strval($this->user->id));
+        $service->deleteUser(strval($this->user->id));
     }
 }
