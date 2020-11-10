@@ -168,25 +168,6 @@ export default {
             }
             return files.slice(from, to);
         },
-/*
-    setPages() {
-      let numberOfPages = Math.ceil(
-        this.sortedFilesUploading.length / this.perPage
-      );
-      for (let index = 1; index <= numberOfPages; index++) {
-        this.pages.push(index);
-      }
-    },
-    paginate(files) {
-      let urlPage = this.$route.query.page;
-      let page = urlPage >= 1 ? urlPage : 1;
-      let perPage = this.perPage;
-      let from = page * perPage - perPage;
-      let to = page * perPage;
-      return files.slice(from, to);
-    },
-
- */
   },
   computed: {
     ...mapGetters(['userSettings']),
