@@ -16,7 +16,6 @@ use App\FileObject;
 use App\Traits\UserSettingRequest;
 use Illuminate\Support\Facades\Auth;
 use Log;
-use App\Holding;
 
 class DipController extends Controller
 {

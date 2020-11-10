@@ -65,27 +65,24 @@ class User extends Authenticatable
         return $this;
     }
 
-    public function getGivenNameAttribute() {
-        return isset($this->token) ? $this->token->given_name : null;
-    }
-
     public function getAccountUuidAttribute()
     {
 		/* TODO: Get rid of this hacky workaround -
 			the auth user model must support everything the eloquent user model does! */
-		    return \App\User::find( auth()->id() )->account->uuid;
-	  }
+		return \App\User::find( auth()->id() )->account->uuid;
+	}
 
     public function getUsernameAttribute()
     {
 		/* TODO: Get rid of this hacky workaround -
 			the auth user model must support everything the eloquent user model does! */
-		    return \App\User::find( auth()->id() )->username;
-    }
+		return \App\User::find( auth()->id() )->username;
+	}
 
 
-    public function account()
+	public function account()
     {
-	    return \App\User::find( auth()->id() )->account();
+		return \App\User::find( auth()->id() )->account();
     }
+
 }

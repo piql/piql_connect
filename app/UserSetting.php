@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Exception;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Cache;
 
@@ -131,8 +132,12 @@ class UserSetting extends Model
 
     public function getDefaultAipStorageLocationIdAttribute()
     {
-        return $this->get( "storage.defaultAipStorageLocationId",
-            \App\StorageLocation::where('storable_type', 'App\Aip')->firstOrFail()->id );
+        try {
+            return $this->get( "storage.defaultAipStorageLocationId",
+                \App\StorageLocation::where('storable_type', 'App\Aip')->firstOrFail()->id );
+        } catch (Exception $e) {
+            return null;
+        }
     }
 
     public function setDefaultAipStorageLocationIdAttribute( $value )
