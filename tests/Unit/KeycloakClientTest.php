@@ -27,4 +27,48 @@ class KeycloakClientTest extends TestCase
 
         $users = $service->getUsers();
     }
+
+    public function test_a_user_can_change_password()
+    {
+        $this->instance( KeycloakClientInterface::class, Mockery::mock(
+            KeycloakClientService::class, function($mock) {
+                $mock->shouldReceive('changePassword')->times(1);
+            } )
+        );
+        $service = $this->app->make( KeycloakClientInterface::class );
+        $users = $service->changePassword('id', 'password');
+    }
+
+    public function test_can_globally_logout_user()
+    {
+        $this->instance( KeycloakClientInterface::class, Mockery::mock(
+            KeycloakClientService::class, function($mock) {
+                $mock->shouldReceive('logoutUser')->times(1);
+            } )
+        );
+        $service = $this->app->make( KeycloakClientInterface::class );
+        $users = $service->logoutUser('id');
+    }
+
+    public function test_can_block_user_from_logging_in()
+    {
+        $this->instance( KeycloakClientInterface::class, Mockery::mock(
+            KeycloakClientService::class, function($mock) {
+                $mock->shouldReceive('blockUser')->times(1);
+            } )
+        );
+        $service = $this->app->make( KeycloakClientInterface::class );
+        $users = $service->blockUser('id');
+    }
+
+    public function test_can_ubblock_user_to_enable_login()
+    {
+        $this->instance( KeycloakClientInterface::class, Mockery::mock(
+            KeycloakClientService::class, function($mock) {
+                $mock->shouldReceive('unblockUser')->times(1);
+            } )
+        );
+        $service = $this->app->make( KeycloakClientInterface::class );
+        $users = $service->unblockUser('id');
+    }
 }
