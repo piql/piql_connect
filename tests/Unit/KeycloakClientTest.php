@@ -14,21 +14,21 @@ class FakeKeycloakClient
 {
     private $users;
     private $fakeResponse;
-    private $fakeResponseSet;
+    private $fakeResponseFunction;
     private $lastAssignedId;
 
     public function __construct(Collection $users)
     {
         $this->users = $users;
         $this->fakeResponse = null;
-        $this->fakeResponseSet = false;
+        $this->fakeResponseFunction = null;
         $this->lastAssignedId = '';
     }
 
-    public function setFakeResponse($response)
+    public function setFakeResponse($function, $response)
     {
         $this->fakeResponse = $response;
-        $this->fakeResponseSet = true;
+        $this->fakeResponseFunction = $function;
     }
 
     public function lastAssignedId()
@@ -38,7 +38,7 @@ class FakeKeycloakClient
 
     public function getUsers()
     {
-        if ($this->fakeResponseSet) {
+        if ($this->fakeResponseFunction == __FUNCTION__) {
             return $this->fakeResponse;
         }
 
@@ -47,7 +47,8 @@ class FakeKeycloakClient
                 'id' => $user->id,
                 'username' => $user->username,
                 'password' => $user->password,
-                'full_name' => $user->full_name,
+                'first_name' => $user->full_name,
+                'last_name' => $user->full_name,
                 'email' => $user->email,
                 'account_uuid' => $user->account_uuid ];
         })->toArray();
@@ -55,6 +56,22 @@ class FakeKeycloakClient
 
     public function createUser(array $userInfo)
     {
+        if ($this->fakeResponseFunction == __FUNCTION__) {
+            return $this->fakeResponse;
+        }
+
+        if (!is_array($userInfo)) {
+            return ['errorMessage' => 'Invalid input'];
+        }
+
+        if (!isset($userInfo['id']) ||
+            !isset($userInfo['username']) ||
+            strlen($userInfo['id']) == 0 ||
+            strlen($userInfo['username']) == 0 ||
+            count($userInfo) > 7) {
+            return ['errorMessage' => 'Invalid input'];
+        }
+
         foreach ($this->users as $user) {
             if ($user->username == $userInfo['username']) {
                 $this->lastAssignedId = Str::uuid();
@@ -62,7 +79,69 @@ class FakeKeycloakClient
                 break;
             }
         }
+
+        // Missing username is not valid
+        if (!isset($userInfo['username']) || strlen($userInfo['username']) == 0) {
+            return ['errorMessage' => 'Username is not set'];
+        }
+
         return ['content' => ''];
+    }
+
+    public function updateUser(array $userInfo)
+    {
+        if ($this->fakeResponseFunction == __FUNCTION__) {
+            return $this->fakeResponse;
+        }
+
+        if (!is_array($userInfo)) {
+            return ['errorMessage' => 'Invalid input'];
+        }
+
+        if (!isset($userInfo['id']) ||
+            !isset($userInfo['username']) ||
+            strlen($userInfo['id']) == 0 ||
+            strlen($userInfo['username']) == 0 ||
+            count($userInfo) > 6) {
+            return ['errorMessage' => 'Invalid input'];
+        }
+
+        foreach ($this->users as $user) {
+            if ($user->username == $userInfo['username'] || $user->id == $userInfo['id']) {
+                $user->id = $userInfo['id'];
+                $user->username = $userInfo['username'];
+                $user->email = $userInfo['email'];
+                return ['content' => ''];
+            }
+        }
+
+        return ['errorMessage' => 'Could not find user'];
+    }
+
+    public function deleteUser(array $userInfo)
+    {
+        if ($this->fakeResponseFunction == __FUNCTION__) {
+            return $this->fakeResponse;
+        }
+
+        if (!is_array($userInfo)) {
+            return ['errorMessage' => 'Invalid input'];
+        }
+
+        if (!isset($userInfo['id']) ||
+            strlen($userInfo['id']) == 0 ||
+            count($userInfo) != 1) {
+            return ['errorMessage' => 'Invalid input'];
+        }
+
+        foreach ($this->users as $user) {
+            if ($user->id == $userInfo['id']) {
+                $this->users->forget($userInfo['id']);
+                return ['content' => ''];
+            }
+        }
+
+        return ['errorMessage' => 'Could not find user'];
     }
 }
 
@@ -123,19 +202,19 @@ class KeycloakClientTest extends TestCase
         $this->expectException(\Exception::class);
 
         // Null response is not valid
-        $this->client->setFakeResponse(null);
+        $this->client->setFakeResponse('getUsers', null);
         $users = $this->service->getUsers();
 
         // Response cannot be string
-        $this->client->setFakeResponse('something');
+        $this->client->setFakeResponse('getUsers', 'something');
         $users = $this->service->getUsers();
 
         // Array is flattened, expecting multi-dimensional array
-        $this->client->setFakeResponse(['id' => $users[0]->id, 'username' => $users[0]->username]);
+        $this->client->setFakeResponse('getUsers', ['id' => $users[0]->id, 'username' => $users[0]->username]);
         $users = $this->service->getUsers();
 
         // User id is a required attribute
-        $this->client->setFakeResponse([['username' => $users[0]->username], ['username' => $users[1]->username]]);
+        $this->client->setFakeResponse('getUsers', [['username' => $users[0]->username], ['username' => $users[1]->username]]);
         $users = $this->service->getUsers();
     }
 
@@ -152,56 +231,100 @@ class KeycloakClientTest extends TestCase
         $this->assertNotEquals($user->id, $this->users[0]);
     }
 
+    public function test_when_creating_a_user_without_username_exception_is_thrown()
+    {
+        $this->expectException(\Exception::class);
+        $user = $this->users[0];
+	$user->username = '';
+        $this->service->createUser($user->account_uuid, $user);
+    }
+
     public function test_when_creating_a_user_and_response_is_misformed_exception_is_thrown()
     {
         $this->expectException(\Exception::class);
 
         // Null response is not valid
-        $this->client->setFakeResponse(null);
+        $this->client->setFakeResponse('createUser', null);
         $this->service->createUser($this->users[0]->account_uuid, $this->users[0]);
 
         // Response cannot be string
-        $this->client->setFakeResponse('something');
+        $this->client->setFakeResponse('createUser', 'something');
         $this->service->createUser($this->users[0]->account_uuid, $this->users[0]);
 
         // Empty array is not valid response
-        $this->client->setFakeResponse([]);
+        $this->client->setFakeResponse('createUser', []);
         $this->service->createUser($this->users[0]->account_uuid, $this->users[0]);
 
         // Array with random data is not valid response
-        $this->client->setFakeResponse(['convenient']);
+        $this->client->setFakeResponse('createUser', ['convenient']);
         $this->service->createUser($this->users[0]->account_uuid, $this->users[0]);
-
-        // TODO: Decide which function we're setting faked response for. createUser is calling getUsers
     }
 
-
-
-/*
     public function test_when_updating_a_user_the_user_is_updated()
     {
-        $this->instance( KeycloakClientInterface::class, Mockery::mock(
-            KeycloakClientService::class, function ( $mock ) {
-                $mock->shouldReceive( 'editUser' )->times(1);
-            } )
-        );
+        $user = $this->service->editUser($this->users[0]->account_uuid, $this->users[0]);
+        $this->assertInstanceOf(User::class, $user);
+        $this->assertEquals($user, $this->users[0]);
+    }
 
-        $service = $this->app->make( KeycloakClientInterface::class );
+    public function test_when_updating_missing_user_exception_is_thrown()
+    {
+        $this->expectException(\Exception::class);
+        $user = $this->users[0];
+        $user->username = '';
+        $this->service->editUser($user->account_uuid, $user);
+    }
 
-        $service->editUser(strval($this->user->id), $this->user);
+    public function test_when_updating_a_user_and_response_is_misformed_exception_is_thrown()
+    {
+        $this->expectException(\Exception::class);
+
+        // Null response is not valid
+        $this->client->setFakeResponse('updateUser', null);
+        $this->service->editUser($this->users[0]->account_uuid, $this->users[0]);
+
+        // Response cannot be string
+        $this->client->setFakeResponse('updateUser', 'something');
+        $this->service->editUser($this->users[0]->account_uuid, $this->users[0]);
+
+        // Empty array is not valid response
+        $this->client->setFakeResponse('updateUser', []);
+        $this->service->editUser($this->users[0]->account_uuid, $this->users[0]);
+
+        // Array with random data is not valid response
+        $this->client->setFakeResponse('updateUser', ['convenient']);
+        $this->service->editUser($this->users[0]->account_uuid, $this->users[0]);
     }
 
     public function test_when_deleting_a_user_the_user_is_deleted()
     {
-        $this->instance( KeycloakClientInterface::class, Mockery::mock(
-            KeycloakClientService::class, function ( $mock ) {
-                $mock->shouldReceive( 'deleteUser' )->times(1);
-            } )
-        );
-
-        $service = $this->app->make( KeycloakClientInterface::class );
-
-        $service->deleteUser(strval($this->user->id));
+        $this->assertNull($this->service->deleteUser($this->users[0]->id));
     }
-*/
+
+    public function test_when_deleting_missing_user_exception_is_thrown()
+    {
+        $this->expectException(\Exception::class);
+        $this->service->deleteUser('made-up-id');
+    }
+
+    public function test_when_deleting_a_user_and_response_is_misformed_exception_is_thrown()
+    {
+        $this->expectException(\Exception::class);
+
+        // Null response is not valid
+        $this->client->setFakeResponse('deleteUser', null);
+        $this->service->deleteUser($this->users[0]->account_uuid, $this->users[0]);
+
+        // Response cannot be string
+        $this->client->setFakeResponse('deleteUser', 'something');
+        $this->service->deleteUser($this->users[0]->account_uuid, $this->users[0]);
+
+        // Empty array is not valid response
+        $this->client->setFakeResponse('deleteUser', []);
+        $this->service->deleteUser($this->users[0]->account_uuid, $this->users[0]);
+
+        // Array with random data is not valid response
+        $this->client->setFakeResponse('deleteUser', ['convenient']);
+        $this->service->deleteUser($this->users[0]->account_uuid, $this->users[0]);
+    }
 }
