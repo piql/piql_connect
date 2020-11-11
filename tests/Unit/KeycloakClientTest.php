@@ -13,14 +13,35 @@ use App\User;
 class FakeKeycloakClient
 {
     private $users;
+    private $fakeResponse;
+    private $fakeResponseSet;
+    private $lastAssignedId;
 
-    public function __construct($users)
+    public function __construct(Collection $users)
     {
         $this->users = $users;
+        $this->fakeResponse = null;
+        $this->fakeResponseSet = false;
+        $this->lastAssignedId = '';
+    }
+
+    public function setFakeResponse($response)
+    {
+        $this->fakeResponse = $response;
+        $this->fakeResponseSet = true;
+    }
+
+    public function lastAssignedId()
+    {
+        return $this->lastAssignedId;
     }
 
     public function getUsers()
     {
+        if ($this->fakeResponseSet) {
+            return $this->fakeResponse;
+        }
+
         return $this->users->map( function ($user) {
             return [
                 'id' => $user->id,
@@ -30,6 +51,18 @@ class FakeKeycloakClient
                 'email' => $user->email,
                 'account_uuid' => $user->account_uuid ];
         })->toArray();
+    }
+
+    public function createUser(array $userInfo)
+    {
+        foreach ($this->users as $user) {
+            if ($user->username == $userInfo['username']) {
+                $this->lastAssignedId = Str::uuid();
+                $user->setIdAttribute($this->lastAssignedId);
+                break;
+            }
+        }
+        return ['content' => ''];
     }
 }
 
@@ -85,19 +118,66 @@ class KeycloakClientTest extends TestCase
         $this->assertEquals(count($users), $this->users->count());
     }
 
-    public function test_when_adding_a_user_the_user_is_added()
+    public function test_when_requesting_users_and_response_is_misformed_exception_is_thrown()
     {
-        $this->instance( KeycloakClientInterface::class, Mockery::mock(
-            KeycloakClientService::class, function ( $mock ) {
-                $mock->shouldReceive( 'addUser' )->times(1);
-            } )
-        );
+        $this->expectException(\Exception::class);
 
-        $service = $this->app->make( KeycloakClientInterface::class );
+        // Null response is not valid
+        $this->client->setFakeResponse(null);
+        $users = $this->service->getUsers();
 
-        $service->addUser($this->user->account_uuid, $this->user);
+        // Response cannot be string
+        $this->client->setFakeResponse('something');
+        $users = $this->service->getUsers();
+
+        // Array is flattened, expecting multi-dimensional array
+        $this->client->setFakeResponse(['id' => $users[0]->id, 'username' => $users[0]->username]);
+        $users = $this->service->getUsers();
+
+        // User id is a required attribute
+        $this->client->setFakeResponse([['username' => $users[0]->username], ['username' => $users[1]->username]]);
+        $users = $this->service->getUsers();
     }
 
+    public function test_when_creating_a_user_a_user_is_returned()
+    {
+        $user = $this->service->createUser($this->users[0]->account_uuid, $this->users[0]);
+        $this->assertInstanceOf(User::class, $user);
+    }
+
+    public function test_when_creating_a_user_a_new_id_is_generated()
+    {
+        $user = $this->service->createUser($this->users[0]->account_uuid, $this->users[0]);
+        $this->assertEquals($user->id, $this->client->lastAssignedId());
+        $this->assertNotEquals($user->id, $this->users[0]);
+    }
+
+    public function test_when_creating_a_user_and_response_is_misformed_exception_is_thrown()
+    {
+        $this->expectException(\Exception::class);
+
+        // Null response is not valid
+        $this->client->setFakeResponse(null);
+        $this->service->createUser($this->users[0]->account_uuid, $this->users[0]);
+
+        // Response cannot be string
+        $this->client->setFakeResponse('something');
+        $this->service->createUser($this->users[0]->account_uuid, $this->users[0]);
+
+        // Empty array is not valid response
+        $this->client->setFakeResponse([]);
+        $this->service->createUser($this->users[0]->account_uuid, $this->users[0]);
+
+        // Array with random data is not valid response
+        $this->client->setFakeResponse(['convenient']);
+        $this->service->createUser($this->users[0]->account_uuid, $this->users[0]);
+
+        // TODO: Decide which function we're setting faked response for. createUser is calling getUsers
+    }
+
+
+
+/*
     public function test_when_updating_a_user_the_user_is_updated()
     {
         $this->instance( KeycloakClientInterface::class, Mockery::mock(
@@ -123,4 +203,5 @@ class KeycloakClientTest extends TestCase
 
         $service->deleteUser(strval($this->user->id));
     }
+*/
 }
