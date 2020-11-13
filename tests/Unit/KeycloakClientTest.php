@@ -197,23 +197,30 @@ class KeycloakClientTest extends TestCase
         $this->assertEquals(count($users), $this->users->count());
     }
 
-    public function test_when_requesting_users_and_response_is_misformed_exception_is_thrown()
+    public function test_when_requesting_users_and_response_is_null_exception_is_thrown()
     {
         $this->expectException(\Exception::class);
-
-        // Null response is not valid
         $this->client->setFakeResponse('getUsers', null);
         $users = $this->service->getUsers();
+    }
 
-        // Response cannot be string
+    public function test_when_requesting_users_and_response_is_string_exception_is_thrown()
+    {
+        $this->expectException(\Exception::class);
         $this->client->setFakeResponse('getUsers', 'something');
         $users = $this->service->getUsers();
+    }
 
-        // Array is flattened, expecting multi-dimensional array
+    public function test_when_requesting_users_and_response_is_flat_array_exception_is_thrown()
+    {
+        $this->expectException(\Exception::class);
         $this->client->setFakeResponse('getUsers', ['id' => $users[0]->id, 'username' => $users[0]->username]);
         $users = $this->service->getUsers();
+    }
 
-        // User id is a required attribute
+    public function test_when_requesting_users_and_response_is_missing_id_exception_is_thrown()
+    {
+        $this->expectException(\Exception::class);
         $this->client->setFakeResponse('getUsers', [['username' => $users[0]->username], ['username' => $users[1]->username]]);
         $users = $this->service->getUsers();
     }
@@ -235,28 +242,21 @@ class KeycloakClientTest extends TestCase
     {
         $this->expectException(\Exception::class);
         $user = $this->users[0];
-	$user->username = '';
+        $user->username = '';
         $this->service->createUser($user->account_uuid, $user);
+    }
+
+    public function test_when_creating_a_user_and_response_is_null_exception_is_thrown()
+    {
+        $this->expectException(\Exception::class);
+        $this->client->setFakeResponse('createUser', null);
+        $this->service->createUser($this->users[0]->account_uuid, $this->users[0]);
     }
 
     public function test_when_creating_a_user_and_response_is_misformed_exception_is_thrown()
     {
         $this->expectException(\Exception::class);
-
-        // Null response is not valid
-        $this->client->setFakeResponse('createUser', null);
-        $this->service->createUser($this->users[0]->account_uuid, $this->users[0]);
-
-        // Response cannot be string
-        $this->client->setFakeResponse('createUser', 'something');
-        $this->service->createUser($this->users[0]->account_uuid, $this->users[0]);
-
-        // Empty array is not valid response
-        $this->client->setFakeResponse('createUser', []);
-        $this->service->createUser($this->users[0]->account_uuid, $this->users[0]);
-
-        // Array with random data is not valid response
-        $this->client->setFakeResponse('createUser', ['convenient']);
+        $this->client->setFakeResponse('createUser', ['convenient' => '']);
         $this->service->createUser($this->users[0]->account_uuid, $this->users[0]);
     }
 
@@ -275,24 +275,17 @@ class KeycloakClientTest extends TestCase
         $this->service->editUser($user->account_uuid, $user);
     }
 
+    public function test_when_updating_a_user_and_response_is_null_exception_is_thrown()
+    {
+        $this->expectException(\Exception::class);
+        $this->client->setFakeResponse('updateUser', null);
+        $this->service->editUser($this->users[0]->account_uuid, $this->users[0]);
+    }
+
     public function test_when_updating_a_user_and_response_is_misformed_exception_is_thrown()
     {
         $this->expectException(\Exception::class);
-
-        // Null response is not valid
-        $this->client->setFakeResponse('updateUser', null);
-        $this->service->editUser($this->users[0]->account_uuid, $this->users[0]);
-
-        // Response cannot be string
-        $this->client->setFakeResponse('updateUser', 'something');
-        $this->service->editUser($this->users[0]->account_uuid, $this->users[0]);
-
-        // Empty array is not valid response
-        $this->client->setFakeResponse('updateUser', []);
-        $this->service->editUser($this->users[0]->account_uuid, $this->users[0]);
-
-        // Array with random data is not valid response
-        $this->client->setFakeResponse('updateUser', ['convenient']);
+        $this->client->setFakeResponse('updateUser', ['convenient' => '']);
         $this->service->editUser($this->users[0]->account_uuid, $this->users[0]);
     }
 
@@ -307,24 +300,17 @@ class KeycloakClientTest extends TestCase
         $this->service->deleteUser('made-up-id');
     }
 
+    public function test_when_deleting_a_user_and_response_is_null_exception_is_thrown()
+    {
+        $this->expectException(\Exception::class);
+        $this->client->setFakeResponse('deleteUser', null);
+        $this->service->deleteUser($this->users[0]->account_uuid, $this->users[0]);
+    }
+
     public function test_when_deleting_a_user_and_response_is_misformed_exception_is_thrown()
     {
         $this->expectException(\Exception::class);
-
-        // Null response is not valid
-        $this->client->setFakeResponse('deleteUser', null);
-        $this->service->deleteUser($this->users[0]->account_uuid, $this->users[0]);
-
-        // Response cannot be string
-        $this->client->setFakeResponse('deleteUser', 'something');
-        $this->service->deleteUser($this->users[0]->account_uuid, $this->users[0]);
-
-        // Empty array is not valid response
-        $this->client->setFakeResponse('deleteUser', []);
-        $this->service->deleteUser($this->users[0]->account_uuid, $this->users[0]);
-
-        // Array with random data is not valid response
-        $this->client->setFakeResponse('deleteUser', ['convenient']);
+        $this->client->setFakeResponse('deleteUser', ['convenient' => '']);
         $this->service->deleteUser($this->users[0]->account_uuid, $this->users[0]);
     }
 }
