@@ -181,7 +181,7 @@ class KeycloakClientTest extends TestCase
 
         // Create service with fake client
         $this->client = new FakeKeycloakClient($this->users);
-        $this->service = $this->app->makeWith('App\Services\KeycloakClientService', ['app' => $this->app, 'keycloakClient' => $this->client]);
+        $this->service = $this->app->makeWith('App\Services\KeycloakClientService', ['keycloakClient' => $this->client]);
     }
 
     public function test_when_injecting_an_instance_of_KeycloakClientInterface_it_makes_a_KeycloakClientService()

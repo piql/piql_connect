@@ -9,7 +9,7 @@ class KeycloakClientService implements KeycloakClientInterface
 {
     private $client;
 
-    public function __construct(Object $app, Object $keycloakClient = null)
+    public function __construct(Object $keycloakClient = null)
     {
         $this->client = $keycloakClient;
         if ($this->client === null) {

@@ -16,7 +16,7 @@ class KeycloakClientServiceProvider  extends ServiceProvider
     public function register()
     {
         $this->app->bind('App\Interfaces\KeycloakClientInterface', function( $app ) {
-            return new \App\Services\KeycloakClientService( $app );
+            return new \App\Services\KeycloakClientService();
         });
 
     }
