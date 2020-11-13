@@ -80,7 +80,7 @@ export default {
     });
   },
   methods: {
-    ...mapActions(['fetchUserSettings']),    
+    ...mapActions(['fetchUserSettings']),
     batchRemove: function() {
         let fileSelArr = this.$el.querySelectorAll('.fileSel');
         let fileToRemoveArr = [];
@@ -168,45 +168,6 @@ export default {
             }
             return files.slice(from, to);
         },
-    removeFailedClicked: function (file) {
-      let options = {
-        okText: this.$t("OK"),
-        cancelText: this.$t("Cancel"),
-      };
-      this.$dialog
-        .confirm(this.$t("upload.remove") + "?", options)
-        .then((remove) => {
-          this.$emit("removeFailedClicked", file);
-        });
-    },
-    humanReadableFileSize() {
-      return Math.ceil(this.file.fileSize / 1000);
-    },
-    progressBarStyle() {
-      return this.file.progressBarStyle;
-    },
-    progressPercentage() {
-      return this.file.progressPercentage;
-    },
-    isUploading() {
-      return this.file.isUploading;
-    },
-    setPages() {
-      let numberOfPages = Math.ceil(
-        this.sortedFilesUploading.length / this.perPage
-      );
-      for (let index = 1; index <= numberOfPages; index++) {
-        this.pages.push(index);
-      }
-    },
-    paginate(files) {
-      let urlPage = this.$route.query.page;
-      let page = urlPage >= 1 ? urlPage : 1;
-      let perPage = this.perPage;
-      let from = page * perPage - perPage;
-      let to = page * perPage;
-      return files.slice(from, to);
-    },
   },
   computed: {
     ...mapGetters(['userSettings']),
@@ -221,9 +182,9 @@ export default {
     },
     selectAll: {
         get: function () {
-            return this.displayedfiles 
-              ? this.selected !== undefined && 
-                  this.selected.length > 0 && this.selected.length == this.displayedfiles.length 
+            return this.displayedfiles
+              ? this.selected !== undefined &&
+                  this.selected.length > 0 && this.selected.length == this.displayedfiles.length
               : false;
         },
         set: function (value) {
@@ -261,7 +222,7 @@ export default {
     }
     .offset{
         width: 500px !important;
-        margin: 20px auto;  
+        margin: 20px auto;
     }
     .contentCenter {
         text-align: center;

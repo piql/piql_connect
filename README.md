@@ -19,8 +19,9 @@
 
 Ubuntu 18.04 or similar operating system. Run the following to get prerequisites installed:
 ```
-$ sudo apt-get install php7.2-cli php7.2-xml php7.2-mbstring php7.2-bcmath php7.2-mysql php7.2-zip \
-  composer npm docker.io docker-compose
+$ sudo apt-get install php7.4-cli php7.4-xml php7.4-mbstring php7.4-bcmath php7.4-mysql php7.4-zip \
+  php7.4-dev php7.4-mongodb composer npm docker.io docker-compose python3
+$ docker network create piqlConnect-net
 ```
 An installation of Archivematica ( https://github.com/artefactual/archivematica ) set up using docker-compose (See Archivematica Documentation)
 
@@ -43,13 +44,10 @@ $ sudo usermod -aG docker $USER
 
 This allows you to work with dockers as a normal user.
 
-To enable feedback from Archivematica you will need to do some preparations before running the build script.
-The storage location identifier you will find by logging in to the **Archivematica Storage Service** via your browser. Navigate to the **Locations** tab and copy the UUID for **Transfer Source**. Export the variables to your shell:
+Rename the config.py.example file to config.py and edit the variables in the file to suit your environment.
 
-```
-$ export STORAGE_LOCATION_ID=[UUID]
-$ export UPDATE_AM_SERVICE_CALLBACKS=true
-```
+To enable feedback from Archivematica you will need to do some preparations before running the build script.
+The storage location identifier you will find by logging in to the **Archivematica Storage Service** via your browser. Navigate to the **Locations** tab and copy the UUID for **Transfer Source**. Add this to the appropriate variable in the config.py file.
 
 You also need to add two callbacks to the **Archivematica Storage Service** (note that only the event differs between the two setups and that two empty headers need to be created). Navigate to the **Administration** tab and click **Service callbacks**. Then add the new callbacks by clicking **Create new callback** and use the following settings:
 
@@ -66,21 +64,14 @@ Expected status: 200
 Now, go to the deploy/ folder, and run the build script:
 
 ```
-$ export LOCALDEV=true
-$ export CONNECT_HOSTNAME=$HOSTNAME # Could be anything but must be reachable
 $ cd deploy/
-$ ./automated-build-connect.sh
+$ python3 build.py
 ```
 
-If all goes well, you should now after the build process, have a working development environment for piqlConnect, and should be able to type:
+If all goes well, you should now after the build process, have a working development environment for piqlConnect, and should be able to access it using any modern web browser.
 
+If you need to rebuild PiqlConnect, simply re-run the build script.
 
-```
-$ npm run dev
-
-```
-
-To get piqlConnect rebuilt from your local shell.
 
 ### End-to-end tests
 

@@ -16,7 +16,6 @@ use App\FileObject;
 use App\Traits\UserSettingRequest;
 use Illuminate\Support\Facades\Auth;
 use Log;
-use App\Holding;
 
 class DipController extends Controller
 {
@@ -280,6 +279,12 @@ class DipController extends Controller
     {
         $dip = Dip::find( $dipId );
         return $dip->fileObjects->find( $fileId )->toArray();
+    }
+
+    public function showFileObject(Request $request, $fileId)
+    {
+    	$fileRes = new FileObjectResource(FileObject::findOrFail($fileId));
+    	return $fileRes->toArray($request);
     }
 
     public function file_thumbnail( ArchivalStorageInterface $storage, Request $request, FilePreviewInterface $filePreview )

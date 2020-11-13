@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\Users;
 
+use App\Traits\UserSettingRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -12,12 +13,18 @@ use Illuminate\Support\Facades\Validator;
 class PreferencesController extends Controller
 {
 
+    use UserSettingRequest;
+
     /* preferences - mapped to GET
      * Get the user preference settings  (User interface setttings, language etc)
      */
     public function preferences(Request $request)
     {
         $user = Auth::user();  //TODO: Pick up the userid from the user_id parameter, validate against Auth::user
+        if (!isset($user->settings->interface['tableRowCount'])) {
+            $user->settings->interface = $user->settings->interface + ['tableRowCount' => $this->rowLimit($user, $request) ];
+        }
+
         return $user->settings;
     }
 

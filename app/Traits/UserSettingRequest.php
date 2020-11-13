@@ -12,6 +12,7 @@ trait UserSettingRequest
         if($request->limit) return $request->limit;
         $uiConfig = $user->settings->interface;
         if(isset($uiConfig->tableRowCount)) return $uiConfig->tableRowCount;
-        return env('DEFAULT_ENTRIES_PER_PAGE', 10);
+        else if(isset($uiConfig['tableRowCount'])) return $uiConfig['tableRowCount'];
+        return env('DEFAULT_ENTRIES_PER_PAGE', 8);
     }
 }
