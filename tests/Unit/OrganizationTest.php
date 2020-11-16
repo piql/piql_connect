@@ -16,13 +16,10 @@ class OrganizationTest extends TestCase
     }
 
     /**
-     * @covers test organization
+     * @covers test create an organization and make sure an uuid is created
      */
-    public function test_organization() {
-        $org = new Organization([
-            "name" => "Mega Archive"
-        ]);
-        dump($org);
-        $org->save();
+    public function test_create_organization_with_an_uuid() {
+        $org = factory(Organization::class)->create();
+        $this->assertStringMatchesFormat("%x-%x-%x-%x-%x", $org->uuid);
     }
 }
