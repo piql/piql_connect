@@ -17,9 +17,13 @@ class OrganizationTest extends TestCase
 
     /**
      * @covers test create an organization and make sure an uuid is created
+     * and name is created
      */
-    public function test_create_organization_with_an_uuid() {
+    public function test_create_organization() {
         $org = factory(Organization::class)->create();
-        $this->assertStringMatchesFormat("%x-%x-%x-%x-%x", $org->uuid);
+        $this->assertTrue(strlen($org->name) > 0,
+            "Organization doesn't have a valid name");
+        $this->assertStringMatchesFormat("%x-%x-%x-%x-%x", $org->uuid,
+            "Organization doesn't have a valid uuid");
     }
 }
