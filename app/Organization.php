@@ -18,4 +18,10 @@ class Organization extends Model
         'name'
     ];
 
+
+    public function users()
+    {
+        return $this->hasMany(User::class, 'organization_uuid', 'uuid');
+    }
+
 }
