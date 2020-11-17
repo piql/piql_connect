@@ -2,8 +2,10 @@
 
 namespace Tests\Unit;
 
+use App\Events\OrganizationCreatedEvent;
 use App\Organization;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Illuminate\Support\Facades\Event;
 use Tests\TestCase;
 
 class OrganizationTest extends TestCase
@@ -20,10 +22,17 @@ class OrganizationTest extends TestCase
      * and name is created
      */
     public function test_create_organization() {
+        $event = Event::fake();
+
         $org = factory(Organization::class)->create();
         $this->assertTrue(strlen($org->name) > 0,
             "Organization doesn't have a valid name");
         $this->assertStringMatchesFormat("%x-%x-%x-%x-%x", $org->uuid,
             "Organization doesn't have a valid uuid");
+
+        $event->assertDispatched(OrganizationCreatedEvent::class,
+            function(OrganizationCreatedEvent $event) use ($org) {
+                return $org->uuid == $event->organization->uuid;
+            });
     }
 }
