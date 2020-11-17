@@ -126,4 +126,9 @@ class User extends Authenticatable
     {
         return $this->belongsTo('App\Account', 'account_uuid', 'uuid');
     }
+
+    public function organization()
+    {
+        return $this->belongsTo(Organization::class, 'organization_uuid', 'uuid');
+    }
 }
