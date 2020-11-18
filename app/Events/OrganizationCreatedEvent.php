@@ -10,7 +10,7 @@ use Illuminate\Broadcasting\InteractsWithSockets;
 
 class OrganizationCreatedEvent
 {
-    use Dispatchable, InteractsWithSockets, SerializesModels;
+    use Dispatchable, SerializesModels;
 
     public $organization;
 
