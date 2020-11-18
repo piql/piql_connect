@@ -49,7 +49,8 @@ class KeycloakClientService implements KeycloakClientInterface
             'firstName' => $firstName,
             'lastName' => $lastName,
             'enabled' => true,
-            'attributes' => ['organization' => $organizationId]
+            'attributes' => ['organization' => $organizationId],
+            'requiredActions' => ['UPDATE_PASSWORD']
         ]);
         $this->validateKeycloakResponse($response);
 

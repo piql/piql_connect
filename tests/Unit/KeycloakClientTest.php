@@ -68,7 +68,7 @@ class FakeKeycloakClient
             !isset($userInfo['username']) ||
             strlen($userInfo['id']) == 0 ||
             strlen($userInfo['username']) == 0 ||
-            count($userInfo) > 7) {
+            count($userInfo) > 8) {
             return ['errorMessage' => 'Invalid input'];
         }
 
