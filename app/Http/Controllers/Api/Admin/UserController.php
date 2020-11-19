@@ -122,42 +122,42 @@ class UserController extends Controller
             'errors' => $validator->errors(),
         ], 400);
 
+        $user = User::find($id);
+        if ($user === null) {
+            return response([
+                'message' => 'User not found'
+            ], 404);
+        }
+
+        // Check if email is duplicate
+        if (isset($request->email) &&
+            $request->email != $user->email &&
+            User::where('email', $request->email)->count() > 0) {
+            return response([
+                'message' => 'Email is already in use'
+            ], 400);
+        }
+
+        // Update user model
+        if (isset($request->email)) {
+            $user->email = $request->email;
+        }
+        if (isset($request->full_name)) {
+            $user->full_name = $request->full_name;
+        }
+
+        // Update keycloak
         try {
-            $user = User::find($id);
-            if ($user === null) {
-                return response([
-                    'message' => 'User not found'
-                ], 404);
-            }
+            $keycloakClient->editUser($user->account_uuid, $user);
+        } catch (\Throwable $e) {
+            return response(['message' => $e->getMessage()], 400);
+        }
 
-            // Check if email is duplicate
-            if (isset($request->email) &&
-                $request->email != $user->email &&
-                User::where('email', $request->email)->count() > 0) {
-                return response([
-                    'message' => 'Email is already in use'
-                ], 400);
-            }
-
-            // Update user model
-            if (isset($request->email)) {
-                $user->email = $request->email;
-            }
-            if (isset($request->full_name)) {
-                $user->full_name = $request->full_name;
-            }
-
-            // Update keycloak
-            try {
-                $keycloakClient->editUser($user->account_uuid, $user);
-            } catch (\Throwable $e) {
-                return response(['message' => $e->getMessage()], 500);
-            }
-
+        try {
             $user->save();
-            return new UserResource($user);
         } catch (Throwable $e) {
             return response(['message' => $e->getMessage()], 400);
         }
+        return new UserResource($user);
     }
 }
