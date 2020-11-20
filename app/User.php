@@ -124,7 +124,7 @@ class User extends Authenticatable
 
     public function account()
     {
-        return $this->belongsTo('App\Account', 'account_uuid', 'uuid');
+        return $this->organization->account();
     }
 
     public function organization()
