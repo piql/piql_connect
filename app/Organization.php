@@ -27,4 +27,9 @@ class Organization extends Model
         return $this->hasMany(User::class, 'organization_uuid', 'uuid');
     }
 
+    public function account()
+    {
+        return $this->hasOne(Account::class, 'organization_uuid', 'uuid');
+    }
+
 }
