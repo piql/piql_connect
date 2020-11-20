@@ -18,6 +18,9 @@ class Organization extends Model
         'name'
     ];
 
+    protected $dispatchesEvents = [
+        'created' => \App\Events\OrganizationCreatedEvent::class,
+    ];
 
     public function users()
     {
