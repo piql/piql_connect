@@ -3,10 +3,10 @@
         <page-heading icon="fa-user" :title="$t('settings.settings.users')" :ingress="$t('settings.settings.listing')" />
         <div class="card">
             <div class="card-header">
-                <span v-if="showAddUser"><i class="fa fa-user-plus"></i>  {{$t('settings.settings.addUser').toUpperCase()}} | 
+                <span v-if="showAddUser"><i class="fa fa-user-plus"></i>  {{$t('settings.settings.addUser').toUpperCase()}} |
                 <a href="#" class="btn btn-sm" @click="displayUsers">{{$t('settings.listing.backToUsers')}}</a>
                 </span>
-        
+
                 <button v-else type="button" class="btn btn-primary btncheck" @click="displayAddUser">
                     <i class="fa fa-user-plus"></i>  {{$t('settings.settings.addUser')}}
                 </button>
@@ -21,11 +21,11 @@
                         </div>
                     </div>
                 </div>
-               
+
             </div>
         </div>
 
-        
+
     </div>
 </template>
 
@@ -67,7 +67,7 @@ import { mapGetters, mapActions } from "vuex";
                 this.$route.query.page = 1;
             }
             this.fetchUsers(this.apiQueryString)
-
+            console.log('user listing');
         },
 
         computed:  {
@@ -81,7 +81,7 @@ import { mapGetters, mapActions } from "vuex";
                 }
                 return filter;
             }
-            
+
 
         },
 
@@ -99,7 +99,7 @@ import { mapGetters, mapActions } from "vuex";
             forceRerender(){
                 this.listingKey += 1;
             },
-        
+
             addUser(form){
                 this.infoToast("Adding User", "creating new user in the system");
 
@@ -110,8 +110,8 @@ import { mapGetters, mapActions } from "vuex";
                     'email': form.email
                 });
 
-                this.forceRerender();  
-                this.displayUsers();  
+                this.forceRerender();
+                this.displayUsers();
 
             },
             editUser(){
@@ -120,7 +120,7 @@ import { mapGetters, mapActions } from "vuex";
 
                 this.forceRerender();
                 this.$bvModal.hide('edit-user');
-                
+
 
             },
            disableUser(data){
@@ -134,7 +134,7 @@ import { mapGetters, mapActions } from "vuex";
                 }
 
                 this.$bvModal.hide('disable-user');
-               
+
             },
             enableUser(data){
                 this.infoToast("Enable User", "enabling a user in listing");
@@ -155,4 +155,3 @@ import { mapGetters, mapActions } from "vuex";
         }
     }
 </script>
-
