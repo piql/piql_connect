@@ -62,6 +62,9 @@ class EventServiceProvider extends ServiceProvider
         \App\Events\CommitJobEvent::class => [
             \App\Listeners\CommitJobListener::class
         ],
+        \App\Events\OrganizationCreatedEvent::class => [
+            \App\Listeners\OrganizationCreatedListener::class
+        ],
     ];
 
     /**
