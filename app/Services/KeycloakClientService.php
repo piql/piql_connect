@@ -20,11 +20,12 @@ class KeycloakClientService implements KeycloakClientInterface
 
     private function init($params = [])
     {
-        $this->realm = isset($params['realm']) ? $params['realm'] : env('APP_AUTH_SERVICE_REALM');
-        $this->username = isset($params['username']) ? $params['username'] : env('APP_AUTH_SERVICE_USERNAME');
-        $this->password = isset($params['password']) ? $params['password'] : env('APP_AUTH_SERVICE_PASSWORD');
-        $this->clientId = isset($params['client_id']) ? $params['client_id'] : env('APP_AUTH_SERVICE_CLIENT_ID');
-        $this->baseUri = isset($params['baseUri']) ? $params['baseUri'] : env('APP_AUTH_SERVICE_BASE_URL');
+        $p = collect($params)->only(['realm','username','password','client_id','baseUri', ])->all();
+        $this->realm = isset($p['realm']) ? $p['realm'] : env('APP_AUTH_SERVICE_REALM');
+        $this->username = isset($p['username']) ? $p['username'] : env('APP_AUTH_SERVICE_USERNAME');
+        $this->password = isset($p['password']) ? $p['password'] : env('APP_AUTH_SERVICE_PASSWORD');
+        $this->clientId = isset($p['client_id']) ? $p['client_id'] : env('APP_AUTH_SERVICE_CLIENT_ID');
+        $this->baseUri = isset($p['baseUri']) ? $p['baseUri'] : env('APP_AUTH_SERVICE_BASE_URL');
     }
 
     private function params($keys=[])
@@ -43,11 +44,14 @@ class KeycloakClientService implements KeycloakClientInterface
     public function __construct($params = [])
     {
         $this->init($params);
-        $this->client = \Keycloak\Admin\KeycloakClient::factory($this->params());
+        if(isset($params['client'])) $this->client = $params['client'];
+        else $this->client = \Keycloak\Admin\KeycloakClient::factory($this->params());
+        if(isset($params['gzClient'])) $this->gzClient = $params['gzClient'];
     }
 
     private function initGuzzleClient()
     {
+        if($this->gzClient != null) return;
         $this->gzClient = new \GuzzleHttp\Client(['base_uri' => $this->baseUri]);
         //todo: consider caching credentials locally for refresh before logging in afresh
         $params = $this->params(['username', 'password', 'client_id']);
