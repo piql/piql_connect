@@ -66,12 +66,21 @@ import { mapGetters, mapActions } from "vuex";
             if( isNaN( page ) || parseInt( page ) < 2 ) {
                 this.$route.query.page = 1;
             }
-            this.fetchUsers(this.apiQueryString)
+            this.fetchUsers(this.queryParams)
             console.log('user listing');
         },
 
         computed:  {
             ...mapGetters(['formattedUsers','usersPageMeta','userApiResponse']),
+            queryParams(){
+                let query = this.$route.query;
+                let page = query.page || 1;
+                let limit = 10;
+                return {
+                    limit: 10,
+                    offset: (page - 1) * limit
+                }
+            },
             apiQueryString: function() {
                 let query = this.$route.query;
                 let filter = '';
