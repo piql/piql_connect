@@ -48,7 +48,7 @@ def docker_create_volume(volume_name):
 
 def docker_network_connect(network_name, containers):
     """
-    Create a new Docker network.
+    Create a link between 2 containers over a Docker network.
     :param (str)network_name: The name of the Docker network.
     :param (list)containers: The Docker network driver type.
     :return: No return value.
@@ -170,7 +170,7 @@ envfile.close()
 
 print('Generating the environment.js file')
 if (os.path.isfile('init-auth-client.sh')):
-    process = subprocess.Popen(['./init-auth-client.sh', '-r ' + config.keycloak_realm_name])
+    process = subprocess.Popen(['./init-auth-client.sh', '-r' + config.keycloak_realm_name])
     process.wait()
 
 print('Running Composer install')
