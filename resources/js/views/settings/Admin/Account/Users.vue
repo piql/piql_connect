@@ -24,8 +24,6 @@
 
             </div>
         </div>
-
-
     </div>
 </template>
 
@@ -66,36 +64,25 @@ import { mapGetters, mapActions } from "vuex";
             if( isNaN( page ) || parseInt( page ) < 2 ) {
                 this.$route.query.page = 1;
             }
+            this.fetchUserSettings();
             this.fetchUsers(this.queryParams)
-            console.log('user listing');
         },
 
         computed:  {
-            ...mapGetters(['formattedUsers','usersPageMeta','userApiResponse']),
+            ...mapGetters(['formattedUsers','usersPageMeta','userApiResponse', 'userTableRowCount']),
             queryParams(){
                 let query = this.$route.query;
                 let page = query.page || 1;
-                let limit = 10;
+                let limit = this.userTableRowCount;
                 return {
-                    limit: 10,
+                    limit: limit,
                     offset: (page - 1) * limit
                 }
             },
-            apiQueryString: function() {
-                let query = this.$route.query;
-                let filter = '';
-
-                if( parseInt( query.page ) ) {
-                    filter += "?page=" + query.page;
-                }
-                return filter;
-            }
-
-
         },
 
         methods: {
-            ...mapActions(['fetchUsers','postNewUser','disableUserRequest','enableUserRequest']),
+            ...mapActions(['fetchUsers','postNewUser','disableUserRequest','enableUserRequest', 'fetchUserSettings']),
             displayAddUser(){
                 this.showAddUser = true;
             },
@@ -103,7 +90,7 @@ import { mapGetters, mapActions } from "vuex";
                 this.showAddUser = false;
             },
             dispatchRouting() {
-                this.fetchUsers(this.apiQueryString);
+                this.fetchUsers(this.queryParams);
             },
             forceRerender(){
                 this.listingKey += 1;

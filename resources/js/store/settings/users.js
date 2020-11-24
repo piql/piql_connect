@@ -84,10 +84,12 @@ const mutations = {
     setUserSearchMeta(state, data) {
         let limit = data.query.limit || data.showing;
         let offset = data.query.offset || 0;
+        let page = 1;
+        if (offset > 0) page = Math.ceil(data.total/offset)
         state.pageMeta = {
-            current_page: (data.total / (offset + data.showing)) + 1,
+            current_page: page,
             from: offset + 1,
-            last_page: 3,
+            last_page: Math.ceil(data.total/limit),
             path: "/users",
             per_page: limit,
             to: offset + data.showing,
