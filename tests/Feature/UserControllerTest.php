@@ -6,6 +6,7 @@ use Tests\TestCase;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Laravel\Passport\Passport;
 use Illuminate\Support\Str;
+use Mockery;
 
 class UserControllerTest extends TestCase
 {
@@ -69,5 +70,54 @@ class UserControllerTest extends TestCase
         ]);
         $u = User::find($id);
         $this->assertNull($u->disabled_on);
+    }
+
+    public function test_updating_user_returns_200()
+    {
+        $keycloakClient = Mockery::mock('App\Interfaces\KeycloakClientInterface');
+        $keycloakClient->expects('editUser')
+                       ->once();
+
+        $this->app->bind('App\Interfaces\KeycloakClientInterface',
+            function( $app ) use($keycloakClient) {
+                return $keycloakClient;
+            }
+        );
+
+        $newEmail = $this->user->email . '_TEST';
+        $newFullName = $this->user->full_name . '_TEST';
+        $response = $this->json('put','/api/v1/admin/users/' . $this->user->id, [
+            'email' => $newEmail,
+            'full_name' => $newFullName
+        ]);
+
+        $response->assertStatus(200);
+        $responseData = $response->decodeResponseJson('data');
+        $this->assertEquals($this->user->id, $responseData['id']);
+        $this->assertEquals($this->user->username, $responseData['username']);
+        $this->assertEquals($newEmail, $responseData['email']);
+        $this->assertEquals($newFullName, $responseData['full_name']);
+    }
+
+    public function test_updating_missing_user_returns_404()
+    {
+        $response = $this->json('put','/api/v1/admin/users/non-existing-id', [
+            'email' => $this->user->email,
+            'full_name' => $this->user->full_name
+        ]);
+
+        $response->assertStatus(404);
+    }
+
+    public function test_updating_with_duplicate_email_returns_400()
+    {
+        $existingUser = factory(User::class)->create();
+
+        $response = $this->json('put','/api/v1/admin/users/' . $this->user->id, [
+            'email' => $existingUser->email,
+            'full_name' => $this->user->full_name
+        ]);
+
+        $response->assertStatus(400);
     }
 }
