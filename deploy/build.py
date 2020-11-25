@@ -162,8 +162,6 @@ envfile_data = envfile_data.replace('_S3_URL_', config.S3_URL)
 envfile_data = envfile_data.replace('_KEYCLOAK_REALM_PUBLIC_KEY_', config.keycloak_realm_public_key)
 envfile_data = envfile_data.replace('_KEYCLOAK_REALM_NAME_', config.keycloak_realm_name)
 envfile_data = envfile_data.replace('_KEYCLOAK_CALLBACK_CLIENT_SECRET_', config.keycloak_callback_client_secret)
-envfile_data = envfile_data.replace('_APP_AUTH_SERVICE_USERNAME_', config.keycloak_service_username)
-envfile_data = envfile_data.replace('_APP_AUTH_SERVICE_PASSWORD_', config.keycloak_service_password)
 envfile.close()
 envfile = open(config.piqlconnect_root_dir + '.env', "wt")
 envfile.write(envfile_data)
@@ -313,7 +311,7 @@ print('Migrating databases.')
 if (config.complete_database_wipe == True):
     run_container_command('piqlconnect_app_1', 'php artisan migrate:fresh', 'www-data')
 else:
-    run_container_command('piqlconnect_app_1', 'php artisan migrate', 'www-data')
+    run_container_command('piqlconnect_app_1', 'php -d max_execution_time=3600 artisan migrate', 'www-data')
 print('Databases migrated. Continuing.')
 
 print('Setting passport keys')
