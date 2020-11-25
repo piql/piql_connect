@@ -1,4 +1,12 @@
-# Upgrading from version < 0.3 to a newer version
+## Upgrading from version 1.0 to a newer version
+
+1. Backup database (mysqldump --host=127.0.0.1 -u <DB-user> -p --single-transaction --quick --lock-tables=false connect > ~/piqlconnect_db-$(date +%F).sql)
+2. Stop PiqlConnect
+3. Checkout the Master branch (or the release branch for a specific version if you don't want the latest version)
+4. Run the build script (python3 build.py) ## Note: Make sure you have changed the complete_database_wipe-variable in config.py to False if you don't want to lose all your existing data. Failure to do this will wipe the database, requiring you to restore the database to get your data back. ##
+5. Check that there are no obvious data issues and that PiqlConnect is functioning as intended
+
+## Upgrading from version <= 0.3 to a newer version for the first time
 
 1. Backup database (mysqldump --host=127.0.0.1 -u <DB-user> -p --single-transaction --quick --lock-tables=false connect > ~/piqlconnect_db-$(date +%F).sql)
 2. Stop PiqlConnect
@@ -12,13 +20,12 @@
 9. Run the automated update script
 10. Check that there are no obvious data issues and that PiqlConnect is functioning as intended
 
-
 ## Rollback in case of issues
 
 1. Stop PiqlConnect
 2. Start the database container
 3. Drop the connect database
 4. Restore the database backup
-5. Checkout the previous version of PiqlConnect
-6. Rebuild the environment based on the procedure for that version. Make sure you don't run any database migrations
+5. Checkout the previous version of PiqlConnect (git checkout release/vX.X.X)
+6. Rebuild the environment based on the procedure for that version.
 7. Check that all is OK and retry the upgrade

@@ -72,7 +72,19 @@ If all goes well, you should now after the build process, have a working develop
 
 If you need to rebuild PiqlConnect, simply re-run the build script.
 
+### Important note on updating a production instance
 
+When a new version of PiqlConnect is released, the new version will be merged into the Master branch. To get the latest current version, make sure the complete_database_wipe-variable in the config.py file is set to False. If you fail to do this, all the data in your instance will be irreversably deleted with no warning.
+
+Otherwise, follow the instructions in the UPGRADE.md file.
+
+### Resetting the MongoDB backend for the statistics view on the dashboard
+
+If there are errors in the data shown on the dashboard, run the following command:
+```
+$ cd deploy/
+$ python3 reset_stats_db.py
+```
 ### End-to-end tests
 
 To perform user interface tests, you must run:
