@@ -62,7 +62,7 @@ complete_database_wipe = True
 # value to the name of the main database seeder file. It is recommended that you create a new set and
 # not change the existing default seeder.
 # NOTE: The seeder will only be run if complete_database_wipe is set to True. 
-database_seeder = DatabaseSeeder
+database_seeder = 'DatabaseSeeder'
 
 # This setting must be set to True in order for the build process to run. The default value is 
 # False.
