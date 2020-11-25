@@ -89,8 +89,6 @@ export default {
             this.fetchUsers(this.queryParams);
         },
         addUser(form){
-            this.infoToast("Adding User", "creating new user in the system");
-            //invoke vuex axction postNewUser defined above
             this.postNewUser({
                 'name': form.fullname,
                 'username': form.username,
@@ -99,24 +97,18 @@ export default {
             this.displayUsers();
         },
         editUser(){
-            this.infoToast("Editing User", "editing user in the system");
             //logic to send data to endpoint goes here
             this.$bvModal.hide('edit-user');
         },
         disableUser(data){
-            this.infoToast("Disable User", "disabling a user from listing");
             //vuex action call
             this.disableUserRequest(data);
             this.$bvModal.hide('disable-user');
         },
         enableUser(data){
-            this.infoToast("Enable User", "enabling a user in listing");
             //vuex request
             this.enableUserRequest(data);
             this.$bvModal.hide('enable-user');
-        },
-        assignAccountMetadata( accountMetadata ){
-            console.log("should associate metadata: ",accountMetadata);
         }
     }
 }
