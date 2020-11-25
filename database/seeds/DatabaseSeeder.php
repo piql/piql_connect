@@ -16,7 +16,7 @@ class DatabaseSeeder extends Seeder
         $this->call(ArchiveSeeder::class);
         $this->call(HoldingSeeder::class);
         $this->call(UsersTableSeeder::class);
-        $this->call(SafeSpringS3ConfigurationSeeder::class);
+        $this->call(S3ConfigurationSeeder::class);
         $this->call(ArchivematicaServiceSeeder::class);
     }
 }
