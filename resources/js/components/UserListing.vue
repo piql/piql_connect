@@ -14,7 +14,7 @@
         </thead>
         <tbody>
             <tr v-for="staff in users" :key="staff.id">
-                <td>{{staff.full_name}}</td>
+                <td>{{staff.firstName}} {{staff.lastName}}</td>
                 <td>{{staff.username}}</td>
                 <td>{{staff.email}}</td>
                 <td v-if="staff.disabled === true"> <b-badge variant="danger"> Disabled</b-badge></td>

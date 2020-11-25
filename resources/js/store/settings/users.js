@@ -1,9 +1,8 @@
 //import any mixin or library needed
 import axios from "axios"
-import env from "./../../environment"
+import { wrappers } from "../../mixins/keycloakapi";
 
-let url = new URL(env.keyCloakConfig.url);
-axios.defaults.baseURL = `${url.protocol}//${url.hostname}` + (url.port ? `:${url.port}` : '') + `/auth/admin/realms/${env.keyCloakConfig.realm}`;
+const axs = wrappers();
 
 //state
 const state = {
@@ -29,9 +28,9 @@ const actions = {
         let search = query.q || '';
         let params = { max, search, first }
         return new Promise((resolve, reject) => {
-            axios.get('/users', { params }).then(response => {
+            axs.get('/users', { params }).then(response => {
                 commit('setUsersMutation', response.data)
-                axios.get('/users/count').then(rs => {
+                axs.get('/users/count').then(rs => {
                     commit('setUserSearchMeta', {
                         total: rs.data,
                         showing: response.data.length,
@@ -97,12 +96,7 @@ const mutations = {
         }
     },
     setUsersMutation: (state, payload) => {
-        state.users = [];
-        payload.forEach(u => {
-            u.full_name = `${u.firstName} ${u.lastName}`;
-            state.users.push(u);
-        })
-        // state.pageMeta = payload.meta;
+        state.users = payload;
         state.response = payload;
     },
     setResponse: (state, response) => {
