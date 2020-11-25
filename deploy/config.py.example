@@ -4,7 +4,7 @@
 # Usage: Change the variables in this file to match the environment you are setting up.
 # Rename the file to config.py before you run the build.py script.
 
-# The full path to the folder where PIqlConnect resides
+# The full path to the folder where PiqlConnect resides
 piqlconnect_root_dir = '/home/piqlconnect/src/piql_connect/'
 
 # This setting will allow the update of Archivematicas service callbacks.
