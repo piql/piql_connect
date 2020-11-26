@@ -127,9 +127,8 @@ class KeycloakClientService implements KeycloakClientInterface
         return $this->client->getUser(['id' => $id]);
     }
 
-    public function searchOrganizationUsers($orgId, $params = [], $limit = 20, $offset = 0)
+    public function searchOrganizationUsers($params = [], $limit = 20, $offset = 0)
     {
-        if ($orgId == null || count($orgId) == 0) throw new Exception("organisation id is required for this operation");
         $params = collect($params)->only(['email', 'firstName', 'lastName', 'username', 'search'])->all();
         $params = array_merge($params, ['first' => 0, 'max' => $limit]);
         return $this->client->getUsers($params);

@@ -17,7 +17,7 @@ interface KeycloakClientInterface
     public function deleteUser(string $userId) : void;
 
     public function getUserById($id);
-    public function searchOrganizationUsers($orgId, $params=[], $limit=20, $offset=0);
+    public function searchOrganizationUsers($params=[], $limit=20, $offset=0);
 
     public function getRoles(): array;
     public function getRoleByName($name): array;
@@ -29,7 +29,9 @@ interface KeycloakClientInterface
     public function addUserToGroup($userId, $groupId): array;
     public function addRoleToGroup($roleId, $groupId): array;
     public function getGroupRoles($limit = 20, $offset = 0): array;
-    // public function removeUserFromGroup($userId, $groupId): array;
-    // public function removeRoleFromGroup($userId, $roleId): array;
-    // public function showUserPermissions($userId): array;
+
+    //method implementations to ve skipped due to scope change
+    /* public function removeUserFromGroup($userId, $groupId): array;
+    public function removeRoleFromGroup($userId, $roleId): array;
+    public function showUserPermissions($userId): array; */
 }
