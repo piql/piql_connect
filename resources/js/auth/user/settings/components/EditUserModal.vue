@@ -47,15 +47,15 @@ export default {
   methods: {
     editUser() {
       this.$emit('edited-user', {
-        fullname: name,
-        email: email,
-        username: username,
+        fullname: this.name,
+        email: this.email,
+        username: this.username,
       })
     }
   },
   computed: {
     fullName(){
-      return `${user.firstName} ${user.lastName}`
+      return `${this.user.firstName} ${this.user.lastName}`
     }
   }
 }
