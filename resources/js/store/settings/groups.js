@@ -1,4 +1,7 @@
-import axios from "axios";
+import axios from "axios"
+import { wrappers } from "../../mixins/keycloakapi";
+
+const axs = wrappers();
 
 const state = {
     groups: null,
@@ -52,9 +55,26 @@ const actions = {
     },
 
     //get actions
-    async fetchGroups({commit},query){
-        let response =  await axios.get('/api/v1/admin/access-control/roles' + query);
-        commit('setGroupsMutation', response.data)
+    async fetchGroups({ commit }, query) {
+        let max = query.limit || 10;
+        let first = query.offset || 0;
+        let search = query.q || '';
+        let params = { max, search, first }
+        return new Promise((resolve, reject) => {
+            axs.get('/groups', { params }).then(response => {
+                commit('setGroupsMutation', response.data)
+                axs.get('/groups/count').then(rs => {
+                    commit('setGroupSearchMeta', {
+                        total: rs.data,
+                        showing: response.data.length,
+                        query: query
+                    })
+                })
+                resolve(response.data)
+            }).catch(err => {
+                reject(err.response.data);
+            })
+        })
     },
 
     async fetchGroupUsers({commit},groupId){
@@ -70,9 +90,23 @@ const actions = {
 }
 
 const mutations = {
-    setGroupsMutation: (state,payload)=> {
-        state.groups = payload.data;
-        state.pageMeta = payload.meta;
+    setGroupSearchMeta(state, data) {
+        let limit = data.query.limit || data.showing;
+        let offset = data.query.offset || 0;
+        let page = 1;
+        if (offset > 0) page = Math.ceil(data.total/offset)
+        state.pageMeta = {
+            current_page: page,
+            from: offset + 1,
+            last_page: Math.ceil(data.total/limit),
+            path: "/groups",
+            per_page: limit,
+            to: offset + data.showing,
+            total: data.total
+        }
+    },
+    setGroupsMutation: (state, payload) => {
+        state.groups = payload;
         state.response = payload;
     },
     setGroupUsersMutation: (state,payload)=> {
