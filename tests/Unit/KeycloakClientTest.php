@@ -2,8 +2,8 @@
 
 namespace Tests\Unit;
 
-use Tests\TestCase;
 use Mockery;
+use Tests\TestCase;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 use App\Interfaces\KeycloakClientInterface;
@@ -68,7 +68,7 @@ class FakeKeycloakClient
             !isset($userInfo['username']) ||
             strlen($userInfo['id']) == 0 ||
             strlen($userInfo['username']) == 0 ||
-            count($userInfo) > 7) {
+            count($userInfo) > 8) {
             return ['errorMessage' => 'Invalid input'];
         }
 
@@ -181,7 +181,8 @@ class KeycloakClientTest extends TestCase
 
         // Create service with fake client
         $this->client = new FakeKeycloakClient($this->users);
-        $this->service = $this->app->makeWith('App\Services\KeycloakClientService', ['keycloakClient' => $this->client]);
+        // $this->service = $this->app->makeWith('App\Services\KeycloakClientService', ['keycloakClient' => $this->client]);
+        $this->service = new KeycloakClientService(['client'=>&$this->client]);
     }
 
     public function test_when_injecting_an_instance_of_KeycloakClientInterface_it_makes_a_KeycloakClientService()
@@ -201,6 +202,7 @@ class KeycloakClientTest extends TestCase
     {
         $this->expectException(\Exception::class);
         $this->client->setFakeResponse('getUsers', null);
+
         $users = $this->service->getUsers();
     }
 
@@ -214,15 +216,16 @@ class KeycloakClientTest extends TestCase
     public function test_when_requesting_users_and_response_is_flat_array_exception_is_thrown()
     {
         $this->expectException(\Exception::class);
-        $this->client->setFakeResponse('getUsers', ['id' => $users[0]->id, 'username' => $users[0]->username]);
+        $this->client->setFakeResponse('getUsers', ['id' => $this->users[0]->id, 'username' => $this->users[0]->username]);
         $users = $this->service->getUsers();
     }
 
     public function test_when_requesting_users_and_response_is_missing_id_exception_is_thrown()
     {
         $this->expectException(\Exception::class);
-        $this->client->setFakeResponse('getUsers', [['username' => $users[0]->username], ['username' => $users[1]->username]]);
+        $this->client->setFakeResponse('getUsers', [['username' => $this->users[0]->username], ['username' => $this->users[1]->username]]);
         $users = $this->service->getUsers();
+        var_dump($users);
     }
 
     public function test_when_creating_a_user_a_user_is_returned()
@@ -338,5 +341,49 @@ class KeycloakClientTest extends TestCase
         $service = $this->app->make( KeycloakClientInterface::class );
 
         $users = $service->searchOrganizationUsers("org-uuid");
+    }
+
+    public function test_a_user_can_change_password()
+    {
+        $this->instance( KeycloakClientInterface::class, Mockery::mock(
+            KeycloakClientService::class, function($mock) {
+                $mock->shouldReceive('changePassword')->times(1);
+            } )
+        );
+        $service = $this->app->make( KeycloakClientInterface::class );
+        $users = $service->changePassword('id', 'password');
+    }
+
+    public function test_can_globally_logout_user()
+    {
+        $this->instance( KeycloakClientInterface::class, Mockery::mock(
+            KeycloakClientService::class, function($mock) {
+                $mock->shouldReceive('logoutUser')->times(1);
+            } )
+        );
+        $service = $this->app->make( KeycloakClientInterface::class );
+        $users = $service->logoutUser('id');
+    }
+
+    public function test_can_block_user_from_logging_in()
+    {
+        $this->instance( KeycloakClientInterface::class, Mockery::mock(
+            KeycloakClientService::class, function($mock) {
+                $mock->shouldReceive('blockUser')->times(1);
+            } )
+        );
+        $service = $this->app->make( KeycloakClientInterface::class );
+        $users = $service->blockUser('id');
+    }
+
+    public function test_can_ubblock_user_to_enable_login()
+    {
+        $this->instance( KeycloakClientInterface::class, Mockery::mock(
+            KeycloakClientService::class, function($mock) {
+                $mock->shouldReceive('unblockUser')->times(1);
+            } )
+        );
+        $service = $this->app->make( KeycloakClientInterface::class );
+        $users = $service->unblockUser('id');
     }
 }

@@ -3,7 +3,6 @@
 
 <head lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <title>piqlConnect</title>
-    <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=yes">
     <link href="{{ asset('css/vendor.css') }}" rel="stylesheet" />

@@ -13,18 +13,73 @@ class KeycloakClientService implements KeycloakClientInterface
      * @param \Keycloak\Admin\KeycloakClient
      */
     private $client;
+    private $gzClient;
+    private $gzClientCreds;
 
-    public function __construct(Object $keycloakClient = null)
+    private $realm;
+    private $username;
+    private $password;
+    private $clientId;
+    private $baseUri;
+
+    private function init($params = [])
     {
-        $this->client = $keycloakClient;
-        if ($this->client === null) {
-            $this->client = \Keycloak\Admin\KeycloakClient::factory([
-                'realm' => env('APP_AUTH_SERVICE_REALM'),
-                'username' => env('APP_AUTH_SERVICE_USERNAME'),
-                'password' => env('APP_AUTH_SERVICE_PASSWORD'),
-                'client_id' => env('APP_AUTH_SERVICE_CLIENT_ID'),
-                'baseUri' => env('APP_AUTH_SERVICE_BASE_URL')
-            ]);
+        $p = collect($params)->only(['realm','username','password','client_id','baseUri', ])->all();
+        $this->realm = isset($p['realm']) ? $p['realm'] : env('APP_AUTH_SERVICE_REALM');
+        $this->username = isset($p['username']) ? $p['username'] : env('APP_AUTH_SERVICE_USERNAME');
+        $this->password = isset($p['password']) ? $p['password'] : env('APP_AUTH_SERVICE_PASSWORD');
+        $this->clientId = isset($p['client_id']) ? $p['client_id'] : env('APP_AUTH_SERVICE_CLIENT_ID');
+        $this->baseUri = isset($p['baseUri']) ? $p['baseUri'] : env('APP_AUTH_SERVICE_BASE_URL');
+    }
+
+    private function params($keys=[])
+    {
+        $p = [
+            'realm' => $this->realm,
+            'username' => $this->username,
+            'password' => $this->password,
+            'client_id' => $this->clientId,
+            'baseUri' => $this->baseUri,
+        ];
+        if(empty($keys)) return $p;
+        return collect($p)->only($keys)->all();
+    }
+
+    public function __construct($params = [])
+    {
+        $this->init($params);
+        if(isset($params['client'])) $this->client = $params['client'];
+        else $this->client = \Keycloak\Admin\KeycloakClient::factory($this->params());
+        if(isset($params['gzClient'])) $this->gzClient = $params['gzClient'];
+    }
+
+    private function initGuzzleClient()
+    {
+        if($this->gzClient != null) return;
+        $this->gzClient = new \GuzzleHttp\Client(['base_uri' => $this->baseUri]);
+        //todo: consider caching credentials locally for refresh before logging in afresh
+        $params = $this->params(['username', 'password', 'client_id']);
+        $res = $this->gzClient->post("/auth/realms/$this->realm/protocol/openid-connect/token", [
+            'headers' =>  ['Content-Type' => 'application/x-www-form-urlencoded'],
+            'form_params' => array_merge($params, ['grant_type' => 'password'])
+        ]);
+        $this->gzClientCreds = json_decode($res->getBody()->getContents());
+    }
+
+    private function getGuzzleClient()
+    {
+        if ($this->gzClient == null)
+            $this->initGuzzleClient();
+        return $this->gzClient;
+    }
+
+    private function customRequest(callable $consumer) {
+        try {
+            $res = $consumer($this->getGuzzleClient(), $this->gzClientCreds->access_token);
+            $this->validateKeycloakResponse($res);
+            return $res;
+        } catch (Exception $e) {
+            throw $e;
         }
     }
 
@@ -53,7 +108,8 @@ class KeycloakClientService implements KeycloakClientInterface
             'firstName' => $firstName,
             'lastName' => $lastName,
             'enabled' => true,
-            'attributes' => ['organization' => $organizationId]
+            'attributes' => ['organization' => $organizationId],
+            'requiredActions' => ['UPDATE_PASSWORD']
         ]);
         $this->validateKeycloakResponse($response);
 
@@ -211,5 +267,43 @@ class KeycloakClientService implements KeycloakClientInterface
         $res = $this->client->getGroupRoleMappings($params);
         $this->validateKeycloakResponse($res);
         return $res;
+    }
+
+    public function changePassword($id, $password)
+    {
+        return $this->customRequest(function(\GuzzleHttp\Client $client, string $token) use ($id, $password) {
+            $res = $client->put("/auth/admin/realms/$this->realm/users/$id/reset-password", [
+                'headers' => [
+                    'Authorization' => "Bearer $token",
+                    'Content-Type' => 'application/json'
+                ],
+                \GuzzleHttp\RequestOptions::JSON => [
+                    'type' => 'password',
+                    'value' => $password,
+                    'temporary' => true
+                ]
+            ]);
+            return json_decode($res->getBody()->getContents());
+        });
+    }
+
+    public function logoutUser($id)
+    {
+        return $this->customRequest(function(\GuzzleHttp\Client $client, string $token) use ($id) {
+            $res = $client->post("/auth/admin/realms/$this->realm/users/$id/logout", [
+                'headers' => ['Authorization' => "Bearer $token"],
+            ]);
+            return json_decode($res->getBody()->getContents());
+        });
+    }
+
+    public function blockUser($id)
+    {
+        return $this->client->updateUser(['id' => $id, 'enabled' => false]);
+    }
+
+    public function unblockUser($id)
+    {
+        return $this->client->updateUser(['id' => $id, 'enabled' => true]);
     }
 }

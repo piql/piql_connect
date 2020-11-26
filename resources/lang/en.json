@@ -195,7 +195,7 @@
     "ingest.offlineStorage.config.uploadedTitle": "Uploaded images",
     "ingest.offlineStorage.config.toast.fileUploaded.message": "Your image was sent",
     "ingest.offlineStorage.config.removeQuestion": "Remove this file?",
-    
+
     "ingest.fileList.header": "File list",
     "ingest.fileList.ingress": "Displays the files included in the submission package",
     "ingest.fileList.fileSize": "File size",
@@ -410,6 +410,9 @@
     "settings.logo.ingress": "Upload a new logo image",
     "settings.logo.button": "Select logo file",
     "settings.logo.successful": "Your log has been changed",
+
+    "settings.user.disabled": "Disabled",
+    "settings.user.enabled": "Active",
 
     "settings.user.assignAccountMetadata.title": "Assign metadata to account",
     "settings.admin.accountMetadataUser.fullname": "Full name",
