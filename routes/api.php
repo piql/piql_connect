@@ -238,6 +238,7 @@ Route::group(['prefix' => 'v1/admin/users'], function () {
     Route::get('{id}', 'Api\Admin\UserController@show');
     Route::post('disable', 'Api\Admin\UserController@disable');
     Route::post('enable', 'Api\Admin\UserController@enable');
+    Route::put('{id}', 'Api\Admin\UserController@update');
 });
 
 

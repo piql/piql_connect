@@ -73,6 +73,13 @@ If all goes well, you should now after the build process, have a working develop
 If you need to rebuild PiqlConnect, simply re-run the build script.
 
 
+### Resetting the MongoDB backend for the statistics view on the dashboard
+
+If there are errors in the data shown on the dashboard, run the following command:
+```
+$ cd deploy/
+$ python3 reset_stats_db.py
+```
 ### End-to-end tests
 
 To perform user interface tests, you must run:
