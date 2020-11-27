@@ -12,7 +12,10 @@
                 </button>
             </div>
             <div class="card-body">
-                <add-user v-if="showAddUser" @addUser='addUser'></add-user>
+                <add-user v-if="showAddUser"
+                  :user="createUserModel"
+                  :organization="userOrganizationId" :language="currentLanguage"
+                  :actions="requiredActions" @addUser='addUser'></add-user>
                 <div v-else>
                     <user-listing @disableUser="disableUser" :users="formattedUsers" @editUser="editUser" @enableUser="enableUser"></user-listing>
                     <div class="row text-center pagerRow">
@@ -32,12 +35,20 @@ import { mapGetters, mapActions } from "vuex";
 
 export default {
     components:{
-        Pager
+      Pager
     },
     data() {
-        return {
-            showAddUser: false
-        };
+      return {
+        showAddUser: false,
+        org: "acerat-org-id",
+        requiredActions: [
+          {value:'user.form.post-action.change-password', text: "Change Password"},
+          {value:'user.form.post-action.verify-email', text: "Verify Email"},
+        ],
+        createUserModel: {
+          error: null
+        }
+      };
     },
     props: {
         height: {
@@ -66,7 +77,7 @@ export default {
         })
     },
     computed:  {
-        ...mapGetters(['formattedUsers','usersPageMeta','userApiResponse', 'userTableRowCount']),
+        ...mapGetters(['formattedUsers','usersPageMeta','userApiResponse', 'userTableRowCount', 'userOrganizationId', 'currentLanguage']),
         queryParams(){
             let query = this.$route.query;
             let page = query.page || 1;

@@ -16,13 +16,14 @@ const getters = {
     userSettings: state => state.settings,
     userLanguages: state => state.languages,
     currentUser: state => state.user,
-    userName: () => Vue.prototype.$keycloak.given_name,
+    userName: () => Vue.prototype.$keycloak.tokenParsed.preferred_username,
     userIsAdmin: () => Vue.prototype.$keycloak.resourceAccess['piql-connect-api'].roles.includes('admin'),
+    userOrganizationId: () => Vue.prototype.$keycloak.tokenParsed.organization,
     userMetadataTemplateByUserId: state => userId => {
         return state.userMetadataTemplates.find((t) => t.owner_id == userId);
     },
     userMetadataTemplates: state => state.userMetadataTemplates,
-    currentLanguage: state => state.settings.interface.language,
+    currentLanguage: state => state.settings.interface.language || 'en',
     userTableRowCount: state => state.settings.interface.tableRowCount,
 }
 
@@ -40,7 +41,7 @@ const actions = {
             })
         });
     },
-    
+
 
     async fetchLanguages({ commit }) {
         let response = await axios.get("/api/v1/system/languages");
@@ -77,7 +78,7 @@ const actions = {
                 reject(error.response)
             })
         })
-        
+
     },
 
     async createEmptyTemplateWithUserAsCreator({ commit }, userAccount) {
@@ -106,7 +107,7 @@ const mutations = {
     setLanguagesMutation: (state, payload) => {
         state.languages = payload.data;
     },
-    
+
     setResponse: (state, response) => {
         state.response = {
             status: response.status,
