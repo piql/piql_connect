@@ -36,7 +36,7 @@
 
     <DisableUserModal :user="user" @disabled-user="disableButtonClicked"/>
     <EnableUserModal :user="user" @enabled-user="enableButtonClicked"/>
-    <EditUserModal :user="user" @edited-user="editButtonClicked"/>
+    <EditUserModal :user="user" @edited-user="editUser"/>
 
   </div>
 </template>
@@ -79,9 +79,9 @@ export default {
         enableButtonClicked(id){
             this.$emit('enableUser', {users: [id]});
         },
-        editButtonClicked(){
+        editUser(user){
             //some data will be passed here before emitting
-            this.$emit('editUser');
+            this.$emit('editUser', user);
         },
         formatDate(ISOdate){
             let date = new Date(ISOdate);
