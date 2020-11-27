@@ -300,6 +300,8 @@
     "settings.settings.enableUserWarning": "Are you sure you want to enable this user? If so, proceed to enable",
 
     "settings.listing.fullname": "Fullname",
+    "settings.listing.firstname": "First Name",
+    "settings.listing.lastname": "Last Name",
     "settings.listing.username": "Username",
     "settings.listing.email": "Email",
     "settings.listing.status": "Status",
