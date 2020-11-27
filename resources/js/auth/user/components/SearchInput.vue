@@ -3,13 +3,14 @@
     <b-input-group class="mt-3 no-border">
       <b-form-input
         class="no-border"
-        v-model="search"
-        placeholder="search users"
-        @keydown.enter="searchForUser"
+        v-model="search.new"
+        :placeholder="$t('settings.user.listing.search.placeholder')"
+        @change="searchForUser"
+        @keypress="searchForUser"
       ></b-form-input>
       <b-input-group-append class="no-border">
         <b-button
-          v-if="searchInputPresent"
+          v-if="searchInputAvailable"
           variant="outline-light"
           class="text-danger no-border"
           @click="clearSearch"
@@ -24,34 +25,37 @@
 export default {
   data() {
     return {
-      search: "",
+      defer: {
+          func: null,
+          timeout: 700
+      },
+      search: {
+        old: "",
+        new: ""
+      },
       error: "",
-      limit: 100,
     };
   },
   computed: {
-    searchInputPresent() {
-      return this.search.trim().length > 0;
+    searchInputAvailable() {
+      return this.search.new.trim() != this.search.old;
     },
   },
   watch: {
-    search() {
-      if(this.search.length == 0) this.fetchUsers();
+    searchInputAvailable() {
+      this.searchForUser();
     }
   },
   methods: {
-    clearSearch() {
-      this.search = "";
+    clearDeferFunc() {
+        if(this.defer.func != null) clearTimeout(this.defer.func);
+        this.defer.func = null;
     },
-    fetchUsers(){
-      let params = {
-        query: { q: this.search.trim(), limit: this.limit },
-        token: this.authBearerToken,
-      };
-      this.fetchChatUsers(params).then(() => {});
+    clearSearch() {
+      this.search.new = "";
     },
     searchForUser() {
-      if (!this.searchInputPresent) return;
+      if (!this.searchInputAvailable) return;
       this.fetchUsers();
     },
   },
