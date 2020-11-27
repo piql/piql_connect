@@ -44,7 +44,7 @@
 <script>
 import DisableUserModal from './../auth/user/settings/components/DisableUserModal';
 import EnableUserModal from './../auth/user/settings/components/EnableUserModal';
-import EditUserModal from './../auth/user/settings/components/EditUserModal';
+import EditUserModal from './../auth/user/components/EditUserModal';
 export default {
     data() {
         return {
