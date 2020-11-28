@@ -12,7 +12,7 @@
     </div>
     <template #modal-footer="{ ok, cancel }">
       <b-button variant="success" @click="ok()">{{$t('OK')}}</b-button>
-      <b-button variant="outline-secondary" @click="cancel()">{{$t('Cancel')}}</b-button>
+      <b-button variant="default" @click="cancel()">{{$t('Cancel')}}</b-button>
     </template>
   </b-modal>
 </template>
