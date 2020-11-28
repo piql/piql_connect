@@ -36,7 +36,7 @@
 
     <DisableUserModal :user="user" @disabled-user="disableButtonClicked"/>
     <EnableUserModal :user="user" @enabled-user="enableButtonClicked"/>
-    <EditUserModal :user="user" @edited-user="editButtonClicked"/>
+    <EditUserModal :user="user" @edited-user="editUser"/>
 
   </div>
 </template>
@@ -44,7 +44,7 @@
 <script>
 import DisableUserModal from './../auth/user/settings/components/DisableUserModal';
 import EnableUserModal from './../auth/user/settings/components/EnableUserModal';
-import EditUserModal from './../auth/user/settings/components/EditUserModal';
+import EditUserModal from './../auth/user/components/EditUserModal';
 export default {
     data() {
         return {
@@ -79,9 +79,9 @@ export default {
         enableButtonClicked(id){
             this.$emit('enableUser', {users: [id]});
         },
-        editButtonClicked(){
+        editUser(user){
             //some data will be passed here before emitting
-            this.$emit('editUser');
+            this.$emit('editUser', user);
         },
         formatDate(ISOdate){
             let date = new Date(ISOdate);

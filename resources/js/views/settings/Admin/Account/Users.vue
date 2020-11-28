@@ -83,7 +83,9 @@ export default {
         },
     },
     methods: {
-        ...mapActions(['fetchUsers','postNewUser','disableUserRequest','enableUserRequest', 'fetchUserSettings', 'createUser']),
+        ...mapActions([
+          'fetchUsers','disableUserRequest','enableUserRequest', 'fetchUserSettings',
+          'createUser', 'updateUser']),
         showCreateUserForm(){
             this.showAddUser = true;
         },
@@ -99,9 +101,12 @@ export default {
             this.fetchUsers(this.queryParams);
           });
         },
-        editUser(){
-            //logic to send data to endpoint goes here
-            this.$bvModal.hide('edit-user');
+        editUser(user){
+            this.updateUser(user).then(() => {
+                this.$bvModal.hide('edit-user');
+            }).catch(e => {
+                console.log(e)
+            })
         },
         disableUser(data){
             //vuex action call

@@ -49,6 +49,20 @@ const actions = {
                 })
                 resolve(response.data)
             }).catch(err => {
+                commit('setErrorResponse', err.response)
+                reject(err.response.data);
+            })
+        })
+    },
+
+    async updateUser({ commit }, data) {
+        return new Promise((resolve, reject) => {
+            axs.put(`/users/${data.id}`, data).then(response => {
+                commit('setUpdatedUser', data);
+                resolve(response.data)
+            }).catch(err => {
+                commit('setUserError', {id: data.id, error: err.response.data});
+                commit('setErrorResponse', err.response)
                 reject(err.response.data);
             })
         })
@@ -89,6 +103,23 @@ const actions = {
 
 //mutations
 const mutations = {
+    setUserError(state, data) {
+        let index = state.users.findIndex((u => u.id == data.id));
+        if(state.users[index] == undefined) {
+            console.log(`could not find user with id ${data.id}`);
+            return
+        }
+        state.users[index].error = data.error;
+    },
+    setUpdatedUser(state, data) {
+        let index = state.users.findIndex((u => u.id == data.id));
+        if(state.users[index] == undefined) {
+            console.log(`could not find user with id ${data.id}`);
+            return
+        }
+        data.error = null;
+        Object.assign(state.users[index], data)
+    },
     setUserSearchMeta(state, data) {
         let limit = data.query.limit || data.showing;
         let offset = data.query.offset || 0;
@@ -105,7 +136,11 @@ const mutations = {
         }
     },
     setUsersMutation: (state, payload) => {
-        state.users = payload;
+        state.users = [];
+        payload.forEach(u => {
+            u.error = '';
+            state.users.push(u);
+        })
         state.response = payload;
     },
     setResponse: (state, response) => {
