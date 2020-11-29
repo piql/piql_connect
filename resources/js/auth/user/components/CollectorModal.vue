@@ -2,7 +2,7 @@
   <b-modal class="collector-modal" :id="glue('collector', title)" :title="$t(title)" @show="resetModal" @hidden="resetModal" @ok="handleOk">
     <div>
       <div>
-        <strong class="text-danger center">{{error}}</strong>
+        <strong class="text-danger center error">{{error}}</strong>
       </div>
       <b-form @submit.stop.prevent="handleSubmit" :ref="glue('collector-form', title)">
         <b-form-group v-for="a in attr" :key="glue('input-', a)" :id="glue('input', a)" :label-for="glue('input', a)" :label="$t(a)">
@@ -56,7 +56,7 @@ export default {
       this.error = null;
       let ref = this.glue('collector-form', this.title);
       if (!this.$refs[ref].checkValidity()) {
-        this.error = $t('form.validation.error');
+        this.error = this.$t('form.validation.error');
         return;
       }
       this.$emit('data', this.form);
@@ -73,5 +73,9 @@ export default {
 h5 {
   font-size: 1.8rem;
   margin-left: 0px;
+}
+
+strong.error {
+  margin-bottom: 10px;
 }
 </style>

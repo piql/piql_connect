@@ -41,13 +41,20 @@
         <b-form-group class="ml-1" label-for="input-attributes" label="">
           <b-button right @click="showAttributeForm">+ {{$t('modal.user.title.attributes')}}</b-button>
           <!-- TODO: support for deleting/editing form attributes in table-->
-          <b-table id="input-attributes" hover :items="form.attributes"></b-table>
+          <b-table id="input-attributes" :fields="attributes.fields" :items="form.attributes" hover>
+            <template #cell(actions)="data">
+              <span class="action"
+                @click="removeAttribute(data.item.id)"
+                :title="$t('text.remove') + ' ' + data.item.attribute"
+              >x</span>
+            </template>
+          </b-table>
         </b-form-group>
 
         <b-button type="submit" variant="primary">{{$t('settings.settings.addUser')}}</b-button>
       </b-form>
 
-      <CollectorModal title="modal.user.title.attributes" :attr="attributeLabels" @data="appendAttributes" />
+      <CollectorModal title="modal.user.title.attributes" :attr="attributes.dataLabels" @data="addAttribute" />
     </div>
 </template>
 
@@ -67,11 +74,18 @@ export default {
   data(){
     return {
       actionOptions: [],
-      attributeLabels: [
-        // attributes consumed by the generic form modal
-        'user.label.attribute',
-        'user.label.value'
-      ],
+      attributes:{
+        autoId: 0,
+        fields: [
+          {key: 'attribute', label: this.$t('user.label.attribute')},
+          {key: 'value', label: this.$t('user.label.value')},
+          {key: 'actions', label: this.$t('user.label.actions')},
+        ],
+        dataLabels: [
+          'user.label.attribute',
+          'user.label.value'
+        ]
+      },
       form: {
         requiredActions: [],
       }
@@ -106,18 +120,25 @@ export default {
         email: '',
         username: '',
         requiredActions: [],
-        attributes: [
-          { attribute: 'organisation', value: this.organization },
-          { attribute: 'rows-per-page', value: 8 },
-          { attribute: 'language', value: this.language },
-        ],
+        attributes: [],
       };
+      this.addAttribute({ attribute: 'organisation', value: this.organization })
+      this.addAttribute({ attribute: 'rows-per-page', value: 8 })
+      this.addAttribute({ attribute: 'language', value: this.language })
     },
     showAttributeForm(){
       this.$bvModal.show('collector-modal-user-title-attributes')
     },
-    appendAttributes(data){
-      this.form.attributes.push(data);
+    addAttribute(data){
+      let id = this.attributes.autoId + 1;
+      this.form.attributes.push({id, ...data});
+      this.attributes.autoId++
+    },
+    removeAttribute(id) {
+      let attr = this.form.attributes.find(a => a.id == id);
+      if(!confirm(`${this.$t('text.remove')} ${attr.attribute}`)) return;
+      let index = this.form.attributes.findIndex(a => a.id == id);
+      this.form.attributes.splice(index, 1);
     },
     submitForm(e){
       e.preventDefault();
@@ -129,9 +150,9 @@ export default {
         attributes: [],
         requiredActions: [],
       }
-      this.form.attributes.forEach(a => data.attributes.push({attribute: a.attribute, value: a.value}))
       this.form.requiredActions.forEach(a => data.requiredActions.push(a))
-      this.$emit('addUser', data);
+      this.form.attributes.forEach(a => data.attributes.push({attribute: a.attribute, value: a.value}))
+      this.$emit('dataAvailable', data);
     }
   }
 }
@@ -145,5 +166,14 @@ export default {
 }
 #input-onCreateAction{
   margin-bottom: 0.5rem!important;
+}
+span.action {
+  align-self: center;
+  color: red;
+}
+span.action:hover {
+  font-weight: bold;
+  font-size: 110%;
+  cursor: pointer;
 }
 </style>

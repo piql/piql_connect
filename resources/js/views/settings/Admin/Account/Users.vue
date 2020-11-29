@@ -14,7 +14,7 @@
             <div class="card-body">
                 <add-user v-if="showAddUser" :formLoaded="showAddUser"
                   :organization="userOrganizationId" :language="currentLanguage"
-                  :actions="onUserCreatedActions" @addUser='addUser'>
+                  :actions="onUserCreatedActions" @dataAvailable='addUser'>
                 </add-user>
                 <div v-else>
                     <user-listing @disableUser="disableUser" :users="formattedUsers" @editUser="editUser" @enableUser="enableUser"></user-listing>

@@ -420,8 +420,11 @@
     "user.form.post-actions.hint": "You may select multiple required user actions",
     "form.validation.error": "Form has validation errors",
     "modal.user.title.attributes": "User Attributes",
+
     "user.label.attribute": "Attribute",
     "user.label.value": "Value",
+    "user.label.actions": "Actions",
+    "text.remove": "Remove",
 
     "settings.user.assignAccountMetadata.title": "Assign metadata to account",
     "settings.admin.accountMetadataUser.fullname": "Full name",
