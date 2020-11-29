@@ -43,7 +43,6 @@
 
         <b-form-group class="ml-1" label-for="input-attributes" label="">
           <b-button right @click="showAttributeForm">+ {{$t('modal.user.title.attributes')}}</b-button>
-          <!-- TODO: support for deleting/editing form attributes in table-->
           <b-table id="input-attributes" :fields="attributes.fields" :items="form.attributes" hover>
             <template #cell(actions)="data">
               <span class="action"
