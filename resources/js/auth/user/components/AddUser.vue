@@ -1,5 +1,8 @@
 <template>
     <div>
+      <div>
+        <strong class="text-danger center error" id="add-user-modal-error">{{errorMessage}}</strong>
+      </div>
       <b-form ref="add_user_form" @submit.stop.prevent="submitForm">
         <b-form-group id="input-firstname" label-for="input-firstname" :label="$t('settings.listing.firstname')">
             <b-form-input id="input-firstname" class="mb-4"
@@ -70,9 +73,11 @@ export default {
     organization: String,
     language: String,
     formLoaded: Boolean,
+    error: String
   },
   data(){
     return {
+      errorMessage: null,
       actionOptions: [],
       attributes:{
         autoId: 0,
@@ -102,6 +107,12 @@ export default {
     formLoaded() {
       //we need to do away with this by creating a route for create user page
       if(this.formLoaded) this.resetForm();
+    },
+    error(){
+      this.errorMessage = this.error || null;
+      if(this.errorMessage != null) {
+        document.getElementById('add-user-modal-error').scrollIntoView({behavior: "smooth"});
+      }
     }
   },
   methods:{
@@ -114,6 +125,7 @@ export default {
       })});
     },
     resetForm() {
+      this.error = null;
       this.form = {
         firstname: '',
         lastname: '',
@@ -175,5 +187,8 @@ span.action:hover {
   font-weight: bold;
   font-size: 110%;
   cursor: pointer;
+}
+strong.error {
+  margin-bottom: 10px;
 }
 </style>

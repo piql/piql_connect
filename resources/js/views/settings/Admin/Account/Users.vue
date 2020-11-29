@@ -12,7 +12,8 @@
                 </button>
             </div>
             <div class="card-body">
-                <add-user v-if="showAddUser" :formLoaded="showAddUser"
+                <add-user v-if="showAddUser"
+                  :formLoaded="showAddUser" :error="createModel.error"
                   :organization="userOrganizationId" :language="currentLanguage"
                   :actions="onUserCreatedActions" @dataAvailable='addUser'>
                 </add-user>
@@ -40,6 +41,9 @@ export default {
     data() {
       return {
         showAddUser: false, //this needs to go in preference for a route driven UI
+        createModel: {
+          error: null
+        }
       };
     },
     props: {
@@ -96,9 +100,14 @@ export default {
           this.fetchUsers(this.queryParams);
         },
         addUser(user){
-          this.createUser(user).then(() => {
+          this.createUser(user)
+          .then(() => {
+            this.createModel.error = null;
             this.showUserList();
             this.fetchUsers(this.queryParams);
+          })
+          .catch(e => {
+            this.createModel.error = e.data.errorMessage;
           });
         },
         editUser(user){

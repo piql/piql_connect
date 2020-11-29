@@ -78,8 +78,7 @@ const actions = {
             axs.post('/users', data).then(response => {
                 resolve(response.data)
             }).catch(err => {
-                commit('setErrorResponse', err.response)
-                reject(err.response.data);
+                reject(err);
             })
         })
     },
