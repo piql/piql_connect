@@ -35,7 +35,7 @@ export default {
       return this.searchText.trim().length > 0;
     },
     border(){
-      return this.showBorder || false;
+      return this.showBorder || true;
     }
   },
   watch: {
