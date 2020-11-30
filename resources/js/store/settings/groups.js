@@ -13,7 +13,7 @@ const state = {
 
 const getters = {
     userGroups: state => state.groups,
-    groupPageMeta: state => state.pageMeta,
+    groupsPageMeta: state => state.pageMeta,
     groupsApiResponse: state => state.response,
     userGroupUsers: state => {
         return (state.groupUsers)?state.groupUsers:[];
@@ -65,7 +65,7 @@ const actions = {
                 commit('setGroupsMutation', response.data)
                 axs.get('/groups/count').then(rs => {
                     commit('setGroupSearchMeta', {
-                        total: rs.data,
+                        total: rs.data.count,
                         showing: response.data.length,
                         query: query
                     })
@@ -129,9 +129,7 @@ const mutations = {
             status:error.status,
             message: error.data.message
         }
-        
     }
-
 }
 
 export default {

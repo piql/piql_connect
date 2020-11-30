@@ -354,7 +354,6 @@
 
     "settings.groups.addGroup": "Añadir Grupo",
     "settings.groups.group": "Grupo",
-    "settings.groups.description": "Descripción", 
     "settings.groups.assignUsers": "Asignar Usuarios",
     "settings.groups.listRolesAndUsers": "Listar Roles & Usuarios Asignados",
     "settings.groups.assignRoles": "Asignar Roles",
