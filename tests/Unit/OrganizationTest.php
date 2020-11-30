@@ -6,6 +6,8 @@ use App\Events\OrganizationCreatedEvent;
 use App\Organization;
 use App\Account;
 use App\User;
+use Faker\Factory as Faker;
+use Faker\Provider\Address;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\Event;
 use Tests\TestCase;
@@ -20,22 +22,67 @@ class OrganizationTest extends TestCase
     }
 
     /**
-     * @covers test create a basic organization with an uuid and name
+     * @test create a basic organization mass assign name
      */
-    public function test_create_a_basic_organization() {
-        // prevent firing events
-        Event::fake();
+    public function test_create_a_basic_organization_set_name_on_create() {
+        $faker = Faker::create();
 
-        $org = factory(Organization::class)->create();
-        $org = Organization::findOrFail($org->id);
-        $this->assertTrue(strlen($org->name) > 0,
+        $organizationName = $faker->company." ".$faker->companySuffix;
+        $org = Organization::create([
+            "name" => $organizationName,
+        ]);
+        $this->assertEquals($organizationName, $org->name,
             "Organization doesn't have a valid name");
-        $this->assertStringMatchesFormat("%x-%x-%x-%x-%x", $org->uuid,
-            "Organization doesn't have a valid uuid");
+
     }
 
     /**
-     * @covers test create an organization and make sure an OrganizationCreatedEvent is sent
+     * @test create a basic organization and test a valid uuid is created
+     */
+    public function test_create_a_basic_organization_and_test_a_valid_uuid_is_created() {
+        $faker = Faker::create();
+
+        $org = Organization::create([
+            "name" => $faker->company." ".$faker->companySuffix,
+        ]);
+
+        // test a valid uuid is auto generated
+        $this->assertStringMatchesFormat("%x-%x-%x-%x-%x", $org->uuid,
+            "Organization doesn't have a valid uuid");
+
+    }
+
+    /**
+     * @test create a basic organization mass assign name and uuid and validate uuid is not mass assignable
+     */
+    public function test_create_a_basic_organization_and_validate_uuid_is_not_mass_assignable() {
+        $faker = Faker::create();
+
+        $organizationName = $faker->company." ".$faker->companySuffix;
+        $uuid = $faker->uuid;
+        $org = Organization::create([
+            "name" => $organizationName,
+            "uuid" => $uuid
+        ]);
+        $this->assertEquals($organizationName, $org->name,
+            "Organization doesn't have a valid name");
+
+        // test a valid uuid is auto generated
+        $this->assertStringMatchesFormat("%x-%x-%x-%x-%x", $org->uuid,
+            "Organization doesn't have a valid uuid");
+
+        // Mass assignment rule prevents setting UUID
+        $this->assertNotEquals($org->uuid, $uuid,
+            "Mass assignment rule didn't prevent setting UUID");
+    }
+
+    public function test_create_a_basic_organization_without_setting_a_name() {
+        $this->expectException(\Illuminate\Database\QueryException::class);
+        Organization::create();
+    }
+
+    /**
+     * @test create an organization and make sure an OrganizationCreatedEvent is sent
      */
     public function test_create_organization_and_validate_OrganizationCreatedEvent_is_sent()
     {
