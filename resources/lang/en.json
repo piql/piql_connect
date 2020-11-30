@@ -421,10 +421,10 @@
     "settings.admin.accountMetadataUser.username": "Username",
     "settings.admin.assignMetadataDropdownLabel": "Select a metadata template",
     "settings.admin.assignMetadataDropdownPlaceholder": "No template selected",
+    "settings.user.listing.search.placeholder": "Search for User...",
 
     "admin.account.metadata.template.clone": "Clone Template",
     "admin.account.metadata.template.assign": "Assign Template",
-
 
     "timeout.warning": "Inactivity warning. Automatic log out in",
     "timeout.seconds": "seconds",

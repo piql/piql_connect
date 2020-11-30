@@ -12,6 +12,7 @@
                 </button>
             </div>
             <div class="card-body">
+                <search-input :timeout="search.timeout" label='settings.user.listing.search.placeholder' @data="searchUser" />
                 <add-user v-if="showAddUser" @addUser='addUser'></add-user>
                 <div v-else>
                     <user-listing @disableUser="disableUser" :users="formattedUsers" @editUser="editUser" @enableUser="enableUser"></user-listing>
@@ -29,15 +30,20 @@
 <script>
 import Pager from "../../../../components/Pager"
 import { mapGetters, mapActions } from "vuex";
+import SearchInput from '../../../../auth/user/components/SearchInput.vue';
 
 export default {
     components:{
         Pager
     },
     data() {
-        return {
-            showAddUser: false
-        };
+      return {
+        showAddUser: false,
+        search: {
+          text: "",
+          timeout: 500 //search input debounce in milliseconds
+        }
+      };
     },
     props: {
         height: {
@@ -62,7 +68,7 @@ export default {
             this.$route.query.page = 1;
         }
         this.fetchUserSettings().then(() => {
-            this.fetchUsers(this.queryParams)
+            this.fetchUsers(this.queryParams);
         })
     },
     computed:  {
@@ -73,7 +79,8 @@ export default {
             let limit = this.userTableRowCount;
             return {
                 limit: limit,
-                offset: (page - 1) * limit
+                offset: (page - 1) * limit,
+                q: this.search.text,
             }
         },
     },
@@ -112,6 +119,10 @@ export default {
             //vuex request
             this.enableUserRequest(data);
             this.$bvModal.hide('enable-user');
+        },
+        searchUser(str) {
+          this.search.text = str;
+          this.fetchUsers(this.queryParams)
         }
     }
 }

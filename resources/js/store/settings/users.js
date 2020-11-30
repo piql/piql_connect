@@ -30,13 +30,25 @@ const actions = {
         return new Promise((resolve, reject) => {
             axs.get('/users', { params }).then(response => {
                 commit('setUsersMutation', response.data)
-                axs.get('/users/count').then(rs => {
+                if(search.length > 0) {
                     commit('setUserSearchMeta', {
-                        total: rs.data,
+                        total: response.data.length,
                         showing: response.data.length,
-                        query: query
+                        query: {
+                            limit: response.data.length,
+                            total: response.data.length,
+                            offset: 0,
+                        }
                     })
-                })
+                } else {
+                    axs.get('/users/count').then(rs => {
+                        commit('setUserSearchMeta', {
+                            total: rs.data,
+                            showing: response.data.length,
+                            query: query
+                        })
+                    })
+                }
                 resolve(response.data)
             }).catch(err => {
                 commit('setErrorResponse', err.response)
