@@ -17,7 +17,17 @@ const state = {
 const getters = {
     formattedUsers: state => state.users,
     usersPageMeta: state => state.pageMeta,
-    userApiResponse: state => state.response
+    userApiResponse: state => state.response,
+    onUserCreatedActions: () => [
+        /**
+         * refer to refer to
+         * https://www.keycloak.org/docs-api/4.8/javadocs/index.html?org/keycloak/models/UserModel.RequiredAction.html
+         * for more detail
+        */
+        { value:'UPDATE_PASSWORD', text: 'user.on-create.action.update-password' },
+        { value:'VERIFY_EMAIL', text: 'user.on-create.action.verify-email' },
+        { value:'UPDATE_PROFILE', text: 'user.on-create.action.update-profile' },
+    ]
 }
 
 //actions
@@ -63,16 +73,14 @@ const actions = {
         commit('setUsersMutation', response.data)
     },
 
-    async postNewUser({ commit }, request) {
-        axios.post("/api/v1/registration/register", request).then(response => {
-            //response
-            commit('setResponse', response)
-
-        }).catch(err => {
-            //error
-            commit('setErrorResponse', err.response)
-
-        });
+    async createUser({ commit }, data) {
+        return new Promise((resolve, reject) => {
+            axs.post('/users', data).then(response => {
+                resolve(response.data)
+            }).catch(err => {
+                reject(err);
+            })
+        })
     },
 
     async disableUserRequest({ commit }, data) {
