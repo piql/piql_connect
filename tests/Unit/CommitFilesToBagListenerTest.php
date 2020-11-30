@@ -2,7 +2,6 @@
 
 namespace Tests\Unit;
 
-use App\Account;
 use App\Bag;
 use App\Events\BagCompleteEvent;
 use App\Events\BagFilesEvent;
@@ -29,14 +28,11 @@ class CommitFilesToBagListenerTest extends TestCase
 
     private $bag;
     private $user;
-    private $account;
 
     public function setUp() : void
     {
         parent::setUp();
-        $this->account = factory(Account::class)->create();
         $this->user = $user = factory(User::class)->create();
-        $this->user->account()->associate( $this->account );
         Passport::actingAs( $this->user );
 
 

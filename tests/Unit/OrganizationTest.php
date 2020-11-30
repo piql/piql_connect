@@ -131,4 +131,13 @@ class OrganizationTest extends TestCase
         $this->assertContains($userA->id, $accUserIds);
         $this->assertContains($userB->id, $accUserIds);
     }
+
+    public function test_account_from_user_via_organization() {
+        $org = factory(Organization::class)->create();
+        $acc = factory(Account::class)->create();
+        $user = factory(User::class)->create();
+        $org->account()->save($acc);
+        $org->users()->save($user);
+        $this->assertEquals($user->account->uuid, $acc->uuid);
+    }
 }

@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Organization;
 use App\Account;
 use App\AccountMetadata;
 use App\ArchiveMetadata;
@@ -36,6 +37,7 @@ class BagApiTest extends TestCase
     private $otherUser;
     private $otherBag;
     private $account;
+    private $organization;
     private $accountMetadata;
     private $archiveMetadata1;
     private $archiveMetadata2;
@@ -47,16 +49,17 @@ class BagApiTest extends TestCase
         parent::setUp();
         $this->createdBagIds = collect([]);
         $this->testBagName1 = "TestBagName1";
-        $this->account = factory(Account::class)->create();
+        $this->organization = factory(Organization::class)->create();
+        $this->account = factory(Account::class)->create([ 'organization_uuid' => $this->organization->uuid ]);
 
         $this->testUser = User::create([
             'username' => 'BagApiTestUser',
             'password' => 'notinuse',
             'full_name' => 'BagApi TestUser',
             'email' => 'bagapitestuser@localhost',
-            'account_uuid' => $this->account->uuid,
+            'organization_uuid' => $this->organization->uuid,
         ]);
-        $this->testUser->account()->associate( $this->account );
+        $this->testUser->organization()->associate( $this->organization );
 
         Passport::actingAs($this->testUser);
 
@@ -155,7 +158,7 @@ class BagApiTest extends TestCase
             'password' => 'notinuse',
             'full_name' => 'BagApi OtherTestUser',
             'email' => 'bagapiothertestuser@localhost',
-            'account_uuid' => $this->account->uuid,
+            'organization_uuid' => $this->organization->uuid,
         ]);
 
         Passport::actingAs($this->otherUser);
