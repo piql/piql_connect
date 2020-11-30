@@ -6,6 +6,7 @@ use Tests\TestCase;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Laravel\Passport\Passport;
 use Faker\Factory as faker;
+use App\Organization;
 use App\Account;
 use App\Archive;
 use App\User;
@@ -18,6 +19,7 @@ class AccountArchiveControllerTest extends TestCase
 
     private $user;
     private $account;
+    private $organization;
     private $archive;
     private $archiveContent;
     private $faker;
@@ -26,9 +28,9 @@ class AccountArchiveControllerTest extends TestCase
     {
         parent::setUp();
 
-        $this->account = factory( Account::class )->create();
-        $this->user = factory(User::class)->create();
-        $this->user->account()->associate( $this->account );
+        $this->organization = factory( Organization::class )->create();
+        $this->account = factory( Account::class )->create(['organization_uuid' => $this->organization->uuid]);
+        $this->user = factory(User::class)->create(['organization_uuid' => $this->organization->uuid]);
         Passport::actingAs( $this->user );
         $this->faker = Faker::create();
 

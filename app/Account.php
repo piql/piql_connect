@@ -20,6 +20,7 @@ class Account extends Model
         'uuid',
         'title',
         'description',
+        'organization_uuid',
         'defaultMetadataTemplate'
     ];
 

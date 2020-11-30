@@ -19,7 +19,7 @@ use Faker\Generator as Faker;
 
 $factory->define(Account::class, function (Faker $faker) {
     if(Organization::count() == 0){
-        throw new Exception("User factory failed: You need to create at least one Organization before creating an account.");
+        throw new Exception("Account factory failed: You need to create at least one Organization before creating an account.");
     }
 
     return [
