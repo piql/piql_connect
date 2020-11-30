@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use Illuminate\Support\Facades\Storage;
+use splitbrain\PHPArchive\Tar;
 use Log;
 
 class TarFileService implements \App\Interfaces\FileCollectorInterface
@@ -15,8 +16,7 @@ class TarFileService implements \App\Interfaces\FileCollectorInterface
     public function collectDirectory( string $sourceDirectoryPath, string $destinationFilePath ) : bool
     {
         try {
-            $tar = new \PharData( $destinationFilePath );
-            $tar->buildFromDirectory( $sourceDirectoryPath );
+            $this->buildFromDirectory($destinationFilePath, $sourceDirectoryPath );
         } catch ( \Exception $ex ) {
             Log::error( "Failed to collect files from {$sourceDirectoryPath} into tarball {$destinationFilePath}: {$ex->getMessage()}" );
             throw $ex;
@@ -24,19 +24,48 @@ class TarFileService implements \App\Interfaces\FileCollectorInterface
         return true;
     }
 
-
-    public function collectSingleFile( string $sourceFilePath, string $collectionPath, string $destinationFilePath, bool $deleteWhenCollected ) : bool
+    public function collectMultipleFiles( array $sourceFilePaths, string $destinationFilePath, bool $deleteWhenCollected ) : bool
     {
         try {
-            $tar = new \PharData( $destinationFilePath );
-            $tar->addFile( $sourceFilePath, $collectionPath );
-            if( $deleteWhenCollected ) {
-                unlink( $sourceFilePath );
-            }
+            $this->buildFromIterator($destinationFilePath, $sourceFilePaths );
         } catch ( \Exception $ex ) {
-            Log::error( "Failed to collect the file {$sourceFilePath} into tarball {$destinationFilePath}: {$ex->getMessage()}" );
+            Log::error( "Failed to collect the files into tarball {$destinationFilePath}: {$ex->getMessage()}" );
             throw $ex;
         }
+
+        if( $deleteWhenCollected ) {
+            foreach( $sourceFilePaths as $sourceFilePath ) {
+                if ( !unlink($sourceFilePath) ) {
+                    Log::warning("Failed to delete file");
+                }
+            }
+        }
+
         return true;
+    }
+
+    private function buildFromIterator($destinationFilePath, array $sourceFilePaths) {
+        $tar = new Tar();
+        $tar->create( $destinationFilePath );
+        foreach ($sourceFilePaths as $fileName=>$file) {
+            if (is_file($file)){
+                $tar->addFile($file, $fileName);
+            }
+        }
+        $tar->close();
+    }
+
+    private function buildFromDirectory($destinationFilePath, $dir) {
+        $tar = new Tar();
+        $tar->create( $destinationFilePath );
+        $rii = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($dir));
+        $dirLen = strlen(realpath($dir));
+        foreach ($rii as $file) {
+            if ($file->isFile()){
+            	$path = realpath($file->getPathname());
+            	$tar->addFile($path, substr($path, $dirLen - strlen($path) + 1));
+            }
+        }
+        $tar->close();
     }
 }

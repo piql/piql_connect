@@ -2,6 +2,36 @@
 export HOST_USERID=333
 export HOST_GROUPID=333
 
+while getopts r:c:uh:p:ls: flag
+do  
+  case "${flag}" in
+    r) KEYCLOAK_REALM_NAME=${OPTARG};;
+    c) KEYCLOAK_CALLBACK_CLIENT_SECRET=${OPTARG};;
+    u) UPDATE_AM_SERVICE_CALLBACKS=true;;
+    h) CONNECT_HOSTNAME=${OPTARG};;
+    p) KEYCLOAK_REALM_PUBLIC_KEY=${OPTARG};;
+    l) LOCALDEV=true;;
+    s) STORAGE_LOCATION_ID=${OPTARG};;
+    *) echo "Usage: ./automated-build-connect.sh [OPTIONS]
+
+    #The following variables are required:
+    
+    #-r --realm-name                 Keycloak realm name
+    #-p --realm-public-key           Keycloak realm public key
+    #-c --callback-client-secret     Keycloak callback client secret
+    #-s --storage-location-ID        Archivematica Storage Location ID
+    #-h --server-hostname            Server FQDN
+    
+    #In addition, the following variables can be stated:
+    
+    #-l --localdev                   Turn on Localdev mode
+    #-u --update-am-callbacks        Update Archivematica service callbacks
+
+    #"
+    #exit 1
+  esac
+done
+
 # Check for resources
 if [[ ! -z $UPDATE_AM_SERVICE_CALLBACKS ]] ; then
   which lynx >& /dev/null
@@ -13,6 +43,11 @@ fi
 
 # Select hostname
 currHostname=$CONNECT_HOSTNAME
+if [[ -z $CONNECT_HOSTNAME ]] ; then
+  echo "CONNECT_HOSTNAME is not set"
+  exit 1
+fi
+
 echo "Hostname to be used: $currHostname"
 ping -c4 $currHostname
 if [ $? -ne 0 ] ; then
@@ -44,6 +79,9 @@ if [[ ! -z $STORAGE_LOCATION_ID ]] ; then
   replaceString=$(cat .env | grep STORAGE_LOCATION_ID)
   sed -i "s/$replaceString/STORAGE_LOCATION_ID=$STORAGE_LOCATION_ID/g" .env || exit $?
 fi
+
+echo "Generate environment.js"
+./init-auth-client.sh -r $KEYCLOAK_REALM_NAME|| exit $?
 
 echo "Composer"
 composer install || exit $?
@@ -145,14 +183,31 @@ KEYCLOAK_USER_PROVIDER_CREDENTIAL=username
 KEYCLOAK_TOKEN_PRINCIPAL_ATTRIBUTE=preferred_username
 KEYCLOAK_APPEND_DECODED_TOKEN=true
 KEYCLOAK_ALLOWED_RESOURCES="piql-connect-api"
+APP_AUTH_SERVICE_REALM='$KEYCLOAK_REALM_NAME'
+APP_AUTH_SERVICE_BASE_URL=https://auth.piqlconnect.com
+APP_AUTH_SERVICE_CALLBACK_CLIENT=piql-service-callback
+APP_AUTH_SERVICE_CALLBACK_CLIENT_SECRET='$KEYCLOAK_CALLBACK_CLIENT_SECRET'
 ' >> $envfile || exit $?
 
+if [[ ! -z $APP_AUTH_SERVICE_USERNAME ]] ; then
+  replaceString=$(cat .env | grep APP_AUTH_SERVICE_USERNAME)
+  sed -i "s/$replaceString/APP_AUTH_SERVICE_USERNAME=$APP_AUTH_SERVICE_USERNAME/g" .env || exit $?
+fi
+
+if [[ ! -z $APP_AUTH_SERVICE_PASSWORD ]] ; then
+  replaceString=$(cat .env | grep APP_AUTH_SERVICE_PASSWORD)
+  sed -i "s/$replaceString/APP_AUTH_SERVICE_PASSWORD=$APP_AUTH_SERVICE_PASSWORD/g" .env || exit $?
+fi
 
 echo "Update AM service callbacks"
 if [[ ! -z $UPDATE_AM_SERVICE_CALLBACKS ]] ; then
   ./update-service-callbacks.php || exit $?
 fi
 
-./init-auth-client.sh
-    
+
 echo "Finished successfully"
+
+if [ -z "$KEYCLOAK_REALM_PUBLIC_KEY" ] ; then
+    echo "\nRemember to update key KEYCLOAK_REALM_PUBLIC_KEY in .env file"
+    echo "Also consider setting it permanently in your ~/.xxxshrc file"
+fi

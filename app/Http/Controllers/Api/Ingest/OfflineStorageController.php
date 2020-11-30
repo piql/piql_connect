@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\Ingest;
 
+use App\Aip;
 use App\Dip;
 use App\Http\Resources\AipCollection;
 use App\Http\Resources\AipToDipResource;
@@ -22,11 +23,15 @@ use App\Events\BagFilesEvent;
 use App\Events\CommitJobEvent;
 use App\Interfaces\FileArchiveInterface;
 use App\Mail\PiqlIt;
+use App\Traits\UserSettingRequest;
+use Illuminate\Support\Facades\DB;
 use Response;
 use Log;
 
 class OfflineStorageController extends Controller
 {
+    use UserSettingRequest;
+    
     private $nameValidationRule = '/(^[^:\\<>"\/?*|]{3,64}$)/';
     private $newNameValidationRule = '/(^[^:\\<>"\/?*|]{0,64}$)/';
 
@@ -39,14 +44,11 @@ class OfflineStorageController extends Controller
 
     public function jobs( Request $request)
     {
-        $limit = $request->limit ? $request->limit : env('DEFAULT_ENTRIES_PER_PAGE');
-        
-        
         $jobs = Job::where('owner', Auth::id() )
             ->whereIn('status', ['created','closed'])
             ->withCount('aips')
             ->latest()
-            ->paginate($limit);
+            ->paginate($this->rowLimit(Auth::user(), $request));
 
         return new JobCollection( $jobs );
     }
@@ -63,17 +65,14 @@ class OfflineStorageController extends Controller
         // This is a bit nasty because there is no owner validation here
         // Should be safe when used internally e.i when owner is valid
         $jobs = \App\Job::whereIn('status', ['transferring', 'preparing', 'writing', 'storing']);
-        $limit = $request->limit ? $request->limit : env('DEFAULT_ENTRIES_PER_PAGE');
-
-        return new JobCollection( $jobs->paginate( $limit ) );
+        return new JobCollection( $jobs->paginate( $this->rowLimit(Auth::user(), $request) ) );
     }
 
 
     public function dips(Request $request ,$jobId)
     {
-        $limit = $request->limit ? $request->limit : env('DEFAULT_ENTRIES_PER_PAGE');
         $job = Job::findOrFail($jobId);
-        return AipToDipResource::collection( $job->aips()->paginate( $limit ) );
+        return AipToDipResource::collection($job->aips()->paginate($this->rowLimit(Auth::user(), $request)));
     }
 
     public function detachDip($jobId, $dipId)

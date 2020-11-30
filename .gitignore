@@ -52,5 +52,9 @@ composer.phar
 .rnd
 piql_connect.code-workspace
 resources/js/app.jse
+resources/js/environment.js
 
-.vscode/settings.json
+.vscode/
+.env.backup
+deploy/__pycache__/
+deploy/config.py

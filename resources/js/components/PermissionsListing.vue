@@ -154,7 +154,7 @@ export default {
         /**list users * i can only pull in 10 at a time, need help getting all at 
          * the same time unless allowed to tamper with the backend **/
 
-       let roles = (await axios.get("/api/v1/admin/access-control/permission-groups",{ params: { limit: 100 } })).data.data;
+       let roles = (await axios.get("/api/v1/admin/access-control/permission-groups",{ params: { } })).data.data;
         roles.forEach(single => {
             this.list.push({
                 name: single.name,

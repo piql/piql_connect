@@ -97,7 +97,7 @@ export default {
             let query = this.$route.query;
             let page = parseInt(query.page);
             let filter = query.search ? "&search=" + query.search : "";
-            return (page && page > 0 ? `?page=${page}` : "") + (page && page > 0 ? "" : "?") + filter;
+            return "?" + (page && page > 1 ? "page=" + page : "") + filter;
         },
         dipName: function () {
             if (!this.dip && this.dipId > 0) {
@@ -137,7 +137,7 @@ export default {
         refreshFiles() {
             let dipId = this.dipId;
             let apiQueryString = this.apiQueryString;
-            axios.get(`/api/v1/access/dips/${dipId}/files${apiQueryString}`, { params: { limit: 8 } }).then( async ( dipFilesResponse ) =>  {
+            axios.get(`/api/v1/access/dips/${dipId}/files${apiQueryString}`).then( async ( dipFilesResponse ) =>  {
                 this.dipFiles = dipFilesResponse.data.data;
                 this.meta = dipFilesResponse.data.meta;
             });
