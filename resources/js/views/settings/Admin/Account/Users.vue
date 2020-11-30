@@ -4,16 +4,20 @@
         <div class="card">
             <div class="card-header">
                 <span v-if="showAddUser"><i class="fa fa-user-plus"></i>  {{$t('settings.settings.addUser').toUpperCase()}} |
-                <a href="#" class="btn btn-sm" @click="displayUsers">{{$t('settings.listing.backToUsers')}}</a>
+                <a href="#" class="btn btn-sm" @click="showUserList">{{$t('settings.listing.backToUsers')}}</a>
                 </span>
 
-                <button v-else type="button" class="btn btn-primary btncheck" @click="displayAddUser">
+                <button v-else type="button" class="btn btn-primary btncheck" @click="showCreateUserForm">
                     <i class="fa fa-user-plus"></i>  {{$t('settings.settings.addUser')}}
                 </button>
             </div>
             <div class="card-body">
                 <search-input :timeout="search.timeout" label='settings.user.listing.search.placeholder' @data="searchUser" />
-                <add-user v-if="showAddUser" @addUser='addUser'></add-user>
+                <add-user v-if="showAddUser"
+                  :formLoaded="showAddUser" :error="createModel.error"
+                  :organization="userOrganizationId" :language="currentLanguage"
+                  :actions="onUserCreatedActions" @dataAvailable='addUser'>
+                </add-user>
                 <div v-else>
                     <user-listing @disableUser="disableUser" :users="formattedUsers" @editUser="editUser" @enableUser="enableUser"></user-listing>
                     <div class="row text-center pagerRow">
@@ -34,22 +38,25 @@ import SearchInput from '../../../../auth/user/components/SearchInput.vue';
 
 export default {
     components:{
-        Pager
+      Pager
     },
     data() {
       return {
-        showAddUser: false,
+        showAddUser: false, //this needs to go in preference for a route driven UI
         search: {
           text: "",
           timeout: 500 //search input debounce in milliseconds
+        },
+        createModel: {
+          error: null
         }
       };
     },
     props: {
-        height: {
-            type: Number,
-            default: 0
-        }
+      height: {
+        type: Number,
+        default: 0
+      }
     },
     watch: {
         '$route': 'dispatchRouting',
@@ -72,7 +79,9 @@ export default {
         })
     },
     computed:  {
-        ...mapGetters(['formattedUsers','usersPageMeta','userApiResponse', 'userTableRowCount']),
+        ...mapGetters([
+          'formattedUsers','usersPageMeta','userApiResponse', 'userTableRowCount',
+          'userOrganizationId', 'currentLanguage', 'onUserCreatedActions']),
         queryParams(){
             let query = this.$route.query;
             let page = query.page || 1;
@@ -85,23 +94,28 @@ export default {
         },
     },
     methods: {
-        ...mapActions(['fetchUsers','postNewUser','disableUserRequest','enableUserRequest', 'fetchUserSettings', 'updateUser']),
-        displayAddUser(){
+        ...mapActions([
+          'fetchUsers','disableUserRequest','enableUserRequest', 'fetchUserSettings',
+          'createUser', 'updateUser']),
+        showCreateUserForm(){
             this.showAddUser = true;
         },
-        displayUsers(){
+        showUserList(){
             this.showAddUser = false;
         },
         dispatchRouting() {
-            this.fetchUsers(this.queryParams);
+          this.fetchUsers(this.queryParams);
         },
-        addUser(form){
-            this.postNewUser({
-                'name': form.fullname,
-                'username': form.username,
-                'email': form.email
-            });
-            this.displayUsers();
+        addUser(user){
+          this.createUser(user)
+          .then(() => {
+            this.createModel.error = null;
+            this.showUserList();
+            this.fetchUsers(this.queryParams);
+          })
+          .catch(e => {
+            this.createModel.error = e.data.errorMessage;
+          });
         },
         editUser(user){
             this.updateUser(user).then(() => {

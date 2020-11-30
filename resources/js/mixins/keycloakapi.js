@@ -37,8 +37,7 @@ const axiosWrapper = async function(call, url, data, options, retries = 5 ) {
 
                 console.error( "Request could not be handled by endpoint: ",
                     error.request, error.response, error.header, error.code || "" );
-
-                break; //No point in retrying this request.
+                return Promise.reject(error.response);
             };
 
             // If we get here, something happened in setting up the request that triggered an Error
