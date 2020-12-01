@@ -19,6 +19,7 @@ class AccountResource extends JsonResource
             'uuid' => $this->uuid,
             'title' => $this->title,
             'description' => $this->description,
+            'organization_uuid' => $this->organization_uuid,
             'defaultMetadataTemplate' => $this->defaultMetadataTemplate
         ];
 

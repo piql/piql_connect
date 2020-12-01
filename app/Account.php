@@ -20,6 +20,7 @@ class Account extends Model
         'uuid',
         'title',
         'description',
+        'organization_uuid',
         'defaultMetadataTemplate'
     ];
 
@@ -57,9 +58,15 @@ class Account extends Model
         return $this->hasMany('App\Archive', 'account_uuid', 'uuid');
     }
 
+    public function organization()
+    {
+        return $this->belongsTo('App\Organization', 'organization_uuid', 'uuid');
+    }
+
     public function users()
     {
-        return $this->hasMany('App\User', 'account_uuid', 'uuid');
+        //TODO: This method should be obsoleted as part of the archive refactoring
+        return $this->organization->users();
     }
 
     public function getDefaultMetadataTemplateAttribute( string $template ) {

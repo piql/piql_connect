@@ -35,6 +35,7 @@ class AccountController extends Controller
         $validatedRequest = $this->validate( $request, [
                 "title" => "string",
                 "description" => "string|nullable",
+                "organization_uuid" => "uuid",
                 "defaultMetadataTemplate" => "array|nullable"
             ]
         );
@@ -64,6 +65,7 @@ class AccountController extends Controller
         $validatedRequest = $this->validate( $request, [
                 "title" => "string",
                 "description" => "string|nullable",
+                "organization_uuid" => "uuid",
                 "defaultMetadataTemplate" => "array|nullable"
             ]
         );
@@ -84,6 +86,7 @@ class AccountController extends Controller
        $validatedRequest = $this->validate( $request, [
                 "title" => "string",
                 "description" => "string|nullable",
+                "organization_uuid" => "uuid",
                 "defaultMetadataTemplate" => "array|nullable"
             ]
         );

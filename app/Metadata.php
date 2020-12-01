@@ -39,7 +39,7 @@ class Metadata extends Model
                 if (!auth()->check()) {
                     throw new \Exception("User must be authenticated to create Metadata");
                 }
-                if (!auth()->user()->account()) {
+                if (!auth()->user()->account) {
                     throw new \Exception("User must belong to an account to create Metadata");
                 }
                 $model->owner_id = auth()->user()->account->uuid;
