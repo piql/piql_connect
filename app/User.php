@@ -23,7 +23,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'username', 'password', 'full_name', 'email', 'api_token', 'confirmation_token', 'disabled_on', 'account_uuid'
+        'username', 'password', 'full_name', 'email', 'api_token', 'confirmation_token', 'disabled_on', 'organization_uuid'
     ];
 
     /**
@@ -124,7 +124,7 @@ class User extends Authenticatable
 
     public function account()
     {
-        return $this->belongsTo('App\Account', 'account_uuid', 'uuid');
+        return $this->organization->account();
     }
 
     public function organization()
