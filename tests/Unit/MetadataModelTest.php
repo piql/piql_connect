@@ -8,6 +8,7 @@ use App\File;
 use App\Metadata;
 use App\User;
 use App\Account;
+use App\Organization;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Laravel\Passport\Passport;
 use Tests\TestCase;
@@ -15,8 +16,8 @@ use App\UserSetting;
 
 class MetadataModelTest extends TestCase
 {
-    private $account;
     private $user;
+    private $file;
 
     public function setUp() : void
     {
@@ -27,9 +28,9 @@ class MetadataModelTest extends TestCase
 
     public function test_associating_file_model_to_a_metadata_model()
     {
-        $this->account = factory(Account::class)->create();
-        $this->user = factory(User::class)->create();
-        $this->user->account()->associate( $this->account );
+        $organization = factory( Organization::class )->create();
+        factory( Account::class )->create(['organization_uuid' => $organization->uuid]);
+        $this->user = factory(User::class)->create(['organization_uuid' => $organization->uuid]);
         Passport::actingAs( $this->user );
 
         $bag = factory(Bag::class)->create([
@@ -54,9 +55,9 @@ class MetadataModelTest extends TestCase
 
     public function test_creating_metadata_model_where_owner_and_owner_type_are_provided()
     {
-        $this->account = factory(Account::class)->create();
-        $this->user = factory(User::class)->create();
-        $this->user->account()->associate( $this->account );
+        $organization = factory( Organization::class )->create();
+        factory( Account::class )->create(['organization_uuid' => $organization->uuid]);
+        $this->user = factory(User::class)->create(['organization_uuid' => $organization->uuid]);
         Passport::actingAs( $this->user );
 
         $metadata = factory(Metadata::class)->create([

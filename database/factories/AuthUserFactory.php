@@ -2,7 +2,7 @@
 
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
 
-use App\Account;
+use App\Organization;
 use App\Auth\User;
 use Faker\Generator as Faker;
 use Illuminate\Support\Str;
@@ -30,7 +30,7 @@ $factory->define(User::class, function (Faker $faker) {
     $user->email = $user->preferred_username.'@example.com';
     $user->given_name = $names[0];
     $user->family_name = $names[1];
-    $user->account_uuid = Account::pluck('uuid')->random();
+    $user->organization_uuid = Organization::pluck('uuid')->random();
     \App\UserSetting::create([ 'user_id' => $user->sub ]);
     \App\User::create([
         'full_name' => $user->name,
@@ -38,7 +38,7 @@ $factory->define(User::class, function (Faker $faker) {
         'password' => bcrypt("secret"),
         'email' => $user->email,
         'email_verified_at' => now(),
-        'account_uuid' => $user->account_uuid,
+        'organization_uuid' => $user->organization_uuid,
         'remember_token' => Str::random(10),
     ]);
     return (array) $user;

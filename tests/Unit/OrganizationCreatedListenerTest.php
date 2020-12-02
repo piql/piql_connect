@@ -5,8 +5,7 @@ namespace Tests\Unit;
 use App\Organization;
 use App\Events\OrganizationCreatedEvent;
 use App\Listeners\OrganizationCreatedListener;
-use Illuminate\Support\Facades\Event;
-use Laravel\BrowserKitTesting\DatabaseTransactions;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
 use Log;
 
@@ -21,7 +20,7 @@ class OrganizationCreatedListenerTest extends TestCase
     }
 
     /**
-     * @covers test event listener when when receiving an OrganizationCreatedEvent and validate the log is being written to
+     * @test event listener when when receiving an OrganizationCreatedEvent and validate the log is being written to
      */
     public function test_handle_OrganizationCreatedEvent_and_validate_log() {
 
@@ -37,7 +36,7 @@ class OrganizationCreatedListenerTest extends TestCase
     }
 
     /**
-     * @covers test integration by sending an OrganizationCreatedEvent and validate the log is being written to
+     * @test integration by sending an OrganizationCreatedEvent and validate the log is being written to
      */
     public function test_integration_by_sending_an_OrganizationCreatedEvent_and_validate_log() {
 
