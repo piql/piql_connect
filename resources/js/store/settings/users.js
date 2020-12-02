@@ -69,8 +69,15 @@ const actions = {
     },
 
     async fetchSelectUsers({ commit }) {
-        let response = await axios.get('/api/v1/admin/users');
-        commit('setUsersMutation', response.data)
+        return new Promise((resolve, reject) => {
+            axs.get('/users').then(response => {
+                commit('setUsersMutation', response.data)
+                resolve(response.data)
+            }).catch(err => {
+                commit('setErrorResponse', err.response)
+                reject(err.response.data);
+            })
+        })
     },
 
     async createUser({ commit }, data) {
