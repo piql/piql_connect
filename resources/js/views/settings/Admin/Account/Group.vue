@@ -14,7 +14,7 @@
             <div class="card-body">
                 <add-group v-if="showAddGroup" @addGroup='addGroup'></add-group>
                 <div v-else>
-                    <groups-listing :key="groupkey" @assignGroupToRoles="assignGroupToRoles" @assignGroupToUsers="assignGroupToUsers" />
+                    <groups-listing :formattedUsers="formattedUsers" :key="groupkey" @assignGroupToRoles="assignGroupToRoles" @assignGroupToUsers="assignGroupToUsers" />
                     <div class="row text-center pagerRow">
                         <div class="col">
                             <Pager :meta='groupsPageMeta' :height='height' />
@@ -38,6 +38,7 @@ import { mapGetters, mapActions } from "vuex";
             return {
                 groupkey: 0,
                 showAddGroup: false,
+                ulist:[],
             };
         },
         props: {
@@ -48,7 +49,7 @@ import { mapGetters, mapActions } from "vuex";
         },
         computed: {
             ...mapGetters(
-                ['groupsPageMeta','groupsApiResponse', 'userTableRowCount']
+                ['groupsPageMeta','groupsApiResponse', 'userTableRowCount', 'formattedUsers']
             ),
             queryParams(){
                 let query = this.$route.query;

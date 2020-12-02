@@ -115,12 +115,13 @@ export default {
         height: {
             type: Number,
             default: 0
-        }
+        },
+        formattedUsers: Array
     },
 
     computed:{
         ...mapGetters(
-            ['userGroups','userGroupUsers','userGroupRoles','formattedUsers','userRoles']
+            ['userGroups','userGroupUsers','userGroupRoles','userRoles']
         ),
 
     },
