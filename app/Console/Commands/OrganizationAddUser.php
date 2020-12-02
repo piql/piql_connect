@@ -82,7 +82,7 @@ class OrganizationAddUser extends Command
             'password' => Hash::make(Uuid::generate()),
             'full_name' => $firstName." ".$lastName,
             'email' => $email,
-            'account_uuid' => $organization->uuid, // todo : this needs to be assigned to organization uuid
+            'organization_uuid' => $organization->uuid,
         ]);
 
 
