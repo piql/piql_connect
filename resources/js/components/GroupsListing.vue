@@ -127,7 +127,19 @@ export default {
     watch: {
         formattedUsers(val){
             if(val){
-                this.ulist = val.data.map( u => { return { value: u.id, label: u.full_name } } );
+                this.ulist = val.map( u => {
+                    let fullName = '';
+                    if (u.firstName && u.lastName) {
+                        fullName = u.firstName + ' ' + u.lastName;
+                    } else if (u.firstName) {
+                        fullName = u.firstName;
+                    } else if (u.lastName) {
+                        fullName = u.lastName;
+                    } else {
+                        fullName = u.username;
+                    }
+                    return { value: u.id, label: fullName }
+                } );
             }
         },
         userRoles(val){
