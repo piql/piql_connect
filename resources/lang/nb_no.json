@@ -354,7 +354,6 @@
 
     "settings.groups.addGroup": "Legg til gruppe",
     "settings.groups.group": "Gruppe",
-    "settings.groups.description": "Beskrivelse",
     "settings.groups.assignUsers": "Tildel bruker",
     "settings.groups.listRolesAndUsers": "List roller og tildelte brukere",
     "settings.groups.assignRoles": "Tildel roller",
