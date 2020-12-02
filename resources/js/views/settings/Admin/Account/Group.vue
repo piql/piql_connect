@@ -38,7 +38,6 @@ import { mapGetters, mapActions } from "vuex";
             return {
                 groupkey: 0,
                 showAddGroup: false,
-                ulist:[],
             };
         },
         props: {
