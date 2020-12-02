@@ -62,7 +62,7 @@ class OrganizationTest extends TestCase
     }
 
     public function test_matching_user_lists_from_account_and_organization() {
-        // NOTE: All account related asserts in this test must be deleted when account->users is refactored away     
+        // NOTE: All account related asserts in this test must be deleted when account->users is refactored away
 
         $org = factory(Organization::class)->create();
         $acc = factory(Account::class)->create();
@@ -74,7 +74,7 @@ class OrganizationTest extends TestCase
 
         $this->assertEquals($org->users->count(), 2);
         $this->assertEquals($acc->users->count(), 2);
-        
+
         $orgUserIds = $org->users->pluck('id')->toArray();
         $this->assertContains($userA->id, $orgUserIds);
         $this->assertContains($userB->id, $orgUserIds);
