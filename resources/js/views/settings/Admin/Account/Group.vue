@@ -6,64 +6,94 @@
                 <span v-if="showAddGroup"><i class="fa fa-plus"></i>  {{$t('settings.groups.addGroup').toUpperCase()}} | 
                 <a href="#" class="btn btn-sm" @click="displayGroups">{{$t('settings.groups.backToGroup')}}</a>
                 </span>
-        
+
                 <button v-else type="button" class="btn btn-primary" @click="displayAddGroup">
                     <i class="fa fa-plus"></i>  {{$t('settings.groups.addGroup')}}
                 </button>
-                
             </div>
             <div class="card-body">
-                 <add-group v-if="showAddGroup" @addGroup='addGroup'></add-group>
-                <groups-listing v-else :key="groupkey" @assignGroupToRoles="assignGroupToRoles" @assignGroupToUsers="assignGroupToUsers" />
-               
+                <add-group v-if="showAddGroup" @addGroup='addGroup'></add-group>
+                <div v-else>
+                    <groups-listing :key="groupkey" @assignGroupToRoles="assignGroupToRoles" @assignGroupToUsers="assignGroupToUsers" />
+                    <div class="row text-center pagerRow">
+                        <div class="col">
+                            <Pager :meta='groupsPageMeta' :height='height' />
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-
-        
     </div>
 </template>
 
 <script>
+import Pager from "../../../../components/Pager"
 import { mapGetters, mapActions } from "vuex";
 
     export default {
-       
+        components:{
+            Pager
+        },
         data() {
             return {
                 groupkey: 0,
                 showAddGroup: false,
             };
         },
+        props: {
+            height: {
+                type: Number,
+                default: 0
+            }
+        },
         computed: {
-            ...mapGetters({
-                groups: ['groupsApiResponse']
-            }),
-            
+            ...mapGetters(
+                ['groupsPageMeta','groupsApiResponse', 'userTableRowCount']
+            ),
+            queryParams(){
+                let query = this.$route.query;
+                let page = query.page || 1;
+                let limit = this.userTableRowCount;
+                return {
+                    limit: limit,
+                    offset: (page - 1) * limit
+                }
+            },
+        },
+        async mounted() {
+            let page = this.$route.query.page;
+            if( isNaN( page ) || parseInt( page ) < 2 ) {
+                this.$route.query.page = 1;
+            }
+            this.fetchUserSettings().then(() => {
+                this.fetchGroups(this.queryParams);
+            })
         },
         watch:{
-            groupsApiResponse(newValue,prevValue){
+            '$route': 'dispatchRouting',
+            groupsApiResponse(newValue){
                 //will run on success or failure of any post operation
                 if(newValue && (newValue.status >= 200 && newValue.status <= 299)){
                     this.successToast('Success: ' + newValue.status ,newValue.message);
-                }else if(newValue && newValue.status){
+                } else if(newValue && newValue.status){
                     this.errorToast('Error: ' + newValue.status,newValue.message);
                 }
             }
-
         },
+
         methods: {
-            ...mapActions(['postNewGroup','postRolesToGroup','postUsersToGroup']),
+            ...mapActions(['fetchGroups','postNewGroup','postRolesToGroup','postUsersToGroup','fetchUserSettings']),
             displayAddGroup(){
                 this.showAddGroup = true;
-
             },
             displayGroups(){
                 this.showAddGroup = false;
-
+            },
+            dispatchRouting() {
+                this.fetchGroups(this.queryParams);
             },
             forceRerender(){
                 this.groupkey += 1;
-
             },
             addGroup(form){
                 this.infoToast('Add Group','Adding '+ form.group);
