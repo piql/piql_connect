@@ -204,7 +204,7 @@
                 <span class="poweredByImg">
                     <img src="/images/piql_logo_white.png">
                 </span>
-                <div class="version">v1.0.2</div>
+                <div class="version">v1.0.3</div>
             </div>
         </div>
     </div>
