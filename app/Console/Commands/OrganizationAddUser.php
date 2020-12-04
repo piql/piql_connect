@@ -57,12 +57,22 @@ class OrganizationAddUser extends Command
         $username = $this->argument('username');
         $alwaysYes = $this->option('yes');
 
-        $validator = Validator::make(["email" => $email], [
+        $validator = Validator::make([
+            "firstName" => $firstName,
+            "lastName" => $lastName,
+            "userName" => $username,
+            "email" => $email
+        ], [
+            'firstName' => 'required',
+            'lastName' => 'required',
+            'userName' => 'required',
             'email' => 'required|email'
         ]);
 
         if ($validator->fails()) {
-            $this->error("Invalid email '{$email}'");
+            foreach ($validator->errors()->all() as $message) {
+                $this->error($message);
+            }
             return 1;
         }
 
@@ -95,7 +105,6 @@ class OrganizationAddUser extends Command
 
         try {
             DB::transaction(function() use ($user, $organization){
-                $this->info('Hello');
                 $user->save();
                 $organization->users()->save($user);
                 $this->keycloakClient->createUser($organization->uuid, $user);
@@ -105,7 +114,7 @@ class OrganizationAddUser extends Command
             $this->error($e->getMessage());
             return 1;
         }
-        $this->info('Added user with id ' . $user->id . ' to keycloak server');
+        $this->info("Added user with id " . $user->id . " to '{$organization->name}'");
         return 0;
     }
 }

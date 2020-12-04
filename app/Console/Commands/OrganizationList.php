@@ -22,7 +22,7 @@ class OrganizationList extends Command
      *
      * @var string
      */
-    protected $description = 'Create a new organization';
+    protected $description = 'List organizations';
 
     /**
      * Create a new command instance.
