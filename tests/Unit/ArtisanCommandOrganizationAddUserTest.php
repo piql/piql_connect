@@ -31,7 +31,7 @@ class ArtisanCommandOrganizationAddUserTest extends TestCase
     /**
      * @test add a user to an organization
      */
-    public function test_create_a_basic_organization() {
+    public function test_add_user_to_an_organization() {
         $users = User::count();
         $organization = Organization::create([
             "name" => $this->faker->company
@@ -84,9 +84,9 @@ class ArtisanCommandOrganizationAddUserTest extends TestCase
     }
 
     /**
-     * @test to an organization add a user with invalid username
+     * @test add a user with invalid username to an organization
      */
-    public function test_to_an_organization_add_user_with_invalid_username() {
+    public function test_add_user_with_invalid_username_to_an_organization_() {
         $organization = factory(Organization::class)->create();
         $this->artisan("organization:adduser",[
             "organizationId" => $organization->uuid,
@@ -98,9 +98,9 @@ class ArtisanCommandOrganizationAddUserTest extends TestCase
     }
 
     /**
-     * @test to an organization add a user with invalid last name
+     * @test add a user with invalid last name to an organization
      */
-    public function test_to_an_organization_add_user_with_invalid_lastname() {
+    public function test_add_user_with_invalid_lastname_to_an_organization() {
         $organization = factory(Organization::class)->create();
         $this->artisan("organization:adduser",[
             "organizationId" => $organization->uuid,
@@ -112,9 +112,9 @@ class ArtisanCommandOrganizationAddUserTest extends TestCase
     }
 
     /**
-     * @test to an organization add a user with invalid first name
+     * @test add a user with invalid first name to an organization
      */
-    public function test_to_an_organization_add_user_with_invalid_firstname() {
+    public function test_add_user_with_invalid_firstname_to_an_organization() {
         $organization = factory(Organization::class)->create();
         $this->artisan("organization:adduser",[
             "organizationId" => $organization->uuid,
@@ -128,7 +128,7 @@ class ArtisanCommandOrganizationAddUserTest extends TestCase
     /**
      * @test add a user to an organization where auth service returns an error
      */
-    public function test_to_an_organization_add_a_user_where_auth_service_returns_an_error() {
+    public function test_add_a_user_to_an_organization_where_auth_service_returns_an_error() {
         $users = User::count();
         app()->bind(KeycloakClientInterface::class,
             function($app)  {
