@@ -143,6 +143,13 @@ export default {
                 } );
             }
         },
+        userGroupUsers(val){
+            if (val){
+                this.selectedUsers = val.map( u => {
+                    return u.id;
+                } );
+            }
+        },
         userRoles(val){
             if(val){
                 this.list = val.map( u => { return { value: u.id, label: u.name } } );
@@ -193,12 +200,6 @@ export default {
         showAssignUsersModal(groupId){
             this.group = this.userGroups.filter(group => group.id === groupId);
             this.fetchGroupUsers(groupId).then(() => {
-                console.log("userGroupUsers:");
-                console.log(this.userGroupUsers);
-
-                console.log("formattedUsers:");
-                console.log(this.formattedUsers);
-
                 this.$bvModal.show('assign-users');
             }).catch(e => {
                 console.log(e);

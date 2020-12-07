@@ -368,6 +368,10 @@
     "settings.groups.assignUsersToGroup": "Assign Users to Group",
     "settings.groups.assignRolesToGroup": "Assign Roles to Group",
     "settings.groups.backToGroup": "return to group page",
+    "settings.groups.toasts.assignUser.title": "Assigned users",
+    "settings.groups.toasts.assignUser.message": "Assigned users to group",
+    "settings.groups.toasts.assignUserError.title": "Failed to assign users",
+    "settings.groups.toasts.assignUserError.message": "Failed to assign users to group",
 
     "settings.settings.roles": "Roles",
     "settings.settings.rolesDesc": "Manage Roles",

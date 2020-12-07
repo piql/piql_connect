@@ -82,7 +82,7 @@ import { mapGetters, mapActions } from "vuex";
         },
 
         methods: {
-            ...mapActions(['fetchGroups','postNewGroup','postRolesToGroup','postUsersToGroup','fetchUserSettings']),
+            ...mapActions(['deleteUsersFromGroup','fetchGroupUsers','fetchGroups','postNewGroup','postRolesToGroup','postUsersToGroup','fetchUserSettings']),
             displayAddGroup(){
                 this.showAddGroup = true;
             },
@@ -122,13 +122,42 @@ import { mapGetters, mapActions } from "vuex";
                 this.$bvModal.hide('assign-group');
             },
 
-            async assignGroupToUsers(data){
-                //push to vuex action
-                this.postUsersToGroup(data);
-
-                this.forceRerender();
-                this.$bvModal.hide('assign-users');
-
+            assignGroupToUsers(data){
+                //remove old users from group and add new ones
+                this.fetchGroupUsers(data.group_id).then((resp) => {
+                    let users = resp.map( u => {
+                        return u.id;
+                    } );
+		    let deleteData = {
+                        users: users,
+                        group_id: data.group_id
+                    }
+                    this.deleteUsersFromGroup(deleteData).then(() => {
+                        this.postUsersToGroup(data).then(() => {
+                            this.infoToast(
+                                this.$t('settings.groups.toasts.assignUser.title'),
+                                this.$t('settings.groups.toasts.assignUser.message'),
+                            );
+                            this.$bvModal.hide('assign-users');
+                            return;
+                        }).catch( (exception) => {
+                            this.errorToast(
+                                this.$t('settings.groups.toasts.assignUserError.title'),
+                                this.$t('settings.groups.toasts.assignUserError.message'),
+		            );
+                        });
+                    }).catch( (exception) => {
+                        this.errorToast(
+                            this.$t('settings.groups.toasts.assignUserError.title'),
+                            this.$t('settings.groups.toasts.assignUserError.message'),
+		        );
+                    });
+                }).catch( (exception) => {
+                    this.errorToast(
+                        this.$t('settings.groups.toasts.assignUserError.title'),
+                        this.$t('settings.groups.toasts.assignUserError.message'),
+		    );
+                });
             }
         }
     }

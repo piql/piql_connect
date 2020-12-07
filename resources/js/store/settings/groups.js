@@ -46,6 +46,10 @@ const actions = {
     },
 
     async postUsersToGroup({commit}, data){
+        if (data.users.length == 0) {
+            return Promise.resolve();
+        }
+
         return new Promise((resolve, reject) => {
             data.users.forEach ( function(user) {
                 axs.put(`/users/${user}/groups/${data.group_id}`).then(response => {
@@ -61,8 +65,28 @@ const actions = {
         })
     },
 
+    async deleteUsersFromGroup({commit}, data){
+        if (data.users.length == 0) {
+            return Promise.resolve();
+        }
+
+        return new Promise((resolve, reject) => {
+            data.users.forEach ( function(user) {
+                axs.Delete(`/users/${user}/groups/${data.group_id}`).then(response => {
+                    commit('setResponse', response);
+                    resolve(response.data)
+                }).catch(err => {
+                    commit('setUserError', {userId: data.id, error: err.response.data});
+                    commit('setErrorResponse', err.response)
+                    reject(err.response.data);
+                    return;
+                })
+            });
+        })
+    },
+
     //get actions
-    async fetchGroups({ commit }, query) {
+    async fetchGroups({ commit }, query){
         let max = query.limit || 10;
         let first = query.offset || 0;
         let search = query.q || '';
@@ -87,8 +111,6 @@ const actions = {
     async fetchGroupUsers({commit},groupId){
         return new Promise((resolve, reject) => {
             axs.get(`/groups/${groupId}/members`).then(response => {
-		console.log("Data: ");
-		console.log(response.data);
                 commit('setGroupUsersMutation', response.data)
                 resolve(response.data)
             }).catch(err => {
@@ -105,7 +127,7 @@ const actions = {
 }
 
 const mutations = {
-    setGroupSearchMeta(state, data) {
+    setGroupSearchMeta(state, data){
         let limit = data.query.limit || data.showing;
         let offset = data.query.offset || 0;
         let page = 1;
