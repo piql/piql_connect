@@ -123,7 +123,6 @@ import { mapGetters, mapActions } from "vuex";
             },
 
             async assignGroupToUsers(data){
-                this.infoToast("Assigning Users", "assigning group to users selected");
                 //push to vuex action
                 this.postUsersToGroup(data);
 

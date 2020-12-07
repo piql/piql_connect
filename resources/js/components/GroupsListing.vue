@@ -179,7 +179,7 @@ export default {
         assignUserButtonClicked(groupId){
             let data = {
                 users: this.selectedUsers,
-                access_controls: [groupId]
+                group_id: groupId
             }
 
             this.$emit('assignGroupToUsers', data);
@@ -192,8 +192,17 @@ export default {
         },
         showAssignUsersModal(groupId){
             this.group = this.userGroups.filter(group => group.id === groupId);
-            this.$bvModal.show('assign-users');
+            this.fetchGroupUsers(groupId).then(() => {
+                console.log("userGroupUsers:");
+                console.log(this.userGroupUsers);
 
+                console.log("formattedUsers:");
+                console.log(this.formattedUsers);
+
+                this.$bvModal.show('assign-users');
+            }).catch(e => {
+                console.log(e);
+            });
         },
     }
 

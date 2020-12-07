@@ -46,12 +46,19 @@ const actions = {
     },
 
     async postUsersToGroup({commit}, data){
-        axios.post("/api/v1/admin/access-control/users/assign",data).then(response => {
-            commit('setResponse',response)
-        }).catch(error => {
-            commit('setErrorResponse',error.response)
+        return new Promise((resolve, reject) => {
+            data.users.forEach ( function(user) {
+                axs.put(`/users/${user}/groups/${data.group_id}`).then(response => {
+                    commit('setResponse', response);
+                    resolve(response.data)
+                }).catch(err => {
+                    commit('setUserError', {userId: data.id, error: err.response.data});
+                    commit('setErrorResponse', err.response)
+                    reject(err.response.data);
+                    return;
+                })
+            });
         })
-
     },
 
     //get actions
@@ -78,8 +85,16 @@ const actions = {
     },
 
     async fetchGroupUsers({commit},groupId){
-        let response = await axios.get('/api/v1/admin/access-control/roles/' + groupId +'/users');
-        commit('setGroupUsersMutation', response.data)
+        return new Promise((resolve, reject) => {
+            axs.get(`/groups/${groupId}/members`).then(response => {
+		console.log("Data: ");
+		console.log(response.data);
+                commit('setGroupUsersMutation', response.data)
+                resolve(response.data)
+            }).catch(err => {
+                reject(err.response.data);
+            })
+        })
     },
 
     async fetchGroupRoles({commit},groupId){
@@ -110,7 +125,7 @@ const mutations = {
         state.response = payload;
     },
     setGroupUsersMutation: (state,payload)=> {
-        state.groupUsers = payload.data;
+        state.groupUsers = payload;
         state.response = payload;
     },
     setGroupRolesMutation: (state,payload)=> {
