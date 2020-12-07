@@ -62,7 +62,7 @@ export const wrappers = () => {
         post,
         put,
         patch,
-        delete: "Delete"
+        Delete
     };
 }
 
