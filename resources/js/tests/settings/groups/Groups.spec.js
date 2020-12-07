@@ -24,6 +24,7 @@ describe("Group.vue", ()=> {
             groupsApiResponse: () => {},
 	    groupsPageMeta: () => {},
 	    userTableRowCount: () => 10,
+            formattedUsers: () => [ {value: 123, label: 'Test Name'}],
         };
 
         store = new Vuex.Store({
@@ -74,6 +75,29 @@ describe("Group.vue", ()=> {
 
 
         expect(wrapper.vm.groupkey).toBe(1);
+    })
+
+    test("list user objects for selection", async ()=>{
+        let wrapper = shallowMount(Groups, {
+            store,
+            localVue,
+            mocks:{
+                $route,
+                $t
+            },
+            stubs:{
+                'b-modal': true,
+                'b-button': true,
+                'groups-listing': true,
+                'page-heading': true
+            },
+            propsData:{
+                height: 1
+            }
+        });
+
+        let ulist = await wrapper.vm.formattedUsers;
+        expect(ulist.length).toBe(1);
     })
 
 })

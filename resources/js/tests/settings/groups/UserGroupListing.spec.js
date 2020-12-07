@@ -26,7 +26,6 @@ describe("GroupsListing.vue", ()=> {
             userGroups: () => [{ id: 345, name: "Test Group Name", description: "Group description for testing"}],
             userGroupUsers: () => [ {id : 123, full_name: 'Test Name'}],
             userGroupRoles: () => [ {id: 1, name: 'A test role'}],
-            formattedUsers: () => [ {value: 123, label: 'Test Name'}],
             userRoles: () => [ {value: 123, label: 'Test Name'}],
         };
 
@@ -83,27 +82,4 @@ describe("GroupsListing.vue", ()=> {
         let list = await wrapper.vm.userRoles;
         expect(list.length).toBe(1);
     })
-
-    test("list user objects for selection", async ()=>{
-        let wrapper = shallowMount(GroupListing, {
-            store,
-            localVue,
-            mocks:{
-                $route,
-                $t
-            },
-            stubs:{
-                'b-modal': true,
-                'b-button': true,
-                'vue-select-sides': true,
-                'pager': true
-            },
-            propsData:{
-                height: 1
-            }
-        });
-
-        let ulist = await wrapper.vm.formattedUsers;
-        expect(ulist.length).toBe(1);
-    });
 })
