@@ -1,6 +1,6 @@
 <?php
 
-use App\Organization;
+use App\Account;
 use App\Traits\SeederOperations;
 use App\User;
 use Illuminate\Database\Seeder;
@@ -16,11 +16,11 @@ class TestUsersTableSeeder extends Seeder
 
     public function run()
     {
-        $org = Organization::first();
-        $seedSuccess = $this->seedFromFile(function($param) use($org){
+        $account = Account::first();
+        $seedSuccess = $this->seedFromFile(function($param) use($account){
             // assume plaintext passwords
             $param["password"] = Hash::make($param["password"] ?? Uuid::generate());
-            $param["organization_uuid"] = $org->uuid;
+            $param["account_uuid"] = $account->uuid;
             // add user if it doesn't exists
             User::where('username', $param["username"])->first() ?? User::create($param);
         });
