@@ -52,6 +52,7 @@ describe("Listing", ()=>{
               'pager':true,
               'b-modal': true,
               'b-button':true,
+              'search-input': true,
             }
           });
 
