@@ -31,7 +31,7 @@ class DatabaseSeeder extends Seeder
         if(!$account) {
             $account = Account::create([
                 'title' => 'Default Account',
-                'description' => 'Dummy development account',
+                'description' => 'Default Account',
                 'organization_uuid' => $org->uuid,
                 'uuid' => Uuid::generate()->string
             ]);
@@ -42,14 +42,14 @@ class DatabaseSeeder extends Seeder
         //      development, testing and demo.
         $archive = Archive::create([
             'title' => 'Default Archive',
-            'description' => 'Dummy development archive',
+            'description' => '',
             'account_uuid' => $account->uuid,
             'uuid' => Uuid::generate()->string
         ]);
 
         Holding::create([
             'title' => 'Default Holding',
-            'description' => 'Dummy development holding',
+            'description' => '',
             'position' => 0,
             'owner_archive_uuid' => $archive->uuid,
             'uuid' => Uuid::generate()->string
