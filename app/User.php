@@ -122,11 +122,6 @@ class User extends Authenticatable
         return $this->hasMany('App\StorageLocation', 'owner_id');
     }
 
-    public function account()
-    {
-        return $this->organization->account();
-    }
-
     public function organization()
     {
         return $this->belongsTo(Organization::class, 'organization_uuid', 'uuid');

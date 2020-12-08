@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Archive;
 use App\Holding;
 use App\Http\Resources\AccountResource;
+use App\Organization;
 use App\Account;
 use App\Http\Resources\ArchiveResource;
 use App\Http\Resources\HoldingResource;
@@ -25,12 +26,15 @@ class AccountArchiveHoldingControllerTest extends TestCase
     public function setUp() : void
     {
         parent::setUp();
-        $this->user = factory(User::class)->create();
-        Passport::actingAs( $this->user );
 
-        $this->account = factory(Account::class)->create();
-        $this->account->owner()->associate($this->user);
-        $this->account->save();
+        $org = factory(Organization::class)->create();
+        $this->account = factory(Account::class)->create([
+            'organization_uuid' => $org->uuid
+        ]);
+        $this->user = factory(User::class)->create([
+            'organization_uuid' => $org->uuid
+        ]);
+        Passport::actingAs( $this->user );
 
         $this->archive = factory(Archive::class)->create([
             "account_uuid" => $this->account->uuid
