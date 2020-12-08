@@ -6,6 +6,7 @@ use App\User;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Webpatser\Uuid\Uuid;
 
 class CreateOrganizationsTable extends Migration
 {
@@ -66,7 +67,7 @@ class CreateOrganizationsTable extends Migration
             Account::where('uuid', '!=', $account->uuid)->orWhereNull('uuid')->delete();
             User::query()->update(['account_uuid' => $account->uuid]);
         }
-        
+
         Schema::table('accounts', function (Blueprint $table) {
             $table->dropColumn('organization_uuid');
         });
