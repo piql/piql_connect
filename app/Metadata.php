@@ -40,7 +40,7 @@ class Metadata extends Model
                     throw new \Exception("User must be authenticated to create Metadata");
                 }
                 if (!auth()->user()->organization) {
-                    throw new \Exception("User must belong to an account to create Metadata");
+                    throw new \Exception("User must belong to an organization to create Metadata");
                 }
                 if (!auth()->user()->organization->account) {
                     throw new \Exception("User's organization must contain an account to create Metadata");
