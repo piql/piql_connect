@@ -14,7 +14,9 @@
 import { mapGetters, mapActions } from "vuex";
 export default {
     methods: {
-        ...mapActions(['updateTableRowCount', 'fetchUserSettings']),
+        ...mapActions('users',
+            ['updateTableRowCount', 'fetchUserSettings']
+        ),
         rowCountUpdated() {
             this.clearDeferFunc();
             this.defer.func = setTimeout(() => {
@@ -53,7 +55,9 @@ export default {
         }
     },
     computed: {
-        ...mapGetters(['userTableRowCount']),
+        ...mapGetters('user',
+            ['userTableRowCount']
+        ),
         showLabel: function() {
             return this.rowlabel.length > 0;
         }

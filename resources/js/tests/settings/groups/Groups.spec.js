@@ -1,6 +1,9 @@
-import Groups from "@/views/settings/Admin/Account/Group"
-import Vuex from 'vuex'
-import { shallowMount, createLocalVue } from "@vue/test-utils"
+import Groups from "@/views/settings/Admin/Account/Group";
+import Vuex from 'vuex';
+import { shallowMount, createLocalVue } from "@vue/test-utils";
+import users from '@/store/settings/users';
+import user from '@/store/settings/user';
+import groups from '@/store/settings/groups';
 
 const localVue = createLocalVue();
 localVue.use( Vuex );
@@ -15,21 +18,37 @@ describe("Group.vue", ()=> {
     let store;
 
     beforeEach( () => {
-        actions = {
-            fetchGroups: jest.fn(),
+        let userActions = {
             fetchUserSettings: jest.fn()
-        };
+        }
 
-        getters = {
-            groupsApiResponse: () => {},
-	    groupsPageMeta: () => {},
-	    userTableRowCount: () => 10,
-            formattedUsers: () => [ {value: 123, label: 'Test Name'}],
-        };
+        let groupActions = {
+            fetchGroups: jest.fn()
+        }
+
+        let userState = {
+            settings: { interface: {  } }
+        }
 
         store = new Vuex.Store({
-            actions,
-            getters
+            modules: {
+                users: {
+                    actions,
+                    getters: users.getters,
+                    namespaced: true,
+                },
+                user: {
+                    state: userState,
+                    actions: userActions,
+                    getters: user.getters,
+                    namespaced: true,
+                },
+                groups: {
+                    actions: groupActions,
+                    getters: groups.getters,
+                    namespaced: true,
+                },
+            }
         });
     })
 
@@ -51,53 +70,6 @@ describe("Group.vue", ()=> {
         });
 
         expect(wrapper.exists()).toBeTruthy();
-    })
-
-
-    //test force Render
-    test("group key should increment by 1 for every method call", ()=> {
-        let wrapper = shallowMount(Groups, {
-	    store,
-            localVue,
-            mocks:{
-                $t,
-                $route,
-            },
-            stubs:{
-                'b-modal': true,
-                'b-button': true,
-                'groups-listing': true,
-                'page-heading': true
-            } 
-        });
-
-        wrapper.vm.forceRerender();
-
-
-        expect(wrapper.vm.groupkey).toBe(1);
-    })
-
-    test("list user objects for selection", async ()=>{
-        let wrapper = shallowMount(Groups, {
-            store,
-            localVue,
-            mocks:{
-                $route,
-                $t
-            },
-            stubs:{
-                'b-modal': true,
-                'b-button': true,
-                'groups-listing': true,
-                'page-heading': true
-            },
-            propsData:{
-                height: 1
-            }
-        });
-
-        let ulist = await wrapper.vm.formattedUsers;
-        expect(ulist.length).toBe(1);
     })
 
 })

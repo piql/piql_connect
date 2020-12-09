@@ -26,7 +26,9 @@ export default {
         });
     },
     methods: {
-        ...mapActions(['changeLanguage', 'fetchUserSettings', 'fetchLanguages']),
+        ...mapActions('user',
+            ['changeLanguage', 'fetchUserSettings', 'fetchLanguages']
+        ),
         selectionChanged: function () {
             this.$i18n.locale = this.selection;
             this.changeLanguage(this.selection);

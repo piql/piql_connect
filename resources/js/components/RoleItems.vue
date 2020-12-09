@@ -116,7 +116,12 @@ export default {
         }
     },
     computed:{
-        ...mapGetters(['userGroups','userRoles','rolesPageMeta']),
+        ...mapGetters('roles',
+            ['userGroups','userRoles','rolesPageMeta']
+        ),
+        ...mapGetters('groups',
+            ['userGroups']
+        ),
       apiQueryString: function() {
             let query = this.$route.query;
             let filter = '';

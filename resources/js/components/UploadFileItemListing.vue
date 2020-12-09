@@ -80,7 +80,9 @@ export default {
     });
   },
   methods: {
-    ...mapActions(['fetchUserSettings']),
+    ...mapActions('user',
+        ['fetchUserSettings']
+    ),
     batchRemove: function() {
         let fileSelArr = this.$el.querySelectorAll('.fileSel');
         let fileToRemoveArr = [];

@@ -120,10 +120,12 @@ export default {
     },
 
     computed:{
-        ...mapGetters(
+        ...mapGetters('groups',
             ['userGroups','userGroupUsers','userGroupRoles','userRoles']
         ),
-
+        ...mapGetters('roles',
+            ['userRoles']
+        ),
     },
     watch: {
         formattedUsers(val){
@@ -161,8 +163,14 @@ export default {
         this.fetchSelectedRoles();
     },
     methods:{
-        ...mapActions(
-            ['fetchGroupUsers','fetchGroupRoles','fetchSelectUsers','fetchSelectedRoles']
+        ...mapActions('groups',
+            ['fetchGroupUsers','fetchGroupRoles','fetchSelectedRoles']
+        ),
+        ...mapActions('users',
+            ['fetchSelectUsers']
+        ),
+        ...mapActions('roles',
+            ['fetchSelectedRoles']
         ),
         showListingModal(groupId){
             this.group = this.userGroups.filter(group => group.id === groupId);

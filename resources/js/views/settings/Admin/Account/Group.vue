@@ -47,8 +47,14 @@ import { mapGetters, mapActions } from "vuex";
             }
         },
         computed: {
-            ...mapGetters(
-                ['groupsPageMeta','groupsApiResponse', 'userTableRowCount', 'formattedUsers']
+            ...mapGetters('groups',
+                ['groupsPageMeta','groupsApiResponse',]
+            ),
+            ...mapGetters('user',
+                ['userTableRowCount']
+            ),
+	    ...mapGetters('users',
+                ['formattedUsers']
             ),
             queryParams(){
                 let query = this.$route.query;
@@ -82,7 +88,15 @@ import { mapGetters, mapActions } from "vuex";
         },
 
         methods: {
-            ...mapActions(['deleteUsersFromGroup','fetchGroupUsers','fetchGroups','postNewGroup','postRolesToGroup','postUsersToGroup','fetchUserSettings']),
+            ...mapActions('users',
+               ['fetchGroupUsers']
+            ),
+            ...mapActions('user',
+               ['fetchUserSettings']
+            ),
+            ...mapActions('groups',
+               ['deleteUsersFromGroup','fetchGroups','postNewGroup','postRolesToGroup','postUsersToGroup']
+            ),
             displayAddGroup(){
                 this.showAddGroup = true;
             },

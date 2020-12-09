@@ -228,7 +228,9 @@ export default {
         }
     },
     computed: {
-        ...mapGetters(['userIsAdmin']),
+        ...mapGetters('user',
+            ['userIsAdmin']
+        ),
         responsiveSidebarColumns() {
             return this.width > 1100 ? "sideMenuOuter" : "sideMenuOuterCollapsed";
         },
