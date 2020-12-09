@@ -151,17 +151,7 @@ import { mapGetters, mapActions } from "vuex";
                             );
                             this.$bvModal.hide('assign-users');
                             return;
-                        }).catch( (exception) => {
-                            this.errorToast(
-                                this.$t('settings.groups.toasts.assignUserError.title'),
-                                this.$t('settings.groups.toasts.assignUserError.message'),
-                            );
                         });
-                    }).catch( (exception) => {
-                        this.errorToast(
-                            this.$t('settings.groups.toasts.assignUserError.title'),
-                            this.$t('settings.groups.toasts.assignUserError.message'),
-                        );
                     });
                 }).catch( (exception) => {
                     this.errorToast(
