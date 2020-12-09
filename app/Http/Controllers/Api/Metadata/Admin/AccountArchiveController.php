@@ -101,7 +101,7 @@ class AccountArchiveController extends Controller
 
     public function upsert( Request $request, Account $account )
     {
-        if( $account->id != auth()->user()->account->id ) {
+        if( $account->id != auth()->user()->organization->account->id ) {
             //TODO: Admin access
             abort( 403, "User with id ".auth()->id()." does not have the neccesary permissions to update archives for this account" );
         }

@@ -85,7 +85,7 @@ class FileObject extends Model
             "uuid" => Str::uuid(),
             "modified_by" => $this->storable->owner,
             "metadata" => [$source => $fileMetadata],
-            "owner_id" => $this->storable->owner()->account->uuid,
+            "owner_id" => $this->storable->owner()->organization->account->uuid,
             "owner_type" => "App\Account",
         ]);
         $metadata->parent()->associate($this);

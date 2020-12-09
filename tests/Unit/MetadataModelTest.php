@@ -56,13 +56,13 @@ class MetadataModelTest extends TestCase
     public function test_creating_metadata_model_where_owner_and_owner_type_are_provided()
     {
         $organization = factory( Organization::class )->create();
-        factory( Account::class )->create(['organization_uuid' => $organization->uuid]);
+        $account = factory( Account::class )->create(['organization_uuid' => $organization->uuid]);
         $this->user = factory(User::class)->create(['organization_uuid' => $organization->uuid]);
         Passport::actingAs( $this->user );
 
         $metadata = factory(Metadata::class)->create([
             "modified_by" => $this->user->id,
-            "owner_id" => $this->user->account->uuid,
+            "owner_id" => $account->uuid,
             "owner_type" => 'App\Account',
         ]);
 

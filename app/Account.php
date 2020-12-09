@@ -63,12 +63,6 @@ class Account extends Model
         return $this->belongsTo('App\Organization', 'organization_uuid', 'uuid');
     }
 
-    public function users()
-    {
-        //TODO: This method should be obsoleted as part of the archive refactoring
-        return $this->organization->users();
-    }
-
     public function getDefaultMetadataTemplateAttribute( string $template ) {
         $ar = json_decode( $template, true );
         if(isset( $ar["dc"] ) && !isset( $ar["dc"]["identifier"] ) ) {
