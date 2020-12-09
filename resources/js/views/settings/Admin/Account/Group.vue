@@ -139,7 +139,7 @@ import { mapGetters, mapActions } from "vuex";
                     let users = resp.map( u => {
                         return u.id;
                     } );
-		    let deleteData = {
+                    let deleteData = {
                         users: users,
                         group_id: data.group_id
                     }
@@ -155,22 +155,21 @@ import { mapGetters, mapActions } from "vuex";
                             this.errorToast(
                                 this.$t('settings.groups.toasts.assignUserError.title'),
                                 this.$t('settings.groups.toasts.assignUserError.message'),
-		            );
+                            );
                         });
                     }).catch( (exception) => {
                         this.errorToast(
                             this.$t('settings.groups.toasts.assignUserError.title'),
                             this.$t('settings.groups.toasts.assignUserError.message'),
-		        );
+                        );
                     });
                 }).catch( (exception) => {
                     this.errorToast(
                         this.$t('settings.groups.toasts.assignUserError.title'),
                         this.$t('settings.groups.toasts.assignUserError.message'),
-		    );
+                    );
                 });
             }
         }
     }
 </script>
-
