@@ -88,14 +88,11 @@ import { mapGetters, mapActions } from "vuex";
         },
 
         methods: {
-            ...mapActions('users',
-               ['fetchGroupUsers']
-            ),
             ...mapActions('user',
                ['fetchUserSettings']
             ),
             ...mapActions('groups',
-               ['deleteUsersFromGroup','fetchGroups','postNewGroup','postRolesToGroup','postUsersToGroup']
+               ['deleteUsersFromGroup','fetchGroups','postNewGroup','postRolesToGroup','postUsersToGroup','fetchGroupUsers']
             ),
             displayAddGroup(){
                 this.showAddGroup = true;
