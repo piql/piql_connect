@@ -15,11 +15,10 @@ use Illuminate\Support\Facades\Event;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Illuminate\Support\Collection;
 use Laravel\Passport\Passport;
 use App\Bag;
 use App\User;
-use App\Archive;
+use App\Collection;
 use App\Holding;
 
 class BagApiTest extends TestCase
@@ -30,8 +29,8 @@ class BagApiTest extends TestCase
     private $bagTestData;
     private $testBagName1;
     private $createdBagIds;
-    private $testArchive1;
-    private $testArchive2;
+    private $testCollection1;
+    private $testCollection2;
     private $testHolding1;
     private $testHolding2;
     private $otherUser;
@@ -39,8 +38,8 @@ class BagApiTest extends TestCase
     private $account;
     private $organization;
     private $accountMetadata;
-    private $archiveMetadata1;
-    private $archiveMetadata2;
+    private $collectionMetadata1;
+    private $collectionMetadata2;
     private $holdingMetadata1;
     private $holdingMetadata2;
 
@@ -75,31 +74,31 @@ class BagApiTest extends TestCase
         $this->accountMetadata->save();
         $this->accountMetadata->owner()->associate($this->testUser);
 
-        $this->testArchive1 = Archive::create([
-            'title' => 'testBagArchive1Title',
+        $this->testCollection1 = Collection::create([
+            'title' => 'testBagCollection1Title',
             "account_uuid" => $this->account->uuid,
         ]);
-        $this->archiveMetadata1 = factory(ArchiveMetadata::class)->create([
+        $this->collectionMetadata1 = factory(ArchiveMetadata::class)->create([
             "modified_by" => $this->testUser->id,
         ]);
-        $this->archiveMetadata1->parent()->associate($this->testArchive1);
-        $this->archiveMetadata1->save();
-        $this->archiveMetadata1->owner()->associate($this->testUser);
+        $this->collectionMetadata1->parent()->associate($this->testCollection1);
+        $this->collectionMetadata1->save();
+        $this->collectionMetadata1->owner()->associate($this->testUser);
 
-        $this->testArchive2 = Archive::create([
-            'title' => 'testBagArchive2Title',
+        $this->testCollection2 = Collection::create([
+            'title' => 'testBagCollection2Title',
             "account_uuid" => $this->account->uuid,
         ]);
-        $this->archiveMetadata2 = factory(ArchiveMetadata::class)->create([
+        $this->collectionMetadata2 = factory(ArchiveMetadata::class)->create([
             "modified_by" => $this->testUser->id,
         ]);
-        $this->archiveMetadata2->parent()->associate($this->testArchive2);
-        $this->archiveMetadata2->save();
-        $this->archiveMetadata2->owner()->associate($this->testUser);
+        $this->collectionMetadata2->parent()->associate($this->testCollection2);
+        $this->collectionMetadata2->save();
+        $this->collectionMetadata2->owner()->associate($this->testUser);
 
         $this->testHolding1 = Holding::create([
             'title' => "testBagHoldingTitle1",
-            'owner_archive_uuid' => $this->testArchive1->uuid
+            'collection_uuid' => $this->testCollection1->uuid
         ]);
         $this->holdingMetadata1 = factory(HoldingMetadata::class)->create([
             "modified_by" => $this->testUser->id,
@@ -110,7 +109,7 @@ class BagApiTest extends TestCase
 
         $this->testHolding2 = Holding::create([
             'title' => "testBagHoldingTitle2",
-            'owner_archive_uuid' => $this->testArchive2->uuid
+            'collection_uuid' => $this->testCollection2->uuid
         ]);
         $this->holdingMetadata2 = factory(HoldingMetadata::class)->create([
             "modified_by" => $this->testUser->id,
@@ -125,8 +124,8 @@ class BagApiTest extends TestCase
             'owner' => $this->bagTestData['owner']
         ]];
 
-        $this->bagTestDataWithArchiveAndHolding = [
-            'archive_uuid' => $this->testArchive1->uuid,
+        $this->bagTestDataWithCollectionAndHolding = [
+            'collection_uuid' => $this->testCollection1->uuid,
             'holding_name' => $this->testHolding1->title,
             'holding_uuid' => $this->testHolding1->uuid
         ] + $this->bagTestData;
@@ -134,7 +133,7 @@ class BagApiTest extends TestCase
 
     private function createOneBag( Array $overrides = null )
     {
-        $data = $this->bagTestDataWithArchiveAndHolding;
+        $data = $this->bagTestDataWithCollectionAndHolding;
         if( $overrides ) {
             $data = $overrides + $data;
         }
@@ -193,7 +192,7 @@ class BagApiTest extends TestCase
         $response = $this->json( 'POST', route( 'api.ingest.bags.store' ), $this->bagTestData );
         $response->assertStatus(200);
 
-        $response->assertJson(['data' => ['archive_uuid' => '', 'archive_name' => '']]);
+        $response->assertJson(['data' => ['collection_uuid' => '', 'collection_name' => '']]);
     }
 
     public function test_when_creating_a_bag_with_empty_name_it_returns_200()
@@ -229,26 +228,26 @@ class BagApiTest extends TestCase
 
     public function test_when_creating_a_bag_given_storage_properties_are_set_the_response_includes_those_storage_properties()
     {
-        $response = $this->json( 'POST', route( 'api.ingest.bags.store' ), $this->bagTestDataWithArchiveAndHolding );
+        $response = $this->json( 'POST', route( 'api.ingest.bags.store' ), $this->bagTestDataWithCollectionAndHolding );
         $response->assertStatus(200);
 
-        $response->assertJson(['data' => ['archive_uuid' => $this->testArchive1->uuid, 'holding_uuid' => $this->testHolding1->uuid]]);
+        $response->assertJson(['data' => ['collection_uuid' => $this->testCollection1->uuid, 'holding_uuid' => $this->testHolding1->uuid]]);
     }
 
     public function test_when_updating_a_bag_given_storage_properties_are_set_the_response_includes_those_storage_properties()
     {
-        $createdBagResponse = $this->json( 'POST', route( 'api.ingest.bags.store' ), $this->bagTestDataWithArchiveAndHolding);
+        $createdBagResponse = $this->json( 'POST', route( 'api.ingest.bags.store' ), $this->bagTestDataWithCollectionAndHolding);
 
         $bagData = $createdBagResponse->getData()->data;
 
         $response = $this->json( 'PATCH', route( 'api.ingest.bags.update', $bagData->id ), [
-            'archive_uuid' => $this->testArchive2->uuid,
+            'collection_uuid' => $this->testCollection2->uuid,
             'holding_uuid' => $this->testHolding2->uuid,
             'holding_name' => $this->testHolding2->title,
         ]);
 
         $response->assertJson(['data' => [
-            'archive_uuid' => $this->testArchive2->uuid,
+            'collection_uuid' => $this->testCollection2->uuid,
             'holding_uuid' => $this->testHolding2->uuid,
             'holding_name' => $this->testHolding2->title,
         ] ]);
@@ -256,7 +255,7 @@ class BagApiTest extends TestCase
 
     public function test_when_updating_a_bag_with_a_valid_name_it_returns_that_name_and_200()
     {
-        $createdBagResponse = $this->json( 'POST', route( 'api.ingest.bags.store' ), $this->bagTestDataWithArchiveAndHolding);
+        $createdBagResponse = $this->json( 'POST', route( 'api.ingest.bags.store' ), $this->bagTestDataWithCollectionAndHolding);
 
         $bagData = $createdBagResponse->getData()->data;
 
@@ -273,7 +272,7 @@ class BagApiTest extends TestCase
 
     public function test_when_updating_a_bag_with_a_invalid_name_it_returns_that_name_and_424()
     {
-        $createdBagResponse = $this->json( 'POST', route( 'api.ingest.bags.store' ), $this->bagTestDataWithArchiveAndHolding);
+        $createdBagResponse = $this->json( 'POST', route( 'api.ingest.bags.store' ), $this->bagTestDataWithCollectionAndHolding);
 
         $bagData = $createdBagResponse->getData()->data;
 
@@ -290,7 +289,7 @@ class BagApiTest extends TestCase
 
     public function test_when_updating_a_bag_with_a_too_long_name_it_returns_that_name_and_424()
     {
-        $createdBagResponse = $this->json( 'POST', route( 'api.ingest.bags.store' ), $this->bagTestDataWithArchiveAndHolding);
+        $createdBagResponse = $this->json( 'POST', route( 'api.ingest.bags.store' ), $this->bagTestDataWithCollectionAndHolding);
 
         $bagData = $createdBagResponse->getData()->data;
 
@@ -315,14 +314,14 @@ class BagApiTest extends TestCase
     {
         $createdBag = $this->createOneBag();
         $response = $this->json( 'GET', route( 'api.ingest.bags.latest' ) );
-        $response->assertJson([ 'data' => $this->bagTestDataWithArchiveAndHolding ]);
+        $response->assertJson([ 'data' => $this->bagTestDataWithCollectionAndHolding ]);
     }
 
     public function test_when_requesting_the_lastest_bag_it_is_the_latest_bag_for_the_current_user()
     {
         $this->createExtraUserAndBags();
         $response = $this->json( 'GET', route( 'api.ingest.bags.latest' ) );
-        $response->assertJson([ 'data' => $this->bagTestDataWithArchiveAndHolding ]);
+        $response->assertJson([ 'data' => $this->bagTestDataWithCollectionAndHolding ]);
     }
 
     public function test_when_getting_a_list_of_bags_they_are_the_bags_for_the_current_user()
@@ -360,7 +359,7 @@ class BagApiTest extends TestCase
     {
         $createdBag = $this->createOneBag();
         $response = $this->get( route( 'api.ingest.bags.show', $createdBag->id ) );
-        $response->assertJson([ 'data' => $this->bagTestDataWithArchiveAndHolding ]);
+        $response->assertJson([ 'data' => $this->bagTestDataWithCollectionAndHolding ]);
     }
 
     public function test_it_throws_401_when_requesting_a_bag_belonging_to_another_user()
@@ -376,7 +375,7 @@ class BagApiTest extends TestCase
         $this->createExtraUserAndBags();
 
         $response = $this->patch( route( 'api.ingest.bags.update', $this->otherBag->id ), [
-            'archive_name' => 'whatever'
+            'collection_name' => 'whatever'
         ]);
 
         $response->assertStatus( 401 );

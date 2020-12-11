@@ -6,7 +6,7 @@ use App\Traits\AutoGenerateUuid;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Validator;
-use App\Archive;
+use App\Collection;
 
 class Holding extends Model
 {
@@ -16,7 +16,7 @@ class Holding extends Model
 
     protected $table = 'holdings';
     protected $fillable = [
-        'title', 'description', 'owner_archive_uuid', 'parent_id','position',
+        'title', 'description', 'collection_uuid',
         'uuid', 'defaultMetadataTemplate'
     ];
 
@@ -32,8 +32,6 @@ class Holding extends Model
     {
         parent::boot();
         static::creating(function ($model) {
-            $model->position = $model->siblings()->count()+1;
-
             $validateIdentifier = Validator::make( ['uuid' => $model->uuid ], ['uuid' => 'uuid'] );
             if( !$validateIdentifier->passes() ){
                 $model->uuid = Str::uuid();
@@ -44,124 +42,26 @@ class Holding extends Model
         });
     }
 
-    /* Section: Mutators and accessors */
     public function setOwnerArchiveUuidAttribute($value)
     {
-        if(! Archive::findByUuid( $value ) )
+        if(! Collection::findByUuid( $value ) )
         {
-            throw new \InvalidArgumentException("Cannot assign owner archive to holdings - archive not found: ".$value);
+            throw new \InvalidArgumentException("Cannot assign collection to holding - collection not found: ".$value);
         }
 
-        $this->attributes['owner_archive_uuid'] = $value;
+        $this->attributes['collection_uuid'] = $value;
     }
 
 
-    /* Section: Relations */
-    public function owner_archive()
+    public function collection()
     {
-        return $this->belongsTo(\App\Archive::class, 'owner_archive_uuid',  'uuid');
-    }
-
-    public function parent()
-    {
-        return $this->belongsTo('App\Holding', 'parent_id');
-    }
-
-    /* Section: Utilities */
-
-
-    /* function siblings()
-     * returns all holdings at the same level as the current (self exclusive)
-     */
-
-    public function siblings()
-    {
-        return Holding::orderBy( 'position' )
-            ->where( 'id', '<>', $this->id )
-            ->where( 'parent_id', '=', $this->parent_id);
-    }
-
-    /* function subHolding()
-     * returns all first-level sub-holdings for the current holding
-     */
-
-    public function subHolding()
-    {
-        return $this->hasMany('App\Holding', 'parent_id');
-    }
-
-    /* function moveBefore($holding_id)
-     * moves a holding before another holding in the chain
-     * returns the updated holding
-     */
-
-    public function moveBefore( $holding_id )
-    {
-        $insertPosition = Holding::findOrFail( $holding_id )->position;
-
-        /* Partition the list by before and after new position */
-        $parts = $this->siblings()->get()->partition(
-            function ($sibling) use ($insertPosition) {
-                return $sibling->position < $insertPosition;
-            }
-        );
-
-
-        /* Insert $this between before and after*/
-        $ordered = $parts->first()->concat([$this])->concat($parts->last() );
-
-        /* Re-enumerate entries by map reduce */
-        $ordered->reduce( function ( $pos, $holding ) {
-            $holding->update(['position' => $pos]);
-            return $pos+1;
-        }, 0);
-
-        return $this;
-    }
-
-
-    /* function moveAfter($holding_id)
-     * moves a holding after another holding in the chain
-     * returns the updated holding */
-
-    public function moveAfter( $holding_id )
-    {
-        $insertPosition = Holding::findOrFail( $holding_id )->position;
-
-        /* Partition the list by before and after new position */
-        $parts = $this->siblings()->get()->partition(
-            function ($sibling) use ($insertPosition) {
-                return $sibling->position <= $insertPosition;
-            }
-        );
-
-        /* Insert $this between before and after*/
-        $ordered = $parts->first()->concat( [$this] )->concat( $parts->last() );
-
-        /* Re-enumerate entries by map reduce */
-        $ordered->reduce( function ( $pos, $holding ) {
-            $holding->update(['position' => $pos]);
-            return $pos+1;
-        }, 0);
-
-        return $this;
-    }
-
-
-
-    /* function ancestor()
-    /* recursively finds the top-level holdings for this holding
-     */
-
-    public function ancestor()
-    {
-        return $this->parent()->with('ancestor');
+        return $this->belongsTo('App\Collection', 'collection_uuid', 'uuid');
     }
 
     public function getDefaultMetadataTemplateAttribute( string $template ) {
         $ar = json_decode( $template, true );
         if(isset( $ar["dc"] ) && !isset( $ar["dc"]["identifier"] ) ) {
-            $ar["dc"]["identifier"] = $this->attributes["uuid"]; //The default is to use the uuid for the Archive as the identifier (as per spec.)
+            $ar["dc"]["identifier"] = $this->attributes["uuid"]; //The default is to use the uuid as the identifier (as per spec.)
         }
 
         if(isset( $ar["dc"] ) && !isset( $ar["dc"]["title"] ) ) {

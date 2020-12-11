@@ -2,7 +2,7 @@
 
 namespace Tests\Unit;
 
-use App\Archive;
+use App\Collection;
 use App\Bag;
 use App\Events\BagFilesEvent;
 use App\Events\PreProcessBagEvent;
@@ -36,20 +36,19 @@ class FMUIngestServiceTest extends TestCase
         $user = factory(User::class)->create();
         Passport::actingAs( $user );
 
-        $archive = Archive::create([
+        $collection = Collection::create([
             'title' => '(FMU)',
-            'description' => "A few words",
-            'parent_uuid' => null
+            'description' => "A few words"
         ]);
 
         Holding::create([
             'title' => "000000-100000",
-            'owner_archive_uuid' => $archive->uuid
+            'collection_uuid' => $collection->uuid
         ]);
 
         Holding::create([
             'title' => "400000-400000",
-            'owner_archive_uuid' => $archive->uuid
+            'collection_uuid' => $collection->uuid
         ]);
 
         $bag = factory(Bag::class)->create([

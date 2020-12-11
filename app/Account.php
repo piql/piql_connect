@@ -4,7 +4,6 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
-use Webpatser\Uuid\Uuid;
 use Illuminate\Support\Facades\Validator;
 
 class Account extends Model
@@ -53,9 +52,9 @@ class Account extends Model
         return $this->morphTo();
     }
 
-    public function archives()
+    public function collections()
     {
-        return $this->hasMany('App\Archive', 'account_uuid', 'uuid');
+        return $this->hasMany('App\Collection', 'account_uuid', 'uuid');
     }
 
     public function organization()
@@ -66,7 +65,7 @@ class Account extends Model
     public function getDefaultMetadataTemplateAttribute( string $template ) {
         $ar = json_decode( $template, true );
         if(isset( $ar["dc"] ) && !isset( $ar["dc"]["identifier"] ) ) {
-            $ar["dc"]["identifier"] = $this->attributes["uuid"]; //The default is to use the uuid for the Archive as the identifier (as per spec.)
+            $ar["dc"]["identifier"] = $this->attributes["uuid"]; //The default is to use the uuid as the identifier (as per spec.)
         }
 
         if(isset( $ar["dc"] ) && !isset( $ar["dc"]["title"] ) ) {

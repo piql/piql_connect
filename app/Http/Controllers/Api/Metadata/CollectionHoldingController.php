@@ -6,18 +6,18 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\HoldingResource;
 use App\Holding;
-use App\Archive;
+use App\Collection;
 
-class ArchiveHoldingController extends Controller
+class CollectionHoldingController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index( Request $request, Archive $archive )
+    public function index( Request $request, Collection $collection )
     {
-        $holdings = $archive->holdings;
+        $holdings = $collection->holdings;
         return HoldingResource::collection( $holdings );
     }
 
@@ -48,7 +48,7 @@ class ArchiveHoldingController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show( Request $request, Archive $archive , Holding $holding )
+    public function show( Request $request, Collection $collection, Holding $holding )
     {
         return new HoldingResource( $holding );
     }

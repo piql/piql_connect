@@ -20,7 +20,7 @@ use Log;
 class DipController extends Controller
 {
     use UserSettingRequest;
-    
+
     /**
      * Display a listing of the resource.
      *
@@ -31,7 +31,7 @@ class DipController extends Controller
     {
         $q = StorageProperties::query()->whereHas("dip");
         $terms = collect(explode(" ", $request->query('search')))->reject("");
-        $archiveUuid = $request->query('archive');
+        $collectionUuid = $request->query('collection');
         $holdingUUID = $request->query('holding');
         $fromDate = $request->query('archived_from');
         $toDate = $request->query('archived_to');
@@ -58,8 +58,8 @@ class DipController extends Controller
             }
         }
 
-        if($archiveUuid) {
-            $q->where('archive_uuid', $archiveUuid);
+        if($collectionUuid) {
+            $q->where('collection_uuid', $collectionUuid);
             if($holdingUUID) {
                 $q->where('holding_uuid', $holdingUUID);
             }

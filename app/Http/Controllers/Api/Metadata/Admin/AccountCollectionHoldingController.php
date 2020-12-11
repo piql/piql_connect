@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Api\Metadata\Admin;
 
-use App\Archive;
+use App\Collection;
 use App\File;
 use App\Holding;
 use App\HoldingMetadata;
@@ -13,19 +13,19 @@ use App\Http\Controllers\Controller;
 use phpDocumentor\Reflection\DocBlock\Tags\Author;
 use Illuminate\Support\Facades\Validator;
 
-class AccountArchiveHoldingController extends Controller
+class AccountCollectionHoldingController extends Controller
 {
     /**
-     * Display a listing of Holdings for the current Archive
+     * Display a listing of Holdings for the current Collection
      *
      * @param Request $request
      * @param Account $account
-     * @param Archive $archive
+     * @param Collection $collection
      * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
      */
-    public function index(Request $request, Account $account, Archive $archive)
+    public function index(Request $request, Account $account, Collection $collection)
     {
-        $holdings = $archive->holdings();
+        $holdings = $collection->holdings();
         $limit = $request->limit ? $request->limit : env('DEFAULT_ENTRIES_PER_PAGE');
         return HoldingResource::collection( $holdings->paginate( $limit ) );
 
@@ -36,13 +36,13 @@ class AccountArchiveHoldingController extends Controller
      *
      * @param \Illuminate\Http\Request $request
      * @param Account $account
-     * @param Archive $archive
+     * @param Collection $collection
      * @param Holding $holding
      *
      * @param File $file
      * @return void
      */
-    public function store(Request $request, Account $account, Archive $archive)
+    public function store(Request $request, Account $account, Collection $collection)
     {
         $validated = $request->validate([
             'title' => 'required|string|max:100',
@@ -54,7 +54,7 @@ class AccountArchiveHoldingController extends Controller
 
         $holding = Holding::create(
             array_merge($validated, [
-                "owner_archive_uuid" => $archive->uuid,
+                "collection_uuid" => $collection->uuid,
             ])
         );
 
@@ -65,11 +65,11 @@ class AccountArchiveHoldingController extends Controller
      * Display the specified resource.
      *
      * @param Account $account
-     * @param Archive $archive
+     * @param Collection $collection
      * @param Holding $holding
      * @return \Illuminate\Http\Response
      */
-    public function show(Account $account, Archive $archive, Holding $holding)
+    public function show(Account $account, Collection $collection, Holding $holding)
     {
         return new HoldingResource( $holding );
     }
@@ -79,11 +79,11 @@ class AccountArchiveHoldingController extends Controller
      *
      * @param \Illuminate\Http\Request $request
      * @param Account $account
-     * @param Archive $archive
+     * @param Collection $collection
      * @param Holding $holding
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Account $account, Archive $archive, Holding $holding)
+    public function update(Request $request, Account $account, Collection $collection, Holding $holding)
     {
         $validated = $request->validate( [
             'title' => 'required|string|max:100',
@@ -102,19 +102,18 @@ class AccountArchiveHoldingController extends Controller
      *
      * @param \Illuminate\Http\Request $request
      * @param Account $account
-     * @param Archive $archive
+     * @param Collection $collection
      * @param Holding $holding
      * @return \Illuminate\Http\Response
      */
-    public function upsert(Request $request, Account $account, Archive $archive, Holding $holding)
+    public function upsert(Request $request, Account $account, Collection $collection, Holding $holding)
     {
         $validated = $request->validate( [
             'title' => 'required|string|max:100',
             'description' => 'string|max:500',
             'lhs' => 'int|exists:holding',
             'rhs' => 'int|exists:holding',
-            'defaultMetadataTemplate' => 'array|nullable',
-            'owner_archive_uuid' => 'string'
+            'defaultMetadataTemplate' => 'array|nullable'
         ]);
 
         if( $request->id ) {
@@ -123,7 +122,7 @@ class AccountArchiveHoldingController extends Controller
             return new HoldingResource( $holding );
         }
 
-        $data = array_merge( $validated, [ 'owner_archive_uuid' => $archive->uuid ] );
+        $data = array_merge( $validated, [ 'collection_uuid' => $collection->uuid ] );
 
         return new HoldingResource( Holding::create( $data ) );
     }
@@ -132,11 +131,13 @@ class AccountArchiveHoldingController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param Account $account
+     * @param \App\Account $account
+     * @param \App\Collection $collection
+     * @param \App\Holding $holding
      * @return \Illuminate\Http\Response
      * @throws \Exception
      */
-    public function destroy(Account $account, Archive $archive, Holding $holding)
+    public function destroy(Account $account, Collection $collection, Holding $holding)
     {
         abort(409, "Holdings cannot be deleted in this version");
     }
