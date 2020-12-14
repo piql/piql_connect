@@ -22,7 +22,8 @@
     "Back": "Back",
     "All": "All",
     "Your archive": "Your archive",
-    "nothingSelected": "Nothing Selected",
+    "Your collection": "Your collection",
+    "nothingSelected": "Nothing selected",
 
     "upload.title": "Upload",
     "upload.ingress" : "Upload files to your archive here by clicking the 'Add file' button.",
@@ -198,7 +199,7 @@
     "ingest.offlineStorage.config.uploadedTitle": "Uploaded images",
     "ingest.offlineStorage.config.toast.fileUploaded.message": "Your image was sent",
     "ingest.offlineStorage.config.removeQuestion": "Remove this file?",
-    
+
     "ingest.fileList.header": "File list",
     "ingest.fileList.ingress": "Displays the files included in the submission package",
     "ingest.fileList.fileSize": "File size",
