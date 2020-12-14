@@ -4,9 +4,9 @@
 
         
 
-        <access-browser-filters :singleArchiveTitle="$t('Your archive')"></access-browser-filters>
+        <access-browser-filters :singleCollectionTitle="$t('Your collection')"></access-browser-filters>
         <browser-list @openObject="openObject" :location="selectedLocation" :dataObjects="currentObjects"
-            :selectedArchive="selectedArchiveUuid" :selectedHolding="selectedHolding"/>
+            :selectedCollection="selectedArchiveUuid" :selectedHolding="selectedHolding"/>
 
               <div class="row text-center pagerRow">
                 <div class="col">
@@ -67,8 +67,8 @@ export default {
 
             let filter = "?location=Online"
 
-            if( query.archive ) {
-                filter += "&archive=" + encodeURI( query.archive );
+            if( query.collection ) {
+                filter += "&collection=" + encodeURI( query.collection );
             }
             if( query.holding ){
                     filter += "&holding=" + encodeURI( query.holding );

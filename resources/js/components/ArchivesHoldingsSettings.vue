@@ -4,7 +4,7 @@
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-sm-4 col-lg-4 col-xs-4">
-                        <archive-picker :archives='archives' :initialSelectedArchive='selectedArchive' @archiveSelectionChanged='archiveSelectionChanged'></archive-picker>
+                        <collection-picker :collections='collections' :initialSelectedCollection='selectedCollection' @collectionSelectionChanged='collectionSelectionChanged'></collection-picker>
                     </div>
                 </div>
             </div>
@@ -25,8 +25,8 @@ export default {
             holdingSelectCounter: 0,
             lastSelectedHolding: "",
             selectedHolding: "",
-            selectedArchive: "H-002",
-            archives: [],
+            selectedCollection: "H-002",
+            collections: [],
         }
     },
     computed: {
@@ -35,7 +35,7 @@ export default {
         },
 
         completeFilter: function() {
-            let filter = "?archive=" + encodeURI(this.selectedArchive);
+            let filter = "?collection=" + encodeURI(this.selectedCollection);
             filter += "&loc=" + encodeURI(this.selectedLocation);
             if(this.selectedHolding){
                 filter += "&holding=" + encodeURI(this.selectedHolding);
@@ -53,7 +53,7 @@ export default {
         },
     },
     async mounted() {
-        this.archives = (await axios.get("/api/v1/planning/archives")).data.data;
+        this.collections = (await axios.get("/api/v1/planning/collections")).data.data;
     },
     methods: {
         holdingSelectionChanged: function(holding, state) {
@@ -71,8 +71,8 @@ export default {
             }
 
         },
-        archiveSelectionChanged: function(archive) {
-            this.selectedArchive = archive;
+        collectionSelectionChanged: function(collection) {
+            this.selectedCollection = collection;
         },
         locationSelectionChanged: function(location) {
             this.selectedLocation = location;

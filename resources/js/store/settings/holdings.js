@@ -15,9 +15,9 @@ const getters = {
 }
 
 const actions = {
-    async fetchHoldingsForArchive( { commit }, { accountId, archiveId, query} ){
+    async fetchHoldingsForCollection( { commit }, { accountId, collectionId, query} ){
         let queryString = query ?? "";
-        await ax.get(`/api/v1/metadata/admin/accounts/${accountId}/archives/${archiveId}/holdings${queryString}`)
+        await ax.get(`/api/v1/metadata/admin/accounts/${accountId}/collections/${collectionId}/holdings${queryString}`)
             .then( response =>
                 commit('setHoldingsMutation',response.data )
             ).catch( error =>
@@ -26,8 +26,8 @@ const actions = {
     },
     async createHolding( {commit}, request ) {
         const accountId = request.accountId;
-        const archiveId = request.archiveId;
-        await ax.put( `/api/v1/metadata/admin/accounts/${accountId}/archives/${archiveId}/holdings`,
+        const collectionId = request.collectionId;
+        await ax.put( `/api/v1/metadata/admin/accounts/${accountId}/collections/${collectionId}/holdings`,
             {
                 title: request.title,
                 description: request.description,
@@ -42,8 +42,8 @@ const actions = {
 
     async updateHoldingMetadata( {commit}, payload ) {
         const accountId = payload.accountId;
-        const archiveId = payload.archiveId;
-        const url = `/api/v1/metadata/admin/accounts/${accountId}/archives/${archiveId}/holdings`;
+        const collectionId = payload.collectionId;
+        const url = `/api/v1/metadata/admin/accounts/${accountId}/collections/${collectionId}/holdings`;
         const holding = payload.holding;
 
         await ax.put( url, holding )
@@ -56,10 +56,10 @@ const actions = {
 
     async editHoldingData( {commit}, request ) {
         let accountId = request.accountId;
-        let archiveId = request.archiveId;
+        let collectionId = request.collectionId;
         let id = request.id;
 
-        await ax.put( `/api/v1/metadata/admin/accounts/${accountId}/archives/${archiveId}/holdings/${id}`,
+        await ax.put( `/api/v1/metadata/admin/accounts/${accountId}/collections/${collectionId}/holdings/${id}`,
             {
                 title: request.title,
                 description: request.description

@@ -2,7 +2,7 @@
     <div class="w-100">
         <page-heading iconImg="/images/retrieval-icon-gray.svg" :title="$t('access.retrieve.request')" :ingress="$t('access.retrieve.request.ingress')" />
 
-        <access-browser-filters :singleArchiveTitle="$t('Your archive')"></access-browser-filters>
+        <access-browser-filters :singleCollectionTitle="$t('Your collection')"></access-browser-filters>
 
         <div class="row plistHeader text-truncate mt-2">
             <div class="col-sm-2 text-center">{{$t("access.browse.header.preview")}}</div>
@@ -50,7 +50,7 @@ export default {
         apiQueryString: function() {
             let query = this.$route.query;
 
-            let archiveFilter = query.archive ? `archive=${encodeURI( query.archive )}` : "";
+            let archiveFilter = query.collection ? `collection=${encodeURI( query.collection )}` : "";
             let holdingFilter = query.holding ? `holding=${encodeURI( query.holding )}` : "";
             let archivedFromFilter = query.archived_from ? `archived_from=${encodeURI( query.archived_from )}` : "";
             let archivedToFilter = query.archived_to ? `archived_to=${encodeURI( query.archived_to )}` : "";

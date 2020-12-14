@@ -7,7 +7,7 @@ import groups from "./settings/groups"
 import roles from "./settings/roles";
 import user from "./settings/user";
 import template from "./metadata/template";
-import archives from "./settings/archives";
+import collections from "./settings/collections";
 import holdings from "./settings/holdings";
 import account from "./settings/account";
 
@@ -24,7 +24,7 @@ export const store = new Vuex.Store({
         roles,
         user,
         template,
-        archives,
+        collections,
         holdings,
         account
     }

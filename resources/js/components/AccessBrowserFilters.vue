@@ -3,10 +3,10 @@
         <form v-on:submit.prevent>
             <div class="row mb-2">
 
-                <div v-if="filters.archives && useArchives" class="col-lg-3 col-md-3 col-sm">
-                    <archive-picker
+                <div v-if="filters.collections && useCollections" class="col-lg-3 col-md-3 col-sm">
+                    <collection-picker
                         :wildCardLabel='$t("All")'
-                        :label='$t("Archive")'
+                        :label='$t("Collection")'
                     />
                 </div>
 
@@ -63,7 +63,7 @@ export default {
             type: Object,
             default: function() {
                 return {
-                    archives: true,
+                    collections: true,
                     holdings: true,
                     archivedFrom: true,
                     archivedTo: true,
@@ -71,7 +71,7 @@ export default {
                 };
             }
         },
-        useArchives: {
+        useCollections: {
             type: Boolean,
             default: true
         },
@@ -79,9 +79,9 @@ export default {
             type: Boolean,
             default: true
         },
-        singleArchiveTitle: {
+        singleCollectionTitle: {
             type: String,
-            default: "Your archive"
+            default: "Your collection"
         }
     },
     watch: {

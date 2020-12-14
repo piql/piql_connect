@@ -14,7 +14,7 @@
             <browser-item  v-for="item in dataObjects" :item="item" :key="item.id" @showPreview="showPreview"/>
         </span>
         <span v-if="fileLocation === 'offline'">
-            <browser-item-offline  v-for="item in dataObjects" @addFileToRetrieval="addFileToRetrieval" @addObjectToRetrieval="addObjectToRetrieval" :archive="selectedArchive" :holding="selectedHolding" v-bind:item="item" v-bind:key="item.id" @openObject="openObject"/>
+            <browser-item-offline  v-for="item in dataObjects" @addFileToRetrieval="addFileToRetrieval" @addObjectToRetrieval="addObjectToRetrieval" :collection="selectedCollection" :holding="selectedHolding" v-bind:item="item" v-bind:key="item.id" @openObject="openObject"/>
         </span>
         <Lightbox
             ref="lgbx"
@@ -52,7 +52,7 @@ import Lightbox from './lightbox';
             type: String,
             default: "online"
         },
-        selectedArchive: String,
+        selectedCollection: String,
         selectedHolding: String,
         dataObjects: Array,
     },

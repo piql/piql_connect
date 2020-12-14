@@ -1,11 +1,11 @@
 <template>
     <div>
-        <b-modal id="edit-archive-metadata"
+        <b-modal id="edit-collection-metadata"
             size="xl" :centered=true
             :title="$t('admin.metadata.template.edit.title')"
             :header-class="['d-ruby','text-center']"
             :no-fade=true title-class="h3"
-            :ok-title="$t('settings.archives.assignMeta')"
+            :ok-title="$t('settings.collections.assignMeta')"
             :cancel-title="$t('admin.metadata.template.edit.cancelButton')"
             @ok="updateDefaultMetadataTemplate"
             @cancel="cancelUpdate"
@@ -18,7 +18,7 @@
                     <b-dropdown-item-button v-for="template in templates" :key="template.id" @click="selectTemplate(template.id)">
                         {{ template.metadata.dc.title }}
                     </b-dropdown-item-button>
-                        <!--b-form-group class="w-100" :label="$t('settings.archives.template')" for="templateSelector" >
+                        <!--b-form-group class="w-100" :label="$t('settings.collections.template')" for="templateSelector" >
                             <b-form-select v-for="template in templates" :key="template.id" :value="template.id">
                                 {{ template.metadata.dc.title }}
                             </b-form-input>
@@ -26,7 +26,7 @@
                 </b-dropdown>
             </template>
 
-        <b-form v-if="archive">
+        <b-form v-if="collection">
             <b-form-group
                 key="identifier" id="identifier"
                 label="Identifier" label-for="identifier">
@@ -45,7 +45,7 @@
                 <b-form-input
                     :id="schemeItem.label.toLowerCase()"
                     class="mb-4"
-                    v-model="archive.defaultMetadataTemplate.dc[schemeItem.name]"
+                    v-model="collection.defaultMetadataTemplate.dc[schemeItem.name]"
                     :type="schemeItem.type" />
 
             </b-form-group>
@@ -62,7 +62,7 @@
 import {mapGetters, mapActions} from "vuex"
 export default {
     props:{
-        archiveId: {
+        collectionId: {
             type: Number,
             default: 0,
         },
@@ -99,7 +99,7 @@ export default {
     data(){
         return {
             selectedTemplate: '',
-            archive: { 'defaultMetadataTemplate': {'dc': {}}},
+            collection: { 'defaultMetadataTemplate': {'dc': {}}},
             backup:  { 'defaultMetadataTemplate': {'dc': {}}},
         }
     },
@@ -107,42 +107,42 @@ export default {
         await this.fetchTemplates();
     },
     watch: {
-        archiveId( id ) {
-            this.archive = this.archiveById( this.archiveId );
-            this.backup = JSON.parse(JSON.stringify( this.archive ));
+        collectionId( id ) {
+            this.collection = this.collectionById( this.collectionId );
+            this.backup = JSON.parse(JSON.stringify( this.collection ));
         }
     },
     computed: {
-        ...mapGetters(['archives', 'archiveById', 'firstAccount', 'templates', 'templateById']),
+        ...mapGetters(['collections', 'collectionById', 'firstAccount', 'templates', 'templateById']),
         defaultMetadataTemplate: {
             get(){
-                return this.archive.defaultMetadataTemplate;
+                return this.collection.defaultMetadataTemplate;
             },
             set( template ) {
-                this.archive.defaultMetadataTemplate = template;
+                this.collection.defaultMetadataTemplate = template;
             }
         },
     },
     methods: {
-        ...mapActions(['updateArchiveMetadata', 'fetchArchives', 'fetchAccounts', 'fetchTemplates']),
+        ...mapActions(['updateCollectionMetadata', 'fetchCollections', 'fetchAccounts', 'fetchTemplates']),
 
         selectTemplate( templateId ) {
             let template = JSON.parse( JSON.stringify( this.templateById( templateId ) ) );
-            this.archive.defaultMetadataTemplate.dc = template.metadata.dc;
+            this.collection.defaultMetadataTemplate.dc = template.metadata.dc;
         },
         async cancelUpdate(){
-            this.archive = JSON.parse(JSON.stringify(this.backup));
+            this.collection = JSON.parse(JSON.stringify(this.backup));
         },
         async updateDefaultMetadataTemplate(){
             const payload = {
                 accountId: this.firstAccount.id,
-                archive: this.archive
+                collection: this.collection
             };
-            this.updateArchiveMetadata( payload ).then( result => {
-                this.backup = JSON.parse(JSON.stringify( this.archive ));
+            this.updateCollectionMetadata( payload ).then( result => {
+                this.backup = JSON.parse(JSON.stringify( this.collection ));
                 this.successToast(
-                    this.$t('settings.archives.toast.addingArchiveMeta'),
-                    this.$t('settings.archives.toast.addingArchiveMeta') + ' ' + this.archiveId
+                    this.$t('settings.collections.toast.addingCollectionMeta'),
+                    this.$t('settings.collections.toast.addingCollectionMeta') + ' ' + this.collectionId
                 );
                 this.$emit('disableMetaForm');
             }).catch( error => {
