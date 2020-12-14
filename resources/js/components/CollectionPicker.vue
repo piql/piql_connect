@@ -69,7 +69,7 @@ export default {
         },
         singleCollectionTitle: {
             type: String,
-            default: $t('Your collection')
+            default: "$t('Your collection')"
         },
         selectionDisabled: {
             type: Boolean,
