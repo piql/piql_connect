@@ -28,14 +28,14 @@
                              <div :title="$t('upload.collectionToolTip')">
                                 <collection-picker
                                 :useWildCard="true"
-                                :wildCardLabel='$t("nothingSelected")' 
+                                :wildCardLabel='$t("nothingSelected")'
                                 v-bind:label="$t('Collection')" :required="true"/>
                             </div>
                          </div>
                          <div class="form-group">
                              <div :title="$t('upload.holdingToolTip')">
                                 <holding-picker v-bind:label="$t('Holdings')"
-                                :wildCardLabel='$t("nothingSelected")' 
+                                :wildCardLabel='$t("nothingSelected")'
                                 :useWildCard="true" @selectedHolder="selectedHolder" :required="true"/>
                             </div>
                          </div>
@@ -115,7 +115,7 @@ import axios from 'axios';
 import JQuery from 'jquery';
 let $ = JQuery;
 import filesize from 'filesize';
-import {mapActions} from 'vuex'; 
+import {mapActions} from 'vuex';
 export default {
     mixins: [ RouterTools, DeferUpdate ],
     data() {
@@ -489,7 +489,7 @@ export default {
             let queryCollection = query.collection;
             let queryHolding = query.holding;
             if( queryCollection != this.selectedCollection || queryHolding != this.selectedHolding  ) {
-                this.changedArchive( queryCollection, queryHolding );
+                this.changedCollection( queryCollection, queryHolding );
             }
             let prevCurrentPage = this.currentPage;
             this.currentPage = parseInt(query.page ?? "1");
@@ -543,7 +543,7 @@ export default {
             this.filesUploading = [];
             return createdBag;
         },
-        async changedArchive(collectionId, holdingUuid) {
+        async changedCollection(collectionId, holdingUuid) {
             if( !collectionId || !holdingUuid )
                 return;
             this.selectedCollection = collectionId;

@@ -6,7 +6,7 @@
         <div class="card">
             <div class="card-header">
                 <span v-if="enableMetaForm"><i class="fa fa-tags"></i> {{ $t('settings.collections.assignMeta').toUpperCase() }} | <button class="btn btn-primary" @click="disableMetaForm">{{$t('settings.collections.backToCollections')}}</button></span>
-                <button v-else class="btn" @click="newArchiveForm"><i class="fa fa-plus"></i> {{$t('settings.collections.add')}}</button>
+                <button v-else class="btn" @click="newCollectionForm"><i class="fa fa-plus"></i> {{$t('settings.collections.add')}}</button>
             </div>
             <div class="card-body">
                 <collections-listing v-show="!enableMetaForm" @assignMeta='assignMeta' :accountId='1' :collections='collections' />
@@ -23,7 +23,7 @@
             <template v-slot:modal-title>
                 <h4> <b>{{$t('settings.collections.create').toUpperCase()}}</b></h4>
             </template>
-            <b-form v-on:submit.prevent='makeArchive'>
+            <b-form v-on:submit.prevent='makeCollection'>
                 <b-form-group id="input-group-2" :label="$t('settings.collections.title')" label-for="input-1">
                     <b-form-input
                         id="input-1"
@@ -53,7 +53,7 @@ export default {
     data() {
         return {
             enableMetaForm: false,
-            selectedArchiveId: 0,
+            selectedCollectionId: 0,
             createForm: {
                 title: '',
                 description: ''
@@ -80,10 +80,10 @@ export default {
         },
         collectionId: {
             get: function(){
-                return this.selectedArchiveId || 0;
+                return this.selectedCollectionId || 0;
             },
             set: function( value ) {
-                this.selectedArchiveId = value;
+                this.selectedCollectionId = value;
             }
         },
     },
@@ -92,10 +92,10 @@ export default {
         async dispatchRouting() {
             await this.fetchCollections({ accountId: 1, query: this.apiQueryString });
         },
-        newArchiveForm(){
+        newCollectionForm(){
             this.$bvModal.show('create-collection');
         },
-        async makeArchive() {
+        async makeCollection() {
             const accountId = 1;
             this.createCollection( {
                 title: this.createForm.title,
@@ -104,8 +104,8 @@ export default {
             } );
             this.$bvModal.hide('create-collection');
             this.successToast(
-                this.$t('settings.collections.toast.createdArchiveHeading'),
-                this.$t('settings.collections.toast.createdArchive') + ' ' + this.createForm.title
+                this.$t('settings.collections.toast.createdCollectionHeading'),
+                this.$t('settings.collections.toast.createdCollection') + ' ' + this.createForm.title
             );
             await this.fetchCollections({ accountId: 1, query: this.apiQueryString });
             this.createForm = { title: '', description: '' };

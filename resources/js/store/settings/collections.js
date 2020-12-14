@@ -79,8 +79,8 @@ const mutations = {
         state.pageMeta = collections.meta;
     },
     addCollectionMetadataMutation (state, payload) {
-        let archiveToUpdate = state.collections.find(collection => collection.metadata.id === payload.data.id);
-        archiveToUpdate.defaultMetadataTemplate = payload.data.defaultMetadataTemplate;
+        let collectionToUpdate = state.collections.find(collection => collection.metadata.id === payload.data.id);
+        collectionToUpdate.defaultMetadataTemplate = payload.data.defaultMetadataTemplate;
     },
     editCollectionMutation( state, response ) {
         let collectionIndex = state.collections.findIndex( collection => collection.id === response.data.id );

@@ -42,7 +42,7 @@ class Holding extends Model
         });
     }
 
-    public function setOwnerArchiveUuidAttribute($value)
+    public function setOwnerCollectionUuidAttribute($value)
     {
         if(! Collection::findByUuid( $value ) )
         {

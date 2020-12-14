@@ -2,11 +2,11 @@
     <div class="w-100">
         <page-heading icon="fa-hdd" :title="$t('access.browse')" :ingress="$t('access.browse.ingress')" />
 
-        
+
 
         <access-browser-filters :singleCollectionTitle="$t('Your collection')"></access-browser-filters>
         <browser-list @openObject="openObject" :location="selectedLocation" :dataObjects="currentObjects"
-            :selectedCollection="selectedArchiveUuid" :selectedHolding="selectedHolding"/>
+            :selectedCollection="selectedCollectionUuid" :selectedHolding="selectedHolding"/>
 
               <div class="row text-center pagerRow">
                 <div class="col">
@@ -14,8 +14,8 @@
                 </div>
             </div>
 
-        
-      
+
+
     </div>
 </template>
 
@@ -43,7 +43,7 @@ export default {
             currentFilesPage: 1,
             selectedLocation: null,
             selectedHolding: null,
-            selectedArchiveUuid: null
+            selectedCollectionUuid: null
         }
     },
     props: {

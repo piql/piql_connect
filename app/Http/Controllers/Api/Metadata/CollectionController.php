@@ -16,7 +16,7 @@ class CollectionController extends Controller
      */
     public function index()
     {
-        //TODO: Limit access to Archives per Account
+        //TODO: Limit access to Collections per Account
         return CollectionResource::collection( Collection::all() );
     }
 
@@ -28,7 +28,7 @@ class CollectionController extends Controller
      */
     public function store(Request $request)
     {
-        abort( 403, "Forbidden: Users cannot persist Archives in this version" );
+        abort( 403, "Forbidden: Users cannot persist Collections in this version" );
     }
 
     /**

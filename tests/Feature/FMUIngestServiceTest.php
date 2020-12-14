@@ -151,7 +151,7 @@ class FMUIngestServiceTest extends TestCase
         self::assertFalse($service->validateFileName("FM.000000.tif"));
     }
 
-    public function test_validate_files_with_invalid_archive() {
+    public function test_validate_files_with_invalid_collection() {
         $service = new FMUIngestService($this->app);
         self::assertFalse($service->validateFileName("ABC.800000.tif"));
     }

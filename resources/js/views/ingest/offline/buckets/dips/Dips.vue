@@ -3,7 +3,7 @@
         <page-heading icon="fa-hdd" :title="$t('ingest.offlineStorage.package.header')" :ingress="$t('ingest.offlineStorage.package.ingress')" />
         <breadcumb :subTitle="$t('ingest.taskList.title')" :subTitleRoute="{ name: 'ingest.offline' }"/>
         <bucket-content-list @openObject="openObject" @onDelete="onDelete" :location="selectedLocation" :dataObjects="currentObjects"
-            :selectedCollection="selectedArchiveUuid" :selectedHolding="selectedHolding"/>
+            :selectedCollection="selectedCollectionUuid" :selectedHolding="selectedHolding"/>
         <div class="row text-center pagerRow">
             <div class="col">
                 <Pager :meta='packagePageMeta' :height='height' />
@@ -31,7 +31,7 @@ export default {
             packagePageMeta: null,
             selectedLocation: null,
             selectedHolding: null,
-            selectedArchiveUuid: null
+            selectedCollectionUuid: null
         }
     },
     props: {

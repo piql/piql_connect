@@ -50,13 +50,13 @@ export default {
         apiQueryString: function() {
             let query = this.$route.query;
 
-            let archiveFilter = query.collection ? `collection=${encodeURI( query.collection )}` : "";
+            let collectionFilter = query.collection ? `collection=${encodeURI( query.collection )}` : "";
             let holdingFilter = query.holding ? `holding=${encodeURI( query.holding )}` : "";
             let archivedFromFilter = query.archived_from ? `archived_from=${encodeURI( query.archived_from )}` : "";
             let archivedToFilter = query.archived_to ? `archived_to=${encodeURI( query.archived_to )}` : "";
             let querySearchFilter = query.search ? `search=${encodeURI( query.search )}` : "";
             let pageFilter = parseInt( query.page ) ? `page=${encodeURI( query.page )}` : "";
-            let filters = [archiveFilter, holdingFilter, archivedFromFilter, archivedToFilter, querySearchFilter, pageFilter ];
+            let filters = [collectionFilter, holdingFilter, archivedFromFilter, archivedToFilter, querySearchFilter, pageFilter ];
 
             return "?".concat( filters.filter( (f) => f ).join( "&" ) );
         },

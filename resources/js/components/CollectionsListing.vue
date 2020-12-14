@@ -4,7 +4,7 @@
         <thead>
             <tr>
                 <th>{{$t('settings.collections.collection')}}</th>
-                <th>{{$t('settings.collections.archiveDesc')}}</th>
+                <th>{{$t('settings.collections.collectionDesc')}}</th>
                 <th>{{$t('settings.collections.createdAt')}}</th>
                 <th width="20%">{{$t('settings.collections.actions')}}</th>
             </tr>

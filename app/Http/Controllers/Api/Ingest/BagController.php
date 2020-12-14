@@ -56,7 +56,6 @@ class BagController extends Controller
             $bag = $user->bags()->latest()->first();
         }
 
-        //NOTE(swut): What??!?!
         if( $bag == null || $bag->status !== 'open' ){
             $bag = Bag::create(['name' => ""]);
             $bag->storage_properties()->update([
