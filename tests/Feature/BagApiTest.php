@@ -5,7 +5,7 @@ namespace Tests\Feature;
 use App\Organization;
 use App\Account;
 use App\AccountMetadata;
-use App\ArchiveMetadata;
+use App\CollectionMetadata;
 use App\Events\FileUploadedEvent;
 use App\Events\PreProcessBagEvent;
 use App\HoldingMetadata;
@@ -78,7 +78,7 @@ class BagApiTest extends TestCase
             'title' => 'testBagCollection1Title',
             "account_uuid" => $this->account->uuid,
         ]);
-        $this->collectionMetadata1 = factory(ArchiveMetadata::class)->create([
+        $this->collectionMetadata1 = factory(CollectionMetadata::class)->create([
             "modified_by" => $this->testUser->id,
         ]);
         $this->collectionMetadata1->parent()->associate($this->testCollection1);
@@ -89,7 +89,7 @@ class BagApiTest extends TestCase
             'title' => 'testBagCollection2Title',
             "account_uuid" => $this->account->uuid,
         ]);
-        $this->collectionMetadata2 = factory(ArchiveMetadata::class)->create([
+        $this->collectionMetadata2 = factory(CollectionMetadata::class)->create([
             "modified_by" => $this->testUser->id,
         ]);
         $this->collectionMetadata2->parent()->associate($this->testCollection2);
@@ -398,7 +398,7 @@ class BagApiTest extends TestCase
         });
         $this->assertEquals(1, $query->count());
 
-        $query = ArchiveMetadata::whereHasMorph('parent', [\App\Bag::class], function(Builder $query) use ($uuid) {
+        $query = CollectionMetadata::whereHasMorph('parent', [\App\Bag::class], function(Builder $query) use ($uuid) {
             $query->where("uuid", $uuid);
         });
         $this->assertEquals(1, $query->count());

@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api\Metadata\Admin;
 
 use App\AccountMetadata;
 use App\Collection;
-use App\ArchiveMetadata;
+use App\CollectionMetadata;
 use App\File;
 use App\Http\Resources\CollectionResource;
 use App\Account;

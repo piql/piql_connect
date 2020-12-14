@@ -70,7 +70,7 @@
     </b-modal>
 
 </div>
-  
+
 </template>
 
 <script>
@@ -132,13 +132,13 @@ export default {
         async assignTemplate(){
             this.$bvModal.hide( 'assign-template' )
             let template = this.templates.find( single => single.id === this.selection );
-            const data = { 
+            const data = {
                 id: this.collection.id,
                 metadata:  {
                     metadata: template.metadata.dc
-                } 
+                }
             };
-            await this.addArchiveMetadata( data );
+            await this.addCollectionMetadata( data );
             this.successToast(
                 this.$t('settings.collections.toast.addingCollectionMeta'),
                 this.$t('settings.collections.toast.addingCollectionMeta') + ' ' + this.title
