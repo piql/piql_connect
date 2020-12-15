@@ -18,11 +18,6 @@
                     <b-dropdown-item-button v-for="template in templates" :key="template.id" @click="selectTemplate(template.id)">
                         {{ template.metadata.dc.title }}
                     </b-dropdown-item-button>
-                        <!--b-form-group class="w-100" :label="$t('settings.collections.template')" for="templateSelector" >
-                            <b-form-select v-for="template in templates" :key="template.id" :value="template.id">
-                                {{ template.metadata.dc.title }}
-                            </b-form-input>
-                        </b-form-group-->
                 </b-dropdown>
             </template>
 
