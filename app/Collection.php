@@ -5,20 +5,19 @@ namespace App;
 use App\Traits\AutoGenerateUuid;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Webpatser\Uuid\Uuid;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Validator;
 
-class Archive extends Model
+class Collection extends Model
 {
     use SoftDeletes;
     use AutoGenerateUuid;
 
     const DEFAULT_TEMPLATE = '{ "title": "", "description": "", "dc":  { "identifier": "" } }';
 
-    protected $table = 'archives';
+    protected $table = 'collections';
     protected $fillable = [
-        'title','description','parent_uuid', 'uuid', 'account_uuid', 'defaultMetadataTemplate'
+        'title', 'description', 'uuid', 'account_uuid', 'defaultMetadataTemplate'
     ];
     protected $casts = [
         'defaultMetadataTemplate' => 'array'
@@ -45,32 +44,14 @@ class Archive extends Model
         });
     }
 
-    public static function findByParentUuid($parent_uuid)
-    {
-        return Archive::where('parent_uuid', '=', $parent_uuid)->first();
-    }
-
     public static function findByUuid($uuid)
     {
-        return Archive::where('uuid', '=', $uuid)->first();
-    }
-
-    public function setParentUuidAttribute($value)
-    {
-        if( !empty($value) )
-        {
-            if( Archive::findByParentUuid($value) == null )
-            {
-                throw new \Exception("The parent archive with uuid ".$value." does not exist.");
-            }
-
-            $this->attributes['parent_uuid'] = $value;
-        }
+        return Collection::where('uuid', '=', $uuid)->first();
     }
 
     public function holdings()
     {
-        return $this->hasMany('App\Holding', 'owner_archive_uuid', 'uuid');
+        return $this->hasMany('App\Holding', 'collection_uuid', 'uuid');
     }
 
     public function account() {
@@ -80,7 +61,7 @@ class Archive extends Model
     public function getDefaultMetadataTemplateAttribute( string $template ) {
         $ar = json_decode( $template, true );
         if(isset( $ar["dc"] ) && !isset( $ar["dc"]["identifier"] ) ) {
-            $ar["dc"]["identifier"] = $this->attributes["uuid"]; //The default is to use the uuid for the Archive as the identifier (as per spec.)
+            $ar["dc"]["identifier"] = $this->attributes["uuid"]; //The default is to use the uuid as the identifier (as per spec.)
         }
 
         if(isset( $ar["dc"] ) && !isset( $ar["dc"]["title"] ) ) {

@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 use App\Bag;
 use App\File;
-use App\Archive;
+use App\Collection;
 use App\BagTransitionException;
 use App\Http\Resources\BagResource;
 use App\Http\Resources\BagCollection;
@@ -55,21 +55,22 @@ class BagController extends Controller
         if( $user->bags->count() > 0){
             $bag = $user->bags()->latest()->first();
         }
+
         if( $bag == null || $bag->status !== 'open' ){
             $bag = Bag::create(['name' => ""]);
             $bag->storage_properties()->update([
-                'archive_uuid' => Archive::first()->uuid,
-                'holding_uuid' => Archive::first()->holdings()->first()->uuid ?? ""
+                'collection_uuid' => Collection::first()->uuid,
+                'holding_uuid' => Collection::first()->holdings()->first()->uuid ?? ""
             ]);
         }
 
         $resultBag = Bag::with([ 'files' ])
             ->join('storage_properties', 'storage_properties.bag_uuid', 'bags.uuid')
-            ->leftJoin('archives', 'archives.uuid', 'storage_properties.archive_uuid')
+            ->leftJoin('collections', 'collections.uuid', 'storage_properties.collection_uuid')
             ->leftJoin('holdings', 'holdings.uuid', 'storage_properties.holding_uuid')
             ->where('bags.id','=', $bag->id)
-            ->select('bags.*', 'archives.title AS archive_title',
-                'archives.uuid AS archive_uuid', 'holdings.uuid AS holding_uuid')
+            ->select('bags.*', 'collections.title AS collection_title',
+                'collections.uuid AS collection_uuid', 'holdings.uuid AS holding_uuid')
             ->first();
 
         return new BagResource( $resultBag );
@@ -88,10 +89,10 @@ class BagController extends Controller
 
     public function online(Request $request)
     {
-        $archive = $request->query('archive');
+        $collection = $request->query('collection');
         $bags = Bag::where('status', 'complete')
-                    ->whereHas('storage_properties', function ( $query ) use($archive) {
-                    $query->where('archive_uuid', $archive);
+                    ->whereHas('storage_properties', function ( $query ) use($collection) {
+                    $query->where('collection_uuid', $collection);
                 })->get();
         return new BagCollection($bags);
     }
@@ -115,10 +116,10 @@ class BagController extends Controller
         $bag = Bag::create(['name' => $bagName]);
         if( $bag )
         {
-            if( $request->filled( 'archive_uuid' ) && $request->filled( 'holding_uuid' ) )
+            if( $request->filled( 'collection_uuid' ) && $request->filled( 'holding_uuid' ) )
             {
                 $validatedData = $request->validate([
-                    'archive_uuid' => 'required|uuid',
+                    'collection_uuid' => 'required|uuid',
                     'holding_uuid' => 'required|uuid',
                 ]);
 
@@ -130,10 +131,10 @@ class BagController extends Controller
                 $resultBag =
                     Bag::query()
                         ->join('storage_properties', 'storage_properties.bag_uuid', 'bags.uuid')
-                        ->leftJoin('archives', 'archives.uuid', 'storage_properties.archive_uuid')
+                        ->leftJoin('collections', 'collections.uuid', 'storage_properties.collection_uuid')
                         ->leftJoin('holdings', 'holdings.uuid', 'storage_properties.holding_uuid')
-                        ->select('bags.*', 'archives.title AS archive_title',
-                            'archives.uuid AS archive_uuid', 'holdings.uuid AS holding_uuid')
+                        ->select('bags.*', 'collections.title AS collection_title',
+                            'collections.uuid AS collection_uuid', 'holdings.uuid AS holding_uuid')
                         ->find($bag->id);
                 return new BagResource( $resultBag );
             }
@@ -161,10 +162,10 @@ class BagController extends Controller
    {
         $bag = Bag::with([ 'files' ])
             ->join( 'storage_properties', 'storage_properties.bag_uuid', 'bags.uuid' )
-            ->leftJoin( 'archives', 'archives.uuid', 'storage_properties.archive_uuid' )
+            ->leftJoin( 'collections', 'collections.uuid', 'storage_properties.collection_uuid' )
             ->leftJoin( 'holdings', 'holdings.uuid', 'storage_properties.holding_uuid' )
-            ->select( 'bags.*', 'archives.title AS archive_title',
-                'archives.uuid AS archive_uuid', 'holdings.uuid AS holding_uuid' )
+            ->select( 'bags.*', 'collections.title AS collection_title',
+                'collections.uuid AS collection_uuid', 'holdings.uuid AS holding_uuid' )
                 ->find($id);
 
         if( $bag == null ) {
@@ -193,7 +194,7 @@ class BagController extends Controller
         }
 
         $files = $bag->files()->latest()->get();
-        /*TODO: Move to AIP        
+        /*TODO: Move to AIP
             $result = $files->map( function ($file) {
             $ext = pathinfo($file->filename, PATHINFO_EXTENSION);
             return collect(["fupath" => $file->uuid.".".$ext])->merge($file);
@@ -237,12 +238,12 @@ class BagController extends Controller
         $q = Bag::query()->where('bags.owner', Auth::id() );
         if(empty($request->query())){
             $q->leftJoin('storage_properties', 'storage_properties.bag_uuid', 'bags.uuid')
-              ->leftJoin('archives', 'archives.uuid', 'storage_properties.archive_uuid')
+              ->leftJoin('collections', 'collections.uuid', 'storage_properties.collection_uuid')
               ->leftJoin('holdings', 'holdings.uuid', 'storage_properties.holding_uuid')
               ->leftJoin('bag_job', 'bags.id', '=', 'bag_job.bag_id')
               ->leftJoin('jobs', 'bag_job.job_id', '=', 'jobs.id')
-              ->select('bags.*', 'archives.title AS archive_title',
-              'archives.uuid AS archive_uuid', 'holdings.uuid AS holding_uuid')
+              ->select('bags.*', 'collections.title AS collection_title',
+              'collections.uuid AS collection_uuid', 'holdings.uuid AS holding_uuid')
               ->distinct()->latest();
 
           return new BagCollection(
@@ -252,20 +253,20 @@ class BagController extends Controller
 
 
         $q->leftJoin('storage_properties', 'storage_properties.bag_uuid', 'bags.uuid')
-          ->leftJoin('archives', 'archives.uuid', 'storage_properties.archive_uuid')
+          ->leftJoin('collections', 'collections.uuid', 'storage_properties.collection_uuid')
           ->leftJoin('holdings', 'holdings.uuid', 'storage_properties.holding_uuid')
           ->leftJoin('bag_job', 'bags.id', '=', 'bag_job.bag_id')
           ->leftJoin('jobs', 'bag_job.job_id', '=', 'jobs.id')
-          ->select('bags.*', 'archives.title AS archive_title',
-          'archives.uuid AS archive_uuid', 'holdings.uuid AS holding_uuid')
+          ->select('bags.*', 'collections.title AS collection_title',
+          'collections.uuid AS collection_uuid', 'holdings.uuid AS holding_uuid')
           ->distinct();
         if( $request->has( 'holding' ) ) {
             $q->where( 'holding_uuid', $request->query( 'holding' ) );
         }
         $q->get();
 
-        if( $request->has( 'archive' ) ) {
-            $q->where( 'archive_uuid', $request->query( 'archive' ) );
+        if( $request->has( 'collection' ) ) {
+            $q->where( 'collection_uuid', $request->query( 'collection' ) );
         }
 
 
@@ -360,10 +361,10 @@ class BagController extends Controller
             $bag->update([ 'name' => $request->name ]);
         }
 
-        if( $request->filled( "archive_uuid" ) && $request->filled( "holding_uuid" ) )
+        if( $request->filled( "collection_uuid" ) && $request->filled( "holding_uuid" ) )
         {
             $validatedData = $request->validate([
-                'archive_uuid' => 'required|uuid',
+                'collection_uuid' => 'required|uuid',
                 'holding_uuid' => 'required|uuid',
             ]);
 
@@ -376,11 +377,11 @@ class BagController extends Controller
 
         $resultBag = Bag::with([ 'files' ])
             ->join('storage_properties', 'storage_properties.bag_uuid', 'bags.uuid')
-            ->leftJoin('archives', 'archives.uuid', 'storage_properties.archive_uuid')
+            ->leftJoin('collections', 'collections.uuid', 'storage_properties.collection_uuid')
             ->leftJoin('holdings', 'holdings.uuid', 'storage_properties.holding_uuid')
             ->where('bags.id','=', $id)
-            ->select('bags.*', 'archives.title AS archive_title',
-                'archives.uuid AS archive_uuid', 'holdings.uuid AS holding_uuid')
+            ->select('bags.*', 'collections.title AS collection_title',
+                'collections.uuid AS collection_uuid', 'holdings.uuid AS holding_uuid')
             ->first();
         return new BagResource($resultBag);
     }
@@ -458,17 +459,17 @@ class BagController extends Controller
         if(!$holding) {
             abort(response()->json(["error" => 424, "message" => "No such Holding: {$bag->storage_properties->holding_uuid}"], 424));
         }
-        $archive = $holding->owner_archive;
-        if(!$archive) {
-            abort(response()->json(["error" => 424, "message" => "No archive"], 424));
+        $collection = $holding->collection;
+        if(!$collection) {
+            abort(response()->json(["error" => 424, "message" => "No collection"], 424));
         }
-        $account = $archive->account;
+        $account = $collection->account;
         if(!$account) {
             abort(response()->json(["error" => 424, "message" => "No account"], 424));
         }
         $metadata = [
             'account' => $account->defaultMetadataTemplate,
-            'archive' => $archive->defaultMetadataTemplate,
+            'collection' => $collection->defaultMetadataTemplate,
             'holding' => $holding->defaultMetadataTemplate,
         ];
         $bag->metadata = $metadata;

@@ -17,7 +17,7 @@ class HoldingController extends Controller
      */
     public function index()
     {
-        //TODO: Limit access to Holdings per Account (and Archive)
+        //TODO: Limit access to Holdings per Account (and Collection)
         return HoldingResource::collection( Holding::all() );
     }
 
@@ -50,7 +50,7 @@ class HoldingController extends Controller
      */
     public function show(Holding $holding)
     {
-        //TODO: Limit access to Holdings per Account (and Archive)
+        //TODO: Limit access to Holdings per Account (and Collection)
         return new HoldingResource($holding);
     }
 

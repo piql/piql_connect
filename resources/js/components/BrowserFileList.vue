@@ -27,7 +27,7 @@ export default {
             type: String,
             default: "online"
         },
-        selectedArchive: String,
+        selectedCollection: String,
         selectedHolding: String,
         dataObjects: Array,
     },

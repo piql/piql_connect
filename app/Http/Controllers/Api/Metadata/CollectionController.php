@@ -4,10 +4,10 @@ namespace App\Http\Controllers\Api\Metadata;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Archive;
-use App\Http\Resources\ArchiveResource;
+use App\Collection;
+use App\Http\Resources\CollectionResource;
 
-class ArchiveController extends Controller
+class CollectionController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,8 +16,8 @@ class ArchiveController extends Controller
      */
     public function index()
     {
-        //TODO: Limit access to Archives per Account
-        return ArchiveResource::collection( Archive::all() );
+        //TODO: Limit access to Collections per Account
+        return CollectionResource::collection( Collection::all() );
     }
 
     /**
@@ -28,7 +28,7 @@ class ArchiveController extends Controller
      */
     public function store(Request $request)
     {
-        abort( 403, "Forbidden: Users cannot persist Archives in this version" );
+        abort( 403, "Forbidden: Users cannot persist Collections in this version" );
     }
 
     /**
@@ -39,12 +39,12 @@ class ArchiveController extends Controller
      */
     public function show($id)
     {
-        //TODO: Limit access to Archives per Account
-        $archive = Archive::find( $id );
-        if( !isset( $archive ) ) {
-            abort( response()->json(['error' => 404, 'message' => 'No Archive with id '.$id.' was found.'], 404) );
+        //TODO: Limit access to Collections per Account
+        $collection = Collection::find( $id );
+        if( !isset( $collection ) ) {
+            abort( response()->json(['error' => 404, 'message' => 'No Collection with id '.$id.' was found.'], 404) );
         }
-        return new ArchiveResource( $archive );
+        return new CollectionResource( $collection );
     }
 
     /**
@@ -56,7 +56,7 @@ class ArchiveController extends Controller
      */
     public function update(Request $request, $id)
     {
-        abort( 403, "Forbidden: Users cannot edit Archives in this version" );
+        abort( 403, "Forbidden: Users cannot edit Collections in this version" );
     }
 
     /**
@@ -67,6 +67,6 @@ class ArchiveController extends Controller
      */
     public function destroy($id)
     {
-        abort( 403, "Forbidden: Users cannot delete Archives" );
+        abort( 403, "Forbidden: Users cannot delete Collections" );
     }
 }

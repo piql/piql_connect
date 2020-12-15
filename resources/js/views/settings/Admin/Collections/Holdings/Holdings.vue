@@ -9,8 +9,8 @@
                 <button v-else class="btn" @click="newHoldingForm"><i class="fa fa-plus"></i> {{$t('settings.holdings.add')}}</button>
             </div>
             <div class="card-body">
-                <holding-metadata :originalHolding="holdingForMetadataEdit" :accountId='firstAccountId' :archiveId='archiveId' @disableMetaForm='disableMetaForm' />
-                <holdings-listing @assignHoldingMetadata='assignHoldingMetadata' :accountId='firstAccountId' :parentArchiveId='archiveId' :holdings='holdings' />
+                <holding-metadata :originalHolding="holdingForMetadataEdit" :accountId='firstAccountId' :collectionId='collectionId' @disableMetaForm='disableMetaForm' />
+                <holdings-listing @assignHoldingMetadata='assignHoldingMetadata' :accountId='firstAccountId' :parentCollectionId='collectionId' :holdings='holdings' />
             </div>
         </div>
 
@@ -60,7 +60,7 @@ export default {
     data() {
         return {
             enableHoldingMetadataForm: false,
-            archiveId: 0,
+            collectionId: 0,
             selectedHoldingId: 0,
             firstAccountId: 1,
             holdingForMetadataEdit : null,
@@ -77,7 +77,7 @@ export default {
         '$route': 'dispatchRouting'
     },
     computed: {
-        ...mapGetters(['templates', 'templateById', 'firstAccount', 'archives', 'archiveById','holdings','holdingById','holdingPageMeta']),
+        ...mapGetters(['templates', 'templateById', 'firstAccount', 'collections', 'collectionById','holdings','holdingById','holdingPageMeta']),
         apiQueryString: function() {
             let routeQuery = this.$route.query;
             let apiQueryItems = [];
@@ -90,10 +90,10 @@ export default {
         },
     },
     methods: {
-        ...mapActions(['fetchAccounts', 'fetchArchives', 'fetchHoldingsForArchive', 'addHoldingMetadata','editHoldingData','createHolding']),
+        ...mapActions(['fetchAccounts', 'fetchCollections', 'fetchHoldingsForCollection', 'addHoldingMetadata','editHoldingData','createHolding']),
         async dispatchRouting() {
-            this.archiveId = parseInt( this.$route.params.archiveId );
-            this.fetchHoldingsForArchive({ accountId: 1, archiveId: this.archiveId, query: this.apiQueryString });
+            this.collectionId = parseInt( this.$route.params.collectionId );
+            this.fetchHoldingsForCollection({ accountId: 1, collectionId: this.collectionId, query: this.apiQueryString });
             await Vue.nextTick();
         },
         newHoldingForm(){
@@ -105,14 +105,14 @@ export default {
                 title: this.createForm.title,
                 description: this.createForm.description,
                 accountId,
-                archiveId: this.archiveId
+                collectionId: this.collectionId
             } );
             this.$bvModal.hide('create-holding');
             this.successToast(
-                this.$t('settings.archives.toast.createdHoldingHeading'),
-                this.$t('settings.archives.toast.createdHolding') + ' ' + this.createForm.title
+                this.$t('settings.collections.toast.createdHoldingHeading'),
+                this.$t('settings.collections.toast.createdHolding') + ' ' + this.createForm.title
             );
-            await this.fetchHoldingsForArchive( {accountId, archiveId: this.archiveId, query: this.apiQueryString } );
+            await this.fetchHoldingsForCollection( {accountId, collectionId: this.collectionId, query: this.apiQueryString } );
             this.createForm = { title: '', description: '' };
         },
         assignHoldingMetadata( holding ) {

@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class StorageProperties extends Model
 {
     protected $table ='storage_properties';
-    protected $fillable = [ 'bag_uuid', 'archive_uuid', 'holding_name', 'holding_uuid',
+    protected $fillable = [ 'bag_uuid', 'collection_uuid', 'holding_name', 'holding_uuid',
         'transfer_uuid', 'sip_uuid', 'dip_uuid', 'aip_uuid',
         'aip_initial_online_storage_location', 'dip_initial_storage_location',
         'archivematica_service_dashboard_uuid', 'archivematica_service_storage_server_uuid', 'name' ];
@@ -27,9 +27,9 @@ class StorageProperties extends Model
         return $this->hasOne('App\Dip', 'external_uuid', 'dip_uuid');
     }
 
-    public function archive()
+    public function collection()
     {
-        return $this->belongsTo('App\Archive', 'archive_uuid', 'uuid' );
+        return $this->belongsTo('App\Collection', 'collection_uuid', 'uuid' );
     }
 
 }
