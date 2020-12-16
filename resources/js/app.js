@@ -83,6 +83,29 @@ Vue.component("vue-select-sides", vueSelectSides);
 // Pretty-print file sizes
 Vue.use(vueFilterPrettyBytes);
 
+ /**
+  * Use Auth0 for authentication
+  */
+
+// Import the Auth0 configuration
+import { domain, clientId } from "./auth_config.json";
+
+// Import the plugin
+import { Auth0Plugin } from "./auth/auth";
+
+// Install the authentication plugin here
+Vue.use(Auth0Plugin, {
+  domain,
+  clientId,
+  onRedirectCallback: appState => {
+    router.push(
+      appState && appState.targetUrl
+        ? appState.targetUrl
+        : window.location.pathname
+    );
+  }
+});
+
 /**
  * Finally, create the Vue application instance
  */
@@ -92,17 +115,7 @@ import env from "./environment"
 
 //import store
 import { store } from "./store/store";
-import VueKeyCloak from '@dsb-norge/vue-keycloak-js'
 import Layout from './views/layout.vue';
-
-function interceptToken() {
-    axios.interceptors.request.use(config => {
-        config.headers.Authorization = `Bearer ${Vue.prototype.$keycloak.token}`
-        return config
-    }, error => {
-        return Promise.reject(error)
-    })
-}
 
 function loadLanguage() {
     axios.get("/api/v1/system/users/me").then( async ( resp ) =>  {
@@ -110,17 +123,12 @@ function loadLanguage() {
     });
 }
 
-Vue.use(VueKeyCloak, {
-    config: env.keycloakConfig,
-    onReady: () => {
-        interceptToken();
-        new Vue({
-            router,
-            i18n,
-            store,
-            mixins: [refreshSessionActivity],
-            render: h => h(Layout)
-        }).$mount('#app');
-        loadLanguage();
-    }
-});
+new Vue({
+    router,
+    i18n,
+    store,
+    mixins: [refreshSessionActivity],
+    render: h => h(Layout)
+}).$mount('#app');
+
+loadLanguage();
