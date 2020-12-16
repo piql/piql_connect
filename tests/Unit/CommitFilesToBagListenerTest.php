@@ -94,7 +94,7 @@ class CommitFilesToBagListenerTest extends TestCase
                         $this->assertArrayHasKey("object", $argument);
                         switch ($argument['object']) {
                             case MetadataPath::ACCOUNT_OBJECT:
-                            case MetadataPath::ARCHIVE_OBJECT:
+                            case MetadataPath::COLLECTION_OBJECT:
                             case MetadataPath::HOLDING_OBJECT:
                                 return true;
                             default:

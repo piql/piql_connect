@@ -32,7 +32,7 @@
         },
         props: {
             item: Object,
-            archive: String,
+            collection: String,
             holding: String,
         },
         data() {

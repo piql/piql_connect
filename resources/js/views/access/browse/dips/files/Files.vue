@@ -3,7 +3,7 @@
 
         <page-heading icon="fa-hdd" :title="$t('access.browse.content')" :ingress="$t('access.browse.content.ingress')" />
 
-        <browser-file-filters :singleArchiveTitle="$t('Your archive')" :subTitle="dipName"/>
+        <browser-file-filters :singleCollectionTitle="$t('Your collection')" :subTitle="dipName"/>
 
         <list-header
             :colA="previewCol"

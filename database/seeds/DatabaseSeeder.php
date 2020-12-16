@@ -2,7 +2,7 @@
 
 use App\Organization;
 use App\Account;
-use App\Archive;
+use App\Collection;
 use App\Holding;
 use Illuminate\Database\Seeder;
 use Webpatser\Uuid\Uuid;
@@ -38,10 +38,10 @@ class DatabaseSeeder extends Seeder
         }
 
         //TODO: The default seeder creates a simple archival arrangement with only one
-        //      archive and holding. Consider removing this and use specific seeders for
+        //      collection and holding. Consider removing this and use specific seeders for
         //      development, testing and demo.
-        $archive = Archive::create([
-            'title' => 'Default Archive',
+        $collection = Collection::create([
+            'title' => 'Default Collection',
             'description' => '',
             'account_uuid' => $account->uuid,
             'uuid' => Uuid::generate()->string
@@ -50,8 +50,7 @@ class DatabaseSeeder extends Seeder
         Holding::create([
             'title' => 'Default Holding',
             'description' => '',
-            'position' => 0,
-            'owner_archive_uuid' => $archive->uuid,
+            'collection_uuid' => $collection->uuid,
             'uuid' => Uuid::generate()->string
         ]);
 

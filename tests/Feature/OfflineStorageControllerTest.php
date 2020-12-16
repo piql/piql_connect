@@ -189,7 +189,7 @@ class OfflineStorageControllerTest extends TestCase
         $aipCount = $this->job->aips()->count();
         $response = $this->actingAs( $this->user )
             ->json('DELETE',
-                route('api.ingest.bucket.detach.dip', [Uuid::generate()->string, $this->aips[0]->storage_properties->dip->id]));
+                route('api.ingest.bucket.detach.dip', [-1, $this->aips[0]->storage_properties->dip->id]));
         $response->assertStatus( 404 )
             ->assertJsonFragment(['error' => 404]);
         $this->assertEquals( $aipCount, \DB::table("archivables")->where("archive_id", $this->job->id)->count());
@@ -201,7 +201,7 @@ class OfflineStorageControllerTest extends TestCase
         $aipCount = $this->job->aips()->count();
         $response = $this->actingAs( $this->user )
             ->json('DELETE',
-                route('api.ingest.bucket.detach.dip', [$this->job->id, Uuid::generate()->string]));
+                route('api.ingest.bucket.detach.dip', [$this->job->id, -1]));
         $response->assertStatus( 404 )
             ->assertJsonFragment(['error' => 404]);
         $this->assertEquals( $aipCount, \DB::table("archivables")->where("archive_id", $this->job->id)->count());

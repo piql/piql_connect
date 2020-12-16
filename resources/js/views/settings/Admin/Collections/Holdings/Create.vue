@@ -18,8 +18,8 @@
                         ></b-form-input>
                     </b-form-group>
 
-                    <b-form-group id="input-group-2" :label="$t('settings.archives.archive')" >
-                        <b-form-select v-model="form.archiveId" :options="options"></b-form-select>
+                    <b-form-group id="input-group-2" :label="$t('settings.collections.collection')" >
+                        <b-form-select v-model="form.collectionId" :options="options"></b-form-select>
                     </b-form-group>
 
                     
@@ -51,17 +51,17 @@ export default {
             form:{
                 name:'',
                 description: '',
-                archiveId: '',
+                collectionId: '',
             },
             options: []
 
         }
     },
     async mounted(){
-        this.options = this.archives.map(archive => {
+        this.options = this.collections.map(collection => {
             return {
-                text: archive.title,
-                value: archive.id
+                text: collection.title,
+                value: collection.id
             }
         })
 
@@ -74,7 +74,7 @@ export default {
             this.addHolding({
                 title: this.form.name,
                 description: this.form.description,
-                archiveId: this.form.archiveId,
+                collectionId: this.form.collectionId,
                 created: new Date(),
                 id: this.uniqueID      
             })
@@ -90,7 +90,7 @@ export default {
         }
     },
     computed: {
-        ...mapGetters(['archives']),
+        ...mapGetters(['collections']),
         uniqueID(){
             return Date.now();
         }

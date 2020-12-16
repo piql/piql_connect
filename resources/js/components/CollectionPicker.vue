@@ -1,22 +1,22 @@
 <template>
     <div class="form-group w-100">
-        <span v-if="!singleArchive">
-            <label v-if="showLabel" for="archivePicker" class="col-form-label-sm">
+        <span v-if="!singleCollection">
+            <label v-if="showLabel" for="collectionPicker" class="col-form-label-sm">
             {{label}}
         </label>
         <div :class="inputValidation">
             <select v-model="selection" :id="elementId" class="form-control w-100" v-bind:disabled="selectionDisabled" :data-none-selected-text="wildCardLabel" data-live-search="true" @change="selChange">
-                <option v-for="archive in archivesWithWildcard" :key="archive.id" :value="archive.uuid">
-                    {{archive.title}}
+                <option v-for="collection in collectionsWithWildcard" :key="collection.id" :value="collection.uuid">
+                    {{collection.title}}
                 </option>
             </select>
         </div>
     </span>
     <span v-else>
-        <label class="col-form-label-sm" for="singleArchive">{{$t('Archive')}}</label>
+        <label class="col-form-label-sm" for="singleCollection">{{$t('Collection')}}</label>
         <select class="form-control text-center" disabled>
             <option selected>
-                {{singleArchiveTitle}}
+                {{singleCollectionTitle}}
             </option>
         </select>
     </span>
@@ -30,22 +30,22 @@ export default {
     mixins: [ RouterTools ],
 
     mounted() {
-        axios.get("/api/v1/metadata/archives").then( (response) => {
-            this.archives = response.data.data;
+        axios.get("/api/v1/metadata/collections").then( (response) => {
+            this.collections = response.data.data;
         });
     },
     methods: {
         dispatchRouting: function() {
             let query = this.$route.query;
             Vue.nextTick( () => {
-                this.updatePicker( query.archive );
+                this.updatePicker( query.collection );
             });
         },
         refreshPicker: function() {
             $(`#${this.elementId}`).selectpicker('refresh');
         },
-        updatePicker: function( archive ) {
-            $(`#${this.elementId}`).selectpicker('val', archive);
+        updatePicker: function( collection ) {
+            $(`#${this.elementId}`).selectpicker('val', collection);
             this.refreshPicker();
             this.selChange();
         },
@@ -57,19 +57,19 @@ export default {
     data() {
         return {
             selection: null,
-            archives: [],
+            collections: [],
             initComplete: false,
             inputValidation: '',
         };
     },
     props: {
-        singleArchive: {
+        singleCollection: {
             type: Boolean,
             default: false
         },
-        singleArchiveTitle: {
+        singleCollectionTitle: {
             type: String,
-            default: "Your Archive"
+            default: "$t('Your collection')"
         },
         selectionDisabled: {
             type: Boolean,
@@ -88,7 +88,7 @@ export default {
         },
         elementId: {
             type: String,
-            default: "archivePicker"
+            default: "collectionPicker"
         },
         required: {
             type: Boolean,
@@ -98,21 +98,21 @@ export default {
     watch: {
         '$route': 'dispatchRouting',
 
-        selection: function ( archive ){
-            if( archive === '0' ){
-                this.updateQueryParams({ archive : null, page: null, holding: null });
+        selection: function ( collection ){
+            if( collection === '0' ){
+                this.updateQueryParams({ collection : null, page: null, holding: null });
             } else {
-                this.updateQueryParams({ archive, page : null, holding: null });
+                this.updateQueryParams({ collection, page : null, holding: null });
             }
 
             this.$emit('loadNewHolders')
         },
-        archives: function( archives ){
-            if( !! archives ) {
-                let archiveQuery = this.$route.query.archive ?? '0';
+        collections: function( collections ){
+            if( !! collections ) {
+                let collectionQuery = this.$route.query.collection ?? '0';
                     this.refreshPicker();
                     Vue.nextTick( () => {
-                        this.updatePicker( archiveQuery );
+                        this.updatePicker( collectionQuery );
                     });
             }
         },
@@ -122,11 +122,11 @@ export default {
         showLabel: function() {
             return this.label.length > 0;
         },
-        archivesWithWildcard: function() {
+        collectionsWithWildcard: function() {
             /* If it has elements, push a wildcard element ("All") at the start of the list */
-            return this.archives && this.archives.length > 1
-                ? [ {'id' : 0, 'title': this.wildCardLabel, 'uuid': '0' }, ...this.archives ]
-                : this.archives;
+            return this.collections && this.collections.length > 1
+                ? [ {'id' : 0, 'title': this.wildCardLabel, 'uuid': '0' }, ...this.collections ]
+                : this.collections;
         }
     }
 }

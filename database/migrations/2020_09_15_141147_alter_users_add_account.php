@@ -18,15 +18,6 @@ class AlterUsersAddAccount extends Migration
         Schema::table('users', function (Blueprint $table) {
             $table->uuid("account");
         });
-
-        $account = Account::whereTitle("Default Account")->first();
-        if(!$account) {
-            $account = Account::create([
-                "title" => "Default Account",
-                "description" => "Default Account",
-            ]);
-        }
-        User::query()->update(["account" => $account->uuid]);
     }
 
     /**

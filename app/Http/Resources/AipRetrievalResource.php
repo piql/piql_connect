@@ -26,7 +26,7 @@ class AipRetrievalResource extends JsonResource
             'bucket_name' => $this->jobs->first()->name,
             'size_on_disk' => $this->size,
             'file_count' => $this->fileObjects->count(),
-            'archive_uuid' => $this->storage_properties->archive_uuid,
+            'collection_uuid' => $this->storage_properties->collection_uuid,
             'holding_name' => $this->storage_properties->holding_name
         ];
     }

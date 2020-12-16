@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\Api\Metadata\Admin;
 
 use App\AccountMetadata;
-use App\Archive;
-use App\ArchiveMetadata;
+use App\Collection;
+use App\CollectionMetadata;
 use App\File;
-use App\Http\Resources\ArchiveResource;
+use App\Http\Resources\CollectionResource;
 use App\Account;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
@@ -15,7 +15,7 @@ use phpDocumentor\Reflection\DocBlock\Tags\Author;
 use Webpatser\Uuid\Uuid;
 use Log;
 
-class AccountArchiveController extends Controller
+class AccountCollectionController extends Controller
 {
     private function validateRequest(Request $request) {
         return $request->validate([
@@ -36,7 +36,7 @@ class AccountArchiveController extends Controller
     {
         // TODO: setup guards
         $limit = $request->limit ? $request->limit : env('DEFAULT_ENTRIES_PER_PAGE');
-        return ArchiveResource::collection( Archive::paginate( $limit ) );
+        return CollectionResource::collection( Collection::paginate( $limit ) );
     }
 
     /**
@@ -55,30 +55,31 @@ class AccountArchiveController extends Controller
         ];
 
         $total = array_merge( $validated, $additional );
-        $archive = Archive::create( $total );
+        $collection = Collection::create( $total );
 
-        return new ArchiveResource( $archive );
+        return new CollectionResource( $collection );
     }
 
     /**
      * Display the specified resource.
      *
-     * @param Account $account
+     * @param \App\Account $account
+     * @param \App\Collection $collection
      * @return \Illuminate\Http\Response
      */
-    public function show(Account $account, Archive $archive)
+    public function show(Account $account, Collection $collection)
     {
-        return response()->json([ "data" => new ArchiveResource($archive)]);
+        return response()->json([ "data" => new CollectionResource($collection)]);
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param \Illuminate\Http\Request $request
-     * @param \App\Account $acccount
-     * @param \App\Archive $archive
+     * @param \App\Account $account
+     * @param \App\Collection $collection
      */
-    public function update(Request $request, Account $account, Archive $archive)
+    public function update(Request $request, Account $account, Collection $collection)
     {
        $validatedRequest = $this->validate( $request, [
                 "title" => "string",
@@ -86,16 +87,15 @@ class AccountArchiveController extends Controller
                 "defaultMetadataTemplate" => "array|nullable"
             ]
         );
-
-        $archive->update( $request->all() );
-        return new ArchiveResource( $archive );
+        $collection->update( $request->all() );
+        return new CollectionResource( $collection );
     }
 
     /**
      * Update or create the specified resource in storage.
      *
      * @param \Illuminate\Http\Request $request
-     * @param Account $account
+     * @param \App\Account $account
      * @return \Illuminate\Http\Response
      */
 
@@ -103,7 +103,7 @@ class AccountArchiveController extends Controller
     {
         if( $account->id != auth()->user()->organization->account->id ) {
             //TODO: Admin access
-            abort( 403, "User with id ".auth()->id()." does not have the neccesary permissions to update archives for this account" );
+            abort( 403, "User with id ".auth()->id()." does not have the neccesary permissions to update collections for this account" );
         }
 
         $validatedRequest = $this->validate( $request, [
@@ -115,12 +115,12 @@ class AccountArchiveController extends Controller
         $data = array_merge( $validatedRequest, ["account_uuid" => $account->uuid] );
 
         if( isset($request->id) ) {
-            $archive = Archive::findOrFail( $request->id );
-            $archive->update( $data );
-            return new ArchiveResource( $archive );
+            $collection = Collection::findOrFail( $request->id );
+            $collection->update( $data );
+            return new CollectionResource( $collection );
         }
 
-        return new ArchiveResource( Archive::create( $data ) );
+        return new CollectionResource( Collection::create( $data ) );
     }
 
 
@@ -128,13 +128,14 @@ class AccountArchiveController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param Account $account
+     * @param \App\Account $account
+     * @param \App\Collection $collection
      * @return \Illuminate\Http\Response
      * @throws \Exception
      */
-    public function destroy(Account $account, Archive $archive)
+    public function destroy(Account $account, Collection $collection)
     {
-        return response( "Archives cannot be deleted in this version", 405 );
+        return response( "Collection cannot be deleted in this version", 405 );
     }
 
 }

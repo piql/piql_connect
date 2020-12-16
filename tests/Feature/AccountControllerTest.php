@@ -49,7 +49,7 @@ class AccountControllerTest extends TestCase
 
     public function test_given_an_authenticated_user_storing_an_account_it_is_created()
     {
-        static::markTestSkipped('Currently, there is a one-to-one relationship between organization and account. Skipped until multiple accounts/archives are implemented.');
+        static::markTestSkipped('Currently, there is a one-to-one relationship between organization and account. Skipped until multiple accounts are implemented.');
 
         $account = factory(Account::class)->create([
             'title' => 'test title',

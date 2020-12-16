@@ -8,20 +8,20 @@ use Laravel\Passport\Passport;
 use Faker\Factory as faker;
 use App\Organization;
 use App\Account;
-use App\Archive;
+use App\Collection;
 use App\User;
 use App\Http\Resources\AccountResource;
-use App\Http\Resources\ArchiveResource;
+use App\Http\Resources\CollectionResource;
 
-class AccountArchiveControllerTest extends TestCase
+class AccountCollectionControllerTest extends TestCase
 {
     use DatabaseTransactions;
 
     private $user;
     private $account;
     private $organization;
-    private $archive;
-    private $archiveContent;
+    private $collection;
+    private $collectionContent;
     private $faker;
 
     public function setUp() : void
@@ -34,61 +34,60 @@ class AccountArchiveControllerTest extends TestCase
         Passport::actingAs( $this->user );
         $this->faker = Faker::create();
 
-        $this->archiveContent = [ "account_uuid" => $this->account->uuid ];
+        $this->collectionContent = [ "account_uuid" => $this->account->uuid ];
 
-        $this->archive = factory(Archive::class)->create( $this->archiveContent );
+        $this->collection = factory(Collection::class)->create( $this->collectionContent );
 
     }
 
-    public function test_given_an_authenticated_user_when_getting_all_archives_it_responds_200()
+    public function test_given_an_authenticated_user_when_getting_all_collections_it_responds_200()
     {
-
         $response = $this->actingAs( $this->user )
-            ->get( route('admin.metadata.accounts.archives.index', [ $this->account->id ]) );
+            ->get( route('admin.metadata.accounts.collections.index', [ $this->account->id ]) );
         $response->assertStatus( 200 );
 
     }
 
-    public function test_given_an_authenticated_user_when_requesting_an_archive_it_is_returned()
+    public function test_given_an_authenticated_user_when_requesting_a_collection_it_is_returned()
     {
         $response = $this->actingAs( $this->user )
-            ->get( route('admin.metadata.accounts.archives.show', [$this->account->id, $this->archive->id]) );
+            ->get( route('admin.metadata.accounts.collections.show', [$this->account->id, $this->collection->id]) );
         $response->assertStatus( 200 )
-            ->assertJsonFragment( $this->archiveContent );
+            ->assertJsonFragment( $this->collectionContent );
     }
 
-    public function test_given_an_authenticated_user_storing_an_archive_it_is_stored()
+    public function test_given_an_authenticated_user_storing_a_collection_it_is_stored()
     {
-        $archive = [
+        $collection = [
             'title' => $this->faker->slug(3),
             'description' => $this->faker->slug(6)
         ];
 
         $response = $this->actingAs( $this->user )
-            ->postJson( route('admin.metadata.accounts.archives.store', [$this->account->id]),
-                $archive );
+            ->postJson( route('admin.metadata.accounts.collections.store', [$this->account->id]),
+                $collection );
 
         $response->assertStatus( 201 )
                  ->assertJsonStructure(["data" => ["id"]])
-                 ->assertJsonFragment( $archive );
-        $this->assertEquals(2, $this->account->archives()->count());
+                 ->assertJsonFragment( $collection );
+        $this->assertEquals(2, $this->account->collections()->count());
     }
 
-    public function test_given_an_authenticated_user_storing_an_archive_with_dublin_core_metadata_the_it_is_stored()
+    public function test_given_an_authenticated_user_storing_a_collection_with_dublin_core_metadata_the_it_is_stored()
     {
         $metadata = [ "dc" => [
             'subject' => $this->faker->text()
         ]];
 
-        $archive = [
+        $collection = [
             'title' => $this->faker->slug(3),
             'description' => $this->faker->slug(6),
             'defaultMetadataTemplate' => $metadata
         ];
 
         $response = $this->actingAs( $this->user )
-            ->postJson( route('admin.metadata.accounts.archives.store', [$this->account->id]),
-                $archive );
+            ->postJson( route('admin.metadata.accounts.collections.store', [$this->account->id]),
+                $collection );
 
         $response->assertStatus( 201 )
                  ->assertJsonStructure(["data" => ["id"]])
@@ -96,24 +95,24 @@ class AccountArchiveControllerTest extends TestCase
     }
 
 
-    public function test_given_an_authenticated_user_updating_when_updating_an_archive_it_is_updated()
+    public function test_given_an_authenticated_user_updating_when_updating_a_collection_it_is_updated()
     {
-        $archive = [
+        $collection = [
             'title' => 'updated title',
             'description' => 'updated description',
         ];
 
         $response = $this->actingAs( $this->user )
                          ->patchJson(
-                             route( 'admin.metadata.accounts.archives.update',
-                             [$this->account->id, $this->archive->id] ),
-                             $archive );
+                             route( 'admin.metadata.accounts.collections.update',
+                             [$this->account->id, $this->collection->id] ),
+                             $collection );
 
         $response->assertStatus( 200 )
-                 ->assertJsonFragment( $archive );
+                 ->assertJsonFragment( $collection );
     }
 
-    public function test_given_an_archive_when_updating_it_with_dublin_core_metadata_it_is_updated()
+    public function test_given_a_collection_when_updating_it_with_dublin_core_metadata_it_is_updated()
     {
         $metadataTemplate = [ "dc" => [
             'subject' => $this->faker->text()
@@ -121,8 +120,8 @@ class AccountArchiveControllerTest extends TestCase
 
         $response = $this->actingAs( $this->user )
                          ->patchJson(
-                             route( 'admin.metadata.accounts.archives.update',
-                             [$this->account->id, $this->archive->id] ),
+                             route( 'admin.metadata.accounts.collections.update',
+                             [$this->account->id, $this->collection->id] ),
                              ["defaultMetadataTemplate" => $metadataTemplate ] );
 
         $expected = array_replace_recursive( $response->decodeResponseJson('data'),
@@ -132,19 +131,19 @@ class AccountArchiveControllerTest extends TestCase
                  ->assertJsonFragment( ["data" => $expected ]);
     }
 
- 
-    public function test_given_an_authenticated_user_when_deleting_archive_it_responds_405()
+
+    public function test_given_an_authenticated_user_when_deleting_a_collection_it_responds_405()
     {
         $response = $this->actingAs( $this->user )
-            ->delete( route('admin.metadata.accounts.archives.destroy', [$this->account->id, $this->archive->id]));
+            ->delete( route('admin.metadata.accounts.collections.destroy', [$this->account->id, $this->collection->id]));
         $response->assertStatus( 405 );
     }
 
-    public function test_given_an_authenticated_user_when_getting_archive_metadata_it_is_in_the_response()
+    public function test_given_an_authenticated_user_when_getting_collection_metadata_it_is_in_the_response()
     {
-        $archive = factory(Archive::class)->create(["defaultMetadataTemplate" => ["dc" => ["subject" => "testing things"]]]);
+        $collection = factory(Collection::class)->create(["defaultMetadataTemplate" => ["dc" => ["subject" => "testing things"]]]);
         $response = $this->actingAs( $this->user )
-            ->get( route('admin.metadata.accounts.archives.show', [$this->account->id, $archive->id]) );
+            ->get( route('admin.metadata.accounts.collections.show', [$this->account->id, $collection->id]) );
         $response->assertStatus( 200 )
                  ->assertJsonStructure( ["data" => ["id","title","description","uuid","defaultMetadataTemplate"]] );
     }
@@ -154,7 +153,7 @@ class AccountArchiveControllerTest extends TestCase
         $metadataTemplate = ["dc" => ["title" => "The best novel ever!"]];
 
         $response = $this->actingAs( $this->user )
-            ->put( route('admin.metadata.accounts.archives.update', [$this->account->id, $this->archive->id]),
+            ->put( route('admin.metadata.accounts.collections.update', [$this->account->id, $this->collection->id]),
                ["defaultMetadataTemplate" => $metadataTemplate] );
 
         $expected = array_replace_recursive( $response->decodeResponseJson('data'), ["defaultMetadataTemplate" => $metadataTemplate] );
@@ -163,7 +162,7 @@ class AccountArchiveControllerTest extends TestCase
                  ->assertJsonFragment( $expected );
     }
 
-    public function test_given_an_authenticated_user_when_updating_an_archive_that_does_not_exist_it_is_upserted()
+    public function test_given_an_authenticated_user_when_updating_a_collection_that_does_not_exist_it_is_upserted()
     {
         $data = [
             "title" => "This upsert concept just rocks",
@@ -171,7 +170,7 @@ class AccountArchiveControllerTest extends TestCase
         ];
 
         $response = $this->actingAs( $this->user )
-            ->put( route('admin.metadata.accounts.archives.upsert', [$this->account] ),
+            ->put( route('admin.metadata.accounts.collections.upsert', [$this->account] ),
                 $data );
 
         $expected = array_replace_recursive(
@@ -181,19 +180,19 @@ class AccountArchiveControllerTest extends TestCase
             ->assertJsonFragment( $expected );
     }
 
-    public function test_given_an_authenticated_user_when_upserting_an_archive_that_exists_it_is_updated()
+    public function test_given_an_authenticated_user_when_upserting_a_collection_that_exists_it_is_updated()
     {
         $account = factory(Account::class)->create();
-        $archive = factory(Archive::class)->create(["account_uuid" => $account->uuid]);
+        $collection = factory(Collection::class)->create(["account_uuid" => $account->uuid]);
 
         $data = [
-            "id" => $archive->id,
+            "id" => $collection->id,
             "title" => "What a wonderful upsert",
             "defaultMetadataTemplate" => ["dc" => ["title" => "The most updated novel ever!"]]
         ];
 
         $response = $this->actingAs( $this->user )
-            ->put( route('admin.metadata.accounts.archives.upsert', [$this->account] ),
+            ->put( route('admin.metadata.accounts.collections.upsert', [$this->account] ),
                 $data );
 
         $expected = array_replace_recursive(
@@ -202,6 +201,5 @@ class AccountArchiveControllerTest extends TestCase
         $response->assertStatus( 200 )
                  ->assertJsonFragment( ["data" => $expected ]);
     }
-
 
 }

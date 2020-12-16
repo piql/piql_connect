@@ -3,7 +3,7 @@
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
 
 use App\AccountMetadata;
-use App\ArchiveMetadata;
+use App\CollectionMetadata;
 use App\HoldingMetadata;
 use App\Metadata;
 use App\MetadataTemplate;
@@ -42,7 +42,7 @@ $factory->define(AccountMetadata::class, function (Faker $faker) {
     ];
 });
 
-$factory->define(ArchiveMetadata::class, function (Faker $faker) {
+$factory->define(CollectionMetadata::class, function (Faker $faker) {
     return [
         'modified_by' => $faker->uuid,
         'metadata' => [ "dc:title" => "The greatest story ever told" ],
