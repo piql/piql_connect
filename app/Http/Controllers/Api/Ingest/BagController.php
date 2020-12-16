@@ -463,12 +463,12 @@ class BagController extends Controller
         if(!$collection) {
             abort(response()->json(["error" => 424, "message" => "No collection"], 424));
         }
-        $account = $collection->account;
-        if(!$account) {
-            abort(response()->json(["error" => 424, "message" => "No account"], 424));
+        $archive = $collection->archive;
+        if(!$archive) {
+            abort(response()->json(["error" => 424, "message" => "No archive"], 424));
         }
         $metadata = [
-            'account' => $account->defaultMetadataTemplate,
+            'archive' => $archive->defaultMetadataTemplate,
             'collection' => $collection->defaultMetadataTemplate,
             'holding' => $holding->defaultMetadataTemplate,
         ];

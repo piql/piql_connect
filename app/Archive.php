@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Validator;
 
-class Account extends Model
+class Archive extends Model
 {
     const DEFAULT_TEMPLATE = '{ "title": "", "description": "", "dc":  { "identifier": "" } }';
 
@@ -54,7 +54,7 @@ class Account extends Model
 
     public function collections()
     {
-        return $this->hasMany('App\Collection', 'account_uuid', 'uuid');
+        return $this->hasMany('App\Collection', 'archive_uuid', 'uuid');
     }
 
     public function organization()
@@ -69,7 +69,7 @@ class Account extends Model
         }
 
         if(isset( $ar["dc"] ) && !isset( $ar["dc"]["title"] ) ) {
-            $ar["dc"]["title"] = $this->attributes["title"] ?? "";  //TODO: accounts.title is nullable, not sure if this is ok?
+            $ar["dc"]["title"] = $this->attributes["title"] ?? "";  //TODO: archives.title is nullable, not sure if this is ok?
         }
 
         if(isset( $ar["dc"] ) && !isset( $ar["dc"]["description"] ) ) {

@@ -1,6 +1,6 @@
 <template>
     <div class="w-100">
-        <page-heading icon="fa-user" :title="$t('admin.metadata.account.assign.title')" :ingress="$t('admin.metadata.account.assign.ingress')" />
+        <page-heading icon="fa-user" :title="$t('admin.archive.metadata.template.assign')" :ingress="$t('admin.archive.metadata.template.assign.ingress')" />
         <div class="card">
             <div class="card-header">
             </div>

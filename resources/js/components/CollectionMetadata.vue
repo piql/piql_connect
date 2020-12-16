@@ -108,7 +108,7 @@ export default {
         }
     },
     computed: {
-        ...mapGetters(['collections', 'collectionById', 'firstAccount', 'templates', 'templateById']),
+        ...mapGetters(['collections', 'collectionById', 'firstArchive', 'templates', 'templateById']),
         defaultMetadataTemplate: {
             get(){
                 return this.collection.defaultMetadataTemplate;
@@ -119,7 +119,7 @@ export default {
         },
     },
     methods: {
-        ...mapActions(['updateCollectionMetadata', 'fetchCollections', 'fetchAccounts', 'fetchTemplates']),
+        ...mapActions(['updateCollectionMetadata', 'fetchCollections', 'fetchArchives', 'fetchTemplates']),
 
         selectTemplate( templateId ) {
             let template = JSON.parse( JSON.stringify( this.templateById( templateId ) ) );
@@ -130,7 +130,7 @@ export default {
         },
         async updateDefaultMetadataTemplate(){
             const payload = {
-                accountId: this.firstAccount.id,
+                archiveId: this.firstArchive.id,
                 collection: this.collection
             };
             this.updateCollectionMetadata( payload ).then( result => {

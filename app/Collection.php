@@ -17,7 +17,7 @@ class Collection extends Model
 
     protected $table = 'collections';
     protected $fillable = [
-        'title', 'description', 'uuid', 'account_uuid', 'defaultMetadataTemplate'
+        'title', 'description', 'uuid', 'archive_uuid', 'defaultMetadataTemplate'
     ];
     protected $casts = [
         'defaultMetadataTemplate' => 'array'
@@ -54,8 +54,8 @@ class Collection extends Model
         return $this->hasMany('App\Holding', 'collection_uuid', 'uuid');
     }
 
-    public function account() {
-        return $this->belongsTo(\App\Account::class, 'account_uuid', 'uuid');
+    public function archive() {
+        return $this->belongsTo(\App\Archive::class, 'archive_uuid', 'uuid');
     }
 
     public function getDefaultMetadataTemplateAttribute( string $template ) {

@@ -9,7 +9,7 @@
                 <button v-else class="btn" @click="newCollectionForm"><i class="fa fa-plus"></i> {{$t('settings.collections.add')}}</button>
             </div>
             <div class="card-body">
-                <collections-listing v-show="!enableMetaForm" @assignMeta='assignMeta' :accountId='1' :collections='collections' />
+                <collections-listing v-show="!enableMetaForm" @assignMeta='assignMeta' :archiveId='1' :collections='collections' />
             </div>
         </div>
 
@@ -67,7 +67,7 @@ export default {
         '$route': 'dispatchRouting'
     },
     computed: {
-        ...mapGetters(['templates', 'templateById', 'firstAccount', 'collections', 'collectionPageMeta']),
+        ...mapGetters(['templates', 'templateById', 'firstArchive', 'collections', 'collectionPageMeta']),
         apiQueryString: function() {
             let routeQuery = this.$route.query;
             let apiQueryItems = [];
@@ -88,26 +88,26 @@ export default {
         },
     },
     methods: {
-        ...mapActions(['fetchCollections', 'fetchAccounts','createCollection']),
+        ...mapActions(['fetchCollections', 'fetchArchives','createCollection']),
         async dispatchRouting() {
-            await this.fetchCollections({ accountId: 1, query: this.apiQueryString });
+            await this.fetchCollections({ archiveId: 1, query: this.apiQueryString });
         },
         newCollectionForm(){
             this.$bvModal.show('create-collection');
         },
         async makeCollection() {
-            const accountId = 1;
+            const archiveId = 1;
             this.createCollection( {
                 title: this.createForm.title,
                 description: this.createForm.description,
-                accountId,
+                archiveId,
             } );
             this.$bvModal.hide('create-collection');
             this.successToast(
                 this.$t('settings.collections.toast.createdCollectionHeading'),
                 this.$t('settings.collections.toast.createdCollection') + ' ' + this.createForm.title
             );
-            await this.fetchCollections({ accountId: 1, query: this.apiQueryString });
+            await this.fetchCollections({ archiveId: 1, query: this.apiQueryString });
             this.createForm = { title: '', description: '' };
         },
 

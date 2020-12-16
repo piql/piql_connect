@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers\Api\Metadata\Admin;
 
-use App\AccountMetadata;
+use App\ArchiveMetadata;
 use App\Collection;
 use App\CollectionMetadata;
 use App\File;
 use App\Http\Resources\CollectionResource;
-use App\Account;
+use App\Archive;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -15,7 +15,7 @@ use phpDocumentor\Reflection\DocBlock\Tags\Author;
 use Webpatser\Uuid\Uuid;
 use Log;
 
-class AccountCollectionController extends Controller
+class ArchiveCollectionController extends Controller
 {
     private function validateRequest(Request $request) {
         return $request->validate([
@@ -29,10 +29,10 @@ class AccountCollectionController extends Controller
      * Display a listing of the resource.
      *
      * @param Request $request
-     * @param Account $account
+     * @param Archive $archive
      * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
      */
-    public function index(Request $request, Account $account)
+    public function index(Request $request, Archive $archive)
     {
         // TODO: setup guards
         $limit = $request->limit ? $request->limit : env('DEFAULT_ENTRIES_PER_PAGE');
@@ -43,15 +43,15 @@ class AccountCollectionController extends Controller
      * Store a newly created resource in storage.
      *
      * @param \Illuminate\Http\Request $request
-     * @param File $file
+     * @param Archive $archive
      * @return void
 ,    */
-    public function store(Request $request, Account $account)
+    public function store(Request $request, Archive $archive)
     {
         $validated = $this->validateRequest($request);
         $additional = [
             "modified_by" => Auth::id(),
-            "account_uuid" => $account->uuid
+            "archive_uuid" => $archive->uuid
         ];
 
         $total = array_merge( $validated, $additional );
@@ -63,11 +63,11 @@ class AccountCollectionController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param \App\Account $account
+     * @param \App\Archive $archive
      * @param \App\Collection $collection
      * @return \Illuminate\Http\Response
      */
-    public function show(Account $account, Collection $collection)
+    public function show(Archive $archive, Collection $collection)
     {
         return response()->json([ "data" => new CollectionResource($collection)]);
     }
@@ -76,10 +76,10 @@ class AccountCollectionController extends Controller
      * Update the specified resource in storage.
      *
      * @param \Illuminate\Http\Request $request
-     * @param \App\Account $account
+     * @param \App\Archive $archive
      * @param \App\Collection $collection
      */
-    public function update(Request $request, Account $account, Collection $collection)
+    public function update(Request $request, Archive $archive, Collection $collection)
     {
        $validatedRequest = $this->validate( $request, [
                 "title" => "string",
@@ -95,15 +95,15 @@ class AccountCollectionController extends Controller
      * Update or create the specified resource in storage.
      *
      * @param \Illuminate\Http\Request $request
-     * @param \App\Account $account
+     * @param \App\Archive $archive
      * @return \Illuminate\Http\Response
      */
 
-    public function upsert( Request $request, Account $account )
+    public function upsert( Request $request, Archive $archive )
     {
-        if( $account->id != auth()->user()->organization->account->id ) {
+        if( $archive->id != auth()->user()->organization->archive->id ) {
             //TODO: Admin access
-            abort( 403, "User with id ".auth()->id()." does not have the neccesary permissions to update collections for this account" );
+            abort( 403, "User with id ".auth()->id()." does not have the neccesary permissions to update collections for this archive" );
         }
 
         $validatedRequest = $this->validate( $request, [
@@ -112,7 +112,7 @@ class AccountCollectionController extends Controller
             "defaultMetadataTemplate" => "array|nullable"
         ]);
 
-        $data = array_merge( $validatedRequest, ["account_uuid" => $account->uuid] );
+        $data = array_merge( $validatedRequest, ["archive_uuid" => $archive->uuid] );
 
         if( isset($request->id) ) {
             $collection = Collection::findOrFail( $request->id );
@@ -128,12 +128,12 @@ class AccountCollectionController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param \App\Account $account
+     * @param \App\Archive $archive
      * @param \App\Collection $collection
      * @return \Illuminate\Http\Response
      * @throws \Exception
      */
-    public function destroy(Account $account, Collection $collection)
+    public function destroy(Archive $archive, Collection $collection)
     {
         return response( "Collection cannot be deleted in this version", 405 );
     }

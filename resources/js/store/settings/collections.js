@@ -16,9 +16,9 @@ const getters = {
 }
 
 const actions = {
-    async fetchCollections( { commit }, { accountId, query } ){
+    async fetchCollections( { commit }, { archiveId, query } ){
         let queryString = query ?? "";
-        await ax.get(`/api/v1/metadata/admin/accounts/${accountId}/collections${queryString}`)
+        await ax.get(`/api/v1/metadata/admin/archives/${archiveId}/collections${queryString}`)
             .then( response =>
                 commit('setCollectionMutation',response.data)
             ).catch( error =>
@@ -26,12 +26,12 @@ const actions = {
             );
     },
     async createCollection( {commit}, request ) {
-        let accountId = request.accountId;
-        await ax.put( `/api/v1/metadata/admin/accounts/${accountId}/collections/`,
+        let archiveId = request.archiveId;
+        await ax.put( `/api/v1/metadata/admin/archives/${archiveId}/collections/`,
             {
                 title: request.title,
                 description: request.description,
-                accountId
+                archiveId
             }
         ).then( response =>
             commit( 'createCollectionMutation', response.data )
@@ -41,7 +41,7 @@ const actions = {
     },
 
     async updateCollectionMetadata( {commit}, payload ) {
-        const url = `/api/v1/metadata/admin/accounts/${payload.accountId}/collections`;
+        const url = `/api/v1/metadata/admin/archives/${payload.archiveId}/collections`;
         const collection = payload.collection;
 
         await ax.put( url, collection )
@@ -53,9 +53,9 @@ const actions = {
     },
 
     async editCollectionData({commit}, request ){
-        let accountId = request.accountId;
+        let archiveId = request.archiveId;
         let collectionId = request.id;
-        await ax.put( `/api/v1/metadata/admin/accounts/${accountId}/collections`,
+        await ax.put( `/api/v1/metadata/admin/archives/${archiveId}/collections`,
             {
                 id: collectionId,
                 title: request.title,

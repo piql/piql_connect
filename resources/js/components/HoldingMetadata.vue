@@ -51,7 +51,7 @@
 import {mapGetters, mapActions} from "vuex"
 export default {
     props:{
-        accountId: {
+        archiveId: {
             type: Number,
             default: 0
         },
@@ -119,7 +119,7 @@ export default {
         },
     },
     methods: {
-        ...mapActions(['updateHoldingMetadata', 'fetchCollections', 'fetchAccounts', 'fetchTemplates']),
+        ...mapActions(['updateHoldingMetadata', 'fetchCollections', 'fetchArchives', 'fetchTemplates']),
 
         selectTemplate( templateId ) {
             let template = JSON.parse( JSON.stringify( this.templateById( templateId ) ) );
@@ -130,7 +130,7 @@ export default {
         },
         async updateHoldingDefaultMetadataTemplate(){
             const payload = {
-                accountId: this.accountId,
+                archiveId: this.archiveId,
                 collectionId: this.collectionId,
                 holding: this.holding
             };
