@@ -6,27 +6,29 @@ use App\Events\BagFilesEvent;
 use App\Events\BagCompleteEvent;
 use App\Events\ErrorEvent;
 use App\Interfaces\MetadataGeneratorInterface;
+use App\Interfaces\TransferPacketBuilder;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
-use BagitUtil;
 use App\Traits\BagOperations;
 use App\MetadataPath;
 use Illuminate\Support\Facades\Log;
 
-class CommitFilesToBagListener implements ShouldQueue
+class CommitFilesToTransferPacketListener implements ShouldQueue
 {
     use BagOperations;
     protected $metadataGenerator;
-    protected $bagIt;
+    protected $packetBuilder;
+
     /**
      * Create the event listener.
      *
-     * @return void
+     * @param TransferPacketBuilder $packetBuilder
+     * @param MetadataGeneratorInterface $metadataGenerator
      */
-    public function __construct(BagitUtil $bagIt = null, MetadataGeneratorInterface $metadataGenerator)
+    public function __construct(TransferPacketBuilder $packetBuilder, MetadataGeneratorInterface $metadataGenerator)
     {
-        $this->bagIt = $bagIt ?? new BagitUtil();
+        $this->packetBuilder = $packetBuilder;
         $this->metadataGenerator = $metadataGenerator;
     }
 
@@ -61,24 +63,6 @@ class CommitFilesToBagListener implements ShouldQueue
             'type' => $metadataType,
         ]);
 
-        // append metadata to file
-        // TODO: For each of $bag->storage_properties->account, archive, holding - do:
-        /*
-        $writeSuccess = $metadataWriter->write([
-            'object' => $metadataPlaceholder->object,
-            'metadata' => $query->first()->metadata
-        ]);
-
-        if (!$writeSuccess) {
-            Log::error("Generating " . $metadataPlaceholder->class . "metadata for Bag " . $uuid . " failed!");
-        }
-
-        if (!$metadataGenerated) {
-                event(new ErrorEvent($bag));
-            }
-        }
-        */
-
         foreach (['account', 'archive', 'holding'] as $type) {
             $meta = (!isset($bag->metadata[$type])) ? [] : $bag->metadata[$type];
             $retval = $metadataWriter->write([
@@ -89,9 +73,9 @@ class CommitFilesToBagListener implements ShouldQueue
 
         foreach ($files as $file) {
             if(($file->filename === "metadata.csv") && $bag->owner()->first()->settings->ingestMetadataAsFile)
-                $this->bagIt->addMetadataFile($file->storagePathCompleted(), MetadataPath::FILE_OBJECT_PATH . $file->filename);
+                $this->packetBuilder->addMetadataFile($file->storagePathCompleted(), MetadataPath::FILE_OBJECT_PATH . $file->filename);
             else
-                $this->bagIt->addFile($file->storagePathCompleted(), MetadataPath::FILE_OBJECT_PATH . $file->filename);
+                $this->packetBuilder->addFile($file->storagePathCompleted(), MetadataPath::FILE_OBJECT_PATH . $file->filename);
 
             if($bag->owner()->first()->settings->ingestMetadataAsFile !== true) {
                 if ($file->metadata->count() > 0) {
@@ -114,10 +98,10 @@ class CommitFilesToBagListener implements ShouldQueue
 
         // add metadata file to bagit tool
         if( Storage::exists( $metadataFileName ) ){
-            $this->bagIt->addMetadataFile(Storage::path($metadataFileName), "metadata.".$metadataType);
+            $this->packetBuilder->addMetadataFile(Storage::path($metadataFileName), "metadata.".$metadataType);
         }
 
-        $result = $this->bagIt->createBag($bag->storagePathCreated());
+        $result = $this->packetBuilder->build($bag->storagePathCreated());
 
         // delete metadata file
         if( Storage::exists($metadataFileName) && ( ! env('APP_DEBUG_SAVE_METADATA_FILE', false) ) ){
@@ -130,7 +114,7 @@ class CommitFilesToBagListener implements ShouldQueue
         }
         else
         {
-            Log::error("Bag ".$bag->id." failed!");
+            Log::error("Bag ".$bag->id." failed! Root cause: ".$this->packetBuilder->errorMessage());
             event( new ErrorEvent($bag) );
         }
         if(file_exists($metadataFileName)) {
