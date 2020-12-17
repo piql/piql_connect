@@ -4,9 +4,9 @@ namespace Tests\Feature;
 
 use App\Collection;
 use App\Holding;
-use App\Http\Resources\AccountResource;
+use App\Http\Resources\ArchiveResource;
 use App\Organization;
-use App\Account;
+use App\Archive;
 use App\Http\Resources\CollectionResource;
 use App\Http\Resources\HoldingResource;
 use App\User;
@@ -14,12 +14,12 @@ use Tests\TestCase;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Laravel\Passport\Passport;
 
-class AccountCollectionHoldingControllerTest extends TestCase
+class ArchiveCollectionHoldingControllerTest extends TestCase
 {
     use DatabaseTransactions;
 
     private $user;
-    private $account;
+    private $archive;
     private $collection;
     private $holding;
 
@@ -28,7 +28,7 @@ class AccountCollectionHoldingControllerTest extends TestCase
         parent::setUp();
 
         $org = factory(Organization::class)->create();
-        $this->account = factory(Account::class)->create([
+        $this->archive = factory(Archive::class)->create([
             'organization_uuid' => $org->uuid
         ]);
         $this->user = factory(User::class)->create([
@@ -37,7 +37,7 @@ class AccountCollectionHoldingControllerTest extends TestCase
         Passport::actingAs( $this->user );
 
         $this->collection = factory(Collection::class)->create([
-            "account_uuid" => $this->account->uuid
+            "archive_uuid" => $this->archive->uuid
         ]);
 
         $this->holding = factory(Holding::class)->create([
@@ -49,7 +49,7 @@ class AccountCollectionHoldingControllerTest extends TestCase
     {
 
         $response = $this->actingAs( $this->user )
-            ->get( route('admin.metadata.accounts.collections.holdings.index', [ $this->account->id, $this->collection->id ]) );
+            ->get( route('admin.metadata.archives.collections.holdings.index', [ $this->archive->id, $this->collection->id ]) );
         $response->assertStatus( 200 );
 
     }
@@ -57,7 +57,7 @@ class AccountCollectionHoldingControllerTest extends TestCase
     public function test_given_an_authenticated_user_and_holding_it_responds_200()
     {
         $response = $this->actingAs( $this->user )
-            ->get( route('admin.metadata.accounts.collections.holdings.show', [$this->account->id, $this->collection->id, $this->holding->id]) );
+            ->get( route('admin.metadata.archives.collections.holdings.show', [$this->archive->id, $this->collection->id, $this->holding->id]) );
         $response->assertStatus( 200 );
     }
 
@@ -69,7 +69,7 @@ class AccountCollectionHoldingControllerTest extends TestCase
         ];
 
         $response = $this->actingAs( $this->user )
-            ->post( route('admin.metadata.accounts.collections.holdings.store', [$this->account->id, $this->collection->id]),
+            ->post( route('admin.metadata.archives.collections.holdings.store', [$this->archive->id, $this->collection->id]),
                 $holding );
 
         $response
@@ -87,7 +87,7 @@ class AccountCollectionHoldingControllerTest extends TestCase
         ];
 
         $response = $this->actingAs( $this->user )
-            ->post( route('admin.metadata.accounts.collections.holdings.store', [$this->account->id, $this->collection->id]),
+            ->post( route('admin.metadata.archives.collections.holdings.store', [$this->archive->id, $this->collection->id]),
                 $holding );
 
         $expected = array_replace_recursive( $response->decodeResponseJson('data'),
@@ -118,7 +118,7 @@ class AccountCollectionHoldingControllerTest extends TestCase
         $holding = Holding::create( $holdingData );
 
         $response = $this->actingAs( $this->user )
-            ->put( route('admin.metadata.accounts.collections.holdings.update', [$this->account->id, $this->collection->id, $holding->id]),
+            ->put( route('admin.metadata.archives.collections.holdings.update', [$this->archive->id, $this->collection->id, $holding->id]),
                 $updateHoldingData );
 
         $expected = array_replace_recursive( $response->decodeResponseJson('data'),
@@ -138,7 +138,7 @@ class AccountCollectionHoldingControllerTest extends TestCase
         ]);
 
         $response = $this->actingAs( $this->user )
-            ->json('PATCH', route('admin.metadata.accounts.collections.holdings.update', [$this->account->id, $this->collection->id, $this->holding->id]),
+            ->json('PATCH', route('admin.metadata.archives.collections.holdings.update', [$this->archive->id, $this->collection->id, $this->holding->id]),
                 (new HoldingResource($holding))->toArray(null));
 
         $response->assertStatus( 200 );
@@ -150,8 +150,8 @@ class AccountCollectionHoldingControllerTest extends TestCase
 
     public function test_given_a_holding_when_upserting_it_is_updated()
     {
-        $account = factory(Account::class)->create();
-        $collection = Collection::create(["title" => "Sweet collection title", "account_uuid" => $account->uuid]);
+        $archive = factory(Archive::class)->create();
+        $collection = Collection::create(["title" => "Sweet collection title", "archive_uuid" => $archive->uuid]);
         $holding = Holding::create(["title" => "Dull Holding title", "collection_uuid" => $collection->uuid ]);
         $data = [
             "id" => $holding->id,
@@ -159,7 +159,7 @@ class AccountCollectionHoldingControllerTest extends TestCase
             "defaultMetadataTemplate" => ["dc" => ["title" => "The most updated novel ever!"]],
         ];
         $response = $this->actingAs( $this->user )
-            ->put( route( 'admin.metadata.accounts.collections.holdings.upsert', [$this->account, $this->collection] ),
+            ->put( route( 'admin.metadata.archives.collections.holdings.upsert', [$this->archive, $this->collection] ),
                 $data );
 
         $expected = array_replace_recursive(
@@ -177,7 +177,7 @@ class AccountCollectionHoldingControllerTest extends TestCase
             "collection_uuid" => $this->collection->uuid
         ];
         $response = $this->actingAs( $this->user )
-            ->put( route( 'admin.metadata.accounts.collections.holdings.upsert', [$this->account, $this->collection] ),
+            ->put( route( 'admin.metadata.archives.collections.holdings.upsert', [$this->archive, $this->collection] ),
                 $data );
 
         $expected = array_replace_recursive(

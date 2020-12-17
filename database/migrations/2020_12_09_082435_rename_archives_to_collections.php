@@ -23,6 +23,10 @@ class RenameArchivesToCollections extends Migration
             $table->renameColumn('archive_uuid', 'collection_uuid');
         });
         Schema::rename('archives', 'collections');
+        Schema::rename('accounts', 'archives');
+        Schema::table('collections', function (Blueprint $table) {
+            $table->renameColumn('account_uuid', 'archive_uuid');
+        });
     }
 
     /**
@@ -32,6 +36,10 @@ class RenameArchivesToCollections extends Migration
      */
     public function down()
     {
+        Schema::table('collections', function (Blueprint $table) {
+            $table->renameColumn('archive_uuid', 'account_uuid');
+        });
+        Schema::rename('archives', 'accounts');
         Schema::rename('collections', 'archives');
         Schema::table('storage_properties', function (Blueprint $table) {
             $table->renameColumn('collection_uuid', 'archive_uuid');

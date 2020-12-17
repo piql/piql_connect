@@ -9,7 +9,7 @@ import user from "./settings/user";
 import template from "./metadata/template";
 import collections from "./settings/collections";
 import holdings from "./settings/holdings";
-import account from "./settings/account";
+import archive from "./settings/archive";
 
 //load Vuex
 Vue.use(Vuex)
@@ -26,6 +26,6 @@ export const store = new Vuex.Store({
         template,
         collections,
         holdings,
-        account
+        archive
     }
 })

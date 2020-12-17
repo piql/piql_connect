@@ -7,7 +7,7 @@ use App\EventLogEntry;
 use App\File;
 use App\Metadata;
 use App\User;
-use App\Account;
+use App\Archive;
 use App\Organization;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Laravel\Passport\Passport;
@@ -29,7 +29,7 @@ class MetadataModelTest extends TestCase
     public function test_associating_file_model_to_a_metadata_model()
     {
         $organization = factory( Organization::class )->create();
-        factory( Account::class )->create(['organization_uuid' => $organization->uuid]);
+        factory( Archive::class )->create(['organization_uuid' => $organization->uuid]);
         $this->user = factory(User::class)->create(['organization_uuid' => $organization->uuid]);
         Passport::actingAs( $this->user );
 
@@ -56,14 +56,14 @@ class MetadataModelTest extends TestCase
     public function test_creating_metadata_model_where_owner_and_owner_type_are_provided()
     {
         $organization = factory( Organization::class )->create();
-        $account = factory( Account::class )->create(['organization_uuid' => $organization->uuid]);
+        $archive = factory( Archive::class )->create(['organization_uuid' => $organization->uuid]);
         $this->user = factory(User::class)->create(['organization_uuid' => $organization->uuid]);
         Passport::actingAs( $this->user );
 
         $metadata = factory(Metadata::class)->create([
             "modified_by" => $this->user->id,
-            "owner_id" => $account->uuid,
-            "owner_type" => 'App\Account',
+            "owner_id" => $archive->uuid,
+            "owner_type" => 'App\Archive',
         ]);
 
         $this->assertNotEquals(null, $metadata);

@@ -21,7 +21,7 @@ class MetadataTemplateControllerTest extends TestCase
         parent::setUp();
 
         $organization = factory(\App\Organization::class)->create();
-        $account = factory(\App\Account::class)->create(['organization_uuid' => $organization->uuid]);
+        $archive = factory(\App\Archive::class)->create(['organization_uuid' => $organization->uuid]);
         $this->user = factory(User::class)->create(['organization_uuid' => $organization->uuid]);
         Passport::actingAs( $this->user );
 
@@ -29,7 +29,7 @@ class MetadataTemplateControllerTest extends TestCase
             "modified_by" => $this->user->id,
             "metadata" => ["dc" => ["title" => "The best show ever!"]]
         ]);
-        $this->metadata->owner()->associate($account);
+        $this->metadata->owner()->associate($archive);
         $this->metadata->save();
     }
 

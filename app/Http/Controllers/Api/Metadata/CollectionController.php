@@ -16,7 +16,7 @@ class CollectionController extends Controller
      */
     public function index()
     {
-        //TODO: Limit access to Collections per Account
+        //TODO: Limit access to Collections per Archive
         return CollectionResource::collection( Collection::all() );
     }
 
@@ -39,7 +39,7 @@ class CollectionController extends Controller
      */
     public function show($id)
     {
-        //TODO: Limit access to Collections per Account
+        //TODO: Limit access to Collections per Archive
         $collection = Collection::find( $id );
         if( !isset( $collection ) ) {
             abort( response()->json(['error' => 404, 'message' => 'No Collection with id '.$id.' was found.'], 404) );

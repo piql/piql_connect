@@ -3,8 +3,8 @@
 namespace Tests\Feature;
 
 use App\Organization;
-use App\Account;
-use App\AccountMetadata;
+use App\Archive;
+use App\ArchiveMetadata;
 use App\CollectionMetadata;
 use App\Events\FileUploadedEvent;
 use App\Events\PreProcessBagEvent;
@@ -35,9 +35,9 @@ class BagApiTest extends TestCase
     private $testHolding2;
     private $otherUser;
     private $otherBag;
-    private $account;
+    private $archive;
     private $organization;
-    private $accountMetadata;
+    private $archiveMetadata;
     private $collectionMetadata1;
     private $collectionMetadata2;
     private $holdingMetadata1;
@@ -49,7 +49,7 @@ class BagApiTest extends TestCase
         $this->createdBagIds = collect([]);
         $this->testBagName1 = "TestBagName1";
         $this->organization = factory(Organization::class)->create();
-        $this->account = factory(Account::class)->create([ 'organization_uuid' => $this->organization->uuid ]);
+        $this->archive = factory(Archive::class)->create([ 'organization_uuid' => $this->organization->uuid ]);
 
         $this->testUser = User::create([
             'username' => 'BagApiTestUser',
@@ -67,16 +67,16 @@ class BagApiTest extends TestCase
             'owner' => $this->testUser->id
         ];
 
-        $this->accountMetadata = factory(AccountMetadata::class)->create([
+        $this->archiveMetadata = factory(ArchiveMetadata::class)->create([
             "modified_by" => $this->testUser->id,
         ]);
-        $this->accountMetadata->parent()->associate($this->account);
-        $this->accountMetadata->save();
-        $this->accountMetadata->owner()->associate($this->testUser);
+        $this->archiveMetadata->parent()->associate($this->archive);
+        $this->archiveMetadata->save();
+        $this->archiveMetadata->owner()->associate($this->testUser);
 
         $this->testCollection1 = Collection::create([
             'title' => 'testBagCollection1Title',
-            "account_uuid" => $this->account->uuid,
+            "archive_uuid" => $this->archive->uuid,
         ]);
         $this->collectionMetadata1 = factory(CollectionMetadata::class)->create([
             "modified_by" => $this->testUser->id,
@@ -87,7 +87,7 @@ class BagApiTest extends TestCase
 
         $this->testCollection2 = Collection::create([
             'title' => 'testBagCollection2Title',
-            "account_uuid" => $this->account->uuid,
+            "archive_uuid" => $this->archive->uuid,
         ]);
         $this->collectionMetadata2 = factory(CollectionMetadata::class)->create([
             "modified_by" => $this->testUser->id,
@@ -393,7 +393,7 @@ class BagApiTest extends TestCase
         $uuid = $createdBag->uuid;
 
         /* TODO: Assert metadata on the bag
-        $query = AccountMetadata::whereHasMorph('parent', [\App\Bag::class], function(Builder $query) use ($uuid) {
+        $query = ArchiveMetadata::whereHasMorph('parent', [\App\Bag::class], function(Builder $query) use ($uuid) {
             $query->where("uuid", $uuid);
         });
         $this->assertEquals(1, $query->count());

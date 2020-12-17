@@ -71,7 +71,7 @@ export default {
         ...mapGetters(['templates']),
     },
     props: {
-        accountId: {
+        archiveId: {
             type: Number,
             default: 1
         },
@@ -104,7 +104,7 @@ export default {
                 description: this.edit.description,
                 collectionId: this.edit.collectionId,
                 id: this.edit.id,
-                accountId: this.accountId,
+                archiveId: this.archiveId,
                 collectionId: this.parentCollectionId
             }
 
@@ -114,7 +114,7 @@ export default {
 
 
             this.successToast(
-                this.$t('settings.holdings.toast.editingHolding'), 
+                this.$t('settings.holdings.toast.editingHolding'),
                 this.$t('settings.holdings.toast.editingHolding') + ' ' + this.edit.title
             );
 

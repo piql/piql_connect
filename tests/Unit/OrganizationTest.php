@@ -4,7 +4,7 @@ namespace Tests\Unit;
 
 use App\Events\OrganizationCreatedEvent;
 use App\Organization;
-use App\Account;
+use App\Archive;
 use App\User;
 use Faker\Factory as Faker;
 use Faker\Provider\Address;
@@ -95,26 +95,26 @@ class OrganizationTest extends TestCase
             });
     }
 
-    public function test_find_account_from_organization() {
+    public function test_find_archive_from_organization() {
         $org = factory(Organization::class)->create();
-        $acc = factory(Account::class)->create();
-        $org->account()->save($acc);
-        $this->assertEquals($org->account->uuid, $acc->uuid);
+        $acc = factory(Archive::class)->create();
+        $org->archive()->save($acc);
+        $this->assertEquals($org->archive->uuid, $acc->uuid);
     }
 
-    public function test_find_organization_from_account() {
+    public function test_find_organization_from_archive() {
         $org = factory(Organization::class)->create();
-        $acc = factory(Account::class)->create();
-        $org->account()->save($acc);
+        $acc = factory(Archive::class)->create();
+        $org->archive()->save($acc);
         $this->assertEquals($acc->organization->uuid, $org->uuid);
     }
 
     public function test_user_lists_from_organization() {
         $org = factory(Organization::class)->create();
-        $acc = factory(Account::class)->create();
+        $acc = factory(Archive::class)->create();
         $userA = factory(User::class)->create();
         $userB = factory(User::class)->create();
-        $org->account()->save($acc);
+        $org->archive()->save($acc);
         $org->users()->save($userA);
         $org->users()->save($userB);
 

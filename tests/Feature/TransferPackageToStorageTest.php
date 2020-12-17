@@ -48,7 +48,7 @@ class TransferPackageToStorageTest extends TestCase
         parent::setUp();
 
         $organization = factory(\App\Organization::class)->create();
-        factory(\App\Account::class)->create(['organization_uuid' => $organization->uuid]);
+        factory(\App\Archive::class)->create(['organization_uuid' => $organization->uuid]);
         $this->testUser = factory(\App\User::class)->create(['organization_uuid' => $organization->uuid]);
         Passport::actingAs( $this->testUser );
         $this->faker = Faker::create();

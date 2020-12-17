@@ -83,7 +83,7 @@ export default {
         }
     },
     props: {
-        accountId: {
+        archiveId: {
             type: Number,
             default: 1
         },
@@ -119,7 +119,7 @@ export default {
             this.$bvModal.hide('edit-collection')
             await this.editCollectionData( {
                 id: this.edit.id,
-                accountId: this.accountId,
+                archiveId: this.archiveId,
                 title: this.edit.title,
                 description: this.edit.description
             } );

@@ -62,7 +62,7 @@ class CommitFilesToBagListener implements ShouldQueue
         ]);
 
         // append metadata to file
-        // TODO: For each of $bag->storage_properties->account, collection, holding - do:
+        // TODO: For each of $bag->storage_properties->archive, collection, holding - do:
         /*
         $writeSuccess = $metadataWriter->write([
             'object' => $metadataPlaceholder->object,
@@ -79,7 +79,7 @@ class CommitFilesToBagListener implements ShouldQueue
         }
         */
 
-        foreach (['account', 'collection', 'holding'] as $type) {
+        foreach (['archive', 'collection', 'holding'] as $type) {
             $meta = (!isset($bag->metadata[$type])) ? [] : $bag->metadata[$type];
             $retval = $metadataWriter->write([
                 'object' => MetadataPath::of($type),
