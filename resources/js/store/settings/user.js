@@ -16,9 +16,9 @@ const getters = {
     userSettings: state => state.settings,
     userLanguages: state => state.languages,
     currentUser: state => state.user,
-    userName: () => Vue.prototype.$keycloak.tokenParsed.preferred_username,
-    userIsAdmin: () => Vue.prototype.$keycloak.resourceAccess['piql-connect-api'].roles.includes('admin'),
-    userOrganizationId: () => Vue.prototype.$keycloak.tokenParsed.organization,
+    userName: () => Vue.prototype.$auth.user.name,
+    userIsAdmin: () => true, //TODO: Use permissions
+    userOrganizationId: () => '', //TODO: Retrieve from back-end
     userMetadataTemplateByUserId: state => userId => {
         return state.userMetadataTemplates.find((t) => t.owner_id == userId);
     },
@@ -90,7 +90,8 @@ const actions = {
     },
 
     async logoutUser({ commit }) {
-        Vue.prototype.$keycloak.logoutFn();
+        Vue.prototype.$auth.logout();
+        Vue.nextTick( () => { window.location = "/logout"; } );
     },
 }
 

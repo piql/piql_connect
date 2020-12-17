@@ -1,6 +1,6 @@
 <template>
     <div class="screensize fullHeight">
-        <div class="container-fluid p-0 fullHeight">
+        <div v-if="!$auth.loading && $auth.isAuthenticated" class="container-fluid p-0 fullHeight">
             <top-bar />
             <div class="d-flex flex-row overflow-auto fullHeight">
                 <div class="d-flex fullHeight">
@@ -21,7 +21,7 @@ export default {
     data() {
         return {
             width: 0,
-            height: 0
+            height: 0,
         };
     },
     mounted() {
@@ -39,13 +39,23 @@ export default {
             this.height = height;
         },
     },
+    watch: {
+        authLoaded(shouldLogIn) {
+            if (shouldLogIn) {
+                this.$auth.loginWithRedirect();
+            }
+        }
+    },
     computed: {
         currentWidth() {
             return this.width;
         },
         currentHeight() {
             return this.height;
-        }
+        },
+        authLoaded() {
+            return this.$auth.auth0Client !== null && !this.$auth.loading && !this.$auth.isAuthenticated;
+        },
     },
 }
 </script>
