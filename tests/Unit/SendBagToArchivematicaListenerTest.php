@@ -4,9 +4,11 @@ namespace Tests\Unit;
 
 use App\Bag;
 use App\Events\BagCompleteEvent;
+use App\Events\ErrorEvent;
 use App\Events\InitiateTransferToArchivematicaEvent;
 use App\Listeners\SendBagToArchivematicaListener;
 use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use Mockery;
 use Tests\TestCase;
@@ -51,6 +53,7 @@ class SendBagToArchivematicaListenerTest extends TestCase
         $listener->handle($event);
 
         Event::assertDispatched(InitiateTransferToArchivematicaEvent::class);
+        Event::assertNotDispatched(ErrorEvent::class);
 
         foreach ($files as $file) {
             $this->assertTrue($this->storageSource->exists($file->name));
@@ -73,9 +76,28 @@ class SendBagToArchivematicaListenerTest extends TestCase
         $listener->handle($event);
 
         Event::assertDispatched(InitiateTransferToArchivematicaEvent::class);
+        Event::assertNotDispatched(ErrorEvent::class);
 
         foreach ($files as $file) {
             $this->assertTrue($this->storageSource->exists($file->name));
+        }
+    }
+
+    public function test_transfer_missing_files_to_service()
+    {
+        $this->bag->shouldReceive('zipBagFileName')->times(3)->andReturn($this->bagFileName);
+        $files[] = (object)["name" => $this->bagFileName.'/objects/account/archive/holding/test.txt', "content" => "Hello world"];
+        $files[] = (object)["name" => $this->bagFileName.'/metadata/metadata.csv', "content" => "Hello world"];
+
+        $event = new BagCompleteEvent($this->bag);
+        $listener = new SendBagToArchivematicaListener($this->storageSource, $this->storageDestination);
+        $listener->handle($event);
+
+        Event::assertNotDispatched(InitiateTransferToArchivematicaEvent::class);
+        Event::assertDispatched(ErrorEvent::class);
+
+        foreach ($files as $file) {
+            $this->assertTrue(!$this->storageSource->exists($file->name));
         }
     }
 }
