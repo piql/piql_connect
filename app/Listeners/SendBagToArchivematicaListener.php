@@ -2,6 +2,7 @@
 
 namespace App\Listeners;
 
+use App\Events\ErrorEvent;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Contracts\Filesystem\Filesystem;
 use Illuminate\Support\Facades\File;
@@ -57,7 +58,9 @@ class SendBagToArchivematicaListener implements ShouldQueue
         $directories = array_merge($directories, $this->storageFrom->allDirectories($bag->zipBagFileName()));
         foreach ($directories as $directory) {
             if($this->storageTo->makeDirectory($directory)) {
-
+                Log::error("Unable to create directory '{$this->storageTo->getAdapter()->applyPathPrefix($directory)}'");
+                event(new ErrorEvent($bag));
+                return;
             }
         }
 
@@ -67,7 +70,10 @@ class SendBagToArchivematicaListener implements ShouldQueue
                 $this->storageFrom->getAdapter()->applyPathPrefix($file),
                 $this->storageTo->getAdapter()->applyPathPrefix($file)
             )) {
-
+                Log::error("Unable to copy '{$this->storageFrom->getAdapter()->applyPathPrefix($file)}'".
+                    "'{$this->storageTo->getAdapter()->applyPathPrefix($file)}'");
+                event(new ErrorEvent($bag));
+                return;
             }
         }
         event( new InitiateTransferToArchivematicaEvent( $bag ) );
