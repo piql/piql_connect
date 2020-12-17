@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
@@ -27,6 +28,23 @@ class RenameArchivesToCollections extends Migration
         Schema::table('collections', function (Blueprint $table) {
             $table->renameColumn('account_uuid', 'archive_uuid');
         });
+
+        DB::table('metadata')
+            ->where("owner_type", "App/Account")
+            ->update(["owner_type" => "App/Archive"]);
+
+        $creationTime = new DateTime;
+        $organizationUuid = \Webpatser\Uuid\Uuid::generate()->string;
+        DB::table('organizations')->insert([
+            "name" => "Default organization",
+            "uuid" => $organizationUuid,
+            "updated_at" => $creationTime->format('y-m-d H:i:s'),
+            "created_at" => $creationTime->format('y-m-d H:i:s')
+        ]);
+        DB::table('archives')
+            ->update(["organization_uuid" => $organizationUuid]);
+        DB::table('users')
+            ->update(["organization_uuid" => $organizationUuid]);
     }
 
     /**
@@ -36,6 +54,10 @@ class RenameArchivesToCollections extends Migration
      */
     public function down()
     {
+        DB::table('metadata')
+            ->where("owner_type", "App/Archive")
+            ->update(["owner_type" => "App/Account"]);
+
         Schema::table('collections', function (Blueprint $table) {
             $table->renameColumn('archive_uuid', 'account_uuid');
         });
