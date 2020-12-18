@@ -5,14 +5,12 @@
                     <thead>
                         <tr>
                             <th>{{$t('settings.groups.group')}}</th>
-                            <th>{{$t('settings.groups.description')}}</th>
                             <th width="20%">{{$t('settings.settings.actions')}} </th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr v-for="group in userGroups" :key="group.id">
                             <td>{{group.name}}</td>
-                            <td>{{group.description}}</td>
                             <td>
                                 
                                 <a class="btn btn-xs btn-primary" @click="showAssignUsersModal(group.id)" data-toggle="tooltip" :title="$t('settings.groups.assignUsers')" style="color:white">
@@ -33,11 +31,6 @@
 
                     </tbody>
                 </table>
-                <div class="row text-center pagerRow">
-                    <div class="col">
-                        <Pager :meta='groupPageMeta' :height='height' />
-                    </div>
-                </div>
 
                 <b-modal id="group-users" size="lg" hide-footer>
                     <template v-slot:modal-title>
@@ -105,10 +98,8 @@
 
 <script>
 import { mapActions, mapGetters } from "vuex";
-import Pager from "./Pager";
 export default {
     components: {
-        Pager
     },
     data() {
         return {
@@ -129,26 +120,14 @@ export default {
 
     computed:{
         ...mapGetters(
-            ['groupsApiResponse','userGroups','groupPageMeta','userGroupUsers','userGroupRoles','formattedUsers','userRoles']
+            ['userGroups','userGroupUsers','userGroupRoles','formattedUsers','userRoles']
         ),
-       
-        apiQueryString: function() {
-            let query = this.$route.query;
-            let filter = '';
-
-            if( parseInt( query.page ) ) {
-                filter += "?page=" + query.page;
-            }
-            return filter;
-        },
-
 
     },
-     watch: {
-        '$route': 'dispatchRouting',
+    watch: {
         formattedUsers(val){
             if(val){
-                this.ulist = val.map( u => { return { value: u.id, label: u.full_name } } );
+                this.ulist = val.data.map( u => { return { value: u.id, label: u.full_name } } );
             }
         },
         userRoles(val){
@@ -158,23 +137,13 @@ export default {
         }
     },
     async mounted() {
-       let page = this.$route.query.page;
-        if( isNaN( page ) || parseInt( page ) < 2 ) {
-            this.$route.query.page = 1;
-        }
-        this.fetchGroups( this.apiQueryString);
         this.fetchSelectUsers()
         this.fetchSelectedRoles();
-
-
     },
     methods:{
         ...mapActions(
-            ['fetchGroups','fetchGroupUsers','fetchGroupRoles','fetchSelectUsers','fetchSelectedRoles']
+            ['fetchGroupUsers','fetchGroupRoles','fetchSelectUsers','fetchSelectedRoles']
         ),
-       dispatchRouting() {
-            this.fetchGroups( this.apiQueryString);
-        },
         showListingModal(groupId){
             this.group = this.userGroups.filter(group => group.id === groupId);
             //fetch users and roles
@@ -182,7 +151,6 @@ export default {
             this.fetchGroupRoles(groupId);
 
             this.$bvModal.show('group-users');
-
         },
         //emitted actions
         assignButtonClicked(groupId){

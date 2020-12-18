@@ -20,13 +20,16 @@ describe("Listing", ()=>{
       fetchUsers: jest.fn(),
       postNewUser: jest.fn(),
       disableUserRequest: jest.fn(),
-      enableUserRequest: jest.fn()
+      enableUserRequest: jest.fn(),
+      fetchUserSettings: jest.fn()
     }
 
     getters = {
         userApiResponse: () => {},
         usersPageMeta: () => {},
+        userTableRowCount: () => 10,
         formattedUsers: () => [ {value: 123, label: 'Test Name'}],
+
     }
 
     store = new Vuex.Store({
@@ -49,6 +52,7 @@ describe("Listing", ()=>{
               'pager':true,
               'b-modal': true,
               'b-button':true,
+              'search-input': true,
             }
           });
 

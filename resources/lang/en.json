@@ -308,6 +308,8 @@
     "settings.settings.enableUserWarning": "Are you sure you want to enable this user? If so, proceed to enable",
 
     "settings.listing.fullname": "Fullname",
+    "settings.listing.firstname": "First Name",
+    "settings.listing.lastname": "Last Name",
     "settings.listing.username": "Username",
     "settings.listing.email": "Email",
     "settings.listing.status": "Status",
@@ -387,7 +389,6 @@
 
     "settings.groups.addGroup": "Add Group",
     "settings.groups.group": "Group",
-    "settings.groups.description": "Description",
     "settings.groups.assignUsers": "Assign Users",
     "settings.groups.listRolesAndUsers": "List Roles & Users Assigned",
     "settings.groups.assignRoles": "Assign Roles",
@@ -442,11 +443,32 @@
     "settings.logo.button": "Select logo file",
     "settings.logo.successful": "Your log has been changed",
 
+    "settings.user.disabled": "Disabled",
+    "settings.user.enabled": "Active",
+
+    "user.form.post-actions": "User Actions Required",
+    "user.form.post-actions.hint": "You may select multiple required user actions",
+    "form.validation.error": "Form has validation errors",
+    "modal.user.title.attributes": "User Attributes",
+
+    "user.label.attribute": "Attribute",
+    "user.label.value": "Value",
+    "user.label.actions": "Actions",
+    "text.remove": "Remove",
+
     "settings.user.assignArchiveMetadata.title": "Assign metadata to archive",
     "settings.admin.user_account.fullname": "Full name",
     "settings.admin.user_account.username": "Username",
     "settings.admin.assignMetadataDropdownLabel": "Select a metadata template",
     "settings.admin.assignMetadataDropdownPlaceholder": "No template selected",
+    "settings.user.listing.search.placeholder": "Search for User...",
+
+    "user.on-create.action.update-password": "Change Password",
+    "user.on-create.action.verify-email": "Verify Email",
+    "user.on-create.action.update-profile": "Update Profile",
+
+    "admin.account.metadata.template.clone": "Clone Template",
+    "admin.account.metadata.template.assign": "Assign Template",
 
     "timeout.warning": "Inactivity warning. Automatic log out in",
     "timeout.seconds": "seconds",

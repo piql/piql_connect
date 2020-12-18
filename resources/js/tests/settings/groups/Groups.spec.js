@@ -1,13 +1,46 @@
 import Groups from "@/views/settings/Admin/Account/Group"
-import { shallowMount } from "@vue/test-utils"
+import Vuex from 'vuex'
+import { shallowMount, createLocalVue } from "@vue/test-utils"
 
-const $t = (s) => s;
+const localVue = createLocalVue();
+localVue.use( Vuex );
 
-describe("Groups.vue", ()=> {
+const $route = { name: 'test', query: { page: 1 }}
+const $t = (s)=>s;
+
+describe("Group.vue", ()=> {
+
+    let actions;
+    let getters;
+    let store;
+
+    beforeEach( () => {
+        actions = {
+            fetchGroups: jest.fn(),
+            fetchUserSettings: jest.fn()
+        };
+
+        getters = {
+            groupsApiResponse: () => {},
+	    groupsPageMeta: () => {},
+	    userTableRowCount: () => 10,
+        };
+
+        store = new Vuex.Store({
+            actions,
+            getters
+        });
+    })
+
     //test whether component renders
     test("component should render", ()=> {
         let wrapper = shallowMount(Groups, {
-            mocks: { $t },
+	    store,
+            localVue,
+            mocks:{
+                $t,
+                $route,
+            },
             stubs:{
                 'b-modal': true,
                 'b-button': true,
@@ -23,7 +56,12 @@ describe("Groups.vue", ()=> {
     //test force Render
     test("group key should increment by 1 for every method call", ()=> {
         let wrapper = shallowMount(Groups, {
-            mocks: { $t },
+	    store,
+            localVue,
+            mocks:{
+                $t,
+                $route,
+            },
             stubs:{
                 'b-modal': true,
                 'b-button': true,
