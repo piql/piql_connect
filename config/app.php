@@ -188,13 +188,13 @@ return [
         App\Providers\FilesystemDriverProvider::class,
         App\Providers\SettingsProvider::class,
         App\Providers\ArchivematicaConnectionServiceProvider::class,
-        App\Providers\ArchivematicaDashboardClientProvider::class,
         App\Providers\ArchivematicaStorageClientProvider::class,
         App\Providers\MetadataGeneratorServiceProvider::class,
         App\Providers\PreProcessBagServiceProvider::class,
         App\Providers\IngestValidationServiceProvider::class,
         App\Providers\FilePreviewProvider::class,
         App\Providers\KeycloakClientServiceProvider::class,
+        App\Providers\TransferPacketProvider::class,
 
 
         /*

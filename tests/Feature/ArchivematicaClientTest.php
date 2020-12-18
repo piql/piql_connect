@@ -190,7 +190,6 @@ class ArchivematicaClientTest extends TestCase
             return (
                 ($method == 'POST') &&
                 ($uri == 'transfer/approve/') &&
-                ($options['form_params']['type'] == 'zipped bag') &&
                 ($options['form_params']['directory'] == $this->bag->zipBagFileName())
             );
         };
