@@ -16,10 +16,10 @@ class ArchiveResource extends JsonResource
     {
         return [
             'id' => $this->id,
+            'uuid' => $this->uuid,
             'title' => $this->title,
             'description' => $this->description,
-            'uuid' => $this->uuid,
-            'account_uuid' => $this->account_uuid,
+            'organization_uuid' => $this->organization_uuid,
             'defaultMetadataTemplate' => $this->defaultMetadataTemplate
         ];
 

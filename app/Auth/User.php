@@ -65,13 +65,6 @@ class User extends Authenticatable
         return $this;
     }
 
-    public function getAccountUuidAttribute()
-    {
-		/* TODO: Get rid of this hacky workaround -
-			the auth user model must support everything the eloquent user model does! */
-		return \App\User::find( auth()->id() )->account->uuid;
-	}
-
     public function getUsernameAttribute()
     {
 		/* TODO: Get rid of this hacky workaround -
@@ -79,10 +72,11 @@ class User extends Authenticatable
 		return \App\User::find( auth()->id() )->username;
 	}
 
-
-	public function account()
+	public function organization()
     {
-		return \App\User::find( auth()->id() )->account();
+		/* TODO: Get rid of this hacky workaround -
+			the auth user model must support everything the eloquent user model does! */
+            return \App\User::find( auth()->id() )->organization();
     }
 
 }

@@ -18,9 +18,7 @@ class HoldingResource extends JsonResource
             'id' => $this->id,
             'title' => $this->title,
             'description' => $this->description,
-            'owner_archive_uuid' => $this->owner_archive_uuid,
-            'position' => $this->position,
-            'parent_id' => $this->parent_id,
+            'collection_uuid' => $this->collection_uuid,
             'uuid' => $this->uuid,
             'defaultMetadataTemplate' => $this->defaultMetadataTemplate
         ];

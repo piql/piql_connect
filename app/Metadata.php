@@ -39,11 +39,14 @@ class Metadata extends Model
                 if (!auth()->check()) {
                     throw new \Exception("User must be authenticated to create Metadata");
                 }
-                if (!auth()->user()->account()) {
-                    throw new \Exception("User must belong to an account to create Metadata");
+                if (!auth()->user()->organization) {
+                    throw new \Exception("User must belong to an organization to create Metadata");
                 }
-                $model->owner_id = auth()->user()->account->uuid;
-                $model->owner_type = "App\Account";
+                if (!auth()->user()->organization->archive) {
+                    throw new \Exception("User's organization must contain an archive to create Metadata");
+                }
+                $model->owner_id = auth()->user()->organization->archive->uuid;
+                $model->owner_type = "App\Archive";
             }
         });
     }

@@ -7,7 +7,6 @@ use App\File;
 use App\Http\Resources\MetadataResource;
 use App\Metadata;
 use App\User;
-use App\Account;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
@@ -19,7 +18,6 @@ class FileMetadataControllerTest extends TestCase
 {
     use DatabaseTransactions;
 
-    private $account;
     private $user;
     private $file;
     private $bag;
@@ -28,9 +26,10 @@ class FileMetadataControllerTest extends TestCase
     {
         parent::setUp();
 
-        $this->account = factory(Account::class)->create();
-        $this->user = factory(User::class)->create();
-        $this->user->account()->associate( $this->account );
+        $organization = factory(\App\Organization::class)->create();
+        factory(\App\Archive::class)->create(['organization_uuid' => $organization->uuid]);
+        $this->user = factory(User::class)->create(['organization_uuid' => $organization->uuid]);
+
         Passport::actingAs( $this->user );
 
         $bag = factory(Bag::class)->create([

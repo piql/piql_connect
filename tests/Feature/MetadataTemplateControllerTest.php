@@ -5,7 +5,6 @@ namespace Tests\Feature;
 use App\Http\Resources\MetadataResource;
 use App\MetadataTemplate;
 use App\User;
-use App\Account;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Laravel\Passport\Passport;
@@ -14,7 +13,6 @@ class MetadataTemplateControllerTest extends TestCase
 {
     use DatabaseTransactions;
 
-    private $account;
     private $user;
     private $metadata;
 
@@ -22,16 +20,16 @@ class MetadataTemplateControllerTest extends TestCase
     {
         parent::setUp();
 
-        $this->account = factory(Account::class)->create();
-        $this->user = factory(User::class)->create();
-        $this->user->account()->associate( $this->account );
+        $organization = factory(\App\Organization::class)->create();
+        $archive = factory(\App\Archive::class)->create(['organization_uuid' => $organization->uuid]);
+        $this->user = factory(User::class)->create(['organization_uuid' => $organization->uuid]);
         Passport::actingAs( $this->user );
 
         $this->metadata = factory(MetadataTemplate::class)->create([
             "modified_by" => $this->user->id,
             "metadata" => ["dc" => ["title" => "The best show ever!"]]
         ]);
-        $this->metadata->owner()->associate($this->user->account);
+        $this->metadata->owner()->associate($archive);
         $this->metadata->save();
     }
 

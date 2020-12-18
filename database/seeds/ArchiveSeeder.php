@@ -6,6 +6,9 @@ use \App\Traits\SeederOperations;
 
 class ArchiveSeeder extends Seeder
 {
+    //TODO: This class is only used by UserPermissionsTestSeeder, which seems obsolete.
+    //      Reevaluate in the next seeder refactoring.
+
     use SeederOperations;
 
     /**

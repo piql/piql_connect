@@ -144,18 +144,18 @@ Route::group(['prefix' => 'v1', 'middleware' => ['auth']], function () {
     });
 
     Route::group(['prefix' => 'metadata'], function () {
-        Route::apiResource('archives', 'Api\Metadata\ArchiveController', ['as' => 'api.metadata']);
-        Route::apiResource('archives.holdings', 'Api\Metadata\ArchiveHoldingController', ['as' => 'api.metadata']);
+        Route::apiResource('collections', 'Api\Metadata\CollectionController', ['as' => 'api.metadata']);
+        Route::apiResource('collections.holdings', 'Api\Metadata\CollectionHoldingController', ['as' => 'api.metadata']);
 
         Route::group(['prefix' => 'admin'], function() { //TODO: Admin guard must be applied to these routes
             Route::apiResource('templates',                  'Api\Metadata\Admin\MetadataTemplateController',      ['as' => 'admin.metadata']);
             Route::put('templates', 'Api\Metadata\Admin\MetadataTemplateController@upsert')->name('admin.metadata.templates.upsert');
-            Route::apiResource('accounts',                   'Api\Metadata\Admin\AccountController',               ['as' => 'admin.metadata']);
-            Route::put('accounts', 'Api\Metadata\Admin\AccountController@upsert')->name('admin.metadata.accounts.upsert');
-            Route::apiResource('accounts.archives',          'Api\Metadata\Admin\AccountArchiveController',        ['as' => 'admin.metadata']);
-            Route::put('accounts/{account}/archives',         'Api\Metadata\Admin\AccountArchiveController@upsert')->name('admin.metadata.accounts.archives.upsert');
-            Route::apiResource('accounts.archives.holdings', 'Api\Metadata\Admin\AccountArchiveHoldingController', ['as' => 'admin.metadata']);
-            Route::put('accounts/{account}/archives/{archive}/holdings',       'Api\Metadata\Admin\AccountArchiveHoldingController@upsert')->name('admin.metadata.accounts.archives.holdings.upsert');
+            Route::apiResource('archives',                   'Api\Metadata\Admin\ArchiveController',               ['as' => 'admin.metadata']);
+            Route::put('archives', 'Api\Metadata\Admin\ArchiveController@upsert')->name('admin.metadata.archives.upsert');
+            Route::apiResource('archives.collections',          'Api\Metadata\Admin\ArchiveCollectionController',        ['as' => 'admin.metadata']);
+            Route::put('archives/{archive}/collections',         'Api\Metadata\Admin\ArchiveCollectionController@upsert')->name('admin.metadata.archives.collections.upsert');
+            Route::apiResource('archives.collections.holdings', 'Api\Metadata\Admin\ArchiveCollectionHoldingController', ['as' => 'admin.metadata']);
+            Route::put('archives/{archive}/collections/{collection}/holdings',       'Api\Metadata\Admin\ArchiveCollectionHoldingController@upsert')->name('admin.metadata.archives.collections.holdings.upsert');
         });
     });
 

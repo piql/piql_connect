@@ -4,16 +4,20 @@
 namespace App\Listeners;
 
 use App\Events\ClearTmpFilesEvent;
-use App\Events\BagEvent;
-use App\Events\ErrorEvent;
-use BagitUtil;
+use Illuminate\Support\Facades\File;
+use Illuminate\Contracts\Filesystem\Filesystem;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use App\Bag;
 use Illuminate\Support\Facades\Storage;
 use Log;
 
 class ClearTmpFiles implements ShouldQueue
 {
+    private $storage;
+
+    public function __construct(Filesystem $storage)
+    {
+        $this->storage = $storage;
+    }
 
     public function handle(ClearTmpFilesEvent $event)
     {
@@ -39,8 +43,14 @@ class ClearTmpFiles implements ShouldQueue
 
         $deleteFile($bag->storagePathCreated());
 
-        if(Storage::disk('am')->delete($bag->zipBagFileName()) === false) {
-            Log::warning("Failed to delete {$bag->zipBagFileName()} from storage".Storage::disk('am')->path(""));
+        if(File::isDirectory($this->storage->getAdapter()->applyPathPrefix($bag->zipBagFileName()))) {
+            if ($this->storage->deleteDirectory($bag->zipBagFileName()) === false) {
+                Log::warning("Failed to delete {$bag->zipBagFileName()} from storage" . $this->storage->path(""));
+            }
+        } else {
+            if ($this->storage->delete($bag->zipBagFileName()) === false) {
+                Log::warning("Failed to delete {$bag->zipBagFileName()} from storage" . $this->storage->path(""));
+            }
         }
     }
 

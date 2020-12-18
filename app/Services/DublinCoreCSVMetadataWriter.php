@@ -10,6 +10,7 @@ use App\Helpers\MetadataHelper;
 class DublinCoreCSVMetadataWriter implements MetadataWriterInterface
 {
     private $filename;
+    private $filenameColumnPreFix;
 
     private $header = [
         "title"       => "dc.title",
@@ -32,7 +33,7 @@ class DublinCoreCSVMetadataWriter implements MetadataWriterInterface
     public function __construct( array $params )
     {
         $this->filename = $params['filename'];
-
+        $this->filenameColumnPreFix = $params['filenameColumnPreFix'] ?? "";
         // append header
         Storage::append(
             $this->filename,
@@ -54,7 +55,7 @@ class DublinCoreCSVMetadataWriter implements MetadataWriterInterface
         // serialize metadata
         Storage::append(
             $this->filename,
-            'data/'.$parameter['object'].','.collect($this->header)->map(function($col, $key) use ($metadata) {
+            $this->filenameColumnPreFix.$parameter['object'].','.collect($this->header)->map(function($col, $key) use ($metadata) {
                 return (MetadataHelper::csvEscape($metadata[$key] ?? ''));
             })->implode(',')
         );
