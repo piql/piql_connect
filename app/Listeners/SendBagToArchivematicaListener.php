@@ -9,7 +9,6 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use App\Events\BagCompleteEvent;
 use App\Events\InitiateTransferToArchivematicaEvent;
-use App\Events\StartTransferToArchivematicaEvent;
 use App\Traits\BagOperations;
 use Log;
 
@@ -56,24 +55,24 @@ class SendBagToArchivematicaListener implements ShouldQueue
 
         // create directories
         $directories = array_merge($directories, $this->storageFrom->allDirectories($bag->zipBagFileName()));
-        foreach ($directories as $directory) {
-            try {
+        try {
+            foreach ($directories as $directory) {
                 if (!$this->storageTo->makeDirectory($directory)) {
                     Log::error("Unable to create directory '{$this->storageTo->getAdapter()->applyPathPrefix($directory)}'");
                     event(new ErrorEvent($bag));
                     return;
                 }
-            } catch (\Exception $exception) {
-                Log::error("Unable to create directory '{$this->storageTo->getAdapter()->applyPathPrefix($directory)}'".
-                " Root cause " . $exception->getMessage());
-                event(new ErrorEvent($bag));
-                return;
             }
+        }catch (\Exception $exception) {
+            Log::error("An error occurred while creating directories".
+            " Root cause " . $exception->getMessage());
+            event(new ErrorEvent($bag));
+            return;
         }
 
         // copy the files
-        foreach ($files as $file) {
-            try {
+        try {
+            foreach ($files as $file) {
                 if (!File::copy(
                     $this->storageFrom->getAdapter()->applyPathPrefix($file),
                     $this->storageTo->getAdapter()->applyPathPrefix($file)
@@ -83,13 +82,12 @@ class SendBagToArchivematicaListener implements ShouldQueue
                     event(new ErrorEvent($bag));
                     return;
                 }
-            } catch (\Exception $exception) {
-                Log::error("Unable to copy '{$this->storageFrom->getAdapter()->applyPathPrefix($file)}'" .
-                    "'{$this->storageTo->getAdapter()->applyPathPrefix($file)}'".
-                    " Root cause: ".$exception->getMessage());
-                event(new ErrorEvent($bag));
-                return;
             }
+        }catch (\Exception $exception) {
+            Log::error("An error occurred while copying files".
+                " Root cause: ".$exception->getMessage());
+            event(new ErrorEvent($bag));
+            return;
         }
         event( new InitiateTransferToArchivematicaEvent( $bag ) );
     }

@@ -5,7 +5,6 @@ namespace App\Services;
 
 
 use App\Interfaces\TransferPacketBuilder;
-use BagitUtil;
 
 class AMTransferPacketBuilder implements TransferPacketBuilder
 {
@@ -28,29 +27,36 @@ class AMTransferPacketBuilder implements TransferPacketBuilder
 
     public function build($outputFile): bool
     {
-        // Create output directory
-        if(!$this->createOutputDirectory($outputFile)) {
+        try {
+            // Create output directory
+            if (!$this->createOutputDirectory($outputFile)) {
+                return false;
+            }
+
+
+            foreach ($this->inputFiles as $file) {
+                if (!file_exists($file->source)) {
+                    $this->errorMessage = "Failed to add file to bag. Source file don't exist: '{$file->source}'";
+                    return false;
+                }
+
+                $destination = $outputFile . "/" . $file->destination;
+
+                $dirname = dirname($destination);
+                if (!is_dir($dirname)) {
+                    mkdir($dirname, 0777, true);
+                }
+
+                // copy file to destination
+                if (!copy($file->source, $destination)) {
+                    $this->errorMessage = 'Failed to add file to bag. Source=' . $file->source . ' destination=' . $destination;
+                    return false;
+                }
+            }
+        } catch (\Exception $exception) {
+            $this->errorMessage = "Building transfer packet '{$outputFile}' failed ".
+                "Root cause: ".$exception->getMessage();
             return false;
-        }
-
-        foreach ($this->inputFiles as $file) {
-            if (!file_exists($file->source)) {
-                $this->errorMessage = "Failed to add file to bag. Source file don't exist: '{$file->source}'";
-                return false;
-            }
-
-            $destination = $outputFile."/".$file->destination;
-
-            $dirname = dirname($destination);
-            if (! is_dir($dirname)) {
-                mkdir($dirname, 0777, true);
-            }
-
-            // copy file to destination
-            if(!copy($file->source, $destination)){
-                $this->errorMessage = 'Failed to add file to bag. Source=' . $file->source . ' destination=' . $destination;
-                return false;
-            }
         }
 
         return true;
