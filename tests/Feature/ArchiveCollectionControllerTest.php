@@ -7,18 +7,18 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Laravel\Passport\Passport;
 use Faker\Factory as faker;
 use App\Organization;
-use App\Account;
+use App\Archive;
 use App\Collection;
 use App\User;
-use App\Http\Resources\AccountResource;
+use App\Http\Resources\ArchiveResource;
 use App\Http\Resources\CollectionResource;
 
-class AccountCollectionControllerTest extends TestCase
+class ArchiveCollectionControllerTest extends TestCase
 {
     use DatabaseTransactions;
 
     private $user;
-    private $account;
+    private $archive;
     private $organization;
     private $collection;
     private $collectionContent;
@@ -29,12 +29,12 @@ class AccountCollectionControllerTest extends TestCase
         parent::setUp();
 
         $this->organization = factory( Organization::class )->create();
-        $this->account = factory( Account::class )->create(['organization_uuid' => $this->organization->uuid]);
+        $this->archive = factory( Archive::class )->create(['organization_uuid' => $this->organization->uuid]);
         $this->user = factory(User::class)->create(['organization_uuid' => $this->organization->uuid]);
         Passport::actingAs( $this->user );
         $this->faker = Faker::create();
 
-        $this->collectionContent = [ "account_uuid" => $this->account->uuid ];
+        $this->collectionContent = [ "archive_uuid" => $this->archive->uuid ];
 
         $this->collection = factory(Collection::class)->create( $this->collectionContent );
 
@@ -43,7 +43,7 @@ class AccountCollectionControllerTest extends TestCase
     public function test_given_an_authenticated_user_when_getting_all_collections_it_responds_200()
     {
         $response = $this->actingAs( $this->user )
-            ->get( route('admin.metadata.accounts.collections.index', [ $this->account->id ]) );
+            ->get( route('admin.metadata.archives.collections.index', [ $this->archive->id ]) );
         $response->assertStatus( 200 );
 
     }
@@ -51,7 +51,7 @@ class AccountCollectionControllerTest extends TestCase
     public function test_given_an_authenticated_user_when_requesting_a_collection_it_is_returned()
     {
         $response = $this->actingAs( $this->user )
-            ->get( route('admin.metadata.accounts.collections.show', [$this->account->id, $this->collection->id]) );
+            ->get( route('admin.metadata.archives.collections.show', [$this->archive->id, $this->collection->id]) );
         $response->assertStatus( 200 )
             ->assertJsonFragment( $this->collectionContent );
     }
@@ -64,13 +64,13 @@ class AccountCollectionControllerTest extends TestCase
         ];
 
         $response = $this->actingAs( $this->user )
-            ->postJson( route('admin.metadata.accounts.collections.store', [$this->account->id]),
+            ->postJson( route('admin.metadata.archives.collections.store', [$this->archive->id]),
                 $collection );
 
         $response->assertStatus( 201 )
                  ->assertJsonStructure(["data" => ["id"]])
                  ->assertJsonFragment( $collection );
-        $this->assertEquals(2, $this->account->collections()->count());
+        $this->assertEquals(2, $this->archive->collections()->count());
     }
 
     public function test_given_an_authenticated_user_storing_a_collection_with_dublin_core_metadata_the_it_is_stored()
@@ -86,7 +86,7 @@ class AccountCollectionControllerTest extends TestCase
         ];
 
         $response = $this->actingAs( $this->user )
-            ->postJson( route('admin.metadata.accounts.collections.store', [$this->account->id]),
+            ->postJson( route('admin.metadata.archives.collections.store', [$this->archive->id]),
                 $collection );
 
         $response->assertStatus( 201 )
@@ -104,8 +104,8 @@ class AccountCollectionControllerTest extends TestCase
 
         $response = $this->actingAs( $this->user )
                          ->patchJson(
-                             route( 'admin.metadata.accounts.collections.update',
-                             [$this->account->id, $this->collection->id] ),
+                             route( 'admin.metadata.archives.collections.update',
+                             [$this->archive->id, $this->collection->id] ),
                              $collection );
 
         $response->assertStatus( 200 )
@@ -120,8 +120,8 @@ class AccountCollectionControllerTest extends TestCase
 
         $response = $this->actingAs( $this->user )
                          ->patchJson(
-                             route( 'admin.metadata.accounts.collections.update',
-                             [$this->account->id, $this->collection->id] ),
+                             route( 'admin.metadata.archives.collections.update',
+                             [$this->archive->id, $this->collection->id] ),
                              ["defaultMetadataTemplate" => $metadataTemplate ] );
 
         $expected = array_replace_recursive( $response->decodeResponseJson('data'),
@@ -135,7 +135,7 @@ class AccountCollectionControllerTest extends TestCase
     public function test_given_an_authenticated_user_when_deleting_a_collection_it_responds_405()
     {
         $response = $this->actingAs( $this->user )
-            ->delete( route('admin.metadata.accounts.collections.destroy', [$this->account->id, $this->collection->id]));
+            ->delete( route('admin.metadata.archives.collections.destroy', [$this->archive->id, $this->collection->id]));
         $response->assertStatus( 405 );
     }
 
@@ -143,7 +143,7 @@ class AccountCollectionControllerTest extends TestCase
     {
         $collection = factory(Collection::class)->create(["defaultMetadataTemplate" => ["dc" => ["subject" => "testing things"]]]);
         $response = $this->actingAs( $this->user )
-            ->get( route('admin.metadata.accounts.collections.show', [$this->account->id, $collection->id]) );
+            ->get( route('admin.metadata.archives.collections.show', [$this->archive->id, $collection->id]) );
         $response->assertStatus( 200 )
                  ->assertJsonStructure( ["data" => ["id","title","description","uuid","defaultMetadataTemplate"]] );
     }
@@ -153,7 +153,7 @@ class AccountCollectionControllerTest extends TestCase
         $metadataTemplate = ["dc" => ["title" => "The best novel ever!"]];
 
         $response = $this->actingAs( $this->user )
-            ->put( route('admin.metadata.accounts.collections.update', [$this->account->id, $this->collection->id]),
+            ->put( route('admin.metadata.archives.collections.update', [$this->archive->id, $this->collection->id]),
                ["defaultMetadataTemplate" => $metadataTemplate] );
 
         $expected = array_replace_recursive( $response->decodeResponseJson('data'), ["defaultMetadataTemplate" => $metadataTemplate] );
@@ -170,7 +170,7 @@ class AccountCollectionControllerTest extends TestCase
         ];
 
         $response = $this->actingAs( $this->user )
-            ->put( route('admin.metadata.accounts.collections.upsert', [$this->account] ),
+            ->put( route('admin.metadata.archives.collections.upsert', [$this->archive] ),
                 $data );
 
         $expected = array_replace_recursive(
@@ -182,8 +182,8 @@ class AccountCollectionControllerTest extends TestCase
 
     public function test_given_an_authenticated_user_when_upserting_a_collection_that_exists_it_is_updated()
     {
-        $account = factory(Account::class)->create();
-        $collection = factory(Collection::class)->create(["account_uuid" => $account->uuid]);
+        $archive = factory(Archive::class)->create();
+        $collection = factory(Collection::class)->create(["archive_uuid" => $archive->uuid]);
 
         $data = [
             "id" => $collection->id,
@@ -192,7 +192,7 @@ class AccountCollectionControllerTest extends TestCase
         ];
 
         $response = $this->actingAs( $this->user )
-            ->put( route('admin.metadata.accounts.collections.upsert', [$this->account] ),
+            ->put( route('admin.metadata.archives.collections.upsert', [$this->archive] ),
                 $data );
 
         $expected = array_replace_recursive(

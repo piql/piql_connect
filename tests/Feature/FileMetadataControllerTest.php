@@ -27,7 +27,7 @@ class FileMetadataControllerTest extends TestCase
         parent::setUp();
 
         $organization = factory(\App\Organization::class)->create();
-        factory(\App\Account::class)->create(['organization_uuid' => $organization->uuid]);
+        factory(\App\Archive::class)->create(['organization_uuid' => $organization->uuid]);
         $this->user = factory(User::class)->create(['organization_uuid' => $organization->uuid]);
 
         Passport::actingAs( $this->user );

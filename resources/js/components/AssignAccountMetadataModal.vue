@@ -1,31 +1,31 @@
 <template>
-    <b-modal id="assign-account-metadata"
-        size="xl" :centered=true 
+    <b-modal id="assign-archive-metadata"
+        size="xl" :centered=true
         :title="$t('admin.metadata.template.edit.title')"
         :header-class="['d-ruby','text-center']"
         :no-fade=true title-class="h3"
         :ok-title="$t('admin.metadata.template.edit.saveButton')"
         :cancel-title="$t('admin.metadata.template.edit.cancelButton')"
-        @ok="assignAccountMetadata"
+        @ok="assignArchiveMetadata"
     >
         <template v-slot:modal-title>
-            <h4>{{$t('settings.user.assignAccountMetadata.title')}}</h4>
+            <h4>{{$t('settings.user.assignArchiveMetadata.title')}}</h4>
         </template>
 
         <b-row>
             <b-col>
-                <div>{{$t('settings.admin.accountMetadataUser.fullname')}}</div>
+                <div>{{$t('settings.admin.user_account.fullname')}}</div>
             </b-col>
             <b-col>
-                <div>{{$t('settings.admin.accountMetadataUser.username')}}</div>
+                <div>{{$t('settings.admin.user_account.username')}}</div>
             </b-col>
         </b-row>
         <b-row>
             <b-col>
-                <div>{{userAccount.full_name}}</div>
+                <div>{{userArchive.full_name}}</div>
             </b-col>
             <b-col>
-                <div>{{userAccount.username}}</div>
+                <div>{{userArchive.username}}</div>
             </b-col>
         </b-row>
 
@@ -81,7 +81,7 @@ export default {
     },
 
     props: {
-        userAccount: {
+        userArchive: {
             type: Object,
             default: () => {
                 return {
@@ -124,13 +124,13 @@ export default {
         selectedTemplateId( value ) {
             this.userMetadataInstance = JSON.parse(JSON.stringify(this.selectedTemplate)); //When the user selects a template, copy it to the current template instance
         },
-        userAccount( value ) {
+        userArchive( value ) {
             this.selectedTemplateId = null;
             this.userMetadataInstance = null;
             this.updateActiveTemplateFromStore();
         },
         userMetadataTemplates( value ) {
-            this.userMetadataInstance = JSON.parse( JSON.stringify( this.userMetadataTemplateByUserId( this.userAccount.id ) ));
+            this.userMetadataInstance = JSON.parse( JSON.stringify( this.userMetadataTemplateByUserId( this.userArchive.id ) ));
         },
     },
     computed: {
@@ -147,7 +147,7 @@ export default {
             let selectedTemplateId = this.selectedTemplateId;
             if(!selectedTemplateId){
                 updateActiveTemplateFromStore();
-                return this.userMetadataTemplate; 
+                return this.userMetadataTemplate;
             }
             return this.templates.find( (t) => t.id == selectedTemplateId );
         }
@@ -157,19 +157,19 @@ export default {
             return `${type}-${name}`.replace(/\s/g,'');     /* Strip all whitespace from fieldId */
         },
 
-        ...mapActions(['fetchMetadataTemplates', 'setAccountMetadataTemplate', 'createEmptyTemplateWithUserAsCreator']),
-        assignAccountMetadata( user, meta ){
-            this.userMetadataInstance.owner_id = this.userAccount.id;
-            this.setAccountMetadataTemplate( this.userMetadataInstance );
+        ...mapActions(['fetchMetadataTemplates', 'setArchiveMetadataTemplate', 'createEmptyTemplateWithUserAsCreator']),
+        assignArchiveMetadata( user, meta ){
+            this.userMetadataInstance.owner_id = this.userArchive.id;
+            this.setArchiveMetadataTemplate( this.userMetadataInstance );
             Vue.nextTick( () => this.updateActiveTemplateFromStore() );
         },
         updateActiveTemplateFromStore(){
-            let existingTemplate = this.userMetadataTemplateByUserId( this.userAccount.id );
+            let existingTemplate = this.userMetadataTemplateByUserId( this.userArchive.id );
             if( existingTemplate ){
                 this.userMetadataInstance = JSON.parse( JSON.stringify( existingTemplate ) );
                 return;
             }
-            this.createEmptyTemplateWithUserAsCreator( this.userAccount );
+            this.createEmptyTemplateWithUserAsCreator( this.userArchive );
         },
         cancel(){
             this.userMetadataInstance = null;

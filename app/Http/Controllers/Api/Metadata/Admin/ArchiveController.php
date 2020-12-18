@@ -2,33 +2,33 @@
 
 namespace App\Http\Controllers\Api\Metadata\Admin;
 
-use App\Http\Resources\AccountResource;
+use App\Http\Resources\ArchiveResource;
 use Illuminate\Support\Facades\Auth;
-use App\Account;
+use App\Archive;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Webpatser\Uuid\Uuid;
 
-class AccountController extends Controller
+class ArchiveController extends Controller
 {
-    //TODO: IMPORTANT! We need a guard here to limit access to the Account API to System Administrators only (no Superusers/local admins here)
+    //TODO: IMPORTANT! We need a guard here to limit access to the Archive API to System Administrators only (no Superusers/local admins here)
     //
     /**
-     * Display a paginated listing of Accounts
+     * Display a paginated listing of Archives
      *
      * @return \Illuminate\Http\Response
      */
     public function index( Request $request )
     {
         $limit = $request->limit ? $request->limit : env('DEFAULT_ENTRIES_PER_PAGE');
-        return AccountResource::collection( Account::paginate( $limit ) );
+        return ArchiveResource::collection( Archive::paginate( $limit ) );
     }
 
     /**
-     * Validate and persist a new Account.
+     * Validate and persist a new Archive.
      *
      * @param \Illuminate\Http\Request $request title, description (optional), metadata (optional)
-     * @return \Illuminate\Http\Response of AccountResource
+     * @return \Illuminate\Http\Response of ArchiveResource
      */
     public function store(Request $request )
     {
@@ -39,28 +39,28 @@ class AccountController extends Controller
                 "defaultMetadataTemplate" => "array|nullable"
             ]
         );
-        return new AccountResource( Account::create( $validatedRequest ) );
+        return new ArchiveResource( Archive::create( $validatedRequest ) );
     }
 
     /**
-     * Display a specified Account
+     * Display a specified Archive
      *
-     * @param Account $account
-     * @return \Illuminate\Http\Response of AccountResource
+     * @param Archive $archive
+     * @return \Illuminate\Http\Response of ArchiveResource
      */
-    public function show(Account $account)
+    public function show(Archive $archive)
     {
-        return new AccountResource( $account );
+        return new ArchiveResource( $archive );
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param \Illuminate\Http\Request $request
-     * @param Account $account
+     * @param Archive $archive
      * @return \Illuminate\Http\Response
      */
-    public function update( Request $request, Account $account )
+    public function update( Request $request, Archive $archive )
     {
         $validatedRequest = $this->validate( $request, [
                 "title" => "string",
@@ -69,15 +69,15 @@ class AccountController extends Controller
                 "defaultMetadataTemplate" => "array|nullable"
             ]
         );
-        $account->update( $validatedRequest );
-        return new AccountResource( $account );
+        $archive->update( $validatedRequest );
+        return new ArchiveResource( $archive );
     }
 
     /**
      * Update or create the specified resource in storage.
      *
      * @param \Illuminate\Http\Request $request
-     * @param Account $account
+     * @param Archive $archive
      * @return \Illuminate\Http\Response
      */
 
@@ -91,25 +91,25 @@ class AccountController extends Controller
             ]
         );
         if( $request->id ) {
-            $account = Account::findOrFail( $request->id );
-            $account->update( $validatedRequest );
-            return new AccountResource( $account );
+            $archive = Archive::findOrFail( $request->id );
+            $archive->update( $validatedRequest );
+            return new ArchiveResource( $archive );
         }
 
-        return new AccountResource( Account::create( $validatedRequest ) );
+        return new ArchiveResource( Archive::create( $validatedRequest ) );
     }
 
 
 
     /**
-     * In this version, deleting accounts is not supported due to consistency issues
+     * In this version, deleting archives is not supported due to consistency issues
      *
-     * @param Account $account
+     * @param Archive $archive
      * @return \Illuminate\Http\Response
      * @throws \Exception
      */
-    public function destroy(Account $account)
+    public function destroy(Archive $archive)
     {
-        return abort( 405, "Accounts cannot be deleted in this version" );
+        return abort( 405, "Archives cannot be deleted in this version" );
     }
 }

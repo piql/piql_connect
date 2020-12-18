@@ -1,7 +1,7 @@
 <?php
 
 use App\Organization;
-use App\Account;
+use App\Archive;
 use App\Collection;
 use App\Holding;
 use Illuminate\Database\Seeder;
@@ -16,26 +16,17 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        //NOTE: Default organization and account are currently created by migrations, but
-        //      fallbacks are created here in case seeds are run without migrating.
-        $org=Organization::first();
-        if(!$org)
-        {
-            $org = Organization::create([
-                'name' => 'Default Organization',
-                'uuid' => Uuid::generate()->string
-            ]);
-        }
+        $org = Organization::create([
+            'name' => 'Default Organization',
+            'uuid' => Uuid::generate()->string
+        ]);
 
-        $account = Account::first();
-        if(!$account) {
-            $account = Account::create([
-                'title' => 'Default Account',
-                'description' => 'Default Account',
-                'organization_uuid' => $org->uuid,
-                'uuid' => Uuid::generate()->string
-            ]);
-        }
+        $archive = Archive::create([
+            'title' => 'Default Archive',
+            'description' => '',
+            'organization_uuid' => $org->uuid,
+            'uuid' => Uuid::generate()->string
+        ]);
 
         //TODO: The default seeder creates a simple archival arrangement with only one
         //      collection and holding. Consider removing this and use specific seeders for
@@ -43,7 +34,7 @@ class DatabaseSeeder extends Seeder
         $collection = Collection::create([
             'title' => 'Default Collection',
             'description' => '',
-            'account_uuid' => $account->uuid,
+            'archive_uuid' => $archive->uuid,
             'uuid' => Uuid::generate()->string
         ]);
 

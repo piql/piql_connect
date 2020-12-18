@@ -93,7 +93,7 @@ class CommitFilesToBagListenerTest extends TestCase
                     $mock->shouldReceive('write')->times(MetadataPath::count())->with(Mockery::on(function ($argument) use ($file) {
                         $this->assertArrayHasKey("object", $argument);
                         switch ($argument['object']) {
-                            case MetadataPath::ACCOUNT_OBJECT:
+                            case MetadataPath::ARCHIVE_OBJECT:
                             case MetadataPath::COLLECTION_OBJECT:
                             case MetadataPath::HOLDING_OBJECT:
                                 return true;

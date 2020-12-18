@@ -63,7 +63,7 @@ class CommitFilesToTransferPacketListener implements ShouldQueue
             'type' => $metadataType,
         ]);
 
-        foreach (['account', 'collection', 'holding'] as $type) {
+        foreach (['archive', 'collection', 'holding'] as $type) {
             $meta = (!isset($bag->metadata[$type])) ? [] : $bag->metadata[$type];
             $retval = $metadataWriter->write([
                 'object' => MetadataPath::of($type),

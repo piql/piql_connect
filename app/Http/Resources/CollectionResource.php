@@ -19,7 +19,7 @@ class CollectionResource extends JsonResource
             'title' => $this->title,
             'description' => $this->description,
             'uuid' => $this->uuid,
-            'account_uuid' => $this->account_uuid,
+            'archive_uuid' => $this->archive_uuid,
             'defaultMetadataTemplate' => $this->defaultMetadataTemplate
         ];
 

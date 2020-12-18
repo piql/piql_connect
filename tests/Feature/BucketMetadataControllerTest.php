@@ -7,7 +7,7 @@ use App\Job;
 use App\Http\Resources\MetadataResource;
 use App\Metadata;
 use App\User;
-use App\Account;
+use App\Archive;
 use App\Organization;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -28,7 +28,7 @@ class BucketMetadataControllerTest extends TestCase
         parent::setUp();
 
         $organization = factory( Organization::class )->create();
-        factory( Account::class )->create(['organization_uuid' => $organization->uuid]);
+        factory( Archive::class )->create(['organization_uuid' => $organization->uuid]);
         $this->user = factory(User::class)->create(['organization_uuid' => $organization->uuid]);
 
         Passport::actingAs( $this->user );

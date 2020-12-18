@@ -7,7 +7,7 @@
             </div>
             <div class="card-body">
                 <b-form @submit="submitForm">
-            
+
                     <b-form-group id="input-group-2" :label="$t('settings.collections.collection')" label-for="input-1">
                         <b-form-input
                         id="input-1"
@@ -33,7 +33,7 @@
                 </b-form>
             </div>
         </div>
-        
+
     </div>
 </template>
 
@@ -50,14 +50,14 @@ export default {
         }
     },
     methods: {
-        ...mapActions(['addCollection', 'fetchAccounts']),
+        ...mapActions(['addCollection', 'fetchArchives']),
         async submitForm(e){
             e.preventDefault();
             //add collection
             this.addCollection({
                 title: this.form.name,
                 description: this.form.description,
-                account: this.firstAccountId
+                archive: this.firstArchiveId
             });
 
             this.successToast(
@@ -71,12 +71,12 @@ export default {
         }
     },
     async mounted() {
-        await this.fetchAccounts();
+        await this.fetchArchives();
     },
     computed: {
-        ...mapGetters(['firstAccount']),
-        firstAccountId() {
-            return this.firstAccount.id;
+        ...mapGetters(['firstArchive']),
+        firstArchiveId() {
+            return this.firstArchive.id;
         }
     }
 

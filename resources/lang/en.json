@@ -442,15 +442,11 @@
     "settings.logo.button": "Select logo file",
     "settings.logo.successful": "Your log has been changed",
 
-    "settings.user.assignAccountMetadata.title": "Assign metadata to account",
-    "settings.admin.accountMetadataUser.fullname": "Full name",
-    "settings.admin.accountMetadataUser.username": "Username",
+    "settings.user.assignArchiveMetadata.title": "Assign metadata to archive",
+    "settings.admin.user_account.fullname": "Full name",
+    "settings.admin.user_account.username": "Username",
     "settings.admin.assignMetadataDropdownLabel": "Select a metadata template",
     "settings.admin.assignMetadataDropdownPlaceholder": "No template selected",
-
-    "admin.account.metadata.template.clone": "Clone Template",
-    "admin.account.metadata.template.assign": "Assign Template",
-
 
     "timeout.warning": "Inactivity warning. Automatic log out in",
     "timeout.seconds": "seconds",
@@ -464,19 +460,22 @@
     "datepicker.toasts.illegalRangeTitle": "Invalid date range",
     "datepicker.toasts.illegalRangeMessage": "The selected archived from-to date range is invalid. Updating.",
 
-    "admin.account.metadata.title": "Title",
-    "admin.account.metadata.identifier": "Unique identifier",
-    "admin.account.metadata.creator": "Creator",
-    "admin.account.metadata.subject": "Subject",
-    "admin.account.metadata.created_at": "Creation date",
-    "admin.account.metadata.schema": "Schema",
-    "admin.account.metadata.actions": "Actions",
+    "admin.archive.metadata.title": "Title",
+    "admin.archive.metadata.identifier": "Unique identifier",
+    "admin.archive.metadata.creator": "Creator",
+    "admin.archive.metadata.subject": "Subject",
+    "admin.archive.metadata.created_at": "Creation date",
+    "admin.archive.metadata.schema": "Schema",
+    "admin.archive.metadata.actions": "Actions",
     "admin.metadata.createNewTemplate": "Create new metadata template",
     "admin.metadata.listCurrentAssignments": "List current metadata assignments",
     "admin.metadata.template.title": "Metadata templates",
-    "admin.metadata.template.ingress": "Create a metadata template that can then be used on account, collection and holding levels",
+    "admin.metadata.template.ingress": "Create a metadata template that can then be used on archive, collection and holding levels",
     "admin.metadata.template.edit.title": "Edit metadata fields",
     "admin.metadata.template.edit.saveButton": "Save",
     "admin.metadata.template.edit.cancelButton": "Cancel",
-    "admin.metadata.template.edit.schemeName": "Metadata scheme name"
+    "admin.metadata.template.edit.schemeName": "Metadata scheme name",
+    "admin.archive.metadata.template.clone": "Clone Template",
+    "admin.archive.metadata.template.assign": "Assign Template"
+
 }

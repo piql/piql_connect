@@ -4,7 +4,7 @@ namespace App;
 
 use App\Traits\MorphableSelf;
 
-class AccountMetadata extends Metadata
+class ArchiveMetadata extends Metadata
 {
     use MorphableSelf;
 }

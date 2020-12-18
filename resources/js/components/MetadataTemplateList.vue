@@ -3,11 +3,11 @@
         <table class="table table-hover table-sm table-bordered table-vcenter text-truncate">
             <thead>
                 <tr>
-                    <th class="text-center p-3">{{$t("admin.account.metadata.title")}}</th>
-                    <th class="text-center p-3">{{$t("admin.account.metadata.creator")}}</th>
-                    <th class="text-center p-3">{{$t("admin.account.metadata.subject")}}</th>
-                    <th class="text-center p-3">{{$t("admin.account.metadata.schema")}}</th>
-                    <th class="text-center p-3">{{$t("admin.account.metadata.actions")}}</th>
+                    <th class="text-center p-3">{{$t("admin.archive.metadata.title")}}</th>
+                    <th class="text-center p-3">{{$t("admin.archive.metadata.creator")}}</th>
+                    <th class="text-center p-3">{{$t("admin.archive.metadata.subject")}}</th>
+                    <th class="text-center p-3">{{$t("admin.archive.metadata.schema")}}</th>
+                    <th class="text-center p-3">{{$t("admin.archive.metadata.actions")}}</th>
                 </tr>
             </thead>
 
@@ -20,10 +20,10 @@
 
                     <td class="align-self-center text-center">
                         <a class="ml-2 mr-2 btn btn-xs text-white"
-                            @click="cloneTemplate(template.id)" data-toggle="tooltip" :title="$t('admin.account.metadata.template.clone')" >
+                            @click="cloneTemplate(template.id)" data-toggle="tooltip" :title="$t('admin.archive.metadata.template.clone')" >
                             <i class="fas fa-clone"></i></a>
                         <a class="ml-2 mr-2 btn btn-xs text-white"
-                            @click="assignTemplate(template)" :title="$t('admin.account.metadata.template.assign')" >
+                            @click="assignTemplate(template)" :title="$t('admin.archive.metadata.template.assign')" >
                             <i class="fas fa-paperclip"></i></a>
                     </td>
                 </tr>
