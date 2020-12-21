@@ -17,10 +17,16 @@ const axiosWrapper = async function(call, url, data, options, retries = 5 ) {
         return Promise.reject( error );
     }
 
+    // Add access token
+    let defaultOptionsPrepared = defaultOptions;
+    let token = (await Vue.prototype.$auth.getTokenSilently());
+    let apiToken = `Bearer ${token}`;
+    defaultOptionsPrepared['headers']['Authorization'] = apiToken;
+
     let response;
     while( retries-- > 0 ){
         try {
-            let params = [url, data, {...options, ...defaultOptions}];
+            let params = [url, data, {...options, ...defaultOptionsPrepared}];
             return await axios[call](...params);
         } catch( error ) {
             if ( error.code === 'ECONNABORTED' || error.response.status === 408 ) { // Request timed out

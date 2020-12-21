@@ -119,179 +119,8 @@ import {mapActions} from 'vuex';
 export default {
     mixins: [ RouterTools, DeferUpdate ],
     data() {
-        const Authorization = `Bearer ${Vue.prototype.$keycloak.token}`;
-
-        const uploader = new FineUploaderTraditional({
-            options: {
-                request: {
-                    endpoint: '/api/v1/ingest/files/upload',
-                    params: {
-                        base_directory: 'completed',
-                        sub_directory: null,
-                        optimus_uploader_allowed_extensions: [],
-                        optimus_uploader_size_limit: 0,
-                        optimus_uploader_thumbnail_height: 100,
-                        optimus_uploader_thumbnail_width: 100,
-                    },
-                    customHeaders: {
-                        Authorization
-                    }
-                },
-                deleteFile: {
-                    enabled: true,
-                    endpoint: '/api/v1/ingest/file',
-                    customHeaders: {
-                        Authorization
-                    }
-                },
-                chunking: {
-                    enabled: true,
-                    partSize: 1024*1024*5,
-                    mandatory: true,
-                    concurrent: {
-                        enabled: false
-                    },
-                },
-                resume: {
-                    enabled: true
-                },
-                retry: {
-                    enableAuto: false, /* this didn't work very well, so we have our own logic for it */
-                },
-                autoUpload: false,
-                callbacks: {
-                    onStatusChange: (id, oldStatus, newStatus) => {
-                        if (newStatus == 'submitted') {
-                            // Manually start upload with a delay to avoid flooding the server
-                            // TODO The delay is strictly only needed when uploading many small files. Tweak for special cases.
-                            let filesIndex = this.filesUploading.findIndex( (file) => file.id == id );
-                            if( filesIndex == -1) {
-                                console.error("Failed to find file when starting upload");
-                                return;
-                            }
-                            let delay = this.filesUploading[filesIndex].uploadStartTime - (new Date().getTime());
-                            setTimeout( ()  => {
-                                // TODO: Find a better suited method than retry to start the upload
-                                this.uploader.methods.retry(id);
-                            }, delay );
-                        }
-                    },
-                    onValidate: (id, name) => {
-                    },
-                    onSubmit: (id, name) => {
-                        let isDuplicate = this.filesUploading.some( file => file.filename === name );
-                        if( isDuplicate ){
-                            this.errorToast(
-                                this.$t('upload.toasts.uploadDuplicate.title'),
-                                this.$t('upload.toasts.uploadDuplicate.message'),
-                                { 'FILENAME': name },
-                                0
-                            );
-                            cancel(id);
-                        }
-
-                        this.filesUploading.unshift({
-                            'id': id,
-                            'filename': name,
-                            'progressBarStyle': "width: 0%",
-                            'progressPercentage': 0,
-                            'uploadedFileId': '',
-                            'fileSize': 0,
-                            'uploadedFileSize': 0,
-                            'isUploading': false,
-                            'isFailed': false,
-                            'isComplete': false,
-                            'retryCount' : 0,
-                            'isHidden': false,
-                            'uploadStartTime': this.uploadStartTime()
-                        });
-                    },
-                    onProgress: (id, name, uploadedBytes, totalBytes) => {
-                        let progress = Math.round( uploadedBytes * ( 100.0 / totalBytes ) );
-                        let filesIndex = this.filesUploading.findIndex( (file) => file.id == id );
-                        this.filesUploading[filesIndex].isUploading = true;
-                        this.filesUploading[filesIndex].fileSize = totalBytes;
-                        this.filesUploading[filesIndex].uploadedFileSize = uploadedBytes;
-                        this.filesUploading[filesIndex].progressBarStyle = {'width': `${progress}%` };
-                        this.filesUploading[filesIndex].progressPercentage = progress;
-                        this.refreshSession(); //Needed if paginate-navigated away from the first page
-                    },
-                    onComplete: async (id, name, response, xhr, something) => {
-                        if( response.success == false ){
-                            return;
-                        }
-                        let filesIndex = this.filesUploading.findIndex( (file) => file.id == id );
-                        if( filesIndex == -1 || !this.filesUploading[filesIndex] || this.filesUploading[filesIndex].isFailed ) {
-                            console.error("Failed to find file on complete");
-                            return;
-                        }
-                        this.filesUploading[filesIndex].isUploading = false;
-                        this.filesUploading[filesIndex].isComplete = true;
-                        let fileSize = this.uploader.methods.getSize(id);
-                        this.filesUploading[filesIndex].fileSize = fileSize;
-                        this.infoToast(
-                            this.$t('upload.toasts.uploadComplete.title'),
-                            this.$t('upload.toasts.uploadComplete.message'),
-                            {'FILENAME': name }
-                        );
-
-                        if( this.compoundModeEnabled ) {
-                            let uploadToBagId = this.bag.id;
-                            axios.post(`/api/v1/ingest/bags/${uploadToBagId}/files`, {
-                                'fileName' : name,
-                                'result' : response,
-                                'fileSize': fileSize
-                            }).then( async ( file ) => {
-                                this.filesUploading[filesIndex].uploadedFileId = file.data.data.id;
-                                this.filesUploading[filesIndex].uploadedToBagId = file.data.data.bag_id;
-
-                                if( this.bag.id == uploadToBagId ){ //???
-                                    await axios.get("/api/v1/ingest/bags/"+uploadToBagId+"/files").then( (files) => {
-                                        this.files = files.data.data;
-                                    });
-                                }
-                            });
-                        } else {
-                            axios.post("/api/v1/ingest/files/bag", {
-                                'fileName' : name,
-                                'result' : response,
-                                'fileSize': fileSize
-                            });
-                        }
-
-                    },
-                    onError: async (id, name, errorReason, xhr ) => {
-                        let filesIndex = this.filesUploading.findIndex( (file) => file.id == id );
-                        if( filesIndex == -1) {
-                            console.error("Failed to find file on error");
-                            return;
-                        }
-
-                        this.filesUploading[filesIndex].retryCount++;
-                        if( this.filesUploading[filesIndex].retryCount < this.maxAutoRetries ){
-                            this.filesUploading[filesIndex].isUploading = true;
-                            this.filesUploading[filesIndex].isFailed = false;
-                            let fileId = id;
-                            setTimeout( ()  => {
-                                this.uploader.methods.retry(fileId);
-                            }, this.retryGracetimeMs );
-                        }
-                        else {
-                            this.filesUploading[filesIndex].retryCount = 0;
-                            this.filesUploading[filesIndex].isUploading = false;
-                            this.filesUploading[filesIndex].isFailed = true;
-                            this.errorToast(
-                                this.$t('upload.toasts.uploadFailed.title'),
-                                this.$t('upload.toasts.uploadFailed.message'),
-                                { 'FILENAME': name }
-                            );
-                        }
-                    }
-                }
-            }
-        });
         return {
-            uploader: uploader,
+            uploader: {},
             bag: {},
             bagName: "",
             files: [],
@@ -312,18 +141,11 @@ export default {
             fileNameFilter: ""
         };
     },
-
     components: {
         FineUploader,
         Dropzone
     },
     computed: {
-        authToken() {
-            if( this.authMode == "CSRF" ) {
-                return {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')};
-            }
-            return {'Authorization': `Bearer ${Vue.prototype.$keycloak.token}`};
-        },
         sortedFilesUploading() {
             return this.filesUploading
                 .filter( f => !f.isHidden )
@@ -568,10 +390,6 @@ export default {
         }
     },
     props: {
-        authMode: { // Mode for authenticating to API
-            type: String,
-            default: "keycloak"
-        },
         retryGracetimeMs: { // Delay before retrying a failed upload
             type: Number,
             default: 3000
@@ -590,6 +408,178 @@ export default {
         }
     },
     async mounted() {
+        let token = (await this.$auth.getTokenSilently());
+        const Authorization = `Bearer ${token}`;
+        this.uploader = new FineUploaderTraditional({
+            options: {
+                request: {
+                    endpoint: '/api/v1/ingest/files/upload',
+                    params: {
+                        base_directory: 'completed',
+                        sub_directory: null,
+                        optimus_uploader_allowed_extensions: [],
+                        optimus_uploader_size_limit: 0,
+                        optimus_uploader_thumbnail_height: 100,
+                        optimus_uploader_thumbnail_width: 100,
+                    },
+                    customHeaders: {
+                        Authorization
+                    }
+                },
+                deleteFile: {
+                    enabled: true,
+                    endpoint: '/api/v1/ingest/file',
+                    customHeaders: {
+                        Authorization
+                    }
+                },
+                chunking: {
+                    enabled: true,
+                    partSize: 1024*1024*5,
+                    mandatory: true,
+                    concurrent: {
+                        enabled: false
+                    },
+                },
+                resume: {
+                    enabled: true
+                },
+                retry: {
+                    enableAuto: false, /* this didn't work very well, so we have our own logic for it */
+                },
+                autoUpload: false,
+                callbacks: {
+                    onStatusChange: (id, oldStatus, newStatus) => {
+                        if (newStatus == 'submitted') {
+                            // Manually start upload with a delay to avoid flooding the server
+                            // TODO The delay is strictly only needed when uploading many small files. Tweak for special cases.
+                            let filesIndex = this.filesUploading.findIndex( (file) => file.id == id );
+                            if( filesIndex == -1) {
+                                console.error("Failed to find file when starting upload");
+                                return;
+                            }
+                            let delay = this.filesUploading[filesIndex].uploadStartTime - (new Date().getTime());
+                            setTimeout( ()  => {
+                                // TODO: Find a better suited method than retry to start the upload
+                                this.uploader.methods.retry(id);
+                            }, delay );
+                        }
+                    },
+                    onValidate: (id, name) => {
+                    },
+                    onSubmit: (id, name) => {
+                        let isDuplicate = this.filesUploading.some( file => file.filename === name );
+                        if( isDuplicate ){
+                            this.errorToast(
+                                this.$t('upload.toasts.uploadDuplicate.title'),
+                                this.$t('upload.toasts.uploadDuplicate.message'),
+                                { 'FILENAME': name },
+                                0
+                            );
+                            cancel(id);
+                        }
+
+                        this.filesUploading.unshift({
+                            'id': id,
+                            'filename': name,
+                            'progressBarStyle': "width: 0%",
+                            'progressPercentage': 0,
+                            'uploadedFileId': '',
+                            'fileSize': 0,
+                            'uploadedFileSize': 0,
+                            'isUploading': false,
+                            'isFailed': false,
+                            'isComplete': false,
+                            'retryCount' : 0,
+                            'isHidden': false,
+                            'uploadStartTime': this.uploadStartTime()
+                        });
+                    },
+                    onProgress: (id, name, uploadedBytes, totalBytes) => {
+                        let progress = Math.round( uploadedBytes * ( 100.0 / totalBytes ) );
+                        let filesIndex = this.filesUploading.findIndex( (file) => file.id == id );
+                        this.filesUploading[filesIndex].isUploading = true;
+                        this.filesUploading[filesIndex].fileSize = totalBytes;
+                        this.filesUploading[filesIndex].uploadedFileSize = uploadedBytes;
+                        this.filesUploading[filesIndex].progressBarStyle = {'width': `${progress}%` };
+                        this.filesUploading[filesIndex].progressPercentage = progress;
+                        this.refreshSession(); //Needed if paginate-navigated away from the first page
+                    },
+                    onComplete: async (id, name, response, xhr, something) => {
+                        if( response.success == false ){
+                            return;
+                        }
+                        let filesIndex = this.filesUploading.findIndex( (file) => file.id == id );
+                        if( filesIndex == -1 || !this.filesUploading[filesIndex] || this.filesUploading[filesIndex].isFailed ) {
+                            console.error("Failed to find file on complete");
+                            return;
+                        }
+                        this.filesUploading[filesIndex].isUploading = false;
+                        this.filesUploading[filesIndex].isComplete = true;
+                        let fileSize = this.uploader.methods.getSize(id);
+                        this.filesUploading[filesIndex].fileSize = fileSize;
+                        this.infoToast(
+                            this.$t('upload.toasts.uploadComplete.title'),
+                            this.$t('upload.toasts.uploadComplete.message'),
+                            {'FILENAME': name }
+                        );
+
+                        if( this.compoundModeEnabled ) {
+                            let uploadToBagId = this.bag.id;
+                            axios.post(`/api/v1/ingest/bags/${uploadToBagId}/files`, {
+                                'fileName' : name,
+                                'result' : response,
+                                'fileSize': fileSize
+                            }).then( async ( file ) => {
+                                this.filesUploading[filesIndex].uploadedFileId = file.data.data.id;
+                                this.filesUploading[filesIndex].uploadedToBagId = file.data.data.bag_id;
+
+                                if( this.bag.id == uploadToBagId ){ //???
+                                    await axios.get("/api/v1/ingest/bags/"+uploadToBagId+"/files").then( (files) => {
+                                        this.files = files.data.data;
+                                    });
+                                }
+                            });
+                        } else {
+                            axios.post("/api/v1/ingest/files/bag", {
+                                'fileName' : name,
+                                'result' : response,
+                                'fileSize': fileSize
+                            });
+                        }
+
+                    },
+                    onError: async (id, name, errorReason, xhr ) => {
+                        let filesIndex = this.filesUploading.findIndex( (file) => file.id == id );
+                        if( filesIndex == -1) {
+                            console.error("Failed to find file on error");
+                            return;
+                        }
+
+                        this.filesUploading[filesIndex].retryCount++;
+                        if( this.filesUploading[filesIndex].retryCount < this.maxAutoRetries ){
+                            this.filesUploading[filesIndex].isUploading = true;
+                            this.filesUploading[filesIndex].isFailed = false;
+                            let fileId = id;
+                            setTimeout( ()  => {
+                                this.uploader.methods.retry(fileId);
+                            }, this.retryGracetimeMs );
+                        }
+                        else {
+                            this.filesUploading[filesIndex].retryCount = 0;
+                            this.filesUploading[filesIndex].isUploading = false;
+                            this.filesUploading[filesIndex].isFailed = true;
+                            this.errorToast(
+                                this.$t('upload.toasts.uploadFailed.title'),
+                                this.$t('upload.toasts.uploadFailed.message'),
+                                { 'FILENAME': name }
+                            );
+                        }
+                    }
+                }
+            }
+        });
+
         this.fetchUserSettings().then(data => {
             this.pageSize = data.interface.tableRowCount;
         })
@@ -598,7 +588,7 @@ export default {
         this.pageFrom = 1;
         this.pageTo = this.pageSize;
         this.dispatchRouting();
-        this.userId = Vue.prototype.$keycloak.idTokenParsed.sub ?? "";
+        this.userId = this.$auth.user.sub;
         if( !this.userId ) {
             console.error("No user found. Cannot continue!");
         }

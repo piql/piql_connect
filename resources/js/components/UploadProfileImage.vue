@@ -38,67 +38,70 @@ export default {
         Dropzone,
     },
     data() {
-        const Authorization = `Bearer ${Vue.prototype.$keycloak.token}`;
-        const uploader = new FineUploaderTraditional({
-                options: {
-                    request: {
-                        endpoint: '/api/v1/system/profile/imgUpload',
-                        params: {
-                            base_directory: 'profileImg',
-                            sub_directory: null,
-                            optimus_uploader_allowed_extensions: [],
-                            optimus_uploader_size_limit: 0,
-                            optimus_uploader_thumbnail_height: 100,
-                            optimus_uploader_thumbnail_width: 100,
-                            qqchunksize: 1024 * 768,
-                        },
-                        customHeaders: {
-                            Authorization
-                        }
+        return {
+            uploader: {},
+        };
+    },
+    async mounted() {
+        let token = (await this.$auth.getTokenSilently());
+        const Authorization = `Bearer ${token}`;
+        this.uploader = new FineUploaderTraditional({
+            options: {
+                request: {
+                    endpoint: '/api/v1/system/profile/imgUpload',
+                    params: {
+                        base_directory: 'profileImg',
+                        sub_directory: null,
+                        optimus_uploader_allowed_extensions: [],
+                        optimus_uploader_size_limit: 0,
+                        optimus_uploader_thumbnail_height: 100,
+                        optimus_uploader_thumbnail_width: 100,
+                        qqchunksize: 1024 * 768,
                     },
-                    validation: {
-                        allowedExtensions: ALLOWED_EXT
-                    },
-                    chunking: {
-                        enabled: true,
-                        partSize: 1024*768,
-                        mandatory: true,
-                        concurrent: {
-                            enabled: false
-                        },
-                    },
-                    callbacks: {
-                        onError: (id, name, errorReason, xhrOrXdr) => {
-                            let options = {
-                                okText: this.$t('OK')
-                            };
-                            this.$dialog.alert(errorReason, options);
-                        },
-                        onComplete: async (id, name, response, xhr) => {
-                            if( response.success == false ){
-                                return;
-                            }
-                            axios.post('/api/v1/system/profile/img', {
-                                'fileName' : name,
-                                'result' : response
-                            }).then( async ( file ) => {
-                                this.infoToast(
-                                    this.$t('settings.logo.header'),
-                                    this.$t('settings.logo.successful')
-                                );
-                                setTimeout(
-                                    reload => {
-                                        this.$router.go();
-                                    }, 1000
-                                )
-                            });
-                        }
+                    customHeaders: {
+                        Authorization
                     }
                 },
-            });
-            return {
-                uploader: uploader,
-            };
+                validation: {
+                    allowedExtensions: ALLOWED_EXT
+                },
+                chunking: {
+                    enabled: true,
+                    partSize: 1024*768,
+                    mandatory: true,
+                    concurrent: {
+                        enabled: false
+                    },
+                },
+                callbacks: {
+                    onError: (id, name, errorReason, xhrOrXdr) => {
+                        let options = {
+                            okText: this.$t('OK')
+                        };
+                        this.$dialog.alert(errorReason, options);
+                    },
+                    onComplete: async (id, name, response, xhr) => {
+                        if( response.success == false ){
+                            return;
+                        }
+                        axios.post('/api/v1/system/profile/img', {
+                            'fileName' : name,
+                            'result' : response
+                        }).then( async ( file ) => {
+                            this.infoToast(
+                                this.$t('settings.logo.header'),
+                                this.$t('settings.logo.successful')
+                            );
+                            setTimeout(
+                                reload => {
+                                    this.$router.go();
+                                }, 1000
+                            )
+                        });
+                    }
+                }
+            },
+        });
     },
     props: {
         logolabel: {

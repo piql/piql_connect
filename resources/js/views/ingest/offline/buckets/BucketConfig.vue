@@ -113,9 +113,43 @@
             Lightbox
         },
         data() {
-            const Authorization = `Bearer ${Vue.prototype.$keycloak.token}`;
-
-            const uploader = new FineUploaderTraditional({
+            return {
+                uploader: {},
+                files: [],
+                result: null,
+                lbVisible: false,
+                index: 0,
+                jobId: 0,
+                previewFileNames: [],
+                previewFileTypes: [],
+                previewImages: [],
+                allowedExt: null,
+                uploadingFiles: []
+            }
+        },
+        props: {
+            actionIcons: {
+                type: Object,
+                default: function () { return { 'list': false, 'config': false, 'delete': false, 'defaultAction': true}; }
+            },
+            baseUrl: {
+                type: String,
+                default: "/api/v1/ingest/storage/offline/pending/buckets"
+            },
+            jobListUrl: {
+                type: String,
+                default: "/api/v1/ingest/storage/offline/pending"
+            }
+        },
+        computed: {
+            url() { return this.baseUrl + '/' + this.$route.params.bucketId; },
+            success() { return this.result ? ( this.result.status === 200 ) : false; },
+            item() { return this.success ? this.result.data.data : null; },
+        },
+        async mounted() {
+            let token = (await this.$auth.getTokenSilently());
+            const Authorization = `Bearer ${token}`;
+            this.uploader = new FineUploaderTraditional({
                 options: {
                     request: {
                         endpoint: '/api/v1/ingest/storage/offline/files/upload',
@@ -175,40 +209,7 @@
                     }
                 },
             });
-            return {
-                uploader: uploader,
-                files: [],
-                result: null,
-                lbVisible: false,
-                index: 0,
-                jobId: 0,
-                previewFileNames: [],
-                previewFileTypes: [],
-                previewImages: [],
-                allowedExt: null,
-                uploadingFiles: []
-            }
-        },
-        props: {
-            actionIcons: {
-                type: Object,
-                default: function () { return { 'list': false, 'config': false, 'delete': false, 'defaultAction': true}; }
-            },
-            baseUrl: {
-                type: String,
-                default: "/api/v1/ingest/storage/offline/pending/buckets"
-            },
-            jobListUrl: {
-                type: String,
-                default: "/api/v1/ingest/storage/offline/pending"
-            }
-        },
-        computed: {
-            url() { return this.baseUrl + '/' + this.$route.params.bucketId; },
-            success() { return this.result ? ( this.result.status === 200 ) : false; },
-            item() { return this.success ? this.result.data.data : null; },
-        },
-        async mounted() {
+
             this.jobId = this.$route.params.bucketId;
             this.update();
             this.loadFiles();
