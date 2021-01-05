@@ -52,7 +52,7 @@ keycloak_callback_client_secret = '** KEYCLOAK CALLBACK CLIENT SECRET **'
 # Usually this setting should be True the first time you are setting up the system, then changed 
 # to false for subsequent updates.
 # Proceed with caution.
-complete_database_wipe = True
+complete_database_wipe = False
 
 # The database seeder will add initial data to the database that is nessesary for PiqlConnect to function.
 # The default seeder will add a single archive containing a single holding, and is a good starting point
