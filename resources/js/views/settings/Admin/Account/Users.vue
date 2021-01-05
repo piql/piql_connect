@@ -12,6 +12,7 @@
                 </button>
             </div>
             <div class="card-body">
+                <search-input :timeout="search.timeout" label='settings.user.listing.search.placeholder' @data="searchUser" />
                 <add-user v-if="showAddUser"
                   :formLoaded="showAddUser" :error="createModel.error"
                   :organization="userOrganizationId" :language="currentLanguage"
@@ -33,6 +34,7 @@
 <script>
 import Pager from "../../../../components/Pager"
 import { mapGetters, mapActions } from "vuex";
+import SearchInput from '../../../../auth/user/components/SearchInput.vue';
 
 export default {
     components:{
@@ -41,6 +43,10 @@ export default {
     data() {
       return {
         showAddUser: false, //this needs to go in preference for a route driven UI
+        search: {
+          text: "",
+          timeout: 500 //search input debounce in milliseconds
+        },
         createModel: {
           error: null
         }
@@ -69,7 +75,7 @@ export default {
             this.$route.query.page = 1;
         }
         this.fetchUserSettings().then(() => {
-            this.fetchUsers(this.queryParams)
+            this.fetchUsers(this.queryParams);
         })
     },
     computed:  {
@@ -81,8 +87,9 @@ export default {
             let page = query.page || 1;
             let limit = this.userTableRowCount;
             return {
-              limit: limit,
-              offset: (page - 1) * limit
+                limit: limit,
+                offset: (page - 1) * limit,
+                q: this.search.text,
             }
         },
     },
@@ -126,6 +133,10 @@ export default {
             //vuex request
             this.enableUserRequest(data);
             this.$bvModal.hide('enable-user');
+        },
+        searchUser(str) {
+          this.search.text = str;
+          this.fetchUsers(this.queryParams)
         }
     }
 }

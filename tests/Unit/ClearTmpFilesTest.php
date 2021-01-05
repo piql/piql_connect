@@ -39,7 +39,6 @@ class ClearTmpFilesTest extends TestCase
 
         $this->bag = $bag->fresh();
 
-        $this->storageBags->put($this->bag->zipBagFileName(), $this->bag->zipBagFileName());
 
         foreach($this->files as $file) {
             $this->storageUploader->put($file->storagePath(), $file->storagePath());
@@ -50,10 +49,29 @@ class ClearTmpFilesTest extends TestCase
     /**
      * @test
      */
-    public function delete_files() {
+    public function test_delete_tmp_files_after_creating_a_zipped_bag() {
         // setup
+        $this->storageBags->put($this->bag->zipBagFileName(), $this->bag->zipBagFileName());
+
         $event = new ClearTmpFilesEvent($this->bag);
-        $listener = new ClearTmpFiles();
+        $listener = new ClearTmpFiles($this->storageBags);
+
+        //test
+        $listener->handle($event);
+
+        //asserts
+        $this->assertFileNotExists($this->storageBags->path($this->bag->zipBagFileName()));
+        foreach($this->files as $file) {
+            $this->assertFileNotExists($this->storageUploader->path($file->storagePath()));
+        }
+    }
+
+    public function test_delete_tmp_files_after_creating_a_directory_with_files() {
+        // setup
+        $this->storageBags->put($this->bag->zipBagFileName()."/test.txt", $this->bag->zipBagFileName());
+
+        $event = new ClearTmpFilesEvent($this->bag);
+        $listener = new ClearTmpFiles($this->storageBags);
 
         //test
         $listener->handle($event);

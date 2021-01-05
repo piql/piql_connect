@@ -62,7 +62,7 @@ export default {
                 id: '',
                 title: '',
                 description: '',
-                archiveId: ''
+                collectionId: ''
             },
         }
 
@@ -71,11 +71,11 @@ export default {
         ...mapGetters(['templates']),
     },
     props: {
-        accountId: {
+        archiveId: {
             type: Number,
             default: 1
         },
-        parentArchiveId: {
+        parentCollectionId: {
             type: Number,
             default: 0
         },
@@ -94,7 +94,7 @@ export default {
                 id: holding.id,
                 title: holding.title ?? "",
                 description: holding.description ?? "",
-                archiveId: this.parentArchiveId
+                collectionId: this.parentCollectionId
             };
             this.$bvModal.show('edit-holding');
         },
@@ -102,10 +102,10 @@ export default {
             let data = {
                 title: this.edit.title,
                 description: this.edit.description,
-                archiveId: this.edit.archiveId,
+                collectionId: this.edit.collectionId,
                 id: this.edit.id,
-                accountId: this.accountId,
-                archiveId: this.parentArchiveId
+                archiveId: this.archiveId,
+                collectionId: this.parentCollectionId
             }
 
             this.editHoldingData(data);
@@ -114,7 +114,7 @@ export default {
 
 
             this.successToast(
-                this.$t('settings.holdings.toast.editingHolding'), 
+                this.$t('settings.holdings.toast.editingHolding'),
                 this.$t('settings.holdings.toast.editingHolding') + ' ' + this.edit.title
             );
 

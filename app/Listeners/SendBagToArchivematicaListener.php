@@ -2,12 +2,13 @@
 
 namespace App\Listeners;
 
+use App\Events\ErrorEvent;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Contracts\Filesystem\Filesystem;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use App\Events\BagCompleteEvent;
 use App\Events\InitiateTransferToArchivematicaEvent;
-use App\Events\StartTransferToArchivematicaEvent;
 use App\Traits\BagOperations;
 use Log;
 
@@ -15,16 +16,19 @@ class SendBagToArchivematicaListener implements ShouldQueue
 {
     use BagOperations;
 
-    private $destination;
+    private $storageTo;
+    private $storageFrom;
 
     /**
      * Create the event listener.
      *
-     * @param Storage|null $storage
+     * @param Filesystem|null $storageTo
+     * @param Filesystem|null $storageFrom
      */
-    public function __construct(Filesystem $storage = null)
+    public function __construct(Filesystem $storageFrom = null, Filesystem $storageTo = null)
     {
-        $this->destination = $storage ?? Storage::disk('am');
+        $this->storageTo = $storageTo ?? Storage::disk('am');
+        $this->storageFrom = $storageFrom ?? Storage::disk('bags');
     }
 
     /**
@@ -41,9 +45,50 @@ class SendBagToArchivematicaListener implements ShouldQueue
             return;
         }
 
-        $sourceFile = $bag->storagePathCreated();
-        $this->destination->put( $bag->zipBagFileName(), fopen($sourceFile, 'r+'));
+        $directories = [];
+        if(File::isDirectory($this->storageFrom->getAdapter()->applyPathPrefix($bag->zipBagFileName()))) {
+            $files = $this->storageFrom->allFiles($bag->zipBagFileName());
+            $directories[] = $bag->zipBagFileName();
+        } else {
+            $files[] = $bag->zipBagFileName();
+        }
 
+        // create directories
+        $directories = array_merge($directories, $this->storageFrom->allDirectories($bag->zipBagFileName()));
+        try {
+            foreach ($directories as $directory) {
+                if (!$this->storageTo->makeDirectory($directory)) {
+                    Log::error("Unable to create directory '{$this->storageTo->getAdapter()->applyPathPrefix($directory)}'");
+                    event(new ErrorEvent($bag));
+                    return;
+                }
+            }
+        }catch (\Exception $exception) {
+            Log::error("An error occurred while creating directories".
+            " Root cause " . $exception->getMessage());
+            event(new ErrorEvent($bag));
+            return;
+        }
+
+        // copy the files
+        try {
+            foreach ($files as $file) {
+                if (!File::copy(
+                    $this->storageFrom->getAdapter()->applyPathPrefix($file),
+                    $this->storageTo->getAdapter()->applyPathPrefix($file)
+                )) {
+                    Log::error("Unable to copy '{$this->storageFrom->getAdapter()->applyPathPrefix($file)}'" .
+                        "'{$this->storageTo->getAdapter()->applyPathPrefix($file)}'");
+                    event(new ErrorEvent($bag));
+                    return;
+                }
+            }
+        }catch (\Exception $exception) {
+            Log::error("An error occurred while copying files".
+                " Root cause: ".$exception->getMessage());
+            event(new ErrorEvent($bag));
+            return;
+        }
         event( new InitiateTransferToArchivematicaEvent( $bag ) );
     }
 }

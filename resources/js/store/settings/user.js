@@ -61,9 +61,9 @@ const actions = {
         commit('setPasswordMutation', response)
     },
 
-    async setAccountMetadataTemplate({ commit }, data) {
-        //TODO: Api call for associating metadata template to the user account
-        commit('setAccountMetadataTemplateMutation', data);
+    async setArchiveMetadataTemplate({ commit }, data) {
+        //TODO: Api call for associating metadata template to the user archive
+        commit('setArchiveMetadataTemplateMutation', data);
     },
 
     async updateTableRowCount({ commit }, count) {
@@ -81,12 +81,12 @@ const actions = {
 
     },
 
-    async createEmptyTemplateWithUserAsCreator({ commit }, userAccount) {
-        let ownerId = userAccount.id;
-        let fullName = userAccount.full_name;
+    async createEmptyTemplateWithUserAsCreator({ commit }, userArchive) {
+        let ownerId = userArchive.id;
+        let fullName = userArchive.full_name;
         let m = { "id": "", owner_id: "", "created_at": "", "metadata": { "dc": { "title": "", "creator": "", "subject": "", "description": "", "publisher": "", "contributor": "", "date": "", "type": "", "format": "", "identifier": "", "source": "", "language": "", "relation": "", "coverage": "", "rights": "" } } };
         let template = { ...m, owner_id: ownerId, metadata: { ...m.metadata, dc: { ...m.metadata.dc, creator: fullName } } };
-        commit('setAccountMetadataTemplateMutation', template);
+        commit('setArchiveMetadataTemplateMutation', template);
     },
 
     async logoutUser({ commit }) {
@@ -123,7 +123,7 @@ const mutations = {
 
     },
 
-    setAccountMetadataTemplateMutation: (state, payload) => {
+    setArchiveMetadataTemplateMutation: (state, payload) => {
         state.userMetadataTemplates =
             state.userMetadataTemplates
                 .filter(t => t.owner_id != payload.owner_id)

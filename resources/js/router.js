@@ -6,14 +6,14 @@ const views = require.context('./views/', true, /\.vue$/i);
 /* Test for plural - only supports plural suffixes in list below */
 function isPlural( word ) {
     if( word == "settings") return false; //TODO: Improve our route naming (workaround)
-    const suffixes = ["es", "ts", "as", "ps", "gs" ];
+    const suffixes = ["ns", "es", "ts", "as", "ps", "gs" ];
     return !( suffixes.every( s => !word.endsWith( s ) ) );
 }
 
 /* Naive singularize - works when plural ending is one letter  */
 function singularize( word ) {
     if( word == "settings") return word;
-    const suffixes = ["es", "ts", "as", "ps", "gs" ];
+    const suffixes = ["ns", "es", "ts", "as", "ps", "gs" ];
     if( isPlural (word ) )
         return word.slice( 0, -1 );
     return word;

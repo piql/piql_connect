@@ -4,7 +4,7 @@ namespace App\Services;
 
 use \App\Interfaces\PreProcessBagInterface;
 use \App\Interfaces\IngestValidationInterface;
-use App\Archive;
+use App\Collection;
 use App\Bag;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -31,15 +31,15 @@ class FMUIngestService implements PreProcessBagInterface, IngestValidationInterf
             if(count($matches) < 2) {
                 return;
             }
-            $archiveName = $matches[1][0];
+            $collectionName = $matches[1][0];
             $holdingNr = $matches[2][0];
             $holdingSubNr = (count($matches) > 3) ? $matches[3][0] : "";
-            $key = "$archiveName.$holdingNr"."$holdingSubNr";
+            $key = "$collectionName.$holdingNr"."$holdingSubNr";
             if(!isset($bags[$key])) {
 
-                Archive::where('title','LIKE', "%$archiveName%")->get()->first(function($archive) use(&$bags, $key, $holdingNr, $inputBag) {
+                Collection::where('title','LIKE', "%$collectionName%")->get()->first(function($collection) use(&$bags, $key, $holdingNr, $inputBag) {
                     // figure out holding
-                    $holding = $archive->holdings->first(function($holding) use ($holdingNr) {
+                    $holding = $collection->holdings->first(function($holding) use ($holdingNr) {
                         preg_match( $this->holdingPattern, $holding->title, $matches, PREG_OFFSET_CAPTURE);
                         $startRange =  $matches[1][0];
                         $endRange =  $matches[2][0];
@@ -56,7 +56,7 @@ class FMUIngestService implements PreProcessBagInterface, IngestValidationInterf
 
                     $bag = $bag->fresh();
                     $bag->storage_properties()->update([
-                        'archive_uuid' => $archive->archive_uuid,
+                        'collection_uuid' => $collection->uuid,
                         'holding_name' => $holding->title
                     ]);
                     $bags[$key] = $bag;
@@ -84,15 +84,14 @@ class FMUIngestService implements PreProcessBagInterface, IngestValidationInterf
             return false;
         }
 
-        $archiveName = $matches[1][0];
+        $collectionName = $matches[1][0];
         $holdingNr = $matches[2][0];
-        // get Archive
-        $archive = Archive::where('title','LIKE', "%$archiveName%")->get()->first(function($archive) use ($holdingNr) {
-            if(!$archive) {
+        $collections = Collection::where('title','LIKE', "%$collectionName%")->get()->first(function($collection) use ($holdingNr) {
+            if(!$collection) {
                 return false;
             }
             // figure out holding
-            $holding = $archive->holdings->first(function($holding) use ($holdingNr) {
+            $holding = $collection->holdings->first(function($holding) use ($holdingNr) {
                 preg_match( $this->holdingPattern, $holding->title, $matches, PREG_OFFSET_CAPTURE);
                 $startRange =  $matches[1][0];
                 $endRange =  $matches[2][0];
@@ -104,6 +103,6 @@ class FMUIngestService implements PreProcessBagInterface, IngestValidationInterf
         });
 
 
-        return $archive != null;
+        return $collections != null;
     }
 }

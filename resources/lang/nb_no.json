@@ -14,7 +14,7 @@
     "Ingest": "Mottak",
     "Access": "Innsyn",
     "Archives": "Arkiver",
-    "Archive": "Arkiv",	
+    "Archive": "Arkiv",
     "Holdings": "Samlinger",
     "Holding": "Samling",
     "Cancel": "Avbryt",
@@ -62,7 +62,7 @@
     "upload.toasts.ingestComplete.message": "Opplasting %BAGNAME% er nå tilgjengelig i utforskeren.",
     "upload.toasts.ingestFailed.title": "Mottak av %BAGNAME% fullført",
     "upload.toasts.ingestFailed.message": "Mottatt opplasting %BAGNAME% er nå tilgjengelig i utforskeren.",
-        
+
     "sidebar.dashboard": "Oversikt",
     "sidebar.settings": "Innstillinger",
     "sidebar.userProfile": "Brukerinstillinger",
@@ -193,7 +193,7 @@
     "ingest.offlineStorage.config.uploadedTitle": "Uploaded images",
     "ingest.offlineStorage.config.toast.fileUploaded.message": "Your image was sent",
     "ingest.offlineStorage.config.removeQuestion": "Remove this file?",
-    
+
     "ingest.fileList.header": "Fil-liste",
     "ingest.fileList.ingress": "Her kan du se hvilke filer du har lagt til i en SIP. Du kan også legge til eller endre metadata per fil.",
     "ingest.fileList.fileSize": "Størrelse",
@@ -227,7 +227,7 @@
     "access.browse.archivedTo": "Arkivert til",
     "access.browse.withContents": "Med innhold",
     "access.browse.selectLocation": "Velg objektplassering",
-    
+
     "access.browse": "Utforsk",
     "access.browse.archive": "Arkiv",
     "access.browse.holding": "Samling",
@@ -406,17 +406,17 @@
     "settings.logo.ingress": "Last opp ny logo",
     "settings.logo.button": "Velg logo-fil",
     "settings.logo.successful": "Logoen har blitt byttet",
- 
+
     "settings.user.assignAccountMetadata.title": "Assign metadata to account",
     "settings.admin.accountMetadataUser.fullname": "Full name",
     "settings.admin.accountMetadataUser.username": "Username",
     "settings.admin.assignMetadataDropdownLabel": "Select a metadata template",
     "settings.admin.assignMetadataDropdownPlaceholder": "No template selected",
 
-    "admin.account.metadata.template.clone": "Clone Template",
-    "admin.account.metadata.template.assign": "Assign Template",
+    "admin.archive.metadata.template.clone": "Clone Template",
+    "admin.archive.metadata.template.assign": "Assign Template",
 
-    
+
     "timeout.warning": "Advarsel om inaktivitet. Automatisk utlogging om",
     "timeout.seconds": "sekunder",
     "timeout.text1": "Du har nå vært inaktiv i snart",
@@ -429,16 +429,16 @@
     "datepicker.toasts.illegalRangeTitle": "Ugyldig datoområde",
     "datepicker.toasts.illegalRangeMessage": "Du har valgt en ugyldig rekkevidde for arkivert fra-til. Oppdaterer.",
 
-    "admin.account.metadata.title": "Title",
-    "admin.account.metadata.identifier": "Unique identifier",
-    "admin.account.metadata.creator": "Creator",
-    "admin.account.metadata.subject": "Subject",
-    "admin.account.metadata.created_at": "Creation date",
-    "admin.account.metadata.actions": "Actions",
+    "admin.archive.metadata.title": "Title",
+    "admin.archive.metadata.identifier": "Unique identifier",
+    "admin.archive.metadata.creator": "Creator",
+    "admin.archive.metadata.subject": "Subject",
+    "admin.archive.metadata.created_at": "Creation date",
+    "admin.archive.metadata.actions": "Actions",
     "admin.metadata.createNewTemplate": "Create new metadata template",
     "admin.metadata.listCurrentAssignments": "List current metadata assignments",
     "admin.metadata.template.title": "Create metadata templates",
-    "admin.metadata.template.ingress": "Create a metadata template that can then be used on account, archive and holding levels",
+    "admin.metadata.template.ingress": "Create a metadata template that can then be used on archive, archive and holding levels",
     "admin.metadata.template.edit.title": "Edit metadata fields",
     "admin.metadata.template.edit.saveButton": "Save",
     "admin.metadata.template.edit.cancelButton": "Cancel",

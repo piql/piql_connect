@@ -39,7 +39,7 @@ export default {
     },
     props: {
         item: Object,
-        archive: String,
+        collection: String,
         holding: String,
     },
 

@@ -25,17 +25,17 @@
                             </div>
                          </div>
                          <div class="form-group">
-                             <div :title="$t('upload.archiveToolTip')">
-                                <archive-picker 
+                             <div :title="$t('upload.collectionToolTip')">
+                                <collection-picker
                                 :useWildCard="true"
-                                :wildCardLabel='$t("nothingSelected")' 
-                                v-bind:label="$t('Archive')" :required="true"/>
+                                :wildCardLabel='$t("nothingSelected")'
+                                v-bind:label="$t('Collection')" :required="true"/>
                             </div>
                          </div>
                          <div class="form-group">
                              <div :title="$t('upload.holdingToolTip')">
                                 <holding-picker v-bind:label="$t('Holdings')"
-                                :wildCardLabel='$t("nothingSelected")' 
+                                :wildCardLabel='$t("nothingSelected")'
                                 :useWildCard="true" @selectedHolder="selectedHolder" :required="true"/>
                             </div>
                          </div>
@@ -115,7 +115,7 @@ import axios from 'axios';
 import JQuery from 'jquery';
 let $ = JQuery;
 import filesize from 'filesize';
-import {mapActions} from 'vuex'; 
+import {mapActions} from 'vuex';
 export default {
     mixins: [ RouterTools, DeferUpdate ],
     data() {
@@ -302,8 +302,8 @@ export default {
                 }
             },
             fileInputDisabled: false,
-            singleArchiveTitle: "",
-            selectedArchive: "",
+            singleCollectionTitle: "",
+            selectedCollection: "",
             selectedHolding: "",
             currentPage: 1,
             pageSize: 8,
@@ -331,10 +331,10 @@ export default {
                 .sort( (a,b)  => Number( b.isUploading) - Number( a.isUploading ) );
         },
         processDisabled: function() {
-            return this.invalidBagName | this.numberOfFiles === 0 | this.hasIncompleteFiles | this.setArchive === null | this.getHolding == null;
+            return this.invalidBagName | this.numberOfFiles === 0 | this.hasIncompleteFiles | this.setCollection === null | this.getHolding == null;
         },
-        setArchive: function (){
-            return this.$route.query.archive;
+        setCollection: function (){
+            return this.$route.query.collection;
         },
         getHolding: function (){
             return this.$route.query.holding;
@@ -398,8 +398,8 @@ export default {
         customerSelectsHoldings: function() {
             return !!this.holdings;
         },
-        customerSelectsArchives: function() {
-            return !!this.archives;
+        customerSelectsCollections: function() {
+            return !!this.collections;
         },
         totalSize: function() {
             let size = 0;
@@ -488,10 +488,10 @@ export default {
         },
         dispatchRouting() {
             let query = this.$route.query;
-            let queryArchive = query.archive;
+            let queryCollection = query.collection;
             let queryHolding = query.holding;
-            if( queryArchive != this.selectedArchive || queryHolding != this.selectedHolding  ) {
-                this.changedArchive( queryArchive, queryHolding );
+            if( queryCollection != this.selectedCollection || queryHolding != this.selectedHolding  ) {
+                this.changedCollection( queryCollection, queryHolding );
             }
             let prevCurrentPage = this.currentPage;
             this.currentPage = parseInt(query.page ?? "1");
@@ -513,7 +513,7 @@ export default {
                 {'BAGNAME': bagName }
             );
 
-            this.bag = await this.createBag("", this.userId, this.selectedArchive, this.getHolding );
+            this.bag = await this.createBag("", this.userId, this.selectedCollection, this.getHolding );
 
             this.fileInputDisabled = false;
         },
@@ -534,25 +534,25 @@ export default {
                 'name': this.bagName
             });
         },
-        async createBag( bagName, userId, selectedArchive, selectedHoldingUuid ) {
+        async createBag( bagName, userId, selectedCollection, selectedHoldingUuid ) {
             let createdBag = (await axios.post("/api/v1/ingest/bags/", {
                 name: bagName,
                 owner: userId,
-                archive_uuid: selectedArchive,
+                collection_uuid: selectedCollection,
                 holding_uuid: selectedHoldingUuid
             })).data.data;
             this.files = [];
             this.filesUploading = [];
             return createdBag;
         },
-        async changedArchive(archiveId, holdingUuid) {
-            if( !archiveId || !holdingUuid )
+        async changedCollection(collectionId, holdingUuid) {
+            if( !collectionId || !holdingUuid )
                 return;
-            this.selectedArchive = archiveId;
+            this.selectedCollection = collectionId;
             this.selectedHolding = holdingUuid;
             if( this.bag && this.bag.id && this.compoundModeEnabled) {
                 axios.patch("/api/v1/ingest/bags/"+this.bag.id, {
-                    archive_uuid: archiveId,
+                    collection_uuid: collectionId,
                     holding_uuid: holdingUuid
                 }).then( (response) => {
                     this.bag = response.data.data;
@@ -610,9 +610,9 @@ export default {
 
             this.bag = (await axios.get(`/api/v1/ingest/bags/latest?userId=${this.userId}`)).data.data;
             this.bagName = this.bag.name;
-            let archive = this.bag.archive_uuid;
+            let collection = this.bag.collection_uuid;
             let holding = this.bag.holding_uuid;
-            this.updateQueryParams({ archive, holding });
+            this.updateQueryParams({ collection, holding });
 
             if(!!this.bag & this.bag.status === "open") {
                 this.files = (await axios.get('/api/v1/ingest/bags/' + this.bag.id + '/files')).data.data;
@@ -631,7 +631,7 @@ export default {
                 }) );
             }
             else {
-                this.bag = (await this.createBag( "", this.userId, this.selectedArchive, this.selectedHolding ));
+                this.bag = (await this.createBag( "", this.userId, this.selectedCollection, this.selectedHolding ));
             }
         }
     },

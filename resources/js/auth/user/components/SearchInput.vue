@@ -1,21 +1,11 @@
 <template>
   <div class="user-search">
-    <b-input-group class="mt-3 no-border">
-      <b-form-input
-        class="no-border"
-        v-model="search.new"
-        :placeholder="$t('settings.user.listing.search.placeholder')"
-        @change="searchForUser"
-        @keypress="searchForUser"
-      ></b-form-input>
-      <b-input-group-append class="no-border">
-        <b-button
-          v-if="searchInputAvailable"
-          variant="outline-light"
-          class="text-danger no-border"
-          @click="clearSearch"
-          >x</b-button
-        >
+    <b-input-group class="mt-3" :class="{noBorder: !showBorder}">
+      <b-form-input :class="{noBorder: !showBorder}" v-model="searchText"
+         :placeholder="$t(label)" @change="search" @keypress="search">
+      </b-form-input>
+      <b-input-group-append :class="{noBorder: !showBorder}">
+        <b-button v-if="searchInputAvailable" :class="{noBorder: !showBorder}" @click="clearSearch">x</b-button>
       </b-input-group-append>
     </b-input-group>
   </div>
@@ -23,40 +13,49 @@
 
 <script>
 export default {
+  props: {
+    label: String,
+    timeout: Number,
+    showBorder: Boolean,
+  },
   data() {
     return {
+      searchText: "",
       defer: {
           func: null,
-          timeout: 700
+          timeout: 0, //set to zero to trigger search func without debounce delay
       },
-      search: {
-        old: "",
-        new: ""
-      },
-      error: "",
     };
+  },
+  mounted(){
+    this.defer.timeout = this.timeout || 0;
   },
   computed: {
     searchInputAvailable() {
-      return this.search.new.trim() != this.search.old;
+      return this.searchText.trim().length > 0;
     },
+    border(){
+      return this.showBorder || true;
+    }
   },
   watch: {
     searchInputAvailable() {
-      this.searchForUser();
+      this.search();
     }
   },
   methods: {
     clearDeferFunc() {
-        if(this.defer.func != null) clearTimeout(this.defer.func);
-        this.defer.func = null;
+      if(this.defer.func != null) clearTimeout(this.defer.func);
+      this.defer.func = null;
     },
     clearSearch() {
-      this.search.new = "";
+      this.searchText = "";
     },
-    searchForUser() {
-      if (!this.searchInputAvailable) return;
-      this.fetchUsers();
+    search() {
+      this.clearDeferFunc();
+      this.defer.func = setTimeout(() => {
+        this.$emit('data', this.searchText);
+      }, this.defer.timeout);
     },
   },
 };
@@ -65,6 +64,6 @@ export default {
 <style>
 .no-border {
   border: 0;
-  box-shadow: none; /* You may want to include this as bootstrap applies these styles too */
+  box-shadow: none;
 }
 </style>

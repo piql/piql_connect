@@ -21,7 +21,7 @@ class EventServiceProvider extends ServiceProvider
             \App\Listeners\LogUploadedFilesListener::class,
         ],
         \App\Events\BagFilesEvent::class => [
-            \App\Listeners\CommitFilesToBagListener::class,
+            \App\Listeners\CommitFilesToTransferPacketListener::class,
         ],
         \App\Events\BagCompleteEvent::class => [
             \App\Listeners\SendBagToArchivematicaListener::class,
@@ -61,6 +61,9 @@ class EventServiceProvider extends ServiceProvider
         ],
         \App\Events\CommitJobEvent::class => [
             \App\Listeners\CommitJobListener::class
+        ],
+        \App\Events\OrganizationCreatedEvent::class => [
+            \App\Listeners\OrganizationCreatedListener::class
         ],
     ];
 

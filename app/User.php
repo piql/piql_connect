@@ -23,7 +23,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'username', 'password', 'full_name', 'email', 'api_token', 'confirmation_token', 'disabled_on', 'account_uuid'
+        'username', 'password', 'full_name', 'email', 'api_token', 'confirmation_token', 'disabled_on', 'organization_uuid'
     ];
 
     /**
@@ -122,8 +122,8 @@ class User extends Authenticatable
         return $this->hasMany('App\StorageLocation', 'owner_id');
     }
 
-    public function account()
+    public function organization()
     {
-        return $this->belongsTo('App\Account', 'account_uuid', 'uuid');
+        return $this->belongsTo(Organization::class, 'organization_uuid', 'uuid');
     }
 }

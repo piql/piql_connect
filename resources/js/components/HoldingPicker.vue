@@ -27,13 +27,13 @@ import RouterTools from '../mixins/RouterTools.js';
 export default {
     mixins: [ RouterTools ],
     async mounted() {
-        this.archive = this.$route.query.archive;
+        this.collection = this.$route.query.collection;
     },
     methods: {
         dispatchRouting: function() {
             let query = this.$route.query;
-            this.archive = query.archive;
-            if( query.archive ) {
+            this.collection = query.collection;
+            if( query.collection ) {
                 let holdingQuery = query.holding ?? this.wildCardLabel;
                 this.updatePicker( holdingQuery );
             }
@@ -58,8 +58,8 @@ export default {
     },
     data() {
         return {
-            archives: null,
-            archive: null,
+            collections: null,
+            collection: null,
             holdings: null,
             selection: null,
             initComplete: false,
@@ -90,27 +90,27 @@ export default {
     watch: {
         '$route': 'dispatchRouting',
 
-        async archive( archive ) {
-            this.disableSelection();         
+        async collection( collection ) {
+            this.disableSelection();
             this.holdings = null;
-            if( !archive ) {
+            if( !collection ) {
                 this.holdings = null
                 return;
             }
-            if( this.archives == null ) {
-                this.archives = ((await(axios.get(`/api/v1/metadata/archives`))).data
+            if( this.collections == null ) {
+                this.collections = ((await(axios.get(`/api/v1/metadata/collections`))).data
                 .data.map( (a) => { return { uuid: a.uuid, id: a.id };} ));
             }
 
             //This lookup is a workaround for laravel's apiresource routes with automatic model lookup
             //TODO: Let's look at consequences for using sequential id's rather than uuids in the urls.
-            const archiveId = this.archives.find( ar => ar.uuid === archive ).id;
-            if( !archiveId ){
-                console.error( `No archive with uuid ${archive} was found!` );
+            const collectionId = this.collections.find( ar => ar.uuid === collection ).id;
+            if( !collectionId ){
+                console.error( `No collection with uuid ${collection} was found!` );
                 return;
             }
 
-            axios.get(`/api/v1/metadata/archives/${archiveId}/holdings`).then( (response) => {
+            axios.get(`/api/v1/metadata/collections/${collectionId}/holdings`).then( (response) => {
                 if(response.data.data.length > 0){
                     this.holdings = response.data.data;
                 }
@@ -149,7 +149,7 @@ export default {
             } else {
                 Vue.nextTick(()=> {
                     this.disableSelection();
-                    this.archive = null;
+                    this.collection = null;
                 })
             }
         },
@@ -167,7 +167,7 @@ export default {
             }
             return this.holdings;
         }
-        
+
     }
 }
 

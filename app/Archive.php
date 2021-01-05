@@ -2,26 +2,25 @@
 
 namespace App;
 
-use App\Traits\AutoGenerateUuid;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Webpatser\Uuid\Uuid;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Validator;
 
 class Archive extends Model
 {
-    use SoftDeletes;
-    use AutoGenerateUuid;
-
     const DEFAULT_TEMPLATE = '{ "title": "", "description": "", "dc":  { "identifier": "" } }';
 
-    protected $table = 'archives';
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
     protected $fillable = [
-        'title','description','parent_uuid', 'uuid', 'account_uuid', 'defaultMetadataTemplate'
-    ];
-    protected $casts = [
-        'defaultMetadataTemplate' => 'array'
+        'uuid',
+        'title',
+        'description',
+        'organization_uuid',
+        'defaultMetadataTemplate'
     ];
 
     protected $attributes = [
@@ -29,74 +28,54 @@ class Archive extends Model
     ];
 
 
+    protected $casts = [
+        'defaultMetadataTemplate' => 'array'
+    ];
+
     protected static function boot()
     {
         parent::boot();
 
         static::creating( function ( $model ) {
-            $validateIdentifier = Validator::make( ['uuid' => $model->uuid ], ['uuid' => 'uuid'] );
+            $validateIdentifier = Validator::make( ['uuid' => $model->uuid], ['uuid' => 'uuid'] );
             if( !$validateIdentifier->passes() ){
                 $model->uuid = Str::uuid();
             }
 
-            /* No identifier supplied, create one */
-            $userSuppliedData = $model->defaultMetadataTemplate["dc"];
+            $userSuppliedData = $model->defaultMetadataTemplate["dc"] ?? [];
             $model->defaultMetadataTemplate = ["dc" => ["identifier" => $model->uuid ] + $userSuppliedData ] ;
         });
     }
 
-    public static function findByParentUuid($parent_uuid)
+    public function owner()
     {
-        return Archive::where('parent_uuid', '=', $parent_uuid)->first();
+        return $this->morphTo();
     }
 
-    public static function findByUuid($uuid)
+    public function collections()
     {
-        return Archive::where('uuid', '=', $uuid)->first();
+        return $this->hasMany('App\Collection', 'archive_uuid', 'uuid');
     }
 
-    public function setParentUuidAttribute($value)
+    public function organization()
     {
-        if( !empty($value) )
-        {
-            if( Archive::findByParentUuid($value) == null )
-            {
-                throw new \Exception("The parent archive with uuid ".$value." does not exist.");
-            }
-
-            $this->attributes['parent_uuid'] = $value;
-        }
-    }
-
-    public function holdings()
-    {
-        return $this->hasMany('App\Holding', 'owner_archive_uuid', 'uuid');
-    }
-
-    public function account() {
-        return $this->belongsTo(\App\Account::class, 'account_uuid', 'uuid');
+        return $this->belongsTo('App\Organization', 'organization_uuid', 'uuid');
     }
 
     public function getDefaultMetadataTemplateAttribute( string $template ) {
         $ar = json_decode( $template, true );
         if(isset( $ar["dc"] ) && !isset( $ar["dc"]["identifier"] ) ) {
-            $ar["dc"]["identifier"] = $this->attributes["uuid"]; //The default is to use the uuid for the Archive as the identifier (as per spec.)
+            $ar["dc"]["identifier"] = $this->attributes["uuid"]; //The default is to use the uuid as the identifier (as per spec.)
         }
 
         if(isset( $ar["dc"] ) && !isset( $ar["dc"]["title"] ) ) {
-            $ar["dc"]["title"] = $this->attributes["title"];    //Grab the title from the model if not present in metadata template
+            $ar["dc"]["title"] = $this->attributes["title"] ?? "";  //TODO: archives.title is nullable, not sure if this is ok?
         }
 
         if(isset( $ar["dc"] ) && !isset( $ar["dc"]["description"] ) ) {
             $ar["dc"]["description"] = $this->attributes["description"] ?? ""; //Grab the description from the model if not present in metadata template
-
         }
         return $ar;
     }
 
-    public function setDefaultMetadataTemplateAttribute( Array $template ) {
-        if( array_has( $template, 'dc' ) ) { //TODO: Support other schemas than DC, model level validation would be nice
-            $this->attributes['defaultMetadataTemplate'] = json_encode( $template );
-        }
-    }
 }

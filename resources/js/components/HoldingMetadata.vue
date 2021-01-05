@@ -5,7 +5,7 @@
             :title="$t('admin.metadata.template.edit.title')"
             :header-class="['d-ruby','text-center']"
             :no-fade=true title-class="h3"
-            :ok-title="$t('settings.archives.assignMeta')"
+            :ok-title="$t('settings.collections.assignMeta')"
             :cancel-title="$t('admin.metadata.template.edit.cancelButton')"
             @ok="updateHoldingDefaultMetadataTemplate"
             @cancel="cancelUpdate" >
@@ -51,11 +51,11 @@
 import {mapGetters, mapActions} from "vuex"
 export default {
     props:{
-        accountId: {
+        archiveId: {
             type: Number,
             default: 0
         },
-        archiveId: {
+        collectionId: {
             type: Number,
             default: 0,
         },
@@ -108,7 +108,7 @@ export default {
         }
     },
     computed: {
-        ...mapGetters(['templates', 'templateById', 'archiveById']),
+        ...mapGetters(['templates', 'templateById', 'collectionById']),
         defaultMetadataTemplate: {
             get(){
                 return this.holding.defaultMetadataTemplate;
@@ -119,7 +119,7 @@ export default {
         },
     },
     methods: {
-        ...mapActions(['updateHoldingMetadata', 'fetchArchives', 'fetchAccounts', 'fetchTemplates']),
+        ...mapActions(['updateHoldingMetadata', 'fetchCollections', 'fetchArchives', 'fetchTemplates']),
 
         selectTemplate( templateId ) {
             let template = JSON.parse( JSON.stringify( this.templateById( templateId ) ) );
@@ -130,15 +130,15 @@ export default {
         },
         async updateHoldingDefaultMetadataTemplate(){
             const payload = {
-                accountId: this.accountId,
                 archiveId: this.archiveId,
+                collectionId: this.collectionId,
                 holding: this.holding
             };
             this.updateHoldingMetadata( payload ).then( result => {
                 this.backup = JSON.parse(JSON.stringify( this.holding ));
                 this.successToast(
-                    this.$t('settings.holdings.toast.addingArchiveMeta'),
-                    this.$t('settings.holdings.toast.addingArchiveMeta') + ' ' + this.holding.id
+                    this.$t('settings.holdings.toast.addingHoldingMeta'),
+                    this.$t('settings.holdings.toast.addingHoldingMeta') + ' ' + this.holding.id
                 );
                 this.$emit('disableMetaForm');
             }).catch( error => {
