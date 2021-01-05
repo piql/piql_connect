@@ -21,7 +21,7 @@ class S3ConfigurationSeeder extends Seeder
         $ss_test_bucket = "";
 
         if( S3Configuration::where('key_id', $ss_test_key_id)->count() !== 0 ) {
-            echo "Safespring S3 test already seeded";
+            echo "S3ConfigurationSeeder already applied";
             return;
         }
 
