@@ -79,9 +79,12 @@ export default {
         })
     },
     computed:  {
-        ...mapGetters([
-          'formattedUsers','usersPageMeta','userApiResponse', 'userTableRowCount',
-          'userOrganizationId', 'currentLanguage', 'onUserCreatedActions']),
+        ...mapGetters('users',
+            ['formattedUsers','usersPageMeta','userApiResponse','onUserCreatedActions']
+        ),
+        ...mapGetters('user',
+            ['userTableRowCount', 'userOrganizationId', 'currentLanguage']
+        ),
         queryParams(){
             let query = this.$route.query;
             let page = query.page || 1;

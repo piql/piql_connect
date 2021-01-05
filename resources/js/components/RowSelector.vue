@@ -14,7 +14,7 @@
 import { mapGetters, mapActions } from "vuex";
 export default {
     methods: {
-        ...mapActions('users',
+        ...mapActions('user',
             ['updateTableRowCount', 'fetchUserSettings']
         ),
         rowCountUpdated() {

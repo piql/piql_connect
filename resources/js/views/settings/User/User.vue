@@ -89,7 +89,9 @@ import { mapActions, mapGetters } from "vuex";
         },
 
         methods: {
-            ...mapActions(['setNewPassword','fetchLanguages','fetchUserSettings']),       
+            ...mapActions('user',
+                ['setNewPassword','fetchLanguages','fetchUserSettings']
+            ),
             async changePassword(oldPassword, newPassword1, newPassword2) {
                 if (newPassword1 != newPassword2) {
                     this.errorToast(
@@ -109,7 +111,9 @@ import { mapActions, mapGetters } from "vuex";
         },
 
         computed: {
-            ...mapGetters(['setPasswordData']),
+            ...mapGetters('user',
+                ['setPasswordData']
+            ),
             
         }
     }

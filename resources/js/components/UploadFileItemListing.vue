@@ -172,7 +172,9 @@ export default {
         },
   },
   computed: {
-    ...mapGetters(['userSettings']),
+    ...mapGetters('user',
+        ['userSettings']
+    ),
     displayedfiles() {
       return this.paginate(this.sortedFilesUploading);
     },

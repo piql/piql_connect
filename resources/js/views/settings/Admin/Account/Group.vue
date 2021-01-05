@@ -53,7 +53,7 @@ import { mapGetters, mapActions } from "vuex";
             ...mapGetters('user',
                 ['userTableRowCount']
             ),
-	    ...mapGetters('users',
+            ...mapGetters('users',
                 ['formattedUsers']
             ),
             queryParams(){
