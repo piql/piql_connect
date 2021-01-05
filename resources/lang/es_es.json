@@ -69,7 +69,7 @@
     "sidebar.roles": "Roles",
     "sidebar.userGroups": "Grupos de usuario",
     "sidebar.permissions": "Permisos",
-    "sidebar.users": "Usuarios",	
+    "sidebar.users": "Usuarios",
     "sidebar.upload": "Carga",
     "sidebar.processing": "Procesando",
     "sidebar.taskList": "Almacenamiento en Film",
@@ -164,7 +164,7 @@
     "ingest.offlineStorage.package.toast.delete.failed.title" : "Error en eliminar",
     "ingest.offlineStorage.package.toast.delete.failed.message" : "No es posible eliminar el paquete de archivo",
     "ingest.offlineStorage.package.list.toast.delete.failed.title" : "Error en eliminar",
-    "ingest.offlineStorage.package.list.toast.delete.failed.message" : "No es posible eliminar el paquete de archivo",	
+    "ingest.offlineStorage.package.list.toast.delete.failed.message" : "No es posible eliminar el paquete de archivo",
     "ingest.offlineStorage.package.list.title": "Lista de ficheros del paquete de archivo",
     "ingest.offlineStorage.package.list.ingress": "Mostrar el fichero del paquete de archivo",
     "ingest.offlineStorage.package.metadata.title": "Metadatos del paquete fuera de línea",
@@ -183,7 +183,7 @@
     "ingest.offlineStorage.contentOptions.clientLogo.title" : "Logo de cliente",
     "ingest.offlineStorage.contentOptions.clientLogo.buttonText" : "Elija fichero",
     "ingest.offlineStorage.contentOptions.reelDescription.title" : "Descripción de rollo",
-    "ingest.offlineStorage.contentOptions.reelDescription.buttonText" : "Elija fichero",		
+    "ingest.offlineStorage.contentOptions.reelDescription.buttonText" : "Elija fichero",
     "ingest.offlineStorage.toasts.piqled.title" :"Preparando para escribir en piqlFilm",
     "ingest.offlineStorage.toasts.piqled.message" :"El paquete %PACKAGENAME% está siendo preparado ahora para escribirlo en piqlFilm",
     "ingest.offlineStorage.config.imageUploadTitle": "Visual images upload",
@@ -193,7 +193,7 @@
     "ingest.offlineStorage.config.uploadedTitle": "Uploaded images",
     "ingest.offlineStorage.config.toast.fileUploaded.message": "Your image was sent",
     "ingest.offlineStorage.config.removeQuestion": "Remove this file?",
-    
+
 	"ingest.fileList.header": "Lista de ficheros",
     "ingest.fileList.ingress": "Muestra los ficheros incluidos en el paquete de entrega",
     "ingest.fileList.fileSize": "Tamaño de fichero",
@@ -247,7 +247,7 @@
     "access.browse.header.preview": "Previsualizar",
     "access.browse.header.name": "Nombre del paquete",
     "access.browse.header.ingestDate": "Fecha de Ingesta",
-	"access.browse.header.size": "Tamaño",	
+	"access.browse.header.size": "Tamaño",
     "access.browse.header.holding": "Holding",
     "access.browse.header.files": "Ficheros",
     "access.browse.header.actions": "Acciones",
@@ -286,7 +286,7 @@
     "access.tip.previewImage": "Preview image",
     "settings.settings.header": "Parámetros de Usuario",
     "settings.settings.ingress": "Configurar parámetros de usuario",
-	
+
     "settings.settings.users": "Usuarios",
     "settings.settings.listing": "Gestión de usuarios",
     "settings.settings.addUser": "Añadir Usuario",
@@ -296,7 +296,7 @@
     "settings.settings.enableUser": "Activar Usuario",
     "settings.settings.disableUserWarning": "¿Está seguro que desea desactivar este usuario? Si es así, proceda a desactivar",
     "settings.settings.enableUserWarning": "¿Está seguro que desea activar este usuario? Si es así, proceda a activar",
-    
+
 	"settings.listing.fullname": "Nombre completo",
     "settings.listing.username": "Nombre de usuario",
     "settings.listing.email": "Email",
@@ -354,7 +354,7 @@
 
     "settings.groups.addGroup": "Añadir Grupo",
     "settings.groups.group": "Grupo",
-    "settings.groups.description": "Descripción", 
+    "settings.groups.description": "Descripción",
     "settings.groups.assignUsers": "Asignar Usuarios",
     "settings.groups.listRolesAndUsers": "Listar Roles & Usuarios Asignados",
     "settings.groups.assignRoles": "Asignar Roles",
@@ -406,7 +406,7 @@
     "settings.logo.header": "Cambiar logo",
     "settings.logo.ingress": "Cargar una nueva imagen de logo",
     "settings.logo.button": "Seleccione el fichero de logo",
-    "settings.logo.successful": "Su logo se ha actualizado",	
+    "settings.logo.successful": "Su logo se ha actualizado",
 
     "settings.user.assignAccountMetadata.title": "Assign metadata to account",
     "settings.admin.accountMetadataUser.fullname": "Full name",
@@ -414,8 +414,8 @@
     "settings.admin.assignMetadataDropdownLabel": "Select a metadata template",
     "settings.admin.assignMetadataDropdownPlaceholder": "No template selected",
 
-    "admin.account.metadata.template.clone": "Clone Template",
-    "admin.account.metadata.template.assign": "Assign Template",
+    "admin.archive.metadata.template.clone": "Clone Template",
+    "admin.archive.metadata.template.assign": "Assign Template",
 
 
     "timeout.warning": "Aviso de inactividad. Cerrando sesión automaticamente",
@@ -430,16 +430,16 @@
     "datepicker.toasts.illegalRangeTitle": "Rango de Fecha no válido",
     "datepicker.toasts.illegalRangeMessage": "El rango de fechas seleccionado desde-hasta para el archivado es incorrecto. Actualizando.",
 
-    "admin.account.metadata.title": "Title",
-    "admin.account.metadata.identifier": "Unique identifier",
-    "admin.account.metadata.creator": "Creator",
-    "admin.account.metadata.subject": "Subject",
-    "admin.account.metadata.created_at": "Creation date",
-    "admin.account.metadata.actions": "Actions",
+    "admin.archive.metadata.title": "Title",
+    "admin.archive.metadata.identifier": "Unique identifier",
+    "admin.archive.metadata.creator": "Creator",
+    "admin.archive.metadata.subject": "Subject",
+    "admin.archive.metadata.created_at": "Creation date",
+    "admin.archive.metadata.actions": "Actions",
     "admin.metadata.createNewTemplate": "Create new metadata template",
     "admin.metadata.listCurrentAssignments": "List current metadata assignments",
     "admin.metadata.template.title": "Create metadata templates",
-    "admin.metadata.template.ingress": "Create a metadata template that can then be used on account, archive and holding levels",
+    "admin.metadata.template.ingress": "Create a metadata template that can then be used on archive, archive and holding levels",
     "admin.metadata.template.edit.title": "Edit metadata fields",
     "admin.metadata.template.edit.saveButton": "Save",
     "admin.metadata.template.edit.cancelButton": "Cancel",

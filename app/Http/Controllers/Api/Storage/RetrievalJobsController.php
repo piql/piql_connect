@@ -25,7 +25,7 @@ class RetrievalJobsController extends Controller
     public function aipsOnFilm( Request $request )
     {
         $terms = collect(explode("%20", $request->query('search') ))->reject("");
-        $archiveUuid = $request->query('archive');
+        $collectionUuid = $request->query('collection');
         $holdingTitle = $request->query('holding');
         $fromDate = $request->query('archived_from');
         $toDate = $request->query('archived_to');
@@ -34,7 +34,7 @@ class RetrievalJobsController extends Controller
 
         $aq->whereHas('jobs', function(  $q) {
             /*TODO: Update this status query when we have a working state for ingested jobs */
-            $q->where('status','=', 'stored'); 
+            $q->where('status','=', 'stored');
         } )->where( 'owner', Auth::id() );
 
         if( $fromDate ) {
@@ -58,10 +58,10 @@ class RetrievalJobsController extends Controller
             }
         }
 
-        if($archiveUuid) {
+        if($collectionUuid) {
             $aq->whereHas('storage_properties',
-                function ($sp) use ($archiveUuid) {
-                    $sp->where('archive_uuid', $archiveUuid);
+                function ($sp) use ($collectionUuid) {
+                    $sp->where('collection_uuid', $collectionUuid);
                 });
             if($holdingTitle) {
                 $aq->whereHas('storage_properties',
@@ -77,13 +77,13 @@ class RetrievalJobsController extends Controller
                     $sp->where('name','LIKE',"%{$term}%");
                 });
             });
-            
+
             $terms->slice(1)->each( function ($term, $key) use ($aq) {
                 $aq->whereHas('storage_properties', function ($sp) use($term) {
                     $sp->orWhere('name','LIKE',"%{$term}%");
                 });
             });
-            
+
         }
 
         $limit = $request->limit ? $request->limit : env('DEFAULT_ENTRIES_PER_PAGE');
@@ -109,7 +109,7 @@ class RetrievalJobsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id) 
+    public function show($id)
     {
         $job = Job::find( $id );
         if( $job->owner != Auth::id() ) {

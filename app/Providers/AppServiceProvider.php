@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\ArchivematicaService;
 use App\Listeners\ArchivematicaServiceConnection;
+use App\Listeners\ClearTmpFiles;
 use App\Listeners\SendBagToArchivematicaListener;
 use App\Services\ArchivematicaConnectionService;
 use Illuminate\Support\Facades\Storage;
@@ -27,7 +28,11 @@ class AppServiceProvider extends ServiceProvider
         });
 
         $this->app->bind('App\Listeners\SendBagToArchivematicaListener', function ($app) {
-            return new SendBagToArchivematicaListener( Storage::disk('am'));
+            return new SendBagToArchivematicaListener( Storage::disk('bags'), Storage::disk('am'));
+        });
+
+        $this->app->bind(ClearTmpFiles::class, function ($app) {
+            return new ClearTmpFiles( Storage::disk('am'));
         });
 
         $this->app->bind('App\Interfaces\ArchivematicaConnectionServiceInterface', function ($app) {

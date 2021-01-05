@@ -45,7 +45,7 @@ class InitiateTransferToArchivematicaListener implements ShouldQueue
             return;
         }
 
-        $response = $this->dashboardClient->initiateTransfer($bag->name, $bag->uuid, $bag->zipBagFileName());
+        $response = $this->dashboardClient->initiateTransfer($bag->zipBagFileName(), $bag->uuid, $bag->zipBagFileName());
 
         if($response->statusCode != 200) {
             $message = "Initiate transfer failed with error code " . $response->statusCode;

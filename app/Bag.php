@@ -189,7 +189,16 @@ class Bag extends Model
 
     public function zipBagFileName()
     {
-        return $this->BagFileNameNoExt() . '.zip';
+        /**
+         * TODO: This is really nasty, but it have to do for now
+         *       The Bag Model needs an update and this should be removed then
+         */
+        $extension = '';
+        $packetType = env( 'APP_TRANSFER_PACKET_TYPE', "AM_ZIPPED_BAG");
+        if($packetType == "AM_ZIPPED_BAG") {
+            $extension = '.zip';
+        }
+        return $this->BagFileNameNoExt() . $extension;
     }
 
     public function createdDirectory()

@@ -50,7 +50,7 @@ class FakeKeycloakClient
                 'first_name' => $user->full_name,
                 'last_name' => $user->full_name,
                 'email' => $user->email,
-                'account_uuid' => $user->account_uuid ];
+                'organization_uuid' => $user->organization_uuid ];
         })->toArray();
     }
 
@@ -162,19 +162,19 @@ class KeycloakClientTest extends TestCase
                 'password' => 'kctestpass1',
                 'full_name' => 'Key Cloaksson',
                 'email' => 'kc1@piql.com',
-                'account_uuid' => '1d860602-130e-4624-99ad-d532e1b662ab']),
+                'organization_uuid' => '1d860602-130e-4624-99ad-d532e1b662ab']),
             new User([
                 'username' => 'kctest2',
                 'password' => 'kctestpass2',
                 'full_name' => 'Key Cloaksson Sr.',
                 'email' => 'kc2@piql.com',
-                'account_uuid' => '98dd00df-afba-4031-8dd1-18c09a29acbd']),
+                'organization_uuid' => '98dd00df-afba-4031-8dd1-18c09a29acbd']),
             new User([
                 'username' => 'kctest3',
                 'password' => 'kctestpass3',
                 'full_name' => 'Key Cloaksson Jr.',
                 'email' => 'kc3@piql.com',
-                'account_uuid' => '46e9d918-270b-43fe-b3a8-4e919e28a05c']) ]);
+                'organization_uuid' => '46e9d918-270b-43fe-b3a8-4e919e28a05c']) ]);
         foreach ($this->users as $user) {
             $user->setIdAttribute(Str::uuid());
         }
@@ -230,13 +230,13 @@ class KeycloakClientTest extends TestCase
 
     public function test_when_creating_a_user_a_user_is_returned()
     {
-        $user = $this->service->createUser($this->users[0]->account_uuid, $this->users[0]);
+        $user = $this->service->createUser($this->users[0]->organization_uuid, $this->users[0]);
         $this->assertInstanceOf(User::class, $user);
     }
 
     public function test_when_creating_a_user_a_new_id_is_generated()
     {
-        $user = $this->service->createUser($this->users[0]->account_uuid, $this->users[0]);
+        $user = $this->service->createUser($this->users[0]->organization_uuid, $this->users[0]);
         $this->assertEquals($user->id, $this->client->lastAssignedId());
         $this->assertNotEquals($user->id, $this->users[0]);
     }
@@ -246,26 +246,26 @@ class KeycloakClientTest extends TestCase
         $this->expectException(\Exception::class);
         $user = $this->users[0];
         $user->username = '';
-        $this->service->createUser($user->account_uuid, $user);
+        $this->service->createUser($user->organization_uuid, $user);
     }
 
     public function test_when_creating_a_user_and_response_is_null_exception_is_thrown()
     {
         $this->expectException(\Exception::class);
         $this->client->setFakeResponse('createUser', null);
-        $this->service->createUser($this->users[0]->account_uuid, $this->users[0]);
+        $this->service->createUser($this->users[0]->organization_uuid, $this->users[0]);
     }
 
     public function test_when_creating_a_user_and_response_is_misformed_exception_is_thrown()
     {
         $this->expectException(\Exception::class);
         $this->client->setFakeResponse('createUser', ['convenient' => '']);
-        $this->service->createUser($this->users[0]->account_uuid, $this->users[0]);
+        $this->service->createUser($this->users[0]->organization_uuid, $this->users[0]);
     }
 
     public function test_when_updating_a_user_the_user_is_updated()
     {
-        $user = $this->service->editUser($this->users[0]->account_uuid, $this->users[0]);
+        $user = $this->service->editUser($this->users[0]->organization_uuid, $this->users[0]);
         $this->assertInstanceOf(User::class, $user);
         $this->assertEquals($user, $this->users[0]);
     }
@@ -275,21 +275,21 @@ class KeycloakClientTest extends TestCase
         $this->expectException(\Exception::class);
         $user = $this->users[0];
         $user->username = '';
-        $this->service->editUser($user->account_uuid, $user);
+        $this->service->editUser($user->organization_uuid, $user);
     }
 
     public function test_when_updating_a_user_and_response_is_null_exception_is_thrown()
     {
         $this->expectException(\Exception::class);
         $this->client->setFakeResponse('updateUser', null);
-        $this->service->editUser($this->users[0]->account_uuid, $this->users[0]);
+        $this->service->editUser($this->users[0]->organization_uuid, $this->users[0]);
     }
 
     public function test_when_updating_a_user_and_response_is_misformed_exception_is_thrown()
     {
         $this->expectException(\Exception::class);
         $this->client->setFakeResponse('updateUser', ['convenient' => '']);
-        $this->service->editUser($this->users[0]->account_uuid, $this->users[0]);
+        $this->service->editUser($this->users[0]->organization_uuid, $this->users[0]);
     }
 
     public function test_when_deleting_a_user_the_user_is_deleted()
@@ -307,14 +307,14 @@ class KeycloakClientTest extends TestCase
     {
         $this->expectException(\Exception::class);
         $this->client->setFakeResponse('deleteUser', null);
-        $this->service->deleteUser($this->users[0]->account_uuid, $this->users[0]);
+        $this->service->deleteUser($this->users[0]->organization_uuid, $this->users[0]);
     }
 
     public function test_when_deleting_a_user_and_response_is_misformed_exception_is_thrown()
     {
         $this->expectException(\Exception::class);
         $this->client->setFakeResponse('deleteUser', ['convenient' => '']);
-        $this->service->deleteUser($this->users[0]->account_uuid, $this->users[0]);
+        $this->service->deleteUser($this->users[0]->organization_uuid, $this->users[0]);
     }
 
     public function test_when_requesting_user_by_id_a_user__matching_id_is_returned()

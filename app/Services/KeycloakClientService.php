@@ -2,12 +2,16 @@
 
 namespace App\Services;
 
+use App\Auth\Group;
 use App\Interfaces\KeycloakClientInterface;
 use App\User;
 use Exception;
 
 class KeycloakClientService implements KeycloakClientInterface
 {
+    /**
+     * @param \Keycloak\Admin\KeycloakClient
+     */
     private $client;
     private $gzClient;
     private $gzClientCreds;
@@ -179,15 +183,90 @@ class KeycloakClientService implements KeycloakClientInterface
         return $this->client->getUser(['id' => $id]);
     }
 
-    public function searchOrganizationUsers($orgId, $params = [], $limit = 20, $offset = 0)
+    public function searchOrganizationUsers($params = [], $limit = 20, $offset = 0)
     {
-        if($orgId == null || count($orgId) == 0) throw new Exception("organisation id is required for this operation");
         $params = collect($params)->only(['email', 'firstName', 'lastName', 'username', 'search'])->all();
-        $users = $this->client->getUsers($params);
-        return collect($users)->filter(function ($u) use ($orgId) {
-            return isset($u['attributes']['organization'])
-                && collect($u['attributes']['organization'])->contains($orgId);
-        })->slice($offset, $limit, true);
+        $params = array_merge($params, ['first' => 0, 'max' => $limit]);
+        return $this->client->getUsers($params);
+    }
+
+    public function getRoles(): array
+    {
+        $res = $this->client->getRealmRoles();
+        $this->validateKeycloakResponse($res);
+        return $res;
+    }
+
+    public function getRoleByName($name): array
+    {
+        $res = $this->client->getRealmRole(['role-name' => $name]);
+        $this->validateKeycloakResponse($res);
+        return $res;
+    }
+
+    public function getRoleUsers($name): array
+    {
+        $res = $this->client->getRealmRoleUsers(['role-name' => $name]);
+        $this->validateKeycloakResponse($res);
+        return $res;
+    }
+
+    public function createGroup(Group $group): array
+    {
+        $res = $this->client->createGroup([
+            'name' => $group->name,
+            'attributes' => $group->attributes,
+        ]);
+        $this->validateKeycloakResponse($res);
+        return $res;
+    }
+
+    public function getGroups($q='', $limit = 20, $offset = 0): array
+    {
+        $params = ['search'=>$q, 'max'=>$limit];
+        if($offset > 0) $params['first'] = $offset;
+        $res = $this->client->getGroups($params);
+        $this->validateKeycloakResponse($res);
+        return $res;
+    }
+
+    public function getGroupUsers($limit = 20, $offset = 0): array
+    {
+        $params = ['max'=>$limit];
+        if($offset > 0) $params['first'] = $offset;
+        $res = $this->client->getGroupMembers($params);
+        $this->validateKeycloakResponse($res);
+        return $res;
+    }
+
+    public function getUserGroups($q='', $limit = 20, $offset = 0): array
+    {
+        $params = ['search'=>$q, 'max'=>$limit];
+        if($offset > 0) $params['first'] = $offset;
+        $res = $this->client->getUserGroups($params);
+        $this->validateKeycloakResponse($res);
+        return $res;
+    }
+
+    public function addUserToGroup($userId, $groupId): array
+    {
+        //todo: implement with custom client
+        return [];
+    }
+
+    public function addRoleToGroup($roleId, $groupId): array
+    {
+        //todo: implement with custom client
+        return [];
+    }
+
+    public function getGroupRoles($limit = 20, $offset = 0): array
+    {
+        $params = ['max'=>$limit];
+        if($offset > 0) $params['first'] = $offset;
+        $res = $this->client->getGroupRoleMappings($params);
+        $this->validateKeycloakResponse($res);
+        return $res;
     }
 
     public function changePassword($id, $password)

@@ -16,7 +16,6 @@ describe("GroupsListing.vue", ()=> {
 
     beforeEach( () => {
         actions = {
-            fetchGroups: jest.fn(),
             fetchGroupUsers: jest.fn(),
             fetchGroupRoles: jest.fn(),
             fetchSelectUsers: jest.fn(),
@@ -24,9 +23,7 @@ describe("GroupsListing.vue", ()=> {
         };
 
         getters = {
-            groupsApiResponse: () => {},
             userGroups: () => [{ id: 345, name: "Test Group Name", description: "Group description for testing"}],
-            groupPageMeta: () => {},
             userGroupUsers: () => [ {id : 123, full_name: 'Test Name'}],
             userGroupRoles: () => [ {id: 1, name: 'A test role'}],
             formattedUsers: () => [ {value: 123, label: 'Test Name'}],

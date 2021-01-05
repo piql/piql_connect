@@ -71,11 +71,11 @@
                                     </div>
                                 </li>
                             </router-link>
-                             <router-link :to="{ name: 'settings.admin.archives' }">
-                                <li class="list-group-item submenu" :class="{ active: routeBelongsTo('settings.admin.archives') }" >
+                             <router-link :to="{ name: 'settings.admin.collections' }">
+                                <li class="list-group-item submenu" :class="{ active: routeBelongsTo('settings.admin.collections') }" >
                                     <i class="fas fa-archive"></i>
                                     <div class="leftMenuItem">
-                                        {{$t("sidebar.settings.archives")}}
+                                        {{$t("sidebar.settings.collections")}}
                                     </div>
                                 </li>
                             </router-link>
@@ -204,7 +204,7 @@
                 <span class="poweredByImg">
                     <img src="/images/piql_logo_white.png">
                 </span>
-                <div class="version">v1.0.0</div>
+                <div class="version">v1.0.2</div>
             </div>
         </div>
     </div>

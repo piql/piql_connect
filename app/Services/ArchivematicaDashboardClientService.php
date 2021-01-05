@@ -9,18 +9,25 @@ use App\Services\ArchivematicaServiceConnection;
 use App\Bag;
 use GuzzleHttp\Client as Guzzle;
 use GuzzleHttp\Exception\TransferException;
+use Log;
 
 class ArchivematicaDashboardClientService implements ArchivematicaDashboardClientInterface
 {
+    public  const TRANSFER_TYPE_STANDARD = "standard";
+    public  const TRANSFER_TYPE_ZIPPED_BAG = "zipped bag";
     private $dashboard;
+    private $transferType;
+
     /**
      * Create the event listener.
      *
-     * @return void
+     * @param ArchivematicaConnectionServiceInterface $connectionService
+     * @param string $transferType
      */
-    public function __construct( ArchivematicaConnectionServiceInterface $connectionService )
+    public function __construct( ArchivematicaConnectionServiceInterface $connectionService, $transferType = ArchivematicaDashboardClientService::TRANSFER_TYPE_ZIPPED_BAG)
     {
         $this->dashboard = $connectionService->getFirstAvailableDashboard();
+        $this->transferType = $transferType;
     }
 
     public function initiateTransfer($transferName, $accession, $directory)
@@ -30,7 +37,7 @@ class ArchivematicaDashboardClientService implements ArchivematicaDashboardClien
         $formData =
             [
                 "name" => $transferName,
-                "type" => "zipped bag",
+                "type" => $this->transferType,
                 "accession" => $accession,
                 "paths[]" => $paths,
                 "row_ids[]" => ""
@@ -58,7 +65,7 @@ class ArchivematicaDashboardClientService implements ArchivematicaDashboardClien
     {
         $formData =
             [
-                "type" => "zipped bag",
+                "type" => $this->transferType,
                 "directory" => $directory,
             ];
 

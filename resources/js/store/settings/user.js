@@ -16,13 +16,14 @@ const getters = {
     userSettings: state => state.settings,
     userLanguages: state => state.languages,
     currentUser: state => state.user,
-    userName: () => Vue.prototype.$keycloak.given_name,
+    userName: () => Vue.prototype.$keycloak.tokenParsed.preferred_username,
     userIsAdmin: () => Vue.prototype.$keycloak.resourceAccess['piql-connect-api'].roles.includes('admin'),
+    userOrganizationId: () => Vue.prototype.$keycloak.tokenParsed.organization,
     userMetadataTemplateByUserId: state => userId => {
         return state.userMetadataTemplates.find((t) => t.owner_id == userId);
     },
     userMetadataTemplates: state => state.userMetadataTemplates,
-    currentLanguage: state => state.settings.interface.language,
+    currentLanguage: state => state.settings.interface.language || 'en',
     userTableRowCount: state => state.settings.interface.tableRowCount,
 }
 
@@ -40,7 +41,7 @@ const actions = {
             })
         });
     },
-    
+
 
     async fetchLanguages({ commit }) {
         let response = await axios.get("/api/v1/system/languages");
@@ -60,9 +61,9 @@ const actions = {
         commit('setPasswordMutation', response)
     },
 
-    async setAccountMetadataTemplate({ commit }, data) {
-        //TODO: Api call for associating metadata template to the user account
-        commit('setAccountMetadataTemplateMutation', data);
+    async setArchiveMetadataTemplate({ commit }, data) {
+        //TODO: Api call for associating metadata template to the user archive
+        commit('setArchiveMetadataTemplateMutation', data);
     },
 
     async updateTableRowCount({ commit }, count) {
@@ -77,15 +78,15 @@ const actions = {
                 reject(error.response)
             })
         })
-        
+
     },
 
-    async createEmptyTemplateWithUserAsCreator({ commit }, userAccount) {
-        let ownerId = userAccount.id;
-        let fullName = userAccount.full_name;
+    async createEmptyTemplateWithUserAsCreator({ commit }, userArchive) {
+        let ownerId = userArchive.id;
+        let fullName = userArchive.full_name;
         let m = { "id": "", owner_id: "", "created_at": "", "metadata": { "dc": { "title": "", "creator": "", "subject": "", "description": "", "publisher": "", "contributor": "", "date": "", "type": "", "format": "", "identifier": "", "source": "", "language": "", "relation": "", "coverage": "", "rights": "" } } };
         let template = { ...m, owner_id: ownerId, metadata: { ...m.metadata, dc: { ...m.metadata.dc, creator: fullName } } };
-        commit('setAccountMetadataTemplateMutation', template);
+        commit('setArchiveMetadataTemplateMutation', template);
     },
 
     async logoutUser({ commit }) {
@@ -106,7 +107,7 @@ const mutations = {
     setLanguagesMutation: (state, payload) => {
         state.languages = payload.data;
     },
-    
+
     setResponse: (state, response) => {
         state.response = {
             status: response.status,
@@ -122,7 +123,7 @@ const mutations = {
 
     },
 
-    setAccountMetadataTemplateMutation: (state, payload) => {
+    setArchiveMetadataTemplateMutation: (state, payload) => {
         state.userMetadataTemplates =
             state.userMetadataTemplates
                 .filter(t => t.owner_id != payload.owner_id)

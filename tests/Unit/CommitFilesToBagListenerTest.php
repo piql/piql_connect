@@ -2,14 +2,15 @@
 
 namespace Tests\Unit;
 
-use App\Account;
 use App\Bag;
 use App\Events\BagCompleteEvent;
 use App\Events\BagFilesEvent;
 use App\Events\ErrorEvent;
 use App\Interfaces\MetadataWriterInterface;
-use App\Listeners\CommitFilesToBagListener;
+use App\Interfaces\TransferPacketBuilder;
+use App\Listeners\CommitFilesToTransferPacketListener;
 use App\Metadata;
+use App\Providers\TransferPacketProvider;
 use App\User;
 use App\UserSetting;
 use BagitUtil;
@@ -29,14 +30,11 @@ class CommitFilesToBagListenerTest extends TestCase
 
     private $bag;
     private $user;
-    private $account;
 
     public function setUp() : void
     {
         parent::setUp();
-        $this->account = factory(Account::class)->create();
         $this->user = $user = factory(User::class)->create();
-        $this->user->account()->associate( $this->account );
         Passport::actingAs( $this->user );
 
 
@@ -59,10 +57,10 @@ class CommitFilesToBagListenerTest extends TestCase
 
     public function test_given_a_bag_with_files_when_commiting_files_it_dispatches_bag_complete()
     {
-        $bagitUtil = Mockery::mock( BagitUtil::class );
+        $bagitUtil = Mockery::mock( TransferPacketBuilder::class );
         $bagitUtil->shouldReceive( 'addFile' )->once();
         $bagitUtil
-            ->shouldReceive( 'createBag' )
+            ->shouldReceive( 'build' )
             ->once()
             ->andReturn( true );
 
@@ -95,8 +93,8 @@ class CommitFilesToBagListenerTest extends TestCase
                     $mock->shouldReceive('write')->times(MetadataPath::count())->with(Mockery::on(function ($argument) use ($file) {
                         $this->assertArrayHasKey("object", $argument);
                         switch ($argument['object']) {
-                            case MetadataPath::ACCOUNT_OBJECT:
                             case MetadataPath::ARCHIVE_OBJECT:
+                            case MetadataPath::COLLECTION_OBJECT:
                             case MetadataPath::HOLDING_OBJECT:
                                 return true;
                             default:
@@ -110,7 +108,7 @@ class CommitFilesToBagListenerTest extends TestCase
         });
 
         $event = new BagFilesEvent( $bag );
-        $listener = new CommitFilesToBagListener( $bagitUtil, $metadataGenerator );
+        $listener = new CommitFilesToTransferPacketListener( $bagitUtil, $metadataGenerator );
         $listener->handle( $event );
 
         Event::assertDispatched( BagCompleteEvent::class );
@@ -121,16 +119,16 @@ class CommitFilesToBagListenerTest extends TestCase
     {
         $bag = $this->bag;
 
-        $bagitUtil = Mockery::mock(BagitUtil::class);
+        $bagitUtil = Mockery::mock(TransferPacketBuilder::class);
         $bagitUtil->shouldReceive('addFile')->never();
-        $bagitUtil->shouldReceive('createBag')->never();
+        $bagitUtil->shouldReceive('build')->never();
 
         $metadataGenerator = Mockery::mock( MetadataGeneratorInterface::class, function( $mock ) {
             $mock->shouldReceive('createMetadataWriter')->never();
         });
 
         $event = new BagFilesEvent($bag);
-        $listener = new CommitFilesToBagListener($bagitUtil, $metadataGenerator);
+        $listener = new CommitFilesToTransferPacketListener($bagitUtil, $metadataGenerator);
         $listener->handle($event);
         Event::assertNotDispatched( BagCompleteEvent::class );
         Event::assertDispatched( ErrorEvent::class );
@@ -157,9 +155,10 @@ class CommitFilesToBagListenerTest extends TestCase
         $metadata->owner()->associate($this->user);
         $metadata->save();
 
-        $bagitUtil = Mockery::mock(BagitUtil::class);
+        $bagitUtil = Mockery::mock(TransferPacketBuilder::class);
         $bagitUtil->shouldReceive('addFile')->once();
-        $bagitUtil->shouldReceive('createBag')->once()->andReturn(false);
+        $bagitUtil->shouldReceive('build')->once()->andReturn(false);
+        $bagitUtil->shouldReceive('errorMessage')->once();
 
         $metadataGenerator = Mockery::mock( MetadataGeneratorInterface::class, function( $mock ) {
             $mock->shouldReceive('createMetadataWriter')
@@ -171,7 +170,7 @@ class CommitFilesToBagListenerTest extends TestCase
         });
 
         $event = new BagFilesEvent( $bag );
-        $listener = new CommitFilesToBagListener( $bagitUtil, $metadataGenerator );
+        $listener = new CommitFilesToTransferPacketListener( $bagitUtil, $metadataGenerator );
         $listener->handle( $event );
 
         Event::assertNotDispatched( BagCompleteEvent::class );

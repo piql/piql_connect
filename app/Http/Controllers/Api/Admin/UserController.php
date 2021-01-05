@@ -66,7 +66,7 @@ class UserController extends Controller
             $data = ['users' => [], 'disabled' => true];
             foreach ($request->users as $id){
                 $u = User::find($id);
-                if($u == null) continue; 
+                if($u == null) continue;
                 $u->disabled_on = Carbon::now()->toDateTimeString();
                 if($u->save()) $data['users'][] = $u;
             }
@@ -95,7 +95,7 @@ class UserController extends Controller
             $data = ['users' => [], 'enabled' => true];
             foreach ($request->users as $id){
                 $u = User::find($id);
-                if($u == null) continue; 
+                if($u == null) continue;
                 $u->disabled_on = null;
                 if($u->save()) $data['users'][] = $u;
             }
@@ -148,7 +148,7 @@ class UserController extends Controller
 
         // Update keycloak
         try {
-            $keycloakClient->editUser($user->account_uuid, $user);
+            $keycloakClient->editUser($user->organization_uuid, $user);
         } catch (\Throwable $e) {
             return response(['message' => $e->getMessage()], 400);
         }

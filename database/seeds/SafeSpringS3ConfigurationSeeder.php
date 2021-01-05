@@ -1,6 +1,6 @@
 <?php
 
-use App\Account;
+use App\Archive;
 use Illuminate\Database\Seeder;
 use App\S3Configuration;
 use App\StorageLocation;
@@ -35,7 +35,7 @@ class SafeSpringS3ConfigurationSeeder extends Seeder
         $owner = User::where('username','kare')->first()
             ?? User::first()
             ?? factory(App\User::class)->create([
-                "account_uuid" => Account::first()->uuid
+                "archive_uuid" => Archive::first()->uuid
             ]);
         StorageLocation::create([
             'owner_id' => $owner->id,

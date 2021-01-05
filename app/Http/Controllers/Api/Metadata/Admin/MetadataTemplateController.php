@@ -119,8 +119,6 @@ class MetadataTemplateController extends Controller
             return new MetadataResource( $metadataTemplate );
         }
 
-        $account = Auth::user()->account;
-
         return new MetadataResource( MetadataTemplate::create( $requestData ) );
     }
 

@@ -33,7 +33,8 @@ class DublinCoreCSVMetadataWriterTest extends TestCase
         Passport::actingAs( $this->testUser );
         $this->filename = 'test.txt';
         $this->writer = new DublinCoreCSVMetadataWriter([
-            'filename' => $this->filename
+            'filename' => $this->filename,
+            'filenameColumnPreFix' => 'data/'
         ]);
 
     }

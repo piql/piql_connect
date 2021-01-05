@@ -92,4 +92,29 @@ trait CommandDisplayUtil
         }
     }
 
+    public function displayUser($user, bool $forceVerbose = false) {
+        if ($this->getOutput()->isVerbose() || $forceVerbose) {
+            $this->info("\nUser");
+            $this->info("=====================================================");
+            $this->info("Id                      : " . $user->id);
+            $this->info("Name                    : " . $user->full_name);
+            $this->info("Username                : " . $user->username);
+            $this->info("e-mail                  : " . $user->email);
+        } else {
+            $this->info($user->id." ".$user->full_name);
+        }
+    }
+
+    public function displayOrganization($organization, bool $forceVerbose = false) {
+        if ($this->getOutput()->isVerbose() || $forceVerbose) {
+            $this->info("\nOrganization");
+            $this->info("=====================================================");
+            $this->info("Id                      : " . $organization->id);
+            $this->info("Uuid                    : " . $organization->uuid);
+            $this->info("Name                    : " . $organization->name);
+        } else {
+            $this->info($organization->uuid." ".$organization->name);
+        }
+    }
+
 }

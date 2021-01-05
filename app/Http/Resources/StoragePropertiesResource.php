@@ -19,7 +19,7 @@ class StoragePropertiesResource extends JsonResource
             'id' => $this->id,
             'bag_uuid' => $this->bag_uuid,
             'transfer_uuid' => $this->transfer_uuid,
-            'archive_uuid' => $this->archive_uuid,
+            'collection_uuid' => $this->collection_uuid,
             'dip_uuid' => $this->dip_uuid,
             'aip_uuid' => $this->aip_uuid,
             'aip_initial_online_storage_location' => $this->aip_initial_online_storage_location,
@@ -27,7 +27,7 @@ class StoragePropertiesResource extends JsonResource
             'archivematica_service_dashboard_uuid' => $this->archivematica_service_dashboard_uuid,
             'archivematica_service_storage_server_uuid' => $this->archivematica_service_storag_service_uuid,
             'bag' => new BagResource( $this->bag ),
-            'archive_title' => $this->archive ? $this->archive->title : null,
+            'collection_title' => $this->collection ? $this->collection->title : null,
             'holding_name' => $this->holding_name,
             'ingest_time' => $this->created_at
         ];

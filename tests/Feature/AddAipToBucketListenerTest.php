@@ -11,7 +11,6 @@ use Illuminate\Support\Collection;
 use Laravel\Passport\Passport;
 use Webpatser\Uuid\Uuid;
 use Faker\Factory as Faker;
-use App\Archive;
 use App\Job;
 
 class AddAipToBucketListenerTest extends TestCase
