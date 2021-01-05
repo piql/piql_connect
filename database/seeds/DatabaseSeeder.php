@@ -47,7 +47,7 @@ class DatabaseSeeder extends Seeder
 
         //TODO: Consider seeding only a default admin here
         $this->call(UsersTableSeeder::class);
-        $this->call(SafeSpringS3ConfigurationSeeder::class);
+        $this->call(S3ConfigurationSeeder::class);
         $this->call(ArchivematicaServiceSeeder::class);
     }
 }

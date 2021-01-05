@@ -1,11 +1,12 @@
 <?php
 
+use App\Account;
 use Illuminate\Database\Seeder;
 use App\S3Configuration;
 use App\StorageLocation;
 use App\User;
 
-class TestSafeSpringS3ConfigurationSeeder extends Seeder
+class S3ConfigurationSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -14,13 +15,13 @@ class TestSafeSpringS3ConfigurationSeeder extends Seeder
      */
     public function run()
     {
-        $ss_test_key_id = "A027DQI8VXPIJETYNXZQ";
-        $ss_test_secret = "OOE4owN4uin0ctQQ6VAqsDmsHnGh4AUjgrsbEFtg";
-        $ss_test_url = "https://s3.osl1.safedc.net";
-        $ss_test_bucket = "connect-test";
+        $ss_test_key_id = "";
+        $ss_test_secret = "";
+        $ss_test_url = "";
+        $ss_test_bucket = "";
 
         if( S3Configuration::where('key_id', $ss_test_key_id)->count() !== 0 ) {
-            echo "Safespring S3 test already seeded";
+            echo "S3ConfigurationSeeder already applied";
             return;
         }
 
@@ -36,13 +37,12 @@ class TestSafeSpringS3ConfigurationSeeder extends Seeder
             ?? factory(App\User::class)->create([
                 "account_uuid" => Account::first()->uuid
             ]);
-
         StorageLocation::create([
             'owner_id' => $owner->id,
             'locatable_id' => $s3Config->id,
             'locatable_type' => 'App\S3Configuration',
             'storable_type' => 'App\Aip',
-            'human_readable_name' => "Safespring S3 Aip Store"
+            'human_readable_name' => "S3 Aip Store"
         ]);
 
         StorageLocation::create([
@@ -50,7 +50,7 @@ class TestSafeSpringS3ConfigurationSeeder extends Seeder
             'locatable_id' => $s3Config->id,
             'locatable_type' => 'App\S3Configuration',
             'storable_type' => 'App\Dip',
-            'human_readable_name' => "Safespring S3 Dip Store"
+            'human_readable_name' => "S3 Dip Store"
         ]);
 
         StorageLocation::create([
@@ -70,10 +70,10 @@ class TestSafeSpringS3ConfigurationSeeder extends Seeder
         ]);
 
         // Messages
-        $ss_test_key_id = "A027DQI8VXPIJETYNXZQ";
-        $ss_test_secret = "OOE4owN4uin0ctQQ6VAqsDmsHnGh4AUjgrsbEFtg";
-        $ss_test_url = "https://s3.osl1.safedc.net";
-        $ss_test_bucket = "connect-test-messages-inbox";
+        $ss_test_key_id = "";
+        $ss_test_secret = "";
+        $ss_test_url = "";
+        $ss_test_bucket = "";
 
         $s3Config = S3Configuration::create([
             'url' => $ss_test_url,
@@ -87,7 +87,7 @@ class TestSafeSpringS3ConfigurationSeeder extends Seeder
             'locatable_id' => $s3Config->id,
             'locatable_type' => 'App\S3Configuration',
             'storable_type' => 'App\Message',
-            'human_readable_name' => "Safespring S3 Message Inbox"
+            'human_readable_name' => "S3 Message Inbox"
         ]);
 
         // Jobs
@@ -108,7 +108,7 @@ class TestSafeSpringS3ConfigurationSeeder extends Seeder
             'locatable_id' => $s3Config->id,
             'locatable_type' => 'App\S3Configuration',
             'storable_type' => 'App\Job',
-            'human_readable_name' => "Safespring S3 Job Outbox"
+            'human_readable_name' => "S3 PiqlFilm Outbox"
         ]);
     }
 }

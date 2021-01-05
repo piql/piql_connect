@@ -319,7 +319,7 @@ run_container_command('piqlconnect_app_1', 'php artisan passport:keys --force', 
 
 if (config.complete_database_wipe == True):
     print('Seeding database with default values.')
-    run_container_command('piqlconnect_app_1', 'php artisan db:seed', 'www-data')
+    run_container_command('piqlconnect_app_1', 'php artisan db:seed --class=' + config.database_seeder, 'www-data')
     print('Database seeded. Continuing.')
 
 if (config.update_AM_service_callbacks == True):
