@@ -1,6 +1,8 @@
 import { shallowMount, createLocalVue } from "@vue/test-utils";
 import Vuex from "vuex";
 import Roles from '@/views/settings/Admin/Account/Roles/Roles';
+import users from '@/store/settings/users';
+import roles from '@/store/settings/roles';
 
 const localVue = createLocalVue();
 localVue.use( Vuex );
@@ -8,24 +10,29 @@ localVue.use( Vuex );
 const $t = (s) => s;
 
 describe("Roles.vue", ()=> {
-    let actions;
-    let getters;
     let store;
 
     beforeEach(() => {
-        actions = {
+        let usersActions = {
             fetchUsers: jest.fn(),
         }
 
-        getters = {
-            rolesApiResponse: () => {},
-            rolesPageMeta: () => {},
-            formattedUsers: () => [ {value: 123, label: 'Test Name'}],
+        let rolesActions = {
         }
 
         store = new Vuex.Store({
-            actions,
-            getters
+            modules: {
+                users: {
+                    actions: usersActions,
+                    getters: users.getters,
+                    namespaced: true
+                },
+                roles: {
+                    actions: rolesActions,
+                    getters: roles.getters,
+                    namespaced: true
+                },
+            }
         });
     })
 

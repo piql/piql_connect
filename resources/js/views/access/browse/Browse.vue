@@ -111,7 +111,7 @@ export default {
          *
          * Use it to update API queries with pagination, filters etc.
          */
-        ...mapActions('users',
+        ...mapActions('user',
             ['fetchUserSettings']
         ),
         dispatchRouting() {

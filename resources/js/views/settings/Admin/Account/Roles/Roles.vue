@@ -35,7 +35,9 @@ import { mapActions, mapGetters } from "vuex";
             };
         },
         computed:{
-            ...mapGetters(['rolesApiResponse']),
+            ...mapGetters('roles',
+                ['rolesApiResponse']
+            ),
             
         },
         watch:{
@@ -51,7 +53,9 @@ import { mapActions, mapGetters } from "vuex";
         },
 
         methods: {
-            ...mapActions(['postNewRole','updateRole','removeRole','postRolesToGroup']),
+            ...mapActions('roles',
+                ['postNewRole','updateRole','removeRole','postRolesToGroup']
+            ),
             displayAddRole(){
                 this.showAddRole = true;
 

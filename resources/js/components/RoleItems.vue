@@ -158,7 +158,12 @@ export default {
         
     },
     methods:{
-        ...mapActions(['fetchGroups','fetchRoles']),
+        ...mapActions('groups',
+            ['fetchGroups']
+        ),
+        ...mapActions('roles',
+            ['fetchRoles']
+        ),
         assignButtonClicked(roleId){
             let data = {
                 roles: [roleId],

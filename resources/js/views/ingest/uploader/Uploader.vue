@@ -426,7 +426,7 @@ export default {
     },
 
     methods: {
-        ...mapActions('users',
+        ...mapActions('user',
             ['fetchUserSettings']
         ),
         forceHolderReRender(){

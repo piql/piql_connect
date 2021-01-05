@@ -1,6 +1,7 @@
-import { shallowMount, createLocalVue } from "@vue/test-utils"
-import Vuex from "vuex"
+import { shallowMount, createLocalVue } from "@vue/test-utils";
+import Vuex from "vuex";
 import Listing from "@/views/settings/Admin/Account/Users";
+import user from "@/store/settings/user";
 import users from "@/store/settings/users";
 import Pager from "@/components/Pager";
 
@@ -11,30 +12,33 @@ const localVue = createLocalVue();
 localVue.use( Vuex );
 
 describe("Listing", ()=>{
-  let actions;
-  let getters;
   let store;
 
   beforeEach(() => {
-    actions = {
+    let usersActions = {
       fetchUsers: jest.fn(),
       postNewUser: jest.fn(),
       disableUserRequest: jest.fn(),
-      enableUserRequest: jest.fn(),
+      enableUserRequest: jest.fn()
+    }
+
+    let userActions = {
       fetchUserSettings: jest.fn()
     }
 
-    getters = {
-        userApiResponse: () => {},
-        usersPageMeta: () => {},
-        userTableRowCount: () => 10,
-        formattedUsers: () => [ {value: 123, label: 'Test Name'}],
-
-    }
-
     store = new Vuex.Store({
-        actions,
-        getters
+        modules: {
+            users: {
+                actions: usersActions,
+                getters: users.getters,
+                namespaced: true
+            },
+            user: {
+                actions: userActions,
+                getters: user.getters,
+                namespaced: true
+            },
+        }
       });
   })
 

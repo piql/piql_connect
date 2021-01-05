@@ -46,7 +46,9 @@ export default {
         }
     },
     computed: {
-        ...mapGetters(['userLanguages','currentLanguage']),
+        ...mapGetters('user',
+            ['userLanguages','currentLanguage']
+        ),
         showLabel: function() {
             return this.label.length > 0;
         },

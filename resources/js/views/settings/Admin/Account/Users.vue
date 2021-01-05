@@ -97,9 +97,12 @@ export default {
         },
     },
     methods: {
-        ...mapActions([
-          'fetchUsers','disableUserRequest','enableUserRequest', 'fetchUserSettings',
-          'createUser', 'updateUser']),
+        ...mapActions('users',
+            ['fetchUsers','disableUserRequest','enableUserRequest', 'createUser', 'updateUser']
+        ),
+        ...mapActions('user',
+            ['fetchUserSettings']
+        ),
         showCreateUserForm(){
             this.showAddUser = true;
         },
