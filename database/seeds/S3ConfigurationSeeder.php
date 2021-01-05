@@ -108,7 +108,7 @@ class S3ConfigurationSeeder extends Seeder
             'locatable_id' => $s3Config->id,
             'locatable_type' => 'App\S3Configuration',
             'storable_type' => 'App\Job',
-            'human_readable_name' => "Safespring S3 PiqlFilm Outbox"
+            'human_readable_name' => "S3 PiqlFilm Outbox"
         ]);
     }
 }
