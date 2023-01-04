@@ -32,7 +32,7 @@
     "sass-loader": "^7.3.1",
     "video.js": "^7.8.4",
     "vue": "^2.6.11",
-    "vue-jest": "^3.0.5",
+    "vue-jest": "^4.0.1",
     "vue-template-compiler": "^2.6.11",
     "vuex": "^3.5.1",
     "vuex-mock-store": "0.0.8",
